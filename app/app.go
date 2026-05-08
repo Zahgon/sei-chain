@@ -467,8 +467,7 @@ type App struct {
 
 	benchmarkManager *benchmark.Manager
 
-	// GigaExecutorEnabled controls whether to use the Giga executor (evmone-based)
-	// instead of geth's interpreter for EVM execution. Experimental feature.
+	// GigaExecutorEnabled controls whether to use the Giga executor.
 	GigaExecutorEnabled bool
 	// GigaOCCEnabled controls whether to use OCC with the Giga executor
 	GigaOCCEnabled bool
@@ -1539,7 +1538,6 @@ func (app *App) CacheContext(ctx sdk.Context) (sdk.Context, sdk.CacheMultiStore)
 
 // ExecuteTxsConcurrently calls the appropriate function for processing transacitons
 func (app *App) ExecuteTxsConcurrently(ctx sdk.Context, txs [][]byte, typedTxs []sdk.Tx) ([]*abci.ExecTxResult, sdk.Context) {
-	// Giga only supports synchronous execution for now
 	if app.GigaExecutorEnabled && app.GigaOCCEnabled {
 		return app.ProcessTXsWithOCCGiga(ctx, txs, typedTxs)
 	} else if app.GigaExecutorEnabled {
