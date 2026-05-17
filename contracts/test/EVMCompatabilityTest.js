@@ -1712,20 +1712,31 @@ describe("EVM throughput", function(){
     });
     await Promise.all(promises)
 
-    // wait for last nonce to mine (means all prior mined)
-    for(let r of responses){
-      if(r.nonce === maxNonce) {
-        await r.response.wait()
-        break;
+    // Wait until every nonce N..maxNonce is mined by polling
+    // getTransactionCount, which advances only when a tx at the current
+    // nonce mines. .wait() on a single TransactionResponse can hang or
+    // throw TRANSACTION_REPLACED when prior tests leave pending txs from
+    // the same signer; polling the account's nonce is unaffected by hash
+    // changes and reflects the actual on-chain state.
+    const targetCount = maxNonce + 1
+    const deadline = Date.now() + 120_000
+    let observedCount = await ethers.provider.getTransactionCount(address)
+    while (observedCount < targetCount) {
+      if (Date.now() > deadline) {
+        throw new Error(`timed out waiting for nonces to mine: count=${observedCount} target=${targetCount}`)
       }
+      await new Promise(r => setTimeout(r, 200))
+      observedCount = await ethers.provider.getTransactionCount(address)
     }
 
-    // get represented block numbers
+    // Collect block numbers from receipts. getTransactionReceipt avoids
+    // ethers' replacement check in .wait(), which can incorrectly raise
+    // TRANSACTION_REPLACED for unrelated pending txs on the same signer.
     let blockNumbers = []
     for(let response of responses){
-      const receipt = await response.response.wait()
-      const blockNumber = receipt.blockNumber
-      blockNumbers.push(blockNumber)
+      const receipt = await ethers.provider.getTransactionReceipt(response.response.hash)
+      expect(receipt, `receipt missing for tx ${response.response.hash} (nonce ${response.nonce})`).to.not.be.null
+      blockNumbers.push(receipt.blockNumber)
     }
 
     blockNumbers = uniq(blockNumbers).sort((a,b)=>{return a-b})
