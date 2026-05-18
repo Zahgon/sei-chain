@@ -38,6 +38,14 @@ func TestGetVestedCoinsContVestingAcc(t *testing.T) {
 	vestedCoins = cva.GetVestedCoins(now.Add(12 * time.Hour))
 	require.Equal(t, sdk.Coins{sdk.NewInt64Coin(feeDenom, 500), sdk.NewInt64Coin(stakeDenom, 50)}, vestedCoins)
 
+	// require pro-rata vesting at a non-aligned timestamp (7/24 elapsed)
+	vestedCoins = cva.GetVestedCoins(now.Add(7 * time.Hour))
+	require.Equal(t, sdk.Coins{sdk.NewInt64Coin(feeDenom, 291), sdk.NewInt64Coin(stakeDenom, 29)}, vestedCoins)
+
+	// require pro-rata vesting at a non-aligned timestamp (17/24 elapsed)
+	vestedCoins = cva.GetVestedCoins(now.Add(17 * time.Hour))
+	require.Equal(t, sdk.Coins{sdk.NewInt64Coin(feeDenom, 708), sdk.NewInt64Coin(stakeDenom, 70)}, vestedCoins)
+
 	// require 100% of coins vested
 	vestedCoins = cva.GetVestedCoins(now.Add(48 * time.Hour))
 	require.Equal(t, origCoins, vestedCoins)

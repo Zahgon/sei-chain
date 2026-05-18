@@ -3,6 +3,7 @@ package types
 import (
 	"errors"
 	"fmt"
+	"math/big"
 	"time"
 
 	yaml "gopkg.in/yaml.v2"
@@ -237,14 +238,13 @@ func (cva ContinuousVestingAccount) GetVestedCoins(blockTime time.Time) sdk.Coin
 		return cva.OriginalVesting
 	}
 
-	// calculate the vesting scalar
-	x := blockTime.Unix() - cva.StartTime
-	y := cva.EndTime - cva.StartTime
-	s := sdk.NewDec(x).Quo(sdk.NewDec(y))
+	elapsed := big.NewInt(blockTime.Unix() - cva.StartTime)
+	duration := big.NewInt(cva.EndTime - cva.StartTime)
 
 	for _, ovc := range cva.OriginalVesting {
-		vestedAmt := ovc.Amount.ToDec().Mul(s).RoundInt()
-		vestedCoins = append(vestedCoins, sdk.NewCoin(ovc.Denom, vestedAmt))
+		vested := new(big.Int).Mul(ovc.Amount.BigInt(), elapsed)
+		vested.Quo(vested, duration)
+		vestedCoins = append(vestedCoins, sdk.NewCoin(ovc.Denom, sdk.NewIntFromBigInt(vested)))
 	}
 
 	return vestedCoins
@@ -278,7 +278,7 @@ func (cva ContinuousVestingAccount) GetStartTime() int64 {
 // Validate checks for errors on the account fields
 func (cva ContinuousVestingAccount) Validate() error {
 	if cva.GetStartTime() >= cva.GetEndTime() {
-		return errors.New("vesting start-time cannot be before end-time")
+		return errors.New("vesting start-time must be before end-time")
 	}
 
 	return cva.BaseVestingAccount.Validate()
@@ -363,8 +363,8 @@ func (pva PeriodicVestingAccount) GetVestedCoins(blockTime time.Time) sdk.Coins 
 
 	// for each period, if the period is over, add those coins as vested and check the next period.
 	for _, period := range pva.VestingPeriods {
-		x := blockTime.Unix() - currentPeriodStartTime
-		if x < period.Length {
+		elapsed := blockTime.Unix() - currentPeriodStartTime
+		if elapsed < period.Length {
 			break
 		}
 
@@ -410,7 +410,7 @@ func (pva PeriodicVestingAccount) GetVestingPeriods() Periods {
 // Validate checks for errors on the account fields
 func (pva PeriodicVestingAccount) Validate() error {
 	if pva.GetStartTime() >= pva.GetEndTime() {
-		return errors.New("vesting start-time cannot be before end-time")
+		return errors.New("vesting start-time must be before end-time")
 	}
 	endTime := pva.StartTime
 	originalVesting := sdk.NewCoins()
