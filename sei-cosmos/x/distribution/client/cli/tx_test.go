@@ -1,27 +1,29 @@
-package cli
+package cli_test
 
 import (
+	"context"
 	"testing"
 
+	"github.com/sei-protocol/sei-chain/app"
 	"github.com/spf13/pflag"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	"github.com/cosmos/cosmos-sdk/simapp/params"
-	"github.com/cosmos/cosmos-sdk/testutil"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/client/cli"
 
 	"github.com/stretchr/testify/require"
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
 func Test_splitAndCall_NoMessages(t *testing.T) {
 	clientCtx := client.Context{}
 
-	err := newSplitAndApply(nil, clientCtx, nil, nil, 10)
+	err := cli.NewSplitAndApply(t.Context(), nil, clientCtx, nil, nil, 10)
 	assert.NoError(t, err, "")
 }
 
@@ -43,8 +45,9 @@ func Test_splitAndCall_Splitting(t *testing.T) {
 	const chunkSize = 2
 
 	callCount := 0
-	err := newSplitAndApply(
-		func(clientCtx client.Context, fs *pflag.FlagSet, msgs ...sdk.Msg) error {
+	err := cli.NewSplitAndApply(
+		t.Context(),
+		func(_ context.Context, clientCtx client.Context, fs *pflag.FlagSet, msgs ...sdk.Msg) error {
 			callCount++
 
 			assert.NotNil(t, clientCtx)
@@ -65,7 +68,7 @@ func Test_splitAndCall_Splitting(t *testing.T) {
 }
 
 func TestParseProposal(t *testing.T) {
-	encodingConfig := params.MakeTestEncodingConfig()
+	encodingConfig := app.MakeEncodingConfig()
 
 	okJSON := testutil.WriteToNewTempFile(t, `
 {
@@ -77,7 +80,7 @@ func TestParseProposal(t *testing.T) {
 }
 `)
 
-	proposal, err := ParseCommunityPoolSpendProposalWithDeposit(encodingConfig.Marshaler, okJSON.Name())
+	proposal, err := cli.ParseCommunityPoolSpendProposalWithDeposit(encodingConfig.Marshaler, okJSON.Name())
 	require.NoError(t, err)
 
 	require.Equal(t, "Community Pool Spend", proposal.Title)

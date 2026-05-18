@@ -1,21 +1,21 @@
 package types
 
 import (
-	"math"
 	"testing"
 	"time"
 
-	"github.com/tendermint/tendermint/version"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/internal/libs/protoio"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmtime "github.com/tendermint/tendermint/libs/time"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/protoio"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
 func generateHeader() Header {
@@ -39,6 +39,7 @@ func generateHeader() Header {
 		LastResultsHash:    make([]byte, crypto.HashSize),
 	}
 }
+
 func getTestProposal(t testing.TB) *Proposal {
 	t.Helper()
 
@@ -49,7 +50,7 @@ func getTestProposal(t testing.TB) *Proposal {
 		Height: 12345,
 		Round:  23456,
 		BlockID: BlockID{Hash: []byte("--June_15_2020_amino_was_removed"),
-			PartSetHeader: PartSetHeader{Total: 111, Hash: []byte("--June_15_2020_amino_was_removed")}},
+			PartSetHeader: PartSetHeader{Total: MaxBlockPartsCount, Hash: []byte("--June_15_2020_amino_was_removed")}},
 		POLRound:  -1,
 		Timestamp: stamp,
 	}
@@ -67,7 +68,7 @@ func TestProposalSignable(t *testing.T) {
 
 func TestProposalString(t *testing.T) {
 	str := getTestProposal(t).String()
-	expected := `Proposal{12345/23456 (2D2D4A756E655F31355F323032305F616D696E6F5F7761735F72656D6F766564:111:2D2D4A756E65, -1) 000000000000 @ 2018-02-11T07:09:22.765Z}`
+	expected := `Proposal{12345/23456 (2D2D4A756E655F31355F323032305F616D696E6F5F7761735F72656D6F766564:101:2D2D4A756E65, -1) 000000000000 @ 2018-02-11T07:09:22.765Z}`
 	if str != expected {
 		t.Errorf("got unexpected string for Proposal. Expected:\n%v\nGot:\n%v", expected, str)
 	}
@@ -80,21 +81,19 @@ func TestProposalVerifySignature(t *testing.T) {
 	pubKey, err := privVal.GetPubKey(ctx)
 	require.NoError(t, err)
 
-	txKeys := make([]TxKey, 0)
+	txHashes := make([]TxHash, 0)
 	prop := NewProposal(
-		4, 2, 2,
-		BlockID{tmrand.Bytes(crypto.HashSize), PartSetHeader{777, tmrand.Bytes(crypto.HashSize)}}, tmtime.Now(), txKeys, generateHeader(), &Commit{}, EvidenceList{}, pubKey.Address())
+		4, 2, 1,
+		BlockID{tmrand.Bytes(crypto.HashSize), PartSetHeader{MaxBlockPartsCount, tmrand.Bytes(crypto.HashSize)}}, tmtime.Now(), txHashes, generateHeader(), &Commit{}, EvidenceList{}, pubKey.Address())
 	p := prop.ToProto()
 	signBytes := ProposalSignBytes("test_chain_id", p)
 
 	// sign it
-	err = privVal.SignProposal(ctx, "test_chain_id", p)
-	require.NoError(t, err)
-	prop.Signature = p.Signature
+	require.NoError(t, privVal.SignProposal(ctx, "test_chain_id", p))
+	prop.Signature = utils.OrPanic1(crypto.SigFromBytes(p.Signature))
 
 	// verify the same proposal
-	valid := pubKey.VerifySignature(signBytes, prop.Signature)
-	require.True(t, valid)
+	require.NoError(t, pubKey.Verify(signBytes, prop.Signature))
 
 	// serialize, deserialize and verify again....
 	newProp := new(tmproto.Proposal)
@@ -112,29 +111,21 @@ func TestProposalVerifySignature(t *testing.T) {
 	// verify the transmitted proposal
 	newSignBytes := ProposalSignBytes("test_chain_id", pb)
 	require.Equal(t, string(signBytes), string(newSignBytes))
-	valid = pubKey.VerifySignature(newSignBytes, np.Signature)
-	require.True(t, valid)
+	require.NoError(t, pubKey.Verify(newSignBytes, np.Signature))
 }
 
 func BenchmarkProposalWriteSignBytes(b *testing.B) {
 	pbp := getTestProposal(b).ToProto()
-
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		ProposalSignBytes("test_chain_id", pbp)
 	}
 }
 
 func BenchmarkProposalSign(b *testing.B) {
 	ctx := b.Context()
-
 	privVal := NewMockPV()
-
 	pbp := getTestProposal(b).ToProto()
-	b.ResetTimer()
-
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		err := privVal.SignProposal(ctx, "test_chain_id", pbp)
 		if err != nil {
 			b.Error(err)
@@ -156,7 +147,7 @@ func BenchmarkProposalVerifySignature(b *testing.B) {
 	b.ResetTimer()
 
 	for i := 0; i < b.N; i++ {
-		pubKey.VerifySignature(ProposalSignBytes("test_chain_id", pbp), testProposal.Signature)
+		pubKey.Verify(ProposalSignBytes("test_chain_id", pbp), testProposal.Signature)
 	}
 }
 
@@ -176,41 +167,35 @@ func TestProposalValidateBasic(t *testing.T) {
 		{"Invalid BlockId", func(p *Proposal) {
 			p.BlockID = BlockID{[]byte{1, 2, 3}, PartSetHeader{111, []byte("blockparts")}}
 		}, true},
-		{"Invalid Signature", func(p *Proposal) {
-			p.Signature = make([]byte, 0)
-		}, true},
-		{"Too big Signature", func(p *Proposal) {
-			p.Signature = make([]byte, MaxSignatureSize+1)
-		}, true},
 	}
-	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")), math.MaxInt32, crypto.Checksum([]byte("partshash")))
+	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")).Bytes(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
 
 	for _, tc := range testCases {
 		t.Run(tc.testName, func(t *testing.T) {
 			ctx := t.Context()
 
-			txKeys := make([]TxKey, 0)
+			txHashes := make([]TxHash, 0)
 			pubKey, err := privVal.GetPubKey(ctx)
 			require.NoError(t, err)
 			prop := NewProposal(
-				4, 2, 2,
-				blockID, tmtime.Now(), txKeys,
+				4, 2, 1,
+				blockID, tmtime.Now(), txHashes,
 				generateHeader(), &Commit{}, EvidenceList{}, pubKey.Address())
 			p := prop.ToProto()
-			err = privVal.SignProposal(ctx, "test_chain_id", p)
-			prop.Signature = p.Signature
-			require.NoError(t, err)
+			require.NoError(t, privVal.SignProposal(ctx, "test_chain_id", p))
+			prop.Signature = utils.OrPanic1(crypto.SigFromBytes(p.Signature))
 			tc.malleateProposal(prop)
-			assert.Equal(t, tc.expectErr, prop.ValidateBasic() != nil, "Validate Basic had an unexpected result")
+			err = prop.ValidateBasic()
+			assert.Equal(t, tc.expectErr, err != nil, "Validate Basic had an unexpected result: %v", err)
 		})
 	}
 }
 
 func TestProposalProtoBuf(t *testing.T) {
-	var txKeys []TxKey
-	proposal := NewProposal(1, 2, 3, makeBlockID([]byte("hash"), 2, []byte("part_set_hash")), tmtime.Now(), txKeys, generateHeader(), &Commit{Signatures: []CommitSig{}}, EvidenceList{}, crypto.Address("testaddr"))
-	proposal.Signature = []byte("sig")
-	proposal2 := NewProposal(1, 2, 3, BlockID{}, tmtime.Now(), txKeys, generateHeader(), &Commit{Signatures: []CommitSig{}}, EvidenceList{}, crypto.Address("testaddr"))
+	var txHashes []TxHash
+	proposal := NewProposal(1, 3, 2, makeBlockID([]byte("hash"), 2, []byte("part_set_hash")), tmtime.Now(), txHashes, generateHeader(), &Commit{Signatures: []CommitSig{}}, EvidenceList{}, crypto.Address("testaddr"))
+	proposal.Signature = testKey.Sign([]byte("sig"))
+	proposal2 := NewProposal(1, 2, 3, BlockID{}, tmtime.Now(), txHashes, generateHeader(), &Commit{Signatures: []CommitSig{}}, EvidenceList{}, crypto.Address("testaddr"))
 
 	testCases := []struct {
 		msg     string

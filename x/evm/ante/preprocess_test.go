@@ -10,16 +10,15 @@ import (
 
 	"github.com/sei-protocol/sei-chain/utils/helpers"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkacltypes "github.com/cosmos/cosmos-sdk/types/accesscontrol"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/params"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
+	vestingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/vesting/types"
+	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/ante"
 	"github.com/sei-protocol/sei-chain/x/evm/derived"
@@ -191,22 +190,6 @@ func TestGetVersion(t *testing.T) {
 	require.Equal(t, derived.London, ante.GetVersion(ctx, ethCfg))
 }
 
-func TestAnteDeps(t *testing.T) {
-	k := &testkeeper.EVMTestApp.EvmKeeper
-	handler := ante.NewEVMPreprocessDecorator(k, k.AccountKeeper())
-	msg, _ := types.NewMsgEVMTransaction(&ethtx.LegacyTx{GasLimit: 100})
-	msg.Derived = &derived.Derived{
-		SenderEVMAddr: common.BytesToAddress([]byte("senderevm")),
-		SenderSeiAddr: []byte("sendersei"),
-		PubKey:        &secp256k1.PubKey{Key: []byte("pubkey")},
-	}
-	deps, err := handler.AnteDeps(nil, mockTx{msgs: []sdk.Msg{msg}}, 0, func(txDeps []sdkacltypes.AccessOperation, tx sdk.Tx, txIndex int) ([]sdkacltypes.AccessOperation, error) {
-		return txDeps, nil
-	})
-	require.Nil(t, err)
-	require.Equal(t, 12, len(deps))
-}
-
 func TestEVMAddressDecorator(t *testing.T) {
 	k := &testkeeper.EVMTestApp.EvmKeeper
 	ctx := testkeeper.EVMTestApp.GetContextForDeliverTx(nil)
@@ -317,7 +300,7 @@ func TestMigrateBalance(t *testing.T) {
 			sdk.NewCoins(sdk.NewCoin("usei", sdk.NewInt(1))), math.MaxInt64, admin),
 	))
 	associateHelper := helpers.NewAssociationHelper(k, k.BankKeeper(), k.AccountKeeper())
-	require.Nil(t, associateHelper.MigrateBalance(ctx, evmAddr, seiAddr))
+	require.Nil(t, associateHelper.MigrateBalance(ctx, evmAddr, seiAddr, false))
 	require.Equal(t, int64(1), k.BankKeeper().SpendableCoins(ctx, seiAddr).AmountOf("usei").Int64())
 	require.Equal(t, int64(0), k.BankKeeper().LockedCoins(ctx, seiAddr).AmountOf("usei").Int64())
 	require.Equal(t, int64(0), k.BankKeeper().SpendableCoins(ctx, sdk.AccAddress(evmAddr[:])).AmountOf("usei").Int64())

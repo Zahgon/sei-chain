@@ -15,12 +15,10 @@ import (
 func TestSubscribeNewHeads(t *testing.T) {
 	t.Parallel()
 	recvCh, done := sendWSRequestGood(t, "subscribe", "newHeads")
-	NewHeadsCalled <- struct{}{}
 	defer func() { done <- struct{}{} }()
 
-	receivedSubMsg := false
-	receivedEvents := false
-	timer := time.NewTimer(1 * time.Second)
+	timer := time.NewTimer(5 * time.Second)
+	defer timer.Stop()
 
 	expectedKeys := []string{
 		"parentHash", "sha3Uncles", "miner", "stateRoot", "transactionsRoot",
@@ -38,21 +36,22 @@ func TestSubscribeNewHeads(t *testing.T) {
 		inapplicableKeys[key] = struct{}{}
 	}
 	var subscriptionId string
-
-	for {
+	allZerosRE := regexp.MustCompile(`^0+$`)
+	for t.Context().Err() == nil {
 		select {
 		case resObj := <-recvCh:
 			_, ok := resObj["error"]
 			if ok {
 				t.Fatal("Received error:", resObj["error"])
 			}
-			if !receivedSubMsg {
+			if subscriptionId == "" {
 				// get subscriptionId from first message
 				subscriptionId = resObj["result"].(string)
-				receivedSubMsg = true
+				// Reset timer now that subscription is confirmed, then trigger new heads
+				timer.Reset(5 * time.Second)
+				NewHeadsCalled <- struct{}{}
 				continue
 			}
-			receivedEvents = true
 			method := resObj["method"].(string)
 			if method != "eth_subscription" {
 				t.Fatal("Method is not eth_subscription")
@@ -69,20 +68,19 @@ func TestSubscribeNewHeads(t *testing.T) {
 				}
 				// check that applicable keys aren't all 0's
 				if _, inapplicable := inapplicableKeys[key]; !inapplicable {
-					if matched, err := regexp.MatchString("^0+$", fmt.Sprintf("%v", resultMap[key])); err != nil || matched {
-						t.Fatalf("%s was unable to parse or expected non-zero value", key)
+					got := fmt.Sprintf("%v", resultMap[key])
+					if allZerosRE.MatchString(got) {
+						t.Fatalf("%s must be non-zero (got %v)", key, resultMap[key])
 					}
 				}
 			}
-		case <-timer.C:
-			if !receivedSubMsg || !receivedEvents {
-				t.Fatal("No message received within 5 seconds")
-			}
+			// Event validated successfully, no need to wait further
 			return
+		case <-timer.C:
+			t.Fatal("No event received within 5 seconds")
 		}
 	}
 }
-
 func TestSubscribeEmptyLogs(t *testing.T) {
 	t.Parallel()
 	recvCh, done := sendWSRequestGood(t, "subscribe", "logs")
@@ -93,7 +91,7 @@ func TestSubscribeEmptyLogs(t *testing.T) {
 	// just testing to see that we don't crash when no params are provided
 	for {
 		select {
-		case _ = <-recvCh:
+		case <-recvCh:
 			return
 		case <-timer.C:
 			t.Fatal("No message received within 5 seconds")

@@ -5,15 +5,15 @@ import (
 	"time"
 
 	"github.com/sei-protocol/sei-chain/app"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/sei-protocol/sei-chain/testutil/nullify"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/sei-protocol/sei-chain/x/mint/types"
 	"github.com/stretchr/testify/require"
 )
 
 func TestGenesis(t *testing.T) {
-	app := app.Setup(false, false, false)
+	app := app.Setup(t, false, false, false)
 	ctx := app.BaseApp.NewContext(false, tmproto.Header{})
 
 	now := time.Now()

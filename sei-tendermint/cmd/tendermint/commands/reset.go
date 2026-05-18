@@ -4,20 +4,19 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/tendermint/tendermint/libs/cli"
-
+	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/cli"
+	tmos "github.com/sei-protocol/sei-chain/sei-tendermint/libs/os"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/privval"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/spf13/cobra"
-
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/libs/log"
-	tmos "github.com/tendermint/tendermint/libs/os"
-	"github.com/tendermint/tendermint/privval"
-	"github.com/tendermint/tendermint/types"
 )
+
+const wasmDirName = "wasm"
 
 // MakeResetCommand constructs a command that removes the database of
 // the specified Tendermint core instance.
-func MakeResetCommand(conf *config.Config, logger log.Logger) *cobra.Command {
+func MakeResetCommand(conf *config.Config) *cobra.Command {
 	var keyType string
 
 	resetCmd := &cobra.Command{
@@ -29,7 +28,7 @@ func MakeResetCommand(conf *config.Config, logger log.Logger) *cobra.Command {
 		Use:   "blockchain",
 		Short: "Removes all blocks, state, transactions and evidence stored by the tendermint node",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return ResetState(conf.DBDir(), logger)
+			return ResetState(conf.DBDir())
 		},
 	}
 
@@ -47,7 +46,7 @@ func MakeResetCommand(conf *config.Config, logger log.Logger) *cobra.Command {
 		Long: `Resets private validator signer state.
 Only use in testing. This can cause the node to double sign`,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			return ResetFilePV(conf.PrivValidator.KeyFile(), conf.PrivValidator.StateFile(), logger, keyType)
+			return ResetFilePV(conf.PrivValidator.KeyFile(), conf.PrivValidator.StateFile(), keyType)
 		},
 	}
 
@@ -66,15 +65,15 @@ Only use in testing. This can cause the node to double sign`,
 				home = conf.RootDir
 			}
 			return ResetAll(conf.DBDir(), conf.PrivValidator.KeyFile(),
-				conf.PrivValidator.StateFile(), logger, keyType, home)
+				conf.PrivValidator.StateFile(), keyType, home)
 		},
 	}
 
 	resetSignerCmd.Flags().StringVar(&keyType, "key", types.ABCIPubKeyTypeEd25519,
-		"Signer key type. Options: ed25519, secp256k1")
+		"Signer key type (ed25519 only)")
 
 	resetAllCmd.Flags().StringVar(&keyType, "key", types.ABCIPubKeyTypeEd25519,
-		"Signer key type. Options: ed25519, secp256k1")
+		"Signer key type (ed25519 only)")
 
 	resetCmd.AddCommand(resetBlocksCmd)
 	resetCmd.AddCommand(resetPeersCmd)
@@ -87,7 +86,7 @@ Only use in testing. This can cause the node to double sign`,
 // ResetAll removes address book files plus all data, and resets the privValdiator data.
 // Exported for extenal CLI usage
 // XXX: this is unsafe and should only suitable for testnets.
-func ResetAll(dbDir, privValKeyFile, privValStateFile string, logger log.Logger, keyType string, homeDir string) error {
+func ResetAll(dbDir, privValKeyFile, privValStateFile string, keyType string, homeDir string) error {
 	if err := os.RemoveAll(filepath.Join(homeDir, dbDir)); err == nil {
 		logger.Info("Removed all blockchain history", "dir", dbDir)
 	} else {
@@ -100,57 +99,45 @@ func ResetAll(dbDir, privValKeyFile, privValStateFile string, logger log.Logger,
 		logger.Info("Removed dbDir")
 	}
 
+	wasmDir := filepath.Join(homeDir, wasmDirName)
+	if err := os.RemoveAll(wasmDir); err == nil {
+		logger.Info("Removed wasm directory", "dir", wasmDir)
+	} else {
+		logger.Error("error removing wasm directory", "dir", wasmDir, "err", err)
+	}
+
 	// recreate the dbDir since the privVal state needs to live there
-	return ResetFilePV(filepath.Join(homeDir, privValKeyFile), filepath.Join(homeDir, privValStateFile), logger, keyType)
+	return ResetFilePV(filepath.Join(homeDir, privValKeyFile), filepath.Join(homeDir, privValStateFile), keyType)
+}
+
+// removeIfExists removes a path if it exists, logging the result.
+func removeIfExists(path, label string) {
+	if tmos.FileExists(path) {
+		if err := os.RemoveAll(path); err == nil {
+			logger.Info("Removed "+label, "dir", path)
+		} else {
+			logger.Error("error removing "+label, "dir", path, "err", err)
+		}
+	}
 }
 
 // ResetState removes all blocks, tendermint state, indexed transactions and evidence.
-func ResetState(dbDir string, logger log.Logger) error {
-	blockdb := filepath.Join(dbDir, "blockstore.db")
-	state := filepath.Join(dbDir, "state.db")
-	wal := filepath.Join(dbDir, "cs.wal")
-	evidence := filepath.Join(dbDir, "evidence.db")
-	txIndex := filepath.Join(dbDir, "tx_index.db")
+// It handles both the legacy flat layout and the new subdirectory layout.
+func ResetState(dbDir string) error {
+	// Legacy paths (flat under data/)
+	removeIfExists(filepath.Join(dbDir, "blockstore.db"), "blockstore.db")
+	removeIfExists(filepath.Join(dbDir, "state.db"), "state.db")
+	removeIfExists(filepath.Join(dbDir, "cs.wal"), "cs.wal")
+	removeIfExists(filepath.Join(dbDir, "evidence.db"), "evidence.db")
+	removeIfExists(filepath.Join(dbDir, "tx_index.db"), "tx_index.db")
 
-	if tmos.FileExists(blockdb) {
-		if err := os.RemoveAll(blockdb); err == nil {
-			logger.Info("Removed all blockstore.db", "dir", blockdb)
-		} else {
-			logger.Error("error removing all blockstore.db", "dir", blockdb, "err", err)
-		}
-	}
-
-	if tmos.FileExists(state) {
-		if err := os.RemoveAll(state); err == nil {
-			logger.Info("Removed all state.db", "dir", state)
-		} else {
-			logger.Error("error removing all state.db", "dir", state, "err", err)
-		}
-	}
-
-	if tmos.FileExists(wal) {
-		if err := os.RemoveAll(wal); err == nil {
-			logger.Info("Removed all cs.wal", "dir", wal)
-		} else {
-			logger.Error("error removing all cs.wal", "dir", wal, "err", err)
-		}
-	}
-
-	if tmos.FileExists(evidence) {
-		if err := os.RemoveAll(evidence); err == nil {
-			logger.Info("Removed all evidence.db", "dir", evidence)
-		} else {
-			logger.Error("error removing all evidence.db", "dir", evidence, "err", err)
-		}
-	}
-
-	if tmos.FileExists(txIndex) {
-		if err := os.RemoveAll(txIndex); err == nil {
-			logger.Info("Removed tx_index.db", "dir", txIndex)
-		} else {
-			logger.Error("error removing tx_index.db", "dir", txIndex, "err", err)
-		}
-	}
+	// New paths (subdirectory layout — all tendermint DBs under data/tendermint/)
+	removeIfExists(filepath.Join(dbDir, "tendermint", "blockstore.db"), "tendermint/blockstore.db")
+	removeIfExists(filepath.Join(dbDir, "tendermint", "tx_index.db"), "tendermint/tx_index.db")
+	removeIfExists(filepath.Join(dbDir, "tendermint", "state.db"), "tendermint/state.db")
+	removeIfExists(filepath.Join(dbDir, "tendermint", "cs.wal"), "tendermint/cs.wal")
+	removeIfExists(filepath.Join(dbDir, "tendermint", "evidence.db"), "tendermint/evidence.db")
+	removeIfExists(filepath.Join(dbDir, "tendermint", "peerstore.db"), "tendermint/peerstore.db")
 
 	return tmos.EnsureDir(dbDir, 0700)
 }
@@ -158,7 +145,7 @@ func ResetState(dbDir string, logger log.Logger) error {
 // ResetFilePV loads the file private validator and resets the watermark to 0. If used on an existing network,
 // this can cause the node to double sign.
 // XXX: this is unsafe and should only suitable for testnets.
-func ResetFilePV(privValKeyFile, privValStateFile string, logger log.Logger, keyType string) error {
+func ResetFilePV(privValKeyFile, privValStateFile string, keyType string) error {
 	if _, err := os.Stat(privValKeyFile); err == nil {
 		pv, err := privval.LoadFilePVEmptyState(privValKeyFile, privValStateFile)
 		if err != nil {
@@ -183,23 +170,32 @@ func ResetFilePV(privValKeyFile, privValStateFile string, logger log.Logger, key
 	return nil
 }
 
-// ResetPeerStore removes the peer store containing all information used by the tendermint networking layer
-// In the case of a reset, new peers will need to be set either via the config or through the discovery mechanism
+// ResetPeerStore removes the peer store containing all information used by the tendermint networking layer.
+// In the case of a reset, new peers will need to be set either via the config or through the discovery mechanism.
+// It checks both legacy (data/peerstore.db) and new (data/tendermint/peerstore.db) locations.
 func ResetPeerStore(dbDir string) error {
-	peerstore := filepath.Join(dbDir, "peerstore.db")
-	if tmos.FileExists(peerstore) {
-		return os.RemoveAll(peerstore)
+	legacy := filepath.Join(dbDir, "peerstore.db")
+	if tmos.FileExists(legacy) {
+		if err := os.RemoveAll(legacy); err != nil {
+			return err
+		}
+	}
+	newPath := filepath.Join(dbDir, "tendermint", "peerstore.db")
+	if tmos.FileExists(newPath) {
+		if err := os.RemoveAll(newPath); err != nil {
+			return err
+		}
 	}
 	return nil
 }
 
-func MakeUnsafeResetAllCommand(conf *config.Config, logger log.Logger) *cobra.Command {
+func MakeUnsafeResetAllCommand(conf *config.Config) *cobra.Command {
 	var keyType string
 
 	resetAllCmd := &cobra.Command{
 		Use:   "unsafe-reset-all",
-		Short: "Removes all tendermint data including signing state",
-		Long: `Removes all tendermint data including signing state.
+		Short: "Removes all tendermint data, wasm directory, and signing state",
+		Long: `Removes all tendermint data including signing state, and the wasm directory (contract blobs and compiled modules).
 Only use in testing. This can cause the node to double sign`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Get the --home flag value from the command
@@ -214,12 +210,12 @@ Only use in testing. This can cause the node to double sign`,
 			}
 
 			return ResetAll(conf.DBDir(), conf.PrivValidator.KeyFile(),
-				conf.PrivValidator.StateFile(), logger, keyType, home)
+				conf.PrivValidator.StateFile(), keyType, home)
 		},
 	}
 
 	resetAllCmd.Flags().StringVar(&keyType, "key", types.ABCIPubKeyTypeEd25519,
-		"Signer key type. Options: ed25519, secp256k1")
+		"Signer key type (ed25519 only)")
 
 	return resetAllCmd
 }

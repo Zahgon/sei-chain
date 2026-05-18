@@ -4,13 +4,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/x/auth/signing"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/signing"
 	"github.com/sei-protocol/sei-chain/testutil/processblock"
 	"github.com/sei-protocol/sei-chain/testutil/processblock/verify"
 )
 
 func TestEpoch(t *testing.T) {
-	app := processblock.NewTestApp()
+	app := processblock.NewTestApp(t)
 	_ = processblock.CommonPreset(app)
 	app.FastEpoch()
 	for i, testCase := range []TestCase{

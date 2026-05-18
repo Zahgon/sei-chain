@@ -11,32 +11,32 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/version"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/version"
+	"google.golang.org/grpc/credentials/insecure"
 
-	abcitypes "github.com/tendermint/tendermint/abci/types"
+	abcitypes "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 
 	rosettatypes "github.com/coinbase/rosetta-sdk-go/types"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/tendermint/tendermint/rpc/client/http"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/http"
 	"google.golang.org/grpc"
 
-	crgerrs "github.com/cosmos/cosmos-sdk/server/rosetta/lib/errors"
-	crgtypes "github.com/cosmos/cosmos-sdk/server/rosetta/lib/types"
+	crgerrs "github.com/sei-protocol/sei-chain/sei-cosmos/server/rosetta/lib/errors"
+	crgtypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/rosetta/lib/types"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	grpctypes "github.com/cosmos/cosmos-sdk/types/grpc"
-	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
-	auth "github.com/cosmos/cosmos-sdk/x/auth/types"
-	bank "github.com/cosmos/cosmos-sdk/x/bank/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	grpctypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/grpc"
+	authtx "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/tx"
+	auth "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
+	bank "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 
-	tmrpc "github.com/tendermint/tendermint/rpc/client"
+	tmrpc "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client"
 )
 
 // interface assertion
 var _ crgtypes.Client = (*Client)(nil)
 
-const tmWebsocketPath = "/websocket"
 const defaultNodeTimeout = 15 * time.Second
 
 // Client implements a single network client to interact with cosmos based chains
@@ -99,7 +99,7 @@ func NewClient(cfg *Config) (*Client, error) {
 
 // Bootstrap is gonna connect the client to the endpoints
 func (c *Client) Bootstrap() error {
-	grpcConn, err := grpc.Dial(c.config.GRPCEndpoint, grpc.WithInsecure())
+	grpcConn, err := grpc.Dial(c.config.GRPCEndpoint, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return err
 	}
@@ -322,7 +322,7 @@ func (c *Client) GetUnconfirmedTx(ctx context.Context, hash string) (*rosettatyp
 
 	// iterate over unconfirmed txs to find the one with matching hash
 	for _, unconfirmedTx := range res.Txs {
-		if !bytes.Equal(unconfirmedTx.Hash(), hashAsBytes) {
+		if got := unconfirmedTx.Hash(); !bytes.Equal(got[:], hashAsBytes) {
 			continue
 		}
 

@@ -9,10 +9,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/cosmos/iavl"
-	"github.com/sei-protocol/sei-db/proto"
-	"github.com/sei-protocol/sei-db/ss/types"
-	"github.com/sei-protocol/sei-db/tools/utils"
+	"github.com/sei-protocol/sei-chain/sei-db/db_engine/types"
+	"github.com/sei-protocol/sei-chain/sei-db/proto"
+	"github.com/sei-protocol/sei-chain/sei-db/tools/utils"
 )
 
 // writeToDBConcurrently generates random write load against the db
@@ -42,8 +41,8 @@ func writeToDBConcurrently(db types.StateStore, allKVs []utils.KeyValuePair, con
 
 			for j := start; j < end; j += batchSize {
 				ncs := &proto.NamedChangeSet{}
-				cs := &iavl.ChangeSet{}
-				cs.Pairs = []*iavl.KVPair{}
+				cs := &proto.ChangeSet{}
+				cs.Pairs = []*proto.KVPair{}
 
 				batchEnd := j + batchSize
 				if batchEnd > end {
@@ -54,7 +53,7 @@ func writeToDBConcurrently(db types.StateStore, allKVs []utils.KeyValuePair, con
 				for k := j; k < batchEnd; k++ {
 					kv := allKVs[k]
 					// No store key for benchmarks
-					cs.Pairs = append(cs.Pairs, &iavl.KVPair{
+					cs.Pairs = append(cs.Pairs, &proto.KVPair{
 						Key:   kv.Key,
 						Value: kv.Value,
 					})
@@ -97,26 +96,22 @@ func BenchmarkDBWrite(db types.StateStore, inputKVDir string, numVersions int, c
 	// Write each version sequentially
 	totalTime := time.Duration(0)
 	writeCount := 0
-	v := 1
-	for ; v < (numVersions + 1); v++ {
+	for v := 1; v < numVersions+1; v++ {
 		// Write shuffled entries to RocksDB concurrently
 		fmt.Printf("On Version %+v\n", v)
-		totalLatencies := []time.Duration{}
 		startTime := time.Now()
 		latencies := writeToDBConcurrently(db, kvData, concurrency, int64(v), batchSize)
 		endTime := time.Now()
 		totalTime += endTime.Sub(startTime)
-		totalLatencies = append(totalLatencies, latencies...)
 		writeCount += len(latencies)
 
-		sort.Slice(totalLatencies, func(i, j int) bool { return totalLatencies[i] < totalLatencies[j] })
+		sort.Slice(latencies, func(i, j int) bool { return latencies[i] < latencies[j] })
 		// Latencies per version
-		fmt.Printf("P50 Latency: %v\n", utils.CalculatePercentile(totalLatencies, 50))
-		fmt.Printf("P75 Latency: %v\n", utils.CalculatePercentile(totalLatencies, 75))
-		fmt.Printf("P99 Latency: %v\n", utils.CalculatePercentile(totalLatencies, 99))
+		fmt.Printf("P50 Latency: %v\n", utils.CalculatePercentile(latencies, 50))
+		fmt.Printf("P75 Latency: %v\n", utils.CalculatePercentile(latencies, 75))
+		fmt.Printf("P99 Latency: %v\n", utils.CalculatePercentile(latencies, 99))
 		fmt.Printf("Total time: %v\n", totalTime)
 		fmt.Printf("Total Successfully Written %d\n", writeCount)
-		totalLatencies = nil
 		runtime.GC()
 	}
 

@@ -1,46 +1,22 @@
-//go:build gofuzz || go1.18
+//go:build gofuzz
 
 package tests
 
 import (
-	"context"
 	"testing"
 
-	abciclient "github.com/tendermint/tendermint/abci/client"
-	"github.com/tendermint/tendermint/abci/example/kvstore"
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/internal/mempool"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/example/kvstore"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
 )
 
-type TestPeerEvictor struct {
-	evicting map[types.NodeID]struct{}
-}
-
-func NewTestPeerEvictor() *TestPeerEvictor {
-	return &TestPeerEvictor{evicting: map[types.NodeID]struct{}{}}
-}
-
-func (e *TestPeerEvictor) Errored(peerID types.NodeID, err error) {
-	e.evicting[peerID] = struct{}{}
-}
-
 func FuzzMempool(f *testing.F) {
-	app := kvstore.NewApplication()
-	logger := log.NewNopLogger()
-	conn := abciclient.NewLocalClient(logger, app)
-	err := conn.Start(context.TODO())
-	if err != nil {
-		panic(err)
-	}
-
 	cfg := config.DefaultMempoolConfig()
 	cfg.Broadcast = false
 
-	mp := mempool.NewTxMempool(logger, cfg, conn, NewTestPeerEvictor())
+	mp := mempool.NewTxMempool(cfg.ToMempoolConfig(), kvstore.NewProxy(), mempool.NopMetrics(), mempool.NopTxConstraintsFetcher)
 
 	f.Fuzz(func(t *testing.T, data []byte) {
-		_ = mp.CheckTx(t.Context(), data, nil, mempool.TxInfo{})
+		_, _ = mp.CheckTx(t.Context(), data, mempool.TxInfo{})
 	})
 }

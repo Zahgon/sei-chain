@@ -7,13 +7,14 @@ import (
 	"testing"
 	"time"
 
-	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
-	host "github.com/cosmos/ibc-go/v3/modules/core/24-host"
+	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
+	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	wasmkeeper "github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/keeper"
 )
 
 const ChainIDPrefix = "testchain"
@@ -79,14 +80,18 @@ func (coord *Coordinator) UpdateTime() {
 func (coord *Coordinator) UpdateTimeForChain(chain *TestChain) {
 	chain.CurrentHeader.Time = coord.CurrentTime.UTC()
 	wasmApp := chain.App.(*TestingAppDecorator).WasmApp
-	wasmApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
-		Height:  chain.App.LastBlockHeight() + 1,
-		Time:    chain.CurrentHeader.Time,
-		AppHash: chain.CurrentHeader.AppHash,
+	_, err := wasmApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
+		Header: &tmproto.Header{
+			ChainID: chain.ChainID,
+			Height:  chain.App.LastBlockHeight() + 1,
+			Time:    chain.CurrentHeader.Time,
+			AppHash: chain.CurrentHeader.AppHash,
 
-		ValidatorsHash:     chain.Vals.Hash(),
-		NextValidatorsHash: chain.Vals.Hash(),
+			ValidatorsHash:     chain.Vals.Hash(),
+			NextValidatorsHash: chain.Vals.Hash(),
+		},
 	})
+	require.NoError(coord.t, err)
 }
 
 // Setup constructs a TM client, connection, and channel on both chains provided. It will
@@ -202,7 +207,8 @@ func (coord *Coordinator) CommitBlock(chains ...*TestChain) {
 	for _, chain := range chains {
 		wasmApp := chain.App.(*TestingAppDecorator).WasmApp
 		wasmApp.SetDeliverStateToCommit()
-		wasmApp.Commit(context.Background())
+		_, err := wasmApp.Commit(context.Background())
+		require.NoError(coord.t, err)
 		chain.NextBlock()
 	}
 	coord.IncrementTime()
@@ -212,16 +218,20 @@ func (coord *Coordinator) CommitBlock(chains ...*TestChain) {
 func (coord *Coordinator) CommitNBlocks(chain *TestChain, n uint64) {
 	for i := uint64(0); i < n; i++ {
 		wasmApp := chain.App.(*TestingAppDecorator).WasmApp
-		wasmApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
-			Height:  chain.App.LastBlockHeight() + 1,
-			Time:    chain.CurrentHeader.Time,
-			AppHash: chain.CurrentHeader.AppHash,
+		_, err := wasmApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
+			Header: &tmproto.Header{
+				Height:  chain.App.LastBlockHeight() + 1,
+				Time:    chain.CurrentHeader.Time,
+				AppHash: chain.CurrentHeader.AppHash,
 
-			ValidatorsHash:     chain.Vals.Hash(),
-			NextValidatorsHash: chain.Vals.Hash(),
+				ValidatorsHash:     chain.Vals.Hash(),
+				NextValidatorsHash: chain.Vals.Hash(),
+			},
 		})
+		require.NoError(coord.t, err)
 		wasmApp.SetDeliverStateToCommit()
-		chain.App.Commit(context.Background())
+		_, err = chain.App.Commit(context.Background())
+		require.NoError(coord.t, err)
 		chain.NextBlock()
 		coord.IncrementTime()
 	}

@@ -2,12 +2,10 @@ package factory
 
 import (
 	"context"
+	"fmt"
 	"sort"
-	"testing"
 
-	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func Validator(ctx context.Context, votingPower int64) (*types.Validator, types.PrivValidator, error) {
@@ -21,16 +19,17 @@ func Validator(ctx context.Context, votingPower int64) (*types.Validator, types.
 	return val, privVal, nil
 }
 
-func ValidatorSet(ctx context.Context, t *testing.T, numValidators int, votingPower int64) (*types.ValidatorSet, []types.PrivValidator) {
+func ValidatorSet(ctx context.Context, numValidators int, votingPower int64) (*types.ValidatorSet, []types.PrivValidator) {
 	var (
 		valz           = make([]*types.Validator, numValidators)
 		privValidators = make([]types.PrivValidator, numValidators)
 	)
-	t.Helper()
 
 	for i := 0; i < numValidators; i++ {
 		val, privValidator, err := Validator(ctx, votingPower)
-		require.NoError(t, err)
+		if err != nil {
+			panic(fmt.Errorf("Validator(): %w", err))
+		}
 		valz[i] = val
 		privValidators[i] = privValidator
 	}

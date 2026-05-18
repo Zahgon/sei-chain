@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"io"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	dbm "github.com/tendermint/tm-db"
 
-	snapshottypes "github.com/cosmos/cosmos-sdk/snapshots/types"
-	"github.com/cosmos/cosmos-sdk/types/kv"
-	"github.com/cosmos/cosmos-sdk/utils"
+	snapshottypes "github.com/sei-protocol/sei-chain/sei-cosmos/snapshots/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/utils"
 )
 
 type Store interface {
@@ -137,20 +137,7 @@ type MultiStore interface {
 	// tracing operations. The modified MultiStore is returned.
 	SetTracingContext(TraceContext) MultiStore
 
-	// ListeningEnabled returns if listening is enabled for the KVStore belonging the provided StoreKey
-	ListeningEnabled(key StoreKey) bool
-
-	// AddListeners adds WriteListeners for the KVStore belonging to the provided StoreKey
-	// It appends the listeners to a current set, if one already exists
-	AddListeners(key StoreKey, listeners []WriteListener)
-
 	GetWorkingHash() ([]byte, error)
-
-	// Returns Events Emitted from the internal event manager
-	GetEvents() []abci.Event
-
-	// Resets the tracked event list
-	ResetEvents()
 
 	// SetKVStores is a generalized wrapper method
 	SetKVStores(handler func(key StoreKey, s KVStore) CacheWrap) MultiStore
@@ -213,12 +200,6 @@ type CommitMultiStore interface {
 	// starting a new chain at an arbitrary height.
 	SetInitialVersion(version int64) error
 
-	// SetIAVLCacheSize sets the cache size of the IAVL tree.
-	SetIAVLCacheSize(size int)
-
-	// SetIAVLDisableFastNode enables/disables fastnode feature on iavl.
-	SetIAVLDisableFastNode(disable bool)
-
 	// RollbackToVersion rollback the db to specific version(height).
 	RollbackToVersion(version int64) error
 
@@ -280,12 +261,6 @@ type CacheKVStore interface {
 
 	// Writes operations to underlying KVStore
 	Write()
-
-	// Returns Events Emitted from the internal event manager
-	GetEvents() []abci.Event
-
-	// Resets the tracked event list
-	ResetEvents()
 }
 
 // CommitKVStore is an interface for MultiStore.
@@ -305,19 +280,11 @@ type CacheWrap interface {
 	// Write syncs with the underlying store.
 	Write()
 
-	GetEvents() []abci.Event
-
-	// Resets the tracked event list
-	ResetEvents()
-
 	// CacheWrap recursively wraps again.
 	CacheWrap(storeKey StoreKey) CacheWrap
 
 	// CacheWrapWithTrace recursively wraps again with tracing enabled.
 	CacheWrapWithTrace(storeKey StoreKey, w io.Writer, tc TraceContext) CacheWrap
-
-	// CacheWrapWithListeners recursively wraps again with listening enabled
-	CacheWrapWithListeners(storeKey StoreKey, listeners []WriteListener) CacheWrap
 }
 
 type CacheWrapper interface {
@@ -326,9 +293,6 @@ type CacheWrapper interface {
 
 	// CacheWrapWithTrace branches a store with tracing enabled.
 	CacheWrapWithTrace(storeKey StoreKey, w io.Writer, tc TraceContext) CacheWrap
-
-	// CacheWrapWithListeners recursively wraps again with listening enabled
-	CacheWrapWithListeners(storeKey StoreKey, listeners []WriteListener) CacheWrap
 }
 
 func (cid CommitID) IsZero() bool {
@@ -486,4 +450,11 @@ type StoreWithInitialVersion interface {
 	// SetInitialVersion sets the initial version of the IAVL tree. It is used when
 	// starting a new chain at an arbitrary height.
 	SetInitialVersion(version int64)
+}
+
+type GigaMultiStore interface {
+	GetGigaKVStore(StoreKey) KVStore
+	WriteGiga()
+	IsStoreGiga(key StoreKey) bool
+	SetGigaKVStores(handler func(sk StoreKey, s KVStore) KVStore) MultiStore
 }

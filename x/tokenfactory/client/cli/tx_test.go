@@ -4,15 +4,15 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/client"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"google.golang.org/grpc"
 	"os"
 	"testing"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/testutil"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil"
+	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
 	"github.com/stretchr/testify/require"
 )
@@ -177,9 +177,7 @@ func Test_ParseAllowListJSON(t *testing.T) {
 func TestNewCreateDenomCmd_AllowList(t *testing.T) {
 	// Setup codec and client context
 	cdc := codec.NewLegacyAmino()
-	clientCtx := client.Context{
-		LegacyAmino: cdc,
-	}
+	clientCtx := client.Context{}.WithLegacyAmino(cdc)
 
 	// Create a temporary command to test
 	cmd := NewCreateDenomCmd()
@@ -238,9 +236,7 @@ func TestNewCreateDenomCmd_AllowList(t *testing.T) {
 func TestNewUpdateDenomCmd_AllowList(t *testing.T) {
 	// Setup codec and client context
 	cdc := codec.NewLegacyAmino()
-	clientCtx := client.Context{
-		LegacyAmino: cdc,
-	}
+	clientCtx := client.Context{}.WithLegacyAmino(cdc)
 
 	// Create a temporary command to test
 	cmd := NewUpdateDenomCmd()

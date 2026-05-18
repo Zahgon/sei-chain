@@ -3,11 +3,11 @@ package keeper_test
 import (
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/types"
 	"github.com/stretchr/testify/require"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
 
 func TestBaseFeePerGas(t *testing.T) {
@@ -22,7 +22,7 @@ func TestBaseFeePerGas(t *testing.T) {
 }
 
 func TestAdjustBaseFeePerGas(t *testing.T) {
-	k, ctx := testkeeper.MockEVMKeeper()
+	k, ctx := testkeeper.MockEVMKeeper(t)
 	testCases := []struct {
 		name            string
 		currentBaseFee  float64
@@ -180,7 +180,7 @@ func TestAdjustBaseFeePerGas(t *testing.T) {
 }
 
 func TestGetDynamicBaseFeePerGasWithNilMinFee(t *testing.T) {
-	k, ctx := testkeeper.MockEVMKeeper()
+	k, ctx := testkeeper.MockEVMKeeper(t)
 
 	// Test case 1: When dynamic base fee doesn't exist and minimum fee is nil
 	store := ctx.KVStore(k.GetStoreKey())
@@ -201,7 +201,7 @@ func TestGetDynamicBaseFeePerGasWithNilMinFee(t *testing.T) {
 }
 
 func TestGetPrevBlockBaseFeePerGasWithNilMinFee(t *testing.T) {
-	k, ctx := testkeeper.MockEVMKeeper()
+	k, ctx := testkeeper.MockEVMKeeper(t)
 
 	// Test case 1: When dynamic base fee doesn't exist and minimum fee is nil
 	store := ctx.KVStore(k.GetStoreKey())

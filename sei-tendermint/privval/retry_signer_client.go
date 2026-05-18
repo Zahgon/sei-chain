@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tendermint/tendermint/crypto"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 // RetrySignerClient wraps SignerClient adding retry for each operation (except
@@ -59,16 +59,16 @@ func (sc *RetrySignerClient) GetPubKey(ctx context.Context) (crypto.PubKey, erro
 		}
 		// If remote signer errors, we don't retry.
 		if _, ok := err.(*RemoteSignerError); ok {
-			return nil, err
+			return pk, err
 		}
 		select {
 		case <-ctx.Done():
-			return nil, ctx.Err()
+			return pk, ctx.Err()
 		case <-t.C:
 			t.Reset(sc.timeout)
 		}
 	}
-	return nil, fmt.Errorf("exhausted all attempts to get pubkey: %w", err)
+	return pk, fmt.Errorf("exhausted all attempts to get pubkey: %w", err)
 }
 
 func (sc *RetrySignerClient) SignVote(ctx context.Context, chainID string, vote *tmproto.Vote) error {

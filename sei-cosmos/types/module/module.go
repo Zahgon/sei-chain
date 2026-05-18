@@ -34,19 +34,22 @@ import (
 	"sort"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/telemetry"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/seilog"
 	"github.com/spf13/cobra"
-	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	genesistypes "github.com/cosmos/cosmos-sdk/types/genesis"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	genesistypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/genesis"
 )
+
+var logger = seilog.NewLogger("cosmos", "types", "module")
 
 // AppModuleBasic is the standard form for basic non-dependant elements of an application module.
 type AppModuleBasic interface {
@@ -258,23 +261,13 @@ func (gam GenesisOnlyAppModule) RegisterServices(Configurator) {}
 // ConsensusVersion implements AppModule/ConsensusVersion.
 func (gam GenesisOnlyAppModule) ConsensusVersion() uint64 { return 1 }
 
-// BeginBlock returns an empty module begin-block
-func (gam GenesisOnlyAppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {}
-
-// EndBlock returns an empty module end-block
-func (GenesisOnlyAppModule) EndBlock(_ sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
-	return []abci.ValidatorUpdate{}
-}
-
 // Manager defines a module manager that provides the high level utility for managing and executing
 // operations for a group of modules
 type Manager struct {
 	Modules            map[string]AppModule
 	OrderInitGenesis   []string
 	OrderExportGenesis []string
-	OrderBeginBlockers []string
 	OrderMidBlockers   []string
-	OrderEndBlockers   []string
 	OrderMigrations    []string
 }
 
@@ -292,8 +285,6 @@ func NewManager(modules ...AppModule) *Manager {
 		Modules:            moduleMap,
 		OrderInitGenesis:   modulesStr,
 		OrderExportGenesis: modulesStr,
-		OrderBeginBlockers: modulesStr,
-		OrderEndBlockers:   modulesStr,
 	}
 }
 
@@ -309,21 +300,9 @@ func (m *Manager) SetOrderExportGenesis(moduleNames ...string) {
 	m.OrderExportGenesis = moduleNames
 }
 
-// SetOrderBeginBlockers sets the order of set begin-blocker calls
-func (m *Manager) SetOrderBeginBlockers(moduleNames ...string) {
-	m.assertNoForgottenModules("SetOrderBeginBlockers", moduleNames)
-	m.OrderBeginBlockers = moduleNames
-}
-
 // SetOrderMidBlockers sets the order of set mid-blocker calls
 func (m *Manager) SetOrderMidBlockers(moduleNames ...string) {
 	m.OrderMidBlockers = moduleNames
-}
-
-// SetOrderEndBlockers sets the order of set end-blocker calls
-func (m *Manager) SetOrderEndBlockers(moduleNames ...string) {
-	m.assertNoForgottenModules("SetOrderEndBlockers", moduleNames)
-	m.OrderEndBlockers = moduleNames
 }
 
 // SetOrderMigrations sets the order of migrations to be run. If not set
@@ -581,7 +560,7 @@ func (m Manager) RunMigrations(ctx sdk.Context, cfg Configurator, fromVM Version
 			}
 
 			moduleValUpdates := module.InitGenesis(ctx, cfgtor.cdc, module.DefaultGenesis(cfgtor.cdc))
-			ctx.Logger().Info(fmt.Sprintf("adding a new module: %s", moduleName))
+			logger.Info("adding a new module", "module", moduleName)
 			// The module manager assumes only one module will update the
 			// validator set, and that it will not be by a new module.
 			if len(moduleValUpdates) > 0 {
@@ -593,27 +572,6 @@ func (m Manager) RunMigrations(ctx sdk.Context, cfg Configurator, fromVM Version
 	}
 
 	return updatedVM, nil
-}
-
-// BeginBlock performs begin block functionality for all modules. It creates a
-// child context with an event manager to aggregate events emitted from all
-// modules.
-func (m *Manager) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) abci.ResponseBeginBlock {
-	ctx = ctx.WithEventManager(sdk.NewEventManager())
-
-	defer telemetry.MeasureSince(time.Now(), "module", "total_begin_block")
-	for _, moduleName := range m.OrderBeginBlockers {
-		module, ok := m.Modules[moduleName].(BeginBlockAppModule)
-		if ok {
-			moduleStartTime := time.Now()
-			module.BeginBlock(ctx, req)
-			telemetry.ModuleMeasureSince(moduleName, moduleStartTime, "module", "begin_block")
-		}
-	}
-
-	return abci.ResponseBeginBlock{
-		Events: ctx.EventManager().ABCIEvents(),
-	}
 }
 
 // EndBlock performs end block functionality for all modules. It creates a
@@ -634,39 +592,6 @@ func (m *Manager) MidBlock(ctx sdk.Context, height int64) []abci.Event {
 	}
 
 	return ctx.EventManager().ABCIEvents()
-}
-
-// EndBlock performs end block functionality for all modules. It creates a
-// child context with an event manager to aggregate events emitted from all
-// modules.
-func (m *Manager) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) abci.ResponseEndBlock {
-	ctx = ctx.WithEventManager(sdk.NewEventManager())
-	validatorUpdates := []abci.ValidatorUpdate{}
-	defer telemetry.MeasureSince(time.Now(), "module", "total_end_block")
-	for _, moduleName := range m.OrderEndBlockers {
-		module, ok := m.Modules[moduleName].(EndBlockAppModule)
-		if !ok {
-			continue
-		}
-		moduleStartTime := time.Now()
-		moduleValUpdates := module.EndBlock(ctx, req)
-		telemetry.ModuleMeasureSince(moduleName, moduleStartTime, "module", "end_block")
-		// use these validator updates if provided, the module manager assumes
-		// only one module will update the validator set
-		if len(moduleValUpdates) > 0 {
-			if len(validatorUpdates) > 0 {
-				panic("validator EndBlock updates already set by a previous module")
-			}
-
-			validatorUpdates = moduleValUpdates
-		}
-
-	}
-
-	return abci.ResponseEndBlock{
-		ValidatorUpdates: validatorUpdates,
-		Events:           ctx.EventManager().ABCIEvents(),
-	}
 }
 
 // GetVersionMap gets consensus version from all modules

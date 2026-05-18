@@ -1,69 +1,53 @@
-# ---------- Builder ----------
-FROM docker.io/golang:1.24.5 AS go-builder
-WORKDIR /app/sei-chain
+ARG SEICTL_VERSION=v0.0.5@sha256:268fc871e8358e706f505f0ce9ef318761e0d00d317716e9d87218734ae1a81c
 
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates wget && \
-    rm -rf /var/lib/apt/lists/*
+FROM ghcr.io/sei-protocol/seictl:${SEICTL_VERSION} AS seictl
+FROM docker.io/golang:1.25.6-bookworm@sha256:2f768d462dbffbb0f0b3a5171009f162945b086f326e0b2a8fd5d29c3219ff14 AS builder
+WORKDIR /go/src/sei-chain
 
-# Cache Go modules
-COPY go.work go.work.sum ./
-COPY go.mod go.sum ./
-COPY sei-wasmvm/go.mod sei-wasmvm/go.sum ./sei-wasmvm/
-COPY sei-wasmd/go.mod sei-wasmd/go.sum ./sei-wasmd/
-COPY sei-cosmos/go.mod sei-cosmos/go.sum ./sei-cosmos/
-COPY sei-tendermint/go.mod sei-tendermint/go.sum ./sei-tendermint/
-COPY sei-db/go.mod sei-db/go.sum ./sei-db/
-RUN go mod download
+COPY sei-wasmd/x/wasm/artifacts/v152/api/*.so /tmp/wasmd-libs/
+COPY sei-wasmd/x/wasm/artifacts/v155/api/*.so /tmp/wasmd-libs/
+COPY sei-wasmvm/internal/api/*.so /tmp/wasmvm-libs/
+ARG TARGETARCH
+RUN mkdir -p /go/lib && \
+    case "${TARGETARCH}" in \
+      amd64) ARCH_SUFFIX="x86_64" ;; \
+      arm64) ARCH_SUFFIX="aarch64" ;; \
+      *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    cp /tmp/wasmd-libs/libwasmvm152.${ARCH_SUFFIX}.so /go/lib/ && \
+    cp /tmp/wasmd-libs/libwasmvm155.${ARCH_SUFFIX}.so /go/lib/ && \
+    cp /tmp/wasmvm-libs/libwasmvm.${ARCH_SUFFIX}.so /go/lib/
 
-# Copy source and build (CGO enabled for libwasmvm)
+COPY go.* ./
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    go mod download
+
 COPY . .
 ENV CGO_ENABLED=1
-RUN make build
+ARG SEI_CHAIN_REF=""
+ARG GO_BUILD_TAGS=""
+ARG GO_BUILD_ARGS=""
+RUN --mount=type=cache,target=/go/pkg/mod \
+    --mount=type=cache,target=/root/.cache/go-build \
+    BUILD_TAGS="netgo ledger ${GO_BUILD_TAGS}" && \
+    VERSION_PKG="github.com/sei-protocol/sei-chain/sei-cosmos/version" && \
+    LDFLAGS="\
+      -X ${VERSION_PKG}.Name=sei \
+      -X ${VERSION_PKG}.AppName=seid \
+      -X ${VERSION_PKG}.Version=$(git describe --tags || echo "${SEI_CHAIN_REF}") \
+      -X ${VERSION_PKG}.Commit=$(git log -1 --format='%H') \
+      -X '${VERSION_PKG}.BuildTags=${BUILD_TAGS}'" && \
+    go build -tags "${BUILD_TAGS}" -ldflags "${LDFLAGS}" ${GO_BUILD_ARGS} -o /go/bin/seid ./cmd/seid
 
-# Collect libwasmvm*.so: try ./seiwasmd; else auto-derive version and download glibc .so
-ARG WASMVM_VERSION=""
-RUN set -eux; \
-    mkdir -p /build/deps; \
-    LIBWASM_DIR="./sei-wasmd"; \
-    found=0; \
-    # Copy from module cache if present
-    FILES="$(find "$LIBWASM_DIR" -type f -name 'libwasmvm*.so' -print || true)"; \
-    if [ -n "$FILES" ]; then \
-        echo "$FILES" | xargs -r -n1 -I{} cp -v "{}" /build/deps/; \
-        found=1; \
-    fi; \
-    # If not found, derive version (or use provided WASMVM_VERSION) and download
-    if [ "$found" -eq 0 ]; then \
-        if [ -z "$WASMVM_VERSION" ]; then \
-            WASMVM_VERSION="$(go list -f '{{if .Replace}}{{.Replace.Version}}{{else}}{{.Version}}{{end}}' -m github.com/CosmWasm/wasmvm 2>/dev/null | sed 's/^v//' | sed 's/-.*//')"; \
-            [ -n "$WASMVM_VERSION" ] || { echo "wasmvm version not found in go.mod; set --build-arg WASMVM_VERSION=vX.Y.Z"; exit 1; }; \
-            WASMVM_VERSION="v${WASMVM_VERSION}"; \
-        fi; \
-        case "${TARGETARCH:-$(go env GOARCH)}" in \
-            amd64) ARCH=x86_64 ;; \
-            arm64) ARCH=aarch64 ;; \
-            *) echo "unsupported arch: ${TARGETARCH:-$(go env GOARCH)}"; exit 1 ;; \
-        esac; \
-        wget -O /build/deps/libwasmvm.${ARCH}.so \
-            "https://github.com/CosmWasm/wasmvm/releases/download/${WASMVM_VERSION}/libwasmvm.${ARCH}.so"; \
-        found=1; \
-    fi; \
-    ls -l /build/deps
+FROM docker.io/ubuntu:24.04@sha256:104ae83764a5119017b8e8d6218fa0832b09df65aae7d5a6de29a85d813da2fb
 
-# ---------- Runtime ----------
-FROM ubuntu:24.04
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates && \
     rm -rf /var/lib/apt/lists/*
 
-COPY --from=go-builder /app/sei-chain/build/seid /bin/seid
-COPY --from=go-builder /build/deps/libwasmvm*.so /usr/lib/
+COPY --from=builder /go/bin/seid /usr/bin/
+COPY --from=seictl /usr/bin/seictl /usr/bin/
+COPY --from=builder /go/lib/*.so /usr/lib/
 
-# Ensure generic symlink exists and refresh linker cache
-RUN bash -lc '\
-    set -eux; \
-    arch=$(uname -m); case "$arch" in x86_64|amd64) a=x86_64 ;; aarch64|arm64) a=aarch64 ;; *) a="" ;; esac; \
-    if [ -n "$a" ] && [ -f "/usr/lib/libwasmvm.${a}.so" ]; then ln -sf "/usr/lib/libwasmvm.${a}.so" /usr/lib/libwasmvm.so; fi; \
-    ldconfig'
-
-EXPOSE 1317 26656 26657 8545 9090
-ENTRYPOINT ["/bin/seid"]
+ENTRYPOINT ["/usr/bin/seid"]

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/artifacts/cw1155"
 	"github.com/sei-protocol/sei-chain/x/evm/artifacts/cw20"
@@ -86,7 +86,7 @@ func TestQueryPointer(t *testing.T) {
 }
 
 func TestQueryPointee(t *testing.T) {
-	k, ctx := testkeeper.MockEVMKeeper()
+	k, ctx := testkeeper.MockEVMKeeper(t)
 	_, pointerAddr1 := testkeeper.MockAddressPair()
 	seiAddr2, evmAddr2 := testkeeper.MockAddressPair()
 	seiAddr3, evmAddr3 := testkeeper.MockAddressPair()

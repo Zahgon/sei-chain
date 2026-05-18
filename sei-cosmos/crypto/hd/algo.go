@@ -3,10 +3,9 @@ package hd
 import (
 	bip39 "github.com/cosmos/go-bip39"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/sr25519"
-	"github.com/cosmos/cosmos-sdk/crypto/types"
-	tmsr25519 "github.com/tendermint/tendermint/crypto/sr25519"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/sr25519"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 )
 
 // PubKeyType defines an algorithm to derive key-pairs which can be used for cryptographic signing.
@@ -105,6 +104,6 @@ func (s sr25519Algo) Generate() GenerateFn {
 		var bzArr = make([]byte, secp256k1.PrivKeySize)
 		copy(bzArr, bz)
 
-		return &sr25519.PrivKey{PrivKey: tmsr25519.GenPrivKeyFromSecret(bzArr)}
+		return sr25519.GenPrivKeyFromSecret(bzArr)
 	}
 }

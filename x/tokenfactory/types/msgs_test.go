@@ -2,21 +2,21 @@ package types_test
 
 import (
 	"fmt"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/stretchr/testify/require"
 
 	"github.com/sei-protocol/sei-chain/x/tokenfactory/types"
 
-	"github.com/tendermint/tendermint/crypto/ed25519"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
 )
 
 // TestMsgCreateDenom tests if valid/invalid create denom messages are properly validated/invalidated
 func TestMsgCreateDenom(t *testing.T) {
 	// generate a private/public key pair and get the respective address
-	pk1 := ed25519.GenPrivKey().PubKey()
+	pk1 := ed25519.GenerateSecretKey().Public()
 	addr1 := sdk.AccAddress(pk1.Address())
 
 	// make a proper createDenom message
@@ -80,7 +80,7 @@ func TestMsgCreateDenom(t *testing.T) {
 
 func TestMsgUpdateDenom(t *testing.T) {
 	// generate a private/public key pair and get the respective address
-	pk1 := ed25519.GenPrivKey().PubKey()
+	pk1 := ed25519.GenerateSecretKey().Public()
 	addr1 := sdk.AccAddress(pk1.Address())
 
 	// make a proper createDenom message
@@ -146,7 +146,7 @@ func TestMsgUpdateDenom(t *testing.T) {
 // TestMsgMint tests if valid/invalid create denom messages are properly validated/invalidated
 func TestMsgMint(t *testing.T) {
 	// generate a private/public key pair and get the respective address
-	pk1 := ed25519.GenPrivKey().PubKey()
+	pk1 := ed25519.GenerateSecretKey().Public()
 	addr1 := sdk.AccAddress(pk1.Address())
 
 	// make a proper mint message
@@ -219,7 +219,7 @@ func TestMsgMint(t *testing.T) {
 // TestMsgBurn tests if valid/invalid create denom messages are properly validated/invalidated
 func TestMsgBurn(t *testing.T) {
 	// generate a private/public key pair and get the respective address
-	pk1 := ed25519.GenPrivKey().PubKey()
+	pk1 := ed25519.GenerateSecretKey().Public()
 	addr1 := sdk.AccAddress(pk1.Address())
 
 	// make a proper burn message
@@ -289,9 +289,9 @@ func TestMsgBurn(t *testing.T) {
 // TestMsgChangeAdmin tests if valid/invalid create denom messages are properly validated/invalidated
 func TestMsgChangeAdmin(t *testing.T) {
 	// generate a private/public key pair and get the respective address
-	pk1 := ed25519.GenPrivKey().PubKey()
+	pk1 := ed25519.GenerateSecretKey().Public()
 	addr1 := sdk.AccAddress(pk1.Address())
-	pk2 := ed25519.GenPrivKey().PubKey()
+	pk2 := ed25519.GenerateSecretKey().Public()
 	addr2 := sdk.AccAddress(pk2.Address())
 	tokenFactoryDenom := fmt.Sprintf("factory/%s/bitcoin", addr1.String())
 

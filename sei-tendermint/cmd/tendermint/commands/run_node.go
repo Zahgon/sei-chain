@@ -1,17 +1,9 @@
 package commands
 
 import (
-	"bytes"
-	"crypto/sha256"
-	"fmt"
 	"github.com/spf13/cobra"
-	"io"
-	"os"
-	"os/signal"
-	"syscall"
 
-	cfg "github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/libs/log"
+	cfg "github.com/sei-protocol/sei-chain/sei-tendermint/config"
 )
 
 var (
@@ -45,12 +37,8 @@ func AddNodeFlags(cmd *cobra.Command, conf *cfg.Config) {
 			"consensus votes before joining consensus")
 
 	// abci flags
-	cmd.Flags().String(
-		"proxy-app",
-		conf.ProxyApp,
-		"proxy app address, or one of: 'kvstore',"+
-			" 'persistent_kvstore', 'e2e' or 'noop' for local testing.")
-	cmd.Flags().String("abci", conf.ABCI, "specify abci transport (socket | grpc)")
+	mustMarkDeprecated(cmd, "proxy-app", "out-of-process ABCI has been removed; this flag is ignored")
+	mustMarkDeprecated(cmd, "abci", "out-of-process ABCI has been removed; this flag is ignored")
 
 	// rpc flags
 	cmd.Flags().String("rpc.laddr", conf.RPC.ListenAddress, "RPC listen address. Port required")
@@ -86,6 +74,13 @@ func AddNodeFlags(cmd *cobra.Command, conf *cfg.Config) {
 	addDBFlags(cmd, conf)
 }
 
+func mustMarkDeprecated(cmd *cobra.Command, name, message string) {
+	cmd.Flags().String(name, "", "")
+	if err := cmd.Flags().MarkDeprecated(name, message); err != nil {
+		panic(err)
+	}
+}
+
 func addDBFlags(cmd *cobra.Command, conf *cfg.Config) {
 	cmd.Flags().String(
 		"db-backend",
@@ -95,74 +90,4 @@ func addDBFlags(cmd *cobra.Command, conf *cfg.Config) {
 		"db-dir",
 		conf.DBPath,
 		"database directory")
-}
-
-// NewRunNodeCmd returns the command that allows the CLI to start a node.
-// It can be used with a custom PrivValidator and in-process ABCI application.
-func NewRunNodeCmd(nodeProvider cfg.ServiceProvider, conf *cfg.Config, logger log.Logger, restartCh chan struct{}) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:     "start",
-		Aliases: []string{"node", "run"},
-		Short:   "Run the tendermint node",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			if err := checkGenesisHash(conf); err != nil {
-				return err
-			}
-
-			ctx, cancel := signal.NotifyContext(cmd.Context(), os.Interrupt, syscall.SIGTERM)
-			defer cancel()
-
-			n, err := nodeProvider(ctx, conf, logger, restartCh)
-			if err != nil {
-				return fmt.Errorf("failed to create node: %w", err)
-			}
-
-			if err := n.Start(ctx); err != nil {
-				return fmt.Errorf("failed to start node: %w", err)
-			}
-
-			logger.Info("started node", "chain", conf.ChainID())
-
-			for {
-				select {
-				case <-ctx.Done():
-					return nil
-				case <-restartCh:
-					logger.Info("Received signal to restart node.")
-					n.Stop()
-					os.Exit(1)
-				}
-			}
-		},
-	}
-
-	AddNodeFlags(cmd, conf)
-	return cmd
-}
-
-func checkGenesisHash(config *cfg.Config) error {
-	if len(genesisHash) == 0 || config.Genesis == "" {
-		return nil
-	}
-
-	// Calculate SHA-256 hash of the genesis file.
-	f, err := os.Open(config.GenesisFile())
-	if err != nil {
-		return fmt.Errorf("can't open genesis file: %w", err)
-	}
-	defer f.Close()
-	h := sha256.New()
-	if _, err := io.Copy(h, f); err != nil {
-		return fmt.Errorf("error when hashing genesis file: %w", err)
-	}
-	actualHash := h.Sum(nil)
-
-	// Compare with the flag.
-	if !bytes.Equal(genesisHash, actualHash) {
-		return fmt.Errorf(
-			"--genesis-hash=%X does not match %s hash: %X",
-			genesisHash, config.GenesisFile(), actualHash)
-	}
-
-	return nil
 }

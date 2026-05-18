@@ -8,17 +8,17 @@ import (
 	json "encoding/json"
 	reflect "reflect"
 
-	client "github.com/cosmos/cosmos-sdk/client"
-	codec "github.com/cosmos/cosmos-sdk/codec"
-	types "github.com/cosmos/cosmos-sdk/codec/types"
-	types0 "github.com/cosmos/cosmos-sdk/types"
-	module "github.com/cosmos/cosmos-sdk/types/module"
 	gomock "github.com/golang/mock/gomock"
 	mux "github.com/gorilla/mux"
 	runtime "github.com/grpc-ecosystem/grpc-gateway/runtime"
+	client "github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	codec "github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	types "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	types0 "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	module "github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	types1 "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	cobra "github.com/spf13/cobra"
-	abci "github.com/tendermint/tendermint/abci/types"
-	types1 "github.com/tendermint/tendermint/abci/types"
 )
 
 // MockAppModuleBasic is a mock of AppModuleBasic interface.
@@ -446,20 +446,6 @@ func (m *MockAppModule) MidBlock(arg0 types0.Context, arg1 int64) {
 func (mr *MockAppModuleMockRecorder) MidBlock(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "MidBlock", reflect.TypeOf((*MockAppModule)(nil).MidBlock), arg0, arg1)
-}
-
-// EndBlock mocks base method.
-func (m *MockAppModule) EndBlock(arg0 types0.Context, arg1 abci.RequestEndBlock) []abci.ValidatorUpdate {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "EndBlock", arg0, arg1)
-	ret0, _ := ret[0].([]abci.ValidatorUpdate)
-	return ret0
-}
-
-// EndBlock indicates an expected call of EndBlock.
-func (mr *MockAppModuleMockRecorder) EndBlock(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EndBlock", reflect.TypeOf((*MockAppModule)(nil).EndBlock), arg0, arg1)
 }
 
 // ExportGenesis mocks base method.
@@ -1315,20 +1301,6 @@ func (m *MockEndBlockAppModule) DefaultGenesis(arg0 codec.JSONCodec) json.RawMes
 func (mr *MockEndBlockAppModuleMockRecorder) DefaultGenesis(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DefaultGenesis", reflect.TypeOf((*MockEndBlockAppModule)(nil).DefaultGenesis), arg0)
-}
-
-// EndBlock mocks base method.
-func (m *MockEndBlockAppModule) EndBlock(arg0 types0.Context, arg1 types1.RequestEndBlock) []types1.ValidatorUpdate {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "EndBlock", arg0, arg1)
-	ret0, _ := ret[0].([]types1.ValidatorUpdate)
-	return ret0
-}
-
-// EndBlock indicates an expected call of EndBlock.
-func (mr *MockEndBlockAppModuleMockRecorder) EndBlock(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "EndBlock", reflect.TypeOf((*MockEndBlockAppModule)(nil).EndBlock), arg0, arg1)
 }
 
 // ExportGenesis mocks base method.

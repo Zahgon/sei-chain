@@ -5,16 +5,16 @@ import (
 	"encoding/binary"
 	"runtime/debug"
 
-	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/cosmos/cosmos-sdk/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/types/query"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/prefix"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/query"
 
-	"github.com/CosmWasm/wasmd/x/wasm/types"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 )
 
 var _ types.QueryServer = &grpcQuerier{}
@@ -191,7 +191,7 @@ func (q grpcQuerier) SmartContractState(c context.Context, req *types.QuerySmart
 				err = sdkerrors.ErrPanic
 			}
 			rsp = nil
-			moduleLogger(ctx).
+			logger.
 				Debug("smart query contract",
 					"error", "recovering panic",
 					"contract-address", req.Address,

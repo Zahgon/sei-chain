@@ -2,38 +2,38 @@ package baseapp
 
 import (
 	"fmt"
+	"math/big"
 	"reflect"
 	"strings"
 	"sync"
 	"time"
 
 	"github.com/armon/go-metrics"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/gogo/protobuf/proto"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/server/config"
+	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/snapshots"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/utils/tracing"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/legacy/legacytx"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmcfg "github.com/sei-protocol/sei-chain/sei-tendermint/config"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	sdbm "github.com/sei-protocol/sei-tm-db/backends"
+	"github.com/sei-protocol/seilog"
+	"github.com/spf13/cast"
+	leveldbutils "github.com/syndtr/goleveldb/leveldb/util"
+	dbm "github.com/tendermint/tm-db"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
-
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/server/config"
-	"github.com/cosmos/cosmos-sdk/utils/tracing"
-	"github.com/gogo/protobuf/proto"
-	sdbm "github.com/sei-protocol/sei-tm-db/backends"
-	"github.com/spf13/cast"
-	leveldbutils "github.com/syndtr/goleveldb/leveldb/util"
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmcfg "github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/libs/log"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	dbm "github.com/tendermint/tm-db"
-
-	"github.com/cosmos/cosmos-sdk/codec/types"
-	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	"github.com/cosmos/cosmos-sdk/snapshots"
-	"github.com/cosmos/cosmos-sdk/store"
-	"github.com/cosmos/cosmos-sdk/telemetry"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	acltypes "github.com/cosmos/cosmos-sdk/types/accesscontrol"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
+	"go.opentelemetry.io/otel/trace/noop"
 )
 
 const (
@@ -63,6 +63,8 @@ const (
 )
 
 var (
+	logger = seilog.NewLogger("cosmos", "baseapp")
+
 	_ abci.Application = (*BaseApp)(nil)
 )
 
@@ -79,16 +81,21 @@ type (
 	DeliverTxHook func(sdk.Context, sdk.Tx, [32]byte, sdk.DeliverTxHookInput)
 )
 
+func (app *BaseApp) EvmNonce(_ common.Address) uint64 {
+	return 0
+}
+
+func (app *BaseApp) EvmBalance(_ common.Address, _ []byte) *big.Int {
+	return big.NewInt(0)
+}
+
 // BaseApp reflects the ABCI application implementation.
-type BaseApp struct { //nolint: maligned
+type BaseApp struct {
 	// initialized on creation
-	logger            log.Logger
 	name              string // application name from abci.Info
 	interfaceRegistry types.InterfaceRegistry
 	txDecoder         sdk.TxDecoder // unmarshal []byte into sdk.Tx
 
-	anteDepGenerator          sdk.AnteDepGenerator // ante dep generator for parallelization
-	prepareProposalHandler    sdk.PrepareProposalHandler
 	processProposalHandler    sdk.ProcessProposalHandler
 	finalizeBlocker           sdk.FinalizeBlocker
 	anteHandler               sdk.AnteHandler // ante handler for fee and auth
@@ -100,7 +107,6 @@ type BaseApp struct { //nolint: maligned
 
 	appStore
 	baseappVersions
-	peerFilters
 	snapshotData
 	abciData
 	moduleRouter
@@ -109,11 +115,11 @@ type BaseApp struct { //nolint: maligned
 	//
 	// checkState is set on InitChain and reset on Commit
 	// deliverState is set on InitChain and BeginBlock and set to nil on Commit
-	checkState           *state // for CheckTx
-	deliverState         *state // for DeliverTx
-	prepareProposalState *state
-	processProposalState *state
-	stateToCommit        *state
+	checkState              *state // for CheckTx
+	deliverState            *state // for DeliverTx
+	processProposalState    *state
+	processProposalCleanCtx sdk.Context // snapshot before optimistic processing
+	stateToCommit           *state
 
 	// paramStore is used to query for ABCI consensus parameters from an
 	// application parameter store.
@@ -155,15 +161,10 @@ type BaseApp struct { //nolint: maligned
 
 	// indexEvents defines the set of events in the form {eventType}.{attributeKey},
 	// which informs Tendermint what to index. If empty, all events will be indexed.
-	indexEvents map[string]struct{}
-
-	// abciListeners for hooking into the ABCI message processing of the BaseApp
-	// and exposing the requests and responses to external consumers
-	abciListeners []ABCIListener
+	IndexEvents map[string]struct{}
 
 	ChainID string
 
-	votesInfoLock    sync.RWMutex
 	commitLock       *sync.Mutex
 	checkTxStateLock *sync.RWMutex
 
@@ -177,6 +178,10 @@ type BaseApp struct { //nolint: maligned
 	occEnabled         bool
 
 	deliverTxHooks []DeliverTxHook
+
+	execProcessProposalMs int64
+	execFinalizeBlockMs   int64
+	execBlockTxCount      int
 }
 
 type appStore struct {
@@ -200,13 +205,9 @@ type moduleRouter struct {
 }
 
 type abciData struct {
-	initChainer  sdk.InitChainer  // initialize state with validators and state blob
-	beginBlocker sdk.BeginBlocker // logic to run before any txs
-	midBlocker   sdk.MidBlocker   // logic to run after all txs, and to determine valset changes
-	endBlocker   sdk.EndBlocker   // logic to run after all txs, and to determine valset changes
-
-	// absent validators from begin block
-	voteInfos []abci.VoteInfo
+	initChainer sdk.InitChainer // initialize state with validators and state blob
+	midBlocker  sdk.MidBlocker  // logic to run after all txs, and to determine valset changes
+	endBlocker  sdk.EndBlocker  // logic to run after all txs, and to determine valset changes
 }
 
 type baseappVersions struct {
@@ -234,7 +235,7 @@ type snapshotData struct {
 //
 // NOTE: The db is used to store the version number for now.
 func NewBaseApp(
-	name string, logger log.Logger, db dbm.DB, txDecoder sdk.TxDecoder, tmConfig *tmcfg.Config, appOpts servertypes.AppOptions, options ...func(*BaseApp),
+	name string, db dbm.DB, txDecoder sdk.TxDecoder, tmConfig *tmcfg.Config, appOpts servertypes.AppOptions, options ...func(*BaseApp),
 ) *BaseApp {
 	cms := store.NewCommitMultiStore(db)
 	archivalVersion := cast.ToInt64(appOpts.Get(FlagArchivalVersion))
@@ -252,8 +253,8 @@ func NewBaseApp(
 	}
 
 	// Enable Tracing
-	tp := trace.NewNoopTracerProvider()
-	otel.SetTracerProvider(trace.NewNoopTracerProvider())
+	tp := noop.NewTracerProvider()
+	otel.SetTracerProvider(noop.NewTracerProvider())
 	tr := tp.Tracer("component-main")
 	tracingEnabled := cast.ToBool(appOpts.Get(tracing.FlagTracing))
 	if tracingEnabled {
@@ -265,8 +266,7 @@ func NewBaseApp(
 		tr = tp.Tracer("component-main")
 	}
 	app := &BaseApp{
-		logger: logger,
-		name:   name,
+		name: name,
 		appStore: appStore{
 			db:             db,
 			cms:            cms,
@@ -330,7 +330,7 @@ func (app *BaseApp) ConcurrencyWorkers() int {
 	return app.concurrencyWorkers
 }
 
-// OccEnabled returns the whether OCC is enabled for the BaseApp.
+// OccEnabled returns whether OCC is enabled for the BaseApp.
 func (app *BaseApp) OccEnabled() bool {
 	return app.occEnabled
 }
@@ -338,11 +338,6 @@ func (app *BaseApp) OccEnabled() bool {
 // Version returns the application's version string.
 func (app *BaseApp) Version() string {
 	return app.version
-}
-
-// Logger returns the logger of the BaseApp.
-func (app *BaseApp) Logger() log.Logger {
-	return app.logger
 }
 
 // Trace returns the boolean value for logging error stack traces.
@@ -520,10 +515,10 @@ func (app *BaseApp) setTrace(trace bool) {
 }
 
 func (app *BaseApp) setIndexEvents(ie []string) {
-	app.indexEvents = make(map[string]struct{})
+	app.IndexEvents = make(map[string]struct{})
 
 	for _, e := range ie {
-		app.indexEvents[e] = struct{}{}
+		app.IndexEvents[e] = struct{}{}
 	}
 }
 
@@ -553,7 +548,7 @@ func (app *BaseApp) IsSealed() bool { return app.sealed }
 // on Commit.
 func (app *BaseApp) setCheckState(header tmproto.Header) {
 	ms := app.cms.CacheMultiStore()
-	ctx := sdk.NewContext(ms, header, true, app.logger).WithMinGasPrices(app.minGasPrices)
+	ctx := sdk.NewContext(ms, header, true).WithMinGasPrices(app.minGasPrices)
 	app.checkTxStateLock.Lock()
 	defer app.checkTxStateLock.Unlock()
 	if app.checkState == nil {
@@ -574,7 +569,7 @@ func (app *BaseApp) setCheckState(header tmproto.Header) {
 // Commit.
 func (app *BaseApp) setDeliverState(header tmproto.Header) {
 	ms := app.cms.CacheMultiStore()
-	ctx := sdk.NewContext(ms, header, false, app.logger)
+	ctx := sdk.NewContext(ms, header, false)
 	if app.deliverState == nil {
 		app.deliverState = &state{
 			ms:  ms,
@@ -587,24 +582,9 @@ func (app *BaseApp) setDeliverState(header tmproto.Header) {
 	app.deliverState.SetContext(ctx)
 }
 
-func (app *BaseApp) setPrepareProposalState(header tmproto.Header) {
-	ms := app.cms.CacheMultiStore()
-	ctx := sdk.NewContext(ms, header, false, app.logger)
-	if app.prepareProposalState == nil {
-		app.prepareProposalState = &state{
-			ms:  ms,
-			ctx: ctx,
-			mtx: &sync.RWMutex{},
-		}
-		return
-	}
-	app.prepareProposalState.SetMultiStore(ms)
-	app.prepareProposalState.SetContext(ctx)
-}
-
 func (app *BaseApp) setProcessProposalState(header tmproto.Header) {
 	ms := app.cms.CacheMultiStore()
-	ctx := sdk.NewContext(ms, header, false, app.logger)
+	ctx := sdk.NewContext(ms, header, false)
 	if app.processProposalState == nil {
 		app.processProposalState = &state{
 			ms:  ms,
@@ -618,14 +598,9 @@ func (app *BaseApp) setProcessProposalState(header tmproto.Header) {
 }
 
 func (app *BaseApp) resetStatesExceptCheckState() {
-	app.prepareProposalState = nil
 	app.processProposalState = nil
 	app.deliverState = nil
 	app.stateToCommit = nil
-}
-
-func (app *BaseApp) setPrepareProposalHeader(header tmproto.Header) {
-	app.prepareProposalState.SetContext(app.prepareProposalState.Context().WithBlockHeader(header))
 }
 
 func (app *BaseApp) setProcessProposalHeader(header tmproto.Header) {
@@ -636,10 +611,12 @@ func (app *BaseApp) setDeliverStateHeader(header tmproto.Header) {
 	app.deliverState.SetContext(app.deliverState.Context().WithBlockHeader(header).WithBlockHeight(header.Height))
 }
 
-func (app *BaseApp) preparePrepareProposalState() {
-	if app.prepareProposalState.MultiStore().TracingEnabled() {
-		app.prepareProposalState.SetMultiStore(app.prepareProposalState.MultiStore().SetTracingContext(nil).(sdk.CacheMultiStore))
-	}
+// GetProcessProposalCleanContext returns a context snapshotted at the start of
+// ProcessProposal, before the handler runs. It has the correct store state,
+// consensus params, and header, but is immune to speculative writes from
+// optimistic processing.
+func (app *BaseApp) GetProcessProposalCleanContext() sdk.Context {
+	return app.processProposalCleanCtx
 }
 
 func (app *BaseApp) prepareProcessProposalState(headerHash []byte) {
@@ -656,13 +633,6 @@ func (app *BaseApp) prepareDeliverState(headerHash []byte) {
 	app.deliverState.SetContext(app.deliverState.Context().
 		WithHeaderHash(headerHash).
 		WithConsensusParams(app.GetConsensusParams(app.deliverState.Context())))
-}
-
-func (app *BaseApp) setVotesInfo(votes []abci.VoteInfo) {
-	app.votesInfoLock.Lock()
-	defer app.votesInfoLock.Unlock()
-
-	app.voteInfos = votes
 }
 
 // GetConsensusParams returns the current consensus parameters from the BaseApp's
@@ -752,9 +722,9 @@ func (app *BaseApp) StoreConsensusParams(ctx sdk.Context, cp *tmproto.ConsensusP
 	app.paramStore.Set(ctx, ParamStoreKeyABCIParams, cp.Abci)
 }
 
-func (app *BaseApp) validateHeight(req abci.RequestBeginBlock) error {
-	if req.Header.Height < 1 {
-		return fmt.Errorf("invalid height: %d", req.Header.Height)
+func (app *BaseApp) ValidateHeight(height int64) error {
+	if height < 1 {
+		return fmt.Errorf("invalid height: %d", height)
 	}
 
 	// expectedHeight holds the expected height to validate.
@@ -772,8 +742,8 @@ func (app *BaseApp) validateHeight(req abci.RequestBeginBlock) error {
 		expectedHeight = app.LastBlockHeight() + 1
 	}
 
-	if req.Header.Height != expectedHeight {
-		return fmt.Errorf("invalid height: %d; expected: %d", req.Header.Height, expectedHeight)
+	if height != expectedHeight {
+		return fmt.Errorf("invalid height: %d; expected: %d", height, expectedHeight)
 	}
 
 	return nil
@@ -807,11 +777,8 @@ func (app *BaseApp) getState(mode runTxMode) *state {
 
 // retrieve the context for the tx w/ txBytes and other memoized values.
 func (app *BaseApp) getContextForTx(mode runTxMode, txBytes []byte) sdk.Context {
-	app.votesInfoLock.RLock()
-	defer app.votesInfoLock.RUnlock()
 	ctx := app.getState(mode).Context().
-		WithTxBytes(txBytes).
-		WithVoteInfos(app.voteInfos)
+		WithTxBytes(txBytes)
 
 	ctx = ctx.WithConsensusParams(app.GetConsensusParams(ctx))
 
@@ -826,9 +793,25 @@ func (app *BaseApp) getContextForTx(mode runTxMode, txBytes []byte) sdk.Context 
 	return ctx
 }
 
-// cacheTxContext returns a new context based off of the provided context with
+func (app *BaseApp) GetCheckTxContext(txBytes []byte, recheck bool) sdk.Context {
+	mode := runTxModeCheck
+	if recheck {
+		mode = runTxModeReCheck
+	}
+	ctx := app.getState(mode).Context().
+		WithTxBytes(txBytes)
+	if recheck {
+		ctx = ctx.WithIsReCheckTx(true)
+	} else {
+		ctx = ctx.WithIsCheckTx(true)
+	}
+
+	return ctx.WithConsensusParams(app.GetConsensusParams(ctx))
+}
+
+// CacheTxContext returns a new context based off of the provided context with
 // a branched multi-store.
-func (app *BaseApp) cacheTxContext(ctx sdk.Context, checksum [32]byte) (sdk.Context, sdk.CacheMultiStore) {
+func (app *BaseApp) CacheTxContext(ctx sdk.Context, checksum [32]byte) (sdk.Context, sdk.CacheMultiStore) {
 	ms := ctx.MultiStore()
 	// TODO: https://github.com/cosmos/cosmos-sdk/issues/2824
 	msCache := ms.CacheMultiStore()
@@ -845,6 +828,13 @@ func (app *BaseApp) cacheTxContext(ctx sdk.Context, checksum [32]byte) (sdk.Cont
 	return ctx.WithMultiStore(msCache), msCache
 }
 
+type runTxResult struct {
+	gasInfo    sdk.GasInfo
+	result     *sdk.Result
+	anteEvents []abci.Event
+	ctx        sdk.Context
+}
+
 // runTx processes a transaction within a given execution mode, encoded transaction
 // bytes, and the decoded transaction itself. All state transitions occur through
 // a cached Context depending on the mode provided. State only gets persisted
@@ -852,16 +842,7 @@ func (app *BaseApp) cacheTxContext(ctx sdk.Context, checksum [32]byte) (sdk.Cont
 // Note, gas execution info is always returned. A reference to a Result is
 // returned if the tx does not run out of gas and if all the messages are valid
 // and execute successfully. An error is returned otherwise.
-func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [32]byte) (
-	gInfo sdk.GasInfo,
-	result *sdk.Result,
-	anteEvents []abci.Event,
-	priority int64,
-	pendingTxChecker abci.PendingTxChecker,
-	expireHandler abci.ExpireTxHandler,
-	txCtx sdk.Context,
-	err error,
-) {
+func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [32]byte) (runTxRes runTxResult, err error) {
 	defer telemetry.MeasureThroughputSinceWithLabels(
 		telemetry.TxCount,
 		[]metrics.Label{
@@ -870,21 +851,12 @@ func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [
 		time.Now(),
 	)
 
-	// Reset events after each checkTx or simulateTx or recheckTx
-	// DeliverTx is garbage collected after FinalizeBlocker
-	if mode != runTxModeDeliver {
-		defer ctx.MultiStore().ResetEvents()
-	}
-
-	// Wait for signals to complete before starting the transaction. This is needed before any of the
-	// resources are acceessed by the ante handlers and message handlers.
-	defer acltypes.SendAllSignalsForTx(ctx.TxCompletionChannels())
-	acltypes.WaitForAllSignalsForTx(ctx.TxBlockingChannels())
 	// check for existing parent tracer, and if applicable, use it
 	spanCtx, span := app.TracingInfo.StartWithContext("RunTx", ctx.TraceSpanContext())
 	defer span.End()
 	ctx = ctx.WithTraceSpanContext(spanCtx)
 	span.SetAttributes(attribute.String("txHash", fmt.Sprintf("%X", checksum)))
+	runTxRes.ctx = ctx
 
 	// NOTE: GasWanted should be returned by the AnteHandler. GasUsed is
 	// determined by the GasMeter. We need access to the context to get the gas
@@ -894,27 +866,27 @@ func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [
 
 	ms := ctx.MultiStore()
 
+	blockGasMeter := ctx.GasMeter()
 	defer func() {
 		if r := recover(); r != nil {
-			acltypes.SendAllSignalsForTx(ctx.TxCompletionChannels())
 			recoveryMW := newOutOfGasRecoveryMiddleware(gasWanted, ctx, app.runTxRecoveryMiddleware)
 			recoveryMW = newOCCAbortRecoveryMiddleware(recoveryMW) // TODO: do we have to wrap with occ enabled check?
-			err, result = processRecovery(r, recoveryMW), nil
-			if mode != runTxModeDeliver {
-				ctx.MultiStore().ResetEvents()
-			}
+			err, runTxRes.result = processRecovery(r, recoveryMW), nil
 		}
-		gInfo = sdk.GasInfo{GasWanted: gasWanted, GasUsed: ctx.GasMeter().GasConsumed(), GasEstimate: gasEstimate}
+		if ctx.GasMeter() == blockGasMeter {
+			return
+		}
+		runTxRes.gasInfo = sdk.GasInfo{GasWanted: gasWanted, GasUsed: ctx.GasMeter().GasConsumed(), GasEstimate: gasEstimate}
 	}()
 
 	if tx == nil {
-		return sdk.GasInfo{}, nil, nil, 0, nil, nil, ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "tx decode error")
+		return runTxRes, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "tx decode error")
 	}
 
 	msgs := tx.GetMsgs()
 
 	if err := validateBasicTxMsgs(msgs); err != nil {
-		return sdk.GasInfo{}, nil, nil, 0, nil, nil, ctx, err
+		return runTxRes, err
 	}
 
 	if app.anteHandler != nil {
@@ -933,7 +905,7 @@ func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [
 		// NOTE: Alternatively, we could require that AnteHandler ensures that
 		// writes do not happen if aborted/failed.  This may have some
 		// performance benefits, but it'll be more difficult to get right.
-		anteCtx, msCache = app.cacheTxContext(ctx, checksum)
+		anteCtx, msCache = app.CacheTxContext(ctx, checksum)
 		anteCtx = anteCtx.WithEventManager(sdk.NewEventManager())
 		newCtx, err := app.anteHandler(anteCtx, tx, mode == runTxModeSimulate)
 
@@ -945,11 +917,12 @@ func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [
 			// the instantiated gas meter in the AnteHandler, so we update the context
 			// prior to returning.
 			//
-			// This also replaces the GasMeter in the context where GasUsed was initalized 0
+			// This also replaces the GasMeter in the context where GasUsed was initialized 0
 			// and updated with gas consumed in the ante handler runs
 			// The GasMeter is a pointer and its passed to the RunMsg and tracks the consumed
 			// gas there too.
 			ctx = newCtx.WithMultiStore(ms)
+			runTxRes.ctx = ctx
 		}
 		defer func() {
 			if newCtx.DeliverTxCallback() != nil {
@@ -960,72 +933,49 @@ func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [
 		events := ctx.EventManager().Events()
 
 		if err != nil {
-			return gInfo, nil, nil, 0, nil, nil, ctx, err
+			return runTxRes, err
 		}
 		// GasMeter expected to be set in AnteHandler
 		gasWanted = ctx.GasMeter().Limit()
 		gasEstimate = ctx.GasEstimate()
 
-		// Dont need to validate in checkTx mode
-		if ctx.MsgValidator() != nil && mode == runTxModeDeliver {
-			storeAccessOpEvents := msCache.GetEvents()
-			accessOps := ctx.TxMsgAccessOps()[acltypes.ANTE_MSG_INDEX]
-
-			// TODO: (occ) This is an example of where we do our current validation. Note that this validation operates on the declared dependencies for a TX / antehandler + the utilized dependencies, whereas the validation
-			missingAccessOps := ctx.MsgValidator().ValidateAccessOperations(accessOps, storeAccessOpEvents)
-			if len(missingAccessOps) != 0 {
-				for op := range missingAccessOps {
-					ctx.Logger().Info((fmt.Sprintf("Antehandler Missing Access Operation:%s ", op.String())))
-					op.EmitValidationFailMetrics()
-				}
-				errMessage := fmt.Sprintf("Invalid Concurrent Execution antehandler missing %d access operations", len(missingAccessOps))
-				return gInfo, nil, nil, 0, nil, nil, ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidConcurrencyExecution, errMessage)
-			}
-		}
-
-		priority = ctx.Priority()
-		pendingTxChecker = ctx.PendingTxChecker()
-		expireHandler = ctx.ExpireTxHandler()
 		msCache.Write()
-		anteEvents = events.ToABCIEvents()
+		runTxRes.anteEvents = events.ToABCIEvents()
 		anteSpan.End()
 	}
 
 	// Create a new Context based off of the existing Context with a MultiStore branch
 	// in case message processing fails. At this point, the MultiStore
 	// is a branch of a branch.
-	runMsgCtx, msCache := app.cacheTxContext(ctx, checksum)
+	runMsgCtx, msCache := app.CacheTxContext(ctx, checksum)
 
 	// Attempt to execute all messages and only update state if all messages pass
-	// and we're in DeliverTx. Note, runMsgs will never return a reference to a
+	// and we're in DeliverTx. Note, RunMsgs will never return a reference to a
 	// Result if any single message fails or does not have a registered Handler.
-	result, err = app.runMsgs(runMsgCtx, msgs, mode)
+	runTxRes.result, err = app.RunMsgs(runMsgCtx, msgs)
 
-	if err == nil && mode == runTxModeDeliver {
+	if err == nil {
 		msCache.Write()
 	}
 	// we do this since we will only be looking at result in DeliverTx
-	if result != nil && len(anteEvents) > 0 {
+	if runTxRes.result != nil && len(runTxRes.anteEvents) > 0 {
 		// append the events in the order of occurrence
-		result.Events = append(anteEvents, result.Events...)
-	}
-	if ctx.CheckTxCallback() != nil {
-		ctx.CheckTxCallback()(ctx, err)
+		runTxRes.result.Events = append(runTxRes.anteEvents, runTxRes.result.Events...)
 	}
 	// only apply hooks if no error
-	if err == nil && (!ctx.IsEVM() || result.EvmError == "") {
+	if err == nil && (!ctx.IsEVM() || runTxRes.result.EvmError == "") {
 		var evmTxInfo *abci.EvmTxInfo
 		if ctx.IsEVM() {
 			evmTxInfo = &abci.EvmTxInfo{
-				SenderAddress: ctx.EVMSenderAddress(),
+				SenderAddress: ctx.EVMSenderAddress().Hex(),
 				Nonce:         ctx.EVMNonce(),
 				TxHash:        ctx.EVMTxHash(),
-				VmError:       result.EvmError,
+				VmError:       runTxRes.result.EvmError,
 			}
 		}
-		var events []abci.Event = []abci.Event{}
-		if result != nil {
-			events = sdk.MarkEventsToIndex(result.Events, app.indexEvents)
+		var events = []abci.Event{}
+		if runTxRes.result != nil {
+			events = sdk.MarkEventsToIndex(runTxRes.result.Events, app.IndexEvents)
 		}
 		for _, hook := range app.deliverTxHooks {
 			hook(ctx, tx, checksum, sdk.DeliverTxHookInput{
@@ -1034,20 +984,20 @@ func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [
 			})
 		}
 	}
-	return gInfo, result, anteEvents, priority, pendingTxChecker, expireHandler, ctx, err
+	return runTxRes, err
 }
 
-// runMsgs iterates through a list of messages and executes them with the provided
+// RunMsgs iterates through a list of messages and executes them with the provided
 // Context and execution mode. Messages will only be executed during simulation
 // and DeliverTx. An error is returned if any single message fails or if a
 // Handler does not exist for a given message route. Otherwise, a reference to a
 // Result is returned. The caller must not commit state if an error is returned.
-func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*sdk.Result, error) {
+func (app *BaseApp) RunMsgs(ctx sdk.Context, msgs []sdk.Msg) (*sdk.Result, error) {
 
 	defer telemetry.MeasureThroughputSinceWithLabels(
 		telemetry.MessageCount,
 		[]metrics.Label{
-			telemetry.NewLabel("mode", modeKeyToString[mode]),
+			telemetry.NewLabel("mode", "deliver"),
 		},
 		time.Now(),
 	)
@@ -1070,17 +1020,13 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 
 	// NOTE: GasWanted is determined by the AnteHandler and GasUsed by the GasMeter.
 	for i, msg := range msgs {
-		// skip actual execution for (Re)CheckTx mode
-		if mode == runTxModeCheck || mode == runTxModeReCheck {
-			break
-		}
 		var (
 			msgResult    *sdk.Result
 			eventMsgName string // name to use as value in event `message.action`
 			err          error
 		)
 
-		msgCtx, msgMsCache := app.cacheTxContext(ctx, [32]byte{})
+		msgCtx, msgMsCache := app.CacheTxContext(ctx, [32]byte{})
 		msgCtx = msgCtx.WithMessageIndex(i)
 
 		startTime := time.Now()
@@ -1131,33 +1077,12 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 		events = events.AppendEvents(msgEvents)
 
 		txMsgData.Data = append(txMsgData.Data, &sdk.MsgData{MsgType: sdk.MsgTypeURL(msg), Data: msgResult.Data})
-		msgLogs = append(msgLogs, sdk.NewABCIMessageLog(uint32(i), msgResult.Log, msgEvents))
+		msgLogs = append(msgLogs, sdk.NewABCIMessageLog(uint32(i), msgResult.Log, msgEvents)) //nolint:gosec // loop range index
 
 		msgMsCache.Write()
 
 		if msgResult.EvmError != "" {
 			evmError = msgResult.EvmError
-		}
-
-		if ctx.MsgValidator() == nil {
-			continue
-		}
-		storeAccessOpEvents := msgMsCache.GetEvents()
-		accessOps := ctx.TxMsgAccessOps()[i]
-		missingAccessOps := ctx.MsgValidator().ValidateAccessOperations(accessOps, storeAccessOpEvents)
-		// TODO: (occ) This is where we are currently validating our per message dependencies,
-		// whereas validation will be done holistically based on the mvkv for OCC approach
-		if len(missingAccessOps) != 0 {
-			for op := range missingAccessOps {
-				ctx.Logger().Info((fmt.Sprintf("eventMsgName=%s Missing Access Operation:%s ", eventMsgName, op.String())))
-				op.EmitValidationFailMetrics()
-			}
-			errMessage := fmt.Sprintf("Invalid Concurrent Execution messageIndex=%d, missing %d access operations", i, len(missingAccessOps))
-			// we need to bubble up the events for inspection
-			return &sdk.Result{
-				Log:    strings.TrimSpace(msgLogs.String()),
-				Events: events.ToABCIEvents(),
-			}, sdkerrors.Wrap(sdkerrors.ErrInvalidConcurrencyExecution, errMessage)
 		}
 	}
 
@@ -1174,10 +1099,6 @@ func (app *BaseApp) runMsgs(ctx sdk.Context, msgs []sdk.Msg, mode runTxMode) (*s
 	}, nil
 }
 
-func (app *BaseApp) GetAnteDepGenerator() sdk.AnteDepGenerator {
-	return app.anteDepGenerator
-}
-
 func (app *BaseApp) startCompactionRoutine(db dbm.DB) {
 	if app.compactionInterval == 0 {
 		return
@@ -1185,13 +1106,13 @@ func (app *BaseApp) startCompactionRoutine(db dbm.DB) {
 	go func() {
 		if goleveldb, ok := db.(*dbm.GoLevelDB); ok {
 			for {
-				time.Sleep(time.Duration(app.compactionInterval) * time.Second)
+				time.Sleep(time.Duration(app.compactionInterval) * time.Second) //nolint:gosec // compactionInterval is a small config value
 				if err := goleveldb.DB().CompactRange(leveldbutils.Range{Start: nil, Limit: nil}); err != nil {
-					app.Logger().Error(fmt.Sprintf("error compacting DB: %s", err))
+					logger.Error("Failed to compact DB", "err", err)
 				}
 			}
 		} else {
-			app.Logger().Info("exit compaction routine because underlying DB does not support compaction")
+			logger.Info("Exit compaction routine because underlying DB does not support compaction")
 		}
 	}()
 }
@@ -1201,36 +1122,23 @@ func (app *BaseApp) Close() error {
 	// and metadata in a non-atomic way
 	app.commitLock.Lock()
 	defer app.commitLock.Unlock()
-	if err := app.appStore.db.Close(); err != nil {
-		return err
+	if app.db != nil {
+		if err := app.db.Close(); err != nil {
+			return err
+		}
 	}
-	// close the underline database for storeV2
 	if err := app.cms.Close(); err != nil {
 		return err
 	}
-	if err := app.snapshotManager.Close(); err != nil {
-		return err
+	if app.snapshotManager != nil {
+		if err := app.snapshotManager.Close(); err != nil {
+			return err
+		}
 	}
 	if app.closeHandler == nil {
 		return nil
 	}
 	return app.closeHandler()
-}
-
-func (app *BaseApp) ReloadDB() error {
-	if err := app.db.Close(); err != nil {
-		return err
-	}
-	db, err := sdk.NewLevelDB("application", app.TmConfig.DBDir())
-	if err != nil {
-		return err
-	}
-	app.db = db
-	app.cms = store.NewCommitMultiStore(db)
-	if app.snapshotManager != nil {
-		app.snapshotManager.SetMultiStore(app.cms)
-	}
-	return nil
 }
 
 func (app *BaseApp) GetCheckCtx() sdk.Context {
@@ -1244,5 +1152,5 @@ func (app *BaseApp) RegisterDeliverTxHook(hook DeliverTxHook) {
 }
 
 func (app *BaseApp) InplaceTestnetInitialize(pk cryptotypes.PubKey) {
-	app.inplaceTestnetInitializer(pk)
+	_ = app.inplaceTestnetInitializer(pk)
 }

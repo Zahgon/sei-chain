@@ -4,15 +4,15 @@ import (
 	"errors"
 	"fmt"
 
-	wasmvmtypes "github.com/CosmWasm/wasmvm/types"
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
-	host "github.com/cosmos/ibc-go/v3/modules/core/24-host"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
+	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
+	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
+	wasmvmtypes "github.com/sei-protocol/sei-chain/sei-wasmvm/types"
 
-	"github.com/CosmWasm/wasmd/x/wasm/types"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 )
 
 // msgEncoder is an extension point to customize encodings
@@ -104,21 +104,6 @@ func (h SDKMessageHandler) handleSdkMessage(ctx sdk.Context, contractAddr sdk.Ad
 	// path should never be called, because all those Msgs should be
 	// registered within the `msgServiceRouter` already.
 	return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "can't route message %+v", msg)
-}
-
-// callDepthMessageHandler is a wrapper around a Messenger that checks the call depth before dispatching a message.
-type callDepthMessageHandler struct {
-	Messenger
-	MaxCallDepth uint32
-}
-
-func (h callDepthMessageHandler) DispatchMsg(ctx sdk.Context, contractAddr sdk.AccAddress, contractIBCPortID string, msg wasmvmtypes.CosmosMsg, info wasmvmtypes.MessageInfo, codeInfo types.CodeInfo) (events []sdk.Event, data [][]byte, err error) {
-	ctx, err = checkAndIncreaseCallDepth(ctx, h.MaxCallDepth)
-	if err != nil {
-		return nil, nil, sdkerrors.Wrap(err, "dispatch")
-	}
-
-	return h.Messenger.DispatchMsg(ctx, contractAddr, contractIBCPortID, msg, info, codeInfo)
 }
 
 // MessageHandlerChain defines a chain of handlers that are called one by one until it can be handled.
@@ -230,7 +215,7 @@ func NewBurnCoinMessageHandler(burner types.Burner) MessageHandlerFunc {
 			if err := burner.BurnCoins(ctx, types.ModuleName, coins); err != nil {
 				return nil, nil, sdkerrors.Wrap(err, "burn coins")
 			}
-			moduleLogger(ctx).Info("Burned", "amount", coins)
+			logger.Info("Burned", "amount", coins)
 			return nil, nil, nil
 		}
 		return nil, nil, types.ErrUnknownMsg

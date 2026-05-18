@@ -3,21 +3,21 @@ package ante_test
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
-	kmultisig "github.com/cosmos/cosmos-sdk/crypto/keys/multisig"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256r1"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/crypto/types/multisig"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/tx/signing"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante"
-	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/sei-protocol/sei-chain/app"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/ed25519"
+	kmultisig "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/multisig"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256r1"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types/multisig"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/tx/signing"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/ante"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/legacy/legacytx"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 )
 
 func (suite *AnteTestSuite) TestSetPubKey() {
@@ -49,8 +49,8 @@ func (suite *AnteTestSuite) TestSetPubKey() {
 	tx, err := suite.CreateTestTx(privs, accNums, accSeqs, suite.ctx.ChainID())
 	require.NoError(err)
 
-	spkd := sdk.DefaultWrappedAnteDecorator(ante.NewSetPubKeyDecorator(suite.app.AccountKeeper))
-	antehandler, _ := sdk.ChainAnteDecorators(spkd)
+	spkd := ante.NewSetPubKeyDecorator(suite.app.AccountKeeper)
+	antehandler := sdk.ChainAnteDecorators(spkd)
 
 	ctx, err := antehandler(suite.ctx, tx, false)
 	require.NoError(err)
@@ -67,7 +67,7 @@ func (suite *AnteTestSuite) TestSetPubKey() {
 func (suite *AnteTestSuite) TestConsumeSignatureVerificationGas() {
 	params := types.DefaultParams()
 	msg := []byte{1, 2, 3, 4}
-	cdc := simapp.MakeTestEncodingConfig().Amino
+	cdc := app.MakeEncodingConfig().Amino
 
 	p := types.DefaultParams()
 	skR1, _ := secp256r1.GenPrivKey()
@@ -144,9 +144,9 @@ func (suite *AnteTestSuite) TestSigVerification() {
 	feeAmount := testdata.NewTestFeeAmount()
 	gasLimit := testdata.NewTestGasLimit()
 
-	spkd := sdk.DefaultWrappedAnteDecorator(ante.NewSetPubKeyDecorator(suite.app.AccountKeeper))
-	svd := sdk.DefaultWrappedAnteDecorator(ante.NewSigVerificationDecorator(suite.app.AccountKeeper, suite.clientCtx.TxConfig.SignModeHandler()))
-	antehandler, _ := sdk.ChainAnteDecorators(spkd, svd)
+	spkd := ante.NewSetPubKeyDecorator(suite.app.AccountKeeper)
+	svd := ante.NewSigVerificationDecorator(suite.app.AccountKeeper, suite.clientCtx.TxConfig.SignModeHandler())
+	antehandler := sdk.ChainAnteDecorators(spkd, svd)
 
 	type testCase struct {
 		name        string
@@ -208,7 +208,7 @@ func (suite *AnteTestSuite) TestSigVerification() {
 // In the meantime, we want to make double-sure amino compatibility works.
 // ref: https://github.com/cosmos/cosmos-sdk/issues/7229
 func (suite *AnteTestSuite) TestSigVerification_ExplicitAmino() {
-	suite.app, suite.ctx = createTestApp(true)
+	suite.app, suite.ctx = createTestApp(suite.T(), true)
 	suite.ctx = suite.ctx.WithBlockHeight(1)
 
 	// Set up TxConfig.
@@ -219,7 +219,7 @@ func (suite *AnteTestSuite) TestSigVerification_ExplicitAmino() {
 	suite.clientCtx = client.Context{}.
 		WithTxConfig(txConfig)
 
-	anteHandler, _, err := ante.NewAnteHandler(
+	anteHandler, err := ante.NewAnteHandler(
 		ante.HandlerOptions{
 			AccountKeeper:   suite.app.AccountKeeper,
 			BankKeeper:      suite.app.BankKeeper,
@@ -257,9 +257,9 @@ func (suite *AnteTestSuite) TestSigVerification_ExplicitAmino() {
 	feeAmount := testdata.NewTestFeeAmount()
 	gasLimit := testdata.NewTestGasLimit()
 
-	spkd := sdk.DefaultWrappedAnteDecorator(ante.NewSetPubKeyDecorator(suite.app.AccountKeeper))
-	svd := sdk.DefaultWrappedAnteDecorator(ante.NewSigVerificationDecorator(suite.app.AccountKeeper, suite.clientCtx.TxConfig.SignModeHandler()))
-	antehandler, _ := sdk.ChainAnteDecorators(spkd, svd)
+	spkd := ante.NewSetPubKeyDecorator(suite.app.AccountKeeper)
+	svd := ante.NewSigVerificationDecorator(suite.app.AccountKeeper, suite.clientCtx.TxConfig.SignModeHandler())
+	antehandler := sdk.ChainAnteDecorators(spkd, svd)
 
 	type testCase struct {
 		name      string
@@ -349,10 +349,10 @@ func (suite *AnteTestSuite) runSigDecorators(params types.Params, _ bool, privs 
 	tx, err := suite.CreateTestTx(privs, accNums, accSeqs, suite.ctx.ChainID())
 	suite.Require().NoError(err)
 
-	spkd := sdk.DefaultWrappedAnteDecorator(ante.NewSetPubKeyDecorator(suite.app.AccountKeeper))
-	svgc := sdk.DefaultWrappedAnteDecorator(ante.NewSigGasConsumeDecorator(suite.app.AccountKeeper, ante.DefaultSigVerificationGasConsumer))
-	svd := sdk.DefaultWrappedAnteDecorator(ante.NewSigVerificationDecorator(suite.app.AccountKeeper, suite.clientCtx.TxConfig.SignModeHandler()))
-	antehandler, _ := sdk.ChainAnteDecorators(spkd, svgc, svd)
+	spkd := ante.NewSetPubKeyDecorator(suite.app.AccountKeeper)
+	svgc := ante.NewSigGasConsumeDecorator(suite.app.AccountKeeper, ante.DefaultSigVerificationGasConsumer)
+	svd := ante.NewSigVerificationDecorator(suite.app.AccountKeeper, suite.clientCtx.TxConfig.SignModeHandler())
+	antehandler := sdk.ChainAnteDecorators(spkd, svgc, svd)
 
 	// Determine gas consumption of antehandler with default params
 	before := suite.ctx.GasMeter().GasConsumed()
@@ -384,8 +384,8 @@ func (suite *AnteTestSuite) TestIncrementSequenceDecorator() {
 	tx, err := suite.CreateTestTx(privs, accNums, accSeqs, suite.ctx.ChainID())
 	suite.Require().NoError(err)
 
-	isd := sdk.DefaultWrappedAnteDecorator(ante.NewIncrementSequenceDecorator(suite.app.AccountKeeper))
-	antehandler, _ := sdk.ChainAnteDecorators(isd)
+	isd := ante.NewIncrementSequenceDecorator(suite.app.AccountKeeper)
+	antehandler := sdk.ChainAnteDecorators(isd)
 
 	testCases := []struct {
 		ctx         sdk.Context

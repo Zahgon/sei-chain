@@ -2,13 +2,13 @@ package mempool
 
 import (
 	"container/list"
+	"context"
 	"sync"
 	"time"
 
-	"github.com/rs/zerolog/log"
-
 	"github.com/patrickmn/go-cache"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 // TxCache defines an interface for raw transaction caching in a mempool.
@@ -22,10 +22,10 @@ type TxCache interface {
 
 	// Push adds the given transaction key to the cache and returns true if it was
 	// newly added. Otherwise, it returns false.
-	Push(tx types.TxKey) bool
+	Push(tx types.TxHash) bool
 
 	// Remove removes the given transaction key from the cache.
-	Remove(tx types.TxKey)
+	Remove(tx types.TxHash)
 
 	// Size returns the current size of the cache
 	Size() int
@@ -73,11 +73,11 @@ func (c *LRUTxCache) Reset() {
 	c.list.Init()
 }
 
-func (c *LRUTxCache) Push(txKey types.TxKey) bool {
+func (c *LRUTxCache) Push(txHash types.TxHash) bool {
 	c.mtx.Lock()
 	defer c.mtx.Unlock()
 
-	key := c.toCacheKey(txKey)
+	key := c.toCacheKey(txHash)
 	moved, ok := c.cacheMap[key]
 	if ok {
 		c.list.MoveToBack(moved)
@@ -99,11 +99,11 @@ func (c *LRUTxCache) Push(txKey types.TxKey) bool {
 	return true
 }
 
-func (c *LRUTxCache) Remove(txKey types.TxKey) {
+func (c *LRUTxCache) Remove(txHash types.TxHash) {
 	c.mtx.Lock()
 	defer c.mtx.Unlock()
 
-	key := c.toCacheKey(txKey)
+	key := c.toCacheKey(txHash)
 	e := c.cacheMap[key]
 	delete(c.cacheMap, key)
 
@@ -118,7 +118,7 @@ func (c *LRUTxCache) Size() int {
 	return c.list.Len()
 }
 
-func (c *LRUTxCache) toCacheKey(key types.TxKey) cacheKey {
+func (c *LRUTxCache) toCacheKey(key types.TxHash) cacheKey {
 	return cacheKey(trimToSize(key, c.maxKeyLen))
 }
 
@@ -127,43 +127,10 @@ type NopTxCache struct{}
 
 var _ TxCache = (*NopTxCache)(nil)
 
-func (NopTxCache) Reset()                {}
-func (NopTxCache) Push(types.TxKey) bool { return true }
-func (NopTxCache) Remove(types.TxKey)    {}
-func (NopTxCache) Size() int             { return 0 }
-
-// NopTxCacheWithTTL defines a no-op TTL transaction cache.
-type NopTxCacheWithTTL struct{}
-
-var _ TxCacheWithTTL = (*NopTxCacheWithTTL)(nil)
-
-func (NopTxCacheWithTTL) Set(types.TxKey, int)                {}
-func (NopTxCacheWithTTL) Get(types.TxKey) (int, bool)         { return 0, false }
-func (NopTxCacheWithTTL) Increment(types.TxKey)               {}
-func (NopTxCacheWithTTL) Reset()                              {}
-func (NopTxCacheWithTTL) GetForMetrics() (int, int, int, int) { return 0, 0, 0, 0 }
-func (NopTxCacheWithTTL) Stop()                               {}
-
-// TxCacheWithTTL defines an interface for TTL-based transaction caching
-type TxCacheWithTTL interface {
-	// Set adds a transaction to the cache with TTL
-	Set(txKey types.TxKey, counter int)
-
-	// Get retrieves the counter for a transaction key
-	Get(txKey types.TxKey) (counter int, found bool)
-
-	// Increment increments the counter for a transaction key, extending TTL
-	Increment(txKey types.TxKey)
-
-	// GetForMetrics returns the max count, total count, duplicate count, and non duplicate count
-	GetForMetrics() (int, int, int, int)
-
-	// Reset clears the cache
-	Reset()
-
-	// Stop stops the cache and cleans up background goroutines
-	Stop()
-}
+func (NopTxCache) Reset()                 {}
+func (NopTxCache) Push(types.TxHash) bool { return true }
+func (NopTxCache) Remove(types.TxHash)    {}
+func (NopTxCache) Size() int              { return 0 }
 
 // DuplicateTxCache implements TxCacheWithTTL using go-cache
 type DuplicateTxCache struct {
@@ -183,29 +150,37 @@ type DuplicateTxCache struct {
 // positives in cache lookups. A larger value reduces collision risk but uses
 // more memory. A common choice is to use the full length of a cryptographic hash
 // (e.g., 32 bytes for SHA-256) to balance memory usage and collision risk.
-func NewDuplicateTxCache(maxSize int, defaultExpiration, cleanupInterval time.Duration, maxKeyLen int) *DuplicateTxCache {
-	// If defaultExpiration is 0 (no expiration), don't create a cleanup interval
-	// to avoid starting background janitor goroutines that can cause leaks
-	if defaultExpiration == 0 {
-		cleanupInterval = 0
-		log.Debug().Msg("TTL cache expiration disabled")
-	}
-
+func NewDuplicateTxCache(maxSize int, defaultExpiration time.Duration, maxKeyLen int) *DuplicateTxCache {
 	return &DuplicateTxCache{
-		maxSize:   maxSize,
-		cache:     cache.New(defaultExpiration, cleanupInterval),
+		maxSize: maxSize,
+		// Force cleanup interval to 0 - otherwise go-cache leaks a goroutine.
+		// TODO: replace with a more reasonable implementation of cache, which doesn't do such things.
+		cache:     cache.New(defaultExpiration, 0),
 		maxKeyLen: maxKeyLen,
 	}
 }
 
+func (t *DuplicateTxCache) Run(ctx context.Context, cleanupInterval time.Duration) error {
+	if cleanupInterval <= 0 {
+		return nil
+	}
+	// Periodically delete the expired items.
+	for {
+		if err := utils.Sleep(ctx, cleanupInterval); err != nil {
+			return err
+		}
+		t.cache.DeleteExpired()
+	}
+}
+
 // Set adds a transaction to the cache with TTL
-func (t *DuplicateTxCache) Set(txKey types.TxKey, counter int) {
-	t.cache.SetDefault(t.toCacheKey(txKey), counter)
+func (t *DuplicateTxCache) Set(txHash types.TxHash, counter int) {
+	t.cache.SetDefault(t.toCacheKey(txHash), counter)
 }
 
 // Get retrieves the counter for a transaction key
-func (t *DuplicateTxCache) Get(txKey types.TxKey) (counter int, found bool) {
-	if value, exists := t.cache.Get(t.toCacheKey(txKey)); exists {
+func (t *DuplicateTxCache) Get(txHash types.TxHash) (counter int, found bool) {
+	if value, exists := t.cache.Get(t.toCacheKey(txHash)); exists {
 		if counter, ok := value.(int); ok {
 			return counter, true
 		}
@@ -214,8 +189,8 @@ func (t *DuplicateTxCache) Get(txKey types.TxKey) (counter int, found bool) {
 }
 
 // Increment increments the counter for a transaction key, extending TTL
-func (t *DuplicateTxCache) Increment(txKey types.TxKey) {
-	key := t.toCacheKey(txKey)
+func (t *DuplicateTxCache) Increment(txHash types.TxHash) {
+	key := t.toCacheKey(txHash)
 	err := t.cache.Increment(key, 1)
 	if err != nil {
 		// Only set a new key if the cache is not full
@@ -261,12 +236,12 @@ func (t *DuplicateTxCache) GetForMetrics() (int, int, int, int) {
 	return maxCount, totalCount, duplicateCount, nonDuplicateCount
 }
 
-// txKeyToString converts a TxKey (byte array) to a stable string key.
-func (t *DuplicateTxCache) toCacheKey(key types.TxKey) cacheKey {
+// txHashToString converts a TxHash (byte array) to a stable string key.
+func (t *DuplicateTxCache) toCacheKey(key types.TxHash) cacheKey {
 	return cacheKey(trimToSize(key, t.maxKeyLen))
 }
 
-func trimToSize(key types.TxKey, maxKeyLen int) []byte {
+func trimToSize(key types.TxHash, maxKeyLen int) []byte {
 	if maxKeyLen <= 0 {
 		return key[:]
 	}

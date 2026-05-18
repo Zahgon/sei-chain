@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"time"
 
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
-func makeCommit(ctx context.Context, blockID BlockID, height int64, round int32,
+func MakeCommit(ctx context.Context, blockID BlockID, height int64, round int32,
 	voteSet *VoteSet, validators []PrivValidator, now time.Time) (*Commit, error) {
 
 	// all sign
@@ -19,7 +21,7 @@ func makeCommit(ctx context.Context, blockID BlockID, height int64, round int32,
 		}
 		vote := &Vote{
 			ValidatorAddress: pubKey.Address(),
-			ValidatorIndex:   int32(i),
+			ValidatorIndex:   int32(i), //nolint:gosec // i is bounded by len(validators) which is bounded by MaxValidators
 			Height:           height,
 			Round:            round,
 			Type:             tmproto.PrecommitType,
@@ -38,10 +40,13 @@ func makeCommit(ctx context.Context, blockID BlockID, height int64, round int32,
 
 func signAddVote(ctx context.Context, privVal PrivValidator, vote *Vote, voteSet *VoteSet) (signed bool, err error) {
 	v := vote.ToProto()
-	err = privVal.SignVote(ctx, voteSet.ChainID(), v)
-	if err != nil {
+	if err := privVal.SignVote(ctx, voteSet.ChainID(), v); err != nil {
 		return false, err
 	}
-	vote.Signature = v.Signature
+	sig, err := crypto.SigFromBytes(v.Signature)
+	if err != nil {
+		return false, fmt.Errorf("SigFromBytes(): %w", err)
+	}
+	vote.Signature = utils.Some(sig)
 	return voteSet.AddVote(vote)
 }

@@ -5,9 +5,8 @@ import (
 	"sort"
 	"sync"
 
-	"github.com/cosmos/cosmos-sdk/store/types"
-	"github.com/cosmos/cosmos-sdk/types/occ"
-	occtypes "github.com/cosmos/cosmos-sdk/types/occ"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/occ"
 	db "github.com/tendermint/tm-db"
 )
 
@@ -29,6 +28,7 @@ type MultiVersionStore interface {
 	GetIterateset(index int) Iterateset
 	ClearIterateset(index int)
 	ValidateTransactionState(index int) (bool, []int)
+	ValidateTransactionStateWithKeys(index int) (bool, []int, []string)
 }
 
 type WriteSet map[string][]byte
@@ -253,7 +253,7 @@ func (s *Store) CollectIteratorItems(index int) *db.MemDB {
 		// TODO: do we want to exclude keys out of the range or just let the iterator handle it?
 		for _, key := range indexedWriteset {
 			// TODO: inefficient because (logn) for each key + rebalancing? maybe theres a better way to add to a tree to reduce rebalancing overhead
-			sortedItems.Set([]byte(key), []byte{})
+			_ = sortedItems.Set([]byte(key), []byte{})
 		}
 	}
 	return sortedItems
@@ -264,13 +264,13 @@ func (s *Store) validateIterator(index int, tracker iterationTracker) bool {
 	sortedItems := s.CollectIteratorItems(index)
 	// add the iterationtracker writeset keys to the sorted items
 	for key := range tracker.writeset {
-		sortedItems.Set([]byte(key), []byte{})
+		_ = sortedItems.Set([]byte(key), []byte{})
 	}
 	validChannel := make(chan bool, 1)
-	abortChannel := make(chan occtypes.Abort, 1)
+	abortChannel := make(chan occ.Abort, 1)
 
 	// listen for abort while iterating
-	go func(iterationTracker iterationTracker, items *db.MemDB, returnChan chan bool, abortChan chan occtypes.Abort) {
+	go func(iterationTracker iterationTracker, items *db.MemDB, returnChan chan bool, abortChan chan occ.Abort) {
 		var parentIter types.Iterator
 		expectedKeys := iterationTracker.iteratedKeys
 		foundKeys := 0
@@ -282,7 +282,7 @@ func (s *Store) validateIterator(index int, tracker iterationTracker) bool {
 		}
 		// create a new MVSMergeiterator
 		mergeIterator := NewMVSMergeIterator(parentIter, iter, iterationTracker.ascending, NoOpHandler{})
-		defer mergeIterator.Close()
+		defer func() { _ = mergeIterator.Close() }()
 		for ; mergeIterator.Valid(); mergeIterator.Next() {
 			if (len(expectedKeys) - foundKeys) == 0 {
 				// if we have no more expected keys, then the iterator is invalid
@@ -306,7 +306,7 @@ func (s *Store) validateIterator(index int, tracker iterationTracker) bool {
 			}
 		}
 		// return whether we found the exact number of expected keys
-		returnChan <- !((len(expectedKeys) - foundKeys) > 0)
+		returnChan <- foundKeys >= len(expectedKeys)
 	}(tracker, sortedItems, validChannel, abortChannel)
 	select {
 	case <-abortChannel:
@@ -332,13 +332,14 @@ func (s *Store) checkIteratorAtIndex(index int) bool {
 	return valid
 }
 
-func (s *Store) checkReadsetAtIndex(index int) (bool, []int) {
+func (s *Store) checkReadsetAtIndex(index int) (bool, []int, []string) {
 	conflictSet := make(map[int]struct{})
+	var conflictKeys []string
 	valid := true
 
 	readSetAny, found := s.txReadSets.Load(index)
 	if !found {
-		return true, []int{}
+		return true, []int{}, nil
 	}
 	readset := readSetAny.(ReadSet)
 	// iterate over readset and check if the value is the same as the latest value relateive to txIndex in the multiversion store
@@ -355,6 +356,7 @@ func (s *Store) checkReadsetAtIndex(index int) (bool, []int) {
 			parentVal := s.parentStore.Get([]byte(key))
 			if !bytes.Equal(parentVal, value) {
 				valid = false
+				conflictKeys = append(conflictKeys, key)
 			}
 		} else {
 			// if estimate, mark as conflict index - but don't invalidate
@@ -366,10 +368,12 @@ func (s *Store) checkReadsetAtIndex(index int) (bool, []int) {
 					// TODO: would we want to return early?
 					conflictSet[latestValue.Index()] = struct{}{}
 					valid = false
+					conflictKeys = append(conflictKeys, key)
 				}
 			} else if !bytes.Equal(latestValue.Value(), value) {
 				conflictSet[latestValue.Index()] = struct{}{}
 				valid = false
+				conflictKeys = append(conflictKeys, key)
 			}
 		}
 	}
@@ -381,7 +385,7 @@ func (s *Store) checkReadsetAtIndex(index int) (bool, []int) {
 
 	sort.Ints(conflictIndices)
 
-	return valid, conflictIndices
+	return valid, conflictIndices, conflictKeys
 }
 
 // TODO: do we want to return bool + []int where bool indicates whether it was valid and then []int indicates only ones for which we need to wait due to estimates? - yes i think so?
@@ -391,9 +395,15 @@ func (s *Store) ValidateTransactionState(index int) (bool, []int) {
 	// TODO: can we parallelize for all iterators?
 	iteratorValid := s.checkIteratorAtIndex(index)
 
-	readsetValid, conflictIndices := s.checkReadsetAtIndex(index)
+	readsetValid, conflictIndices, _ := s.checkReadsetAtIndex(index)
 
 	return iteratorValid && readsetValid, conflictIndices
+}
+
+func (s *Store) ValidateTransactionStateWithKeys(index int) (bool, []int, []string) {
+	iteratorValid := s.checkIteratorAtIndex(index)
+	readsetValid, conflictIndices, conflictKeys := s.checkReadsetAtIndex(index)
+	return iteratorValid && readsetValid, conflictIndices, conflictKeys
 }
 
 func (s *Store) WriteLatestToStore() {

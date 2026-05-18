@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/cosmos/cosmos-sdk/store/types"
-	"github.com/cosmos/cosmos-sdk/types/kv"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
 )
 
 type (
@@ -22,6 +22,7 @@ type (
 	CacheMultiStore           = types.CacheMultiStore
 	CommitMultiStore          = types.CommitMultiStore
 	MultiStorePersistentCache = types.MultiStorePersistentCache
+	GigaMultiStore            = types.GigaMultiStore
 	KVStore                   = types.KVStore
 	Iterator                  = types.Iterator
 )

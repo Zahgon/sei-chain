@@ -5,22 +5,22 @@ import (
 	"errors"
 	"testing"
 
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 
 	"github.com/golang/mock/gomock"
 	"github.com/gorilla/mux"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/tests/mocks"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/genesis"
-	"github.com/cosmos/cosmos-sdk/types/module"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/tests/mocks"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/genesis"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
 )
 
 var errFoo = errors.New("dummy")
@@ -32,8 +32,6 @@ func TestBasicManager(t *testing.T) {
 	interfaceRegistry := types.NewInterfaceRegistry()
 	cdc := codec.NewProtoCodec(interfaceRegistry)
 
-	clientCtx := client.Context{}
-	clientCtx = clientCtx.WithLegacyAmino(legacyAmino)
 	wantDefaultGenesis := map[string]json.RawMessage{"mockAppModuleBasic1": json.RawMessage(``)}
 
 	mockAppModuleBasic1 := mocks.NewMockAppModuleBasic(mockCtrl)
@@ -107,18 +105,10 @@ func TestManagerOrderSetters(t *testing.T) {
 	mm.SetOrderExportGenesis("module2", "module1")
 	require.Equal(t, []string{"module2", "module1"}, mm.OrderExportGenesis)
 
-	require.Equal(t, []string{"module1", "module2"}, mm.OrderBeginBlockers)
-	mm.SetOrderBeginBlockers("module2", "module1")
-	require.Equal(t, []string{"module2", "module1"}, mm.OrderBeginBlockers)
-
 	// we expect none of the modules to be included by default
 	require.Empty(t, mm.OrderMidBlockers)
 	mm.SetOrderMidBlockers("module2", "module1")
 	require.Equal(t, []string{"module2", "module1"}, mm.OrderMidBlockers)
-
-	require.Equal(t, []string{"module1", "module2"}, mm.OrderEndBlockers)
-	mm.SetOrderEndBlockers("module2", "module1")
-	require.Equal(t, []string{"module2", "module1"}, mm.OrderEndBlockers)
 }
 
 func TestManager_RegisterInvariants(t *testing.T) {
@@ -247,25 +237,6 @@ func TestManager_ExportGenesis(t *testing.T) {
 	require.Equal(t, want, mm.ExportGenesis(ctx, cdc))
 }
 
-func TestManager_BeginBlock(t *testing.T) {
-	mockCtrl := gomock.NewController(t)
-	t.Cleanup(mockCtrl.Finish)
-
-	mockAppModule1 := mocks.NewMockAppModule(mockCtrl)
-	mockAppModule2 := mocks.NewMockAppModule(mockCtrl)
-	mockAppModule1.EXPECT().Name().Times(2).Return("module1")
-	mockAppModule2.EXPECT().Name().Times(2).Return("module2")
-	mm := module.NewManager(mockAppModule1, mockAppModule2)
-	require.NotNil(t, mm)
-	require.Equal(t, 2, len(mm.Modules))
-
-	req := abci.RequestBeginBlock{Hash: []byte("test")}
-
-	mockAppModule1.EXPECT().BeginBlock(gomock.Any(), gomock.Eq(req)).Times(1)
-	mockAppModule2.EXPECT().BeginBlock(gomock.Any(), gomock.Eq(req)).Times(1)
-	mm.BeginBlock(sdk.NewContext(nil, tmproto.Header{}, false, nil), req)
-}
-
 func TestManager_MidBlock(t *testing.T) {
 	mockCtrl := gomock.NewController(t)
 	t.Cleanup(mockCtrl.Finish)
@@ -283,30 +254,5 @@ func TestManager_MidBlock(t *testing.T) {
 
 	mockAppModule1.EXPECT().MidBlock(gomock.Any(), gomock.Eq(height)).Times(1)
 	mockAppModule2.EXPECT().MidBlock(gomock.Any(), gomock.Eq(height)).Times(1)
-	mm.MidBlock(sdk.NewContext(nil, tmproto.Header{}, false, nil), height)
-}
-
-func TestManager_EndBlock(t *testing.T) {
-	mockCtrl := gomock.NewController(t)
-	t.Cleanup(mockCtrl.Finish)
-
-	mockAppModule1 := mocks.NewMockAppModule(mockCtrl)
-	mockAppModule2 := mocks.NewMockAppModule(mockCtrl)
-	mockAppModule1.EXPECT().Name().Times(2).Return("module1")
-	mockAppModule2.EXPECT().Name().Times(2).Return("module2")
-	mm := module.NewManager(mockAppModule1, mockAppModule2)
-	require.NotNil(t, mm)
-	require.Equal(t, 2, len(mm.Modules))
-
-	req := abci.RequestEndBlock{Height: 10}
-
-	mockAppModule1.EXPECT().EndBlock(gomock.Any(), gomock.Eq(req)).Times(1).Return([]abci.ValidatorUpdate{{}})
-	mockAppModule2.EXPECT().EndBlock(gomock.Any(), gomock.Eq(req)).Times(1)
-	ret := mm.EndBlock(sdk.NewContext(nil, tmproto.Header{}, false, nil), req)
-	require.Equal(t, []abci.ValidatorUpdate{{}}, ret.ValidatorUpdates)
-
-	// test panic
-	mockAppModule1.EXPECT().EndBlock(gomock.Any(), gomock.Eq(req)).Times(1).Return([]abci.ValidatorUpdate{{}})
-	mockAppModule2.EXPECT().EndBlock(gomock.Any(), gomock.Eq(req)).Times(1).Return([]abci.ValidatorUpdate{{}})
-	require.Panics(t, func() { mm.EndBlock(sdk.NewContext(nil, tmproto.Header{}, false, nil), req) })
+	mm.MidBlock(sdk.NewContext(nil, tmproto.Header{}, false), height)
 }

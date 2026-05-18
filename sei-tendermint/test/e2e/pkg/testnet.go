@@ -13,11 +13,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/crypto/secp256k1"
-	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	rpchttp "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/http"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 const (
@@ -58,26 +57,24 @@ const (
 
 // Testnet represents a single testnet.
 type Testnet struct {
-	Name                       string
-	File                       string
-	Dir                        string
-	IP                         *net.IPNet
-	InitialHeight              int64
-	InitialState               map[string]string
-	Validators                 map[*Node]int64
-	ValidatorUpdates           map[int64]map[*Node]int64
-	Nodes                      []*Node
-	KeyType                    string
-	Evidence                   int
-	VoteExtensionsEnableHeight int64
-	LogLevel                   string
-	TxSize                     int
-	ABCIProtocol               Protocol
-	PrepareProposalDelayMS     int
-	ProcessProposalDelayMS     int
-	CheckTxDelayMS             int
-	VoteExtensionDelayMS       int
-	FinalizeBlockDelayMS       int
+	Name                   string
+	File                   string
+	Dir                    string
+	IP                     *net.IPNet
+	InitialHeight          int64
+	InitialState           map[string]string
+	Validators             map[*Node]int64
+	ValidatorUpdates       map[int64]map[*Node]int64
+	Nodes                  []*Node
+	KeyType                string
+	Evidence               int
+	LogLevel               string
+	TxSize                 int
+	ABCIProtocol           Protocol
+	PrepareProposalDelayMS int
+	ProcessProposalDelayMS int
+	CheckTxDelayMS         int
+	FinalizeBlockDelayMS   int
 }
 
 // Node represents a Tendermint node in a testnet.
@@ -149,7 +146,6 @@ func LoadTestnet(file string) (*Testnet, error) {
 		PrepareProposalDelayMS: int(manifest.PrepareProposalDelayMS),
 		ProcessProposalDelayMS: int(manifest.ProcessProposalDelayMS),
 		CheckTxDelayMS:         int(manifest.CheckTxDelayMS),
-		VoteExtensionDelayMS:   int(manifest.VoteExtensionDelayMS),
 		FinalizeBlockDelayMS:   int(manifest.FinalizeBlockDelayMS),
 	}
 	if len(manifest.KeyType) != 0 {
@@ -305,9 +301,7 @@ func (t Testnet) Validate() error {
 	if len(t.Nodes) == 0 {
 		return errors.New("network has no nodes")
 	}
-	switch t.KeyType {
-	case "", types.ABCIPubKeyTypeEd25519, types.ABCIPubKeyTypeSecp256k1:
-	default:
+	if t.KeyType != "" && t.KeyType != types.ABCIPubKeyTypeEd25519 {
 		return errors.New("unsupported KeyType")
 	}
 	switch t.ABCIProtocol {
@@ -450,7 +444,8 @@ func (n Node) AddressP2P(withID bool) string {
 	}
 	addr := fmt.Sprintf("%v:26656", ip)
 	if withID {
-		addr = fmt.Sprintf("%x@%v", n.NodeKey.PubKey().Address().Bytes(), addr)
+		pubKey := n.NodeKey.Public()
+		addr = fmt.Sprintf("%x@%v", pubKey.Address().Bytes(), addr)
 	}
 	return addr
 }
@@ -487,20 +482,15 @@ func newKeyGenerator(seed int64) *keyGenerator {
 }
 
 func (g *keyGenerator) Generate(keyType string) crypto.PrivKey {
-	seed := make([]byte, ed25519.SeedSize)
-
+	seed := make([]byte, 32)
 	_, err := io.ReadFull(g.random, seed)
 	if err != nil {
 		panic(err) // this shouldn't happen
 	}
-	switch keyType {
-	case "secp256k1":
-		return secp256k1.GenPrivKeySecp256k1(seed)
-	case "", "ed25519":
-		return ed25519.GenPrivKeyFromSecret(seed)
-	default:
-		panic("KeyType not supported") // should not make it this far
+	if keyType != "" && keyType != "ed25519" {
+		panic("KeyType not supported")
 	}
+	return ed25519.TestSecretKey(seed)
 }
 
 // portGenerator generates local Docker proxy ports for each node.

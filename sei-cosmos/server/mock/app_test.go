@@ -4,21 +4,16 @@ import (
 	"context"
 	"testing"
 
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/types"
 )
 
 // TestInitApp makes sure we can initialize this thing without an error
 func TestInitApp(t *testing.T) {
 	// set up an app
-	app, closer, err := SetupApp()
-
-	// closer may need to be run, even when error in later stage
-	if closer != nil {
-		defer closer()
-	}
-	require.NoError(t, err)
+	app := SetupApp(t)
 
 	// initialize it future-way
 	appState, err := AppGenState(nil, types.GenesisDoc{}, nil)
@@ -44,12 +39,7 @@ func TestInitApp(t *testing.T) {
 // TextDeliverTx ensures we can write a tx
 func TestDeliverTx(t *testing.T) {
 	// set up an app
-	app, closer, err := SetupApp()
-	// closer may need to be run, even when error in later stage
-	if closer != nil {
-		defer closer()
-	}
-	require.NoError(t, err)
+	app := SetupApp(t)
 
 	key := "my-special-key"
 	value := "top-secret-data!!"
@@ -65,9 +55,10 @@ func TestDeliverTx(t *testing.T) {
 		AppStateBytes: appState,
 	}
 	app.InitChain(goCtx, &req)
+	header := tmproto.Header{Height: 1}
 	app.FinalizeBlock(goCtx, &abci.RequestFinalizeBlock{
 		Hash:   []byte("apphash"),
-		Height: 1,
+		Header: &header,
 		Txs:    [][]byte{txBytes},
 	})
 	app.Commit(goCtx)

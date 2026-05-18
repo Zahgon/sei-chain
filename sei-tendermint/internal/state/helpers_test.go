@@ -1,7 +1,6 @@
 package state_test
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"math/rand"
@@ -11,16 +10,17 @@ import (
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/crypto/encoding"
-	sm "github.com/tendermint/tendermint/internal/state"
-	sf "github.com/tendermint/tendermint/internal/state/test/factory"
-	"github.com/tendermint/tendermint/internal/test/factory"
-	tmtime "github.com/tendermint/tendermint/libs/time"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/proxy"
+	sm "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
+	sf "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/test/factory"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/test/factory"
+	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 type paramsChangeTestCase struct {
@@ -86,7 +86,10 @@ func makeValidCommit(
 	sigs := make([]types.CommitSig, vals.Size())
 	votes := make([]*types.Vote, vals.Size())
 	for i := 0; i < vals.Size(); i++ {
-		_, val := vals.GetByIndex(int32(i))
+		_, val, ok := vals.GetByIndex(int32(i))
+		if !ok {
+			panic("validator missing")
+		}
 		vote, err := factory.MakeVote(ctx, privVals[val.Address.String()], chainID, int32(i), height, 0, 2, blockID, time.Now())
 		require.NoError(t, err)
 		sigs[i] = vote.CommitSig()
@@ -100,16 +103,19 @@ func makeValidCommit(
 	}, votes
 }
 
+func makePrivKey(i int) ed25519.SecretKey {
+	return ed25519.TestSecretKey(fmt.Appendf(nil, "%d", i))
+}
+
 func makeState(t *testing.T, nVals, height int) (sm.State, dbm.DB, map[string]types.PrivValidator) {
 	vals := make([]types.GenesisValidator, nVals)
 	privVals := make(map[string]types.PrivValidator, nVals)
 	for i := 0; i < nVals; i++ {
-		secret := []byte(fmt.Sprintf("test%d", i))
-		pk := ed25519.GenPrivKeyFromSecret(secret)
-		valAddr := pk.PubKey().Address()
+		pk := makePrivKey(i)
+		valAddr := pk.Public().Address()
 		vals[i] = types.GenesisValidator{
 			Address: valAddr,
-			PubKey:  pk.PubKey(),
+			PubKey:  pk.Public(),
 			Power:   1000,
 			Name:    fmt.Sprintf("test%d", i),
 		}
@@ -138,7 +144,7 @@ func makeState(t *testing.T, nVals, height int) (sm.State, dbm.DB, map[string]ty
 func genValSet(size int) *types.ValidatorSet {
 	vals := make([]*types.Validator, size)
 	for i := 0; i < size; i++ {
-		vals[i] = types.NewValidator(ed25519.GenPrivKey().PubKey(), 10)
+		vals[i] = types.NewValidator(ed25519.GenerateSecretKey().Public(), 10)
 	}
 	return types.NewValidatorSet(vals)
 }
@@ -152,12 +158,13 @@ func makeHeaderPartsResponsesValPubKeyChange(
 	block := sf.MakeBlock(state, state.LastBlockHeight+1, new(types.Commit))
 	finalizeBlockResponses := &abci.ResponseFinalizeBlock{}
 	// If the pubkey is new, remove the old and add the new.
-	_, val := state.NextValidators.GetByIndex(0)
-	if !bytes.Equal(pubkey.Bytes(), val.PubKey.Bytes()) {
-		vPbPk, err := encoding.PubKeyToProto(val.PubKey)
-		require.NoError(t, err)
-		pbPk, err := encoding.PubKeyToProto(pubkey)
-		require.NoError(t, err)
+	_, val, ok := state.NextValidators.GetByIndex(0)
+	if !ok {
+		panic("validator missing")
+	}
+	if pubkey != val.PubKey {
+		vPbPk := crypto.PubKeyToProto(val.PubKey)
+		pbPk := crypto.PubKeyToProto(pubkey)
 
 		finalizeBlockResponses.ValidatorUpdates = []abci.ValidatorUpdate{
 			{PubKey: vPbPk, Power: 0},
@@ -179,10 +186,12 @@ func makeHeaderPartsResponsesValPowerChange(
 	finalizeBlockResponses := &abci.ResponseFinalizeBlock{}
 
 	// If the pubkey is new, remove the old and add the new.
-	_, val := state.NextValidators.GetByIndex(0)
+	_, val, ok := state.NextValidators.GetByIndex(0)
+	if !ok {
+		panic("validator missing")
+	}
 	if val.VotingPower != power {
-		vPbPk, err := encoding.PubKeyToProto(val.PubKey)
-		require.NoError(t, err)
+		vPbPk := crypto.PubKeyToProto(val.PubKey)
 
 		finalizeBlockResponses.ValidatorUpdates = []abci.ValidatorUpdate{
 			{PubKey: vPbPk, Power: power},
@@ -206,7 +215,7 @@ func makeHeaderPartsResponsesParams(
 }
 
 func randomGenesisDoc() *types.GenesisDoc {
-	pubkey := ed25519.GenPrivKey().PubKey()
+	pubkey := ed25519.GenerateSecretKey().Public()
 	return &types.GenesisDoc{
 		GenesisTime: tmtime.Now(),
 		ChainID:     "abc",
@@ -220,6 +229,12 @@ func randomGenesisDoc() *types.GenesisDoc {
 		},
 		ConsensusParams: types.DefaultConsensusParams(),
 	}
+}
+
+func makeTxMempool(t testing.TB, app *proxy.Proxy) *mempool.TxMempool {
+	t.Helper()
+
+	return mempool.NewTxMempool(mempool.TestConfig(), app, mempool.NopMetrics(), mempool.NopTxConstraintsFetcher)
 }
 
 // used for testing by state store
@@ -302,8 +317,8 @@ func (app *testApp) FinalizeBlock(_ context.Context, req *abci.RequestFinalizeBl
 	}, nil
 }
 
-func (app *testApp) CheckTx(_ context.Context, req *abci.RequestCheckTx) (*abci.ResponseCheckTxV2, error) {
-	return &abci.ResponseCheckTxV2{ResponseCheckTx: &abci.ResponseCheckTx{}}, nil
+func (app *testApp) CheckTx(_ context.Context, req *abci.RequestCheckTxV2) *abci.ResponseCheckTxV2 {
+	return &abci.ResponseCheckTxV2{ResponseCheckTx: &abci.ResponseCheckTx{}}
 }
 
 func (app *testApp) Commit(context.Context) (*abci.ResponseCommit, error) {

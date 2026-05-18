@@ -3,11 +3,11 @@ package factory
 import (
 	"testing"
 
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func TestMakeHeader(t *testing.T) {
-	MakeHeader(t, &types.Header{})
+	MakeHeader(&types.Header{})
 }
 
 func TestRandomNodeID(t *testing.T) {

@@ -7,24 +7,30 @@ import (
 	"io"
 	"os"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/spf13/viper"
 
 	"gopkg.in/yaml.v2"
 
 	"github.com/gogo/protobuf/proto"
-	rpcclient "github.com/tendermint/tendermint/rpc/client"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	rpcclient "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keyring"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
-// Context implements a typical context created in SDK modules for transaction
-// handling and queries.
+type Client = rpcclient.Client
+type LocalClient interface {
+	Client
+	EvmNextPendingNonce(addr common.Address) uint64
+}
+
 type Context struct {
 	FromAddress sdk.AccAddress
-	Client      rpcclient.Client
+	Client      utils.Option[rpcclient.Client]
 	ChainID     string
 	// Deprecated: Codec codec will be changed to Codec: codec.Codec
 	JSONCodec         codec.JSONCodec
@@ -136,8 +142,8 @@ func (ctx Context) WithHeight(height int64) Context {
 
 // WithClient returns a copy of the context with an updated RPC client
 // instance.
-func (ctx Context) WithClient(client rpcclient.Client) Context {
-	ctx.Client = client
+func (ctx Context) WithClient(client Client) Context {
+	ctx.Client = utils.Some(client)
 	return ctx
 }
 
@@ -276,7 +282,7 @@ func (ctx Context) PrintBytes(o []byte) error {
 // will be JSON encoded using ctx.Codec. An error is returned upon failure.
 func (ctx Context) PrintProto(toPrint proto.Message) error {
 	// always serialize JSON initially because proto json can't be directly YAML encoded
-	out, err := ctx.Codec.MarshalJSON(toPrint)
+	out, err := ctx.Codec.MarshalAsJSON(toPrint)
 	if err != nil {
 		return err
 	}
@@ -286,8 +292,8 @@ func (ctx Context) PrintProto(toPrint proto.Message) error {
 // PrintObjectLegacy is a variant of PrintProto that doesn't require a proto.Message type
 // and uses amino JSON encoding.
 // Deprecated: It will be removed in the near future!
-func (ctx Context) PrintObjectLegacy(toPrint interface{}) error {
-	out, err := ctx.LegacyAmino.MarshalJSON(toPrint)
+func (ctx Context) PrintObjectLegacy(toPrint any) error {
+	out, err := ctx.LegacyAmino.MarshalAsJSON(toPrint)
 	if err != nil {
 		return err
 	}
@@ -297,7 +303,7 @@ func (ctx Context) PrintObjectLegacy(toPrint interface{}) error {
 func (ctx Context) printOutput(out []byte) error {
 	if ctx.OutputFormat == "text" {
 		// handle text format by decoding and re-encoding JSON as YAML
-		var j interface{}
+		var j any
 
 		err := json.Unmarshal(out, &j)
 		if err != nil {

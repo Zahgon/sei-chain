@@ -8,34 +8,34 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
-	"os"
 	"strings"
 	"sync"
 	"testing"
 	"time"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gogo/protobuf/jsonpb"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/log"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/snapshots"
-	snapshottypes "github.com/cosmos/cosmos-sdk/snapshots/types"
-	"github.com/cosmos/cosmos-sdk/store/rootmulti"
-	store "github.com/cosmos/cosmos-sdk/store/types"
-	"github.com/cosmos/cosmos-sdk/testutil"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/snapshots"
+	snapshottypes "github.com/sei-protocol/sei-chain/sei-cosmos/snapshots/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/rootmulti"
+	store "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
+	storev2rootmulti "github.com/sei-protocol/sei-chain/sei-cosmos/storev2/rootmulti"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	seidbconfig "github.com/sei-protocol/sei-chain/sei-db/config"
 )
 
 func TestLoadSnapshotChunk(t *testing.T) {
-	app, teardown := setupBaseAppWithSnapshots(t, 2, 5)
-	defer teardown()
+	app := setupBaseAppWithSnapshots(t, 2, 5)
 
 	testcases := map[string]struct {
 		height      uint64
@@ -69,9 +69,7 @@ func TestLoadSnapshotChunk(t *testing.T) {
 }
 
 func TestOfferSnapshot_Errors(t *testing.T) {
-	// Set up app before test cases, since it's fairly expensive.
-	app, teardown := setupBaseAppWithSnapshots(t, 0, 0)
-	defer teardown()
+	app := setupBaseAppWithSnapshots(t, 0, 0)
 
 	m := snapshottypes.Metadata{ChunkHashes: [][]byte{{1}, {2}, {3}}}
 	metadata, err := m.Marshal()
@@ -104,7 +102,6 @@ func TestOfferSnapshot_Errors(t *testing.T) {
 		})
 	}
 
-	// Offering a snapshot after one has been accepted should error
 	resp, _ := app.OfferSnapshot(context.Background(), &abci.RequestOfferSnapshot{Snapshot: &abci.Snapshot{
 		Height:   1,
 		Format:   snapshottypes.CurrentFormat,
@@ -125,25 +122,19 @@ func TestOfferSnapshot_Errors(t *testing.T) {
 }
 
 func TestApplySnapshotChunk(t *testing.T) {
-	source, teardown := setupBaseAppWithSnapshots(t, 4, 10)
-	defer teardown()
+	source := setupBaseAppWithSnapshots(t, 4, 10)
 
-	target, teardown := setupBaseAppWithSnapshots(t, 0, 0)
-	defer teardown()
+	target := setupBaseAppWithSnapshots(t, 0, 0)
 
-	// Fetch latest snapshot to restore
 	respList, _ := source.ListSnapshots(context.Background(), &abci.RequestListSnapshots{})
 	require.NotEmpty(t, respList.Snapshots)
 	snapshot := respList.Snapshots[0]
 
-	// Make sure the snapshot has at least 3 chunks
 	require.GreaterOrEqual(t, snapshot.Chunks, uint32(3), "Not enough snapshot chunks")
 
-	// Begin a snapshot restoration in the target
 	respOffer, _ := target.OfferSnapshot(context.Background(), &abci.RequestOfferSnapshot{Snapshot: snapshot})
 	require.Equal(t, abci.ResponseOfferSnapshot{Result: abci.ResponseOfferSnapshot_ACCEPT}, *respOffer)
 
-	// We should be able to pass an invalid chunk and get a verify failure, before reapplying it.
 	respApply, _ := target.ApplySnapshotChunk(context.Background(), &abci.RequestApplySnapshotChunk{
 		Index:  0,
 		Chunk:  []byte{9},
@@ -155,7 +146,6 @@ func TestApplySnapshotChunk(t *testing.T) {
 		RejectSenders: []string{"sender"},
 	}, *respApply)
 
-	// Fetch each chunk from the source and apply it to the target
 	for index := uint32(0); index < snapshot.Chunks; index++ {
 		respChunk, _ := source.LoadSnapshotChunk(context.Background(), &abci.RequestLoadSnapshotChunk{
 			Height: snapshot.Height,
@@ -172,7 +162,6 @@ func TestApplySnapshotChunk(t *testing.T) {
 		}, *respApply)
 	}
 
-	// The target should now have the same hash as the source
 	assert.Equal(t, source.LastCommitID(), target.LastCommitID())
 }
 
@@ -221,7 +210,6 @@ func TestWithRouter(t *testing.T) {
 	for blockN := 0; blockN < nBlocks; blockN++ {
 		header := tmproto.Header{Height: int64(blockN) + 1}
 		app.setDeliverState(header)
-		app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 		for i := 0; i < txPerHeight; i++ {
 			counter := int64(blockN*txPerHeight + i)
@@ -231,7 +219,7 @@ func TestWithRouter(t *testing.T) {
 			require.NoError(t, err)
 
 			decoded, _ := app.txDecoder(txBytes)
-			res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+			res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 			require.True(t, res.IsOK(), fmt.Sprintf("%v", res))
 		}
 
@@ -244,7 +232,6 @@ func TestWithRouter(t *testing.T) {
 func TestBaseApp_EndBlock(t *testing.T) {
 	db := dbm.NewMemDB()
 	name := t.Name()
-	logger := defaultLogger()
 
 	cp := &tmproto.ConsensusParams{
 		Block: &tmproto.BlockParams{
@@ -253,7 +240,7 @@ func TestBaseApp_EndBlock(t *testing.T) {
 	}
 
 	codec := codec.NewLegacyAmino()
-	app := NewBaseApp(name, logger, db, testTxDecoder(codec), nil, &testutil.TestAppOpts{})
+	app := NewBaseApp(name, db, testTxDecoder(codec), nil, &testutil.TestAppOpts{})
 	app.SetParamStore(&paramStore{db: dbm.NewMemDB()})
 	app.InitChain(context.Background(), &abci.RequestInitChain{
 		ConsensusParams: cp,
@@ -270,8 +257,6 @@ func TestBaseApp_EndBlock(t *testing.T) {
 
 	app.setDeliverState(tmproto.Header{})
 	res := app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{})
-	require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
-
 	require.Len(t, res.GetValidatorUpdates(), 1)
 	require.Equal(t, int64(100), res.GetValidatorUpdates()[0].Power)
 	require.Equal(t, cp.Block.MaxGas, res.ConsensusParamUpdates.Block.MaxGas)
@@ -324,7 +309,6 @@ func TestQuery(t *testing.T) {
 	// query is still empty after a DeliverTx before we commit
 	header := tmproto.Header{Height: app.LastBlockHeight() + 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 	_, resTx, err = app.Deliver(aminoTxEncoder(), tx)
 	require.NoError(t, err)
@@ -352,7 +336,6 @@ func TestGRPCQuery(t *testing.T) {
 	app.InitChain(context.Background(), &abci.RequestInitChain{})
 	header := tmproto.Header{Height: app.LastBlockHeight() + 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 	app.SetDeliverStateToCommit()
 	app.Commit(context.Background())
 
@@ -373,37 +356,6 @@ func TestGRPCQuery(t *testing.T) {
 	err = res.Unmarshal(resQuery.Value)
 	require.NoError(t, err)
 	require.Equal(t, "Hello foo!", res.Greeting)
-}
-
-// Test p2p filter queries
-func TestP2PQuery(t *testing.T) {
-	addrPeerFilterOpt := func(bapp *BaseApp) {
-		bapp.SetAddrPeerFilter(func(addrport string) abci.ResponseQuery {
-			require.Equal(t, "1.1.1.1:8000", addrport)
-			return abci.ResponseQuery{Code: uint32(3)}
-		})
-	}
-
-	idPeerFilterOpt := func(bapp *BaseApp) {
-		bapp.SetIDPeerFilter(func(id string) abci.ResponseQuery {
-			require.Equal(t, "testid", id)
-			return abci.ResponseQuery{Code: uint32(4)}
-		})
-	}
-
-	app := setupBaseApp(t, addrPeerFilterOpt, idPeerFilterOpt)
-
-	addrQuery := abci.RequestQuery{
-		Path: "/p2p/filter/addr/1.1.1.1:8000",
-	}
-	res, _ := app.Query(context.Background(), &addrQuery)
-	require.Equal(t, uint32(3), res.Code)
-
-	idQuery := abci.RequestQuery{
-		Path: "/p2p/filter/id/testid",
-	}
-	res, _ = app.Query(context.Background(), &idQuery)
-	require.Equal(t, uint32(4), res.Code)
 }
 
 // One call to DeliverTx should process all the messages, in order.
@@ -433,12 +385,11 @@ func TestMultiMsgDeliverTx(t *testing.T) {
 
 	header := tmproto.Header{Height: 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 	tx := newTxCounter(0, 0, 1, 2)
 	txBytes, err := codec.Marshal(tx)
 	require.NoError(t, err)
 	decoded, _ := app.txDecoder(txBytes)
-	res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	require.True(t, res.IsOK(), fmt.Sprintf("%v", res))
 
 	store := app.deliverState.ctx.KVStore(capKey1)
@@ -459,7 +410,7 @@ func TestMultiMsgDeliverTx(t *testing.T) {
 	txBytes, err = codec.Marshal(tx)
 	require.NoError(t, err)
 	decoded, _ = app.txDecoder(txBytes)
-	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	require.True(t, res.IsOK(), fmt.Sprintf("%v", res))
 
 	store = app.deliverState.ctx.KVStore(capKey1)
@@ -517,7 +468,6 @@ func TestSimulateTx(t *testing.T) {
 		count := int64(blockN + 1)
 		header := tmproto.Header{Height: count}
 		app.setDeliverState(header)
-		app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 		tx := newTxCounter(count, count)
 		txBytes, err := cdc.Marshal(tx)
@@ -552,7 +502,6 @@ func TestSimulateTx(t *testing.T) {
 		require.True(t, bytes.Equal(result.Data, simRes.Result.Data))
 
 		app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{})
-		require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
 
 		app.SetDeliverStateToCommit()
 		app.Commit(context.Background())
@@ -576,7 +525,6 @@ func TestRunInvalidTransaction(t *testing.T) {
 
 	header := tmproto.Header{Height: 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 	// transaction with no messages
 	{
@@ -661,6 +609,23 @@ func TestRunInvalidTransaction(t *testing.T) {
 	}
 }
 
+func TestRunTxDecodeError(t *testing.T) {
+	app := setupBaseApp(t)
+
+	header := tmproto.Header{Height: 1}
+	app.setDeliverState(header)
+
+	// Consume some gas on the block-level meter to simulate prior operations
+	ctx := app.deliverState.ctx
+	ctx.GasMeter().ConsumeGas(5000, "simulated prior gas")
+
+	// A decode failure should not report block-level gas as its own
+	runTxRes, err := app.runTx(ctx, runTxModeDeliver, nil, [32]byte{})
+	require.Error(t, err)
+	require.Equal(t, uint64(0), runTxRes.gasInfo.GasUsed)
+	require.Equal(t, uint64(0), runTxRes.gasInfo.GasWanted)
+}
+
 // Test that transactions exceeding gas limits fail
 func TestTxGasLimits(t *testing.T) {
 	gasGranted := uint64(10)
@@ -703,7 +668,6 @@ func TestTxGasLimits(t *testing.T) {
 
 	header := tmproto.Header{Height: 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 	testCases := []struct {
 		tx      *txTest
@@ -873,7 +837,6 @@ func TestCustomRunTxPanicHandler(t *testing.T) {
 
 	header := tmproto.Header{Height: 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 	app.AddRunTxRecoveryHandler(func(recoveryObj interface{}) error {
 		err, ok := recoveryObj.(error)
@@ -923,7 +886,6 @@ func TestBaseAppAnteHandler(t *testing.T) {
 
 	header := tmproto.Header{Height: app.LastBlockHeight() + 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 	// execute a tx that will fail ante handler execution
 	//
@@ -934,7 +896,7 @@ func TestBaseAppAnteHandler(t *testing.T) {
 	txBytes, err := cdc.Marshal(tx)
 	require.NoError(t, err)
 	decoded, _ := app.txDecoder(txBytes)
-	res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	require.Empty(t, res.Events)
 	require.False(t, res.IsOK(), fmt.Sprintf("%v", res))
 
@@ -951,7 +913,7 @@ func TestBaseAppAnteHandler(t *testing.T) {
 	require.NoError(t, err)
 
 	decoded, _ = app.txDecoder(txBytes)
-	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	// should emit ante event
 	require.NotEmpty(t, res.Events)
 	require.False(t, res.IsOK(), fmt.Sprintf("%v", res))
@@ -969,7 +931,7 @@ func TestBaseAppAnteHandler(t *testing.T) {
 	require.NoError(t, err)
 
 	decoded, _ = app.txDecoder(txBytes)
-	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	require.NotEmpty(t, res.Events)
 	require.True(t, res.IsOK(), fmt.Sprintf("%v", res))
 
@@ -980,7 +942,6 @@ func TestBaseAppAnteHandler(t *testing.T) {
 
 	// commit
 	app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{})
-	require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
 
 	app.SetDeliverStateToCommit()
 	app.Commit(context.Background())
@@ -1013,7 +974,6 @@ func TestPrecommitHandlerPanic(t *testing.T) {
 
 	header := tmproto.Header{Height: app.LastBlockHeight() + 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 	// execute a tx that will fail ante handler execution
 	//
@@ -1024,7 +984,7 @@ func TestPrecommitHandlerPanic(t *testing.T) {
 	txBytes, err := cdc.Marshal(tx)
 	require.NoError(t, err)
 	decoded, _ := app.txDecoder(txBytes)
-	res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	require.Empty(t, res.Events)
 	require.False(t, res.IsOK(), fmt.Sprintf("%v", res))
 
@@ -1041,7 +1001,7 @@ func TestPrecommitHandlerPanic(t *testing.T) {
 	require.NoError(t, err)
 
 	decoded, _ = app.txDecoder(txBytes)
-	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	// should emit ante event
 	require.NotEmpty(t, res.Events)
 	require.False(t, res.IsOK(), fmt.Sprintf("%v", res))
@@ -1059,7 +1019,7 @@ func TestPrecommitHandlerPanic(t *testing.T) {
 	require.NoError(t, err)
 
 	decoded, _ = app.txDecoder(txBytes)
-	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res = app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	require.NotEmpty(t, res.Events)
 	require.True(t, res.IsOK(), fmt.Sprintf("%v", res))
 
@@ -1070,7 +1030,6 @@ func TestPrecommitHandlerPanic(t *testing.T) {
 
 	// commit
 	app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{})
-	require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
 
 	app.SetDeliverStateToCommit()
 
@@ -1131,14 +1090,13 @@ func TestGasConsumptionBadTx(t *testing.T) {
 
 	header := tmproto.Header{Height: app.LastBlockHeight() + 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 	tx := newTxCounter(5, 0)
 	tx.setFailOnAnte(true)
 	txBytes, err := cdc.Marshal(tx)
 	require.NoError(t, err)
 
-	res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, tx, sha256.Sum256(txBytes))
+	res := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, tx, sha256.Sum256(txBytes))
 	require.False(t, res.IsOK(), fmt.Sprintf("%v", res))
 
 	// removed the block gas exceeded because of removal of block gas meter, gasWanted < max block gas is still fulfilled by various other checks
@@ -1149,9 +1107,9 @@ func TestInitChainer(t *testing.T) {
 	// keep the db and logger ourselves so
 	// we can reload the same  app later
 	db := dbm.NewMemDB()
-	logger := defaultLogger()
+
 	cc := codec.NewLegacyAmino()
-	app := NewBaseApp(name, logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{})
+	app := NewBaseApp(name, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{})
 	capKey := sdk.NewKVStoreKey("main")
 	capKey2 := sdk.NewKVStoreKey("key2")
 	app.MountStores(capKey, capKey2)
@@ -1207,7 +1165,7 @@ func TestInitChainer(t *testing.T) {
 
 	// reload app
 	cc = codec.NewLegacyAmino()
-	app = NewBaseApp(name, logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{})
+	app = NewBaseApp(name, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{})
 	app.SetInitChainer(initChainer)
 	app.MountStores(capKey, capKey2)
 	err = app.LoadLatestVersion() // needed to make stores non-nil
@@ -1221,7 +1179,6 @@ func TestInitChainer(t *testing.T) {
 	// commit and ensure we can still query
 	header := tmproto.Header{Height: app.LastBlockHeight() + 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 	app.SetDeliverStateToCommit()
 	app.Commit(context.Background())
 
@@ -1232,48 +1189,15 @@ func TestInitChainer(t *testing.T) {
 func TestInitChain_WithInitialHeight(t *testing.T) {
 	name := t.Name()
 	db := dbm.NewMemDB()
-	logger := defaultLogger()
+
 	cc := codec.NewLegacyAmino()
-	app := NewBaseApp(name, logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{})
+	app := NewBaseApp(name, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{})
 
 	app.InitChain(
 		context.Background(), &abci.RequestInitChain{
 			InitialHeight: 3,
 		},
 	)
-	app.Commit(context.Background())
-
-	require.Equal(t, int64(3), app.LastBlockHeight())
-}
-
-func TestBeginBlock_WithInitialHeight(t *testing.T) {
-	name := t.Name()
-	db := dbm.NewMemDB()
-	logger := defaultLogger()
-	cc := codec.NewLegacyAmino()
-	app := NewBaseApp(name, logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{})
-
-	app.InitChain(
-		context.Background(), &abci.RequestInitChain{
-			InitialHeight: 3,
-		},
-	)
-
-	app.setDeliverState(tmproto.Header{Height: 4})
-	require.PanicsWithError(t, "invalid height: 4; expected: 3", func() {
-		app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{
-			Header: tmproto.Header{
-				Height: 4,
-			},
-		})
-	})
-
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{
-		Header: tmproto.Header{
-			Height: 3,
-		},
-	})
-	app.SetDeliverStateToCommit()
 	app.Commit(context.Background())
 
 	require.Equal(t, int64(3), app.LastBlockHeight())
@@ -1505,76 +1429,6 @@ func incrementingCounter(t *testing.T, store sdk.KVStore, counterKey []byte, cou
 	return &sdk.Result{}, nil
 }
 
-//---------------------------------------------------------------------
-// Tx processing - CheckTx, DeliverTx, SimulateTx.
-// These tests use the serialized tx as input, while most others will use the
-// Check(), Deliver(), Simulate() methods directly.
-// Ensure that Check/Deliver/Simulate work as expected with the store.
-
-// Test that successive CheckTx can see each others' effects
-// on the store within a block, and that the CheckTx state
-// gets reset to the latest committed state during Commit
-func TestCheckTx(t *testing.T) {
-	// This ante handler reads the key and checks that the value matches the current counter.
-	// This ensures changes to the kvstore persist across successive CheckTx.
-	counterKey := []byte("counter-key")
-
-	anteOpt := func(bapp *BaseApp) { bapp.SetAnteHandler(anteHandlerTxTest(t, capKey1, counterKey)) }
-	routerOpt := func(bapp *BaseApp) {
-		// TODO: can remove this once CheckTx doesnt process msgs.
-		bapp.Router().AddRoute(sdk.NewRoute(routeMsgCounter, func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
-			return &sdk.Result{}, nil
-		}))
-	}
-
-	pchOpt := func(bapp *BaseApp) {
-		bapp.SetPreCommitHandler(func(ctx sdk.Context) error {
-			return nil
-		})
-	}
-
-	app := setupBaseApp(t, anteOpt, routerOpt, pchOpt)
-
-	nTxs := int64(5)
-	app.InitChain(context.Background(), &abci.RequestInitChain{})
-
-	// Create same codec used in txDecoder
-	codec := codec.NewLegacyAmino()
-	registerTestCodec(codec)
-
-	for i := int64(0); i < nTxs; i++ {
-		tx := newTxCounter(i, 0) // no messages
-		txBytes, err := codec.Marshal(tx)
-		require.NoError(t, err)
-		r, _ := app.CheckTx(context.Background(), &abci.RequestCheckTx{Tx: txBytes})
-		require.True(t, r.IsOK(), fmt.Sprintf("%v", r))
-	}
-
-	checkStateStore := app.checkState.ctx.KVStore(capKey1)
-	storedCounter := getIntFromStore(checkStateStore, counterKey)
-
-	// Ensure AnteHandler ran
-	require.Equal(t, nTxs, storedCounter)
-
-	// If a block is committed, CheckTx state should be reset.
-	header := tmproto.Header{Height: 1}
-	app.setDeliverState(header)
-	app.checkState.ctx = app.checkState.ctx.WithHeaderHash([]byte("hash"))
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header, Hash: []byte("hash")})
-
-	require.NotEmpty(t, app.checkState.ctx.HeaderHash())
-
-	app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{})
-	require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
-
-	app.SetDeliverStateToCommit()
-	app.Commit(context.Background())
-
-	checkStateStore = app.checkState.ctx.KVStore(capKey1)
-	storedBytes := checkStateStore.Get(counterKey)
-	require.Nil(t, storedBytes)
-}
-
 // Test that successive DeliverTx can see each others' effects
 // on the store, both within and across blocks.
 func TestDeliverTx(t *testing.T) {
@@ -1602,7 +1456,6 @@ func TestDeliverTx(t *testing.T) {
 	for blockN := 0; blockN < nBlocks; blockN++ {
 		header := tmproto.Header{Height: int64(blockN) + 1}
 		app.setDeliverState(header)
-		app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 		for i := 0; i < txPerHeight; i++ {
 			// every even i is an evm tx
@@ -1621,10 +1474,10 @@ func TestDeliverTx(t *testing.T) {
 				ctx = ctx.WithIsEVM(true)
 				ctx = ctx.WithEVMNonce(12345)
 				ctx = ctx.WithEVMTxHash("hash")
-				ctx = ctx.WithEVMSenderAddress("address")
+				ctx = ctx.WithEVMSenderAddress(common.HexToAddress("0x00000000000000000000000000000000000000aa"))
 			}
 
-			res := app.DeliverTx(ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+			res := app.DeliverTx(ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 			require.True(t, res.IsOK(), fmt.Sprintf("%v", res))
 			events := res.GetEvents()
 			require.Len(t, events, 3, "should contain ante handler, message type and counter events respectively")
@@ -1634,14 +1487,13 @@ func TestDeliverTx(t *testing.T) {
 			if isEvm {
 				require.Equal(t, uint64(12345), res.EvmTxInfo.Nonce)
 				require.Equal(t, "hash", res.EvmTxInfo.TxHash)
-				require.Equal(t, "address", res.EvmTxInfo.SenderAddress)
+				require.Equal(t, "0x00000000000000000000000000000000000000AA", res.EvmTxInfo.SenderAddress)
 			} else {
 				require.Nil(t, res.EvmTxInfo)
 			}
 		}
 
 		app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{})
-		require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
 		app.SetDeliverStateToCommit()
 		app.Commit(context.Background())
 	}
@@ -1663,7 +1515,6 @@ func TestDeliverTxHooks(t *testing.T) {
 
 	header := tmproto.Header{Height: 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 	// every even i is an evm tx
 	counter := int64(1)
@@ -1678,22 +1529,22 @@ func TestDeliverTxHooks(t *testing.T) {
 
 	// register noop hook
 	app.RegisterDeliverTxHook(func(ctx sdk.Context, tx sdk.Tx, b [32]byte, rdt sdk.DeliverTxHookInput) {})
-	res := app.DeliverTx(ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+	res := app.DeliverTx(ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	require.True(t, res.IsOK(), fmt.Sprintf("%v", res))
 
 	// register panic hook (should be captured by recover() middleware)
 	app.RegisterDeliverTxHook(func(ctx sdk.Context, tx sdk.Tx, b [32]byte, rdt sdk.DeliverTxHookInput) { panic(1) })
 	require.NotPanics(t, func() {
-		res = app.DeliverTx(ctx, abci.RequestDeliverTx{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
+		res = app.DeliverTx(ctx, abci.RequestDeliverTxV2{Tx: txBytes}, decoded, sha256.Sum256(txBytes))
 	})
 	require.False(t, res.IsOK(), fmt.Sprintf("%v", res))
 }
 
 func TestOptionFunction(t *testing.T) {
-	logger := defaultLogger()
+
 	db := dbm.NewMemDB()
 	cc := codec.NewLegacyAmino()
-	bap := NewBaseApp("starting name", logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, testChangeNameHelper("new name"))
+	bap := NewBaseApp("starting name", db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, testChangeNameHelper("new name"))
 	require.Equal(t, bap.name, "new name", "BaseApp should have had name changed via option function")
 }
 
@@ -1756,19 +1607,10 @@ func TestBaseAppOptionSeal(t *testing.T) {
 		app.SetInitChainer(nil)
 	})
 	require.Panics(t, func() {
-		app.SetBeginBlocker(nil)
-	})
-	require.Panics(t, func() {
 		app.SetEndBlocker(nil)
 	})
 	require.Panics(t, func() {
 		app.SetAnteHandler(nil)
-	})
-	require.Panics(t, func() {
-		app.SetAddrPeerFilter(nil)
-	})
-	require.Panics(t, func() {
-		app.SetIDPeerFilter(nil)
 	})
 	require.Panics(t, func() {
 		app.SetFauxMerkleMode()
@@ -1782,12 +1624,12 @@ func TestBaseAppOptionSeal(t *testing.T) {
 }
 
 func TestVersionSetterGetter(t *testing.T) {
-	logger := defaultLogger()
+
 	pruningOpt := SetPruning(store.PruneDefault)
 	db := dbm.NewMemDB()
 	name := t.Name()
 	cc := codec.NewLegacyAmino()
-	app := NewBaseApp(name, logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, pruningOpt)
+	app := NewBaseApp(name, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, pruningOpt)
 
 	require.Equal(t, "", app.Version())
 	res, _ := app.Query(context.Background(), &abci.RequestQuery{Path: "app/version"})
@@ -1803,12 +1645,12 @@ func TestVersionSetterGetter(t *testing.T) {
 }
 
 func TestLoadVersionInvalid(t *testing.T) {
-	logger := log.NewNopLogger()
+
 	pruningOpt := SetPruning(store.PruneNothing)
 	db := dbm.NewMemDB()
 	name := t.Name()
 	cc := codec.NewLegacyAmino()
-	app := NewBaseApp(name, logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, pruningOpt)
+	app := NewBaseApp(name, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, pruningOpt)
 
 	err := app.LoadLatestVersion()
 	require.Nil(t, err)
@@ -1819,13 +1661,12 @@ func TestLoadVersionInvalid(t *testing.T) {
 
 	header := tmproto.Header{Height: 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 	app.SetDeliverStateToCommit()
 	app.Commit(context.Background())
 
 	// create a new app with the stores mounted under the same cap key
 	cc = codec.NewLegacyAmino()
-	app = NewBaseApp(name, logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, pruningOpt)
+	app = NewBaseApp(name, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, pruningOpt)
 
 	// require we can load the latest version
 	err = app.LoadVersion(1)
@@ -1836,8 +1677,9 @@ func TestLoadVersionInvalid(t *testing.T) {
 	require.Error(t, err)
 }
 
-// simple one store baseapp with data and snapshots. Each tx is 1 MB in size (uncompressed).
-func setupBaseAppWithSnapshots(t *testing.T, blocks uint, blockTxs int, options ...func(*BaseApp)) (*BaseApp, func()) {
+// simple one store baseapp with data and snapshots using storev2/rootmulti (memiavl).
+// Each tx is 1 MB in size (uncompressed).
+func setupBaseAppWithSnapshots(t *testing.T, blocks uint, blockTxs int, options ...func(*BaseApp)) *BaseApp {
 	codec := codec.NewLegacyAmino()
 	registerTestCodec(codec)
 	routerOpt := func(bapp *BaseApp) {
@@ -1850,15 +1692,20 @@ func setupBaseAppWithSnapshots(t *testing.T, blocks uint, blockTxs int, options 
 
 	snapshotInterval := uint64(2)
 	snapshotTimeout := 1 * time.Minute
-	snapshotDir, err := os.MkdirTemp("", "baseapp")
+	snapshotStore, err := snapshots.NewStore(dbm.NewMemDB(), t.TempDir())
 	require.NoError(t, err)
-	snapshotStore, err := snapshots.NewStore(dbm.NewMemDB(), snapshotDir)
-	require.NoError(t, err)
-	teardown := func() {
-		os.RemoveAll(snapshotDir)
-	}
+
+	scConfig := seidbconfig.DefaultStateCommitConfig()
+	scConfig.MemIAVLConfig.SnapshotInterval = 1
+	scConfig.MemIAVLConfig.SnapshotMinTimeInterval = 0
+	scConfig.MemIAVLConfig.AsyncCommitBuffer = 0
+	ssConfig := seidbconfig.StateStoreConfig{}
+	cms := storev2rootmulti.NewStore(t.TempDir(), scConfig, ssConfig, nil)
+
+	cmsOpt := func(bapp *BaseApp) { bapp.SetCMS(cms) }
 
 	app := setupBaseApp(t, append(options,
+		cmsOpt,
 		SetSnapshotStore(snapshotStore),
 		SetSnapshotInterval(snapshotInterval),
 		SetPruning(sdk.PruningOptions{KeepEvery: 1}),
@@ -1870,7 +1717,6 @@ func setupBaseAppWithSnapshots(t *testing.T, blocks uint, blockTxs int, options 
 	keyCounter := 0
 	for height := int64(1); height <= int64(blocks); height++ {
 		app.setDeliverState(tmproto.Header{Height: height})
-		app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: tmproto.Header{Height: height}})
 		for txNum := 0; txNum < blockTxs; txNum++ {
 			tx := txTest{Msgs: []sdk.Msg{}}
 			for msgNum := 0; msgNum < 100; msgNum++ {
@@ -1883,11 +1729,10 @@ func setupBaseAppWithSnapshots(t *testing.T, blocks uint, blockTxs int, options 
 			}
 			txBytes, err := codec.Marshal(tx)
 			require.NoError(t, err)
-			resp := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTx{Tx: txBytes}, tx, sha256.Sum256(txBytes))
+			resp := app.DeliverTx(app.deliverState.ctx, abci.RequestDeliverTxV2{Tx: txBytes}, tx, sha256.Sum256(txBytes))
 			require.True(t, resp.IsOK(), "%v", resp.String())
 		}
 		app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{Height: height})
-		require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
 
 		app.SetDeliverStateToCommit()
 		app.Commit(context.Background())
@@ -1909,7 +1754,7 @@ func setupBaseAppWithSnapshots(t *testing.T, blocks uint, blockTxs int, options 
 		}
 	}
 
-	return app, teardown
+	return app
 }
 
 func TestMountStores(t *testing.T) {
@@ -1925,12 +1770,12 @@ func TestMountStores(t *testing.T) {
 // Test that we can make commits and then reload old versions.
 // Test that LoadLatestVersion actually does.
 func TestLoadVersion(t *testing.T) {
-	logger := defaultLogger()
+
 	pruningOpt := SetPruning(store.PruneNothing)
 	db := dbm.NewMemDB()
 	name := t.Name()
 	cc := codec.NewLegacyAmino()
-	app := NewBaseApp(name, logger, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, pruningOpt)
+	app := NewBaseApp(name, db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, pruningOpt)
 
 	// make a cap key and mount the store
 	err := app.LoadLatestVersion() // needed to make stores non-nil
@@ -1947,14 +1792,12 @@ func TestLoadVersion(t *testing.T) {
 	// execute a block, collect commit ID
 	header := tmproto.Header{Height: 1}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 	app.SetDeliverStateToCommit()
 	app.Commit(context.Background())
 
 	// execute a block, collect commit ID
 	header = tmproto.Header{Height: 2}
 	app.setDeliverState(header)
-	app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 	app.SetDeliverStateToCommit()
 	app.Commit(context.Background())
 }
@@ -1964,7 +1807,7 @@ func useDefaultLoader(app *BaseApp) {
 }
 
 func initStore(t *testing.T, db dbm.DB, storeKey string, k, v []byte) {
-	rs := rootmulti.NewStore(db, log.NewNopLogger())
+	rs := rootmulti.NewStore(db)
 	rs.SetPruning(store.PruneNothing)
 	key := sdk.NewKVStoreKey(storeKey)
 	rs.MountStoreWithDB(key, store.StoreTypeIAVL, nil)
@@ -1981,7 +1824,7 @@ func initStore(t *testing.T, db dbm.DB, storeKey string, k, v []byte) {
 }
 
 func checkStore(t *testing.T, db dbm.DB, ver int64, storeKey string, k, v []byte) {
-	rs := rootmulti.NewStore(db, log.NewNopLogger())
+	rs := rootmulti.NewStore(db)
 	rs.SetPruning(store.PruneDefault)
 	key := sdk.NewKVStoreKey(storeKey)
 	rs.MountStoreWithDB(key, store.StoreTypeIAVL, nil)
@@ -2030,14 +1873,13 @@ func TestSetLoader(t *testing.T) {
 				opts = append(opts, tc.setLoader)
 			}
 			cc := codec.NewLegacyAmino()
-			app := NewBaseApp(t.Name(), defaultLogger(), db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, opts...)
+			app := NewBaseApp(t.Name(), db, testTxDecoder(cc), nil, &testutil.TestAppOpts{}, opts...)
 			app.MountStores(sdk.NewKVStoreKey(tc.loadStoreKey))
 			err := app.LoadLatestVersion()
 			require.Nil(t, err)
 
 			// "execute" one block
 			app.setDeliverState(tmproto.Header{Height: 2})
-			app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: tmproto.Header{Height: 2}})
 			app.SetDeliverStateToCommit()
 			app.Commit(context.Background())
 

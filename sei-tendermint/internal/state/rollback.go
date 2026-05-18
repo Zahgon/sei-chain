@@ -4,9 +4,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/privval"
-	"github.com/tendermint/tendermint/version"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/privval"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 )
 
 func resetPrivValidatorConfig(privValidatorConfig config.PrivValidatorConfig) error {
@@ -51,9 +51,8 @@ func Rollback(bs BlockStore, ss Store, removeBlock bool, privValidatorConfig *co
 		return latestState.LastBlockHeight, latestState.AppHash, nil
 	}
 
-	// If the state store isn't one below nor equal to the blockstore height than this violates the
-	// invariant
-	if latestBlockHeight != latestState.LastBlockHeight {
+	// If the state store isn't one below nor equal to the blockstore height than this violates the invariant
+	if latestBlockHeight != latestStateHeight {
 		return -1, nil, fmt.Errorf("statestore height (%d) is not one below or equal to blockstore height (%d)",
 			latestState.LastBlockHeight, latestBlockHeight)
 	}

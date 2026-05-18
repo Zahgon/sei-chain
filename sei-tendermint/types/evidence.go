@@ -11,13 +11,14 @@ import (
 	"strings"
 	"time"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/merkle"
-	"github.com/tendermint/tendermint/internal/jsontypes"
-	tmmath "github.com/tendermint/tendermint/libs/math"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/merkle"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
+	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
 // Evidence represents any provable malicious activity by a validator.
@@ -105,8 +106,8 @@ func NewDuplicateVoteEvidence(vote1, vote2 *Vote, blockTime time.Time, valSet *V
 	if valSet == nil {
 		return nil, errors.New("missing validator set")
 	}
-	idx, val := valSet.GetByAddress(vote1.ValidatorAddress)
-	if idx == -1 {
+	_, val, ok := valSet.GetByAddress(vote1.ValidatorAddress)
+	if !ok {
 		return nil, errors.New("validator not in validator set")
 	}
 
@@ -153,7 +154,8 @@ func (dve *DuplicateVoteEvidence) Bytes() []byte {
 
 // Hash returns the hash of the evidence.
 func (dve *DuplicateVoteEvidence) Hash() []byte {
-	return crypto.Checksum(dve.Bytes())
+	hash := crypto.Checksum(dve.Bytes())
+	return hash[:]
 }
 
 // Height returns the height of the infraction
@@ -353,8 +355,8 @@ func (l *LightClientAttackEvidence) GetByzantineValidators(commonVals *Validator
 				continue
 			}
 
-			_, val := commonVals.GetByAddress(commitSig.ValidatorAddress)
-			if val == nil {
+			_, val, ok := commonVals.GetByAddress(commitSig.ValidatorAddress)
+			if !ok {
 				// validator wasn't in the common validator set
 				continue
 			}
@@ -378,7 +380,10 @@ func (l *LightClientAttackEvidence) GetByzantineValidators(commonVals *Validator
 				continue
 			}
 
-			_, val := l.ConflictingBlock.ValidatorSet.GetByAddress(sigA.ValidatorAddress)
+			_, val, ok := l.ConflictingBlock.ValidatorSet.GetByAddress(sigA.ValidatorAddress)
+			if !ok {
+				panic(fmt.Errorf("validator %v not in committee", sigA.ValidatorAddress))
+			}
 			validators = append(validators, val)
 		}
 		sort.Sort(ValidatorsByVotingPower(validators))
@@ -399,7 +404,7 @@ func (l *LightClientAttackEvidence) ConflictingHeaderIsInvalid(trustedHeader *He
 		!bytes.Equal(trustedHeader.NextValidatorsHash, l.ConflictingBlock.NextValidatorsHash) ||
 		!bytes.Equal(trustedHeader.ConsensusHash, l.ConflictingBlock.ConsensusHash) ||
 		!bytes.Equal(trustedHeader.AppHash, l.ConflictingBlock.AppHash) ||
-		!bytes.Equal(trustedHeader.LastResultsHash, l.ConflictingBlock.LastResultsHash)
+		(!SkipLastResultsHashValidation.Load() && !bytes.Equal(trustedHeader.LastResultsHash, l.ConflictingBlock.LastResultsHash))
 
 }
 
@@ -417,7 +422,8 @@ func (l *LightClientAttackEvidence) Hash() []byte {
 	bz := make([]byte, crypto.HashSize+n)
 	copy(bz[:crypto.HashSize-1], l.ConflictingBlock.Hash().Bytes())
 	copy(bz[crypto.HashSize:], buf)
-	return crypto.Checksum(bz)
+	hash := crypto.Checksum(bz)
+	return hash[:]
 }
 
 // Height returns the last height at which the primary provider and witness provider had the same header.
@@ -738,7 +744,7 @@ func (evl EvidenceList) Has(evidence Evidence) bool {
 // ToABCI converts the evidence list to a slice of the ABCI protobuf messages
 // for use when communicating the evidence to an application.
 func (evl EvidenceList) ToABCI() []abci.Misbehavior {
-	var el []abci.Misbehavior
+	el := make([]abci.Misbehavior, 0, len(evl))
 	for _, e := range evl {
 		el = append(el, e.ABCI()...)
 	}
@@ -826,12 +832,12 @@ type ErrEvidenceOverflow struct {
 }
 
 // NewErrEvidenceOverflow returns a new ErrEvidenceOverflow where got > max.
-func NewErrEvidenceOverflow(max, got int64) *ErrEvidenceOverflow {
-	return &ErrEvidenceOverflow{max, got}
+func NewErrEvidenceOverflow(max, got int64) ErrEvidenceOverflow {
+	return ErrEvidenceOverflow{max, got}
 }
 
 // Error returns a string representation of the error.
-func (err *ErrEvidenceOverflow) Error() string {
+func (err ErrEvidenceOverflow) Error() string {
 	return fmt.Sprintf("Too much evidence: Max %d, got %d", err.Max, err.Got)
 }
 
@@ -855,12 +861,23 @@ func NewMockDuplicateVoteEvidenceWithValidator(ctx context.Context, height int64
 	val := NewValidator(pubKey, 10)
 	voteA := makeMockVote(height, 0, 0, pubKey.Address(), randBlockID(), time)
 	vA := voteA.ToProto()
-	_ = pv.SignVote(ctx, chainID, vA)
-	voteA.Signature = vA.Signature
+	if err := pv.SignVote(ctx, chainID, vA); err != nil {
+		return nil, err
+	}
+	sig, err := crypto.SigFromBytes(vA.Signature)
+	if err != nil {
+		return nil, err
+	}
+	voteA.Signature = utils.Some(sig)
+
 	voteB := makeMockVote(height, 0, 0, pubKey.Address(), randBlockID(), time)
 	vB := voteB.ToProto()
 	_ = pv.SignVote(ctx, chainID, vB)
-	voteB.Signature = vB.Signature
+	sig, err = crypto.SigFromBytes(vB.Signature)
+	if err != nil {
+		return nil, err
+	}
+	voteB.Signature = utils.Some(sig)
 	ev, err := NewDuplicateVoteEvidence(voteA, voteB, time, NewValidatorSet([]*Validator{val}))
 	if err != nil {
 		return nil, fmt.Errorf("constructing mock duplicate vote evidence: %w", err)

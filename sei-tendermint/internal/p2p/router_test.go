@@ -4,48 +4,63 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"io"
-	"net"
-	"net/netip"
+	"slices"
 	"strings"
-	"sync/atomic"
 	"testing"
 	"time"
 
 	"github.com/fortytw2/leaktest"
-	"github.com/gogo/protobuf/proto"
-	gogotypes "github.com/gogo/protobuf/types"
+	gogoproto "github.com/gogo/protobuf/proto"
 	dbm "github.com/tendermint/tm-db"
+	"golang.org/x/time/rate"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/internal/p2p/conn"
-	"github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/libs/utils"
-	"github.com/tendermint/tendermint/libs/utils/require"
-	"github.com/tendermint/tendermint/libs/utils/scope"
-	"github.com/tendermint/tendermint/libs/utils/tcp"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/autobahn/consensus"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/autobahn/producer"
+	atypes "github.com/sei-protocol/sei-chain/sei-tendermint/internal/autobahn/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p/conn"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/proxy"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/require"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/scope"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/tcp"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
-func mayDisconnectAfterDone(ctx context.Context, err error) error {
-	err = utils.IgnoreCancel(err)
-	if err == nil || ctx.Err() == nil || !conn.IsDisconnect(err) {
-		return err
+func (r *Router) handshakeV2(ctx context.Context, conn tcp.Conn, dialAddr utils.Option[NodeAddress]) (*handshakedConn, types.NodeInfo, error) {
+	hConn, err := handshake(ctx, conn, r.privKey, handshakeSpec{SeiGigaConnection: false})
+	if err != nil {
+		return nil, types.NodeInfo{}, err
 	}
-	return nil
+	if dialAddr, ok := dialAddr.Get(); ok && dialAddr.NodeID != hConn.msg.NodeAuth.Key().NodeID() {
+		return nil, types.NodeInfo{}, fmt.Errorf("unexpected peer NodeID")
+	}
+	info, err := exchangeNodeInfo(ctx, hConn, *r.nodeInfoProducer())
+	if err != nil {
+		return nil, types.NodeInfo{}, err
+	}
+	return hConn, info, nil
 }
 
-func echoReactor(ctx context.Context, channel *Channel) {
-	iter := channel.RecvAll(ctx)
-	for iter.Next(ctx) {
-		envelope := iter.Envelope()
-		value := envelope.Message.(*TestMessage).Value
-		if err := channel.Send(ctx, Envelope{
-			To:      envelope.From,
-			Message: &TestMessage{Value: value},
-		}); err != nil {
+func makeChDesc(id ChannelID) ChannelDescriptor[*TestMessage] {
+	return ChannelDescriptor[*TestMessage]{
+		ID:                  id,
+		MessageType:         &TestMessage{},
+		Priority:            5,
+		RecvBufferCapacity:  10,
+		RecvMessageCapacity: 10000,
+	}
+}
+
+func echoReactor(ctx context.Context, channel *Channel[*TestMessage]) {
+	for {
+		m, err := channel.Recv(ctx)
+		if err != nil {
 			return
 		}
+		channel.Send(m.Message, m.From)
 	}
 }
 
@@ -59,7 +74,7 @@ func TestRouter_Network(t *testing.T) {
 	local := network.RandomNode()
 	peers := network.Peers(local.NodeID)
 	chDesc := makeChDesc(5)
-	channels := network.MakeChannels(t, chDesc)
+	channels := TestMakeChannels(t, network, chDesc)
 
 	network.Start(t)
 
@@ -71,90 +86,57 @@ func TestRouter_Network(t *testing.T) {
 	t.Logf("Sending a message to each peer should work.")
 	for _, peer := range peers {
 		msg := &TestMessage{Value: "foo"}
-		RequireSend(t, channel, Envelope{To: peer.NodeID, Message: msg, ChannelID: chDesc.ID})
-		RequireReceive(t, channel, Envelope{From: peer.NodeID, Message: msg, ChannelID: chDesc.ID})
+		channel.Send(msg, peer.NodeID)
+		RequireReceive(t, channel, RecvMsg[*TestMessage]{From: peer.NodeID, Message: msg})
 	}
 
 	t.Logf("Sending a broadcast should return back a message from all peers.")
-	RequireSend(t, channel, Envelope{
-		Broadcast: true,
-		Message:   &TestMessage{Value: "bar"},
-	})
-	expect := []*Envelope{}
+	channel.Broadcast(&TestMessage{Value: "bar"})
+	want := []RecvMsg[*TestMessage]{}
 	for _, peer := range peers {
-		expect = append(expect, &Envelope{
-			From:      peer.NodeID,
-			ChannelID: chDesc.ID,
-			Message:   &TestMessage{Value: "bar"},
+		want = append(want, RecvMsg[*TestMessage]{
+			From:    peer.NodeID,
+			Message: &TestMessage{Value: "bar"},
 		})
 	}
-	RequireReceiveUnordered(t, channel, expect)
+	RequireReceiveUnordered(t, channel, want)
 
-	t.Logf("We then submit an error for a peer, and watch it get disconnected and")
-	t.Logf("then reconnected as the router retries it.")
-	peerUpdates := local.PeerManager.Subscribe(ctx)
-	require.NoError(t, channel.SendError(ctx, PeerError{
-		NodeID: peers[0].NodeID,
-		Err:    errors.New("boom"),
-	}))
-	RequireUpdates(t, peerUpdates, []PeerUpdate{
-		{NodeID: peers[0].NodeID, Status: PeerStatusDown},
-		{NodeID: peers[0].NodeID, Status: PeerStatusUp},
-	})
+	t.Logf("We report a fatal error and expect the peer to get disconnected")
+	conn, ok := GetAny(local.Router.peerManager.Conns(), peers[0].NodeID)
+	require.True(t, ok)
+	local.Router.Evict(peers[0].NodeID, errors.New("boom"))
+	local.WaitForDisconnect(ctx, conn)
 }
 
 func TestRouter_Channel_Basic(t *testing.T) {
 	t.Cleanup(leaktest.Check(t))
-	logger, _ := log.NewDefaultLogger("plain", "debug")
+	rng := utils.TestRng()
 	ctx := t.Context()
 	chDesc := makeChDesc(5)
 
-	// Set up a router with no transports (so no peers).
-	peerManager, err := NewPeerManager(logger, selfID, dbm.NewMemDB(), PeerManagerOptions{}, NopMetrics())
-	require.NoError(t, err)
-
-	router, err := NewRouter(
-		logger,
-		NopMetrics(),
-		selfKey,
-		peerManager,
-		func() *types.NodeInfo { return &selfInfo },
-		nil,
-		RouterOptions{
-			Endpoint:   Endpoint{tcp.TestReserveAddr()},
-			Connection: conn.DefaultMConnConfig(),
-		},
-	)
-	require.NoError(t, err)
-
+	router := makeRouter(rng)
 	require.NoError(t, router.Start(ctx))
 	t.Cleanup(router.Wait)
 
 	t.Logf("Opening a channel should work.")
-	channel, err := router.OpenChannel(chDesc)
+	channel, err := OpenChannel(router, chDesc)
 	require.NoError(t, err)
 	require.NotNil(t, channel)
 
 	t.Logf("Opening the same channel again should fail.")
-	_, err = router.OpenChannel(chDesc)
+	_, err = OpenChannel(router, chDesc)
 	require.Error(t, err)
 
 	t.Logf("Opening a different channel should work.")
-	chDesc2 := &ChannelDescriptor{ID: 2, MessageType: &TestMessage{}}
-	_, err = router.OpenChannel(chDesc2)
+	chDesc2 := ChannelDescriptor[*TestMessage]{ID: 2, MessageType: &TestMessage{}}
+	_, err = OpenChannel(router, chDesc2)
 	require.NoError(t, err)
 
 	t.Logf("We should be able to send on the channel, even though there are no peers.")
-	RequireSend(t, channel, Envelope{
-		To:      types.NodeID(strings.Repeat("a", 40)),
-		Message: &TestMessage{Value: "foo"},
-	})
+	channel.Send(&TestMessage{Value: "foo"}, types.NodeID(strings.Repeat("a", 40)))
 
 	t.Logf("A message to ourselves should be dropped.")
-	RequireSend(t, channel, Envelope{
-		To:      selfID,
-		Message: &TestMessage{Value: "self"},
-	})
+	channel.Send(&TestMessage{Value: "self"}, TestAddress(router).NodeID)
 	RequireEmpty(t, channel)
 }
 
@@ -167,49 +149,33 @@ func TestRouter_SendReceive(t *testing.T) {
 
 	ids := network.NodeIDs()
 	aID, bID, cID := ids[0], ids[1], ids[2]
-	channels := network.MakeChannels(t, chDesc)
+	channels := TestMakeChannels(t, network, chDesc)
 	a, b, c := channels[aID], channels[bID], channels[cID]
-	otherChannels := network.MakeChannels(t, MakeTestChannelDesc(9))
+	otherChannels := TestMakeChannels(t, network, MakeTestChannelDesc(9))
 
 	network.Start(t)
 
 	t.Logf("Sending a message a->b should work, and not send anything further to a, b, or c.")
-	RequireSend(t, a, Envelope{To: bID, Message: &TestMessage{Value: "foo"}, ChannelID: chDesc.ID})
-	RequireReceive(t, b, Envelope{From: aID, Message: &TestMessage{Value: "foo"}, ChannelID: chDesc.ID})
-	RequireEmpty(t, a, b, c)
-
-	t.Logf("Sending a nil message a->b should be dropped.")
-	RequireSend(t, a, Envelope{To: bID, Message: nil, ChannelID: chDesc.ID})
-	RequireEmpty(t, a, b, c)
-
-	t.Logf("Sending a different message type should be dropped.")
-	RequireSend(t, a, Envelope{To: bID, Message: &gogotypes.BoolValue{Value: true}, ChannelID: chDesc.ID})
+	a.Send(&TestMessage{Value: "foo"}, bID)
+	RequireReceive(t, b, RecvMsg[*TestMessage]{From: aID, Message: &TestMessage{Value: "foo"}})
 	RequireEmpty(t, a, b, c)
 
 	t.Logf("Sending to an unknown peer should be dropped.")
-	RequireSend(t, a, Envelope{
-		To:        types.NodeID(strings.Repeat("a", 40)),
-		Message:   &TestMessage{Value: "a"},
-		ChannelID: chDesc.ID,
-	})
-	RequireEmpty(t, a, b, c)
-
-	t.Logf("Sending without a recipient should be dropped.")
-	RequireSend(t, a, Envelope{Message: &TestMessage{Value: "noto"}, ChannelID: chDesc.ID})
+	a.Send(&TestMessage{Value: "a"}, types.NodeID(strings.Repeat("a", 40)))
 	RequireEmpty(t, a, b, c)
 
 	t.Logf("Sending to self should be dropped.")
-	RequireSend(t, a, Envelope{To: aID, Message: &TestMessage{Value: "self"}, ChannelID: chDesc.ID})
+	a.Send(&TestMessage{Value: "self"}, aID)
 	RequireEmpty(t, a, b, c)
 
 	t.Logf("Removing b and sending to it should be dropped.")
 	network.Remove(t, bID)
-	RequireSend(t, a, Envelope{To: bID, Message: &TestMessage{Value: "nob"}, ChannelID: chDesc.ID})
+	a.Send(&TestMessage{Value: "nob"}, bID)
 	RequireEmpty(t, a, b, c)
 
 	t.Logf("After all this, sending a message c->a should work.")
-	RequireSend(t, c, Envelope{To: aID, Message: &TestMessage{Value: "bar"}, ChannelID: chDesc.ID})
-	RequireReceive(t, a, Envelope{From: cID, Message: &TestMessage{Value: "bar"}, ChannelID: chDesc.ID})
+	c.Send(&TestMessage{Value: "bar"}, aID)
+	RequireReceive(t, a, RecvMsg[*TestMessage]{From: cID, Message: &TestMessage{Value: "bar"}})
 	RequireEmpty(t, a, b, c)
 
 	t.Logf("None of these messages should have made it onto the other channels.")
@@ -227,286 +193,267 @@ func TestRouter_Channel_Broadcast(t *testing.T) {
 
 	ids := network.NodeIDs()
 	aID, bID, cID, dID := ids[0], ids[1], ids[2], ids[3]
-	channels := network.MakeChannels(t, chDesc)
+	channels := TestMakeChannels(t, network, chDesc)
 	a, b, c, d := channels[aID], channels[bID], channels[cID], channels[dID]
 
 	network.Start(t)
 
 	t.Logf("Sending a broadcast from b should work.")
-	RequireSend(t, b, Envelope{Broadcast: true, Message: &TestMessage{Value: "foo"}, ChannelID: chDesc.ID})
-	RequireReceive(t, a, Envelope{From: bID, Message: &TestMessage{Value: "foo"}, ChannelID: chDesc.ID})
-	RequireReceive(t, c, Envelope{From: bID, Message: &TestMessage{Value: "foo"}, ChannelID: chDesc.ID})
-	RequireReceive(t, d, Envelope{From: bID, Message: &TestMessage{Value: "foo"}, ChannelID: chDesc.ID})
+	b.Broadcast(&TestMessage{Value: "foo"})
+	for _, ch := range utils.Slice(a, c, d) {
+		RequireReceive(t, ch, RecvMsg[*TestMessage]{From: bID, Message: &TestMessage{Value: "foo"}})
+	}
 	RequireEmpty(t, a, b, c, d)
 
 	t.Logf("Removing one node from the network shouldn't prevent broadcasts from working.")
 	network.Remove(t, dID)
-	RequireSend(t, a, Envelope{Broadcast: true, Message: &TestMessage{Value: "bar"}, ChannelID: chDesc.ID})
-	RequireReceive(t, b, Envelope{From: aID, Message: &TestMessage{Value: "bar"}, ChannelID: chDesc.ID})
-	RequireReceive(t, c, Envelope{From: aID, Message: &TestMessage{Value: "bar"}, ChannelID: chDesc.ID})
+	a.Broadcast(&TestMessage{Value: "bar"})
+	for _, ch := range utils.Slice(b, c) {
+		RequireReceive(t, ch, RecvMsg[*TestMessage]{From: aID, Message: &TestMessage{Value: "bar"}})
+	}
 	RequireEmpty(t, a, b, c, d)
 }
 
-func TestRouter_Channel_Wrapper(t *testing.T) {
+func TestRouter_SendError(t *testing.T) {
+	ctx := t.Context()
 	t.Cleanup(leaktest.Check(t))
 	t.Logf("Create a test network and open a channel on all nodes.")
 	network := MakeTestNetwork(t, TestNetworkOptions{NumNodes: 2})
-
-	ids := network.NodeIDs()
-	aID, bID := ids[0], ids[1]
-	chDesc := &ChannelDescriptor{
-		ID:                  17,
-		MessageType:         &wrapperMessage{},
-		Priority:            5,
-		SendQueueCapacity:   10,
-		RecvBufferCapacity:  10,
-		RecvMessageCapacity: 10,
-	}
-
-	channels := network.MakeChannels(t, chDesc)
-	a, b := channels[aID], channels[bID]
-
 	network.Start(t)
 
-	// Since wrapperMessage implements Wrapper and handles Message, it
-	// should automatically wrap and unwrap sent messages -- we prepend the
-	// wrapper actions to the message value to signal this.
-	RequireSend(t, a, Envelope{To: bID, Message: &TestMessage{Value: "foo"}, ChannelID: chDesc.ID})
-	RequireReceive(t, b, Envelope{From: aID, Message: &TestMessage{Value: "unwrap:wrap:foo"}, ChannelID: chDesc.ID})
-
-	// If we send a different message that can't be wrapped, it should be dropped.
-	RequireSend(t, a, Envelope{To: bID, Message: &gogotypes.BoolValue{Value: true}, ChannelID: chDesc.ID})
-	RequireEmpty(t, b)
-
-	// If we send the wrapper message itself, it should also be passed through
-	// since WrapperMessage supports it, and should only be unwrapped at the receiver.
-	RequireSend(t, a, Envelope{
-		To:        bID,
-		Message:   &wrapperMessage{TestMessage: TestMessage{Value: "foo"}},
-		ChannelID: chDesc.ID,
-	})
-	RequireReceive(t, b, Envelope{
-		From:      aID,
-		Message:   &TestMessage{Value: "unwrap:foo"},
-		ChannelID: chDesc.ID,
-	})
-
+	t.Logf("Erroring b should cause it to be disconnected.")
+	nodes := network.Nodes()
+	conn, ok := GetAny(nodes[0].Router.peerManager.Conns(), nodes[1].NodeID)
+	require.True(t, ok)
+	nodes[0].Router.Evict(nodes[1].NodeID, errors.New("boom"))
+	nodes[0].WaitForDisconnect(ctx, conn)
 }
 
-// WrapperMessage prepends the value with "wrap:" and "unwrap:" to test it.
-type wrapperMessage struct {
-	TestMessage
-}
-
-var _ Wrapper = (*wrapperMessage)(nil)
-
-func (w *wrapperMessage) Wrap(inner proto.Message) error {
-	switch inner := inner.(type) {
-	case *TestMessage:
-		w.TestMessage.Value = fmt.Sprintf("wrap:%v", inner.Value)
-	case *wrapperMessage:
-		*w = *inner
-	default:
-		return fmt.Errorf("invalid message type %T", inner)
-	}
-	return nil
-}
-
-func (w *wrapperMessage) Unwrap() (proto.Message, error) {
-	return &TestMessage{Value: fmt.Sprintf("unwrap:%v", w.Value)}, nil
-}
-
-func TestRouter_Channel_Error(t *testing.T) {
-	t.Cleanup(leaktest.Check(t))
-	chDesc := makeChDesc(5)
+func TestRouter_PexOnHandshake_DialerDisabled(t *testing.T) {
 	ctx := t.Context()
 
-	t.Logf("Create a test network and open a channel on all nodes.")
-	network := MakeTestNetwork(t, TestNetworkOptions{NumNodes: 3})
+	// Start a network of 2 nodes connected to each other with PexOnHandshake = true
+	network := MakeTestNetwork(t, TestNetworkOptions{NumNodes: 2, NodeOpts: TestNodeOptions{PexOnHandshake: true}})
 	network.Start(t)
+	nodes := network.Nodes()
 
-	ids := network.NodeIDs()
-	aID, bID := ids[0], ids[1]
-	channels := network.MakeChannels(t, chDesc)
-	a := channels[aID]
+	// Add a node with PexOnHandshake = false and connect it to nodes[0]
+	newNode := network.MakeNode(t, TestNodeOptions{PexOnHandshake: false})
+	newNode.Connect(ctx, nodes[0])
 
-	t.Logf("Erroring b should cause it to be disconnected. It will reconnect shortly after.")
-	sub := network.Node(aID).MakePeerUpdates(ctx, t)
-	RequireSendError(t, a, PeerError{NodeID: bID, Err: errors.New("boom")})
-	RequireUpdates(t, sub, []PeerUpdate{
-		{NodeID: bID, Status: PeerStatusDown},
-		{NodeID: bID, Status: PeerStatusUp},
-	})
+	// newNode should NOT learn about nodes[1] during handshake.
+	require.True(t, slices.Index(
+		newNode.Router.peerManager.AllAddrs(),
+		nodes[1].NodeAddress,
+	) == -1)
 }
 
-type RouterHandle struct {
-	router      *Router
-	peerManager *PeerManager
-}
-
-var keyFiltered, infoFiltered = makeKeyAndInfo()
-
-func spawnRouterWithOptions(t *testing.T, logger log.Logger, ropts RouterOptions) *RouterHandle {
-	t.Helper()
+func TestRouter_PexOnHandshake_ListenerPeersPropagated(t *testing.T) {
 	ctx := t.Context()
-	// Set up and start the router.
-	opts := PeerManagerOptions{
-		MinRetryTime: 100 * time.Millisecond,
-	}
-	peerManager, err := NewPeerManager(logger, selfID, dbm.NewMemDB(), opts, NopMetrics())
-	require.NoError(t, err)
-	r := RouterHandle{
-		peerManager: peerManager,
-	}
-	router, err := NewRouter(
-		logger,
+
+	t.Log("Create a network with 3 nodes.")
+	network := MakeTestNetwork(t, TestNetworkOptions{NumNodes: 3, NodeOpts: TestNodeOptions{PexOnHandshake: true, SelfAddress: true}})
+	nodes := network.Nodes()
+
+	t.Log("Connect nodes 1,2 to 0.")
+	nodes[1].Connect(ctx, nodes[0])
+	nodes[2].Connect(ctx, nodes[0])
+
+	t.Log("Node 2 should learn about node 1 during handshake with 0, and connect to it eventually.")
+	nodes[2].WaitForConn(ctx, nodes[1].NodeID, true)
+}
+
+func makeRouterWithOptionsAndKey(opts *RouterOptions, key NodeSecretKey) *Router {
+	info := makeInfo(key)
+	return utils.OrPanic1(NewRouter(
 		NopMetrics(),
-		selfKey,
-		peerManager,
-		func() *types.NodeInfo { return &selfInfo },
-		func(_ context.Context, id types.NodeID) error {
-			if id == infoFiltered.NodeID {
-				return errors.New("should filter")
-			}
-			return nil
+		key,
+		func() *types.NodeInfo { return &info },
+		dbm.NewMemDB(),
+		opts,
+	))
+}
+
+func makeRouterOptions() *RouterOptions {
+	c := conn.DefaultMConnConfig()
+	c.PongTimeout = time.Hour
+	return &RouterOptions{
+		MaxAcceptRate: utils.Some(rate.Inf),
+		MaxDialRate:   utils.Some(rate.Inf),
+		Endpoint:      Endpoint{tcp.TestReserveAddr()},
+		Connection:    c,
+		// 0 to allow immediate retries from peers.
+		IncomingConnectionWindow: utils.Some(time.Duration(0)),
+		// Large timeouts to avoid flaky happy path tests
+		// AND to avoid false positives on failure tests.
+		ResolveTimeout:   utils.Some(time.Hour),
+		DialTimeout:      utils.Some(time.Hour),
+		HandshakeTimeout: utils.Some(time.Hour),
+	}
+}
+
+func makeRouterWithOptions(rng utils.Rng, opts *RouterOptions) *Router {
+	return makeRouterWithOptionsAndKey(opts, makeKey(rng))
+}
+
+func makeRouterWithKey(key NodeSecretKey) *Router {
+	return makeRouterWithOptionsAndKey(makeRouterOptions(), key)
+}
+
+func makeRouter(rng utils.Rng) *Router {
+	return makeRouterWithKey(makeKey(rng))
+}
+
+func TestRouter_GigaNotSetByDefault(t *testing.T) {
+	rng := utils.TestRng()
+	router := makeRouter(rng)
+	require.False(t, router.giga.IsPresent(), "GigaRouter should not be set with default options")
+}
+
+func TestRouter_GigaSetWhenConfigured(t *testing.T) {
+	rng := utils.TestRng()
+	nodeKey := makeKey(rng)
+	// Use a separate key for the validator to verify both propagate independently.
+	valKey := atypes.SecretKeyFromED25519(ed25519.SecretKey(makeKey(rng)))
+
+	validatorAddrs := map[atypes.PublicKey]GigaNodeAddr{
+		valKey.Public(): {
+			Key:      nodeKey.Public(),
+			HostPort: tcp.HostPort{Hostname: "10.0.0.1", Port: 9999},
 		},
-		ropts,
-	)
-	require.NoError(t, err)
-	require.NoError(t, router.Start(ctx))
-	t.Cleanup(router.Stop)
-	require.NoError(t, router.WaitForStart(ctx))
-	r.router = router
-	return &r
-}
-
-func makeRouterOptions() RouterOptions {
-	return RouterOptions{
-		DialSleep:          func(context.Context) error { return nil },
-		NumConcurrentDials: func() int { return 100 },
-		Endpoint:           Endpoint{tcp.TestReserveAddr()},
-		Connection:         conn.DefaultMConnConfig(),
 	}
-}
 
-func spawnRouter(t *testing.T, logger log.Logger) *RouterHandle {
-	t.Helper()
-	return spawnRouterWithOptions(t, logger, makeRouterOptions())
-}
-
-func handshake(ctx context.Context, logger log.Logger, tcpConn net.Conn, info types.NodeInfo, key crypto.PrivKey) (*Connection, error) {
-	return HandshakeOrClose(
-		ctx,
-		logger.With("node", info.NodeID),
-		info, key, tcpConn,
-		conn.DefaultMConnConfig(),
-		[]*ChannelDescriptor{},
-	)
-}
-
-func TestRouter_FilterByIP(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
-	ctx := t.Context()
-	t.Cleanup(leaktest.Check(t))
-
-	var reject atomic.Bool
+	// Use intentionally non-default values to ensure config actually propagates.
 	opts := makeRouterOptions()
-	opts.FilterPeerByIP = func(ctx context.Context, addr netip.AddrPort) error {
-		if reject.Load() {
-			return errors.New("fail all")
-		}
-		return nil
-	}
-	h := spawnRouterWithOptions(t, logger, opts)
-	sub := h.peerManager.Subscribe(ctx)
+	proxyApp := proxy.New(abci.BaseApplication{}, proxy.NopMetrics())
+	txMempool := mempool.NewTxMempool(mempool.TestConfig(), proxyApp, mempool.NopMetrics(), mempool.NopTxConstraintsFetcher)
+	opts.Giga = utils.Some(&GigaRouterConfig{
+		DialInterval:   7 * time.Second,
+		ValidatorAddrs: validatorAddrs,
+		Consensus: &consensus.Config{
+			Key:                valKey,
+			ViewTimeout:        func(atypes.View) time.Duration { return 3 * time.Second },
+			PersistentStateDir: utils.None[string](),
+		},
+		Producer: &producer.Config{
+			MaxGasPerBlock:   77_000_000,
+			MaxTxsPerBlock:   7_777,
+			MaxTxsPerSecond:  utils.Some(uint64(999)),
+			MempoolSize:      3_333,
+			BlockInterval:    777 * time.Millisecond,
+			AllowEmptyBlocks: true,
+		},
+		TxMempool: txMempool,
+		GenDoc: &types.GenesisDoc{
+			ChainID:       "giga-e2e-test",
+			InitialHeight: 42,
+			GenesisTime:   time.Now(),
+		},
+	})
 
-	if err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		t.Logf("Connection should succeed.")
-		key, info := makeKeyAndInfo()
-		tcpConn, err := tcp.Dial(ctx, h.router.Endpoint().AddrPort)
+	router := makeRouterWithOptionsAndKey(opts, nodeKey)
+	require.True(t, router.giga.IsPresent(), "GigaRouter should be set when Giga config is provided")
+
+	giga, _ := router.giga.Get()
+
+	// Verify non-default config values were propagated.
+	require.Equal(t, 7*time.Second, giga.cfg.DialInterval)
+	require.Len(t, giga.cfg.ValidatorAddrs, 1)
+	addr, ok := giga.cfg.ValidatorAddrs[valKey.Public()]
+	require.True(t, ok, "validator key should be in ValidatorAddrs")
+	require.Equal(t, nodeKey.Public(), addr.Key, "node key should match")
+	require.Equal(t, "10.0.0.1", addr.HostPort.Hostname)
+	require.Equal(t, uint16(9999), addr.HostPort.Port)
+
+	// Verify consensus key is the validator key (distinct from node key).
+	require.Equal(t, valKey.Public(), giga.cfg.Consensus.Key.Public())
+	require.Equal(t, 3*time.Second, giga.cfg.Consensus.ViewTimeout(atypes.View{}))
+
+	// Verify producer config with non-default values.
+	require.Equal(t, uint64(77_000_000), giga.cfg.Producer.MaxGasPerBlock)
+	require.Equal(t, uint64(7_777), giga.cfg.Producer.MaxTxsPerBlock)
+	maxTps, tpsOk := giga.cfg.Producer.MaxTxsPerSecond.Get()
+	require.True(t, tpsOk)
+	require.Equal(t, uint64(999), maxTps)
+	require.Equal(t, uint64(3_333), giga.cfg.Producer.MempoolSize)
+	require.Equal(t, 777*time.Millisecond, giga.cfg.Producer.BlockInterval)
+	require.True(t, giga.cfg.Producer.AllowEmptyBlocks)
+
+	// Verify genesis doc.
+	require.Equal(t, "giga-e2e-test", giga.cfg.GenDoc.ChainID)
+	require.Equal(t, int64(42), giga.cfg.GenDoc.InitialHeight)
+}
+
+func blindHandshake(ctx context.Context, c tcp.Conn, key NodeSecretKey, info types.NodeInfo) error {
+	return utils.IgnoreCancel(scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
+		sc, err := conn.MakeSecretConnection(ctx, c)
 		if err != nil {
-			return fmt.Errorf("peerTransport.Dial(): %w", err)
+			return fmt.Errorf("conn.MakeSecretConnection(): %w", err)
 		}
-		defer tcpConn.Close()
-		conn, err := handshake(ctx, logger, tcpConn, info, key)
-		if err != nil {
-			return fmt.Errorf("conn.Handshake(): %w", err)
-		}
-		RequireUpdate(t, sub, PeerUpdate{
-			NodeID: info.NodeID,
-			Status: PeerStatusUp,
+		s.Spawn(func() error {
+			var buf [1024]byte
+			for {
+				if err := sc.Read(ctx, buf[:]); err != nil {
+					return err
+				}
+			}
 		})
-		conn.Close()
-
-		t.Logf("Enable filtering.")
-		reject.Store(true)
-
-		t.Logf("Connection should fail during handshake.")
-		key, info = makeKeyAndInfo()
-		tcpConn, err = tcp.Dial(ctx, h.router.Endpoint().AddrPort)
-		if err != nil {
-			return fmt.Errorf("peerTransport.Dial(): %w", err)
+		msg := &handshakeMsg{NodeAuth: key.SignChallenge(sc.Challenge())}
+		if err := conn.WriteSizedMsg(ctx, sc, handshakeMsgConv.Marshal(msg)); err != nil {
+			return fmt.Errorf("conn.WriteSizedMsg(): %w", err)
 		}
-		defer conn.Close()
-		if _, err := handshake(ctx, logger, tcpConn, info, key); err == nil {
-			return fmt.Errorf("handshake(): expected error")
+		if err := conn.WriteSizedMsg(ctx, sc, utils.OrPanic1(gogoproto.Marshal(info.ToProto()))); err != nil {
+			return fmt.Errorf("conn.WriteSizedMsg(<nodeInfo>): %w", err)
 		}
-		return nil
-	}); err != nil {
-		t.Fatal(err)
-	}
+		return sc.Flush(ctx)
+	}))
 }
 
 func TestRouter_AcceptPeers(t *testing.T) {
-	key, info := makeKeyAndInfo()
-	info2 := info
-	info2.Network = "other-network"
-	info3 := info
-	info3.Channels = []byte{0x23}
+	rng := utils.TestRng()
+	selfKey := makeKey(rng)
+	peerKey := makeKey(rng)
+	badInfo := makeInfo(peerKey)
+	badInfo.Network = "other-network"
 	testcases := map[string]struct {
 		info types.NodeInfo
-		key  crypto.PrivKey
+		key  NodeSecretKey
 		ok   bool
 	}{
-		"valid handshake":       {info, key, true},
-		"empty handshake":       {types.NodeInfo{}, key, false},
-		"self handshake":        {selfInfo, selfKey, false},
-		"incompatible network":  {info2, key, false},
-		"incompatible channels": {info3, key, false},
-		"filtered":              {infoFiltered, keyFiltered, false},
+		"valid handshake":      {makeInfo(peerKey), peerKey, true},
+		"empty handshake":      {types.NodeInfo{}, peerKey, false},
+		"self handshake":       {makeInfo(selfKey), selfKey, false},
+		"incompatible network": {badInfo, peerKey, false},
 	}
 
 	for name, tc := range testcases {
 		t.Run(name, func(t *testing.T) {
-			logger, _ := log.NewDefaultLogger("plain", "debug")
-			ctx := t.Context()
 			t.Cleanup(leaktest.Check(t))
-			h := spawnRouter(t, logger)
-			sub := h.peerManager.Subscribe(ctx)
-
-			if err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-				tcpConn, err := tcp.Dial(ctx, h.router.Endpoint().AddrPort)
-				if err != nil {
-					return fmt.Errorf("peerTransport.Dial(): %w", err)
+			if err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+				r := makeRouterWithKey(selfKey)
+				s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+				if err := r.WaitForStart(ctx); err != nil {
+					return err
 				}
-				defer tcpConn.Close()
+				sub := r.peerManager.Subscribe()
+				// Dial.
+				tcpConn, err := tcp.Dial(ctx, r.Endpoint().AddrPort)
+				if err != nil {
+					return fmt.Errorf("peerTransport.dial(): %w", err)
+				}
+				// Start handshake.
+				s.SpawnBg(func() error { return blindHandshake(ctx, tcpConn, tc.key, tc.info) })
 				if tc.ok {
-					if _, err := handshake(ctx, logger, tcpConn, tc.info, tc.key); err != nil {
-						return fmt.Errorf("conn.Handshake(): %w", err)
-					}
+					t.Logf("Expect successful connect.")
+					s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, tcpConn.Run(ctx)) })
 					RequireUpdate(t, sub, PeerUpdate{
 						NodeID: tc.info.NodeID,
 						Status: PeerStatusUp,
 					})
 				} else {
-					// Expect immediate or delayed failure.
-					// Peer should drop the connection during handshake.
-					conn, err := handshake(ctx, logger, tcpConn, tc.info, tc.key)
-					if err != nil {
-						return nil
-					}
-					if err := conn.Run(ctx); !errors.Is(err, io.EOF) {
-						return fmt.Errorf("want EOF, got %w", err)
+					t.Logf("Expect disconnect.")
+					if err := tcpConn.Run(ctx); utils.IgnoreCancel(err) == nil {
+						return fmt.Errorf("got %v, expected disconnect", err)
 					}
 				}
 				return nil
@@ -519,34 +466,40 @@ func TestRouter_AcceptPeers(t *testing.T) {
 
 // Test checking that multiple peers connecting at once don't block each other.
 func TestRouter_AcceptPeers_Parallel(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
 	ctx := t.Context()
+	rng := utils.TestRng()
 	t.Cleanup(leaktest.Check(t))
 
-	t.Logf("Set up and start the router.")
-	h := spawnRouter(t, logger)
-	sub := h.peerManager.Subscribe(ctx)
-
 	if err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		t.Logf("Dial raw connections.")
-		var conns []*net.TCPConn
+		t.Logf("Set up and start the router.")
+		r := makeRouter(rng)
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+		if err := r.WaitForStart(ctx); err != nil {
+			return err
+		}
+		sub := r.peerManager.Subscribe()
+
+		t.Logf("dial raw connections.")
+		var peers []*Router
+		var conns []tcp.Conn
+		addr := TestAddress(r)
 		for range 10 {
-			conn, err := tcp.Dial(ctx, h.router.Endpoint().AddrPort)
+			x := makeRouter(rng)
+			peers = append(peers, x)
+			conn, err := x.dial(ctx, utils.Slice(addr))
 			if err != nil {
-				return fmt.Errorf("peerTransport.Dial(): %w", err)
+				return fmt.Errorf("x.dial(): %w", err)
 			}
-			defer conn.Close()
+			s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, conn.Run(ctx)) })
 			conns = append(conns, conn)
 		}
 		t.Logf("Handshake the connections in reverse order.")
 		for i := len(conns) - 1; i >= 0; i-- {
-			conn := conns[i]
-			key, info := makeKeyAndInfo()
-			if _, err := handshake(ctx, logger, conn, info, key); err != nil {
-				return fmt.Errorf("conn.Handshake(): %w", err)
+			if _, _, err := peers[i].handshakeV2(ctx, conns[i], utils.Some(addr)); err != nil {
+				return fmt.Errorf("handshake(): %w", err)
 			}
 			RequireUpdate(t, sub, PeerUpdate{
-				NodeID: info.NodeID,
+				NodeID: TestAddress(peers[i]).NodeID,
 				Status: PeerStatusUp,
 			})
 		}
@@ -556,47 +509,50 @@ func TestRouter_AcceptPeers_Parallel(t *testing.T) {
 	}
 }
 
-func TestRouter_DialPeer_Retry(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
-	ctx := t.Context()
+func TestRouter_dialPeer_Retry(t *testing.T) {
+	rng := utils.TestRng()
 	t.Cleanup(leaktest.Check(t))
 
-	t.Logf("Set up and start the router.")
-	h := spawnRouter(t, logger)
-	sub := h.peerManager.Subscribe(ctx)
+	if err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+		t.Logf("Set up and start the router.")
+		r := makeRouter(rng)
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+		if err := r.WaitForStart(ctx); err != nil {
+			return err
+		}
+		sub := r.peerManager.Subscribe()
 
-	if err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		addr := tcp.TestReserveAddr()
-		listener, err := tcp.Listen(addr)
+		x := makeRouter(rng)
+		listener, err := tcp.Listen(x.Endpoint().AddrPort)
 		if err != nil {
 			return fmt.Errorf("tcp.Listen(): %w", err)
 		}
 		defer listener.Close()
 
 		t.Log("Populate peer manager.")
-		key, info := makeKeyAndInfo()
-		if ok, err := h.peerManager.Add(Endpoint{addr}.NodeAddress(info.NodeID)); !ok || err != nil {
-			return fmt.Errorf("peerManager.Add() = %v,%w", ok, err)
+		addr := TestAddress(x)
+		if err := r.AddAddrs(addr.NodeID, utils.Slice(addr)); err != nil {
+			return fmt.Errorf("r.AddAddrs(): %w", err)
 		}
 
 		t.Log("Accept and drop.")
-		conn, err := tcp.AcceptOrClose(ctx, listener)
+		conn, err := listener.AcceptOrClose(ctx)
 		if err != nil {
-			return fmt.Errorf("peerTransport.Dial(): %w", err)
+			return fmt.Errorf("peerTransport.dial(): %w", err)
 		}
 		conn.Close()
 
 		t.Log("Accept and complete handshake.")
-		conn, err = tcp.AcceptOrClose(ctx, listener)
+		conn, err = listener.AcceptOrClose(ctx)
 		if err != nil {
-			return fmt.Errorf("peerTransport.Dial(): %w", err)
+			return fmt.Errorf("peerTransport.dial(): %w", err)
 		}
-		defer conn.Close()
-		if _, err := handshake(ctx, logger, conn, info, key); err != nil {
-			return fmt.Errorf("conn.Handshake(): %w", err)
+		s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, conn.Run(ctx)) })
+		if _, _, err := x.handshakeV2(ctx, conn, utils.None[NodeAddress]()); err != nil {
+			return fmt.Errorf("handshake(): %w", err)
 		}
 		RequireUpdate(t, sub, PeerUpdate{
-			NodeID: info.NodeID,
+			NodeID: TestAddress(x).NodeID,
 			Status: PeerStatusUp,
 		})
 		return nil
@@ -605,106 +561,145 @@ func TestRouter_DialPeer_Retry(t *testing.T) {
 	}
 }
 
-func TestRouter_DialPeer_Reject(t *testing.T) {
-	key, info := makeKeyAndInfo()
-	_, info2 := makeKeyAndInfo()
+func TestRouter_dialPeer_Reject(t *testing.T) {
+	rng := utils.TestRng()
+	key := makeKey(rng)
+	info := makeInfo(key)
+	info2 := makeInfo(makeKey(rng))
 	info3 := info
 	info3.Network = "other-network"
-	info4 := info
-	info4.Channels = []byte{0x23}
 	testcases := map[string]struct {
 		dialID types.NodeID
 		info   types.NodeInfo
 	}{
-		"empty handshake":       {info.NodeID, types.NodeInfo{}},
-		"unexpected node ID":    {info2.NodeID, info},
-		"incompatible network":  {info.NodeID, info3},
-		"incompatible channels": {info.NodeID, info4},
+		"empty handshake":      {info.NodeID, types.NodeInfo{}},
+		"unexpected node ID":   {info2.NodeID, info},
+		"incompatible network": {info.NodeID, info3},
 	}
 	for name, tc := range testcases {
 		t.Run(name, func(t *testing.T) {
-			logger, _ := log.NewDefaultLogger("plain", "debug")
 			t.Cleanup(leaktest.Check(t))
-			ctx := t.Context()
-			h := spawnRouter(t, logger)
-			if err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
+			err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+				r := makeRouter(rng)
+				s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+				if err := r.WaitForStart(ctx); err != nil {
+					return err
+				}
+
 				addr := tcp.TestReserveAddr()
 				listener, err := tcp.Listen(addr)
 				if err != nil {
 					return fmt.Errorf("tcp.Listen(): %w", err)
 				}
 				defer listener.Close()
-				if ok, err := h.peerManager.Add(Endpoint{addr}.NodeAddress(tc.dialID)); !ok || err != nil {
-					return fmt.Errorf("peerManager.Add() = %v,%w", ok, err)
+				if err := r.AddAddrs(tc.dialID, utils.Slice(Endpoint{addr}.NodeAddress(tc.dialID))); err != nil {
+					return fmt.Errorf("r.AddAddrs(): %w", err)
 				}
-				tcpConn, err := tcp.AcceptOrClose(ctx, listener)
+				tcpConn, err := listener.AcceptOrClose(ctx)
 				if err != nil {
-					return fmt.Errorf("peerTransport.Accept(): %w", err)
+					return fmt.Errorf("listener.AcceptOrClose(): %w", err)
 				}
-				defer tcpConn.Close()
-				// Connections should be closed either during handshake, or immediately afterwards.
-				conn, err := handshake(ctx, logger, tcpConn, tc.info, key)
-				if err != nil {
-					return nil
-				}
-				if err := conn.Run(ctx); !errors.Is(err, io.EOF) {
-					return fmt.Errorf("want EOF, got %w", err)
+				t.Logf("conn accepted")
+				s.SpawnBg(func() error { return blindHandshake(ctx, tcpConn, key, tc.info) })
+				if err := tcpConn.Run(ctx); utils.IgnoreCancel(err) == nil {
+					return fmt.Errorf("got %v, want disconnect", err)
 				}
 				return nil
-			}); err != nil {
+			})
+			if err != nil {
 				t.Fatal(err)
 			}
 		})
 	}
 }
 
-func TestRouter_DialPeers_Parallel(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
+func TestRouter_dial_TriesAllAddresses(t *testing.T) {
+	rng := utils.TestRng()
 	ctx := t.Context()
+
+	// Address dialing order is not deterministic, so we run the test multiple times to
+	// minimize the false-positive probability (situation where the correct address is attempted first).
+	for range 10 {
+		err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
+			// Prepare addresses
+			addr := tcp.TestReserveAddr()
+			id := makeNodeID(rng)
+			addrs := utils.Slice(Endpoint{addr}.NodeAddress(id))
+			for range 10 {
+				addrs = append(addrs, makeAddrFor(rng, id))
+			}
+			utils.Shuffle(rng, addrs)
+
+			// Create the dialing router.
+			listener := utils.OrPanic1(tcp.Listen(addr))
+			s.Spawn(func() error {
+				conn, err := listener.AcceptOrClose(ctx)
+				if err != nil {
+					return err
+				}
+				conn.Close()
+				return nil
+			})
+			r := makeRouter(rng)
+			s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+			conn, err := r.dial(ctx, addrs)
+			if err != nil {
+				return fmt.Errorf("r.dial(): %w", err)
+			}
+			conn.Close()
+			return nil
+		})
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+}
+
+func TestRouter_dialPeers_Parallel(t *testing.T) {
+	ctx := t.Context()
+	rng := utils.TestRng()
 	t.Cleanup(leaktest.Check(t))
 
-	var keys []crypto.PrivKey
-	var infos []types.NodeInfo
-	for range 10 {
-		key, info := makeKeyAndInfo()
-		keys = append(keys, key)
-		infos = append(infos, info)
-	}
-
 	t.Logf("Set up and start the router.")
-	h := spawnRouter(t, logger)
-	sub := h.peerManager.Subscribe(ctx)
-
 	if err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
+		r := makeRouter(rng)
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+		if err := r.WaitForStart(ctx); err != nil {
+			return err
+		}
+		sub := r.peerManager.Subscribe()
+
 		t.Logf("Accept raw connections.")
-		var conns []*net.TCPConn
-		for i, info := range infos {
-			t.Logf("ACCEPT %v %v", i, info.NodeID)
-			addr := tcp.TestReserveAddr()
-			listener, err := tcp.Listen(addr)
+		var peers []*Router
+		var conns []tcp.Conn
+		for i := range 10 {
+			t.Logf("ACCEPT %v", i)
+			peer := makeRouter(rng)
+			listener, err := tcp.Listen(peer.Endpoint().AddrPort)
 			if err != nil {
 				return fmt.Errorf("tcp.Listen(): %w", err)
 			}
 			defer listener.Close()
-			if ok, err := h.peerManager.Add(Endpoint{addr}.NodeAddress(info.NodeID)); !ok || err != nil {
-				return fmt.Errorf("peerManager.Add() = %v,%w", ok, err)
+			if err := r.AddAddrs(TestAddress(peer).NodeID, utils.Slice(TestAddress(peer))); err != nil {
+				return fmt.Errorf("r.AddAddrs(): %w", err)
 			}
-			conn, err := tcp.AcceptOrClose(ctx, listener)
+			conn, err := listener.AcceptOrClose(ctx)
 			if err != nil {
-				return fmt.Errorf("peerTransport.Accept(): %w", err)
+				return fmt.Errorf("listener.AcceptOrClose(): %w", err)
 			}
-			defer conn.Close()
+			s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, conn.Run(ctx)) })
 			conns = append(conns, conn)
+			peers = append(peers, peer)
 		}
 		t.Logf("Handshake the connections in reverse order.")
 		for i := len(conns) - 1; i >= 0; i-- {
 			conn := conns[i]
-			info := infos[i]
-			if _, err := handshake(ctx, logger, conn, info, keys[i]); err != nil {
-				return fmt.Errorf("conn.Handshake(): %w", err)
+			peer := peers[i]
+			if _, _, err := peer.handshakeV2(ctx, conn, utils.None[NodeAddress]()); err != nil {
+				return fmt.Errorf("handshake(): %w", err)
 			}
 			RequireUpdate(t, sub, PeerUpdate{
-				NodeID: info.NodeID,
+				NodeID: TestAddress(peer).NodeID,
 				Status: PeerStatusUp,
 			})
 		}
@@ -715,37 +710,35 @@ func TestRouter_DialPeers_Parallel(t *testing.T) {
 }
 
 func TestRouter_EvictPeers(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
-	ctx := t.Context()
 	t.Cleanup(leaktest.Check(t))
-	h := spawnRouter(t, logger)
-	sub := h.peerManager.Subscribe(ctx)
-
-	if err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		key, info := makeKeyAndInfo()
-		tcpConn, err := tcp.Dial(ctx, h.router.Endpoint().AddrPort)
-		if err != nil {
-			return fmt.Errorf("Dial(): %w", err)
+	rng := utils.TestRng()
+	key := makeKey(rng)
+	info := makeInfo(key)
+	if err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+		r := makeRouter(rng)
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+		if err := r.WaitForStart(ctx); err != nil {
+			return err
 		}
-		defer tcpConn.Close()
-		conn, err := handshake(ctx, logger, tcpConn, info, key)
-		if err != nil {
-			return fmt.Errorf("conn.Handshake(): %w", err)
-		}
-		RequireUpdate(t, sub, PeerUpdate{
-			NodeID: info.NodeID,
-			Status: PeerStatusUp,
-		})
+		sub := r.peerManager.Subscribe()
 
-		t.Log("Report the peer as bad.")
-		h.peerManager.Errored(info.NodeID, errors.New("boom"))
-		RequireUpdate(t, sub, PeerUpdate{
-			NodeID: info.NodeID,
-			Status: PeerStatusDown,
+		tcpConn, err := tcp.Dial(ctx, r.Endpoint().AddrPort)
+		if err != nil {
+			return fmt.Errorf("dial(): %w", err)
+		}
+		s.SpawnBg(func() error { return blindHandshake(ctx, tcpConn, key, info) })
+		s.Spawn(func() error {
+			peerID := key.Public().NodeID()
+			RequireUpdate(t, sub, PeerUpdate{
+				NodeID: peerID,
+				Status: PeerStatusUp,
+			})
+			t.Log("Report the peer as bad.")
+			r.Evict(peerID, errors.New("boom"))
+			return nil
 		})
-		t.Log("Wait for conn down")
-		if err := conn.Run(ctx); !errors.Is(err, io.EOF) {
-			return fmt.Errorf("want EOF, got %w", err)
+		if err := tcpConn.Run(ctx); utils.IgnoreCancel(err) == nil {
+			return fmt.Errorf("got %v, want disconnect", err)
 		}
 		return nil
 	}); err != nil {
@@ -753,86 +746,143 @@ func TestRouter_EvictPeers(t *testing.T) {
 	}
 }
 
-func makeChDesc(id ChannelID) *ChannelDescriptor {
-	return &ChannelDescriptor{
-		ID:                  id,
-		MessageType:         &TestMessage{},
-		Priority:            5,
-		RecvBufferCapacity:  10,
-		RecvMessageCapacity: 10000,
-	}
-}
-
 func TestRouter_DontSendOnInvalidChannel(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
-	ctx := t.Context()
 	t.Cleanup(leaktest.Check(t))
-	h := spawnRouter(t, logger)
-	sub := h.peerManager.Subscribe(ctx)
-
-	desc1 := makeChDesc(1)
-	ch1, err := h.router.OpenChannel(desc1)
-	require.NoError(t, err)
-
-	desc2 := makeChDesc(2)
-	ch2, err := h.router.OpenChannel(desc2)
-	require.NoError(t, err)
-
-	if err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		key, info := makeKeyAndInfo()
-		info.Channels = []byte{byte(desc1.ID)}
-		descs := []*ChannelDescriptor{desc1}
-		tcpConn, err := tcp.Dial(ctx, h.router.Endpoint().AddrPort)
-		if err != nil {
-			return fmt.Errorf("Dial(): %w", err)
+	rng := utils.TestRng()
+	if err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+		r := makeRouter(rng)
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+		if err := r.WaitForStart(ctx); err != nil {
+			return err
 		}
-		conn, err := HandshakeOrClose(
-			ctx,
-			logger.With("node", info.NodeID),
-			info, key, tcpConn,
-			conn.DefaultMConnConfig(),
-			descs,
-		)
+		sub := r.peerManager.Subscribe()
+
+		desc1 := makeChDesc(1)
+		r1, err := OpenChannel(r, desc1)
 		if err != nil {
-			return fmt.Errorf("conn.Handshake(): %w", err)
+			return fmt.Errorf("r.OpenChannel(1): %w", err)
+		}
+
+		desc2 := makeChDesc(2)
+		r2, err := OpenChannel(r, desc2)
+		if err != nil {
+			return fmt.Errorf("r.OpenChannel(2): %w", err)
+		}
+
+		x := makeRouter(rng)
+		x1, err := OpenChannel(x, desc1)
+		if err != nil {
+			return fmt.Errorf("x.OpenChannel(1): %w", err)
+		}
+
+		addr := TestAddress(r)
+		utils.OrPanic(x.AddAddrs(addr.NodeID, utils.Slice(addr)))
+		addrs := utils.OrPanic1(x.peerManager.StartDial(ctx))
+		utils.OrPanic(utils.TestDiff(utils.Slice(addr), addrs))
+		tcpConn := utils.OrPanic1(x.dial(ctx, addrs))
+		s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, tcpConn.Run(ctx)) })
+		hConn, info, err := x.handshakeV2(ctx, tcpConn, utils.Some(addr))
+		if err != nil {
+			return fmt.Errorf("handshake(): %w", err)
 		}
 		RequireUpdate(t, sub, PeerUpdate{
-			NodeID: info.NodeID,
+			NodeID: TestAddress(x).NodeID,
 			Status: PeerStatusUp,
 		})
-		s.SpawnBg(func() error { return mayDisconnectAfterDone(ctx, conn.Run(ctx)) })
+		s.SpawnBg(func() error { return utils.IgnoreCancel(x.runConn(ctx, hConn, info, utils.Some(addr))) })
 		n := 1
 		msg1 := &TestMessage{Value: "Hello"}
 		msg2 := &TestMessage{Value: "Hello2"}
 		t.Log("Broadcast messages of both channels.")
 		s.Spawn(func() error {
 			for range n {
-				if err := ch1.Send(ctx, Envelope{Broadcast: true, Message: msg1}); err != nil {
-					return fmt.Errorf("ch1.Send(): %w", err)
-				}
-				if err := ch2.Send(ctx, Envelope{Broadcast: true, Message: msg2}); err != nil {
-					return fmt.Errorf("ch2.Send(): %w", err)
-				}
+				r1.Broadcast(msg1)
+				r2.Broadcast(msg2)
 			}
 			return nil
 		})
 		t.Log("Expect messages of 1 channel only.")
 		for range n {
-			gotChID, gotMsg, err := conn.ReceiveMessage(ctx)
+			got, err := x1.Recv(ctx)
 			if err != nil {
 				return fmt.Errorf("ReceiveMessage(): %w", err)
 			}
-			if gotChID != desc1.ID {
-				return fmt.Errorf("gotChID = %v, want %v", gotChID, desc1.ID)
-			}
-			got := proto.Clone(desc1.MessageType)
-			if err := proto.Unmarshal(gotMsg, got); err != nil {
-				return fmt.Errorf("Unmarshal: %w", err)
-			}
-			if err := utils.TestDiff[proto.Message](got, msg1); err != nil {
+			if err := utils.TestDiff[gogoproto.Message](got.Message, msg1); err != nil {
 				return fmt.Errorf("gotMsg: %v", err)
 			}
 		}
+		return nil
+	}); err != nil {
+		t.Fatal(err)
+	}
+}
+
+// Test checking that connection information is successfully stored and restored
+// from PeerDB.
+func TestRouter_PeerDB(t *testing.T) {
+	t.Cleanup(leaktest.Check(t))
+	rng := utils.TestRng()
+	if err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+		t.Logf("start the first node")
+		r := makeRouter(rng)
+		addr := TestAddress(r)
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+
+		db := dbm.NewMemDB()
+		key := makeKey(rng)
+		info := makeInfo(key)
+		options := makeRouterOptions()
+		options.PeerStoreInterval = utils.Some(time.Second)
+
+		err := scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
+			t.Logf("start the second node")
+			r2 := utils.OrPanic1(NewRouter(
+				NopMetrics(),
+				key,
+				func() *types.NodeInfo { return &info },
+				db,
+				options,
+			))
+			s.SpawnBg(func() error { return utils.IgnoreCancel(r2.Run(ctx)) })
+
+			t.Logf("wait for the second node to connect to first node and store its address in the peerdb")
+			utils.OrPanic(r2.AddAddrs(info.NodeID, utils.Slice(addr)))
+			for db, ctrl := range r2.peerDB.Lock() {
+				if err := ctrl.WaitUntil(ctx, func() bool {
+					for got := range db.All() {
+						if got == addr {
+							return true
+						}
+					}
+					return false
+				}); err != nil {
+					return err
+				}
+			}
+			return nil
+		})
+		if err != nil {
+			return err
+		}
+
+		t.Logf("restart the second node")
+		r2 := utils.OrPanic1(NewRouter(
+			NopMetrics(),
+			key,
+			func() *types.NodeInfo { return &info },
+			db,
+			makeRouterOptions(),
+		))
+
+		t.Logf("wait for the second node to retrieve address of the first node from peerdb and connect to the first node")
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r2.Run(ctx)) })
+		if _, err := r2.peerManager.conns.Wait(ctx, func(conns ConnSet) bool {
+			_, ok := GetAny(conns, addr.NodeID)
+			return ok
+		}); err != nil {
+			return err
+		}
+
 		return nil
 	}); err != nil {
 		t.Fatal(err)

@@ -6,9 +6,9 @@ import (
 
 	"github.com/go-kit/kit/metrics"
 
-	cstypes "github.com/tendermint/tendermint/internal/consensus/types"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	cstypes "github.com/sei-protocol/sei-chain/sei-tendermint/internal/consensus/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 const (
@@ -118,12 +118,6 @@ type Metrics struct {
 	//metrics:Difference between the timestamp in the proposal message and the local time of the validator at the time it received the message.
 	ProposalTimestampDifference metrics.Histogram `metrics_labels:"is_timely" metrics_bucketsizes:"-10, -.5, -.025, 0, .1, .5, 1, 1.5, 2, 10"`
 
-	// VoteExtensionReceiveCount is the number of vote extensions received by this
-	// node. The metric is annotated by the status of the vote extension from the
-	// application, either 'accepted' or 'rejected'.
-	//metrics:Number of vote extensions received labeled by application response status.
-	VoteExtensionReceiveCount metrics.Counter `metrics_labels:"status"`
-
 	// ProposalReceiveCount is the total number of proposals received by this node
 	// since process start.
 	// The metric is annotated by the status of the proposal from the application,
@@ -181,8 +175,8 @@ type Metrics struct {
 
 // RecordConsMetrics uses for recording the block related metrics during fast-sync.
 func (m *Metrics) RecordConsMetrics(block *types.Block) {
-	m.NumTxs.Set(float64(len(block.Data.Txs)))
-	m.TotalTxs.Add(float64(len(block.Data.Txs)))
+	m.NumTxs.Set(float64(len(block.Txs)))
+	m.TotalTxs.Add(float64(len(block.Txs)))
 	m.BlockSizeBytes.Observe(float64(block.Size()))
 	m.CommittedHeight.Set(float64(block.Height))
 }

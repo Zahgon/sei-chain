@@ -3,14 +3,14 @@ package tests
 import (
 	"testing"
 
-	"github.com/cosmos/cosmos-sdk/x/auth/signing"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/signing"
 	"github.com/sei-protocol/sei-chain/testutil/processblock"
 	"github.com/sei-protocol/sei-chain/testutil/processblock/msgs"
 	"github.com/sei-protocol/sei-chain/testutil/processblock/verify"
 )
 
 func TestDistribution(t *testing.T) {
-	app := processblock.NewTestApp()
+	app := processblock.NewTestApp(t)
 	p := processblock.CommonPreset(app)
 	for _, testCase := range []TestCase{
 		{

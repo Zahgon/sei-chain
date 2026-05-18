@@ -5,9 +5,9 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/tendermint/tendermint/internal/jsontypes"
-	"github.com/tendermint/tendermint/libs/bytes"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 type RequestSubscribe struct {
@@ -40,7 +40,7 @@ type RequestCheckTx struct {
 }
 
 type RequestRemoveTx struct {
-	TxKey types.TxKey `json:"txkey"`
+	TxHash types.TxHash `json:"txkey"`
 }
 
 type RequestTx struct {

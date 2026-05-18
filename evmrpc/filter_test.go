@@ -6,12 +6,19 @@ import (
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
-	"github.com/sei-protocol/sei-chain/x/evm/keeper"
-	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
 	"github.com/stretchr/testify/require"
+
+	"github.com/sei-protocol/sei-chain/evmrpc"
 )
+
+func TestNewPendingTransactionFilterNotSupported(t *testing.T) {
+	t.Parallel()
+	resObj := sendRequestGood(t, "newPendingTransactionFilter")
+	require.Contains(t, resObj, "error")
+	errObj := resObj["error"].(map[string]interface{})
+	require.Equal(t, float64(evmrpc.ErrCodeEVMNotSupported), errObj["code"])
+	require.Contains(t, errObj["message"].(string), "eth_newPendingTransactionFilter")
+}
 
 func TestFilterNew(t *testing.T) {
 	t.Parallel()
@@ -56,7 +63,7 @@ func TestFilterNew(t *testing.T) {
 				filterCriteria["fromBlock"] = tt.fromBlock
 				filterCriteria["toBlock"] = tt.toBlock
 			}
-			resObj := sendRequestGood(t, "newFilter", filterCriteria)
+			resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
 			_, errExists := resObj["error"]
 
 			if tt.wantErr {
@@ -65,7 +72,7 @@ func TestFilterNew(t *testing.T) {
 				require.False(t, errExists, "error should not exist")
 				got := resObj["result"].(string)
 				// make sure next filter id is not equal to this one
-				resObj := sendRequestGood(t, "newFilter", filterCriteria)
+				resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
 				got2 := resObj["result"].(string)
 				require.NotEqual(t, got, got2)
 			}
@@ -78,9 +85,8 @@ func TestFilterUninstall(t *testing.T) {
 	// uninstall existing filter
 	filterCriteria := map[string]interface{}{
 		"fromBlock": "0x1",
-		"toBlock":   "0xa",
 	}
-	resObj := sendRequestGood(t, "newFilter", filterCriteria)
+	resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
 	filterId := resObj["result"].(string)
 	require.NotEmpty(t, filterId)
 
@@ -299,10 +305,10 @@ func TestFilterGetFilterLogs(t *testing.T) {
 		"fromBlock": "0x2",
 		"toBlock":   "0x2",
 	}
-	resObj := sendRequestGood(t, "newFilter", filterCriteria)
+	resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
 	filterId := resObj["result"].(string)
 
-	resObj = sendRequest(t, TestPort, "getFilterLogs", filterId)
+	resObj = sendRequest(t, TestPort, evmrpc.GetFilterLogsMethod, filterId)
 	logs := resObj["result"].([]interface{})
 	require.Equal(t, 4, len(logs))
 	for _, log := range logs {
@@ -312,7 +318,7 @@ func TestFilterGetFilterLogs(t *testing.T) {
 
 	// error: filter id does not exist
 	nonexistentFilterId := 1000
-	resObj = sendRequest(t, TestPort, "getFilterLogs", nonexistentFilterId)
+	resObj = sendRequest(t, TestPort, evmrpc.GetFilterLogsMethod, nonexistentFilterId)
 	_, ok := resObj["error"]
 	require.True(t, ok)
 }
@@ -322,10 +328,10 @@ func TestFilterGetFilterChanges(t *testing.T) {
 	filterCriteria := map[string]interface{}{
 		"fromBlock": "0x2",
 	}
-	resObj := sendRequest(t, TestPort, "newFilter", filterCriteria)
+	resObj := sendRequest(t, TestPort, evmrpc.NewFilterMethod, filterCriteria)
 	filterId := resObj["result"].(string)
 
-	resObj = sendRequest(t, TestPort, "getFilterChanges", filterId)
+	resObj = sendRequest(t, TestPort, evmrpc.GetFilterChangesMethod, filterId)
 	logs := resObj["result"].([]interface{})
 	// After tightening block/receipt matching, fromBlock=0x2 now yields 5 logs total
 	require.Equal(t, 5, len(logs))
@@ -334,7 +340,7 @@ func TestFilterGetFilterChanges(t *testing.T) {
 
 	// error: filter id does not exist
 	nonExistingFilterId := 1000
-	resObj = sendRequest(t, TestPort, "getFilterChanges", nonExistingFilterId)
+	resObj = sendRequest(t, TestPort, evmrpc.GetFilterChangesMethod, nonExistingFilterId)
 	_, ok := resObj["error"]
 	require.True(t, ok)
 }
@@ -343,7 +349,7 @@ func TestFilterBlockFilter(t *testing.T) {
 	t.Parallel()
 	resObj := sendRequestGood(t, "newBlockFilter")
 	blockFilterId := resObj["result"].(string)
-	resObj = sendRequestGood(t, "getFilterChanges", blockFilterId)
+	resObj = sendRequestGood(t, evmrpc.GetFilterChangesMethod, blockFilterId)
 	hashesInterface := resObj["result"].([]interface{})
 	for _, hashInterface := range hashesInterface {
 		hash := hashInterface.(string)
@@ -351,7 +357,7 @@ func TestFilterBlockFilter(t *testing.T) {
 		require.Equal(t, "0x", hash[:2])
 	}
 	// query again to make sure cursor is updated
-	resObj = sendRequestGood(t, "getFilterChanges", blockFilterId)
+	resObj = sendRequestGood(t, evmrpc.GetFilterChangesMethod, blockFilterId)
 	hashesInterface = resObj["result"].([]interface{})
 	for _, hashInterface := range hashesInterface {
 		hash := hashInterface.(string)
@@ -364,15 +370,14 @@ func TestFilterExpiration(t *testing.T) {
 	t.Parallel()
 	filterCriteria := map[string]interface{}{
 		"fromBlock": "0x1",
-		"toBlock":   "0xa",
 	}
-	resObj := sendRequestGood(t, "newFilter", filterCriteria)
+	resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
 	filterId := resObj["result"].(string)
 
 	// wait for filter to expire
 	time.Sleep(2 * filterTimeoutDuration)
 
-	resObj = sendRequest(t, TestPort, "getFilterLogs", filterId)
+	resObj = sendRequest(t, TestPort, evmrpc.GetFilterLogsMethod, filterId)
 	_, ok := resObj["error"]
 	require.True(t, ok)
 }
@@ -381,14 +386,13 @@ func TestFilterGetFilterLogsKeepsFilterAlive(t *testing.T) {
 	t.Parallel()
 	filterCriteria := map[string]interface{}{
 		"fromBlock": "0x1",
-		"toBlock":   "0xa",
 	}
-	resObj := sendRequestGood(t, "newFilter", filterCriteria)
+	resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
 	filterId := resObj["result"].(string)
 
 	for i := 0; i < 5; i++ {
 		// should keep filter alive
-		resObj = sendRequestGood(t, "getFilterLogs", filterId)
+		resObj = sendRequestGood(t, evmrpc.GetFilterLogsMethod, filterId)
 		_, ok := resObj["error"]
 		require.False(t, ok)
 		time.Sleep(filterTimeoutDuration / 2)
@@ -399,14 +403,13 @@ func TestFilterGetFilterChangesKeepsFilterAlive(t *testing.T) {
 	t.Parallel()
 	filterCriteria := map[string]interface{}{
 		"fromBlock": "0x1",
-		"toBlock":   "0xa",
 	}
-	resObj := sendRequestGood(t, "newFilter", filterCriteria)
+	resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
 	filterId := resObj["result"].(string)
 
 	for i := 0; i < 5; i++ {
 		// should keep filter alive
-		resObj = sendRequestGood(t, "getFilterChanges", filterId)
+		resObj = sendRequestGood(t, evmrpc.GetFilterChangesMethod, filterId)
 		_, ok := resObj["error"]
 		require.False(t, ok)
 		time.Sleep(filterTimeoutDuration / 2)
@@ -547,77 +550,99 @@ func TestGetLogsTransactionIndexConsistency(t *testing.T) {
 func TestCollectLogsEvmTransactionIndex(t *testing.T) {
 	t.Parallel()
 
-	// This is a unit test for the core logic that collectLogs implements
-	// It tests that transaction indices are set correctly for EVM transactions
-
-	// Set up the test environment - use the correct return values from MockEVMKeeper
-	k, ctx := testkeeper.MockEVMKeeper()
-
-	// Create a mock block with mixed transaction types (similar to block 2 in our test data)
-	// We'll simulate the transaction hashes that getTxHashesFromBlock would return
-	evmTxHashes := []common.Hash{
-		common.HexToHash("0x1111111111111111111111111111111111111111111111111111111111111111"), // EVM tx index 0
-		common.HexToHash("0x2222222222222222222222222222222222222222222222222222222222222222"), // EVM tx index 1
-		common.HexToHash("0x3333333333333333333333333333333333333333333333333333333333333333"), // EVM tx index 2
+	// Block 2 fixture includes mixed tx types.
+	// Receipt.TransactionIndex values are absolute positions (1, 3, 4), but eth_getLogs
+	// must return EVM-only transaction indexes (0, 1, 2).
+	filterCriteria := map[string]interface{}{
+		"fromBlock": "0x2",
+		"toBlock":   "0x2",
 	}
+	resObj := sendRequestGood(t, "getLogs", filterCriteria)
+	logs := resObj["result"].([]interface{})
+	require.Greater(t, len(logs), 0, "block 2 should have logs")
 
-	// Create mock receipts with logs
-	for i, txHash := range evmTxHashes {
-		receipt := &evmtypes.Receipt{
-			TxHashHex:        txHash.Hex(),
-			TransactionIndex: uint32(i + 10), // Use high absolute indices to simulate mixed tx types
-			BlockNumber:      2,
-			Logs: []*evmtypes.Log{
-				{
-					Address: "0x1111111111111111111111111111111111111112",
-					Topics:  []string{"0x0000000000000000000000000000000000000000000000000000000000000123"},
-					Data:    []byte("test data"),
-					Index:   0,
-				},
-			},
-			LogsBloom: make([]byte, 256), // Empty bloom for simplicity
+	expectedByHash := map[string]int64{
+		multiTxBlockTx1.Hash().Hex(): 0,
+		multiTxBlockTx2.Hash().Hex(): 1,
+		multiTxBlockTx3.Hash().Hex(): 2,
+	}
+	absoluteIndexByHash := map[string]int64{
+		multiTxBlockTx1.Hash().Hex(): 1,
+		multiTxBlockTx2.Hash().Hex(): 3,
+		multiTxBlockTx3.Hash().Hex(): 4,
+	}
+	seen := map[string]bool{}
+
+	for i, logInterface := range logs {
+		logObj := logInterface.(map[string]interface{})
+		txHash := logObj["transactionHash"].(string)
+		gotHex := logObj["transactionIndex"].(string)
+		gotIndex, err := strconv.ParseInt(gotHex[2:], 16, 64)
+		require.NoError(t, err, "log %d has invalid transactionIndex %q", i, gotHex)
+
+		expectedIndex, tracked := expectedByHash[txHash]
+		if !tracked {
+			continue
 		}
 
-		// Fill bloom filter to match our test filters
-		receipt.LogsBloom[0] = 0xFF // Simple bloom that will match any filter
-
-		k.MockReceipt(ctx, txHash, receipt)
+		seen[txHash] = true
+		require.Equal(t, expectedIndex, gotIndex,
+			"log %d tx %s should use EVM tx index %d", i, txHash, expectedIndex)
+		require.NotEqual(t, absoluteIndexByHash[txHash], gotIndex,
+			"log %d tx %s should not use absolute transaction index %d", i, txHash, absoluteIndexByHash[txHash])
 	}
 
-	// Test the core logic that collectLogs implements
-	// This simulates what collectLogs does for each EVM transaction
-	var collectedLogs []*ethtypes.Log
-	evmTxIndex := 0
-	totalLogs := uint(0)
+	require.Len(t, seen, len(expectedByHash), "should observe logs for all expected EVM txs in block 2")
+}
 
-	for _, txHash := range evmTxHashes {
-		receipt, err := k.GetReceipt(ctx, txHash)
-		require.NoError(t, err, "should be able to get receipt for tx %s", txHash.Hex())
-
-		// This simulates keeper.GetLogsForTx
-		logs := keeper.GetLogsForTx(receipt, totalLogs)
-
-		// This is the key part we're testing: setting the correct EVM transaction index
-		for _, log := range logs {
-			log.TxIndex = uint(evmTxIndex) // This should override receipt.TransactionIndex
-			collectedLogs = append(collectedLogs, log)
-		}
-
-		totalLogs += uint(len(receipt.Logs))
-		evmTxIndex++
+// TestFilterGetFilterChangesEmptyOnExhaustedBoundedFilter asserts that
+// eth_getFilterChanges returns [] (not null) once a bounded filter's range is
+// fully consumed (Ethereum JSON-RPC spec requires an array, never null).
+func TestFilterGetFilterChangesEmptyOnExhaustedBoundedFilter(t *testing.T) {
+	t.Parallel()
+	filterCriteria := map[string]interface{}{
+		"fromBlock": "0x2",
+		"toBlock":   "0x2",
 	}
+	resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
+	filterId := resObj["result"].(string)
 
-	// Verify that the transaction indices are set correctly
-	require.Equal(t, len(evmTxHashes), len(collectedLogs), "should have one log per transaction")
+	// First call: consumes the range; result may be non-empty, but must be an array.
+	resObj = sendRequest(t, TestPort, evmrpc.GetFilterChangesMethod, filterId)
+	_, hasErr := resObj["error"]
+	require.False(t, hasErr)
+	require.NotNil(t, resObj["result"], "first getFilterChanges should return [] not null")
+	_, ok := resObj["result"].([]interface{})
+	require.True(t, ok, "first getFilterChanges result should be an array")
 
-	for i, log := range collectedLogs {
-		// This is the main assertion: TxIndex should be the EVM transaction index (0, 1, 2)
-		// NOT the absolute transaction index (10, 11, 12)
-		require.Equal(t, uint(i), log.TxIndex,
-			"log %d should have EVM transaction index %d, but got %d", i, i, log.TxIndex)
+	// Second call: range is exhausted; must return [] not null.
+	resObj = sendRequest(t, TestPort, evmrpc.GetFilterChangesMethod, filterId)
+	_, hasErr = resObj["error"]
+	require.False(t, hasErr)
+	require.NotNil(t, resObj["result"], "exhausted getFilterChanges should return [] not null")
+	logs, ok := resObj["result"].([]interface{})
+	require.True(t, ok, "exhausted getFilterChanges result should be an array")
+	require.Empty(t, logs)
+}
 
-		// Verify it's NOT using the absolute transaction index
-		require.NotEqual(t, uint(i+10), log.TxIndex,
-			"log %d should not use absolute transaction index %d", i, i+10)
+// TestFilterGetFilterLogsEmptyResultIsArray asserts that eth_getFilterLogs
+// returns [] (not null) when no logs match the filter criteria.
+func TestFilterGetFilterLogsEmptyResultIsArray(t *testing.T) {
+	t.Parallel()
+	// Use an address that is guaranteed to have no logs in the mock data.
+	filterCriteria := map[string]interface{}{
+		"fromBlock": "0x1",
+		"toBlock":   "0x1",
+		"address":   "0x0000000000000000000000000000000000000000",
 	}
+	resObj := sendRequestGood(t, evmrpc.NewFilterMethod, filterCriteria)
+	filterId := resObj["result"].(string)
+
+	resObj = sendRequest(t, TestPort, evmrpc.GetFilterLogsMethod, filterId)
+	_, hasErr := resObj["error"]
+	require.False(t, hasErr)
+	require.NotNil(t, resObj["result"], "getFilterLogs with no matching logs should return [] not null")
+	logs, ok := resObj["result"].([]interface{})
+	require.True(t, ok, "getFilterLogs result should be an array")
+	require.Empty(t, logs)
 }

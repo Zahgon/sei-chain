@@ -5,18 +5,21 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/libs/log"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmgrpc "github.com/tendermint/tendermint/privval/grpc"
-	privvalproto "github.com/tendermint/tendermint/proto/tendermint/privval"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/require"
+	tmgrpc "github.com/sei-protocol/sei-chain/sei-tendermint/privval/grpc"
+	privvalproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/privval"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 const ChainID = "123"
+
+var testKey = ed25519.TestSecretKey([]byte("test"))
 
 func TestGetPubKey(t *testing.T) {
 
@@ -32,9 +35,8 @@ func TestGetPubKey(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := t.Context()
-			logger := log.NewTestingLogger(t)
 
-			s := tmgrpc.NewSignerServer(logger, ChainID, tc.pv)
+			s := tmgrpc.NewSignerServer(ChainID, tc.pv)
 
 			req := &privvalproto.PubKeyRequest{ChainId: ChainID}
 			resp, err := s.GetPubKey(ctx, req)
@@ -43,7 +45,7 @@ func TestGetPubKey(t *testing.T) {
 			} else {
 				pk, err := tc.pv.GetPubKey(ctx)
 				require.NoError(t, err)
-				assert.Equal(t, resp.PubKey.GetEd25519(), pk.Bytes())
+				require.Equal(t, resp.PubKey, crypto.PubKeyToProto(pk))
 			}
 		})
 	}
@@ -88,7 +90,7 @@ func TestSignVote(t *testing.T) {
 			Timestamp:        ts,
 			ValidatorAddress: valAddr,
 			ValidatorIndex:   1,
-			Signature:        []byte("signed"),
+			Signature:        utils.Some(testKey.Sign([]byte("signed"))),
 		}, want: &types.Vote{
 			Type:             tmproto.PrecommitType,
 			Height:           1,
@@ -97,7 +99,7 @@ func TestSignVote(t *testing.T) {
 			Timestamp:        ts,
 			ValidatorAddress: valAddr,
 			ValidatorIndex:   1,
-			Signature:        []byte("signed"),
+			Signature:        utils.Some(testKey.Sign([]byte("signed"))),
 		},
 			err: true},
 	}
@@ -105,9 +107,8 @@ func TestSignVote(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := t.Context()
-			logger := log.NewTestingLogger(t)
 
-			s := tmgrpc.NewSignerServer(logger, ChainID, tc.pv)
+			s := tmgrpc.NewSignerServer(ChainID, tc.pv)
 
 			req := &privvalproto.SignVoteRequest{ChainId: ChainID, Vote: tc.have.ToProto()}
 			resp, err := s.SignVote(ctx, req)
@@ -158,7 +159,7 @@ func TestSignProposal(t *testing.T) {
 			POLRound:  2,
 			BlockID:   types.BlockID{Hash: hash, PartSetHeader: types.PartSetHeader{Hash: hash, Total: 2}},
 			Timestamp: ts,
-			Signature: []byte("signed"),
+			Signature: testKey.Sign([]byte("signed")),
 		}, want: &types.Proposal{
 			Type:      tmproto.ProposalType,
 			Height:    1,
@@ -166,7 +167,7 @@ func TestSignProposal(t *testing.T) {
 			POLRound:  2,
 			BlockID:   types.BlockID{Hash: hash, PartSetHeader: types.PartSetHeader{Hash: hash, Total: 2}},
 			Timestamp: ts,
-			Signature: []byte("signed"),
+			Signature: testKey.Sign([]byte("signed")),
 		},
 			err: true},
 	}
@@ -174,9 +175,8 @@ func TestSignProposal(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := t.Context()
-			logger := log.NewTestingLogger(t)
 
-			s := tmgrpc.NewSignerServer(logger, ChainID, tc.pv)
+			s := tmgrpc.NewSignerServer(ChainID, tc.pv)
 
 			req := &privvalproto.SignProposalRequest{ChainId: ChainID, Proposal: tc.have.ToProto()}
 			resp, err := s.SignProposal(ctx, req)

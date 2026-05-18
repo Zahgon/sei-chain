@@ -5,18 +5,19 @@ import (
 	"runtime"
 	"strings"
 
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
-	"github.com/cosmos/cosmos-sdk/telemetry"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/sei-protocol/sei-db/config"
+	storetypes "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-db/config"
+	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/memiavl"
+	tmcfg "github.com/sei-protocol/sei-chain/sei-tendermint/config"
 	"github.com/spf13/viper"
-	tmcfg "github.com/tendermint/tendermint/config"
 )
 
 const (
 	// DefaultMinGasPrices defines the default minimum gas prices
-	DefaultMinGasPrices = "0.02usei"
+	DefaultMinGasPrices = "0.01usei"
 
 	// DefaultGRPCAddress defines the default address to bind the gRPC server to.
 	DefaultGRPCAddress = "0.0.0.0:9090"
@@ -94,20 +95,9 @@ type BaseConfig struct {
 	// which informs Tendermint what to index. If empty, all events will be indexed.
 	IndexEvents []string `mapstructure:"index-events"`
 
-	// IAVLDisableFastNode enables or disables the fast sync node.
-	IAVLDisableFastNode bool `mapstructure:"iavl-disable-fastnode"`
-
 	// CompactionInterval sets (in seconds) the interval between forced levelDB
 	// compaction. A value of 0 means no forced levelDB
 	CompactionInterval uint64 `mapstructure:"compaction-interval"`
-
-	// deprecated
-	NoVersioning bool `mapstructure:"no-versioning"`
-
-	SeparateOrphanStorage        bool   `mapstructure:"separate-orphan-storage"`
-	SeparateOrphanVersionsToKeep int64  `mapstructure:"separate-orphan-versions-to-keep"`
-	NumOrphanPerFile             int    `mapstructure:"num-orphan-per-file"`
-	OrphanDirectory              string `mapstructure:"orphan-dir"`
 
 	// ConcurrencyWorkers defines the number of workers to use for concurrent
 	// transaction execution. A value of -1 means unlimited workers.  Default value is 10.
@@ -202,7 +192,7 @@ type StateSyncConfig struct {
 	SnapshotKeepRecent uint32 `mapstructure:"snapshot-keep-recent"`
 
 	// SnapshotDirectory sets the parent directory for where state sync snapshots are persisted.
-	// Default is emtpy which will then store under the app home directory.
+	// Default is empty which will then store under the app home directory.
 	SnapshotDirectory string `mapstructure:"snapshot-directory"`
 }
 
@@ -262,23 +252,17 @@ func (c *Config) GetMinGasPrices() sdk.DecCoins {
 func DefaultConfig() *Config {
 	return &Config{
 		BaseConfig: BaseConfig{
-			MinGasPrices:                 DefaultMinGasPrices,
-			InterBlockCache:              true,
-			Pruning:                      storetypes.PruningOptionNothing,
-			PruningKeepRecent:            "0",
-			PruningKeepEvery:             "0",
-			PruningInterval:              "0",
-			MinRetainBlocks:              0,
-			IndexEvents:                  nil,
-			IAVLDisableFastNode:          true,
-			CompactionInterval:           0,
-			NoVersioning:                 false,
-			SeparateOrphanStorage:        false,
-			SeparateOrphanVersionsToKeep: 0,
-			NumOrphanPerFile:             0,
-			OrphanDirectory:              "",
-			ConcurrencyWorkers:           DefaultConcurrencyWorkers,
-			OccEnabled:                   DefaultOccEnabled,
+			MinGasPrices:       DefaultMinGasPrices,
+			InterBlockCache:    true,
+			Pruning:            storetypes.PruningOptionNothing,
+			PruningKeepRecent:  "0",
+			PruningKeepEvery:   "0",
+			PruningInterval:    "0",
+			MinRetainBlocks:    0,
+			IndexEvents:        nil,
+			CompactionInterval: 0,
+			ConcurrencyWorkers: DefaultConcurrencyWorkers,
+			OccEnabled:         DefaultOccEnabled,
 		},
 		Telemetry: telemetry.Config{
 			Enabled:                 true,
@@ -344,24 +328,18 @@ func GetConfig(v *viper.Viper) (Config, error) {
 
 	return Config{
 		BaseConfig: BaseConfig{
-			MinGasPrices:                 v.GetString("minimum-gas-prices"),
-			InterBlockCache:              v.GetBool("inter-block-cache"),
-			Pruning:                      v.GetString("pruning"),
-			PruningKeepRecent:            v.GetString("pruning-keep-recent"),
-			PruningInterval:              v.GetString("pruning-interval"),
-			HaltHeight:                   v.GetUint64("halt-height"),
-			HaltTime:                     v.GetUint64("halt-time"),
-			IndexEvents:                  v.GetStringSlice("index-events"),
-			MinRetainBlocks:              v.GetUint64("min-retain-blocks"),
-			IAVLDisableFastNode:          v.GetBool("iavl-disable-fastnode"),
-			CompactionInterval:           v.GetUint64("compaction-interval"),
-			NoVersioning:                 v.GetBool("no-versioning"),
-			SeparateOrphanStorage:        v.GetBool("separate-orphan-storage"),
-			SeparateOrphanVersionsToKeep: v.GetInt64("separate-orphan-versions-to-keep"),
-			NumOrphanPerFile:             v.GetInt("num-orphan-per-file"),
-			OrphanDirectory:              v.GetString("orphan-dir"),
-			ConcurrencyWorkers:           v.GetInt("concurrency-workers"),
-			OccEnabled:                   v.GetBool("occ-enabled"),
+			MinGasPrices:       v.GetString("minimum-gas-prices"),
+			InterBlockCache:    v.GetBool("inter-block-cache"),
+			Pruning:            v.GetString("pruning"),
+			PruningKeepRecent:  v.GetString("pruning-keep-recent"),
+			PruningInterval:    v.GetString("pruning-interval"),
+			HaltHeight:         v.GetUint64("halt-height"),
+			HaltTime:           v.GetUint64("halt-time"),
+			IndexEvents:        v.GetStringSlice("index-events"),
+			MinRetainBlocks:    v.GetUint64("min-retain-blocks"),
+			CompactionInterval: v.GetUint64("compaction-interval"),
+			ConcurrencyWorkers: v.GetInt("concurrency-workers"),
+			OccEnabled:         v.GetBool("occ-enabled"),
 		},
 		Telemetry: telemetry.Config{
 			ServiceName:             v.GetString("telemetry.service-name"),
@@ -405,24 +383,31 @@ func GetConfig(v *viper.Viper) (Config, error) {
 			SnapshotDirectory:  v.GetString("state-sync.snapshot-directory"),
 		},
 		StateCommit: config.StateCommitConfig{
-			Enable:                           v.GetBool("state-commit.enable"),
-			Directory:                        v.GetString("state-commit.directory"),
-			ZeroCopy:                         v.GetBool("state-commit.zero-copy"),
-			AsyncCommitBuffer:                v.GetInt("state-commit.async-commit-buffer"),
-			SnapshotKeepRecent:               v.GetUint32("state-commit.snapshot-keep-recent"),
-			SnapshotInterval:                 v.GetUint32("state-commit.snapshot-interval"),
-			SnapshotWriterLimit:              v.GetInt("state-commit.snapshot-writer-limit"),
-			CacheSize:                        v.GetInt("state-commit.cache-size"),
-			OnlyAllowExportOnSnapshotVersion: v.GetBool("state-commit.only-allow-export-on-snapshot-version"),
+			Enable:            v.GetBool("state-commit.sc-enable"),
+			Directory:         v.GetString("state-commit.sc-directory"),
+			WriteMode:         config.WriteMode(v.GetString("state-commit.sc-write-mode")),
+			ReadMode:          config.ReadMode(v.GetString("state-commit.sc-read-mode")),
+			EnableLatticeHash: v.GetBool("state-commit.sc-enable-lattice-hash"),
+			MemIAVLConfig: memiavl.Config{
+				AsyncCommitBuffer:         v.GetInt("state-commit.sc-async-commit-buffer"),
+				SnapshotKeepRecent:        v.GetUint32("state-commit.sc-keep-recent"),
+				SnapshotInterval:          v.GetUint32("state-commit.sc-snapshot-interval"),
+				SnapshotMinTimeInterval:   v.GetUint32("state-commit.sc-snapshot-min-time-interval"),
+				SnapshotWriterLimit:       v.GetInt("state-commit.sc-snapshot-writer-limit"),
+				SnapshotPrefetchThreshold: v.GetFloat64("state-commit.sc-snapshot-prefetch-threshold"),
+			},
 		},
 		StateStore: config.StateStoreConfig{
-			Enable:               v.GetBool("state-store.enable"),
-			DBDirectory:          v.GetString("state-store.db-directory"),
-			Backend:              v.GetString("state-store.backend"),
-			AsyncWriteBuffer:     v.GetInt("state-store.async-write-buffer"),
-			KeepRecent:           v.GetInt("state-store.keep-recent"),
-			PruneIntervalSeconds: v.GetInt("state-store.prune-interval-seconds"),
-			ImportNumWorkers:     v.GetInt("state-store.import-num-workers"),
+			Enable:               v.GetBool("state-store.ss-enable"),
+			DBDirectory:          v.GetString("state-store.ss-db-directory"),
+			Backend:              v.GetString("state-store.ss-backend"),
+			AsyncWriteBuffer:     v.GetInt("state-store.ss-async-write-buffer"),
+			KeepRecent:           v.GetInt("state-store.ss-keep-recent"),
+			PruneIntervalSeconds: v.GetInt("state-store.ss-prune-interval"),
+			ImportNumWorkers:     v.GetInt("state-store.ss-import-num-workers"),
+			EVMSplit:             v.GetBool("state-store.evm-ss-split"),
+			EVMDBDirectory:       v.GetString("state-store.evm-ss-db-directory"),
+			SeparateEVMSubDBs:    v.GetBool("state-store.evm-ss-separate-dbs"),
 		},
 		Genesis: GenesisConfig{
 			StreamImport:      v.GetBool("genesis.stream-import"),
@@ -433,7 +418,7 @@ func GetConfig(v *viper.Viper) (Config, error) {
 
 // ValidateBasic returns an error if min-gas-prices field is empty in BaseConfig. Otherwise, it returns nil.
 func (c Config) ValidateBasic(tendermintConfig *tmcfg.Config) error {
-	if c.BaseConfig.MinGasPrices == "" {
+	if c.MinGasPrices == "" {
 		return sdkerrors.ErrAppConfig.Wrap("set min gas price in app.toml or flag or env variable")
 	}
 	if c.Pruning == storetypes.PruningOptionEverything && c.StateSync.SnapshotInterval > 0 {

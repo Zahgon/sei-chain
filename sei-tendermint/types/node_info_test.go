@@ -7,12 +7,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	tmnet "github.com/tendermint/tendermint/libs/net"
-	"github.com/tendermint/tendermint/libs/utils"
-	"github.com/tendermint/tendermint/libs/utils/require"
-	"github.com/tendermint/tendermint/libs/utils/tcp"
-	"github.com/tendermint/tendermint/version"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	tmnet "github.com/sei-protocol/sei-chain/sei-tendermint/libs/net"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/require"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/tcp"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 )
 
 const testCh = 0x01
@@ -101,7 +101,7 @@ func TestNodeInfoValidate(t *testing.T) {
 }
 
 func testNodeID() NodeID {
-	return NodeIDFromPubKey(ed25519.GenPrivKey().PubKey())
+	return NodeIDFromPubKey(ed25519.GenerateSecretKey().Public())
 }
 
 func testNodeInfo(t *testing.T, id NodeID, name string) NodeInfo {
@@ -158,13 +158,12 @@ func TestNodeInfoCompatible(t *testing.T) {
 	}{
 		{"Wrong block version", func(ni *NodeInfo) { ni.ProtocolVersion.Block++ }},
 		{"Wrong network", func(ni *NodeInfo) { ni.Network += "-wrong" }},
-		{"No common channels", func(ni *NodeInfo) { ni.Channels = []byte{newTestChannel} }},
 	}
 
 	for _, tc := range testCases {
 		ni := testNodeInfo(t, nodeKey2ID, name)
 		tc.malleateNodeInfo(&ni)
-		assert.Error(t, ni1.CompatibleWith(ni))
+		assert.Error(t, ni1.CompatibleWith(ni), tc.testName)
 	}
 }
 
@@ -242,7 +241,7 @@ func TestResolveAddressString(t *testing.T) {
 			got, err := ResolveAddressString(tc.addr)
 			if want, ok := tc.want.Get(); ok {
 				require.NoError(t, err, tc.addr)
-				require.Equal(t, tcp.Norm(want), tcp.Norm(got))
+				require.Equal(t, want, got)
 			} else {
 				require.Error(t, err, "%v", tc.addr)
 			}

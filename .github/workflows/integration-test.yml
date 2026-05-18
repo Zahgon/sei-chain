@@ -7,12 +7,15 @@ on:
   push:
     branches:
       - main
-      - seiv2
+      - release/**
   pull_request:
     branches:
       - main
-      - seiv2
-      - evm
+      - release/**
+  merge_group:
+    branches:
+      - main
+      - release/**
 
 defaults:
   run:
@@ -65,12 +68,15 @@ jobs:
           },
           {
             name: "Chain Operation Test",
+            env: "GIGA_STORAGE=true",
             scripts: [
               "until [ $(cat build/generated/rpc-launch.complete |wc -l) = 1 ]; do sleep 10; done",
               "until [[ $(docker exec sei-rpc-node build/seid status |jq -M -r .SyncInfo.latest_block_height) -gt 10 ]]; do sleep 10; done",
               "echo rpc node started",
               "python3 integration_test/scripts/runner.py integration_test/chain_operation/snapshot_operation.yaml",
-              "python3 integration_test/scripts/runner.py integration_test/chain_operation/statesync_operation.yaml"
+              "python3 integration_test/scripts/runner.py integration_test/chain_operation/statesync_operation.yaml",
+              "./integration_test/contracts/verify_statesync_flatkv_digest.sh",
+              "./integration_test/contracts/verify_cross_validator_flatkv_digest.sh"
             ]
           },
           {
@@ -82,14 +88,14 @@ jobs:
           },
           {
             name: "Upgrade Module (Major)",
-            env: "UPGRADE_VERSION_LIST=v1.0.0,v1.0.1,v1.0.2",
+            env: "GIGA_STORAGE=true UPGRADE_VERSION_LIST=v1.0.0,v1.0.1,v1.0.2",
             scripts: [
               "python3 integration_test/scripts/runner.py integration_test/upgrade_module/major_upgrade_test.yaml"
             ]
           },
           {
             name: "Upgrade Module (Minor)",
-            env: "UPGRADE_VERSION_LIST=v1.0.0,v1.0.1,v1.0.2",
+            env: "GIGA_STORAGE=true UPGRADE_VERSION_LIST=v1.0.0,v1.0.1,v1.0.2",
             scripts: [
               "python3 integration_test/scripts/runner.py integration_test/upgrade_module/minor_upgrade_test.yaml"
             ]
@@ -103,21 +109,96 @@ jobs:
             ],
           },
           {
+            # Umbrella job for all FlatKV-specific docker-level coverage.
+            # Future FlatKV scenarios (additional bucket layouts, snapshot
+            # rotation, etc.) should be appended here rather than added as
+            # new matrix rows, so the CI surface stays one row per concern.
+            #
+            # Step ordering matters:
+            #   1-2  Deploy EVM fixture and capture baseline RPC reads while
+            #        the cluster is still in memiavl-only mode.
+            #   3    Run the offline FlatKV import on every validator and
+            #        restart the cluster with flatkv enabled (dual_write,
+            #        lattice-hash off to preserve AppHash trajectory across
+            #        the import boundary).
+            #   4-5  Re-run the same fixture probe and physical-layout check
+            #        against the post-import cluster; must match step 2.
+            #   6    SIGKILL one validator, restart, and assert 4-node
+            #        FlatKV digest equality. This exercises WAL recovery on
+            #        the post-import flatkv state, which mirrors the real
+            #        production scenario (chains reach flatkv via migration,
+            #        not via genesis flag).
+            #   7-9  Destructive disaster-recovery scenarios. They run last
+            #        because they wipe or damage one validator's local state.
+            name: "FlatKV Integration",
+            scripts: [
+              "docker exec sei-node-0 integration_test/contracts/deploy_flatkv_evm_fixture.sh",
+              "python3 integration_test/scripts/runner.py integration_test/seidb/flatkv_evm_test.yaml",
+              "./integration_test/contracts/import_flatkv_evm_cluster.sh",
+              "python3 integration_test/scripts/runner.py integration_test/seidb/flatkv_evm_test.yaml",
+              "docker exec sei-node-0 integration_test/contracts/verify_flatkv_evm_store.sh",
+              "./integration_test/contracts/verify_flatkv_crash_recovery.sh",
+              "./integration_test/contracts/verify_flatkv_statesync_crash_recovery.sh",
+              "./integration_test/contracts/verify_flatkv_total_loss_recovery.sh",
+              "./integration_test/contracts/verify_flatkv_partial_loss_fails_loudly.sh",
+            ],
+          },
+          {
             name: "EVM Module",
+            env: "GIGA_STORAGE=true",
             scripts: [
               "./integration_test/evm_module/scripts/evm_tests.sh",
+              "docker exec sei-node-0 integration_test/contracts/deploy_flatkv_evm_fixture.sh",
+              "python3 integration_test/scripts/runner.py integration_test/seidb/flatkv_evm_test.yaml",
+              "docker exec sei-node-0 integration_test/contracts/verify_flatkv_evm_store.sh",
             ]
           },
           {
             name: "EVM Interoperability",
+            env: "GIGA_STORAGE=true",
             scripts: [
               "./integration_test/evm_module/scripts/evm_interoperability_tests.sh"
             ]
           },
           {
+            name: "Disable WASM Tests",
+            scripts: [
+              "./integration_test/evm_module/scripts/disable_wasm.sh",
+            ]
+          },
+          {
             name: "dApp Tests",
+            env: "GIGA_STORAGE=true",
             scripts: [
               "./integration_test/dapp_tests/dapp_tests.sh seilocal"
+            ]
+          },
+          {
+            name: "EVM GIGA Module",
+            env: "GIGA_STORAGE=true GIGA_EXECUTOR=true GIGA_OCC=true",
+            scripts: [
+              "./integration_test/evm_module/scripts/evm_giga_tests.sh"
+            ]
+          },
+          {
+            name: "EVM GIGA Mixed (Determinism)",
+            env: "GIGA_STORAGE=true",
+            scripts: [
+              "./integration_test/evm_module/scripts/evm_giga_mixed_tests.sh"
+            ]
+          },
+          {
+            name: "EVM RPC .io/.iox (spec fixtures)",
+            env: "GIGA_STORAGE=true",
+            scripts: [
+              "./integration_test/evm_module/scripts/evm_rpc_tests.sh"
+            ]
+          },
+          {
+            name: "Autobahn RPC .io/.iox (spec fixtures)",
+            env: "AUTOBAHN=true GIGA_EXECUTOR=true GIGA_STORAGE=true",
+            scripts: [
+              "./integration_test/evm_module/scripts/evm_rpc_tests.sh"
             ]
           },
         ]
@@ -138,12 +219,19 @@ jobs:
         run: sudo apt-get install -y jq
 
       - name: Set up Go
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v6
         with:
-          go-version: 1.24
-
+          go-version: '1.25.6'
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        if: env.DOCKERHUB_USERNAME != ''
+        env:
+          DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
       - name: Start 4 node docker cluster
-        run: make clean && INVARIANT_CHECK_INTERVAL=10 ${{matrix.test.env}} make docker-cluster-start &
+        run: make clean && DOCKER_DETACH=true INVARIANT_CHECK_INTERVAL=10 ${{matrix.test.env}} make docker-cluster-start
 
       - name: Wait for docker cluster to start
         run: |
@@ -154,7 +242,7 @@ jobs:
           sleep 10
 
       - name: Start rpc node
-        run: make run-rpc-node-skipbuild &
+        run: ${{matrix.test.env}} make run-rpc-node-skipbuild &
 
       - name: Verify Sei Chain is running
         run: python3 integration_test/scripts/runner.py integration_test/startup/startup_test.yaml
@@ -169,6 +257,51 @@ jobs:
             bash -c "${script}"
           done
           unset IFS  # revert the internal field separator back to default
+
+      - name: Print node logs on failure
+        if: ${{ failure() }}
+        run: |
+          set -euo pipefail
+          for c in sei-node-0 sei-node-1 sei-node-2 sei-node-3; do
+            echo "==================== ${c} (docker logs tail) ===================="
+            docker logs --tail 200 "${c}" || true
+            echo "==================== ${c} (seid log file tail) ===================="
+            # Logs are accessible on host since build/generated is mounted in containers
+            NODE_ID=${c#sei-node-}
+            if [ -f "build/generated/logs/seid-${NODE_ID}.log" ]; then
+              tail -200 "build/generated/logs/seid-${NODE_ID}.log" || true
+            fi
+          done
+
+      - name: Prepare log artifact name
+        if: ${{ always() }}
+        id: log_artifact_meta
+        run: |
+          raw="${{ matrix.test.name }}"
+          safe=$(echo "$raw" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g' | sed -E 's/^-+|-+$//g')
+          if [ -z "$safe" ]; then
+            safe="logs"
+          fi
+          echo "artifact_name=$safe" >> $GITHUB_OUTPUT
+
+      - name: Collect logs directory
+        if: ${{ always() }}
+        run: |
+          LOG_ROOT="artifacts/sei-${{ steps.log_artifact_meta.outputs.artifact_name }}"
+          mkdir -p "$LOG_ROOT"
+          if [ -d build/generated/logs ]; then
+            cp -r build/generated/logs "$LOG_ROOT/"
+          else
+            echo "No logs directory found"
+          fi
+
+      - name: Upload logs directory
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-logs-${{ steps.log_artifact_meta.outputs.artifact_name }}
+          path: artifacts/sei-${{ steps.log_artifact_meta.outputs.artifact_name }}
+          if-no-files-found: warn
 
   integration-test-check:
     name: Integration Test Check

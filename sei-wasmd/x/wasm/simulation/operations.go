@@ -1,18 +1,19 @@
 package simulation
 
 import (
-	"io/ioutil"
 	"math/rand"
+	"os"
+	"path/filepath"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
-	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/simulation"
+	seiappparams "github.com/sei-protocol/sei-chain/app/params"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
+	simtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/simulation"
 
-	"github.com/CosmWasm/wasmd/app/params"
-	"github.com/CosmWasm/wasmd/x/wasm/types"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/app/params"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 )
 
 // Simulation operation weights constants
@@ -61,7 +62,7 @@ func WeightedOperations(
 		},
 	)
 
-	wasmBz, err := ioutil.ReadFile(wasmContractPath)
+	wasmBz, err := os.ReadFile(filepath.Clean(wasmContractPath))
 	if err != nil {
 		panic(err)
 	}
@@ -105,7 +106,7 @@ func SimulateMsgStoreCode(ak types.AccountKeeper, bk simulation.BankKeeper, wasm
 		txCtx := simulation.OperationInput{
 			R:             r,
 			App:           app,
-			TxGen:         simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:         seiappparams.MakeEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           &msg,
 			MsgType:       msg.Type(),
@@ -158,7 +159,7 @@ func SimulateMsgInstantiateContract(ak types.AccountKeeper, bk simulation.BankKe
 		txCtx := simulation.OperationInput{
 			R:             r,
 			App:           app,
-			TxGen:         simappparams.MakeTestEncodingConfig().TxConfig,
+			TxGen:         seiappparams.MakeEncodingConfig().TxConfig,
 			Cdc:           nil,
 			Msg:           &msg,
 			MsgType:       msg.Type(),

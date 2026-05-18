@@ -8,14 +8,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/version"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/require"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 )
 
 var defaultVoteTime = time.Date(2019, 1, 1, 0, 0, 0, 0, time.UTC)
@@ -26,9 +25,9 @@ func TestEvidenceList(t *testing.T) {
 	ev := randomDuplicateVoteEvidence(ctx, t)
 	evl := EvidenceList([]Evidence{ev})
 
-	assert.NotNil(t, evl.Hash())
-	assert.True(t, evl.Has(ev))
-	assert.False(t, evl.Has(&DuplicateVoteEvidence{}))
+	require.NotNil(t, evl.Hash())
+	require.True(t, evl.Has(ev))
+	require.False(t, evl.Has(&DuplicateVoteEvidence{}))
 }
 
 // TestEvidenceListProtoBuf to ensure parity in protobuf output and input
@@ -71,8 +70,8 @@ func TestEvidenceListProtoBuf(t *testing.T) {
 func randomDuplicateVoteEvidence(ctx context.Context, t *testing.T) *DuplicateVoteEvidence {
 	t.Helper()
 	val := NewMockPV()
-	blockID := makeBlockID([]byte("blockhash"), 1000, []byte("partshash"))
-	blockID2 := makeBlockID([]byte("blockhash2"), 1000, []byte("partshash"))
+	blockID := makeBlockID([]byte("blockhash"), MaxBlockPartsCount, []byte("partshash"))
+	blockID2 := makeBlockID([]byte("blockhash2"), MaxBlockPartsCount, []byte("partshash"))
 	const chainID = "mychain"
 	return &DuplicateVoteEvidence{
 		VoteA:            NewEncodedVote(makeVote(ctx, t, val, chainID, 0, 10, 2, 1, blockID, defaultVoteTime)),
@@ -89,15 +88,15 @@ func TestDuplicateVoteEvidence(t *testing.T) {
 
 	ev, err := NewMockDuplicateVoteEvidence(ctx, height, time.Now(), "mock-chain-id")
 	require.NoError(t, err)
-	assert.Equal(t, ev.Hash(), crypto.Checksum(ev.Bytes()))
-	assert.NotNil(t, ev.String())
-	assert.Equal(t, ev.Height(), height)
+	require.Equal(t, ev.Hash(), crypto.Checksum(ev.Bytes()).Bytes())
+	require.NotNil(t, ev.String())
+	require.Equal(t, ev.Height(), height)
 }
 
 func TestDuplicateVoteEvidenceValidation(t *testing.T) {
 	val := NewMockPV()
-	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")), math.MaxInt32, crypto.Checksum([]byte("partshash")))
-	blockID2 := makeBlockID(crypto.Checksum([]byte("blockhash2")), math.MaxInt32, crypto.Checksum([]byte("partshash")))
+	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")).Bytes(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
+	blockID2 := makeBlockID(crypto.Checksum([]byte("blockhash2")).Bytes(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
 	const chainID = "mychain"
 
 	ctx := t.Context()
@@ -131,7 +130,11 @@ func TestDuplicateVoteEvidenceValidation(t *testing.T) {
 			ev, err := NewDuplicateVoteEvidence(vote1, vote2, defaultVoteTime, valSet)
 			require.NoError(t, err)
 			tc.malleateEvidence(ev)
-			assert.Equal(t, tc.expectErr, ev.ValidateBasic() != nil, "Validate Basic had an unexpected result")
+			if tc.expectErr {
+				require.Error(t, ev.ValidateBasic(), "Validate Basic had an unexpected result")
+			} else {
+				require.NoError(t, ev.ValidateBasic(), "Validate Basic had an unexpected result")
+			}
 		})
 	}
 }
@@ -146,8 +149,8 @@ func TestLightClientAttackEvidenceBasic(t *testing.T) {
 
 	header := makeHeaderRandom()
 	header.Height = height
-	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")), math.MaxInt32, crypto.Checksum([]byte("partshash")))
-	commit, err := makeCommit(ctx, blockID, height, 1, voteSet, privVals, defaultVoteTime)
+	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")).Bytes(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
+	commit, err := MakeCommit(ctx, blockID, height, 1, voteSet, privVals, defaultVoteTime)
 	require.NoError(t, err)
 
 	lcae := &LightClientAttackEvidence{
@@ -163,10 +166,10 @@ func TestLightClientAttackEvidenceBasic(t *testing.T) {
 		Timestamp:           header.Time,
 		ByzantineValidators: valSet.Validators[:nValidators/2],
 	}
-	assert.NotNil(t, lcae.String())
-	assert.NotNil(t, lcae.Hash())
-	assert.Equal(t, lcae.Height(), commonHeight) // Height should be the common Height
-	assert.NotNil(t, lcae.Bytes())
+	require.NotNil(t, lcae.String())
+	require.NotNil(t, lcae.Hash())
+	require.Equal(t, lcae.Height(), commonHeight) // Height should be the common Height
+	require.NotNil(t, lcae.Bytes())
 
 	// maleate evidence to test hash uniqueness
 	testCases := []struct {
@@ -195,7 +198,7 @@ func TestLightClientAttackEvidenceBasic(t *testing.T) {
 		}
 		hash := lcae.Hash()
 		tc.malleateEvidence(lcae)
-		assert.NotEqual(t, hash, lcae.Hash(), tc.testName)
+		require.NotEqual(t, hash, lcae.Hash(), tc.testName)
 	}
 }
 
@@ -210,8 +213,8 @@ func TestLightClientAttackEvidenceValidation(t *testing.T) {
 	header := makeHeaderRandom()
 	header.Height = height
 	header.ValidatorsHash = valSet.Hash()
-	blockID := makeBlockID(header.Hash(), math.MaxInt32, crypto.Checksum([]byte("partshash")))
-	commit, err := makeCommit(ctx, blockID, height, 1, voteSet, privVals, time.Now())
+	blockID := makeBlockID(header.Hash(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
+	commit, err := MakeCommit(ctx, blockID, height, 1, voteSet, privVals, time.Now())
 	require.NoError(t, err)
 
 	lcae := &LightClientAttackEvidence{
@@ -227,7 +230,7 @@ func TestLightClientAttackEvidenceValidation(t *testing.T) {
 		Timestamp:           header.Time,
 		ByzantineValidators: valSet.Validators[:nValidators/2],
 	}
-	assert.NoError(t, lcae.ValidateBasic())
+	require.NoError(t, lcae.ValidateBasic())
 
 	testCases := []struct {
 		testName         string
@@ -268,9 +271,9 @@ func TestLightClientAttackEvidenceValidation(t *testing.T) {
 			}
 			tc.malleateEvidence(lcae)
 			if tc.expectErr {
-				assert.Error(t, lcae.ValidateBasic(), tc.testName)
+				require.Error(t, lcae.ValidateBasic(), tc.testName)
 			} else {
-				assert.NoError(t, lcae.ValidateBasic(), tc.testName)
+				require.NoError(t, lcae.ValidateBasic(), tc.testName)
 			}
 		})
 	}
@@ -282,7 +285,7 @@ func TestMockEvidenceValidateBasic(t *testing.T) {
 
 	goodEvidence, err := NewMockDuplicateVoteEvidence(ctx, int64(1), time.Now(), "mock-chain-id")
 	require.NoError(t, err)
-	assert.Nil(t, goodEvidence.ValidateBasic())
+	require.NoError(t, goodEvidence.ValidateBasic())
 }
 
 func makeVote(
@@ -313,7 +316,7 @@ func makeVote(
 	err = val.SignVote(ctx, chainID, vpb)
 	require.NoError(t, err)
 
-	v.Signature = vpb.Signature
+	v.Signature = utils.Some(utils.OrPanic1(crypto.SigFromBytes(vpb.Signature)))
 	return v
 }
 
@@ -341,8 +344,8 @@ func TestEvidenceProto(t *testing.T) {
 
 	// -------- Votes --------
 	val := NewMockPV()
-	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")), math.MaxInt32, crypto.Checksum([]byte("partshash")))
-	blockID2 := makeBlockID(crypto.Checksum([]byte("blockhash2")), math.MaxInt32, crypto.Checksum([]byte("partshash")))
+	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")).Bytes(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
+	blockID2 := makeBlockID(crypto.Checksum([]byte("blockhash2")).Bytes(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
 	const chainID = "mychain"
 	v := NewEncodedVote(makeVote(ctx, t, val, chainID, math.MaxInt32, math.MaxInt64, 1, 0x01, blockID, defaultVoteTime))
 	v2 := NewEncodedVote(makeVote(ctx, t, val, chainID, math.MaxInt32, math.MaxInt64, 2, 0x01, blockID2, defaultVoteTime))
@@ -363,14 +366,14 @@ func TestEvidenceProto(t *testing.T) {
 		t.Run(tt.testName, func(t *testing.T) {
 			pb, err := EvidenceToProto(tt.evidence)
 			if tt.toProtoErr {
-				assert.Error(t, err, tt.testName)
+				require.Error(t, err, tt.testName)
 				return
 			}
-			assert.NoError(t, err, tt.testName)
+			require.NoError(t, err, tt.testName)
 
 			evi, err := EvidenceFromProto(pb)
 			if tt.fromProtoErr {
-				assert.Error(t, err, tt.testName)
+				require.Error(t, err, tt.testName)
 				return
 			}
 			require.Equal(t, tt.evidence, evi, tt.testName)
@@ -383,9 +386,10 @@ func TestEvidenceVectors(t *testing.T) {
 
 	// Votes for duplicateEvidence
 	val := NewMockPV()
-	val.PrivKey = ed25519.GenPrivKeyFromSecret([]byte("it's a secret")) // deterministic key
-	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")), math.MaxInt32, crypto.Checksum([]byte("partshash")))
-	blockID2 := makeBlockID(crypto.Checksum([]byte("blockhash2")), math.MaxInt32, crypto.Checksum([]byte("partshash")))
+	// WARNING: this key has to be stable, otherwise hashes break.
+	val.PrivKey = ed25519.TestSecretKey([]byte("it's a secret"))
+	blockID := makeBlockID(crypto.Checksum([]byte("blockhash")).Bytes(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
+	blockID2 := makeBlockID(crypto.Checksum([]byte("blockhash2")).Bytes(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
 	const chainID = "mychain"
 	v := NewEncodedVote(makeVote(ctx, t, val, chainID, math.MaxInt32, math.MaxInt64, 1, 0x01, blockID, defaultVoteTime))
 	v2 := NewEncodedVote(makeVote(ctx, t, val, chainID, math.MaxInt32, math.MaxInt64, 2, 0x01, blockID2, defaultVoteTime))
@@ -413,8 +417,8 @@ func TestEvidenceVectors(t *testing.T) {
 		EvidenceHash:    []byte("f2564c78071e26643ae9b3e2a19fa0dc10d4d9e873aa0be808660123f11a1e78"),
 		ProposerAddress: []byte("2915b7b15f979e48ebc61774bb1d86ba3136b7eb"),
 	}
-	blockID3 := makeBlockID(header.Hash(), math.MaxInt32, crypto.Checksum([]byte("partshash")))
-	commit, err := makeCommit(ctx, blockID3, height, 1, voteSet, privVals, defaultVoteTime)
+	blockID3 := makeBlockID(header.Hash(), MaxBlockPartsCount, crypto.Checksum([]byte("partshash")).Bytes())
+	commit, err := MakeCommit(ctx, blockID3, height, 1, voteSet, privVals, defaultVoteTime)
 	require.NoError(t, err)
 	lcae := &LightClientAttackEvidence{
 		ConflictingBlock: &LightBlock{
@@ -429,8 +433,6 @@ func TestEvidenceVectors(t *testing.T) {
 		Timestamp:           header.Time,
 		ByzantineValidators: valSet.Validators[:nValidators/2],
 	}
-	// assert.NoError(t, lcae.ValidateBasic())
-
 	testCases := []struct {
 		testName string
 		evList   EvidenceList
@@ -438,15 +440,15 @@ func TestEvidenceVectors(t *testing.T) {
 	}{
 		{"duplicateVoteEvidence",
 			EvidenceList{&DuplicateVoteEvidence{VoteA: v2, VoteB: v}},
-			"a9ce28d13bb31001fc3e5b7927051baf98f86abdbd64377643a304164c826923",
+			"92ebbd40f4ab47e1736d7d89efdf88caa54e199eaf755dfe076590095e4f384e",
 		},
 		{"LightClientAttackEvidence",
 			EvidenceList{lcae},
-			"2f8782163c3905b26e65823ababc977fe54e97b94e60c0360b1e4726b668bb8e",
+			"c99409ac7170ef13763f185e0e288f496f90549212cf91d5d37b1853090af7f2",
 		},
 		{"LightClientAttackEvidence & DuplicateVoteEvidence",
 			EvidenceList{&DuplicateVoteEvidence{VoteA: v2, VoteB: v}, lcae},
-			"eedb4b47d6dbc9d43f53da8aa50bb826e8d9fc7d897da777c8af6a04aa74163e",
+			"5fa180fc78714a2a744479acb0bcbf72bba68608e41c31cba86a864ea97d149e",
 		},
 	}
 

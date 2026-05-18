@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/sei-protocol/sei-db/tools/cmd/seidb/benchmark"
-	"github.com/sei-protocol/sei-db/tools/cmd/seidb/operations"
+	"github.com/sei-protocol/sei-chain/sei-db/tools/cmd/seidb/benchmark"
+	"github.com/sei-protocol/sei-chain/sei-db/tools/cmd/seidb/operations"
 	"github.com/spf13/cobra"
 )
 
@@ -24,8 +24,12 @@ func main() {
 		operations.DumpDbCmd(),
 		operations.PruneCmd(),
 		operations.DumpIAVLCmd(),
+		operations.DumpFlatKVCmd(),
 		operations.StateSizeCmd(),
-		operations.ReplayChangelogCmd())
+		operations.MemiavlLatestVersionCmd(),
+		operations.ImportFlatKVFromMemiavlCmd(),
+		operations.ReplayChangelogCmd(),
+		operations.TraceProfileReportCmd())
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)

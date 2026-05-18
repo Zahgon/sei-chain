@@ -5,13 +5,39 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/sei-protocol/sei-chain/app"
 	"github.com/sei-protocol/sei-chain/evmrpc"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/stretchr/testify/require"
 )
+
+// withCapturedConsensusParams seeds the test ctx with the ConsensusParams
+// recorded for the captured block (mock_data/.../*.json -> tendermint_state ->
+// BlockResults.consensus_param_updates). The captures came from a live chain
+// where the block under trace had a specific max_gas; using anything else
+// re-runs the trace at a different block.gaslimit and produces a different
+// gasUsed. The mock client already loads these into mockedBlockResultsResults
+// — we just propagate the right block's params onto the ctx so x/evm's
+// BlockContext.GasLimit (which reads ctx.ConsensusParams().Block.MaxGas) sees
+// the same number the live trace did.
+func withCapturedConsensusParams(ctx sdk.Context, mc *MockClient, blockHeight int64) sdk.Context {
+	br, ok := mc.mockedBlockResultsResults[blockHeight]
+	if !ok || br == nil || br.ConsensusParamUpdates == nil || br.ConsensusParamUpdates.Block == nil {
+		return ctx
+	}
+	cp := ctx.ConsensusParams()
+	if cp == nil {
+		cp = &tmproto.ConsensusParams{}
+	}
+	cp.Block = &tmproto.BlockParams{
+		MaxBytes: br.ConsensusParamUpdates.Block.MaxBytes,
+		MaxGas:   br.ConsensusParamUpdates.Block.MaxGas,
+	}
+	return ctx.WithConsensusParams(cp)
+}
 
 func Test0xf15bb88570910ae06a479a6e052bbadf23bcc8eaae1239025252d4b1afc8ea18(t *testing.T) {
 	testTx(t,
@@ -97,7 +123,7 @@ func Test0x78b377a6459b9ad6a0f64a858ea7afe90dc00a7bba0f0535758572ba1fe59e26(t *t
 	testTx(t,
 		"0x78b377a6459b9ad6a0f64a858ea7afe90dc00a7bba0f0535758572ba1fe59e26",
 		"v5.5.2",
-		"0x182b0",
+		"0x18aaf",
 		"0x000000000000000000000000000000000000000000000000000000000000002000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000004563918244f40000000000000000000000000000000000000000000000000e9fc7a6844505c1bc07",
 		false,
 	)
@@ -352,11 +378,12 @@ func Test0x2cbbf34f930076000024953b87da7dc119a04f71fc4734a4bfabbe60558a49c6(t *t
 }
 
 func testTx(t *testing.T, txHash string, version string, expectedGasUsed string, expectedOutput string, hasErr bool) {
-	s := SetupMockPacificTestServer(func(a *app.App, mc *MockClient) sdk.Context {
+	s := SetupMockPacificTestServer(t, func(a *app.App, mc *MockClient) sdk.Context {
 		ctx := a.RPCContextProvider(evmrpc.LatestCtxHeight).WithClosestUpgradeName(version)
 		ctx = setLegacySstoreIfNeeded(ctx, a, version)
 		blockHeight := mockStatesFromTxJson(ctx, txHash, a, mc)
 		ctx = setLegacySstoreIfNeeded(ctx, a, version)
+		ctx = withCapturedConsensusParams(ctx, mc, blockHeight)
 		return ctx.WithBlockHeight(blockHeight)
 	})
 	s.Run(
@@ -388,6 +415,7 @@ func testBlock(
 	t *testing.T, blockNumber uint64, version string, expectedGasUsed string,
 ) {
 	s := SetupMockPacificTestServer(
+		t,
 		func(a *app.App, mc *MockClient) sdk.Context {
 			ctx := a.RPCContextProvider(evmrpc.LatestCtxHeight).WithClosestUpgradeName(version)
 			ctx = setLegacySstoreIfNeeded(ctx, a, version)
@@ -395,6 +423,7 @@ func testBlock(
 				ctx, blockNumber, a, mc,
 			)
 			ctx = setLegacySstoreIfNeeded(ctx, a, version)
+			ctx = withCapturedConsensusParams(ctx, mc, blockHeight)
 			return ctx.WithBlockHeight(blockHeight)
 		},
 	)

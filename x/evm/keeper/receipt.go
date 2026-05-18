@@ -5,15 +5,14 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/iavl"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/sei-protocol/sei-db/proto"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/prefix"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 
 	"github.com/ethereum/go-ethereum/core"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
+	receipt "github.com/sei-protocol/sei-chain/sei-db/ledger_db/receipt"
 	"github.com/sei-protocol/sei-chain/utils"
 	"github.com/sei-protocol/sei-chain/x/evm/state"
 	"github.com/sei-protocol/sei-chain/x/evm/types"
@@ -40,7 +39,7 @@ func (k *Keeper) GetTransientReceipt(ctx sdk.Context, txHash common.Hash, txInde
 	store := ctx.TransientStore(k.transientStoreKey)
 	bz := store.Get(types.NewTransientReceiptKey(txIndex, txHash))
 	if bz == nil {
-		return nil, errors.New("not found")
+		return nil, receipt.ErrNotFound
 	}
 	r := &types.Receipt{}
 	if err := r.Unmarshal(bz); err != nil {
@@ -58,50 +57,18 @@ func (k *Keeper) DeleteTransientReceipt(ctx sdk.Context, txHash common.Hash, txI
 // Many EVM applications (e.g. MetaMask) relies on being on able to query receipt
 // by EVM transaction hash (not Sei transaction hash) to function properly.
 func (k *Keeper) GetReceipt(ctx sdk.Context, txHash common.Hash) (*types.Receipt, error) {
-	// receipts are immutable, use latest version
-	lv := k.receiptStore.GetLatestVersion()
-
-	// try persistent store
-	bz, err := k.receiptStore.Get(types.ReceiptStoreKey, lv, types.ReceiptKey(txHash))
-	if err != nil {
-		return nil, err
+	if k.receiptStore == nil {
+		return nil, receipt.ErrNotConfigured
 	}
-
-	if bz == nil {
-		// try legacy store for older receipts
-		store := ctx.KVStore(k.storeKey)
-		bz = store.Get(types.ReceiptKey(txHash))
-		if bz == nil {
-			return nil, errors.New("not found")
-		}
-	}
-
-	var r types.Receipt
-	if err := r.Unmarshal(bz); err != nil {
-		return nil, err
-	}
-	return &r, nil
+	return k.receiptStore.GetReceipt(ctx, txHash)
 }
 
 // Only used for testing
 func (k *Keeper) GetReceiptFromReceiptStore(ctx sdk.Context, txHash common.Hash) (*types.Receipt, error) {
-	// receipts are immutable, use latest version
-	lv := k.receiptStore.GetLatestVersion()
-
-	// try persistent store
-	bz, err := k.receiptStore.Get(types.ReceiptStoreKey, lv, types.ReceiptKey(txHash))
-	if err != nil {
-		return nil, err
+	if k.receiptStore == nil {
+		return nil, receipt.ErrNotConfigured
 	}
-	if bz == nil {
-		return nil, errors.New("not found")
-	}
-
-	var r types.Receipt
-	if err := r.Unmarshal(bz); err != nil {
-		return nil, err
-	}
-	return &r, nil
+	return k.receiptStore.GetReceiptFromStore(ctx, txHash)
 }
 
 // GetReceiptWithRetry attempts to get a receipt with retries to handle race conditions
@@ -109,13 +76,13 @@ func (k *Keeper) GetReceiptFromReceiptStore(ctx sdk.Context, txHash common.Hash)
 func (k *Keeper) GetReceiptWithRetry(ctx sdk.Context, txHash common.Hash, maxRetries int) (*types.Receipt, error) {
 	var lastErr error
 	for i := 0; i < maxRetries; i++ {
-		receipt, err := k.GetReceipt(ctx, txHash)
+		rcpt, err := k.GetReceipt(ctx, txHash)
 		if err == nil {
-			return receipt, nil
+			return rcpt, nil
 		}
 
 		// If it's not a "not found" error, return immediately
-		if err.Error() != "not found" {
+		if !errors.Is(err, receipt.ErrNotFound) {
 			return nil, err
 		}
 
@@ -129,20 +96,34 @@ func (k *Keeper) GetReceiptWithRetry(ctx sdk.Context, txHash common.Hash, maxRet
 //	MockReceipt sets a data structure that stores EVM specific transaction metadata.
 //
 // this is currently used by a number of tests to set receipts at the moment
-func (k *Keeper) MockReceipt(ctx sdk.Context, txHash common.Hash, receipt *types.Receipt) error {
+func (k *Keeper) MockReceipt(ctx sdk.Context, txHash common.Hash, rcpt *types.Receipt) error {
 	fmt.Printf("MOCK RECEIPT height=%d, tx=%s\n", ctx.BlockHeight(), txHash.Hex())
-	if err := k.SetTransientReceipt(ctx, txHash, receipt); err != nil {
+	if err := k.SetTransientReceipt(ctx, txHash, rcpt); err != nil {
 		return err
 	}
-	return k.FlushTransientReceiptsSync(ctx)
+	if err := k.FlushTransientReceipts(ctx); err != nil {
+		return err
+	}
+	deadline := time.Now().Add(2 * time.Second)
+	for {
+		if _, err := k.GetReceipt(ctx, txHash); err == nil {
+			return nil
+		} else if err != nil && !errors.Is(err, receipt.ErrNotFound) {
+			return err
+		}
+		if time.Now().After(deadline) {
+			return fmt.Errorf("%w: after async flush", receipt.ErrNotFound)
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
 }
 
-func (k *Keeper) FlushTransientReceiptsSync(ctx sdk.Context) error {
-	return k.flushTransientReceipts(ctx, true)
+func (k *Keeper) FlushTransientReceipts(ctx sdk.Context) error {
+	return k.flushTransientReceipts(ctx)
 }
 
 func (k *Keeper) FlushTransientReceiptsAsync(ctx sdk.Context) error {
-	return k.flushTransientReceipts(ctx, false)
+	return k.flushTransientReceipts(ctx)
 }
 
 func isLegacyReceipt(ctx sdk.Context, receipt *types.Receipt) bool {
@@ -158,11 +139,11 @@ func isLegacyReceipt(ctx sdk.Context, receipt *types.Receipt) bool {
 	return false
 }
 
-func (k *Keeper) flushTransientReceipts(ctx sdk.Context, sync bool) error {
+func (k *Keeper) flushTransientReceipts(ctx sdk.Context) error {
 	transientReceiptStore := prefix.NewStore(ctx.TransientStore(k.transientStoreKey), types.ReceiptKeyPrefix)
 	iter := transientReceiptStore.Iterator(nil, nil)
 	defer func() { _ = iter.Close() }()
-	var pairs []*iavl.KVPair
+	records := make([]receipt.ReceiptRecord, 0)
 
 	// TransientReceiptStore is recreated on commit meaning it will only contain receipts for a single block at a time
 	// and will never flush a subset of block's receipts.
@@ -170,39 +151,23 @@ func (k *Keeper) flushTransientReceipts(ctx sdk.Context, sync bool) error {
 	// and we need to account for that.
 	cumulativeGasUsedPerBlock := make(map[uint64]uint64)
 	for ; iter.Valid(); iter.Next() {
-		receipt := &types.Receipt{}
-		if err := receipt.Unmarshal(iter.Value()); err != nil {
+		rcpt := &types.Receipt{}
+		if err := rcpt.Unmarshal(iter.Value()); err != nil {
 			return err
 		}
 
-		if !isLegacyReceipt(ctx, receipt) {
-			cumulativeGasUsedPerBlock[receipt.BlockNumber] += receipt.GasUsed
-			receipt.CumulativeGasUsed = cumulativeGasUsedPerBlock[receipt.BlockNumber]
+		if !isLegacyReceipt(ctx, rcpt) {
+			cumulativeGasUsedPerBlock[rcpt.BlockNumber] += rcpt.GasUsed
+			rcpt.CumulativeGasUsed = cumulativeGasUsedPerBlock[rcpt.BlockNumber]
 		}
 
-		marshalledReceipt, err := receipt.Marshal()
-		if err != nil {
-			return err
-		}
-
-		kvPair := &iavl.KVPair{Key: types.ReceiptKey(types.TransientReceiptKey(iter.Key()).TransactionHash()), Value: marshalledReceipt}
-		pairs = append(pairs, kvPair)
+		txHash := types.TransientReceiptKey(iter.Key()).TransactionHash()
+		records = append(records, receipt.ReceiptRecord{TxHash: txHash, Receipt: rcpt})
 	}
-	if len(pairs) == 0 {
-		return nil
+	if k.receiptStore == nil {
+		return receipt.ErrNotConfigured
 	}
-	ncs := &proto.NamedChangeSet{
-		Name:      types.ReceiptStoreKey,
-		Changeset: iavl.ChangeSet{Pairs: pairs},
-	}
-
-	if sync {
-		return k.receiptStore.ApplyChangesetSync(ctx.BlockHeight(), []*proto.NamedChangeSet{ncs})
-	} else {
-		var changesets []*proto.NamedChangeSet
-		changesets = append(changesets, ncs)
-		return k.receiptStore.ApplyChangesetAsync(ctx.BlockHeight(), changesets)
-	}
+	return k.receiptStore.SetReceipts(ctx, records)
 }
 
 // MigrateLegacyReceiptsBatch moves up to batchSize receipts from the legacy KV store
@@ -313,7 +278,7 @@ func (k *Keeper) WriteReceipt(
 
 	if perr := stateDB.GetPrecompileError(); perr != nil {
 		if receipt.Status > 0 {
-			ctx.Logger().Error(fmt.Sprintf("Transaction %s succeeded in execution but has precompile error %s", receipt.TxHashHex, perr.Error()))
+			logger.Error("Transaction succeeded in execution but has precompile error ", "tx", receipt.TxHashHex, "err", perr)
 		} else {
 			// append precompile error to VM error
 			receipt.VmError = fmt.Sprintf("%s|%s", receipt.VmError, perr.Error())

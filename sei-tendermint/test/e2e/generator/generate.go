@@ -6,8 +6,8 @@ import (
 	"sort"
 	"strings"
 
-	e2e "github.com/tendermint/tendermint/test/e2e/pkg"
-	"github.com/tendermint/tendermint/types"
+	e2e "github.com/sei-protocol/sei-chain/sei-tendermint/test/e2e/pkg"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 var (
@@ -66,11 +66,8 @@ var (
 	evidence   = uniformChoice{0, 1, 10}
 	txSize     = uniformChoice{1024, 4096} // either 1kb or 4kb
 	ipv6       = uniformChoice{false, true}
-	keyType    = uniformChoice{types.ABCIPubKeyTypeEd25519, types.ABCIPubKeyTypeSecp256k1}
+	keyType    = uniformChoice{types.ABCIPubKeyTypeEd25519}
 	abciDelays = uniformChoice{"none", "small", "large"}
-
-	voteExtensionEnableHeightOffset = uniformChoice{int64(0), int64(10), int64(100)}
-	voteExtensionEnabled            = uniformChoice{true, false}
 )
 
 // Generate generates random testnets using the given RNG.
@@ -120,10 +117,6 @@ func generateTestnet(r *rand.Rand, opt map[string]interface{}) (e2e.Manifest, er
 		TxSize:           txSize.Choose(r).(int),
 	}
 
-	if voteExtensionEnabled.Choose(r).(bool) {
-		manifest.VoteExtensionsEnableHeight = manifest.InitialHeight + voteExtensionEnableHeightOffset.Choose(r).(int64)
-	}
-
 	if opt["abci"] == "builtin" {
 		manifest.ABCIProtocol = string(e2e.ProtocolBuiltin)
 	} else {
@@ -135,13 +128,11 @@ func generateTestnet(r *rand.Rand, opt map[string]interface{}) (e2e.Manifest, er
 	case "small":
 		manifest.PrepareProposalDelayMS = 100
 		manifest.ProcessProposalDelayMS = 100
-		manifest.VoteExtensionDelayMS = 20
 		manifest.FinalizeBlockDelayMS = 200
 	case "large":
 		manifest.PrepareProposalDelayMS = 200
 		manifest.ProcessProposalDelayMS = 200
 		manifest.CheckTxDelayMS = 20
-		manifest.VoteExtensionDelayMS = 100
 		manifest.FinalizeBlockDelayMS = 500
 	}
 
@@ -153,7 +144,7 @@ func generateTestnet(r *rand.Rand, opt map[string]interface{}) (e2e.Manifest, er
 		numValidators = 4
 	case "large":
 		// FIXME Networks are kept small since large ones use too much CPU.
-		numSeeds = r.Intn(1)
+		numSeeds = r.Intn(2)
 		numLightClients = r.Intn(2)
 		numValidators = 4 + r.Intn(4)
 		numFulls = r.Intn(4)
@@ -303,9 +294,9 @@ func generateNode(
 		Database:         nodeDatabases.Choose(r),
 		PrivvalProtocol:  nodePrivvalProtocols.Choose(r),
 		StateSync:        e2e.StateSyncDisabled,
-		PersistInterval:  ptrUint64(uint64(nodePersistIntervals.Choose(r).(int))),
-		SnapshotInterval: uint64(nodeSnapshotIntervals.Choose(r).(int)),
-		RetainBlocks:     uint64(nodeRetainBlocks.Choose(r).(int)),
+		PersistInterval:  ptrUint64(uint64(nodePersistIntervals.Choose(r).(int))), //nolint:gosec // test generator values are small non-negative ints
+		SnapshotInterval: uint64(nodeSnapshotIntervals.Choose(r).(int)),           //nolint:gosec // test generator values are small non-negative ints
+		RetainBlocks:     uint64(nodeRetainBlocks.Choose(r).(int)),                //nolint:gosec // test generator values are small non-negative ints
 		Perturb:          nodePerturbations.Choose(r),
 	}
 

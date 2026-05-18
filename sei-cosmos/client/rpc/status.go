@@ -1,21 +1,20 @@
 package rpc
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/spf13/cobra"
 
-	"github.com/tendermint/tendermint/libs/bytes"
-	ctypes "github.com/tendermint/tendermint/rpc/coretypes"
-	tmproto "github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	ctypes "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/coretypes"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cosmos/cosmos-sdk/version"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/version"
 )
 
 // ValidatorInfo is info about the node's validator, same as Tendermint,
@@ -44,16 +43,21 @@ func StatusCommand() *cobra.Command {
 			if err != nil {
 				return err
 			}
-
-			status, err := getNodeStatus(clientCtx)
+			node, err := clientCtx.GetNode()
+			if err != nil {
+				return err
+			}
+			status, err := node.Status(cmd.Context())
 			if err != nil {
 				return err
 			}
 
+			var addr cryptotypes.Address
 			var pk cryptotypes.PubKey
 			// `status` has TM pubkeys, we need to convert them to our pubkeys.
-			if status.ValidatorInfo.PubKey != nil {
-				pk, err = cryptocodec.FromTmPubKeyInterface(status.ValidatorInfo.PubKey)
+			if k, ok := status.ValidatorInfo.PubKey.Get(); ok {
+				addr = k.Address()
+				pk, err = cryptocodec.FromTmPubKeyInterface(k)
 				if err != nil {
 					return err
 				}
@@ -63,13 +67,13 @@ func StatusCommand() *cobra.Command {
 				NodeInfo: status.NodeInfo,
 				SyncInfo: status.SyncInfo,
 				ValidatorInfo: validatorInfo{
-					Address:     status.ValidatorInfo.Address,
+					Address:     addr,
 					PubKey:      pk,
 					VotingPower: status.ValidatorInfo.VotingPower,
 				},
 			}
 
-			output, err := clientCtx.LegacyAmino.MarshalJSON(statusWithPk)
+			output, err := clientCtx.LegacyAmino.MarshalAsJSON(statusWithPk)
 			if err != nil {
 				return err
 			}
@@ -84,15 +88,6 @@ func StatusCommand() *cobra.Command {
 	return cmd
 }
 
-func getNodeStatus(clientCtx client.Context) (*ctypes.ResultStatus, error) {
-	node, err := clientCtx.GetNode()
-	if err != nil {
-		return &ctypes.ResultStatus{}, err
-	}
-
-	return node.Status(context.Background())
-}
-
 // NodeInfoResponse defines a response type that contains node status and version
 // information.
 type NodeInfoResponse struct {
@@ -104,7 +99,11 @@ type NodeInfoResponse struct {
 // REST handler for node info
 func NodeInfoRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		status, err := getNodeStatus(clientCtx)
+		node, err := clientCtx.GetNode()
+		if rest.CheckInternalServerError(w, err) {
+			return
+		}
+		status, err := node.Status(r.Context())
 		if rest.CheckInternalServerError(w, err) {
 			return
 		}
@@ -126,11 +125,14 @@ type SyncingResponse struct {
 // REST handler for node syncing
 func NodeSyncingRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		status, err := getNodeStatus(clientCtx)
+		node, err := clientCtx.GetNode()
 		if rest.CheckInternalServerError(w, err) {
 			return
 		}
-
+		status, err := node.Status(r.Context())
+		if rest.CheckInternalServerError(w, err) {
+			return
+		}
 		rest.PostProcessResponseBare(w, clientCtx, SyncingResponse{Syncing: status.SyncInfo.CatchingUp})
 	}
 }

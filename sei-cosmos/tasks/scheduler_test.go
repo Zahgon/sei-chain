@@ -11,22 +11,21 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/trace"
 
-	"github.com/cosmos/cosmos-sdk/store/cachekv"
-	"github.com/cosmos/cosmos-sdk/store/cachemulti"
-	"github.com/cosmos/cosmos-sdk/store/dbadapter"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/occ"
-	"github.com/cosmos/cosmos-sdk/utils/tracing"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/cachekv"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/cachemulti"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/dbadapter"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/occ"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/utils/tracing"
 )
 
-type mockDeliverTxFunc func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx)
+type mockDeliverTxFunc func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx)
 
 var testStoreKey = sdk.NewKVStoreKey("mock")
 var itemKey = []byte("key")
@@ -35,7 +34,7 @@ func requestList(n int) []*sdk.DeliverTxEntry {
 	tasks := make([]*sdk.DeliverTxEntry, n)
 	for i := 0; i < n; i++ {
 		tasks[i] = &sdk.DeliverTxEntry{
-			Request: types.RequestDeliverTx{
+			Request: types.RequestDeliverTxV2{
 				Tx: []byte(fmt.Sprintf("%d", i)),
 			},
 			AbsoluteIndex: i,
@@ -69,7 +68,6 @@ func initTestCtx(injectStores bool) sdk.Context {
 	}
 	store := cachemulti.NewStore(db, stores, keys, nil, nil, nil)
 	ctx = ctx.WithMultiStore(&store)
-	ctx = ctx.WithLogger(log.NewNopLogger())
 	return ctx
 }
 
@@ -97,7 +95,7 @@ func TestProcessAll(t *testing.T) {
 			runs:      10,
 			addStores: true,
 			requests:  requestList(0),
-			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
+			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
 				panic("should not deliver")
 			},
 			assertions: func(t *testing.T, ctx sdk.Context, res []types.ResponseDeliverTx) {
@@ -118,7 +116,7 @@ func TestProcessAll(t *testing.T) {
 					kv.Set([]byte(fmt.Sprintf("%d", i)), []byte(fmt.Sprintf("%d", i)))
 				}
 			},
-			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
+			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
 				defer abortRecoveryFunc(&res)
 				kv := ctx.MultiStore().GetKVStore(testStoreKey)
 				if ctx.TxIndex()%2 == 0 {
@@ -133,7 +131,7 @@ func TestProcessAll(t *testing.T) {
 					// just write so we have more writes going on
 					kv.Set(req.Tx, req.Tx)
 					iterator := kv.Iterator(nil, nil)
-					defer iterator.Close()
+					defer func() { _ = iterator.Close() }()
 					for ; iterator.Valid(); iterator.Next() {
 						// Do nothing, just iterate
 					}
@@ -159,7 +157,7 @@ func TestProcessAll(t *testing.T) {
 			runs:      10,
 			addStores: true,
 			requests:  requestList(1000),
-			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
+			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
 				defer abortRecoveryFunc(&res)
 				// all txs read and write to the same key to maximize conflicts
 				kv := ctx.MultiStore().GetKVStore(testStoreKey)
@@ -191,7 +189,7 @@ func TestProcessAll(t *testing.T) {
 			runs:      5,
 			addStores: true,
 			requests:  requestList(1000),
-			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
+			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
 				defer abortRecoveryFunc(&res)
 				// all txs read and write to the same key to maximize conflicts
 				kv := ctx.MultiStore().GetKVStore(testStoreKey)
@@ -227,7 +225,7 @@ func TestProcessAll(t *testing.T) {
 			runs:      1,
 			addStores: true,
 			requests:  requestList(2000),
-			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
+			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
 				defer abortRecoveryFunc(&res)
 				if ctx.TxIndex()%10 != 0 {
 					return types.ResponseDeliverTx{
@@ -255,7 +253,7 @@ func TestProcessAll(t *testing.T) {
 			runs:      10,
 			addStores: false,
 			requests:  requestList(10),
-			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
+			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
 				defer abortRecoveryFunc(&res)
 				return types.ResponseDeliverTx{
 					Info: fmt.Sprintf("%d", ctx.TxIndex()),
@@ -274,7 +272,7 @@ func TestProcessAll(t *testing.T) {
 			runs:      1,
 			addStores: true,
 			requests:  requestList(1000),
-			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
+			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
 				defer abortRecoveryFunc(&res)
 				wait := rand.Intn(10)
 				time.Sleep(time.Duration(wait) * time.Millisecond)
@@ -309,7 +307,7 @@ func TestProcessAll(t *testing.T) {
 			runs:      1,
 			addStores: true,
 			requests:  addTxTracerToTxEntries(requestList(250)),
-			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
+			deliverTxFunc: func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx) {
 				defer abortRecoveryFunc(&res)
 				wait := rand.Intn(10)
 				time.Sleep(time.Duration(wait) * time.Millisecond)
@@ -321,7 +319,7 @@ func TestProcessAll(t *testing.T) {
 				newVal := val + fmt.Sprintf("%d", ctx.TxIndex())
 				kv.Set(itemKey, []byte(newVal))
 
-				if v, ok := ctx.Context().Value("test_tracer").(*testTxTracer); ok {
+				if v, ok := ctx.Context().Value(testTracerKey).(*testTxTracer); ok {
 					v.OnTxExecute()
 				}
 
@@ -384,6 +382,10 @@ func addTxTracerToTxEntries(txEntries []*sdk.DeliverTxEntry) []*sdk.DeliverTxEnt
 
 var _ sdk.TxTracer = &testTxTracer{}
 
+type testTracerKeyType string
+
+const testTracerKey testTracerKeyType = "test_tracer"
+
 func newTestTxTracer(txIndex int) *testTxTracer {
 	return &testTxTracer{txIndex: txIndex, canExecute: true}
 }
@@ -398,7 +400,7 @@ func (t *testTxTracer) Commit() {
 }
 
 func (t *testTxTracer) InjectInContext(ctx sdk.Context) sdk.Context {
-	return ctx.WithContext(context.WithValue(ctx.Context(), "test_tracer", t))
+	return ctx.WithContext(context.WithValue(ctx.Context(), testTracerKey, t))
 }
 
 func (t *testTxTracer) Reset() {

@@ -10,10 +10,10 @@ import (
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/sei-protocol/sei-chain/precompiles/addr"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/state"
 	"github.com/stretchr/testify/require"
-	tmtypes "github.com/tendermint/tendermint/proto/tendermint/types"
 )
 
 func TestAssociatePubKey(t *testing.T) {
@@ -167,7 +167,7 @@ func TestAssociatePubKey(t *testing.T) {
 			}
 			if err != nil {
 				require.Equal(t, vm.ErrExecutionReverted, err)
-				require.Equal(t, tt.wantErrMsg, string(ret))
+				require.Nil(t, ret)
 			} else if tt.wrongRet {
 				// tt.wrongRet is set if we expect a return value that's different from the happy path. This means that the wrong addresses were associated.
 				require.NotEqual(t, tt.wantRet, ret)
@@ -358,7 +358,7 @@ func TestAssociate(t *testing.T) {
 			}
 			if err != nil {
 				require.Equal(t, vm.ErrExecutionReverted, err)
-				require.Equal(t, tt.wantErrMsg, string(ret))
+				require.Nil(t, ret)
 			} else if tt.wrongRet {
 				// tt.wrongRet is set if we expect a return value that's different from the happy path. This means that the wrong addresses were associated.
 				require.NotEqual(t, tt.wantRet, ret)

@@ -1,7 +1,6 @@
 package bits
 
 import (
-	"encoding/binary"
 	"errors"
 	"fmt"
 	"math"
@@ -10,8 +9,8 @@ import (
 	"strings"
 	"sync"
 
-	tmmath "github.com/tendermint/tendermint/libs/math"
-	tmprotobits "github.com/tendermint/tendermint/proto/tendermint/libs/bits"
+	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
+	tmprotobits "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/libs/bits"
 )
 
 // BitArray is a thread-safe implementation of a bit array.
@@ -65,10 +64,10 @@ func (bA *BitArray) GetIndex(i int) bool {
 }
 
 func (bA *BitArray) getIndex(i int) bool {
-	if i >= bA.Bits {
+	if i < 0 || i >= bA.Bits {
 		return false
 	}
-	return bA.Elems[i/64]&(uint64(1)<<uint(i%64)) > 0
+	return bA.Elems[i/64]&(uint64(1)<<uint(i%64)) > 0 //nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
 }
 
 // SetIndex sets the bit at index i within the bit array.
@@ -87,9 +86,9 @@ func (bA *BitArray) setIndex(i int, v bool) bool {
 		return false
 	}
 	if v {
-		bA.Elems[i/64] |= (uint64(1) << uint(i%64))
+		bA.Elems[i/64] |= (uint64(1) << uint(i%64)) //nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
 	} else {
-		bA.Elems[i/64] &= ^(uint64(1) << uint(i%64))
+		bA.Elems[i/64] &= ^(uint64(1) << uint(i%64)) //nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
 	}
 	return true
 }
@@ -139,7 +138,7 @@ func (bA *BitArray) Or(o *BitArray) *BitArray {
 	o.mtx.Lock()
 	c := bA.copyBits(tmmath.MaxInt(bA.Bits, o.Bits))
 	smaller := tmmath.MinInt(len(bA.Elems), len(o.Elems))
-	for i := 0; i < smaller; i++ {
+	for i := range smaller {
 		c.Elems[i] |= o.Elems[i]
 	}
 	bA.mtx.Unlock()
@@ -207,49 +206,13 @@ func (bA *BitArray) Sub(o *BitArray) *BitArray {
 	// If bA is longer, then skipping those iterations is equivalent
 	// to right padding with 0's
 	smaller := tmmath.MinInt(len(bA.Elems), len(o.Elems))
-	for i := 0; i < smaller; i++ {
+	for i := range smaller {
 		// &^ is and not in golang
 		c.Elems[i] &^= o.Elems[i]
 	}
 	bA.mtx.Unlock()
 	o.mtx.Unlock()
 	return c
-}
-
-// IsEmpty returns true iff all bits in the bit array are 0
-func (bA *BitArray) IsEmpty() bool {
-	if bA == nil {
-		return true // should this be opposite?
-	}
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-	for _, e := range bA.Elems {
-		if e > 0 {
-			return false
-		}
-	}
-	return true
-}
-
-// IsFull returns true iff all bits in the bit array are 1.
-func (bA *BitArray) IsFull() bool {
-	if bA == nil {
-		return true
-	}
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-
-	// Check all elements except the last
-	for _, elem := range bA.Elems[:len(bA.Elems)-1] {
-		if (^elem) != 0 {
-			return false
-		}
-	}
-
-	// Check that the last element has (lastElemBits) 1's
-	lastElemBits := (bA.Bits+63)%64 + 1
-	lastElem := bA.Elems[len(bA.Elems)-1]
-	return (lastElem+1)&((uint64(1)<<uint(lastElemBits))-1) == 0
 }
 
 // PickRandom returns a random index for a set bit in the bit array.
@@ -278,6 +241,9 @@ func (bA *BitArray) PickRandom() (int, bool) {
 }
 
 func (bA *BitArray) getTrueIndices() []int {
+	if bA.Size() == 0 {
+		return nil
+	}
 	trueIndices := make([]int, 0, bA.Bits)
 	curBit := 0
 	numElems := len(bA.Elems)
@@ -288,8 +254,8 @@ func (bA *BitArray) getTrueIndices() []int {
 			curBit += 64
 			continue
 		}
-		for j := 0; j < 64; j++ {
-			if (elem & (uint64(1) << uint64(j))) > 0 {
+		for j := range 64 {
+			if (elem & (uint64(1) << uint64(j))) > 0 { //nolint:gosec // j is in [0, 63]; always safe for uint64
 				trueIndices = append(trueIndices, curBit)
 			}
 			curBit++
@@ -298,8 +264,8 @@ func (bA *BitArray) getTrueIndices() []int {
 	// handle last element
 	lastElem := bA.Elems[numElems-1]
 	numFinalBits := bA.Bits - curBit
-	for i := 0; i < numFinalBits; i++ {
-		if (lastElem & (uint64(1) << uint64(i))) > 0 {
+	for i := range numFinalBits {
+		if (lastElem & (uint64(1) << uint64(i))) > 0 { //nolint:gosec // i is in [0, 63]; always safe for uint64
 			trueIndices = append(trueIndices, curBit)
 		}
 		curBit++
@@ -352,21 +318,6 @@ func (bA *BitArray) stringIndented(indent string) string {
 		lines = append(lines, bits)
 	}
 	return fmt.Sprintf("BA{%v:%v}", bA.Bits, strings.Join(lines, indent))
-}
-
-// Bytes returns the byte representation of the bits within the bitarray.
-func (bA *BitArray) Bytes() []byte {
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-
-	numBytes := (bA.Bits + 7) / 8
-	bytes := make([]byte, numBytes)
-	for i := 0; i < len(bA.Elems); i++ {
-		elemBytes := [8]byte{}
-		binary.LittleEndian.PutUint64(elemBytes[:], bA.Elems[i])
-		copy(bytes[i*8:], elemBytes[:])
-	}
-	return bytes
 }
 
 // Update sets the bA's bits to be that of the other bit array.
@@ -427,7 +378,7 @@ func (bA *BitArray) UnmarshalJSON(bz []byte) error {
 	numBits := len(bits)
 
 	bA.reset(numBits)
-	for i := 0; i < numBits; i++ {
+	for i := range numBits {
 		if bits[i] == 'x' {
 			bA.SetIndex(i, true)
 		}

@@ -10,25 +10,26 @@ import (
 	"testing"
 	"time"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	wasmxtypes "github.com/CosmWasm/wasmd/x/wasm/types"
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	clienttx "github.com/cosmos/cosmos-sdk/client/tx"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/store"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	txtype "github.com/cosmos/cosmos-sdk/types/tx"
-	"github.com/cosmos/cosmos-sdk/types/tx/signing"
-	authsigning "github.com/cosmos/cosmos-sdk/x/auth/signing"
-	"github.com/cosmos/cosmos-sdk/x/auth/tx"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	clienttx "github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
+	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	txtype "github.com/sei-protocol/sei-chain/sei-cosmos/types/tx"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/tx/signing"
+	authsigning "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/signing"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/tx"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	wasmkeeper "github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/keeper"
+	wasmxtypes "github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/abci/types"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/sei-protocol/sei-chain/app"
 	utils2 "github.com/sei-protocol/sei-chain/utils"
@@ -155,11 +156,11 @@ func deployCW20Token(tCtx *TestContext, i int) (string, error) {
 }
 
 // NewTestContext initializes a new TestContext with a new app and a new contract
-func NewTestContext(t *testing.T, testAccts []TestAcct, blockTime time.Time, workers int, occEnabled bool) *TestContext {
+func NewTestContext(tb testing.TB, testAccts []TestAcct, blockTime time.Time, workers int, occEnabled bool) *TestContext {
 	contractFile := "../integration_test/contracts/mars.wasm"
 	cw20ContractFile := "../contracts/wasm/cw20_base.wasm"
 
-	wrapper := app.NewTestWrapper(t, blockTime, testAccts[0].PublicKey, true, func(ba *baseapp.BaseApp) {
+	wrapper := app.NewTestWrapper(tb, blockTime, testAccts[0].PublicKey, true, func(ba *baseapp.BaseApp) {
 		ba.SetOccEnabled(occEnabled)
 		ba.SetConcurrencyWorkers(workers)
 	})
@@ -208,6 +209,12 @@ func NewTestContext(t *testing.T, testAccts []TestAcct, blockTime time.Time, wor
 	return tctx
 }
 
+// ToTxBytes converts test messages to transaction bytes.
+// This includes signing, encoding, and state preparation (funding accounts, updating sequences).
+func ToTxBytes(testCtx *TestContext, msgs []*TestMessage) [][]byte {
+	return toTxBytes(testCtx, msgs)
+}
+
 func toTxBytes(testCtx *TestContext, msgs []*TestMessage) [][]byte {
 	txs := make([][]byte, 0, len(msgs))
 	tc := app.MakeEncodingConfig().TxConfig
@@ -222,19 +229,33 @@ func toTxBytes(testCtx *TestContext, msgs []*TestMessage) [][]byte {
 			panic(err)
 		}
 
-		tBuilder := tx.WrapTx(&txtype.Tx{
-			Body: &txtype.TxBody{
-				Messages: []*codectypes.Any{a},
-			},
-			AuthInfo: &txtype.AuthInfo{
-				Fee: &txtype.Fee{
-					Amount:   Funds(10000000000),
-					GasLimit: 10000000000,
-					Payer:    testCtx.TestAccounts[0].AccountAddress.String(),
-					Granter:  testCtx.TestAccounts[0].AccountAddress.String(),
+		var tBuilder client.TxBuilder
+		if tm.IsEVM {
+			tBuilder = tx.WrapTx(&txtype.Tx{
+				Body: &txtype.TxBody{
+					Messages: []*codectypes.Any{a},
 				},
-			},
-		})
+				AuthInfo: &txtype.AuthInfo{
+					Fee: &txtype.Fee{
+						GasLimit: 10000000000,
+					},
+				},
+			})
+		} else {
+			tBuilder = tx.WrapTx(&txtype.Tx{
+				Body: &txtype.TxBody{
+					Messages: []*codectypes.Any{a},
+				},
+				AuthInfo: &txtype.AuthInfo{
+					Fee: &txtype.Fee{
+						Amount:   Funds(10000000000),
+						GasLimit: 10000000000,
+						Payer:    testCtx.TestAccounts[0].AccountAddress.String(),
+						Granter:  testCtx.TestAccounts[0].AccountAddress.String(),
+					},
+				},
+			})
+		}
 
 		if tm.IsEVM {
 			amounts := sdk.NewCoins(sdk.NewCoin("usei", sdk.NewInt(1000000000000000000)), sdk.NewCoin("uusdc", sdk.NewInt(1000000000000000)))
@@ -312,16 +333,25 @@ func RunWithoutOCC(testCtx *TestContext, msgs []*TestMessage) ([]types.Event, []
 func runTxs(testCtx *TestContext, msgs []*TestMessage, occ bool) ([]types.Event, []*types.ExecTxResult, types.ResponseEndBlock, error) {
 	app.EnableOCC = occ
 	txs := toTxBytes(testCtx, msgs)
-	req := &types.RequestFinalizeBlock{
-		Txs:    txs,
-		Height: testCtx.Ctx.BlockHeader().Height,
-	}
+	req := &app.BlockProcessRequest{Height: testCtx.Ctx.BlockHeader().Height}
+	return testCtx.TestApp.ProcessBlock(testCtx.Ctx, txs, req, types.CommitInfo{}, false, nil)
+}
 
-	return testCtx.TestApp.ProcessBlock(testCtx.Ctx, txs, req, req.DecidedLastCommit, false)
+// ProcessBlockDirect calls ProcessBlock directly with pre-prepared transaction bytes.
+// This is useful for benchmarks where you want to measure only ProcessBlock execution time,
+// excluding the overhead of transaction encoding, signing, and state preparation.
+func ProcessBlockDirect(testCtx *TestContext, txs [][]byte, occ bool) ([]types.Event, []*types.ExecTxResult, types.ResponseEndBlock, error) {
+	app.EnableOCC = occ
+	req := &app.BlockProcessRequest{Height: testCtx.Ctx.BlockHeader().Height}
+	return testCtx.TestApp.ProcessBlock(testCtx.Ctx, txs, req, types.CommitInfo{}, false, nil)
 }
 
 func JoinMsgs(msgsList ...[]*TestMessage) []*TestMessage {
-	var result []*TestMessage
+	n := 0
+	for _, testMsg := range msgsList {
+		n += len(testMsg)
+	}
+	result := make([]*TestMessage, 0, n)
 	for _, testMsg := range msgsList {
 		result = append(result, testMsg...)
 	}

@@ -1,9 +1,9 @@
 package simulation
 
 import (
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
-	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/simulation"
+	seiappparams "github.com/sei-protocol/sei-chain/app/params"
+	simtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/simulation"
 )
 
 // OpWeightSubmitParamChangeProposal app params key for param change proposal
@@ -14,7 +14,7 @@ func ProposalContents(paramChanges []simtypes.ParamChange) []simtypes.WeightedPr
 	return []simtypes.WeightedProposalContent{
 		simulation.NewWeightedProposalContent(
 			OpWeightSubmitParamChangeProposal,
-			simappparams.DefaultWeightParamChangeProposal,
+			seiappparams.DefaultWeightParamChangeProposal,
 			SimulateParamChangeProposalContent(paramChanges),
 		),
 	}

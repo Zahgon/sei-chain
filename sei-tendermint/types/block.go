@@ -6,21 +6,29 @@ import (
 	"fmt"
 	"strings"
 	"sync"
+	"sync/atomic"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
 	gogotypes "github.com/gogo/protobuf/types"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/merkle"
-	"github.com/tendermint/tendermint/libs/bits"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmmath "github.com/tendermint/tendermint/libs/math"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/utils"
-	"github.com/tendermint/tendermint/version"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/merkle"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bits"
+	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 )
+
+// SkipLastResultsHashValidation controls whether LastResultsHash validation
+// is skipped during block validation. This is set to true when the Giga
+// executor is enabled, since it may produce different gas used values.
+// Uses atomic.Bool for concurrency safety since NewApp may be called
+// multiple times simultaneously.
+var SkipLastResultsHashValidation atomic.Bool
 
 const (
 	// MaxHeaderBytes is a maximum header size.
@@ -49,18 +57,18 @@ type Block struct {
 	LastCommit *Commit      `json:"last_commit"`
 }
 
-func (b *Block) GetTxKeys() []TxKey {
-	txKeys := make([]TxKey, len(b.Data.Txs))
-	for i := range b.Data.Txs {
-		txKeys[i] = b.Data.Txs[i].Key()
+func (b *Block) GetTxHashes() []TxHash {
+	txHashes := make([]TxHash, len(b.Txs))
+	for i := range b.Txs {
+		txHashes[i] = b.Data.Txs[i].Hash()
 	}
-	return txKeys
+	return txHashes
 }
 
 // ValidateBasic performs basic validation that doesn't involve state data.
 // It checks the internal consistency of the block.
 // Further validation is done using state#ValidateBlock.
-func (b *Block) ValidateBasic() error {
+func (b *Block) ValidateBasic(policy ConsensusPolicy) error {
 	if b == nil {
 		return errors.New("nil block")
 	}
@@ -81,12 +89,17 @@ func (b *Block) ValidateBasic() error {
 	}
 
 	if w, g := b.LastCommit.Hash(), b.LastCommitHash; !bytes.Equal(w, g) {
-		return fmt.Errorf("wrong Header.LastCommitHash. Expected %X, got %X", w, g)
+		// Fall back to legacy hash calculation pre-6.4.
+		if wLegacy := b.LastCommit.legacyHash(); !bytes.Equal(wLegacy, g) {
+			return fmt.Errorf("wrong Header.LastCommitHash. Expected %X, got %X", w, g)
+		}
 	}
 
-	// NOTE: b.Data.Txs may be nil, but b.Data.Hash() still works fine.
-	if w, g := b.Data.Hash(false), b.DataHash; !bytes.Equal(w, g) {
-		return fmt.Errorf("wrong Header.DataHash. Expected %X, got %X. Len of txs %d", w, g, len(b.Data.Txs))
+	if !policy.SkipDataHashValidation() {
+		// NOTE: b.Data.Txs may be nil, but b.Data.Hash() still works fine.
+		if w, g := b.Data.Hash(false), b.DataHash; !bytes.Equal(w, g) {
+			return fmt.Errorf("wrong Header.DataHash. Expected %X, got %X. Len of txs %d", w, g, len(b.Txs))
+		}
 	}
 
 	// NOTE: b.Evidence may be nil, but we're just looping.
@@ -138,6 +151,9 @@ func (b *Block) Hash() tmbytes.HexBytes {
 func (b *Block) MakePartSet(partSize uint32) (*PartSet, error) {
 	if b == nil {
 		return nil, errors.New("nil block")
+	}
+	if partSize == 0 {
+		return nil, errors.New("partSize must be greater than zero")
 	}
 	b.mtx.Lock()
 	defer b.mtx.Unlock()
@@ -237,15 +253,23 @@ func (b *Block) ToProto() (*tmproto.Block, error) {
 
 func (b *Block) ToReqBeginBlock(vals []*Validator) abci.RequestBeginBlock {
 	tmHeader := b.Header.ToProto()
-	votes := make([]abci.VoteInfo, 0, b.LastCommit.Size())
-	for i, val := range vals {
-		commitSig := b.LastCommit.Signatures[i]
-		votes = append(votes, abci.VoteInfo{
-			Validator:       TM2PB.Validator(val),
-			SignedLastBlock: commitSig.BlockIDFlag != BlockIDFlagAbsent,
-		})
+	// b.LastCommit.Signatures is only empty on the trace path.
+	var votes []abci.VoteInfo
+	if len(b.LastCommit.Signatures) > 0 {
+		votes = make([]abci.VoteInfo, 0, b.LastCommit.Size())
+		for i, val := range vals {
+			commitSig := b.LastCommit.Signatures[i]
+			votes = append(votes, abci.VoteInfo{
+				Validator:       TM2PB.Validator(val),
+				SignedLastBlock: commitSig.BlockIDFlag != BlockIDFlagAbsent,
+			})
+		}
 	}
 	abciEvidence := b.Evidence.ToABCI()
+	byzantineValidators := make([]abci.Evidence, 0, len(abciEvidence))
+	for _, e := range abciEvidence {
+		byzantineValidators = append(byzantineValidators, abci.Evidence(e))
+	}
 	return abci.RequestBeginBlock{
 		Hash:   b.hash,
 		Header: *tmHeader,
@@ -253,9 +277,7 @@ func (b *Block) ToReqBeginBlock(vals []*Validator) abci.RequestBeginBlock {
 			Round: b.LastCommit.Round,
 			Votes: votes,
 		},
-		ByzantineValidators: utils.Map(abciEvidence, func(e abci.Misbehavior) abci.Evidence {
-			return abci.Evidence(e)
-		}),
+		ByzantineValidators: byzantineValidators,
 	}
 }
 
@@ -289,7 +311,7 @@ func BlockFromProto(bp *tmproto.Block) (*Block, error) {
 		b.LastCommit = lc
 	}
 
-	return b, b.ValidateBasic()
+	return b, b.ValidateBasic(DefaultConsensusPolicy())
 }
 
 //-----------------------------------------------------------------------------
@@ -341,10 +363,6 @@ func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
 // computed from itself.
 // It populates the same set of fields validated by ValidateBasic.
 func MakeBlock(height int64, txs []Tx, lastCommit *Commit, evidence []Evidence) *Block {
-	txKeys := make([]TxKey, 0, len(txs))
-	for _, tx := range txs {
-		txKeys = append(txKeys, tx.Key())
-	}
 	block := &Block{
 		Header: Header{
 			Version: version.Consensus{Block: version.BlockProtocol, App: 0},
@@ -392,7 +410,7 @@ type Header struct {
 
 	// consensus info
 	EvidenceHash    tmbytes.HexBytes `json:"evidence_hash"`    // evidence included in the block
-	ProposerAddress Address          `json:"proposer_address"` // original proposer of the block
+	ProposerAddress Address          `json:"proposer_address"` // proposer recorded in the block header; preserved across re-proposals
 }
 
 // Populate the Header with state-derived data.
@@ -640,10 +658,11 @@ const (
 
 // CommitSig is a part of the Vote included in a Commit.
 type CommitSig struct {
-	BlockIDFlag      BlockIDFlag `json:"block_id_flag"`
-	ValidatorAddress Address     `json:"validator_address"`
-	Timestamp        time.Time   `json:"timestamp"`
-	Signature        []byte      `json:"signature"`
+	BlockIDFlag BlockIDFlag `json:"block_id_flag"`
+	// WARNING: all fields below should be zeroed if BlockIDFlag == BlockIDFlagAbsent
+	ValidatorAddress Address                  `json:"validator_address"`
+	Timestamp        time.Time                `json:"timestamp"`
+	Signature        utils.Option[crypto.Sig] `json:"signature"`
 }
 
 func MaxCommitBytes(valCount int) int64 {
@@ -667,8 +686,12 @@ func NewCommitSigAbsent() CommitSig {
 // 3. block ID flag
 // 4. timestamp
 func (cs CommitSig) String() string {
+	var sigBytes []byte
+	if sig, ok := cs.Signature.Get(); ok {
+		sigBytes = sig.Bytes()
+	}
 	return fmt.Sprintf("CommitSig{%X by %X on %v @ %s}",
-		tmbytes.Fingerprint(cs.Signature),
+		tmbytes.Fingerprint(sigBytes),
 		tmbytes.Fingerprint(cs.ValidatorAddress),
 		cs.BlockIDFlag,
 		CanonicalTime(cs.Timestamp))
@@ -709,7 +732,7 @@ func (cs CommitSig) ValidateBasic() error {
 		if !cs.Timestamp.IsZero() {
 			return errors.New("time is present")
 		}
-		if len(cs.Signature) != 0 {
+		if cs.Signature.IsPresent() {
 			return errors.New("signature is present")
 		}
 	default:
@@ -719,13 +742,10 @@ func (cs CommitSig) ValidateBasic() error {
 				len(cs.ValidatorAddress),
 			)
 		}
-		// NOTE: Timestamp validation is subtle and handled elsewhere.
-		if len(cs.Signature) == 0 {
+		if !cs.Signature.IsPresent() {
 			return errors.New("signature is missing")
 		}
-		if len(cs.Signature) > MaxSignatureSize {
-			return fmt.Errorf("signature is too big (max: %d)", MaxSignatureSize)
-		}
+		// NOTE: Timestamp validation is subtle and handled elsewhere.
 	}
 
 	return nil
@@ -736,12 +756,15 @@ func (cs *CommitSig) ToProto() *tmproto.CommitSig {
 	if cs == nil {
 		return nil
 	}
-
+	var signature []byte
+	if sig, ok := cs.Signature.Get(); ok {
+		signature = sig.Bytes()
+	}
 	return &tmproto.CommitSig{
 		BlockIdFlag:      tmproto.BlockIDFlag(cs.BlockIDFlag),
 		ValidatorAddress: cs.ValidatorAddress,
 		Timestamp:        cs.Timestamp,
-		Signature:        cs.Signature,
+		Signature:        signature,
 	}
 }
 
@@ -751,7 +774,16 @@ func (cs *CommitSig) FromProto(csp tmproto.CommitSig) error {
 	cs.BlockIDFlag = BlockIDFlag(csp.BlockIdFlag)
 	cs.ValidatorAddress = csp.ValidatorAddress
 	cs.Timestamp = csp.Timestamp
-	cs.Signature = csp.Signature
+
+	if len(csp.Signature) > 0 {
+		sig, err := crypto.SigFromBytes(csp.Signature)
+		if err != nil {
+			return fmt.Errorf("signature: %w", err)
+		}
+		cs.Signature = utils.Some(sig)
+	} else {
+		cs.Signature = utils.None[crypto.Sig]()
+	}
 
 	return cs.ValidateBasic()
 }
@@ -782,7 +814,10 @@ type Commit struct {
 // signature will not be present in the returned vote.
 // Returns nil if the precommit at valIdx is nil.
 // Panics if valIdx >= commit.Size().
-func (commit *Commit) GetVote(valIdx int32) *Vote {
+func (commit *Commit) GetVote(valIdx int32) (*Vote, bool) {
+	if int(valIdx) >= len(commit.Signatures) {
+		return nil, false
+	}
 	commitSig := commit.Signatures[valIdx]
 	return &Vote{
 		Type:             tmproto.PrecommitType,
@@ -793,7 +828,7 @@ func (commit *Commit) GetVote(valIdx int32) *Vote {
 		ValidatorAddress: commitSig.ValidatorAddress,
 		ValidatorIndex:   valIdx,
 		Signature:        commitSig.Signature,
-	}
+	}, true
 }
 
 // VoteSignBytes returns the bytes of the Vote corresponding to valIdx for
@@ -805,9 +840,12 @@ func (commit *Commit) GetVote(valIdx int32) *Vote {
 // Panics if valIdx >= commit.Size().
 //
 // See VoteSignBytes
-func (commit *Commit) VoteSignBytes(chainID string, valIdx int32) []byte {
-	v := commit.GetVote(valIdx).ToProto()
-	return VoteSignBytes(chainID, v)
+func (commit *Commit) VoteSignBytes(chainID string, valIdx int32) ([]byte, bool) {
+	v, ok := commit.GetVote(valIdx)
+	if !ok {
+		return nil, false
+	}
+	return VoteSignBytes(chainID, v.ToProto()), true
 }
 
 // Size returns the number of signatures in the commit.
@@ -836,6 +874,9 @@ func (commit *Commit) ValidateBasic() error {
 		if len(commit.Signatures) == 0 {
 			return errors.New("no signatures in commit")
 		}
+		if len(commit.Signatures) > MaxVotesCount {
+			return fmt.Errorf("too many signatures: %d > %d", len(commit.Signatures), MaxVotesCount)
+		}
 		for i, commitSig := range commit.Signatures {
 			if err := commitSig.ValidateBasic(); err != nil {
 				return fmt.Errorf("wrong CommitSig #%d: %v", i, err)
@@ -845,21 +886,34 @@ func (commit *Commit) ValidateBasic() error {
 	return nil
 }
 
-// Hash returns the hash of the commit
+// Hash returns the hash of the commit.
+// It computes a Merkle tree from all commit fields: Height, Round, BlockID, and Signatures.
 func (commit *Commit) Hash() tmbytes.HexBytes {
 	if commit == nil {
 		return nil
 	}
 	if commit.hash == nil {
-		bs := make([][]byte, len(commit.Signatures))
+		// Encode BlockID
+		pbbi := commit.BlockID.ToProto()
+		bzbi, err := pbbi.Marshal()
+		if err != nil {
+			panic(err)
+		}
+
+		// Build slice with metadata fields first, then signatures
+		// Fields: Height, Round, BlockID, followed by each CommitSig
+		bs := make([][]byte, 3+len(commit.Signatures))
+		bs[0] = cdcEncode(commit.Height)
+		bs[1] = cdcEncode(int64(commit.Round)) // Cast to int64 for cdcEncode
+		bs[2] = bzbi
+
 		for i, commitSig := range commit.Signatures {
 			pbcs := commitSig.ToProto()
 			bz, err := pbcs.Marshal()
 			if err != nil {
 				panic(err)
 			}
-
-			bs[i] = bz
+			bs[3+i] = bz
 		}
 		commit.hash = merkle.HashFromByteSlices(bs)
 	}
@@ -952,7 +1006,10 @@ func (commit *Commit) ToVoteSet(chainID string, vals *ValidatorSet) *VoteSet {
 		if cs.BlockIDFlag == BlockIDFlagAbsent {
 			continue // OK, some precommits can be missing.
 		}
-		vote := commit.GetVote(int32(idx))
+		vote, ok := commit.GetVote(int32(idx)) //nolint:gosec // idx is bounded by commit.Signatures length which fits in int32
+		if !ok {
+			panic(fmt.Errorf("too many signatures"))
+		}
 		if err := vote.ValidateBasic(); err != nil {
 			panic(fmt.Errorf("failed to validate vote reconstructed from commit: %w", err))
 		}
@@ -994,7 +1051,7 @@ func (ec *Commit) BitArray() *bits.BitArray {
 // GetByIndex returns the vote corresponding to a given validator index.
 // Panics if `index >= extCommit.Size()`.
 // Implements VoteSetReader.
-func (ec *Commit) GetByIndex(valIdx int32) *Vote {
+func (ec *Commit) GetByIndex(valIdx int32) (*Vote, bool) {
 	return ec.GetVote(valIdx)
 }
 
@@ -1002,6 +1059,25 @@ func (ec *Commit) GetByIndex(valIdx int32) *Vote {
 // Implements VoteSetReader.
 func (ec *Commit) IsCommit() bool {
 	return len(ec.Signatures) != 0
+}
+
+// legacyHash computes the commit hash using the pre-v6.4 algorithm, which
+// only includes signatures (not Height, Round, or BlockID). This is needed
+// to validate blocks that were created before the CommitHash change.
+func (commit *Commit) legacyHash() tmbytes.HexBytes {
+	if commit == nil {
+		return nil
+	}
+	bs := make([][]byte, len(commit.Signatures))
+	for i, commitSig := range commit.Signatures {
+		pbcs := commitSig.ToProto()
+		bz, err := pbcs.Marshal()
+		if err != nil {
+			panic(err)
+		}
+		bs[i] = bz
+	}
+	return merkle.HashFromByteSlices(bs)
 }
 
 //-------------------------------------

@@ -5,20 +5,19 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sei-protocol/sei-chain/app"
+	"github.com/sei-protocol/sei-chain/app/apptesting"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/stretchr/testify/suite"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/store"
-	"github.com/cosmos/cosmos-sdk/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
-	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/cosmos/cosmos-sdk/x/bank/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/query"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 )
 
 const (
@@ -60,7 +59,7 @@ func (s *paginationTestSuite) TestParsePagination() {
 }
 
 func (s *paginationTestSuite) TestPagination() {
-	app, ctx, _ := setupTest()
+	app, ctx, _ := setupTest(s.T())
 	queryHelper := baseapp.NewQueryServerTestHelper(ctx, app.InterfaceRegistry())
 	types.RegisterQueryServer(queryHelper, app.BankKeeper)
 	queryClient := types.NewQueryClient(queryHelper)
@@ -76,7 +75,7 @@ func (s *paginationTestSuite) TestPagination() {
 	addr1 := sdk.AccAddress(secp256k1.GenPrivKey().PubKey().Address())
 	acc1 := app.AccountKeeper.NewAccountWithAddress(ctx, addr1)
 	app.AccountKeeper.SetAccount(ctx, acc1)
-	s.Require().NoError(simapp.FundAccount(app.BankKeeper, ctx, addr1, balances))
+	s.Require().NoError(apptesting.FundAccount(app.BankKeeper, ctx, addr1, balances))
 
 	s.T().Log("verify empty page request results a max of defaultLimit records and counts total records")
 	pageReq := &query.PageRequest{}
@@ -155,7 +154,7 @@ func (s *paginationTestSuite) TestPagination() {
 	s.T().Log("verify paginate with offset and key - error")
 	pageReq = &query.PageRequest{Key: res.Pagination.NextKey, Offset: 100, Limit: defaultLimit, CountTotal: false}
 	request = types.NewQueryAllBalancesRequest(addr1, pageReq)
-	res, err = queryClient.AllBalances(gocontext.Background(), request)
+	_, err = queryClient.AllBalances(gocontext.Background(), request)
 	s.Require().Error(err)
 	s.Require().Equal("rpc error: code = InvalidArgument desc = paginate: invalid request, either offset or key is expected, got both", err.Error())
 
@@ -169,7 +168,7 @@ func (s *paginationTestSuite) TestPagination() {
 }
 
 func (s *paginationTestSuite) TestReversePagination() {
-	app, ctx, _ := setupTest()
+	app, ctx, _ := setupTest(s.T())
 	queryHelper := baseapp.NewQueryServerTestHelper(ctx, app.InterfaceRegistry())
 	types.RegisterQueryServer(queryHelper, app.BankKeeper)
 	queryClient := types.NewQueryClient(queryHelper)
@@ -185,7 +184,7 @@ func (s *paginationTestSuite) TestReversePagination() {
 	addr1 := sdk.AccAddress(secp256k1.GenPrivKey().PubKey().Address())
 	acc1 := app.AccountKeeper.NewAccountWithAddress(ctx, addr1)
 	app.AccountKeeper.SetAccount(ctx, acc1)
-	s.Require().NoError(simapp.FundAccount(app.BankKeeper, ctx, addr1, balances))
+	s.Require().NoError(apptesting.FundAccount(app.BankKeeper, ctx, addr1, balances))
 
 	s.T().Log("verify paginate with custom limit and countTotal, Reverse false")
 	pageReq := &query.PageRequest{Limit: 2, CountTotal: true, Reverse: true, Key: nil}
@@ -279,7 +278,7 @@ func (s *paginationTestSuite) TestReversePagination() {
 	s.T().Log("verify paginate with offset and key - error")
 	pageReq = &query.PageRequest{Key: res1.Pagination.NextKey, Offset: 100, Limit: defaultLimit, CountTotal: false}
 	request = types.NewQueryAllBalancesRequest(addr1, pageReq)
-	res, err = queryClient.AllBalances(gocontext.Background(), request)
+	_, err = queryClient.AllBalances(gocontext.Background(), request)
 	s.Require().Error(err)
 	s.Require().Equal("rpc error: code = InvalidArgument desc = paginate: invalid request, either offset or key is expected, got both", err.Error())
 
@@ -292,57 +291,15 @@ func (s *paginationTestSuite) TestReversePagination() {
 	s.Require().Nil(res.Pagination.NextKey)
 }
 
-func ExamplePaginate() {
-	app, ctx, _ := setupTest()
-
-	var balances sdk.Coins
-
-	for i := 0; i < 2; i++ {
-		denom := fmt.Sprintf("foo%ddenom", i)
-		balances = append(balances, sdk.NewInt64Coin(denom, 100))
-	}
-
-	balances = balances.Sort()
-	addr1 := sdk.AccAddress([]byte("addr1"))
-	acc1 := app.AccountKeeper.NewAccountWithAddress(ctx, addr1)
-	app.AccountKeeper.SetAccount(ctx, acc1)
-	err := simapp.FundAccount(app.BankKeeper, ctx, addr1, balances)
-	if err != nil { // should return no error
-		fmt.Println(err)
-	}
-	// Paginate example
-	pageReq := &query.PageRequest{Key: nil, Limit: 1, CountTotal: true}
-	request := types.NewQueryAllBalancesRequest(addr1, pageReq)
-	balResult := sdk.NewCoins()
-	authStore := ctx.KVStore(app.GetKey(types.StoreKey))
-	balancesStore := prefix.NewStore(authStore, types.BalancesPrefix)
-	accountStore := prefix.NewStore(balancesStore, address.MustLengthPrefix(addr1))
-	pageRes, err := query.Paginate(accountStore, request.Pagination, func(key []byte, value []byte) error {
-		var tempRes sdk.Coin
-		err := app.AppCodec().Unmarshal(value, &tempRes)
-		if err != nil {
-			return err
-		}
-		balResult = append(balResult, tempRes)
-		return nil
-	})
-	if err != nil { // should return no error
-		fmt.Println(err)
-	}
-	fmt.Println(&types.QueryAllBalancesResponse{Balances: balResult, Pagination: pageRes})
-	// Output:
-	// balances:<denom:"foo0denom" amount:"100" > pagination:<next_key:"foo1denom" total:2 >
-}
-
-func setupTest() (*simapp.SimApp, sdk.Context, codec.Codec) {
-	app := simapp.Setup(false)
-	ctx := app.BaseApp.NewContext(false, tmproto.Header{Height: 1})
-	appCodec := app.AppCodec()
+func setupTest(t *testing.T) (*app.App, sdk.Context, codec.Codec) {
+	a := app.Setup(t, false, false, false)
+	ctx := a.BaseApp.NewContext(false, tmproto.Header{Height: 1})
+	appCodec := a.AppCodec()
 
 	db := dbm.NewMemDB()
 	ms := store.NewCommitMultiStore(db)
 
 	ms.LoadLatestVersion()
 
-	return app, ctx, appCodec
+	return a, ctx, appCodec
 }

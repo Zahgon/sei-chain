@@ -5,12 +5,12 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/cosmos/cosmos-sdk/testutil/network"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/network"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 )
 
 func TestAccountRetriever(t *testing.T) {
-	cfg := network.DefaultConfig()
+	cfg := network.DefaultConfig(t)
 	cfg.NumValidators = 1
 
 	network := network.New(t, cfg)

@@ -5,17 +5,17 @@ import (
 	"regexp"
 	"testing"
 
+	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/mock"
+	ctypes "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/coretypes"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/rpc/client/mock"
-	ctypes "github.com/tendermint/tendermint/rpc/coretypes"
-	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/simapp"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth/legacy/legacytx"
-	"github.com/cosmos/cosmos-sdk/x/gov/client/utils"
-	"github.com/cosmos/cosmos-sdk/x/gov/types"
+	seiapp "github.com/sei-protocol/sei-chain/app"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/legacy/legacytx"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/client/utils"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 )
 
 type TxSearchMock struct {
@@ -75,7 +75,7 @@ func (mock TxSearchMock) Block(ctx context.Context, height *int64) (*ctypes.Resu
 }
 
 func TestGetPaginatedVotes(t *testing.T) {
-	encCfg := simapp.MakeTestEncodingConfig()
+	encCfg := seiapp.MakeEncodingConfig()
 
 	type testCase struct {
 		description string
@@ -180,10 +180,10 @@ func TestGetPaginatedVotes(t *testing.T) {
 			}
 
 			params := types.NewQueryProposalVotesParams(0, tc.page, tc.limit)
-			votesData, err := utils.QueryVotesByTxQuery(clientCtx, params)
+			votesData, err := utils.QueryVotesByTxQuery(t.Context(), clientCtx, params)
 			require.NoError(t, err)
 			votes := []types.Vote{}
-			require.NoError(t, clientCtx.LegacyAmino.UnmarshalJSON(votesData, &votes))
+			require.NoError(t, clientCtx.LegacyAmino.UnmarshalAsJSON(votesData, &votes))
 			require.Equal(t, len(tc.votes), len(votes))
 			for i := range votes {
 				require.Equal(t, tc.votes[i], votes[i])

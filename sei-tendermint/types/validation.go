@@ -1,18 +1,19 @@
 package types
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/batch"
-	tmmath "github.com/tendermint/tendermint/libs/math"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 )
 
 const batchVerifyThreshold = 2
 
-func shouldBatchVerify(vals *ValidatorSet, commit *Commit) bool {
-	return len(commit.Signatures) >= batchVerifyThreshold && batch.SupportsBatchVerifier(vals.GetProposer().PubKey)
+func shouldBatchVerify(commit *Commit) bool {
+	return len(commit.Signatures) >= batchVerifyThreshold
 }
 
 // TODO(wbanfield): determine if the following comment is still true regarding Gaia.
@@ -28,7 +29,7 @@ func VerifyCommit(chainID string, vals *ValidatorSet, blockID BlockID,
 	height int64, commit *Commit) error {
 	// run a basic validation of the arguments
 	if err := verifyBasicValsAndCommit(vals, commit, height, blockID); err != nil {
-		return err
+		return fmt.Errorf("verifyBasicValsAndCommit(): %w", err)
 	}
 
 	// calculate voting power needed. Note that total voting power is capped to
@@ -42,7 +43,7 @@ func VerifyCommit(chainID string, vals *ValidatorSet, blockID BlockID,
 	count := func(c CommitSig) bool { return c.BlockIDFlag == BlockIDFlagCommit }
 
 	// attempt to batch verify
-	if shouldBatchVerify(vals, commit) {
+	if shouldBatchVerify(commit) {
 		return verifyCommitBatch(chainID, vals, commit,
 			votingPowerNeeded, ignore, count, true, true)
 	}
@@ -89,7 +90,7 @@ func verifyCommitLightInternal(chainID string, vals *ValidatorSet, blockID Block
 	count := func(c CommitSig) bool { return true }
 
 	// attempt to batch verify
-	if shouldBatchVerify(vals, commit) {
+	if shouldBatchVerify(commit) {
 		return verifyCommitBatch(chainID, vals, commit,
 			votingPowerNeeded, ignore, count, countAllSignatures, true)
 	}
@@ -136,11 +137,11 @@ func verifyCommitLightTrustingInternal(chainID string, vals *ValidatorSet, commi
 	}
 
 	// safely calculate voting power needed.
-	totalVotingPowerMulByNumerator, overflow := safeMul(vals.TotalVotingPower(), int64(trustLevel.Numerator))
+	totalVotingPowerMulByNumerator, overflow := safeMul(vals.TotalVotingPower(), int64(trustLevel.Numerator)) //nolint:gosec // trustLevel.Numerator is a small trusted config value; no overflow risk
 	if overflow {
 		return errors.New("int64 overflow while calculating voting power needed. please provide smaller trustLevel numerator")
 	}
-	votingPowerNeeded := totalVotingPowerMulByNumerator / int64(trustLevel.Denominator)
+	votingPowerNeeded := totalVotingPowerMulByNumerator / int64(trustLevel.Denominator) //nolint:gosec // trustLevel.Denominator is a small trusted config value; no overflow risk
 
 	// ignore all commit signatures that are not for the block
 	ignore := func(c CommitSig) bool { return c.BlockIDFlag != BlockIDFlagCommit }
@@ -151,7 +152,7 @@ func verifyCommitLightTrustingInternal(chainID string, vals *ValidatorSet, commi
 	// attempt to batch verify commit. As the validator set doesn't necessarily
 	// correspond with the validator set that signed the block we need to look
 	// up by address rather than index.
-	if shouldBatchVerify(vals, commit) {
+	if shouldBatchVerify(commit) {
 		return verifyCommitBatch(chainID, vals, commit,
 			votingPowerNeeded, ignore, count, countAllSignatures, false)
 	}
@@ -185,6 +186,8 @@ func verifyCommitBatch(
 	chainID string,
 	vals *ValidatorSet,
 	commit *Commit,
+	// misnamed argument - votingPowerNeeded is not enough for commit to be valid.
+	// It has to be MORE than votingPowerNeeded.
 	votingPowerNeeded int64,
 	ignoreSig func(CommitSig) bool,
 	countSig func(CommitSig) bool,
@@ -198,13 +201,11 @@ func verifyCommitBatch(
 		seenVals           = make(map[int32]int, len(commit.Signatures))
 		batchSigIdxs       = make([]int, 0, len(commit.Signatures))
 	)
-	// attempt to create a batch verifier
-	bv, ok := batch.CreateBatchVerifier(vals.GetProposer().PubKey)
-	// re-check if batch verification is supported
-	if !ok || len(commit.Signatures) < batchVerifyThreshold {
-		// This should *NEVER* happen.
-		return fmt.Errorf("unsupported signature algorithm or insufficient signatures for batch verification")
+	if len(commit.Signatures) < batchVerifyThreshold {
+		return fmt.Errorf("insufficient signatures for batch verification")
 	}
+
+	bv := crypto.NewBatchVerifier()
 
 	for idx, commitSig := range commit.Signatures {
 		// skip over signatures that should be ignored
@@ -216,12 +217,16 @@ func verifyCommitBatch(
 		// them by index else we need to retrieve them by address
 		if lookUpByIndex {
 			val = vals.Validators[idx]
+			if !bytes.Equal(val.Address, commitSig.ValidatorAddress) {
+				return fmt.Errorf("commit.Signatures[%v].ValidatorAddress = %v, want %v", idx, commitSig.ValidatorAddress, val.Address)
+			}
 		} else {
-			valIdx, val = vals.GetByAddress(commitSig.ValidatorAddress)
+			var ok bool
+			valIdx, val, ok = vals.GetByAddress(commitSig.ValidatorAddress)
 
 			// if the signature doesn't belong to anyone in the validator set
 			// then we just skip over it
-			if val == nil {
+			if !ok {
 				continue
 			}
 
@@ -235,12 +240,17 @@ func verifyCommitBatch(
 		}
 
 		// Validate signature.
-		voteSignBytes := commit.VoteSignBytes(chainID, int32(idx))
+		voteSignBytes, ok := commit.VoteSignBytes(chainID, int32(idx)) //nolint:gosec // idx is bounded by len(commit.Signatures) which is validated against validator set size
+		if !ok {
+			panic("VoteSignBytes() failed unexpectedly")
+		}
 
 		// add the key, sig and message to the verifier
-		if err := bv.Add(val.PubKey, voteSignBytes, commitSig.Signature); err != nil {
-			return err
+		sig, ok := commitSig.Signature.Get()
+		if !ok {
+			return fmt.Errorf("missing signature at idx %v", idx)
 		}
+		bv.Add(val.PubKey, voteSignBytes, sig)
 		batchSigIdxs = append(batchSigIdxs, idx)
 
 		// If this signature counts then add the voting power of the validator
@@ -263,28 +273,14 @@ func verifyCommitBatch(
 	}
 
 	// attempt to verify the batch.
-	ok, validSigs := bv.Verify()
-	if ok {
-		// success
-		return nil
+	if err := bv.Verify(); err != nil {
+		err := utils.ErrorAs[crypto.ErrBadSig](err).OrPanic("unexpected error type")
+		// go back from the batch index to the commit.Signatures index
+		idx := batchSigIdxs[err.Idx]
+		sig := commit.Signatures[idx]
+		return errBadSig{fmt.Errorf("wrong signature (#%d): %X", idx, sig)}
 	}
-
-	// one or more of the signatures is invalid, find and return the first
-	// invalid signature.
-	for i, ok := range validSigs {
-		if !ok {
-			// go back from the batch index to the commit.Signatures index
-			idx := batchSigIdxs[i]
-			sig := commit.Signatures[idx]
-			return fmt.Errorf("wrong signature (#%d): %X", idx, sig)
-		}
-	}
-
-	// execution reaching here is a bug, and one of the following has
-	// happened:
-	//  * non-zero tallied voting power, empty batch (impossible?)
-	//  * bv.Verify() returned `false, []bool{true, ..., true}` (BUG)
-	return fmt.Errorf("BUG: batch verification failed with no invalid signatures")
+	return nil
 }
 
 // Single Verification
@@ -298,6 +294,8 @@ func verifyCommitSingle(
 	chainID string,
 	vals *ValidatorSet,
 	commit *Commit,
+	// misnamed argument - votingPowerNeeded is not enough for commit to be valid.
+	// It has to be MORE than votingPowerNeeded.
 	votingPowerNeeded int64,
 	ignoreSig func(CommitSig) bool,
 	countSig func(CommitSig) bool,
@@ -308,7 +306,6 @@ func verifyCommitSingle(
 		val                *Validator
 		valIdx             int32
 		talliedVotingPower int64
-		voteSignBytes      []byte
 		seenVals           = make(map[int32]int, len(commit.Signatures))
 	)
 	for idx, commitSig := range commit.Signatures {
@@ -320,12 +317,16 @@ func verifyCommitSingle(
 		// them by index else we need to retrieve them by address
 		if lookUpByIndex {
 			val = vals.Validators[idx]
+			if !bytes.Equal(val.Address, commitSig.ValidatorAddress) {
+				return fmt.Errorf("commit.Signatures[%v].ValidatorAddress = %v, want %v", idx, commitSig.ValidatorAddress, val.Address)
+			}
 		} else {
-			valIdx, val = vals.GetByAddress(commitSig.ValidatorAddress)
+			var ok bool
+			valIdx, val, ok = vals.GetByAddress(commitSig.ValidatorAddress)
 
 			// if the signature doesn't belong to anyone in the validator set
 			// then we just skip over it
-			if val == nil {
+			if !ok {
 				continue
 			}
 
@@ -338,10 +339,16 @@ func verifyCommitSingle(
 			seenVals[valIdx] = idx
 		}
 
-		voteSignBytes = commit.VoteSignBytes(chainID, int32(idx))
-
-		if !val.PubKey.VerifySignature(voteSignBytes, commitSig.Signature) {
-			return fmt.Errorf("wrong signature (#%d): %X", idx, commitSig.Signature)
+		voteSignBytes, ok := commit.VoteSignBytes(chainID, int32(idx)) //nolint:gosec // idx is bounded by len(commit.Signatures) which is validated against validator set size
+		if !ok {
+			panic("VoteSignBytes() failed unexpectedly")
+		}
+		sig, ok := commitSig.Signature.Get()
+		if !ok {
+			return fmt.Errorf("missing signature at idx %v", idx)
+		}
+		if err := val.PubKey.Verify(voteSignBytes, sig); err != nil {
+			return errBadSig{fmt.Errorf("wrong signature (#%d): %v", idx, sig)}
 		}
 
 		// If this signature counts then add the voting power of the validator
@@ -381,8 +388,8 @@ func verifyBasicValsAndCommit(vals *ValidatorSet, commit *Commit, height int64, 
 		return NewErrInvalidCommitHeight(height, commit.Height)
 	}
 	if !blockID.Equals(commit.BlockID) {
-		return fmt.Errorf("invalid commit -- wrong block ID: want %v, got %v",
-			blockID, commit.BlockID)
+		return errBadBlockID{fmt.Errorf("invalid commit -- wrong block ID: want %v, got %v",
+			blockID, commit.BlockID)}
 	}
 
 	return nil

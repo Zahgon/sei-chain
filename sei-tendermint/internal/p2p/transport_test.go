@@ -2,6 +2,7 @@ package p2p
 
 import (
 	"context"
+	"fmt"
 	"net/netip"
 	"sync/atomic"
 	"testing"
@@ -10,27 +11,21 @@ import (
 	"github.com/fortytw2/leaktest"
 	"github.com/gogo/protobuf/proto"
 
-	"fmt"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/libs/utils"
-	"github.com/tendermint/tendermint/libs/utils/require"
-	"github.com/tendermint/tendermint/libs/utils/scope"
-	"github.com/tendermint/tendermint/libs/utils/tcp"
-	"github.com/tendermint/tendermint/types"
-
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/libs/log"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/require"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/scope"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/tcp"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
-func makeKeyAndInfo() (crypto.PrivKey, types.NodeInfo) {
-	peerKey := ed25519.GenPrivKey()
-	nodeID := types.NodeIDFromPubKey(peerKey.PubKey())
+func makeInfo(key NodeSecretKey) types.NodeInfo {
+	nodeID := key.Public().NodeID()
 	peerInfo := types.NodeInfo{
 		NodeID:     nodeID,
 		ListenAddr: "127.0.0.1:1239",
 		Network:    "test",
 		Moniker:    string(nodeID),
-		Channels:   []byte{0x01, 0x02},
+		Channels:   []byte{},
 		ProtocolVersion: types.ProtocolVersion{
 			P2P:   1,
 			Block: 2,
@@ -42,46 +37,55 @@ func makeKeyAndInfo() (crypto.PrivKey, types.NodeInfo) {
 			RPCAddress: "rpc.domain.com",
 		},
 	}
-	return peerKey, peerInfo
+	return peerInfo
 }
 
-func TestRouter_MaxAcceptedConnections(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
-	ctx := t.Context()
+func TestRouter_MaxConcurrentAccepts(t *testing.T) {
+	rng := utils.TestRng()
 	opts := makeRouterOptions()
-	opts.MaxAcceptedConnections = 2
-	h := spawnRouterWithOptions(t, logger, opts)
+	maxAccepts := 2
+	opts.MaxConcurrentAccepts = utils.Some(maxAccepts)
 
-	err := utils.IgnoreCancel(scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
+	err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+		r := makeRouterWithOptions(rng, opts)
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+		if err := r.WaitForStart(ctx); err != nil {
+			return err
+		}
+
 		var total atomic.Int64
-		t.Logf("spawn a bunch of connections, making sure that no more than %d are accepted at any given time", opts.MaxAcceptedConnections)
+		t.Logf("spawn a bunch of connections, making sure that no more than %d are accepted at any given time", maxAccepts)
 		for range 10 {
-			s.Spawn(func() error {
-				key, info := makeKeyAndInfo()
-				// Establish a connection.
-				tcpConn, err := tcp.Dial(ctx, h.router.Endpoint().AddrPort)
-				if err != nil {
-					return fmt.Errorf("tcp.Dial(): %w", err)
-				}
-				conn, err := handshake(ctx, logger, tcpConn, info, key)
-				if err != nil {
-					return fmt.Errorf("handshake(): %w", err)
-				}
-				defer conn.Close()
-				// Check that limit was not exceeded.
-				if got, wantMax := total.Add(1), int64(opts.MaxAcceptedConnections); got > wantMax {
-					return fmt.Errorf("accepted too many connections: %d > %d", got, wantMax)
-				}
-				defer total.Add(-1)
-				// Keep the connection open for a while to force other dialers to wait.
-				if err := utils.Sleep(ctx, 100*time.Millisecond); err != nil {
-					return err
-				}
-				return nil
+			s.SpawnNamed("test", func() error {
+				return scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
+					x := makeRouter(rng)
+					// Establish a connection.
+					addr := TestAddress(r)
+					tcpConn, err := x.dial(ctx, utils.Slice(addr))
+					if err != nil {
+						return fmt.Errorf("tcp.dial(): %w", err)
+					}
+					s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, tcpConn.Run(ctx)) })
+					// Begin handshake (but not finish)
+					var input [1]byte
+					if err := tcpConn.Read(ctx, input[:]); err != nil {
+						return fmt.Errorf("tcpConn.Read(): %w", err)
+					}
+					// Check that limit was not exceeded.
+					if got, wantMax := total.Add(1), int64(maxAccepts); got > wantMax {
+						return fmt.Errorf("accepted too many connections: %d > %d", got, wantMax)
+					}
+					defer total.Add(-1)
+					// Keep the connection open for a while to force other dialers to wait.
+					if err := utils.Sleep(ctx, 100*time.Millisecond); err != nil {
+						return err
+					}
+					return nil
+				})
 			})
 		}
 		return nil
-	}))
+	})
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -89,32 +93,44 @@ func TestRouter_MaxAcceptedConnections(t *testing.T) {
 
 // Test checking if listening on various local interfaces works.
 func TestRouter_Listen(t *testing.T) {
-	testcases := []netip.Addr{
-		netip.IPv4Unspecified(),
-		tcp.IPv4Loopback(),
-		netip.IPv6Unspecified(),
-		netip.IPv6Loopback(),
+	testcases := []netip.AddrPort{
+		tcp.TestReservePort(netip.IPv4Unspecified()),
+		tcp.TestReservePort(tcp.IPv4Loopback()),
+		tcp.TestReservePort(netip.IPv6Unspecified()),
+		tcp.TestReservePort(netip.IPv6Loopback()),
 	}
 
 	for _, tc := range testcases {
-		t.Run(tc.String(), func(t *testing.T) {
-			logger, _ := log.NewDefaultLogger("plain", "debug")
-			ctx := t.Context()
+		t.Run(tc.Addr().String(), func(t *testing.T) {
 			t.Cleanup(leaktest.Check(t))
-			opts := makeRouterOptions()
-			opts.Endpoint.AddrPort = netip.AddrPortFrom(tc, opts.Endpoint.Port())
-			h := spawnRouterWithOptions(t, logger, opts)
-			if got, want := h.router.Endpoint().Addr(), tc; got != want {
-				t.Fatalf("transport.Endpoint() = %v, want %v", got, want)
-			}
-			tcpConn, err := tcp.Dial(ctx, h.router.Endpoint().AddrPort)
+			rng := utils.TestRng()
+			err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+				opts := makeRouterOptions()
+				opts.Endpoint.AddrPort = tc
+				r := makeRouterWithOptions(rng, opts)
+				s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+				if err := r.WaitForStart(ctx); err != nil {
+					return err
+				}
+
+				if got, want := r.Endpoint().AddrPort, tc; got != want {
+					return fmt.Errorf("r.Endpoint() = %v, want %v", got, want)
+				}
+
+				x := makeRouter(rng)
+				addr := TestAddress(r)
+				tcpConn, err := x.dial(ctx, utils.Slice(addr))
+				if err != nil {
+					return fmt.Errorf("tcp.dial(): %v", err)
+				}
+				s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, tcpConn.Run(ctx)) })
+				if _, _, err := x.handshakeV2(ctx, tcpConn, utils.Some(addr)); err != nil {
+					return fmt.Errorf("handshake(): %v", err)
+				}
+				return nil
+			})
 			if err != nil {
-				t.Fatalf("tcp.Dial(): %v", err)
-			}
-			defer tcpConn.Close()
-			key, info := makeKeyAndInfo()
-			if _, err := handshake(ctx, logger, tcpConn, info, key); err != nil {
-				t.Fatalf("handshake(): %v", err)
+				t.Fatal(err)
 			}
 		})
 	}
@@ -122,66 +138,68 @@ func TestRouter_Listen(t *testing.T) {
 
 // Test checking that handshake provides correct NodeInfo.
 func TestHandshake_NodeInfo(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
-	ctx := t.Context()
-	h := spawnRouter(t, logger)
-	tcpConn, err := tcp.Dial(ctx, h.router.Endpoint().AddrPort)
+	rng := utils.TestRng()
+	err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
+		r := makeRouter(rng)
+		s.SpawnBg(func() error { return utils.IgnoreCancel(r.Run(ctx)) })
+		if err := r.WaitForStart(ctx); err != nil {
+			return err
+		}
+
+		x := makeRouter(rng)
+		addr := TestAddress(r)
+		tcpConn, err := x.dial(ctx, utils.Slice(addr))
+		if err != nil {
+			return fmt.Errorf("tcp.dial(): %v", err)
+		}
+		s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, tcpConn.Run(ctx)) })
+		_, info, err := x.handshakeV2(ctx, tcpConn, utils.Some(addr))
+		if err != nil {
+			return fmt.Errorf("handshake(): %v", err)
+		}
+		if err := utils.TestDiff(*r.nodeInfoProducer(), info); err != nil {
+			t.Fatalf("conn.PeerInfo(): %v", err)
+		}
+		return nil
+	})
 	if err != nil {
-		t.Fatalf("tcp.Dial(): %v", err)
-	}
-	defer tcpConn.Close()
-	key, info := makeKeyAndInfo()
-	conn, err := handshake(ctx, logger, tcpConn, info, key)
-	if err != nil {
-		t.Fatalf("handshake(): %v", err)
-	}
-	defer conn.Close()
-	if err := utils.TestDiff(selfInfo, conn.PeerInfo()); err != nil {
-		t.Fatalf("conn.PeerInfo(): %v", err)
+		t.Fatal(err)
 	}
 }
 
 // Test checking that handshake respects the context.
 func TestHandshake_Context(t *testing.T) {
-	logger, _ := log.NewDefaultLogger("plain", "debug")
+	rng := utils.TestRng()
 	err := scope.Run(t.Context(), func(ctx context.Context, s scope.Scope) error {
-		addr := tcp.TestReserveAddr()
-		listener, err := tcp.Listen(addr)
+		a := makeRouter(rng)
+		b := makeRouter(rng)
+		listener, err := tcp.Listen(a.Endpoint().AddrPort)
 		if err != nil {
 			return fmt.Errorf("tcp.Listen(): %w", err)
 		}
+		defer listener.Close()
 		s.Spawn(func() error {
-			defer listener.Close()
-			// One connection end does not handshake.
-			tcpConn, err := tcp.AcceptOrClose(ctx, listener)
+			// One connection end tries to handshake.
+			addr := TestAddress(a)
+			tcpConn, err := b.dial(ctx, utils.Slice(addr))
 			if err != nil {
-				return fmt.Errorf("tcp.AcceptOrClose(): %w", err)
+				return fmt.Errorf("tcp.dial(): %v", err)
 			}
+			s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, tcpConn.Run(ctx)) })
 			s.SpawnBg(func() error {
-				defer tcpConn.Close()
-				<-ctx.Done()
-				return nil
-			})
-			return nil
-		})
-		s.Spawn(func() error {
-			// Second connection end tries to handshake.
-			tcpConn, err := tcp.Dial(ctx, addr)
-			if err != nil {
-				t.Fatalf("tcp.Dial(): %v", err)
-			}
-			s.SpawnBg(func() error {
-				defer tcpConn.Close()
-				key, info := makeKeyAndInfo()
-				conn, err := handshake(ctx, logger, tcpConn, info, key)
-				if err == nil {
-					defer conn.Close()
+				if _, _, err := b.handshakeV2(ctx, tcpConn, utils.Some(addr)); err == nil {
 					return fmt.Errorf("handshake(): expected error, got %w", err)
 				}
 				return nil
 			})
 			return nil
 		})
+		// Second connection end does not handshake.
+		tcpConn, err := listener.AcceptOrClose(ctx)
+		if err != nil {
+			return fmt.Errorf("tcp.AcceptOrClose(): %w", err)
+		}
+		s.SpawnBg(func() error { return utils.IgnoreAfterCancel(ctx, tcpConn.Run(ctx)) })
 		return nil
 	})
 	if err != nil {
@@ -193,14 +211,13 @@ func TestRouter_SendReceive_Random(t *testing.T) {
 	ctx := t.Context()
 	rng := utils.TestRng()
 	network := MakeTestNetwork(t, TestNetworkOptions{NumNodes: 5})
-	channels := map[ChannelID]map[types.NodeID]*Channel{}
+	channels := map[ChannelID]map[types.NodeID]*Channel[*TestMessage]{}
 	for id := range ChannelID(4) {
-		channels[id] = network.MakeChannels(t, makeChDesc(id))
+		channels[id] = TestMakeChannels(t, network, makeChDesc(id))
 	}
 	nodes := network.NodeIDs()
 	network.Start(t)
-	for i := range 100 {
-		t.Logf("ITER %v", i)
+	for range 100 {
 		from := nodes[rng.Intn(len(nodes))]
 		to := nodes[rng.Intn(len(nodes))]
 		if from == to {
@@ -209,13 +226,7 @@ func TestRouter_SendReceive_Random(t *testing.T) {
 		chID := ChannelID(rng.Intn(len(channels)))
 		want := &TestMessage{Value: utils.GenString(rng, 10)}
 
-		if err := channels[chID][from].Send(ctx, Envelope{
-			ChannelID: chID,
-			Message:   want,
-			To:        to,
-		}); err != nil {
-			t.Fatalf("Send(): %v", err)
-		}
+		channels[chID][from].Send(want, to)
 		got, err := channels[chID][to].Recv(ctx)
 		if err != nil {
 			t.Fatalf("Receive1(): %v", err)

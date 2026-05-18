@@ -4,43 +4,45 @@ import (
 	"bytes"
 	"context"
 	"fmt"
+	"math"
 	"testing"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	capabilitykeeper "github.com/cosmos/cosmos-sdk/x/capability/keeper"
-	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
-	"github.com/cosmos/cosmos-sdk/x/staking/teststaking"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	clienttypes "github.com/cosmos/ibc-go/v3/modules/core/02-client/types"
-	channeltypes "github.com/cosmos/ibc-go/v3/modules/core/04-channel/types"
-	commitmenttypes "github.com/cosmos/ibc-go/v3/modules/core/23-commitment/types"
-	host "github.com/cosmos/ibc-go/v3/modules/core/24-host"
-	"github.com/cosmos/ibc-go/v3/modules/core/exported"
-	ibckeeper "github.com/cosmos/ibc-go/v3/modules/core/keeper"
-	"github.com/cosmos/ibc-go/v3/modules/core/types"
-	ibctmtypes "github.com/cosmos/ibc-go/v3/modules/light-clients/07-tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/ed25519"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
+	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
+	capabilitykeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/keeper"
+	capabilitytypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/types"
+	stakingkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/keeper"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/teststaking"
+	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
+	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
+	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
+	commitmenttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/23-commitment/types"
+	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
+	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
+	ibckeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/keeper"
+	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/types"
+	ibctmtypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/light-clients/07-tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/tmhash"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
+	tmversion "github.com/sei-protocol/sei-chain/sei-tendermint/version"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	tmtypes "github.com/tendermint/tendermint/types"
-	tmversion "github.com/tendermint/tendermint/version"
 
-	wasmd "github.com/CosmWasm/wasmd/app"
-	"github.com/CosmWasm/wasmd/x/wasm"
+	wasmd "github.com/sei-protocol/sei-chain/sei-wasmd/app"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm"
 )
 
 // TestChain is a testing struct that wraps a simapp with the last TM Header, the current ABCI
@@ -204,15 +206,18 @@ func (chain *TestChain) QueryProofAtHeight(key []byte, height int64) ([]byte, cl
 	// proof height + 1 is returned as the proof created corresponds to the height the proof
 	// was created in the IAVL tree. Tendermint and subsequently the clients that rely on it
 	// have heights 1 above the IAVL tree. Thus we return proof height + 1
+	require.Greater(chain.t, res.Height, int64(0))
+	// #nosec G115 -- checked above.
 	return proof, clienttypes.NewHeight(revision, uint64(res.Height)+1)
 }
 
 // QueryUpgradeProof performs an abci query with the given key and returns the proto encoded merkle proof
 // for the query and the height at which the proof will succeed on a tendermint verifier.
 func (chain *TestChain) QueryUpgradeProof(key []byte, height uint64) ([]byte, clienttypes.Height) {
+	require.Less(chain.t, height, math.MaxInt64)
 	res, _ := chain.App.Query(context.Background(), &abci.RequestQuery{
 		Path:   "store/upgrade/key",
-		Height: int64(height - 1),
+		Height: int64(height - 1), // #nosec G115 -- checked above.
 		Data:   key,
 		Prove:  true,
 	})
@@ -228,6 +233,8 @@ func (chain *TestChain) QueryUpgradeProof(key []byte, height uint64) ([]byte, cl
 	// proof height + 1 is returned as the proof created corresponds to the height the proof
 	// was created in the IAVL tree. Tendermint and subsequently the clients that rely on it
 	// have heights 1 above the IAVL tree. Thus we return proof height + 1
+	require.Greater(chain.t, res.Height, int64(0))
+	// #nosec G115 -- checked above.
 	return proof, clienttypes.NewHeight(revision, uint64(res.Height+1))
 }
 
@@ -265,14 +272,18 @@ func (chain *TestChain) NextBlock() {
 	}
 
 	wasmApp := chain.App.(*TestingAppDecorator).WasmApp
-	wasmApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
-		Height:  chain.App.LastBlockHeight() + 1,
-		Time:    chain.CurrentHeader.Time,
-		AppHash: chain.CurrentHeader.AppHash,
+	_, err := wasmApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
+		Header: &tmproto.Header{
+			ChainID: chain.ChainID,
+			Height:  chain.App.LastBlockHeight() + 1,
+			Time:    chain.CurrentHeader.Time,
+			AppHash: chain.CurrentHeader.AppHash,
 
-		ValidatorsHash:     chain.Vals.Hash(),
-		NextValidatorsHash: chain.Vals.Hash(),
+			ValidatorsHash:     chain.Vals.Hash(),
+			NextValidatorsHash: chain.Vals.Hash(),
+		},
 	})
+	require.NoError(chain.t, err)
 	// wasmApp.BeginBlock(wasmApp.GetContextForDeliverTx([]byte{}), abci.RequestBeginBlock{Header: chain.CurrentHeader})
 }
 
@@ -293,6 +304,12 @@ func (chain *TestChain) SendMsgs(msgs ...sdk.Msg) (*sdk.Result, error) {
 		chain.t,
 		chain.TxConfig,
 		chain.App.GetBaseApp(),
+		chain.App.GetIBCKeeper(),
+		chain.App.GetStakingKeeper(),
+		chain.App.(*TestingAppDecorator).GetCapabilityKeeper(),
+		chain.App.(*TestingAppDecorator).GetDistrKeeper(),
+		chain.App.(*TestingAppDecorator).GetSlashingKeeper(),
+		chain.App.(*TestingAppDecorator).GetEvidenceKeeper(),
 		chain.GetContext().BlockHeader(),
 		msgs,
 		chain.ChainID,
@@ -405,6 +422,8 @@ func (chain *TestChain) ConstructUpdateTMClientHeaderWithTrustedHeight(counterpa
 		// since the last trusted validators for a header at height h
 		// is the NextValidators at h+1 committed to in header h by
 		// NextValidatorsHash
+		require.Less(chain.t, trustedHeight.RevisionHeight+1, uint64(math.MaxInt64))
+		// #nosec G115 -- checked above
 		tmTrustedVals, ok = counterparty.GetValsAtHeight(int64(trustedHeight.RevisionHeight + 1))
 		if !ok {
 			return nil, sdkerrors.Wrapf(ibctmtypes.ErrInvalidHeaderHeight, "could not retrieve trusted validators at trustedHeight: %d", trustedHeight)
@@ -451,7 +470,7 @@ func (chain *TestChain) CreateTMClientHeader(chainID string, blockHeight int64, 
 		ChainID:            chainID,
 		Height:             blockHeight,
 		Time:               timestamp,
-		LastBlockID:        MakeBlockID(make([]byte, tmhash.Size), 10_000, make([]byte, tmhash.Size)),
+		LastBlockID:        MakeBlockID(make([]byte, tmhash.Size), tmtypes.MaxBlockPartsCount, make([]byte, tmhash.Size)),
 		LastCommitHash:     chain.App.LastCommitID().Hash,
 		DataHash:           tmhash.Sum([]byte("data_hash")),
 		ValidatorsHash:     vsetHash,
@@ -465,6 +484,7 @@ func (chain *TestChain) CreateTMClientHeader(chainID string, blockHeight int64, 
 	hhash := tmHeader.Hash()
 	blockID := MakeBlockID(hhash, 3, tmhash.Sum([]byte("part_set")))
 	voteSet := tmtypes.NewVoteSet(chainID, blockHeight, 1, tmproto.PrecommitType, tmValSet)
+	require.LessOrEqual(chain.t, len(tmValSet.Validators), math.MaxInt32, "validator set size exceeds max int32")
 	for i, val := range tmValSet.Validators {
 		privVal := signers[i]
 		vote := &tmtypes.Vote{
@@ -474,13 +494,14 @@ func (chain *TestChain) CreateTMClientHeader(chainID string, blockHeight int64, 
 			BlockID:          blockID,
 			Timestamp:        timestamp,
 			ValidatorAddress: val.Address,
-			ValidatorIndex:   int32(i),
+			ValidatorIndex:   int32(i), // #nosec G115 -- validator set size is checked above
 		}
 		v := vote.ToProto()
 		err := privVal.SignVote(context.Background(), chainID, v)
 		require.NoError(chain.t, err)
-		vote.Signature = v.Signature
-		voteSet.AddVote(vote)
+		vote.Signature = utils.Some(utils.OrPanic1(crypto.SigFromBytes(v.Signature)))
+		_, err = voteSet.AddVote(vote)
+		require.NoError(chain.t, err)
 	}
 
 	commit := voteSet.MakeCommit()
@@ -491,15 +512,11 @@ func (chain *TestChain) CreateTMClientHeader(chainID string, blockHeight int64, 
 	}
 
 	valSet, err := tmValSet.ToProto()
-	if err != nil {
-		panic(err)
-	}
+	require.NoError(chain.t, err)
 
 	if tmTrustedVals != nil {
 		trustedVals, err = tmTrustedVals.ToProto()
-		if err != nil {
-			panic(err)
-		}
+		require.NoError(chain.t, err)
 	}
 
 	// The trusted fields may be nil. They may be filled before relaying messages to a client.
@@ -548,6 +565,7 @@ func CreateSortedSignerArray(altPrivVal, suitePrivVal tmtypes.PrivValidator,
 // NOTE: only creation of a capbility for a transfer or mock port is supported
 // Other applications must bind to the port in InitGenesis or modify this code.
 func (chain *TestChain) CreatePortCapability(scopedKeeper capabilitykeeper.ScopedKeeper, portID string) {
+	// ensure the chain has the latest time
 	// check if the portId is already binded, if not bind it
 	_, ok := chain.App.GetScopedIBCKeeper().GetCapability(chain.GetContext(), host.PortPath(portID))
 	if !ok {
@@ -562,7 +580,8 @@ func (chain *TestChain) CreatePortCapability(scopedKeeper capabilitykeeper.Scope
 
 	wasmApp := chain.App.(*TestingAppDecorator).WasmApp
 	wasmApp.SetDeliverStateToCommit()
-	chain.App.Commit(context.Background())
+	_, err := chain.App.Commit(context.Background())
+	require.NoError(chain.t, err)
 
 	chain.NextBlock()
 }
@@ -580,6 +599,7 @@ func (chain *TestChain) GetPortCapability(portID string) *capabilitytypes.Capabi
 // if it does not already exist. This function will fail testing on any resulting error. The
 // scoped keeper passed in will claim the new capability.
 func (chain *TestChain) CreateChannelCapability(scopedKeeper capabilitykeeper.ScopedKeeper, portID, channelID string) {
+	// ensure the chain has the latest time
 	capName := host.ChannelCapabilityPath(portID, channelID)
 	// check if the portId is already binded, if not bind it
 	_, ok := chain.App.GetScopedIBCKeeper().GetCapability(chain.GetContext(), capName)
@@ -592,7 +612,8 @@ func (chain *TestChain) CreateChannelCapability(scopedKeeper capabilitykeeper.Sc
 
 	wasmApp := chain.App.(*TestingAppDecorator).WasmApp
 	wasmApp.SetDeliverStateToCommit()
-	chain.App.Commit(context.Background())
+	_, err := chain.App.Commit(context.Background())
+	require.NoError(chain.t, err)
 
 	chain.NextBlock()
 }

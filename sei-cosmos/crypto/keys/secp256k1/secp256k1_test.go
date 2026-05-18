@@ -8,15 +8,14 @@ import (
 
 	btcSecp256k1 "github.com/btcsuite/btcd/btcec/v2"
 	"github.com/cosmos/btcutil/base58"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/crypto"
-	tmsecp256k1 "github.com/tendermint/tendermint/crypto/secp256k1"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/ed25519"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 )
 
 type keyData struct {
@@ -252,67 +251,14 @@ func TestMarshalAmino(t *testing.T) {
 			require.Equal(t, tc.msg, tc.typ)
 
 			// Do a round trip of encoding/decoding JSON.
-			bz, err = aminoCdc.MarshalJSON(tc.msg)
+			bz, err = aminoCdc.MarshalAsJSON(tc.msg)
 			require.NoError(t, err)
 			require.Equal(t, tc.expJSON, string(bz))
 
-			err = aminoCdc.UnmarshalJSON(bz, tc.typ)
+			err = aminoCdc.UnmarshalAsJSON(bz, tc.typ)
 			require.NoError(t, err)
 
 			require.Equal(t, tc.msg, tc.typ)
-		})
-	}
-}
-
-func TestMarshalAmino_BackwardsCompatibility(t *testing.T) {
-	aminoCdc := codec.NewLegacyAmino()
-	// Create Tendermint keys.
-	tmPrivKey := tmsecp256k1.GenPrivKey()
-	tmPubKey := tmPrivKey.PubKey()
-	// Create our own keys, with the same private key as Tendermint's.
-	privKey := &secp256k1.PrivKey{Key: []byte(tmPrivKey)}
-	pubKey := privKey.PubKey().(*secp256k1.PubKey)
-
-	testCases := []struct {
-		desc      string
-		tmKey     interface{}
-		ourKey    interface{}
-		marshalFn func(o interface{}) ([]byte, error)
-	}{
-		{
-			"secp256k1 private key, binary",
-			tmPrivKey,
-			privKey,
-			aminoCdc.Marshal,
-		},
-		{
-			"secp256k1 private key, JSON",
-			tmPrivKey,
-			privKey,
-			aminoCdc.MarshalJSON,
-		},
-		{
-			"secp256k1 public key, binary",
-			tmPubKey,
-			pubKey,
-			aminoCdc.Marshal,
-		},
-		{
-			"secp256k1 public key, JSON",
-			tmPubKey,
-			pubKey,
-			aminoCdc.MarshalJSON,
-		},
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.desc, func(t *testing.T) {
-			// Make sure Amino encoding override is not breaking backwards compatibility.
-			bz1, err := tc.marshalFn(tc.tmKey)
-			require.NoError(t, err)
-			bz2, err := tc.marshalFn(tc.ourKey)
-			require.NoError(t, err)
-			require.Equal(t, bz1, bz2)
 		})
 	}
 }

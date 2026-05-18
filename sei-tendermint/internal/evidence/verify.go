@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tendermint/tendermint/light"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/light"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 // verify verifies the evidence fully by checking:
@@ -71,12 +71,14 @@ func (evpool *Pool) verify(ctx context.Context, evidence types.Evidence) error {
 			return types.NewErrInvalidEvidence(evidence, err)
 		}
 
-		_, val := valSet.GetByAddress(ev.VoteA.ValidatorAddress)
-
+		_, val, ok := valSet.GetByAddress(ev.VoteA.ValidatorAddress)
+		if !ok {
+			return fmt.Errorf("validator %v not in committee", ev.VoteA.ValidatorAddress)
+		}
 		if err := ev.ValidateABCI(val, valSet, evTime); err != nil {
 			ev.GenerateABCI(val, valSet, evTime)
 			if addErr := evpool.addPendingEvidence(ctx, ev); addErr != nil {
-				evpool.logger.Error("adding pending duplicate vote evidence failed", "err", addErr)
+				logger.Error("adding pending duplicate vote evidence failed", "err", addErr)
 			}
 			return err
 		}
@@ -136,7 +138,7 @@ func (evpool *Pool) verify(ctx context.Context, evidence types.Evidence) error {
 		if err := ev.ValidateABCI(commonVals, trustedHeader, evTime); err != nil {
 			ev.GenerateABCI(commonVals, trustedHeader, evTime)
 			if addErr := evpool.addPendingEvidence(ctx, ev); addErr != nil {
-				evpool.logger.Error("adding pending light client attack evidence failed", "err", addErr)
+				logger.Error("adding pending light client attack evidence failed", "err", addErr)
 			}
 			return err
 
@@ -203,8 +205,8 @@ func VerifyLightClientAttack(e *types.LightClientAttackEvidence, commonHeader, t
 //   - the block ID's must be different
 //   - The signatures must both be valid
 func VerifyDuplicateVote(e *types.DuplicateVoteEvidence, chainID string, valSet *types.ValidatorSet) error {
-	_, val := valSet.GetByAddress(e.VoteA.ValidatorAddress)
-	if val == nil {
+	_, val, ok := valSet.GetByAddress(e.VoteA.ValidatorAddress)
+	if !ok {
 		return fmt.Errorf("address %X was not a validator at height %d", e.VoteA.ValidatorAddress, e.Height())
 	}
 	pubKey := val.PubKey
@@ -244,10 +246,18 @@ func VerifyDuplicateVote(e *types.DuplicateVoteEvidence, chainID string, valSet 
 	va := e.VoteA.ToProto()
 	vb := e.VoteB.ToProto()
 	// Signatures must be valid
-	if !pubKey.VerifySignature(types.VoteSignBytes(chainID, va), e.VoteA.Signature) {
+	sigA, ok := e.VoteA.Signature.Get()
+	if !ok {
+		return errors.New("VoteA.Signature missing")
+	}
+	sigB, ok := e.VoteB.Signature.Get()
+	if !ok {
+		return errors.New("VoteB.Signature missing")
+	}
+	if err := pubKey.Verify(types.VoteSignBytes(chainID, va), sigA); err != nil {
 		return fmt.Errorf("verifying VoteA: %w", types.ErrVoteInvalidSignature)
 	}
-	if !pubKey.VerifySignature(types.VoteSignBytes(chainID, vb), e.VoteB.Signature) {
+	if err := pubKey.Verify(types.VoteSignBytes(chainID, vb), sigB); err != nil {
 		return fmt.Errorf("verifying VoteB: %w", types.ErrVoteInvalidSignature)
 	}
 

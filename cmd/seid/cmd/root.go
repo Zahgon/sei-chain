@@ -8,44 +8,48 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strings"
 	"time"
 
-	"github.com/CosmWasm/wasmd/x/wasm"
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/config"
-	"github.com/cosmos/cosmos-sdk/client/debug"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/client/keys"
-	"github.com/cosmos/cosmos-sdk/client/pruning"
-	"github.com/cosmos/cosmos-sdk/client/rpc"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/server"
-	serverconfig "github.com/cosmos/cosmos-sdk/server/config"
-	servertypes "github.com/cosmos/cosmos-sdk/server/types"
-	"github.com/cosmos/cosmos-sdk/snapshots"
-	"github.com/cosmos/cosmos-sdk/store"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/utils/tracing"
-	aclkeeper "github.com/cosmos/cosmos-sdk/x/accesscontrol/keeper"
-	authcmd "github.com/cosmos/cosmos-sdk/x/auth/client/cli"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/cosmos/cosmos-sdk/x/crisis"
-	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
+	"github.com/sei-protocol/sei-chain/admin"
 	"github.com/sei-protocol/sei-chain/app"
 	"github.com/sei-protocol/sei-chain/app/params"
-	"github.com/sei-protocol/sei-chain/evmrpc"
+	evmrpcconfig "github.com/sei-protocol/sei-chain/evmrpc/config"
+	gigaconfig "github.com/sei-protocol/sei-chain/giga/executor/config"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/config"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/debug"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/keys"
+
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/rpc"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/server"
+	serverconfig "github.com/sei-protocol/sei-chain/sei-cosmos/server/config"
+	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/snapshots"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/utils/tracing"
+	authcmd "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/client/cli"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
+	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/crisis"
+	genutilcli "github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil/client/cli"
+	seidbconfig "github.com/sei-protocol/sei-chain/sei-db/config"
+	tmcfg "github.com/sei-protocol/sei-chain/sei-tendermint/config"
+	tmcli "github.com/sei-protocol/sei-chain/sei-tendermint/libs/cli"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm"
+	wasmkeeper "github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/keeper"
 	"github.com/sei-protocol/sei-chain/tools"
-	"github.com/sei-protocol/sei-chain/tools/migration/ss"
+	"github.com/sei-protocol/seilog"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
-	tmcfg "github.com/tendermint/tendermint/config"
-	tmcli "github.com/tendermint/tendermint/libs/cli"
-	"github.com/tendermint/tendermint/libs/log"
 	dbm "github.com/tendermint/tm-db"
 )
+
+var logger = seilog.NewLogger("cmd", "seid", "cmd")
 
 // Option configures root command option.
 type Option func(*rootOptions)
@@ -54,12 +58,6 @@ type Option func(*rootOptions)
 //
 //nolint:unused // preserving this becase don't know if it is needed.
 type rootOptions struct{}
-
-func (s *rootOptions) apply(options ...Option) { //nolint:unused // I figure this gets used later.
-	for _, o := range options {
-		o(s)
-	}
-}
 
 // NewRootCmd creates a new root command for a Cosmos SDK application
 func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
@@ -94,6 +92,12 @@ func NewRootCmd() (*cobra.Command, params.EncodingConfig) {
 				return err
 			}
 
+			// Skip creating config.toml/app.toml when running "init"; init creates them itself.
+			// Otherwise the PreRun would create them in the init home, and init would then error
+			if strings.HasPrefix(cmd.Use, "init") {
+				return nil
+			}
+
 			customAppTemplate, customAppConfig := initAppConfig()
 
 			return server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig)
@@ -116,7 +120,6 @@ func initRootCmd(
 
 	// extend debug command
 	debugCmd := debug.Cmd()
-	debugCmd.AddCommand(DumpIavlCmd())
 
 	rootCmd.AddCommand(
 		InitCmd(app.ModuleBasics, app.DefaultNodeHome),
@@ -134,10 +137,9 @@ func initRootCmd(
 		tmcli.NewCompletionCmd(rootCmd, true),
 		debugCmd,
 		config.Cmd(),
-		pruning.PruningCmd(newApp),
-		CompactCmd(app.DefaultNodeHome),
 		tools.ToolCmd(),
 		SnapshotCmd(),
+		LogLevelCmd(),
 	)
 
 	tracingProviderOpts, err := tracing.GetTracerProviderOptions(tracing.DefaultTracingURL)
@@ -219,13 +221,10 @@ func txCommand() *cobra.Command {
 
 func addModuleInitFlags(startCmd *cobra.Command) {
 	crisis.AddModuleInitFlags(startCmd)
-	startCmd.Flags().Bool("migrate-iavl", false, "Run migration of IAVL data store to SeiDB State Store")
-	startCmd.Flags().Int64("migrate-height", 0, "Height at which to start the migration")
 }
 
 // newApp creates a new Cosmos SDK app
 func newApp(
-	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
 	tmConfig *tmcfg.Config,
@@ -268,7 +267,6 @@ func newApp(
 	wasmGasRegisterConfig.GasMultiplier = 21_000_000
 
 	app := app.New(
-		logger,
 		db,
 		traceStore,
 		true,
@@ -287,7 +285,6 @@ func newApp(
 				),
 			),
 		},
-		[]aclkeeper.Option{},
 		app.EmptyAppOptions,
 		baseapp.SetPruning(pruningOpts),
 		baseapp.SetMinGasPrices(cast.ToString(appOpts.Get(server.FlagMinGasPrices))),
@@ -304,25 +301,11 @@ func newApp(
 		baseapp.SetOccEnabled(cast.ToBool(appOpts.Get(baseapp.FlagOccEnabled))),
 	)
 
-	// Start migration if --migrate flag is set
-	if cast.ToBool(appOpts.Get("migrate-iavl")) {
-		go func() {
-			homeDir := cast.ToString(appOpts.Get(flags.FlagHome))
-			stateStore := app.GetStateStore()
-			migrationHeight := cast.ToInt64(appOpts.Get("migrate-height"))
-			migrator := ss.NewMigrator(db, stateStore)
-			if err := migrator.Migrate(migrationHeight, homeDir); err != nil {
-				panic(err)
-			}
-		}()
-	}
-
 	return app
 }
 
 // appExport creates a new simapp (optionally at a given height)
 func appExport(
-	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
 	height int64,
@@ -332,7 +315,6 @@ func appExport(
 	file *os.File,
 ) (servertypes.ExportedApp, error) {
 	exportableApp, err := getExportableApp(
-		logger,
 		db,
 		traceStore,
 		height,
@@ -350,7 +332,6 @@ func appExport(
 }
 
 func getExportableApp(
-	logger log.Logger,
 	db dbm.DB,
 	traceStore io.Writer,
 	height int64,
@@ -367,12 +348,12 @@ func getExportableApp(
 	}
 
 	if height != -1 {
-		exportableApp = app.New(logger, db, traceStore, false, map[int64]bool{}, cast.ToString(appOpts.Get(flags.FlagHome)), uint(1), true, nil, encCfg, app.GetWasmEnabledProposals(), appOpts, app.EmptyWasmOpts, app.EmptyACLOpts, app.EmptyAppOptions)
+		exportableApp = app.New(db, traceStore, false, map[int64]bool{}, cast.ToString(appOpts.Get(flags.FlagHome)), uint(1), true, nil, encCfg, app.GetWasmEnabledProposals(), appOpts, app.EmptyWasmOpts, app.EmptyAppOptions)
 		if err := exportableApp.LoadHeight(height); err != nil {
 			return nil, err
 		}
 	} else {
-		exportableApp = app.New(logger, db, traceStore, true, map[int64]bool{}, cast.ToString(appOpts.Get(flags.FlagHome)), uint(1), true, nil, encCfg, app.GetWasmEnabledProposals(), appOpts, app.EmptyWasmOpts, app.EmptyACLOpts, app.EmptyAppOptions)
+		exportableApp = app.New(db, traceStore, true, map[int64]bool{}, cast.ToString(appOpts.Get(flags.FlagHome)), uint(1), true, nil, encCfg, app.GetWasmEnabledProposals(), appOpts, app.EmptyWasmOpts, app.EmptyAppOptions)
 	}
 	return exportableApp, nil
 
@@ -416,7 +397,7 @@ func initAppConfig() (string, interface{}) {
 	//   own app.toml to override, or use this default value.
 	//
 	// In simapp, we set the min gas prices to 0.
-	srvCfg.MinGasPrices = "0.02usei"
+	srvCfg.MinGasPrices = "0.01usei"
 	srvCfg.API.Enable = true
 
 	// Pruning configs
@@ -434,9 +415,20 @@ func initAppConfig() (string, interface{}) {
 	srvCfg.Telemetry.PrometheusRetentionTime = 60
 
 	// Use shared CustomAppConfig from app_config.go
-	customAppConfig := NewCustomAppConfig(srvCfg, evmrpc.DefaultConfig)
+	customAppConfig := NewCustomAppConfig(srvCfg, evmrpcconfig.DefaultConfig)
 
-	customAppTemplate := serverconfig.DefaultConfigTemplate + `
+	customAppTemplate := serverconfig.ManualConfigTemplate +
+		seidbconfig.StateCommitConfigTemplate +
+		seidbconfig.StateStoreConfigTemplate +
+		seidbconfig.ReceiptStoreConfigTemplate +
+		evmrpcconfig.ConfigTemplate +
+		gigaconfig.ConfigTemplate +
+		admin.ConfigTemplate +
+		serverconfig.AutoManagedConfigTemplate + `
+###############################################################################
+###                        WASM Configuration (Auto-managed)                ###
+###############################################################################
+
 [wasm]
 # This is the maximum sdk gas (wasm and storage) that we allow for any x/wasm "smart" queries
 query_gas_limit = 300000
@@ -444,86 +436,9 @@ query_gas_limit = 300000
 # Warning: this is currently unstable and may lead to crashes, best to keep for 0 unless testing locally
 lru_size = 0
 
-[evm]
-# controls whether an HTTP EVM server is enabled
-http_enabled = {{ .EVM.HTTPEnabled }}
-http_port = {{ .EVM.HTTPPort }}
-
-# controls whether a websocket server is enabled
-ws_enabled = {{ .EVM.WSEnabled }}
-ws_port = {{ .EVM.WSPort }}
-
-# ReadTimeout is the maximum duration for reading the entire
-# request, including the body.
-# Because ReadTimeout does not let Handlers make per-request
-# decisions on each request body's acceptable deadline or
-# upload rate, most users will prefer to use
-# ReadHeaderTimeout. It is valid to use them both.
-read_timeout = "{{ .EVM.ReadTimeout }}"
-
-# ReadHeaderTimeout is the amount of time allowed to read
-# request headers. The connection's read deadline is reset
-# after reading the headers and the Handler can decide what
-# is considered too slow for the body. If ReadHeaderTimeout
-# is zero, the value of ReadTimeout is used. If both are
-# zero, there is no timeout.
-read_header_timeout = "{{ .EVM.ReadHeaderTimeout }}"
-
-# WriteTimeout is the maximum duration before timing out
-# writes of the response. It is reset whenever a new
-# request's header is read. Like ReadTimeout, it does not
-# let Handlers make decisions on a per-request basis.
-write_timeout = "{{ .EVM.WriteTimeout }}"
-
-# IdleTimeout is the maximum amount of time to wait for the
-# next request when keep-alives are enabled. If IdleTimeout
-# is zero, the value of ReadTimeout is used. If both are
-# zero, ReadHeaderTimeout is used.
-idle_timeout = "{{ .EVM.IdleTimeout }}"
-
-# Maximum gas limit for simulation
-simulation_gas_limit = {{ .EVM.SimulationGasLimit }}
-
-# Timeout for EVM call in simulation
-simulation_evm_timeout = "{{ .EVM.SimulationEVMTimeout }}"
-
-# list of CORS allowed origins, separated by comma
-cors_origins = "{{ .EVM.CORSOrigins }}"
-
-# list of WS origins, separated by comma
-ws_origins = "{{ .EVM.WSOrigins }}"
-
-# timeout for filters
-filter_timeout = "{{ .EVM.FilterTimeout }}"
-
-# checkTx timeout for sig verify
-checktx_timeout = "{{ .EVM.CheckTxTimeout }}"
-
-# controls whether to have txns go through one by one
-slow = {{ .EVM.Slow }}
-
-# Deny list defines list of methods that EVM RPC should fail fast, e.g ["debug_traceBlockByNumber"]
-deny_list = {{ .EVM.DenyList }}
-
-# max number of logs returned if block range is open-ended
-max_log_no_block = {{ .EVM.MaxLogNoBlock }}
-
-# max number of blocks to query logs for
-max_blocks_for_log = {{ .EVM.MaxBlocksForLog }}
-
-# max number of concurrent NewHead subscriptions
-max_subscriptions_new_head = {{ .EVM.MaxSubscriptionsNewHead }}
-
-# MaxConcurrentTraceCalls defines the maximum number of concurrent debug_trace calls.
-# Set to 0 for unlimited.
-max_concurrent_trace_calls = {{ .EVM.MaxConcurrentTraceCalls }}
-
-# Max number of blocks allowed to look back for tracing
-# Set to -1 for unlimited lookback, which is useful for archive nodes.
-max_trace_lookback_blocks = {{ .EVM.MaxTraceLookbackBlocks }}
-
-# Timeout for each trace call
-trace_timeout = "{{ .EVM.TraceTimeout }}"
+###############################################################################
+###                     ETH Replay Configuration (Auto-managed)             ###
+###############################################################################
 
 [eth_replay]
 eth_replay_enabled = {{ .ETHReplay.Enabled }}
@@ -531,12 +446,24 @@ eth_rpc = "{{ .ETHReplay.EthRPC }}"
 eth_data_dir = "{{ .ETHReplay.EthDataDir }}"
 eth_replay_contract_state_checks = {{ .ETHReplay.ContractStateChecks }}
 
+###############################################################################
+###                   ETH Block Test Configuration (Auto-managed)           ###
+###############################################################################
+
 [eth_blocktest]
 eth_blocktest_enabled = {{ .ETHBlockTest.Enabled }}
 eth_blocktest_test_data_path = "{{ .ETHBlockTest.TestDataPath }}"
 
+###############################################################################
+###                    EVM Query Configuration (Auto-managed)               ###
+###############################################################################
+
 [evm_query]
 evm_query_gas_limit = {{ .EvmQuery.GasLimit }}
+
+###############################################################################
+###                 Light Invariance Configuration (Auto-managed)           ###
+###############################################################################
 
 [light_invariance]
 supply_enabled = {{ .LightInvariance.SupplyEnabled }}

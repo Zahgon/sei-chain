@@ -3,20 +3,18 @@ package e2e_test
 import (
 	"bytes"
 	"context"
-	"errors"
 	"fmt"
 	"math/rand"
-	"strconv"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	"github.com/tendermint/tendermint/rpc/client/http"
-	e2e "github.com/tendermint/tendermint/test/e2e/pkg"
-	"github.com/tendermint/tendermint/types"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/http"
+	e2e "github.com/sei-protocol/sei-chain/sei-tendermint/test/e2e/pkg"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 const (
@@ -168,7 +166,7 @@ func TestApp_Tx(t *testing.T) {
 				hash := tx.Hash()
 
 				require.Eventuallyf(t, func() bool {
-					txResp, err := client.Tx(ctx, hash, false)
+					txResp, err := client.Tx(ctx, hash.Bytes(), false)
 					return err == nil && bytes.Equal(txResp.Tx, tx)
 				},
 					test.WaitTime, // timeout
@@ -187,29 +185,4 @@ func TestApp_Tx(t *testing.T) {
 
 	}
 
-}
-
-func TestApp_VoteExtensions(t *testing.T) {
-	testNode(t, func(ctx context.Context, t *testing.T, node e2e.Node) {
-		client, err := node.Client()
-		require.NoError(t, err)
-		info, err := client.ABCIInfo(ctx)
-		require.NoError(t, err)
-
-		// This special value should have been created by way of vote extensions
-		resp, err := client.ABCIQuery(ctx, "", []byte("extensionSum"))
-		require.NoError(t, err)
-
-		extSum, err := strconv.Atoi(string(resp.Response.Value))
-		// if extensions are not enabled on the network, we should not expect
-		// the app to have any extension value set.
-		if node.Testnet.VoteExtensionsEnableHeight == 0 ||
-			info.Response.LastBlockHeight < node.Testnet.VoteExtensionsEnableHeight+1 {
-			target := &strconv.NumError{}
-			require.True(t, errors.As(err, &target))
-		} else {
-			require.NoError(t, err)
-			require.GreaterOrEqual(t, extSum, 0)
-		}
-	})
 }

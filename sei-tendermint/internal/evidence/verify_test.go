@@ -10,16 +10,16 @@ import (
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/internal/eventbus"
-	"github.com/tendermint/tendermint/internal/evidence"
-	"github.com/tendermint/tendermint/internal/evidence/mocks"
-	sm "github.com/tendermint/tendermint/internal/state"
-	smmocks "github.com/tendermint/tendermint/internal/state/mocks"
-	"github.com/tendermint/tendermint/internal/test/factory"
-	"github.com/tendermint/tendermint/libs/log"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/eventbus"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/evidence"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/evidence/mocks"
+	sm "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
+	smmocks "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/mocks"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/test/factory"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 const (
@@ -74,7 +74,6 @@ func TestVerify_LunaticAttackAgainstState(t *testing.T) {
 		byzVals            = 4
 	)
 	ctx := t.Context()
-	logger := log.NewNopLogger()
 
 	attackTime := defaultEvidenceTime.Add(1 * time.Hour)
 	// create valid lunatic evidence
@@ -95,7 +94,7 @@ func TestVerify_LunaticAttackAgainstState(t *testing.T) {
 	blockStore.On("LoadBlockMeta", height).Return(&types.BlockMeta{Header: *trusted.Header})
 	blockStore.On("LoadBlockCommit", commonHeight).Return(common.Commit)
 	blockStore.On("LoadBlockCommit", height).Return(trusted.Commit)
-	pool := evidence.NewPool(log.NewNopLogger(), dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), nil)
+	pool := evidence.NewPool(dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), nil)
 
 	evList := types.EvidenceList{ev}
 	// check that the evidence pool correctly verifies the evidence
@@ -115,15 +114,15 @@ func TestVerify_LunaticAttackAgainstState(t *testing.T) {
 
 	// duplicate evidence should be rejected
 	evList = types.EvidenceList{ev, ev}
-	pool = evidence.NewPool(logger, dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), nil)
+	pool = evidence.NewPool(dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), nil)
 	assert.Error(t, pool.CheckEvidence(ctx, evList))
 
 	// If evidence is submitted with an altered timestamp it should return an error
-	eventBus := eventbus.NewDefault(logger)
+	eventBus := eventbus.NewDefault()
 	require.NoError(t, eventBus.Start(ctx))
 
 	ev.Timestamp = defaultEvidenceTime.Add(1 * time.Minute)
-	pool = evidence.NewPool(logger, dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
+	pool = evidence.NewPool(dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
 
 	err := pool.AddEvidence(ctx, ev)
 	assert.Error(t, err)
@@ -131,7 +130,7 @@ func TestVerify_LunaticAttackAgainstState(t *testing.T) {
 
 	// Evidence submitted with a different validator power should fail
 	ev.TotalVotingPower = 1
-	pool = evidence.NewPool(logger, dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), nil)
+	pool = evidence.NewPool(dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), nil)
 	err = pool.AddEvidence(ctx, ev)
 	assert.Error(t, err)
 	ev.TotalVotingPower = common.ValidatorSet.TotalVotingPower()
@@ -148,8 +147,6 @@ func TestVerify_ForwardLunaticAttack(t *testing.T) {
 	attackTime := defaultEvidenceTime.Add(1 * time.Hour)
 
 	ctx := t.Context()
-
-	logger := log.NewNopLogger()
 
 	// create a forward lunatic attack
 	ev, trusted, common := makeLunaticEvidence(ctx,
@@ -177,10 +174,10 @@ func TestVerify_ForwardLunaticAttack(t *testing.T) {
 	blockStore.On("LoadBlockCommit", nodeHeight).Return(trusted.Commit)
 	blockStore.On("Height").Return(nodeHeight)
 
-	eventBus := eventbus.NewDefault(logger)
+	eventBus := eventbus.NewDefault()
 	require.NoError(t, eventBus.Start(ctx))
 
-	pool := evidence.NewPool(logger, dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
+	pool := evidence.NewPool(dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
 
 	// check that the evidence pool correctly verifies the evidence
 	assert.NoError(t, pool.CheckEvidence(ctx, types.EvidenceList{ev}))
@@ -197,25 +194,23 @@ func TestVerify_ForwardLunaticAttack(t *testing.T) {
 	oldBlockStore.On("Height").Return(nodeHeight)
 	require.Equal(t, defaultEvidenceTime, oldBlockStore.LoadBlockMeta(nodeHeight).Header.Time)
 
-	pool = evidence.NewPool(logger, dbm.NewMemDB(), stateStore, oldBlockStore, evidence.NopMetrics(), nil)
+	pool = evidence.NewPool(dbm.NewMemDB(), stateStore, oldBlockStore, evidence.NopMetrics(), nil)
 	assert.Error(t, pool.CheckEvidence(ctx, types.EvidenceList{ev}))
 }
 
 func TestVerifyLightClientAttack_Equivocation(t *testing.T) {
 	ctx := t.Context()
 
-	logger := log.NewNopLogger()
+	conflictingVals, conflictingPrivVals := factory.ValidatorSet(ctx, 5, 10)
 
-	conflictingVals, conflictingPrivVals := factory.ValidatorSet(ctx, t, 5, 10)
-
-	conflictingHeader := factory.MakeHeader(t, &types.Header{
+	conflictingHeader := factory.MakeHeader(&types.Header{
 		ChainID:        evidenceChainID,
 		Height:         10,
 		Time:           defaultEvidenceTime,
 		ValidatorsHash: conflictingVals.Hash(),
 	})
 
-	trustedHeader := factory.MakeHeader(t, &types.Header{
+	trustedHeader := factory.MakeHeader(&types.Header{
 		ChainID:            evidenceChainID,
 		Height:             10,
 		Time:               defaultEvidenceTime,
@@ -247,7 +242,7 @@ func TestVerifyLightClientAttack_Equivocation(t *testing.T) {
 		Timestamp:           defaultEvidenceTime,
 	}
 
-	trustedBlockID := makeBlockID(trustedHeader.Hash(), 1000, []byte("partshash"))
+	trustedBlockID := makeBlockID(trustedHeader.Hash(), types.MaxBlockPartsCount, []byte("partshash"))
 	trustedVoteSet := types.NewVoteSet(evidenceChainID, 10, 1, tmproto.SignedMsgType(2), conflictingVals)
 	trustedCommit, err := factory.MakeCommit(ctx, trustedBlockID, 10, 1,
 		trustedVoteSet, conflictingPrivVals, defaultEvidenceTime)
@@ -287,10 +282,10 @@ func TestVerifyLightClientAttack_Equivocation(t *testing.T) {
 	blockStore.On("LoadBlockMeta", int64(10)).Return(&types.BlockMeta{Header: *trustedHeader})
 	blockStore.On("LoadBlockCommit", int64(10)).Return(trustedCommit)
 
-	eventBus := eventbus.NewDefault(logger)
+	eventBus := eventbus.NewDefault()
 	require.NoError(t, eventBus.Start(ctx))
 
-	pool := evidence.NewPool(logger, dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
+	pool := evidence.NewPool(dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
 
 	evList := types.EvidenceList{ev}
 	err = pool.CheckEvidence(ctx, evList)
@@ -303,19 +298,17 @@ func TestVerifyLightClientAttack_Equivocation(t *testing.T) {
 func TestVerifyLightClientAttack_Amnesia(t *testing.T) {
 	ctx := t.Context()
 
-	logger := log.NewNopLogger()
-
 	var height int64 = 10
-	conflictingVals, conflictingPrivVals := factory.ValidatorSet(ctx, t, 5, 10)
+	conflictingVals, conflictingPrivVals := factory.ValidatorSet(ctx, 5, 10)
 
-	conflictingHeader := factory.MakeHeader(t, &types.Header{
+	conflictingHeader := factory.MakeHeader(&types.Header{
 		ChainID:        evidenceChainID,
 		Height:         height,
 		Time:           defaultEvidenceTime,
 		ValidatorsHash: conflictingVals.Hash(),
 	})
 
-	trustedHeader := factory.MakeHeader(t, &types.Header{
+	trustedHeader := factory.MakeHeader(&types.Header{
 		ChainID:            evidenceChainID,
 		Height:             height,
 		Time:               defaultEvidenceTime,
@@ -328,7 +321,7 @@ func TestVerifyLightClientAttack_Amnesia(t *testing.T) {
 
 	// we are simulating an amnesia attack where all the validators in the conflictingVals set
 	// except the last validator vote twice. However this time the commits are of different rounds.
-	blockID := makeBlockID(conflictingHeader.Hash(), 1000, []byte("partshash"))
+	blockID := makeBlockID(conflictingHeader.Hash(), types.MaxBlockPartsCount, []byte("partshash"))
 	voteSet := types.NewVoteSet(evidenceChainID, height, 0, tmproto.SignedMsgType(2), conflictingVals)
 	commit, err := factory.MakeCommit(ctx, blockID, height, 0, voteSet, conflictingPrivVals, defaultEvidenceTime)
 	require.NoError(t, err)
@@ -347,7 +340,7 @@ func TestVerifyLightClientAttack_Amnesia(t *testing.T) {
 		Timestamp:           defaultEvidenceTime,
 	}
 
-	trustedBlockID := makeBlockID(trustedHeader.Hash(), 1000, []byte("partshash"))
+	trustedBlockID := makeBlockID(trustedHeader.Hash(), types.MaxBlockPartsCount, []byte("partshash"))
 	trustedVoteSet := types.NewVoteSet(evidenceChainID, height, 1, tmproto.SignedMsgType(2), conflictingVals)
 	trustedCommit, err := factory.MakeCommit(ctx, trustedBlockID, height, 1,
 		trustedVoteSet, conflictingPrivVals, defaultEvidenceTime)
@@ -378,10 +371,10 @@ func TestVerifyLightClientAttack_Amnesia(t *testing.T) {
 	blockStore.On("LoadBlockMeta", int64(10)).Return(&types.BlockMeta{Header: *trustedHeader})
 	blockStore.On("LoadBlockCommit", int64(10)).Return(trustedCommit)
 
-	eventBus := eventbus.NewDefault(logger)
+	eventBus := eventbus.NewDefault()
 	require.NoError(t, eventBus.Start(ctx))
 
-	pool := evidence.NewPool(logger, dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
+	pool := evidence.NewPool(dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
 
 	evList := types.EvidenceList{ev}
 	err = pool.CheckEvidence(ctx, evList)
@@ -400,15 +393,14 @@ type voteData struct {
 func TestVerifyDuplicateVoteEvidence(t *testing.T) {
 	ctx := t.Context()
 
-	logger := log.NewNopLogger()
 	val := types.NewMockPV()
 	val2 := types.NewMockPV()
 	valSet := types.NewValidatorSet([]*types.Validator{val.ExtractIntoValidator(ctx, 1)})
 
-	blockID := makeBlockID([]byte("blockhash"), 1000, []byte("partshash"))
-	blockID2 := makeBlockID([]byte("blockhash2"), 1000, []byte("partshash"))
-	blockID3 := makeBlockID([]byte("blockhash"), 10000, []byte("partshash"))
-	blockID4 := makeBlockID([]byte("blockhash"), 10000, []byte("partshash2"))
+	blockID := makeBlockID([]byte("blockhash"), types.MaxBlockPartsCount, []byte("partshash"))
+	blockID2 := makeBlockID([]byte("blockhash2"), types.MaxBlockPartsCount, []byte("partshash"))
+	blockID3 := makeBlockID([]byte("blockhash"), types.MaxBlockPartsCount-1, []byte("partshash"))
+	blockID4 := makeBlockID([]byte("blockhash"), types.MaxBlockPartsCount, []byte("partshash2"))
 
 	const chainID = "mychain"
 
@@ -421,8 +413,8 @@ func TestVerifyDuplicateVoteEvidence(t *testing.T) {
 	err = val2.SignVote(ctx, chainID, bv)
 	require.NoError(t, err)
 
-	vote1.Signature = v1.Signature
-	badVote.Signature = bv.Signature
+	vote1.Signature = utils.Some(utils.OrPanic1(crypto.SigFromBytes(v1.Signature)))
+	badVote.Signature = utils.Some(utils.OrPanic1(crypto.SigFromBytes(bv.Signature)))
 
 	cases := []voteData{
 		{vote1, makeVote(ctx, t, val, chainID, 0, 10, 2, 1, blockID2, defaultEvidenceTime), true}, // different block ids
@@ -478,10 +470,10 @@ func TestVerifyDuplicateVoteEvidence(t *testing.T) {
 	blockStore := &mocks.BlockStore{}
 	blockStore.On("LoadBlockMeta", int64(10)).Return(&types.BlockMeta{Header: types.Header{Time: defaultEvidenceTime}})
 
-	eventBus := eventbus.NewDefault(logger)
+	eventBus := eventbus.NewDefault()
 	require.NoError(t, eventBus.Start(ctx))
 
-	pool := evidence.NewPool(logger, dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
+	pool := evidence.NewPool(dbm.NewMemDB(), stateStore, blockStore, evidence.NopMetrics(), eventBus)
 	startPool(t, pool, stateStore)
 
 	evList := types.EvidenceList{goodEv}
@@ -508,14 +500,14 @@ func makeLunaticEvidence(
 ) (ev *types.LightClientAttackEvidence, trusted *types.LightBlock, common *types.LightBlock) {
 	t.Helper()
 
-	commonValSet, commonPrivVals := factory.ValidatorSet(ctx, t, totalVals, defaultVotingPower)
+	commonValSet, commonPrivVals := factory.ValidatorSet(ctx, totalVals, defaultVotingPower)
 
 	require.Greater(t, totalVals, byzVals)
 
 	// extract out the subset of byzantine validators in the common validator set
 	byzValSet, byzPrivVals := commonValSet.Validators[:byzVals], commonPrivVals[:byzVals]
 
-	phantomValSet, phantomPrivVals := factory.ValidatorSet(ctx, t, phantomVals, defaultVotingPower)
+	phantomValSet, phantomPrivVals := factory.ValidatorSet(ctx, phantomVals, defaultVotingPower)
 
 	conflictingVals := phantomValSet.Copy()
 	require.NoError(t, conflictingVals.UpdateWithChangeSet(byzValSet))
@@ -523,19 +515,19 @@ func makeLunaticEvidence(
 
 	conflictingPrivVals = orderPrivValsByValSet(ctx, t, conflictingVals, conflictingPrivVals)
 
-	commonHeader := factory.MakeHeader(t, &types.Header{
+	commonHeader := factory.MakeHeader(&types.Header{
 		ChainID: evidenceChainID,
 		Height:  commonHeight,
 		Time:    commonTime,
 	})
 
-	trustedHeader := factory.MakeHeader(t, &types.Header{
+	trustedHeader := factory.MakeHeader(&types.Header{
 		ChainID: evidenceChainID,
 		Height:  height,
 		Time:    defaultEvidenceTime,
 	})
 
-	conflictingHeader := factory.MakeHeader(t, &types.Header{
+	conflictingHeader := factory.MakeHeader(&types.Header{
 		ChainID:        evidenceChainID,
 		Height:         height,
 		Time:           attackTime,
@@ -570,7 +562,7 @@ func makeLunaticEvidence(
 		ValidatorSet: commonValSet,
 	}
 	trustedBlockID := factory.MakeBlockIDWithHash(trustedHeader.Hash())
-	trustedVals, privVals := factory.ValidatorSet(ctx, t, totalVals, defaultVotingPower)
+	trustedVals, privVals := factory.ValidatorSet(ctx, totalVals, defaultVotingPower)
 	trustedVoteSet := types.NewVoteSet(evidenceChainID, height, 1, tmproto.SignedMsgType(2), trustedVals)
 	trustedCommit, err := factory.MakeCommit(ctx, trustedBlockID, height, 1, trustedVoteSet, privVals, defaultEvidenceTime)
 	require.NoError(t, err)
@@ -605,7 +597,7 @@ func makeVote(
 	vpb := v.ToProto()
 	err = val.SignVote(ctx, chainID, vpb)
 	require.NoError(t, err)
-	v.Signature = vpb.Signature
+	v.Signature = utils.Some(utils.OrPanic1(crypto.SigFromBytes(vpb.Signature)))
 	return v
 }
 

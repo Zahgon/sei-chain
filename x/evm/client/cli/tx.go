@@ -13,7 +13,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/hd"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -22,14 +22,14 @@ import (
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/spf13/cobra"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/cosmos/cosmos-sdk/codec/legacy"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/sei-protocol/sei-chain/evmrpc"
 	"github.com/sei-protocol/sei-chain/precompiles"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keyring"
 	"github.com/sei-protocol/sei-chain/utils"
 	"github.com/sei-protocol/sei-chain/x/evm/artifacts/native"
 	"github.com/sei-protocol/sei-chain/x/evm/artifacts/wsei"
@@ -134,7 +134,7 @@ func CmdAssociateAddress() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			req, err := http.NewRequest(http.MethodGet, rpc, strings.NewReader(body))
+			req, err := http.NewRequest(http.MethodPost, rpc, strings.NewReader(body))
 			if err != nil {
 				return err
 			}
@@ -607,7 +607,7 @@ func getPrivateKey(cmd *cobra.Command) (*ecdsa.PrivateKey, error) {
 
 func getNonce(rpc string, key ecdsa.PublicKey) (uint64, error) {
 	nonceQuery := fmt.Sprintf("{\"jsonrpc\": \"2.0\",\"method\": \"eth_getTransactionCount\",\"params\":[\"%s\",\"pending\"],\"id\":\"send-cli\"}", crypto.PubkeyToAddress(key).Hex())
-	req, err := http.NewRequest(http.MethodGet, rpc, strings.NewReader(nonceQuery))
+	req, err := http.NewRequest(http.MethodPost, rpc, strings.NewReader(nonceQuery))
 	if err != nil {
 		return 0, err
 	}
@@ -634,7 +634,7 @@ func getNonce(rpc string, key ecdsa.PublicKey) (uint64, error) {
 
 func getChainId(rpc string) (*big.Int, error) {
 	q := "{\"jsonrpc\": \"2.0\",\"method\": \"eth_chainId\",\"params\":[],\"id\":\"send-cli\"}"
-	req, err := http.NewRequest(http.MethodGet, rpc, strings.NewReader(q))
+	req, err := http.NewRequest(http.MethodPost, rpc, strings.NewReader(q))
 	if err != nil {
 		return nil, err
 	}

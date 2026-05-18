@@ -34,23 +34,17 @@ func PrometheusMetrics(namespace string, labelsAndValues ...string) *Metrics {
 			Name:      "validator_set_updates",
 			Help:      "Number of validator set updates returned by the application since process start.",
 		}, labels).With(labelsAndValues...),
-		FlushAppConnectionTime: prometheus.NewHistogramFrom(stdprometheus.HistogramOpts{
-			Namespace: namespace,
-			Subsystem: MetricsSubsystem,
-			Name:      "flush_app_connection_time",
-			Help:      "ValidatorSetUpdates measures how long it takes async ABCI requests to be flushed before committing application state",
-		}, labels).With(labelsAndValues...),
 		ApplicationCommitTime: prometheus.NewHistogramFrom(stdprometheus.HistogramOpts{
 			Namespace: namespace,
 			Subsystem: MetricsSubsystem,
 			Name:      "application_commit_time",
-			Help:      "ApplicationCommitTime meaures how long it takes to commit application state",
+			Help:      "ApplicationCommitTime measures how long it takes to commit application state",
 		}, labels).With(labelsAndValues...),
 		UpdateMempoolTime: prometheus.NewHistogramFrom(stdprometheus.HistogramOpts{
 			Namespace: namespace,
 			Subsystem: MetricsSubsystem,
 			Name:      "update_mempool_time",
-			Help:      "UpdateMempoolTime meaures how long it takes to update mempool after commiting, including reCheckTx",
+			Help:      "UpdateMempoolTime measures how long it takes to update mempool after committing, including reCheckTx",
 		}, labels).With(labelsAndValues...),
 		FinalizeBlockLatency: prometheus.NewHistogramFrom(stdprometheus.HistogramOpts{
 			Namespace: namespace,
@@ -92,21 +86,34 @@ func PrometheusMetrics(namespace string, labelsAndValues ...string) *Metrics {
 
 			Buckets: stdprometheus.ExponentialBucketsRange(0.01, 10, 10),
 		}, labels).With(labelsAndValues...),
+		ProposerPriorityHash: prometheus.NewGaugeFrom(stdprometheus.GaugeOpts{
+			Namespace: namespace,
+			Subsystem: MetricsSubsystem,
+			Name:      "proposer_priority_hash",
+			Help:      "ProposerPriorityHash encodes the first 6 bytes of the hash of the current validator set's proposer priorities as a float64 value. Exported periodically (every proposerPriorityHashInterval heights) for operator visibility; divergence between validators at the same ProposerPriorityHashHeight indicates corrupted ProposerPriority state. Paired with ProposerPriorityHashHeight so operators can correlate.",
+		}, labels).With(labelsAndValues...),
+		ProposerPriorityHashHeight: prometheus.NewGaugeFrom(stdprometheus.GaugeOpts{
+			Namespace: namespace,
+			Subsystem: MetricsSubsystem,
+			Name:      "proposer_priority_hash_height",
+			Help:      "ProposerPriorityHashHeight is the block height at which the most recent ProposerPriorityHash was computed. Operators comparing hashes across validators should only compare samples at the same height.",
+		}, labels).With(labelsAndValues...),
 	}
 }
 
 func NopMetrics() *Metrics {
 	return &Metrics{
-		BlockProcessingTime:      discard.NewHistogram(),
-		ConsensusParamUpdates:    discard.NewCounter(),
-		ValidatorSetUpdates:      discard.NewCounter(),
-		FlushAppConnectionTime:   discard.NewHistogram(),
-		ApplicationCommitTime:    discard.NewHistogram(),
-		UpdateMempoolTime:        discard.NewHistogram(),
-		FinalizeBlockLatency:     discard.NewHistogram(),
-		SaveBlockResponseLatency: discard.NewHistogram(),
-		SaveBlockLatency:         discard.NewHistogram(),
-		PruneBlockLatency:        discard.NewHistogram(),
-		FireEventsLatency:        discard.NewHistogram(),
+		BlockProcessingTime:        discard.NewHistogram(),
+		ConsensusParamUpdates:      discard.NewCounter(),
+		ValidatorSetUpdates:        discard.NewCounter(),
+		ApplicationCommitTime:      discard.NewHistogram(),
+		UpdateMempoolTime:          discard.NewHistogram(),
+		FinalizeBlockLatency:       discard.NewHistogram(),
+		SaveBlockResponseLatency:   discard.NewHistogram(),
+		SaveBlockLatency:           discard.NewHistogram(),
+		PruneBlockLatency:          discard.NewHistogram(),
+		FireEventsLatency:          discard.NewHistogram(),
+		ProposerPriorityHash:       discard.NewGauge(),
+		ProposerPriorityHashHeight: discard.NewGauge(),
 	}
 }

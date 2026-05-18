@@ -10,8 +10,8 @@ import (
 	"github.com/google/orderedcode"
 	dbm "github.com/tendermint/tm-db"
 
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 /*
@@ -50,7 +50,7 @@ func (bs *BlockStore) Base() int64 {
 	if err != nil {
 		panic(err)
 	}
-	defer iter.Close()
+	defer func() { _ = iter.Close() }()
 
 	if iter.Valid() {
 		height, err := decodeBlockMetaKey(iter.Key())
@@ -75,7 +75,7 @@ func (bs *BlockStore) Height() int64 {
 	if err != nil {
 		panic(err)
 	}
-	defer iter.Close()
+	defer func() { _ = iter.Close() }()
 
 	if iter.Valid() {
 		height, err := decodeBlockMetaKey(iter.Key())
@@ -107,7 +107,7 @@ func (bs *BlockStore) LoadBaseMeta() *types.BlockMeta {
 	if err != nil {
 		return nil
 	}
-	defer iter.Close()
+	defer func() { _ = iter.Close() }()
 
 	if iter.Valid() {
 		var pbbm = new(tmproto.BlockMeta)
@@ -370,7 +370,7 @@ func (bs *BlockStore) pruneRange(
 	)
 
 	batch := bs.db.NewBatch()
-	defer batch.Close()
+	defer func() { _ = batch.Close() }()
 
 	pruned, start, err = bs.batchDelete(batch, start, end, preDeletionHook)
 	if err != nil {
@@ -418,7 +418,7 @@ func (bs *BlockStore) batchDelete(
 	if err != nil {
 		return pruned, start, err
 	}
-	defer iter.Close()
+	defer func() { _ = iter.Close() }()
 
 	for ; iter.Valid(); iter.Next() {
 		key := iter.Key()
@@ -525,10 +525,7 @@ func (bs *BlockStore) saveBlockToBatch(batch dbm.Batch, block *types.Block, bloc
 }
 
 func (bs *BlockStore) saveBlockPart(height int64, index int, part *types.Part, batch dbm.Batch) {
-	pbp, err := part.ToProto()
-	if err != nil {
-		panic(fmt.Errorf("unable to make part into proto: %w", err))
-	}
+	pbp := part.ToProto()
 	partBytes := mustEncode(pbp)
 	if err := batch.Set(blockPartKey(height, index), partBytes); err != nil {
 		panic(err)
@@ -660,6 +657,7 @@ func seenCommitKey() []byte {
 	return key
 }
 
+//lint:ignore U1000 Method retained for completeness
 func extCommitKey(height int64) []byte {
 	key, err := orderedcode.Append(nil, prefixExtCommit, height)
 	if err != nil {

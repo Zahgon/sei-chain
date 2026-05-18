@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/tendermint/tendermint/crypto"
-	tmcrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	tmcrypto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/crypto"
 )
 
 const (
@@ -48,7 +48,6 @@ func ProofsFromByteSlices(items [][]byte) (rootHash []byte, proofs []*Proof) {
 }
 
 // Verify that the Proof proves the root hash.
-// Check sp.Index/sp.Total manually if needed
 func (sp *Proof) Verify(rootHash []byte, leaf []byte) error {
 	if sp.Total < 0 {
 		return errors.New("proof total must be positive")
@@ -153,19 +152,19 @@ func ProofFromProto(pb *tmcrypto.Proof) (*Proof, error) {
 // Recursive impl.
 func computeHashFromAunts(index, total int64, leafHash []byte, innerHashes [][]byte) ([]byte, error) {
 	if index >= total || index < 0 || total <= 0 {
-		return nil, fmt.Errorf("Calling computeHashFromAunts() with invalid index (%d) and total (%d)", index, total)
+		return nil, fmt.Errorf("calling computeHashFromAunts() with invalid index (%d) and total (%d)", index, total)
 	}
 	switch total {
 	case 0:
 		panic("Cannot call computeHashFromAunts() with 0 total")
 	case 1:
 		if len(innerHashes) != 0 {
-			return nil, errors.New("Calling computeHashFromAunts() with total 1 but non-empty inner hashes")
+			return nil, errors.New("calling computeHashFromAunts() with total 1 but non-empty inner hashes")
 		}
 		return leafHash, nil
 	default:
 		if len(innerHashes) == 0 {
-			return nil, errors.New("Calling computeHashFromAunts() with total > 1 but empty inner hashes")
+			return nil, errors.New("calling computeHashFromAunts() with total > 1 but empty inner hashes")
 		}
 		numLeft := getSplitPoint(total)
 		if index < numLeft {

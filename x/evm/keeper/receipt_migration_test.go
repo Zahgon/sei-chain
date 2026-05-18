@@ -3,9 +3,9 @@ package keeper_test
 import (
 	"testing"
 
-	"github.com/cosmos/cosmos-sdk/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/prefix"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/types"
@@ -41,7 +41,7 @@ func TestMigrateLegacyReceiptsBatch(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, 100, migrated)
 	// Flush transient receipts so they are available in receipt.db for assertions below
-	require.NoError(t, k.FlushTransientReceiptsSync(ctx))
+	require.NoError(t, k.FlushTransientReceipts(ctx))
 	require.Equal(t, 1, getLegacyReceiptCount(ctx, k))
 
 	// The first tx should have been removed from legacy store; the last should still exist
@@ -53,8 +53,7 @@ func TestMigrateLegacyReceiptsBatch(t *testing.T) {
 	// Verify first 100 legacy receipts are retrievable from receipt.db after migration
 	for i := 0; i < 100; i++ {
 		tx := txs[i]
-		r, err := k.GetReceiptFromReceiptStore(ctx, tx)
-		require.NoError(t, err)
+		r := testkeeper.WaitForReceiptFromStore(t, k, ctx, tx)
 		require.Equal(t, tx.Hex(), r.TxHashHex)
 	}
 	// Verify last receipt is not retrievable from receipt.db after migration
@@ -63,8 +62,7 @@ func TestMigrateLegacyReceiptsBatch(t *testing.T) {
 
 	// Check GetReceipt works for migrated receipts
 	for _, tx := range txs[:100] {
-		r, err := k.GetReceipt(ctx, tx)
-		require.NoError(t, err)
+		r := testkeeper.WaitForReceipt(t, k, ctx, tx)
 		require.Equal(t, tx.Hex(), r.TxHashHex)
 	}
 
@@ -74,13 +72,12 @@ func TestMigrateLegacyReceiptsBatch(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, 1, migrated)
 	// Flush remaining transient receipt
-	require.NoError(t, k.FlushTransientReceiptsSync(ctx))
+	require.NoError(t, k.FlushTransientReceipts(ctx))
 	require.Equal(t, 0, getLegacyReceiptCount(ctx, k))
 
 	// Verify all receipts are retrievable from receipt.db after migration
 	for _, tx := range txs {
-		r, err := k.GetReceiptFromReceiptStore(ctx, tx)
-		require.NoError(t, err)
+		r := testkeeper.WaitForReceiptFromStore(t, k, ctx, tx)
 		require.Equal(t, tx.Hex(), r.TxHashHex)
 	}
 
@@ -91,8 +88,7 @@ func TestMigrateLegacyReceiptsBatch(t *testing.T) {
 
 	// Check GetReceipt works for all receipts
 	for _, tx := range txs {
-		r, err := k.GetReceipt(ctx, tx)
-		require.NoError(t, err)
+		r := testkeeper.WaitForReceipt(t, k, ctx, tx)
 		require.Equal(t, tx.Hex(), r.TxHashHex)
 	}
 }

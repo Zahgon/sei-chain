@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"crypto/sha256"
 	"errors"
 	"fmt"
 	"sync"
@@ -9,36 +8,12 @@ import (
 	"github.com/gogo/protobuf/proto"
 )
 
-// Int is a type constraint for integer types.
-type Int interface {
-	~uint8 | ~uint16 | ~uint32 | ~uint64 | ~uint |
-		~int8 | ~int16 | ~int32 | ~int64 | ~int
-}
-
-// SafeCast casts between integer types, checking for overflows.
-func SafeCast[To Int, From Int](v From) (x To, ok bool) {
-	x = To(v)
-	// This can be further optimized by:
-	// * making compiler detect if From -> To conversion is always safe
-	// * making compiler detect if the parity check is necessary
-	ok = From(x) == v && (x < 0) == (v < 0)
-	return
-}
-
-// Hash is a SHA-256 hash.
-type Hash [sha256.Size]byte
-
-// GetHash computes a hash of the given data.
-func GetHash(data []byte) Hash {
-	return sha256.Sum256(data)
-}
-
-// ParseHash parses a Hash from bytes.
-func ParseHash(raw []byte) (Hash, error) {
-	if got, want := len(raw), sha256.Size; got != want {
-		return Hash{}, fmt.Errorf("hash size = %v, want %v", got, want)
+func ErrorAs[T error](err error) Option[T] {
+	var target T
+	if errors.As(err, &target) {
+		return Some(target)
 	}
-	return Hash(raw), nil
+	return None[T]()
 }
 
 // ProtoClone clones a proto.Message object.
@@ -49,16 +24,6 @@ func ProtoClone[T proto.Message](item T) T {
 // ProtoEqual compares two proto.Message objects.
 func ProtoEqual[T proto.Message](a, b T) bool {
 	return proto.Equal(a, b)
-}
-
-// ProtoHash hashes a proto.Message object.
-// TODO(gprusak): make it deterministic.
-func ProtoHash(a proto.Message) Hash {
-	raw, err := proto.Marshal(a)
-	if err != nil {
-		panic(err)
-	}
-	return sha256.Sum256(raw)
 }
 
 // ProtoMessage is comparable proto.Message.

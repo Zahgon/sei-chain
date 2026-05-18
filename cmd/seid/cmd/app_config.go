@@ -1,9 +1,12 @@
 package cmd
 
 import (
-	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
+	"github.com/sei-protocol/sei-chain/admin"
 	seiapp "github.com/sei-protocol/sei-chain/app"
-	"github.com/sei-protocol/sei-chain/evmrpc"
+	evmrpcconfig "github.com/sei-protocol/sei-chain/evmrpc/config"
+	gigaconfig "github.com/sei-protocol/sei-chain/giga/executor/config"
+	srvconfig "github.com/sei-protocol/sei-chain/sei-cosmos/server/config"
+	seidbconfig "github.com/sei-protocol/sei-chain/sei-db/config"
 	"github.com/sei-protocol/sei-chain/x/evm/blocktest"
 	"github.com/sei-protocol/sei-chain/x/evm/querier"
 	"github.com/sei-protocol/sei-chain/x/evm/replay"
@@ -20,26 +23,36 @@ type WASMConfig struct {
 type CustomAppConfig struct {
 	srvconfig.Config
 
-	WASM            WASMConfig                   `mapstructure:"wasm"`
-	EVM             evmrpc.Config                `mapstructure:"evm"`
-	ETHReplay       replay.Config                `mapstructure:"eth_replay"`
-	ETHBlockTest    blocktest.Config             `mapstructure:"eth_block_test"`
-	EvmQuery        querier.Config               `mapstructure:"evm_query"`
-	LightInvariance seiapp.LightInvarianceConfig `mapstructure:"light_invariance"`
+	StateCommit     seidbconfig.StateCommitConfig  `mapstructure:"state-commit"`
+	StateStore      seidbconfig.StateStoreConfig   `mapstructure:"state-store"`
+	ReceiptStore    seidbconfig.ReceiptStoreConfig `mapstructure:"receipt-store"`
+	WASM            WASMConfig                     `mapstructure:"wasm"`
+	EVM             evmrpcconfig.Config            `mapstructure:"evm"`
+	GigaExecutor    gigaconfig.Config              `mapstructure:"giga_executor"`
+	ETHReplay       replay.Config                  `mapstructure:"eth_replay"`
+	ETHBlockTest    blocktest.Config               `mapstructure:"eth_block_test"`
+	EvmQuery        querier.Config                 `mapstructure:"evm_query"`
+	LightInvariance seiapp.LightInvarianceConfig   `mapstructure:"light_invariance"`
+	Admin           admin.Config                   `mapstructure:"admin_server"`
 }
 
 // NewCustomAppConfig creates a CustomAppConfig with the given base config and EVM config
-func NewCustomAppConfig(baseConfig *srvconfig.Config, evmConfig evmrpc.Config) CustomAppConfig {
+func NewCustomAppConfig(baseConfig *srvconfig.Config, evmConfig evmrpcconfig.Config) CustomAppConfig {
 	return CustomAppConfig{
-		Config: *baseConfig,
+		Config:       *baseConfig,
+		StateCommit:  seidbconfig.DefaultStateCommitConfig(),
+		StateStore:   seidbconfig.DefaultStateStoreConfig(),
+		ReceiptStore: seidbconfig.DefaultReceiptStoreConfig(),
 		WASM: WASMConfig{
 			QueryGasLimit: 300000,
 			LruSize:       1,
 		},
 		EVM:             evmConfig,
+		GigaExecutor:    gigaconfig.DefaultConfig,
 		ETHReplay:       replay.DefaultConfig,
 		ETHBlockTest:    blocktest.DefaultConfig,
 		EvmQuery:        querier.DefaultConfig,
 		LightInvariance: seiapp.DefaultLightInvarianceConfig,
+		Admin:           admin.DefaultConfig,
 	}
 }

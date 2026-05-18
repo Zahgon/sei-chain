@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/types"
 	"github.com/stretchr/testify/require"
@@ -24,7 +24,7 @@ func TestReceipt(t *testing.T) {
 	require.Nil(t, err)
 	require.Equal(t, txHash.Hex(), r.TxHashHex)
 	_, err = k.GetReceipt(ctx, common.Hash{1})
-	require.Equal(t, "not found", err.Error())
+	require.Equal(t, "receipt not found", err.Error())
 }
 
 func TestGetReceiptWithRetry(t *testing.T) {
@@ -36,7 +36,7 @@ func TestGetReceiptWithRetry(t *testing.T) {
 	nonExistentHash := common.Hash{1}
 	_, err := k.GetReceiptWithRetry(ctx, nonExistentHash, 2)
 	require.NotNil(t, err)
-	require.Equal(t, "not found", err.Error())
+	require.Equal(t, "receipt not found", err.Error())
 
 	// Then test successful retry
 	go func() {
@@ -49,7 +49,7 @@ func TestGetReceiptWithRetry(t *testing.T) {
 	require.Equal(t, txHash.Hex(), r.TxHashHex)
 }
 
-func TestFlushTransientReceiptsSync(t *testing.T) {
+func TestFlushTransientReceipts(t *testing.T) {
 	k := &testkeeper.EVMTestApp.EvmKeeper
 	ctx := testkeeper.EVMTestApp.GetContextForDeliverTx([]byte{})
 	txHash := common.HexToHash("0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef")
@@ -69,7 +69,7 @@ func TestFlushTransientReceiptsSync(t *testing.T) {
 	require.Error(t, err)
 
 	// Flush synchronously
-	err = k.FlushTransientReceiptsSync(ctx)
+	err = k.FlushTransientReceipts(ctx)
 	require.NoError(t, err)
 
 	// Now should be retrievable from persistent store
@@ -82,7 +82,7 @@ func TestFlushTransientReceiptsSync(t *testing.T) {
 	// Could be not found or still present depending on flush logic, so we don't assert error here
 
 	// Flushing with no receipts should not error
-	err = k.FlushTransientReceiptsSync(ctx)
+	err = k.FlushTransientReceipts(ctx)
 	require.NoError(t, err)
 }
 
@@ -99,7 +99,7 @@ func TestDeleteTransientReceipt(t *testing.T) {
 
 	receipt, err = k.GetTransientReceipt(ctx, txHash, 0)
 	require.Nil(t, receipt)
-	require.Equal(t, "not found", err.Error())
+	require.Equal(t, "receipt not found", err.Error())
 }
 
 // Flush transient receipts should not adjust cumulative gas used for legacy receipts
@@ -131,7 +131,7 @@ func TestFlushTransientReceiptsLegacyReceipts(t *testing.T) {
 	require.NoError(t, err)
 
 	// Flush both receipts
-	err = k.FlushTransientReceiptsSync(ctx)
+	err = k.FlushTransientReceipts(ctx)
 	require.NoError(t, err)
 
 	// Verify cumulative gas not changed for either receipt
@@ -154,7 +154,7 @@ func TestFlushTransientReceiptsLegacyReceipts(t *testing.T) {
 	}
 	err = k.SetTransientReceipt(ctx, txHash3, receipt3)
 	require.NoError(t, err)
-	err = k.FlushTransientReceiptsSync(ctx)
+	err = k.FlushTransientReceipts(ctx)
 	require.NoError(t, err)
 
 	r3, err := k.GetReceipt(ctx, txHash3)
@@ -187,7 +187,7 @@ func TestFlushTransientReceiptsLegacyReceipts(t *testing.T) {
 	require.NoError(t, err)
 
 	// Flush both receipts
-	err = k.FlushTransientReceiptsSync(ctx)
+	err = k.FlushTransientReceipts(ctx)
 	require.NoError(t, err)
 
 	// Verify cumulative gas not changed for either receipt
@@ -210,7 +210,7 @@ func TestFlushTransientReceiptsLegacyReceipts(t *testing.T) {
 	}
 	err = k.SetTransientReceipt(ctx, txHash6, receipt6)
 	require.NoError(t, err)
-	err = k.FlushTransientReceiptsSync(ctx)
+	err = k.FlushTransientReceipts(ctx)
 	require.NoError(t, err)
 
 	r6, err := k.GetReceipt(ctx, txHash6)
@@ -243,7 +243,7 @@ func TestFlushTransientReceiptsLegacyReceipts(t *testing.T) {
 	require.NoError(t, err)
 
 	// Flush both receipts
-	err = k.FlushTransientReceiptsSync(ctx)
+	err = k.FlushTransientReceipts(ctx)
 	require.NoError(t, err)
 
 	// Verify cumulative gas not changed for either receipt
@@ -266,7 +266,7 @@ func TestFlushTransientReceiptsLegacyReceipts(t *testing.T) {
 	}
 	err = k.SetTransientReceipt(ctx, txHash9, receipt9)
 	require.NoError(t, err)
-	err = k.FlushTransientReceiptsSync(ctx)
+	err = k.FlushTransientReceipts(ctx)
 	require.NoError(t, err)
 
 	r9, err := k.GetReceipt(ctx, txHash9)

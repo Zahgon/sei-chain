@@ -6,29 +6,27 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/crypto/encoding"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
 )
 
 func TestABCIPubKey(t *testing.T) {
-	pkEd := ed25519.GenPrivKey().PubKey()
+	pkEd := ed25519.GenerateSecretKey().Public()
 	err := testABCIPubKey(t, pkEd)
 	assert.NoError(t, err)
 }
 
 func testABCIPubKey(t *testing.T, pk crypto.PubKey) error {
-	abciPubKey, err := encoding.PubKeyToProto(pk)
-	require.NoError(t, err)
-	pk2, err := encoding.PubKeyFromProto(abciPubKey)
+	abciPubKey := crypto.PubKeyToProto(pk)
+	pk2, err := crypto.PubKeyFromProto(abciPubKey)
 	require.NoError(t, err)
 	require.Equal(t, pk, pk2)
 	return nil
 }
 
 func TestABCIValidators(t *testing.T) {
-	pkEd := ed25519.GenPrivKey().PubKey()
+	pkEd := ed25519.GenerateSecretKey().Public()
 
 	// correct validator
 	tmValExpected := NewValidator(pkEd, 10)
@@ -53,7 +51,7 @@ func TestABCIValidators(t *testing.T) {
 }
 
 func TestABCIValidatorWithoutPubKey(t *testing.T) {
-	pkEd := ed25519.GenPrivKey().PubKey()
+	pkEd := ed25519.GenerateSecretKey().Public()
 
 	abciVal := TM2PB.Validator(NewValidator(pkEd, 10))
 

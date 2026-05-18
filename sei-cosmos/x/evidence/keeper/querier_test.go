@@ -3,12 +3,11 @@ package keeper_test
 import (
 	"strings"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence/exported"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence/types"
 
-	"github.com/cosmos/cosmos-sdk/x/evidence/exported"
-	"github.com/cosmos/cosmos-sdk/x/evidence/types"
-
-	abci "github.com/tendermint/tendermint/abci/types"
+	seiapp "github.com/sei-protocol/sei-chain/app"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 )
 
 const (
@@ -18,7 +17,7 @@ const (
 func (suite *KeeperTestSuite) TestQuerier_QueryEvidence_Existing() {
 	ctx := suite.ctx.WithIsCheckTx(false)
 	numEvidence := 100
-	legacyCdc := simapp.MakeTestEncodingConfig().Amino
+	legacyCdc := seiapp.MakeEncodingConfig().Amino
 
 	evidence := suite.populateEvidence(ctx, numEvidence)
 	query := abci.RequestQuery{
@@ -31,13 +30,13 @@ func (suite *KeeperTestSuite) TestQuerier_QueryEvidence_Existing() {
 	suite.NotNil(bz)
 
 	var e exported.Evidence
-	suite.Nil(legacyCdc.UnmarshalJSON(bz, &e))
+	suite.Nil(legacyCdc.UnmarshalAsJSON(bz, &e))
 	suite.Equal(evidence[0], e)
 }
 
 func (suite *KeeperTestSuite) TestQuerier_QueryEvidence_NonExisting() {
 	ctx := suite.ctx.WithIsCheckTx(false)
-	cdc := simapp.MakeTestEncodingConfig().Marshaler
+	cdc := seiapp.MakeEncodingConfig().Marshaler
 	numEvidence := 100
 
 	suite.populateEvidence(ctx, numEvidence)
@@ -53,7 +52,7 @@ func (suite *KeeperTestSuite) TestQuerier_QueryEvidence_NonExisting() {
 
 func (suite *KeeperTestSuite) TestQuerier_QueryAllEvidence() {
 	ctx := suite.ctx.WithIsCheckTx(false)
-	cdc := simapp.MakeTestEncodingConfig().Amino
+	cdc := seiapp.MakeEncodingConfig().Amino
 	numEvidence := 100
 
 	suite.populateEvidence(ctx, numEvidence)
@@ -67,13 +66,13 @@ func (suite *KeeperTestSuite) TestQuerier_QueryAllEvidence() {
 	suite.NotNil(bz)
 
 	var e []exported.Evidence
-	suite.Nil(cdc.UnmarshalJSON(bz, &e))
+	suite.Nil(cdc.UnmarshalAsJSON(bz, &e))
 	suite.Len(e, numEvidence)
 }
 
 func (suite *KeeperTestSuite) TestQuerier_QueryAllEvidence_InvalidPagination() {
 	ctx := suite.ctx.WithIsCheckTx(false)
-	cdc := simapp.MakeTestEncodingConfig().Amino
+	cdc := seiapp.MakeEncodingConfig().Amino
 	numEvidence := 100
 
 	suite.populateEvidence(ctx, numEvidence)
@@ -87,6 +86,6 @@ func (suite *KeeperTestSuite) TestQuerier_QueryAllEvidence_InvalidPagination() {
 	suite.NotNil(bz)
 
 	var e []exported.Evidence
-	suite.Nil(cdc.UnmarshalJSON(bz, &e))
+	suite.Nil(cdc.UnmarshalAsJSON(bz, &e))
 	suite.Len(e, 0)
 }

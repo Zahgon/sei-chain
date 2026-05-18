@@ -5,15 +5,17 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"iter"
 	"math"
 	"math/big"
+	"slices"
 	"sort"
 	"strings"
 
-	"github.com/tendermint/tendermint/crypto/merkle"
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	tmmath "github.com/tendermint/tendermint/libs/math"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/merkle"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/tmhash"
+	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
 const (
@@ -62,6 +64,11 @@ type ValidatorSet struct {
 	totalVotingPower int64
 }
 
+// Ordered iterates over validators in deterministic order.
+func (vals *ValidatorSet) Ordered() iter.Seq[*Validator] {
+	return slices.Values(vals.Validators)
+}
+
 // NewValidatorSet initializes a ValidatorSet by copying over the values from
 // `valz`, a list of Validators. If valz is nil or empty, the new ValidatorSet
 // will have an empty list of Validators.
@@ -84,9 +91,11 @@ func NewValidatorSet(valz []*Validator) *ValidatorSet {
 	return vals
 }
 
+var ErrValidatorSetEmpty = errors.New("validator set is nil or empty")
+
 func (vals *ValidatorSet) ValidateBasic() error {
 	if vals.IsNilOrEmpty() {
-		return errors.New("validator set is nil or empty")
+		return ErrValidatorSetEmpty
 	}
 
 	for idx, val := range vals.Validators {
@@ -96,7 +105,7 @@ func (vals *ValidatorSet) ValidateBasic() error {
 	}
 
 	if err := vals.Proposer.ValidateBasic(); err != nil {
-		return fmt.Errorf("proposer failed validate basic, error: %w", err)
+		return fmt.Errorf("proposer: %w", err)
 	}
 
 	for _, val := range vals.Validators {
@@ -129,7 +138,7 @@ func (vals *ValidatorSet) IncrementProposerPriority(times int32) {
 		panic("empty validator set")
 	}
 	if times <= 0 {
-		panic("Cannot call IncrementProposerPriority with non-positive times")
+		panic("cannot call IncrementProposerPriority with non-positive times")
 	}
 
 	// Cap the difference between priorities to be proportional to 2*totalPower by
@@ -275,25 +284,25 @@ func (vals *ValidatorSet) HasAddress(address []byte) bool {
 
 // GetByAddress returns an index of the validator with address and validator
 // itself (copy) if found. Otherwise, -1 and nil are returned.
-func (vals *ValidatorSet) GetByAddress(address []byte) (index int32, val *Validator) {
+func (vals *ValidatorSet) GetByAddress(address []byte) (index int32, val *Validator, ok bool) {
 	for idx, val := range vals.Validators {
 		if bytes.Equal(val.Address, address) {
-			return int32(idx), val.Copy()
+			return int32(idx), val.Copy(), true //nolint:gosec // validator set size is consensus-bounded, fits in int32
 		}
 	}
-	return -1, nil
+	return 0, nil, false
 }
 
 // GetByIndex returns the validator's address and validator itself (copy) by
 // index.
 // It returns nil values if index is less than 0 or greater or equal to
 // len(ValidatorSet.Validators).
-func (vals *ValidatorSet) GetByIndex(index int32) (address []byte, val *Validator) {
+func (vals *ValidatorSet) GetByIndex(index int32) (address []byte, val *Validator, ok bool) {
 	if index < 0 || int(index) >= len(vals.Validators) {
-		return nil, nil
+		return nil, nil, false
 	}
 	val = vals.Validators[index]
-	return val.Address, val.Copy()
+	return val.Address, val.Copy(), true
 }
 
 // Size returns the length of the validator set.
@@ -328,8 +337,8 @@ func (vals *ValidatorSet) TotalVotingPower() int64 {
 	return vals.totalVotingPower
 }
 
-// GetProposer returns the current proposer. If the validator set is empty, nil
-// is returned.
+// Deprecated in favor of RoundState.Leader()
+// Should be removed in future release.
 func (vals *ValidatorSet) GetProposer() (proposer *Validator) {
 	if len(vals.Validators) == 0 {
 		return nil
@@ -369,12 +378,12 @@ func (vals *ValidatorSet) ProposerPriorityHash() []byte {
 
 	buf := make([]byte, binary.MaxVarintLen64*len(vals.Validators))
 
-	total := 0
+	offset := 0
 	for _, val := range vals.Validators {
-		n := binary.PutVarint(buf, val.ProposerPriority)
-		total += n
+		n := binary.PutVarint(buf[offset:], val.ProposerPriority)
+		offset += n
 	}
-	return tmhash.Sum(buf[:total])
+	return tmhash.Sum(buf[:offset])
 }
 
 // Iterate will run the given function over the set.
@@ -456,8 +465,8 @@ func verifyUpdates(
 ) (tvpAfterUpdatesBeforeRemovals int64, err error) {
 
 	delta := func(update *Validator, vals *ValidatorSet) int64 {
-		_, val := vals.GetByAddress(update.Address)
-		if val != nil {
+		_, val, ok := vals.GetByAddress(update.Address)
+		if ok {
 			return update.VotingPower - val.VotingPower
 		}
 		return update.VotingPower
@@ -503,8 +512,8 @@ func numNewValidators(updates []*Validator, vals *ValidatorSet) int {
 func computeNewPriorities(updates []*Validator, vals *ValidatorSet, updatedTotalVotingPower int64) {
 	for _, valUpdate := range updates {
 		address := valUpdate.Address
-		_, val := vals.GetByAddress(address)
-		if val == nil {
+		_, val, ok := vals.GetByAddress(address)
+		if !ok {
 			// add val
 			// Set ProposerPriority to -C*totalVotingPower (with C ~= 1.125) to make sure validators can't
 			// un-bond and then re-bond to reset their (potentially previously negative) ProposerPriority to zero.
@@ -568,8 +577,8 @@ func verifyRemovals(deletes []*Validator, vals *ValidatorSet) (votingPower int64
 	removedVotingPower := int64(0)
 	for _, valUpdate := range deletes {
 		address := valUpdate.Address
-		_, val := vals.GetByAddress(address)
-		if val == nil {
+		_, val, ok := vals.GetByAddress(address)
+		if !ok {
 			return removedVotingPower, fmt.Errorf("failed to find validator %X to remove", address)
 		}
 		removedVotingPower += val.VotingPower
@@ -988,7 +997,7 @@ func RandValidatorSet(numValidators int, votingPower int64) (*ValidatorSet, []Pr
 		privValidators = make([]PrivValidator, numValidators)
 	)
 
-	for i := 0; i < numValidators; i++ {
+	for i := range numValidators {
 		val, privValidator := RandValidator(false, votingPower)
 		valz[i] = val
 		privValidators[i] = privValidator

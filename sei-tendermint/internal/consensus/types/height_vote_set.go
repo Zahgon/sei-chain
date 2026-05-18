@@ -7,9 +7,9 @@ import (
 	"strings"
 	"sync"
 
-	tmmath "github.com/tendermint/tendermint/libs/math"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 type RoundVoteSet struct {
@@ -260,6 +260,7 @@ func (hvs *HeightVoteSet) toAllRoundVotes() []roundVotes {
 	return allVotes
 }
 
+// JSON write-only representation of HeightVotesSet.
 type roundVotes struct {
 	Round              int32    `json:"round"`
 	Prevotes           []string `json:"prevotes"`

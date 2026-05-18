@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/grpc/tmservice"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
 	gogogrpc "github.com/gogo/protobuf/grpc"
 	"github.com/golang/protobuf/proto" // nolint: staticcheck
@@ -14,11 +14,11 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	pagination "github.com/cosmos/cosmos-sdk/types/query"
-	txtypes "github.com/cosmos/cosmos-sdk/types/tx"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	pagination "github.com/sei-protocol/sei-chain/sei-cosmos/types/query"
+	txtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/tx"
 )
 
 // baseAppSimulateFn is the signature of the Baseapp#Simulate function.
@@ -26,15 +26,17 @@ type baseAppSimulateFn func(txBytes []byte) (sdk.GasInfo, *sdk.Result, error)
 
 // txServer is the server for the protobuf Tx service.
 type txServer struct {
-	clientCtx         client.Context
+	node              client.LocalClient
+	txConfig          client.TxConfig
 	simulate          baseAppSimulateFn
 	interfaceRegistry codectypes.InterfaceRegistry
 }
 
 // NewTxServer creates a new Tx service server.
-func NewTxServer(clientCtx client.Context, simulate baseAppSimulateFn, interfaceRegistry codectypes.InterfaceRegistry) txtypes.ServiceServer {
+func NewTxServer(node client.LocalClient, txConfig client.TxConfig, simulate baseAppSimulateFn, interfaceRegistry codectypes.InterfaceRegistry) txtypes.ServiceServer {
 	return txServer{
-		clientCtx:         clientCtx,
+		node:              node,
+		txConfig:          txConfig,
 		simulate:          simulate,
 		interfaceRegistry: interfaceRegistry,
 	}
@@ -68,7 +70,7 @@ func (s txServer) GetTxsEvent(ctx context.Context, req *txtypes.GetTxsEventReque
 		}
 	}
 
-	result, err := QueryTxsByEvents(s.clientCtx, req.Events, page, limit, orderBy)
+	result, err := QueryTxsByEvents(ctx, s.node, s.txConfig, req.Events, page, limit, orderBy)
 	if err != nil {
 		return nil, err
 	}
@@ -140,7 +142,7 @@ func (s txServer) GetTx(ctx context.Context, req *txtypes.GetTxRequest) (*txtype
 
 	// TODO We should also check the proof flag in gRPC header.
 	// https://github.com/cosmos/cosmos-sdk/issues/7036.
-	result, err := QueryTx(s.clientCtx, req.Hash)
+	result, err := QueryTx(ctx, s.node, s.txConfig, req.Hash)
 	if err != nil {
 		if strings.Contains(err.Error(), "not found") {
 			return nil, status.Errorf(codes.NotFound, "tx not found: %s", req.Hash)
@@ -181,7 +183,7 @@ func (s txServer) GetBlockWithTxs(ctx context.Context, req *txtypes.GetBlockWith
 			"or greater than the current height %d", req.Height, currentHeight)
 	}
 
-	blockId, block, err := tmservice.GetProtoBlock(ctx, s.clientCtx, &req.Height)
+	blockId, block, err := tmservice.GetProtoBlock(ctx, s.node, &req.Height)
 	if err != nil {
 		return nil, err
 	}
@@ -203,7 +205,7 @@ func (s txServer) GetBlockWithTxs(ctx context.Context, req *txtypes.GetBlockWith
 	}
 	decodeTxAt := func(i uint64) error {
 		tx := blockTxs[i]
-		txb, err := s.clientCtx.TxConfig.TxDecoder()(tx)
+		txb, err := s.txConfig.TxDecoder()(tx)
 		if err != nil {
 			return err
 		}
@@ -240,26 +242,24 @@ func (s txServer) GetBlockWithTxs(ctx context.Context, req *txtypes.GetBlockWith
 }
 
 func (s txServer) BroadcastTx(ctx context.Context, req *txtypes.BroadcastTxRequest) (*txtypes.BroadcastTxResponse, error) {
-	return client.TxServiceBroadcast(ctx, s.clientCtx, req)
+	return client.TxServiceBroadcast(ctx, s.node, req)
 }
 
 // RegisterTxService registers the tx service on the gRPC router.
 func RegisterTxService(
 	qrt gogogrpc.Server,
-	clientCtx client.Context,
+	node client.LocalClient,
+	txConfig client.TxConfig,
 	simulateFn baseAppSimulateFn,
 	interfaceRegistry codectypes.InterfaceRegistry,
 ) {
-	txtypes.RegisterServiceServer(
-		qrt,
-		NewTxServer(clientCtx, simulateFn, interfaceRegistry),
-	)
+	txtypes.RegisterServiceServer(qrt, NewTxServer(node, txConfig, simulateFn, interfaceRegistry))
 }
 
 // RegisterGRPCGatewayRoutes mounts the tx service's GRPC-gateway routes on the
 // given Mux.
 func RegisterGRPCGatewayRoutes(clientConn gogogrpc.ClientConn, mux *runtime.ServeMux) {
-	txtypes.RegisterServiceHandlerClient(context.Background(), mux, txtypes.NewServiceClient(clientConn))
+	_ = txtypes.RegisterServiceHandlerClient(context.Background(), mux, txtypes.NewServiceClient(clientConn))
 }
 
 func parseOrderBy(orderBy txtypes.OrderBy) string {

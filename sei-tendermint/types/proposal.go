@@ -6,10 +6,11 @@ import (
 	"math/bits"
 	"time"
 
-	"github.com/tendermint/tendermint/internal/libs/protoio"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmtime "github.com/tendermint/tendermint/libs/time"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/protoio"
+	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
 var (
@@ -25,22 +26,22 @@ var (
 // If POLRound >= 0, then BlockID corresponds to the block that is locked in POLRound.
 type Proposal struct {
 	Type            tmproto.SignedMsgType
-	Height          int64     `json:"height,string"`
-	Round           int32     `json:"round"`     // there can not be greater than 2_147_483_647 rounds
-	POLRound        int32     `json:"pol_round"` // -1 if null.
-	BlockID         BlockID   `json:"block_id"`
-	Timestamp       time.Time `json:"timestamp"`
-	Signature       []byte    `json:"signature"`
-	TxKeys          []TxKey   `json:"tx_keys"`
+	Height          int64      `json:"height,string"`
+	Round           int32      `json:"round"`     // there can not be greater than 2_147_483_647 rounds
+	POLRound        int32      `json:"pol_round"` // -1 if null.
+	BlockID         BlockID    `json:"block_id"`
+	Timestamp       time.Time  `json:"timestamp"`
+	Signature       crypto.Sig `json:"signature"`
+	TxHashes        []TxHash   `json:"tx_keys"`
 	Header          `json:"header"`
 	LastCommit      *Commit      `json:"last_commit"`
 	Evidence        EvidenceList `json:"evidence"`
-	ProposerAddress Address      `json:"proposer_address"` // original proposer of the block
+	ProposerAddress Address      `json:"proposer_address"` // proposer of this proposal for the given height/round
 }
 
 // NewProposal returns a new Proposal.
 // If there is no POLRound, polRound should be -1.
-func NewProposal(height int64, round int32, polRound int32, blockID BlockID, ts time.Time, txKeys []TxKey, header Header, lastCommit *Commit, evidenceList EvidenceList, proposerAddress Address) *Proposal {
+func NewProposal(height int64, round int32, polRound int32, blockID BlockID, ts time.Time, txHashes []TxHash, header Header, lastCommit *Commit, evidenceList EvidenceList, proposerAddress Address) *Proposal {
 	return &Proposal{
 		Type:            tmproto.ProposalType,
 		Height:          height,
@@ -48,7 +49,7 @@ func NewProposal(height int64, round int32, polRound int32, blockID BlockID, ts 
 		BlockID:         blockID,
 		POLRound:        polRound,
 		Timestamp:       tmtime.Canonical(ts),
-		TxKeys:          txKeys,
+		TxHashes:        txHashes,
 		Header:          header,
 		LastCommit:      lastCommit,
 		Evidence:        evidenceList,
@@ -67,8 +68,8 @@ func (p *Proposal) ValidateBasic() error {
 	if p.Round < 0 {
 		return errors.New("negative Round")
 	}
-	if p.POLRound < -1 {
-		return errors.New("negative POLRound (exception: -1)")
+	if p.POLRound < -1 || p.POLRound >= p.Round {
+		return fmt.Errorf("invalid POLRound: got %v, want [-1,%v)", p.POLRound, p.Round)
 	}
 	if err := p.BlockID.ValidateBasic(); err != nil {
 		return fmt.Errorf("wrong BlockID: %w", err)
@@ -79,14 +80,6 @@ func (p *Proposal) ValidateBasic() error {
 	}
 
 	// NOTE: Timestamp validation is subtle and handled elsewhere.
-
-	if len(p.Signature) == 0 {
-		return errors.New("signature is missing")
-	}
-
-	if len(p.Signature) > MaxSignatureSize {
-		return fmt.Errorf("signature is too big (max: %d)", MaxSignatureSize)
-	}
 	return nil
 }
 
@@ -106,11 +99,14 @@ func (p *Proposal) IsTimely(recvTime time.Time, sp SynchronyParams, round int32)
 	// proceed in the case that the chosen value was too small for the given network conditions.
 	// For more information and discussion on this mechanism, see the relevant github issue:
 	// https://github.com/tendermint/spec/issues/371
-	maxShift := bits.LeadingZeros64(uint64(sp.MessageDelay)) - 1
-	nShift := int((round / 10))
+	if round < 0 {
+		return false
+	}
+	maxShift := bits.LeadingZeros64(uint64(sp.MessageDelay)) - 1 //nolint:gosec // message delay is non zero
+	nShift := int(round / 10)                                    //nolint:gosec // round is validated non-negative above
 
 	if nShift > maxShift {
-		// if the number of 'doublings' would would overflow the size of the int, use the
+		// if the number of 'doublings' would overflow the size of the int, use the
 		// maximum instead.
 		nShift = maxShift
 	}
@@ -143,7 +139,7 @@ func (p *Proposal) String() string {
 		p.Round,
 		p.BlockID,
 		p.POLRound,
-		tmbytes.Fingerprint(p.Signature),
+		tmbytes.Fingerprint(p.Signature.Bytes()),
 		CanonicalTime(p.Timestamp))
 }
 
@@ -178,12 +174,12 @@ func (p *Proposal) ToProto() *tmproto.Proposal {
 	pb.Round = p.Round
 	pb.PolRound = p.POLRound
 	pb.Timestamp = p.Timestamp
-	pb.Signature = p.Signature
-	txKeys := make([]*tmproto.TxKey, 0, len(p.TxKeys))
-	for _, txKey := range p.TxKeys {
-		txKeys = append(txKeys, txKey.ToProto())
+	pb.Signature = p.Signature.Bytes()
+	txHashes := make([]*tmproto.TxKey, 0, len(p.TxHashes))
+	for _, txHash := range p.TxHashes {
+		txHashes = append(txHashes, txHash.ToProto())
 	}
-	pb.TxKeys = txKeys
+	pb.TxKeys = txHashes
 	pb.LastCommit = p.LastCommit.ToProto()
 	eviD, err := p.Evidence.ToProto()
 	if err != nil {
@@ -216,21 +212,30 @@ func ProposalFromProto(pp *tmproto.Proposal) (*Proposal, error) {
 	p.Round = pp.Round
 	p.POLRound = pp.PolRound
 	p.Timestamp = pp.Timestamp
-	p.Signature = pp.Signature
-	txKeys, err := TxKeysListFromProto(pp.TxKeys)
+	sig, err := crypto.SigFromBytes(pp.Signature)
+	if err != nil {
+		return nil, fmt.Errorf("signature: %w", err)
+	}
+	p.Signature = sig
+	txHashes, err := TxHashesListFromProto(pp.TxKeys)
 	if err != nil {
 		return nil, err
 	}
-	p.TxKeys = txKeys
+	p.TxHashes = txHashes
 	header, err := HeaderFromProto(&pp.Header)
 	if err != nil {
 		return nil, err
 	}
 	p.Header = header
 	lastCommit, err := CommitFromProto(pp.LastCommit)
+	if err != nil {
+		return nil, err
+	}
 	p.LastCommit = lastCommit
 	eviD := new(EvidenceList)
-	eviD.FromProto(pp.Evidence)
+	if err := eviD.FromProto(pp.Evidence); err != nil {
+		return nil, err
+	}
 	p.Evidence = *eviD
 	p.ProposerAddress = pp.ProposerAddress
 

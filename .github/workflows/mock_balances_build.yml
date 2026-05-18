@@ -4,9 +4,15 @@ on:
   pull_request:
     branches:
       - main
+      - release/**
+  merge_group:
+    branches:
+      - main
+      - release/**
   push:
     branches:
       - main
+      - release/**
 
 jobs:
   mock-balances-build:
@@ -14,9 +20,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v6
         with:
-          go-version: 1.24
+          go-version: '1.25.6'
 
       - name: Build with Mock Balances
         run: make install-mock-balances

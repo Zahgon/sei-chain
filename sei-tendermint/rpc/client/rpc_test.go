@@ -1,7 +1,6 @@
 package client_test
 
 import (
-	"bytes"
 	"context"
 	"encoding/base64"
 	"fmt"
@@ -12,29 +11,28 @@ import (
 	"testing"
 	"time"
 
+	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/crypto/encoding"
-	"github.com/tendermint/tendermint/internal/mempool"
-	rpccore "github.com/tendermint/tendermint/internal/rpc/core"
-	tmjson "github.com/tendermint/tendermint/libs/json"
-	"github.com/tendermint/tendermint/libs/log"
-	tmmath "github.com/tendermint/tendermint/libs/math"
-	"github.com/tendermint/tendermint/libs/service"
-	"github.com/tendermint/tendermint/privval"
-	"github.com/tendermint/tendermint/rpc/client"
-	rpchttp "github.com/tendermint/tendermint/rpc/client/http"
-	rpclocal "github.com/tendermint/tendermint/rpc/client/local"
-	"github.com/tendermint/tendermint/rpc/coretypes"
-	rpcclient "github.com/tendermint/tendermint/rpc/jsonrpc/client"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
+	rpccore "github.com/sei-protocol/sei-chain/sei-tendermint/internal/rpc/core"
+	tmjson "github.com/sei-protocol/sei-chain/sei-tendermint/libs/json"
+	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/service"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/require"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/privval"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client"
+	rpchttp "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/http"
+	rpclocal "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/local"
+	rpcclient "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/jsonrpc/client"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
-func getHTTPClient(t *testing.T, logger log.Logger, conf *config.Config) *rpchttp.HTTP {
+func getHTTPClient(t *testing.T, conf *config.Config) *rpchttp.HTTP {
 	t.Helper()
 
 	rpcAddr := conf.RPC.ListenAddress
@@ -43,7 +41,6 @@ func getHTTPClient(t *testing.T, logger log.Logger, conf *config.Config) *rpchtt
 	ctx := t.Context()
 	require.NoError(t, c.Start(ctx))
 
-	c.Logger = logger
 	t.Cleanup(func() {
 		require.NoError(t, c.Stop())
 	})
@@ -51,7 +48,7 @@ func getHTTPClient(t *testing.T, logger log.Logger, conf *config.Config) *rpchtt
 	return c
 }
 
-func getHTTPClientWithTimeout(t *testing.T, logger log.Logger, conf *config.Config, timeout time.Duration) *rpchttp.HTTP {
+func getHTTPClientWithTimeout(t *testing.T, conf *config.Config, timeout time.Duration) *rpchttp.HTTP {
 	t.Helper()
 
 	rpcAddr := conf.RPC.ListenAddress
@@ -62,7 +59,6 @@ func getHTTPClientWithTimeout(t *testing.T, logger log.Logger, conf *config.Conf
 	ctx := t.Context()
 	require.NoError(t, c.Start(ctx))
 
-	c.Logger = logger
 	t.Cleanup(func() {
 		require.NoError(t, c.Stop())
 	})
@@ -77,22 +73,19 @@ func GetClients(t *testing.T, ns service.Service, conf *config.Config) []client.
 	node, ok := ns.(rpclocal.NodeService)
 	require.True(t, ok)
 
-	logger := log.NewTestingLogger(t)
-	ncl, err := rpclocal.New(logger, node)
+	ncl, err := rpclocal.New(node)
 	require.NoError(t, err)
 
 	return []client.Client{
 		ncl,
-		getHTTPClient(t, logger, conf),
+		getHTTPClient(t, conf),
 	}
 }
 
 func TestClientOperations(t *testing.T) {
 	ctx := t.Context()
 
-	logger := log.NewTestingLogger(t)
-
-	_, conf := NodeSuite(ctx, t, logger)
+	_, conf := NodeSuite(ctx, t)
 
 	t.Run("NilCustomHTTPClient", func(t *testing.T) {
 		_, err := rpchttp.NewWithClient("http://example.com", nil)
@@ -126,20 +119,19 @@ func TestClientOperations(t *testing.T) {
 		require.NoError(t, err, "%+v", err)
 		defer resp.Body.Close()
 
-		assert.Equal(t, resp.Header.Get("Access-Control-Allow-Origin"), origin)
+		require.Equal(t, resp.Header.Get("Access-Control-Allow-Origin"), origin)
 	})
 	t.Run("Batching", func(t *testing.T) {
 		t.Run("JSONRPCCalls", func(t *testing.T) {
-			logger := log.NewTestingLogger(t)
-			c := getHTTPClient(t, logger, conf)
-			testBatchedJSONRPCCalls(ctx, t, c)
+
+			c := getHTTPClient(t, conf)
+			testBatchedJSONRPCCalls(ctx, c)
 		})
 		t.Run("JSONRPCCallsCancellation", func(t *testing.T) {
 			_, _, tx1 := MakeTxKV()
 			_, _, tx2 := MakeTxKV()
 
-			logger := log.NewTestingLogger(t)
-			c := getHTTPClient(t, logger, conf)
+			c := getHTTPClient(t, conf)
 			batch := c.NewBatch()
 			_, err := batch.BroadcastTxCommit(ctx, tx1)
 			require.NoError(t, err)
@@ -153,30 +145,27 @@ func TestClientOperations(t *testing.T) {
 			require.Equal(t, 0, batch.Count())
 		})
 		t.Run("SendingEmptyRequest", func(t *testing.T) {
-			logger := log.NewTestingLogger(t)
 
-			c := getHTTPClient(t, logger, conf)
+			c := getHTTPClient(t, conf)
 			batch := c.NewBatch()
 			_, err := batch.Send(ctx)
 			require.Error(t, err, "sending an empty batch of JSON RPC requests should result in an error")
 		})
 		t.Run("ClearingEmptyRequest", func(t *testing.T) {
-			logger := log.NewTestingLogger(t)
 
-			c := getHTTPClient(t, logger, conf)
+			c := getHTTPClient(t, conf)
 			batch := c.NewBatch()
 			require.Zero(t, batch.Clear(), "clearing an empty batch of JSON RPC requests should result in a 0 result")
 		})
 		t.Run("ConcurrentJSONRPC", func(t *testing.T) {
-			logger := log.NewTestingLogger(t)
 
 			var wg sync.WaitGroup
-			c := getHTTPClient(t, logger, conf)
-			for i := 0; i < 50; i++ {
+			c := getHTTPClient(t, conf)
+			for range 50 {
 				wg.Add(1)
 				go func() {
 					defer wg.Done()
-					testBatchedJSONRPCCalls(ctx, t, c)
+					testBatchedJSONRPCCalls(ctx, c)
 				}()
 			}
 			wg.Wait()
@@ -186,9 +175,8 @@ func TestClientOperations(t *testing.T) {
 
 // Make sure info is correct (we connect properly)
 func TestClientMethodCalls(t *testing.T) {
-	logger := log.NewTestingLogger(t)
 
-	n, conf := NodeSuite(t.Context(), t, logger)
+	n, conf := NodeSuite(t.Context(), t)
 
 	// for broadcast tx tests
 	pool := getMempool(t, n)
@@ -202,7 +190,7 @@ func TestClientMethodCalls(t *testing.T) {
 			t.Run("Status", func(t *testing.T) {
 				status, err := c.Status(t.Context())
 				require.NoError(t, err, "%d: %+v", i, err)
-				assert.Equal(t, conf.Moniker, status.NodeInfo.Moniker)
+				require.Equal(t, conf.Moniker, status.NodeInfo.Moniker)
 			})
 			t.Run("Info", func(t *testing.T) {
 				ctx := t.Context()
@@ -212,16 +200,16 @@ func TestClientMethodCalls(t *testing.T) {
 				status, err := c.Status(ctx)
 				require.NoError(t, err)
 
-				assert.GreaterOrEqual(t, status.SyncInfo.LatestBlockHeight, info.Response.LastBlockHeight)
-				assert.True(t, strings.Contains(info.Response.Data, "size"))
+				require.GreaterOrEqual(t, status.SyncInfo.LatestBlockHeight, info.Response.LastBlockHeight)
+				require.True(t, strings.Contains(info.Response.Data, "size"))
 			})
 			t.Run("NetInfo", func(t *testing.T) {
 				nc, ok := c.(client.NetworkClient)
 				require.True(t, ok, "%d", i)
 				netinfo, err := nc.NetInfo(t.Context())
 				require.NoError(t, err, "%d: %+v", i, err)
-				assert.True(t, netinfo.Listening)
-				assert.Equal(t, 0, len(netinfo.Peers))
+				require.True(t, netinfo.Listening)
+				require.Equal(t, 0, len(netinfo.Peers))
 			})
 			t.Run("DumpConsensusState", func(t *testing.T) {
 				// FIXME: fix server so it doesn't panic on invalid input
@@ -229,8 +217,8 @@ func TestClientMethodCalls(t *testing.T) {
 				require.True(t, ok, "%d", i)
 				cons, err := nc.DumpConsensusState(t.Context())
 				require.NoError(t, err, "%d: %+v", i, err)
-				assert.NotEmpty(t, cons.RoundState)
-				assert.Empty(t, cons.Peers)
+				require.NotEmpty(t, cons.RoundState)
+				require.Empty(t, cons.Peers)
 			})
 			t.Run("ConsensusState", func(t *testing.T) {
 				// FIXME: fix server so it doesn't panic on invalid input
@@ -238,7 +226,7 @@ func TestClientMethodCalls(t *testing.T) {
 				require.True(t, ok, "%d", i)
 				cons, err := nc.ConsensusState(t.Context())
 				require.NoError(t, err, "%d: %+v", i, err)
-				assert.NotEmpty(t, cons.RoundState)
+				require.NotEmpty(t, cons.RoundState)
 			})
 			t.Run("Health", func(t *testing.T) {
 				nc, ok := c.(client.NetworkClient)
@@ -265,8 +253,8 @@ func TestClientMethodCalls(t *testing.T) {
 				val := vals.Validators[0]
 
 				// make sure the current set is also the genesis set
-				assert.Equal(t, gval.Power, val.VotingPower)
-				assert.Equal(t, gval.PubKey, val.PubKey)
+				require.Equal(t, gval.Power, val.VotingPower)
+				require.Equal(t, gval.PubKey, val.PubKey)
 			})
 			t.Run("GenesisChunked", func(t *testing.T) {
 				ctx := t.Context()
@@ -304,7 +292,7 @@ func TestClientMethodCalls(t *testing.T) {
 				res, err := c.ABCIQuery(ctx, "/key", k)
 				qres := res.Response
 				if assert.NoError(t, err) && assert.True(t, qres.IsOK()) {
-					assert.EqualValues(t, v, qres.Value)
+					require.Equal(t, v, qres.Value)
 				}
 			})
 			t.Run("AppCalls", func(t *testing.T) {
@@ -336,22 +324,22 @@ func TestClientMethodCalls(t *testing.T) {
 				require.NoError(t, err)
 				qres := _qres.Response
 				if assert.True(t, qres.IsOK()) {
-					assert.Equal(t, k, qres.Key)
-					assert.EqualValues(t, v, qres.Value)
+					require.Equal(t, k, qres.Key)
+					require.Equal(t, v, qres.Value)
 				}
 
 				// make sure we can lookup the tx with proof
 				ptx, err := c.Tx(ctx, bres.Hash, true)
 				require.NoError(t, err)
-				assert.EqualValues(t, txh, ptx.Height)
-				assert.EqualValues(t, tx, ptx.Tx)
+				require.Equal(t, txh, ptx.Height)
+				require.Equal(t, tx, ptx.Tx)
 
 				// and we can even check the block is added
 				block, err := c.Block(ctx, &apph)
 				require.NoError(t, err)
 				appHash := block.Block.Header.AppHash
-				assert.True(t, len(appHash) > 0)
-				assert.EqualValues(t, apph, block.Block.Header.Height)
+				require.True(t, len(appHash) > 0)
+				require.Equal(t, apph, block.Block.Header.Height)
 
 				blockByHash, err := c.BlockByHash(ctx, block.BlockID.Hash)
 				require.NoError(t, err)
@@ -369,42 +357,42 @@ func TestClientMethodCalls(t *testing.T) {
 				// now check the results
 				blockResults, err := c.BlockResults(ctx, &txh)
 				require.NoError(t, err, "%d: %+v", i, err)
-				assert.Equal(t, txh, blockResults.Height)
+				require.Equal(t, txh, blockResults.Height)
 				if assert.Equal(t, 1, len(blockResults.TxsResults)) {
 					// check success code
-					assert.EqualValues(t, 0, blockResults.TxsResults[0].Code)
+					require.Equal(t, 0, blockResults.TxsResults[0].Code)
 				}
 
 				// check blockchain info, now that we know there is info
 				info, err := c.BlockchainInfo(ctx, apph, apph)
 				require.NoError(t, err)
-				assert.True(t, info.LastHeight >= apph)
+				require.True(t, info.LastHeight >= apph)
 				if assert.Equal(t, 1, len(info.BlockMetas)) {
 					lastMeta := info.BlockMetas[0]
-					assert.EqualValues(t, apph, lastMeta.Header.Height)
+					require.Equal(t, apph, lastMeta.Header.Height)
 					blockData := block.Block
-					assert.Equal(t, blockData.Header.AppHash, lastMeta.Header.AppHash)
-					assert.Equal(t, block.BlockID, lastMeta.BlockID)
+					require.Equal(t, blockData.Header.AppHash, lastMeta.Header.AppHash)
+					require.Equal(t, block.BlockID, lastMeta.BlockID)
 				}
 
 				// and get the corresponding commit with the same apphash
 				commit, err := c.Commit(ctx, &apph)
 				require.NoError(t, err)
 				cappHash := commit.Header.AppHash
-				assert.Equal(t, appHash, cappHash)
-				assert.NotNil(t, commit.Commit)
+				require.Equal(t, appHash, cappHash)
+				require.NotNil(t, commit.Commit)
 
 				// compare the commits (note Commit(2) has commit from Block(3))
 				h = apph - 1
 				commit2, err := c.Commit(ctx, &h)
 				require.NoError(t, err)
-				assert.Equal(t, block.Block.LastCommitHash, commit2.Commit.Hash())
+				require.Equal(t, block.Block.LastCommitHash, commit2.Commit.Hash())
 
 				// and we got a proof that works!
 				_pres, err := c.ABCIQueryWithOptions(ctx, "/key", k, client.ABCIQueryOptions{Prove: true})
 				require.NoError(t, err)
 				pres := _pres.Response
-				assert.True(t, pres.IsOK())
+				require.True(t, pres.IsOK())
 
 				// XXX Test proof
 			})
@@ -416,26 +404,26 @@ func TestClientMethodCalls(t *testing.T) {
 
 				res, err := c.BlockchainInfo(ctx, 0, 0)
 				require.NoError(t, err, "%d: %+v", i, err)
-				assert.True(t, res.LastHeight > 0)
-				assert.True(t, len(res.BlockMetas) > 0)
+				require.True(t, res.LastHeight > 0)
+				require.True(t, len(res.BlockMetas) > 0)
 
 				res, err = c.BlockchainInfo(ctx, 1, 1)
 				require.NoError(t, err, "%d: %+v", i, err)
-				assert.True(t, res.LastHeight > 0)
-				assert.True(t, len(res.BlockMetas) == 1)
+				require.True(t, res.LastHeight > 0)
+				require.True(t, len(res.BlockMetas) == 1)
 
 				res, err = c.BlockchainInfo(ctx, 1, 10000)
 				require.NoError(t, err, "%d: %+v", i, err)
-				assert.True(t, res.LastHeight > 0)
-				assert.True(t, len(res.BlockMetas) < 100)
+				require.True(t, res.LastHeight > 0)
+				require.True(t, len(res.BlockMetas) < 100)
 				for _, m := range res.BlockMetas {
-					assert.NotNil(t, m)
+					require.NotNil(t, m)
 				}
 
 				res, err = c.BlockchainInfo(ctx, 10000, 1)
 				require.Error(t, err)
-				assert.Nil(t, res)
-				assert.Contains(t, err.Error(), "can't be greater than max")
+				require.Nil(t, res)
+				require.Contains(t, err.Error(), "can't be greater than max")
 			})
 			t.Run("BroadcastTxCommit", func(t *testing.T) {
 				ctx := t.Context()
@@ -458,7 +446,7 @@ func TestClientMethodCalls(t *testing.T) {
 				require.Equal(t, initMempoolSize+1, pool.Size())
 
 				txs := pool.ReapMaxTxs(len(tx))
-				require.EqualValues(t, tx, txs[0])
+				require.Equal(t, tx, txs[0])
 				pool.Flush()
 			})
 			t.Run("CheckTx", func(t *testing.T) {
@@ -467,9 +455,9 @@ func TestClientMethodCalls(t *testing.T) {
 
 				res, err := c.CheckTx(ctx, tx)
 				require.NoError(t, err)
-				assert.Equal(t, abci.CodeTypeOK, res.Code)
+				require.Equal(t, abci.CodeTypeOK, res.Code)
 
-				assert.Equal(t, 0, pool.Size(), "mempool must be empty")
+				require.Equal(t, 0, pool.Size(), "mempool must be empty")
 			})
 			t.Run("Events", func(t *testing.T) {
 				t.Run("Header", func(t *testing.T) {
@@ -496,7 +484,7 @@ func TestClientMethodCalls(t *testing.T) {
 					})
 
 					var firstBlockHeight int64
-					for i := int64(0); i < 3; i++ {
+					for i := range int64(3) {
 						event := <-eventCh
 
 						blockEvent, ok := event.Data.(types.LegacyEventDataNewBlock)
@@ -542,28 +530,26 @@ func TestClientMethodCalls(t *testing.T) {
 
 					result, err := c.BroadcastEvidence(ctx, correct)
 					require.NoError(t, err, "BroadcastEvidence(%s) failed", correct)
-					assert.Equal(t, correct.Hash(), result.Hash, "expected result hash to match evidence hash")
+					require.Equal(t, correct.Hash(), result.Hash, "expected result hash to match evidence hash")
 
 					status, err := c.Status(ctx)
 					require.NoError(t, err)
 					err = client.WaitForHeight(ctx, c, status.SyncInfo.LatestBlockHeight+2, nil)
 					require.NoError(t, err)
 
-					ed25519pub := pv.Key.PubKey.(ed25519.PubKey)
-					rawpub := ed25519pub.Bytes()
-					result2, err := c.ABCIQuery(ctx, "/val", rawpub)
+					result2, err := c.ABCIQuery(ctx, "/val", pv.Key.PubKey.Bytes())
 					require.NoError(t, err)
 					qres := result2.Response
 					require.True(t, qres.IsOK())
 
 					var v abci.ValidatorUpdate
-					err = abci.ReadMessage(bytes.NewReader(qres.Value), &v)
+					err = proto.Unmarshal(qres.Value, &v)
 					require.NoError(t, err, "Error reading query result, value %v", qres.Value)
 
-					pk, err := encoding.PubKeyFromProto(v.PubKey)
+					pk, err := crypto.PubKeyFromProto(v.PubKey)
 					require.NoError(t, err)
 
-					require.EqualValues(t, rawpub, pk, "Stored PubKey not equal with expected, value %v", string(qres.Value))
+					require.Equal(t, pv.Key.PubKey, pk, "Stored PubKey not equal with expected, value %v", string(qres.Value))
 					require.Equal(t, int64(9), v.Power, "Stored Power not equal with expected, value %v", string(qres.Value))
 
 					for _, fake := range fakes {
@@ -581,7 +567,7 @@ func TestClientMethodCalls(t *testing.T) {
 	}
 }
 
-func getMempool(t *testing.T, srv service.Service) mempool.Mempool {
+func getMempool(t *testing.T, srv service.Service) *mempool.TxMempool {
 	t.Helper()
 	n, ok := srv.(interface {
 		RPCEnvironment() *rpccore.Environment
@@ -597,25 +583,23 @@ func getMempool(t *testing.T, srv service.Service) mempool.Mempool {
 func TestClientMethodCallsAdvanced(t *testing.T) {
 	ctx := t.Context()
 
-	logger := log.NewTestingLogger(t)
-
-	n, conf := NodeSuite(ctx, t, logger)
+	n, conf := NodeSuite(ctx, t)
 	pool := getMempool(t, n)
 
 	t.Run("UnconfirmedTxs", func(t *testing.T) {
 		// populate mempool with 5 tx
 		txs := make([]types.Tx, 5)
 		ch := make(chan error, 5)
-		for i := 0; i < 5; i++ {
+		for i := range 5 {
 			_, _, tx := MakeTxKV()
 
 			txs[i] = tx
-			err := pool.CheckTx(ctx, tx, func(_ *abci.ResponseCheckTx) { ch <- nil }, mempool.TxInfo{})
-
+			_, err := pool.CheckTx(ctx, tx, mempool.TxInfo{})
 			require.NoError(t, err)
+			ch <- nil
 		}
 		// wait for tx to arrive in mempoool.
-		for i := 0; i < 5; i++ {
+		for range 5 {
 			select {
 			case <-ch:
 			case <-time.After(5 * time.Second):
@@ -652,8 +636,9 @@ func TestClientMethodCallsAdvanced(t *testing.T) {
 
 		_, _, tx := MakeTxKV()
 
-		err := pool.CheckTx(ctx, tx, func(_ *abci.ResponseCheckTx) { close(ch) }, mempool.TxInfo{})
+		_, err := pool.CheckTx(ctx, tx, mempool.TxInfo{})
 		require.NoError(t, err)
+		close(ch)
 
 		// wait for tx to arrive in mempoool.
 		select {
@@ -677,9 +662,8 @@ func TestClientMethodCallsAdvanced(t *testing.T) {
 		pool.Flush()
 	})
 	t.Run("Tx", func(t *testing.T) {
-		logger := log.NewTestingLogger(t)
 
-		c := getHTTPClient(t, logger, conf)
+		c := getHTTPClient(t, conf)
 
 		// first we broadcast a tx
 		_, _, tx := MakeTxKV()
@@ -699,8 +683,8 @@ func TestClientMethodCallsAdvanced(t *testing.T) {
 			// only valid if correct hash provided
 			{true, false, txHash},
 			{true, true, txHash},
-			{false, false, anotherTxHash},
-			{false, true, anotherTxHash},
+			{false, false, anotherTxHash.Bytes()},
+			{false, true, anotherTxHash.Bytes()},
 			{false, false, nil},
 			{false, true, nil},
 		}
@@ -717,16 +701,17 @@ func TestClientMethodCallsAdvanced(t *testing.T) {
 							require.Error(t, err)
 						} else {
 							require.NoError(t, err, "%+v", err)
-							assert.EqualValues(t, txHeight, ptx.Height)
-							assert.EqualValues(t, tx, ptx.Tx)
-							assert.Zero(t, ptx.Index)
-							assert.True(t, ptx.TxResult.IsOK())
-							assert.EqualValues(t, txHash, ptx.Hash)
+							require.Equal(t, txHeight, ptx.Height)
+							require.Equal(t, tx, ptx.Tx)
+							require.Zero(t, ptx.Index)
+							require.True(t, ptx.TxResult.IsOK())
+							require.Equal(t, txHash, ptx.Hash)
 
 							// time to verify the proof
 							proof := ptx.Proof
-							if tc.prove && assert.EqualValues(t, tx, proof.Data) {
-								assert.NoError(t, proof.Proof.Verify(proof.RootHash, txHash))
+							if tc.prove {
+								require.Equal(t, tx, proof.Data)
+								require.NoError(t, proof.Proof.Verify(proof.RootHash, txHash))
 							}
 						}
 					})
@@ -735,9 +720,8 @@ func TestClientMethodCallsAdvanced(t *testing.T) {
 		}
 	})
 	t.Run("TxSearchWithTimeout", func(t *testing.T) {
-		logger := log.NewTestingLogger(t)
 
-		timeoutClient := getHTTPClientWithTimeout(t, logger, conf, 10*time.Second)
+		timeoutClient := getHTTPClientWithTimeout(t, conf, 10*time.Second)
 
 		_, _, tx := MakeTxKV()
 		_, err := timeoutClient.BroadcastTxCommit(ctx, tx)
@@ -750,12 +734,11 @@ func TestClientMethodCallsAdvanced(t *testing.T) {
 	})
 	t.Run("TxSearch", func(t *testing.T) {
 		t.Skip("Test Asserts Non-Deterministic Results")
-		logger := log.NewTestingLogger(t)
 
-		c := getHTTPClient(t, logger, conf)
+		c := getHTTPClient(t, conf)
 
 		// first we broadcast a few txs
-		for i := 0; i < 10; i++ {
+		for range 10 {
 			_, _, tx := MakeTxKV()
 			_, err := c.BroadcastTxSync(ctx, tx)
 			require.NoError(t, err)
@@ -780,15 +763,15 @@ func TestClientMethodCallsAdvanced(t *testing.T) {
 				require.Equal(t, find.Hash, result.Txs[0].Hash)
 
 				ptx := result.Txs[0]
-				assert.EqualValues(t, find.Height, ptx.Height)
-				assert.EqualValues(t, find.Tx, ptx.Tx)
-				assert.Zero(t, ptx.Index)
-				assert.True(t, ptx.TxResult.IsOK())
-				assert.EqualValues(t, find.Hash, ptx.Hash)
+				require.Equal(t, find.Height, ptx.Height)
+				require.Equal(t, find.Tx, ptx.Tx)
+				require.Zero(t, ptx.Index)
+				require.True(t, ptx.TxResult.IsOK())
+				require.Equal(t, find.Hash, ptx.Hash)
 
 				// time to verify the proof
-				if assert.EqualValues(t, find.Tx, ptx.Proof.Data) {
-					assert.NoError(t, ptx.Proof.Proof.Verify(ptx.Proof.RootHash, find.Hash))
+				if assert.Equal(t, find.Tx, ptx.Proof.Data) {
+					require.NoError(t, ptx.Proof.Proof.Verify(ptx.Proof.RootHash, find.Hash))
 				}
 
 				// query by height
@@ -875,51 +858,25 @@ func TestClientMethodCallsAdvanced(t *testing.T) {
 	})
 }
 
-func testBatchedJSONRPCCalls(ctx context.Context, t *testing.T, c *rpchttp.HTTP) {
-	k1, v1, tx1 := MakeTxKV()
-	k2, v2, tx2 := MakeTxKV()
+// WARNING: this function is called in subgoroutines to it shouldn't use testing.T.
+func testBatchedJSONRPCCalls(ctx context.Context, c *rpchttp.HTTP) {
+	k1, _, tx1 := MakeTxKV()
+	k2, _, tx2 := MakeTxKV()
 
 	batch := c.NewBatch()
-	r1, err := batch.BroadcastTxCommit(ctx, tx1)
-	require.NoError(t, err)
-	r2, err := batch.BroadcastTxCommit(ctx, tx2)
-	require.NoError(t, err)
-	require.Equal(t, 2, batch.Count())
-	bresults, err := batch.Send(ctx)
-	require.NoError(t, err)
-	require.Len(t, bresults, 2)
-	require.Equal(t, 0, batch.Count())
+	r1 := utils.OrPanic1(batch.BroadcastTxCommit(ctx, tx1))
+	r2 := utils.OrPanic1(batch.BroadcastTxCommit(ctx, tx2))
+	utils.OrPanic(utils.TestDiff(2, batch.Count()))
+	bresults := utils.OrPanic1(batch.Send(ctx))
+	utils.OrPanic(utils.TestDiff(bresults, []any{r1, r2}))
+	utils.OrPanic(utils.TestDiff(0, batch.Count()))
+	apph := tmmath.MaxInt64(r1.Height, r2.Height) + 1
 
-	bresult1, ok := bresults[0].(*coretypes.ResultBroadcastTxCommit)
-	require.True(t, ok)
-	require.Equal(t, *bresult1, *r1)
-	bresult2, ok := bresults[1].(*coretypes.ResultBroadcastTxCommit)
-	require.True(t, ok)
-	require.Equal(t, *bresult2, *r2)
-	apph := tmmath.MaxInt64(bresult1.Height, bresult2.Height) + 1
+	utils.OrPanic(client.WaitForHeight(ctx, c, apph, nil))
 
-	err = client.WaitForHeight(ctx, c, apph, nil)
-	require.NoError(t, err)
-
-	q1, err := batch.ABCIQuery(ctx, "/key", k1)
-	require.NoError(t, err)
-	q2, err := batch.ABCIQuery(ctx, "/key", k2)
-	require.NoError(t, err)
-	require.Equal(t, 2, batch.Count())
-	qresults, err := batch.Send(ctx)
-	require.NoError(t, err)
-	require.Len(t, qresults, 2)
-	require.Equal(t, 0, batch.Count())
-
-	qresult1, ok := qresults[0].(*coretypes.ResultABCIQuery)
-	require.True(t, ok)
-	require.Equal(t, *qresult1, *q1)
-	qresult2, ok := qresults[1].(*coretypes.ResultABCIQuery)
-	require.True(t, ok)
-	require.Equal(t, *qresult2, *q2)
-
-	require.Equal(t, qresult1.Response.Key, k1)
-	require.Equal(t, qresult2.Response.Key, k2)
-	require.Equal(t, qresult1.Response.Value, v1)
-	require.Equal(t, qresult2.Response.Value, v2)
+	q1 := utils.OrPanic1(batch.ABCIQuery(ctx, "/key", k1))
+	q2 := utils.OrPanic1(batch.ABCIQuery(ctx, "/key", k2))
+	utils.OrPanic(utils.TestDiff(2, batch.Count()))
+	qresults := utils.OrPanic1(batch.Send(ctx))
+	utils.OrPanic(utils.TestDiff(qresults, []any{q1, q2}))
 }

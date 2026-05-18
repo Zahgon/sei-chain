@@ -6,13 +6,14 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/internal/test/factory"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmtime "github.com/tendermint/tendermint/libs/time"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/test/factory"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func TestPeerCatchupRounds(t *testing.T) {
@@ -23,7 +24,7 @@ func TestPeerCatchupRounds(t *testing.T) {
 
 	ctx := t.Context()
 
-	valSet, privVals := factory.ValidatorSet(ctx, t, 10, 1)
+	valSet, privVals := factory.ValidatorSet(ctx, 10, 1)
 
 	chainID := cfg.ChainID()
 	hvs := NewHeightVoteSet(chainID, 1, valSet)
@@ -83,10 +84,7 @@ func makeVoteHR(
 	}
 
 	v := vote.ToProto()
-	err = privVal.SignVote(ctx, chainID, v)
-	require.NoError(t, err, "Error signing vote")
-
-	vote.Signature = v.Signature
-
+	require.NoError(t, privVal.SignVote(ctx, chainID, v))
+	vote.Signature = utils.Some(utils.OrPanic1(crypto.SigFromBytes(v.Signature)))
 	return vote
 }

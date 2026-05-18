@@ -9,30 +9,26 @@ import (
 	"os"
 	"sort"
 	"strings"
-	"sync"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/sei-protocol/sei-chain/app"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/sei-protocol/sei-chain/testutil/keeper"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/sei-protocol/sei-chain/utils"
 	"github.com/sei-protocol/sei-chain/x/evm/config"
-	evmkeeper "github.com/sei-protocol/sei-chain/x/evm/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/types"
 	"github.com/sei-protocol/sei-chain/x/evm/types/ethtx"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/rand"
-	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 func TestPurgePrefixNotHang(t *testing.T) {
-	k, ctx := keeper.MockEVMKeeper()
+	k, ctx := keeper.MockEVMKeeper(t)
 	_, evmAddr := keeper.MockAddressPair()
 	for i := 0; i < 50; i++ {
 		ctx = ctx.WithMultiStore(ctx.MultiStore().CacheMultiStore())
@@ -43,7 +39,7 @@ func TestPurgePrefixNotHang(t *testing.T) {
 }
 
 func TestGetChainID(t *testing.T) {
-	k, ctx := keeper.MockEVMKeeper()
+	k, ctx := keeper.MockEVMKeeper(t)
 	require.Equal(t, config.DefaultChainID, k.ChainID(ctx).Int64())
 
 	ctx = ctx.WithChainID("pacific-1")
@@ -57,7 +53,7 @@ func TestGetChainID(t *testing.T) {
 }
 
 func TestGetVMBlockContext(t *testing.T) {
-	k, ctx := keeper.MockEVMKeeper()
+	k, ctx := keeper.MockEVMKeeper(t)
 	moduleAddr := k.AccountKeeper().GetModuleAddress(authtypes.FeeCollectorName)
 	evmAddr, _ := k.GetEVMAddress(ctx, moduleAddr)
 	k.DeleteAddressMapping(ctx, moduleAddr, evmAddr)
@@ -66,7 +62,7 @@ func TestGetVMBlockContext(t *testing.T) {
 }
 
 func TestGetHashFn(t *testing.T) {
-	k, ctx := keeper.MockEVMKeeper()
+	k, ctx := keeper.MockEVMKeeper(t)
 	f := k.GetHashFn(ctx)
 	require.Equal(t, common.Hash{}, f(math.MaxInt64+1))
 	require.Equal(t, common.BytesToHash(ctx.HeaderHash()), f(uint64(ctx.BlockHeight())))
@@ -74,143 +70,8 @@ func TestGetHashFn(t *testing.T) {
 	require.Equal(t, common.Hash{}, f(uint64(ctx.BlockHeight())-1))
 }
 
-func TestKeeper_CalculateNextNonce(t *testing.T) {
-	address1 := common.BytesToAddress([]byte("addr1"))
-	key1 := tmtypes.TxKey(rand.NewRand().Bytes(32))
-	key2 := tmtypes.TxKey(rand.NewRand().Bytes(32))
-	tests := []struct {
-		name          string
-		address       common.Address
-		pending       bool
-		setup         func(ctx sdk.Context, k *evmkeeper.Keeper)
-		expectedNonce uint64
-	}{
-		{
-			name:          "latest block, no latest stored",
-			address:       address1,
-			pending:       false,
-			expectedNonce: 0,
-		},
-		{
-			name:    "latest block, latest stored",
-			address: address1,
-			pending: false,
-			setup: func(ctx sdk.Context, k *evmkeeper.Keeper) {
-				k.SetNonce(ctx, address1, 50)
-			},
-			expectedNonce: 50,
-		},
-		{
-			name:    "latest block, latest stored with pending nonces",
-			address: address1,
-			pending: false,
-			setup: func(ctx sdk.Context, k *evmkeeper.Keeper) {
-				k.SetNonce(ctx, address1, 50)
-				// because pending:false, these won't matter
-				k.AddPendingNonce(key1, address1, 50, 0)
-				k.AddPendingNonce(key2, address1, 51, 0)
-			},
-			expectedNonce: 50,
-		},
-		{
-			name:    "pending block, nonce should follow the last pending",
-			address: address1,
-			pending: true,
-			setup: func(ctx sdk.Context, k *evmkeeper.Keeper) {
-				k.SetNonce(ctx, address1, 50)
-				k.AddPendingNonce(key1, address1, 50, 0)
-				k.AddPendingNonce(key2, address1, 51, 0)
-			},
-			expectedNonce: 52,
-		},
-		{
-			name:    "pending block, nonce should be the value of hole",
-			address: address1,
-			pending: true,
-			setup: func(ctx sdk.Context, k *evmkeeper.Keeper) {
-				k.SetNonce(ctx, address1, 50)
-				k.AddPendingNonce(key1, address1, 50, 0)
-				// missing 51, so nonce = 51
-				k.AddPendingNonce(key2, address1, 52, 0)
-			},
-			expectedNonce: 51,
-		},
-		{
-			name:    "pending block, completed nonces should also be skipped",
-			address: address1,
-			pending: true,
-			setup: func(ctx sdk.Context, k *evmkeeper.Keeper) {
-				k.SetNonce(ctx, address1, 50)
-				k.AddPendingNonce(key1, address1, 50, 0)
-				k.AddPendingNonce(key2, address1, 51, 0)
-				k.SetNonce(ctx, address1, 52)
-				k.RemovePendingNonce(key1)
-				k.RemovePendingNonce(key2)
-			},
-			expectedNonce: 52,
-		},
-		{
-			name:    "pending block, hole created by expiration",
-			address: address1,
-			pending: true,
-			setup: func(ctx sdk.Context, k *evmkeeper.Keeper) {
-				k.SetNonce(ctx, address1, 50)
-				k.AddPendingNonce(key1, address1, 50, 0)
-				k.AddPendingNonce(key2, address1, 51, 0)
-				k.RemovePendingNonce(key1)
-			},
-			expectedNonce: 50,
-		},
-		{
-			name:    "pending block, skipped nonces all in pending",
-			address: address1,
-			pending: true,
-			setup: func(ctx sdk.Context, k *evmkeeper.Keeper) {
-				// next expected for latest is 50, but 51,52 were sent
-				k.SetNonce(ctx, address1, 50)
-				k.AddPendingNonce(key1, address1, 51, 0)
-				k.AddPendingNonce(key2, address1, 52, 0)
-			},
-			expectedNonce: 50,
-		},
-		{
-			name:    "try 1000 nonces concurrently",
-			address: address1,
-			pending: true,
-			setup: func(ctx sdk.Context, k *evmkeeper.Keeper) {
-				// next expected for latest is 50, but 51,52 were sent
-				k.SetNonce(ctx, address1, 50)
-				wg := sync.WaitGroup{}
-				for i := 50; i < 1000; i++ {
-					wg.Add(1)
-					go func(nonce int) {
-						defer wg.Done()
-						key := tmtypes.TxKey(rand.NewRand().Bytes(32))
-						// call this just to exercise locks
-						k.CalculateNextNonce(ctx, address1, true)
-						k.AddPendingNonce(key, address1, uint64(nonce), 0)
-					}(i)
-				}
-				wg.Wait()
-			},
-			expectedNonce: 1000,
-		},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			k, ctx := keeper.MockEVMKeeper()
-			if test.setup != nil {
-				test.setup(ctx, k)
-			}
-			next := k.CalculateNextNonce(ctx, test.address, test.pending)
-			require.Equal(t, test.expectedNonce, next)
-		})
-	}
-}
-
 func TestDeferredInfo(t *testing.T) {
-	a := app.Setup(false, false, false)
+	a := app.Setup(t, false, false, false)
 	k := a.EvmKeeper
 	ctx := a.GetContextForDeliverTx([]byte{})
 	ctx = ctx.WithTxIndex(1)
@@ -242,27 +103,6 @@ func TestDeferredInfo(t *testing.T) {
 	k.SetMsgs([]*types.MsgEVMTransaction{})
 	infoList = k.GetAllEVMTxDeferredInfo(ctx)
 	require.Empty(t, len(infoList))
-}
-
-func TestAddPendingNonce(t *testing.T) {
-	k, _ := keeper.MockEVMKeeper()
-	k.AddPendingNonce(tmtypes.TxKey{1}, common.HexToAddress("123"), 1, 1)
-	k.AddPendingNonce(tmtypes.TxKey{2}, common.HexToAddress("123"), 2, 1)
-	k.AddPendingNonce(tmtypes.TxKey{3}, common.HexToAddress("123"), 2, 2) // should replace the one above
-	pendingTxs := k.GetPendingTxs()[common.HexToAddress("123").Hex()]
-	require.Equal(t, 2, len(pendingTxs))
-	require.Equal(t, tmtypes.TxKey{1}, pendingTxs[0].Key)
-	require.Equal(t, uint64(1), pendingTxs[0].Nonce)
-	require.Equal(t, int64(1), pendingTxs[0].Priority)
-	require.Equal(t, tmtypes.TxKey{3}, pendingTxs[1].Key)
-	require.Equal(t, uint64(2), pendingTxs[1].Nonce)
-	require.Equal(t, int64(2), pendingTxs[1].Priority)
-	keyToNonce := k.GetKeysToNonces()
-	require.Equal(t, common.HexToAddress("123"), keyToNonce[tmtypes.TxKey{1}].Address)
-	require.Equal(t, uint64(1), keyToNonce[tmtypes.TxKey{1}].Nonce)
-	require.Equal(t, common.HexToAddress("123"), keyToNonce[tmtypes.TxKey{3}].Address)
-	require.Equal(t, uint64(2), keyToNonce[tmtypes.TxKey{3}].Nonce)
-	require.NotContains(t, keyToNonce, tmtypes.TxKey{2})
 }
 
 func TestGetCustomPrecompiles(t *testing.T) {
@@ -305,7 +145,7 @@ func TestGetCustomPrecompiles(t *testing.T) {
 	require.Greater(t, len(tags), 0, "Should have found at least one tag")
 
 	// Setup keeper and context
-	k, ctx := keeper.MockEVMKeeperPrecompiles()
+	k, ctx := keeper.MockEVMKeeperPrecompiles(t)
 
 	// Set up upgrade heights with increment of 10
 	baseHeight := 1000000
@@ -331,7 +171,7 @@ func TestGetCustomPrecompiles(t *testing.T) {
 }
 
 func mockEVMTransactionMessage(t *testing.T) *types.MsgEVMTransaction {
-	k, ctx := testkeeper.MockEVMKeeper()
+	k, ctx := testkeeper.MockEVMKeeper(t)
 	chainID := k.ChainID(ctx)
 	chainCfg := types.DefaultChainConfig()
 	ethCfg := chainCfg.EthereumConfig(chainID)
@@ -360,7 +200,7 @@ func mockEVMTransactionMessage(t *testing.T) *types.MsgEVMTransaction {
 
 func TestGetBaseFeeBeforeV620(t *testing.T) {
 	// Set up a test app and context
-	testApp := app.Setup(false, false, false)
+	testApp := app.Setup(t, false, false, false)
 	testHeight := int64(1000)
 	testCtx := testApp.GetContextForDeliverTx([]byte{}).WithBlockHeight(testHeight)
 

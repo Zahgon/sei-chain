@@ -27,14 +27,10 @@ type Metrics struct {
 	//metrics:Number of validator set updates returned by the application since process start.
 	ValidatorSetUpdates metrics.Counter
 
-	// ValidatorSetUpdates measures how long it takes async ABCI requests to be flushed before
-	// committing application state
-	FlushAppConnectionTime metrics.Histogram
-
-	// ApplicationCommitTime meaures how long it takes to commit application state
+	// ApplicationCommitTime measures how long it takes to commit application state
 	ApplicationCommitTime metrics.Histogram
 
-	// UpdateMempoolTime meaures how long it takes to update mempool after commiting, including
+	// UpdateMempoolTime measures how long it takes to update mempool after committing, including
 	// reCheckTx
 	UpdateMempoolTime metrics.Histogram
 
@@ -52,4 +48,17 @@ type Metrics struct {
 
 	// FireEventsLatency measures how long it takes to fire events for indexing
 	FireEventsLatency metrics.Histogram `metrics_buckettype:"exprange" metrics_bucketsizes:"0.01, 10, 10"`
+
+	// ProposerPriorityHash encodes the first 6 bytes of the hash of the
+	// current validator set's proposer priorities as a float64 value.
+	// Exported periodically (every proposerPriorityHashInterval heights) for
+	// operator visibility; divergence between validators at the same
+	// ProposerPriorityHashHeight indicates corrupted ProposerPriority state.
+	// Paired with ProposerPriorityHashHeight so operators can correlate.
+	ProposerPriorityHash metrics.Gauge
+
+	// ProposerPriorityHashHeight is the block height at which the most recent
+	// ProposerPriorityHash was computed. Operators comparing hashes across
+	// validators should only compare samples at the same height.
+	ProposerPriorityHashHeight metrics.Gauge
 }

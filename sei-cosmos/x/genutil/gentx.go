@@ -5,15 +5,15 @@ import (
 	"encoding/json"
 	"fmt"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/utils"
-	bankexported "github.com/cosmos/cosmos-sdk/x/bank/exported"
-	"github.com/cosmos/cosmos-sdk/x/genutil/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/utils"
+	bankexported "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/exported"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil/types"
+	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 )
 
 // SetGenTxsInAppGenesisState - sets the genesis transactions in the app genesis state
@@ -88,7 +88,7 @@ func ValidateAccountInGenesis(
 	return nil
 }
 
-type deliverTxfn func(sdk.Context, abci.RequestDeliverTx, sdk.Tx, [32]byte) abci.ResponseDeliverTx
+type deliverTxfn func(sdk.Context, abci.RequestDeliverTxV2, sdk.Tx, [32]byte) abci.ResponseDeliverTx
 
 // DeliverGenTxs iterates over all genesis txs, decodes each into a Tx and
 // invokes the provided deliverTxfn with the decoded Tx. It returns the result
@@ -110,7 +110,7 @@ func DeliverGenTxs(
 			panic(err)
 		}
 
-		res := deliverTx(ctx, abci.RequestDeliverTx{Tx: bz}, tx, sha256.Sum256(bz))
+		res := deliverTx(ctx, abci.RequestDeliverTxV2{Tx: bz}, tx, sha256.Sum256(bz))
 		if !res.IsOK() {
 			panic(res.Log)
 		}

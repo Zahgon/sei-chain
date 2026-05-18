@@ -12,11 +12,11 @@ import (
 	"github.com/google/orderedcode"
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/internal/pubsub/query"
-	"github.com/tendermint/tendermint/internal/pubsub/query/syntax"
-	indexer "github.com/tendermint/tendermint/internal/state/indexer"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query/syntax"
+	indexer "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 var _ indexer.TxIndexer = (*TxIndex)(nil)
@@ -38,7 +38,7 @@ func NewTxIndex(store dbm.DB) *TxIndex {
 
 // Get gets transaction from the TxIndex storage and returns it or nil if the
 // transaction is not found.
-func (txi *TxIndex) Get(hash []byte) (*abci.TxResult, error) {
+func (txi *TxIndex) Get(hash []byte) (*abci.TxResultV2, error) {
 	if len(hash) == 0 {
 		return nil, indexer.ErrorEmptyHash
 	}
@@ -57,38 +57,39 @@ func (txi *TxIndex) Get(hash []byte) (*abci.TxResult, error) {
 		return nil, fmt.Errorf("error reading TxResult: %w", err)
 	}
 
-	return txResult, nil
+	return &abci.TxResultV2{Height: txResult.Height, Index: txResult.Index, Tx: txResult.Tx, Result: txResult.Result}, nil
 }
 
 // Index indexes transactions using the given list of events. Each key
 // that indexed from the tx's events is a composite of the event type and the
 // respective attribute's key delimited by a "." (eg. "account.number").
 // Any event with an empty type is not indexed.
-func (txi *TxIndex) Index(results []*abci.TxResult) error {
+func (txi *TxIndex) Index(results []*abci.TxResultV2) error {
 	b := txi.store.NewBatch()
-	defer b.Close()
+	defer func() { _ = b.Close() }()
 
 	for _, result := range results {
 		hash := types.Tx(result.Tx).Hash()
+		hashBytes := hash[:]
 
 		// index tx by events
-		err := txi.indexEvents(result, hash, b)
+		err := txi.indexEvents(result, hashBytes, b)
 		if err != nil {
 			return err
 		}
 
 		// index by height (always)
-		err = b.Set(KeyFromHeight(result), hash)
+		err = b.Set(KeyFromHeight(result), hashBytes)
 		if err != nil {
 			return err
 		}
 
-		rawBytes, err := proto.Marshal(result)
+		rawBytes, err := proto.Marshal(&abci.TxResult{Height: result.Height, Index: result.Index, Tx: result.Tx, Result: result.Result})
 		if err != nil {
 			return err
 		}
 		// index by hash (always)
-		err = b.Set(primaryKey(hash), rawBytes)
+		err = b.Set(primaryKey(hashBytes), rawBytes)
 		if err != nil {
 			return err
 		}
@@ -97,7 +98,7 @@ func (txi *TxIndex) Index(results []*abci.TxResult) error {
 	return b.WriteSync()
 }
 
-func (txi *TxIndex) indexEvents(result *abci.TxResult, hash []byte, store dbm.Batch) error {
+func (txi *TxIndex) indexEvents(result *abci.TxResultV2, hash []byte, store dbm.Batch) error {
 	for _, event := range result.Result.Events {
 		// only index events with a non-empty type
 		if len(event.Type) == 0 {
@@ -138,10 +139,10 @@ func (txi *TxIndex) indexEvents(result *abci.TxResult, hash []byte, store dbm.Ba
 //
 // Search will exit early and return any result fetched so far,
 // when a message is received on the context chan.
-func (txi *TxIndex) Search(ctx context.Context, q *query.Query) ([]*abci.TxResult, error) {
+func (txi *TxIndex) Search(ctx context.Context, q *query.Query) ([]*abci.TxResultV2, error) {
 	select {
 	case <-ctx.Done():
-		return make([]*abci.TxResult, 0), nil
+		return make([]*abci.TxResultV2, 0), nil
 
 	default:
 	}
@@ -160,11 +161,11 @@ func (txi *TxIndex) Search(ctx context.Context, q *query.Query) ([]*abci.TxResul
 		res, err := txi.Get(hash)
 		switch {
 		case err != nil:
-			return []*abci.TxResult{}, fmt.Errorf("error while retrieving the result: %w", err)
+			return []*abci.TxResultV2{}, fmt.Errorf("error while retrieving the result: %w", err)
 		case res == nil:
-			return []*abci.TxResult{}, nil
+			return []*abci.TxResultV2{}, nil
 		default:
-			return []*abci.TxResult{res}, nil
+			return []*abci.TxResultV2{res}, nil
 		}
 	}
 
@@ -217,7 +218,7 @@ func (txi *TxIndex) Search(ctx context.Context, q *query.Query) ([]*abci.TxResul
 		}
 	}
 
-	results := make([]*abci.TxResult, 0, len(filteredHashes))
+	results := make([]*abci.TxResultV2, 0, len(filteredHashes))
 hashes:
 	for _, h := range filteredHashes {
 		res, err := txi.Get(h)
@@ -279,13 +280,13 @@ func (txi *TxIndex) match(
 
 	tmpHashes := make(map[string][]byte)
 
-	switch {
-	case c.Op == syntax.TEq:
+	switch c.Op {
+	case syntax.TEq:
 		it, err := dbm.IteratePrefix(txi.store, startKeyBz)
 		if err != nil {
 			panic(err)
 		}
-		defer it.Close()
+		defer func() { _ = it.Close() }()
 
 	iterEqual:
 		for ; it.Valid(); it.Next() {
@@ -302,14 +303,14 @@ func (txi *TxIndex) match(
 			panic(err)
 		}
 
-	case c.Op == syntax.TExists:
+	case syntax.TExists:
 		// XXX: can't use startKeyBz here because c.Operand is nil
 		// (e.g. "account.owner/<nil>/" won't match w/ a single row)
 		it, err := dbm.IteratePrefix(txi.store, prefixFromCompositeKey(c.Tag))
 		if err != nil {
 			panic(err)
 		}
-		defer it.Close()
+		defer func() { _ = it.Close() }()
 
 	iterExists:
 		for ; it.Valid(); it.Next() {
@@ -326,7 +327,7 @@ func (txi *TxIndex) match(
 			panic(err)
 		}
 
-	case c.Op == syntax.TContains:
+	case syntax.TContains:
 		// XXX: startKey does not apply here.
 		// For example, if startKey = "account.owner/an/" and search query = "account.owner CONTAINS an"
 		// we can't iterate with prefix "account.owner/an/" because we might miss keys like "account.owner/Ulan/"
@@ -334,7 +335,7 @@ func (txi *TxIndex) match(
 		if err != nil {
 			panic(err)
 		}
-		defer it.Close()
+		defer func() { _ = it.Close() }()
 
 	iterContains:
 		for ; it.Valid(); it.Next() {
@@ -357,12 +358,12 @@ func (txi *TxIndex) match(
 			panic(err)
 		}
 
-	case c.Op == syntax.TMatches:
+	case syntax.TMatches:
 		it, err := dbm.IteratePrefix(txi.store, prefixFromCompositeKey(c.Tag))
 		if err != nil {
 			panic(err)
 		}
-		defer it.Close()
+		defer func() { _ = it.Close() }()
 
 	iterMatches:
 		for ; it.Valid(); it.Next() {
@@ -443,7 +444,7 @@ func (txi *TxIndex) matchRange(
 	if err != nil {
 		panic(err)
 	}
-	defer it.Close()
+	defer func() { _ = it.Close() }()
 
 iter:
 	for ; it.Valid(); it.Next() {
@@ -578,11 +579,11 @@ func parseValueFromKey(key []byte) (string, error) {
 	return value, nil
 }
 
-func keyFromEvent(compositeKey string, value string, result *abci.TxResult) []byte {
+func keyFromEvent(compositeKey string, value string, result *abci.TxResultV2) []byte {
 	return secondaryKey(compositeKey, value, result.Height, result.Index)
 }
 
-func KeyFromHeight(result *abci.TxResult) []byte {
+func KeyFromHeight(result *abci.TxResultV2) []byte {
 	return secondaryKey(types.TxHeightKey, fmt.Sprintf("%d", result.Height), result.Height, result.Index)
 }
 

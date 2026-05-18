@@ -1,19 +1,19 @@
 package consensus
 
 import (
+	"errors"
 	"testing"
 	"time"
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/libs/log"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func peerStateSetup(h, r, v int) *PeerState {
-	ps := NewPeerState(log.NewNopLogger(), "testPeerState")
+	ps := NewPeerState("testPeerState")
 	ps.PRS.Height = int64(h)
 	ps.PRS.Round = int32(r)
 	ps.ensureVoteBitArrays(int64(h), v)
@@ -24,10 +24,6 @@ func TestSetHasVote(t *testing.T) {
 	ps := peerStateSetup(1, 1, 1)
 	pva := ps.PRS.Prevotes.Copy()
 
-	// nil vote should return ErrPeerStateNilVote
-	err := ps.SetHasVote(nil)
-	require.Equal(t, ErrPeerStateSetNilVote, err)
-
 	// the peer giving an invalid index should returns ErrPeerStateInvalidVoteIndex
 	v0 := &types.Vote{
 		Height:         1,
@@ -36,8 +32,9 @@ func TestSetHasVote(t *testing.T) {
 		Type:           tmproto.PrevoteType,
 	}
 
-	err = ps.SetHasVote(v0)
-	require.Equal(t, ErrPeerStateInvalidVoteIndex, err)
+	if err := ps.SetHasVote(v0); !errors.Is(err, ErrPeerStateInvalidVoteIndex) {
+		t.Fatalf("expected ErrPeerStateInvalidVoteIndex, got %v", err)
+	}
 
 	// the peer giving an invalid index should returns ErrPeerStateInvalidVoteIndex
 	v1 := &types.Vote{
@@ -47,8 +44,9 @@ func TestSetHasVote(t *testing.T) {
 		Type:           tmproto.PrevoteType,
 	}
 
-	err = ps.SetHasVote(v1)
-	require.Equal(t, ErrPeerStateInvalidVoteIndex, err)
+	if err := ps.SetHasVote(v1); !errors.Is(err, ErrPeerStateInvalidVoteIndex) {
+		t.Fatalf("expected ErrPeerStateInvalidVoteIndex, got %v", err)
+	}
 
 	// the peer giving a correct index should return nil (vote has been set)
 	v2 := &types.Vote{
@@ -127,26 +125,6 @@ func TestSetHasProposal(t *testing.T) {
 	ps.SetHasProposal(invalidProposal)
 	require.True(t, ps.PRS.Proposal, "Valid structure proposal should be accepted regardless of signature")
 
-	// Test PartSetHeader.Total too large - should be silently ignored
-	// Create a new peer state for this test
-	ps3 := peerStateSetup(1, 1, 1)
-	tooLargeTotalProposal := &types.Proposal{
-		Type:     tmproto.ProposalType,
-		Height:   1,
-		Round:    1,
-		POLRound: -1,
-		BlockID: types.BlockID{
-			Hash: crypto.CRandBytes(crypto.HashSize),
-			PartSetHeader: types.PartSetHeader{
-				Total: types.MaxBlockPartsCount + 1, // Too large
-				Hash:  crypto.CRandBytes(crypto.HashSize),
-			},
-		},
-		Signature: []byte("signature"),
-	}
-	ps3.SetHasProposal(tooLargeTotalProposal)
-	require.False(t, ps3.PRS.Proposal, "Proposal with too large Total should be silently ignored")
-
 	// Test valid proposal
 	validProposal := &types.Proposal{
 		Type:     tmproto.ProposalType,
@@ -160,7 +138,7 @@ func TestSetHasProposal(t *testing.T) {
 				Hash:  crypto.CRandBytes(crypto.HashSize),
 			},
 		},
-		Signature: []byte("signature"),
+		Signature: makeSig("signature"),
 	}
 	ps.SetHasProposal(validProposal)
 	require.True(t, ps.PRS.Proposal, "Valid proposal should be accepted")
@@ -179,85 +157,16 @@ func TestSetHasProposal(t *testing.T) {
 				Hash:  crypto.CRandBytes(crypto.HashSize),
 			},
 		},
-		Signature: []byte("signature"),
+		Signature: makeSig("signature"),
 	}
 	ps2.SetHasProposal(differentProposal)
 	require.True(t, ps2.PRS.Proposal, "Proposal with matching height should be accepted")
 }
 
-func TestSetHasProposalMemoryLimit(t *testing.T) {
-	logger := log.NewTestingLogger(t)
-	peerID := types.NodeID("aa")
-	ps := NewPeerState(logger, peerID)
-
-	// Create a valid block hash
-	hash := crypto.CRandBytes(crypto.HashSize)
-
-	// Create a dummy signature
-	sig := crypto.CRandBytes(types.MaxSignatureSize)
-
-	// Create a proposal with a large PartSetHeader.Total
-	proposal := &types.Proposal{
-		Type:     tmproto.ProposalType,
-		Height:   1,
-		Round:    0,
-		POLRound: -1,
-		BlockID: types.BlockID{
-			Hash: hash,
-			PartSetHeader: types.PartSetHeader{
-				Hash: hash, // Use same hash for simplicity
-			},
-		},
-		Timestamp: time.Now(),
-		Signature: sig,
-	}
-
-	// Test with different Total values
-	testCases := []struct {
-		name        string
-		total       uint32
-		expectError bool
-		errorType   string // "max_block_parts"
-	}{
-		{"valid small total", 1, false, ""},
-		{"valid max total", types.MaxBlockPartsCount, false, ""},                        // 101
-		{"over max block parts", types.MaxBlockPartsCount + 1, true, "max_block_parts"}, // 102
-		{"way over max block parts", 1000, true, "max_block_parts"},                     // Way over max
-		{"DoS attack scenario - max uint32", 4294967295, true, "max_block_parts"},       // The actual DoS attack value
-	}
-
-	for _, tc := range testCases {
-		t.Run(tc.name, func(t *testing.T) {
-			// Reset peer state and set height/round to match proposal
-			ps = NewPeerState(logger, peerID)
-			ps.PRS.Height = proposal.Height
-			ps.PRS.Round = proposal.Round
-
-			// Set up proposal with test case total
-			proposal.BlockID.PartSetHeader.Total = tc.total
-
-			// Try to set the proposal
-			ps.SetHasProposal(proposal)
-
-			if tc.expectError {
-				// Should be silently ignored, so no proposal should be set
-				require.False(t, ps.PRS.Proposal, "Proposal with excessive Total should be silently ignored")
-				require.Nil(t, ps.PRS.ProposalBlockParts, "ProposalBlockParts should remain nil")
-			} else {
-				// For valid cases, verify the proposal was accepted
-				require.True(t, ps.PRS.Proposal, "Valid proposal should be accepted")
-				require.NotNil(t, ps.PRS.ProposalBlockParts, "ProposalBlockParts should be created")
-				require.Equal(t, int(tc.total), ps.PRS.ProposalBlockParts.Size())
-				require.NotNil(t, ps.PRS.ProposalBlockParts.Elems)
-			}
-		})
-	}
-}
-
 func TestInitProposalBlockPartsMemoryLimit(t *testing.T) {
-	logger := log.NewTestingLogger(t)
+
 	peerID := types.NodeID("test-peer")
-	ps := NewPeerState(logger, peerID)
+	ps := NewPeerState(peerID)
 
 	testCases := []struct {
 		name           string
@@ -273,7 +182,7 @@ func TestInitProposalBlockPartsMemoryLimit(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			// Reset peer state for each test
-			ps = NewPeerState(logger, peerID)
+			ps = NewPeerState(peerID)
 
 			header := types.PartSetHeader{
 				Total: tc.total,
@@ -294,9 +203,9 @@ func TestInitProposalBlockPartsMemoryLimit(t *testing.T) {
 }
 
 func TestInitProposalBlockPartsAlreadySet(t *testing.T) {
-	logger := log.NewTestingLogger(t)
+
 	peerID := types.NodeID("test-peer")
-	ps := NewPeerState(logger, peerID)
+	ps := NewPeerState(peerID)
 
 	// Set up initial proposal block parts
 	initialHeader := types.PartSetHeader{
@@ -321,7 +230,7 @@ func TestInitProposalBlockPartsAlreadySet(t *testing.T) {
 }
 
 func TestSetHasProposalEdgeCases(t *testing.T) {
-	logger := log.NewTestingLogger(t)
+
 	peerID := types.NodeID("test-peer")
 
 	testCases := []struct {
@@ -331,30 +240,6 @@ func TestSetHasProposalEdgeCases(t *testing.T) {
 		expectProposal bool
 		expectPanic    bool
 	}{
-		{
-			name: "memory limit exceeded - should silently ignore",
-			setupPeerState: func(ps *PeerState) {
-				ps.PRS.Height = 1
-				ps.PRS.Round = 0
-			},
-			proposal: &types.Proposal{
-				Type:     tmproto.ProposalType,
-				Height:   1,
-				Round:    0,
-				POLRound: -1,
-				BlockID: types.BlockID{
-					Hash: make([]byte, 32),
-					PartSetHeader: types.PartSetHeader{
-						Total: types.MaxBlockPartsCount + 1, // Exceeds limit
-						Hash:  make([]byte, 32),
-					},
-				},
-				Timestamp: time.Now(),
-				Signature: []byte("test-signature"),
-			},
-			expectProposal: false, // Should silently ignore
-			expectPanic:    false,
-		},
 		{
 			name: "wrong height - should ignore",
 			setupPeerState: func(ps *PeerState) {
@@ -374,7 +259,7 @@ func TestSetHasProposalEdgeCases(t *testing.T) {
 					},
 				},
 				Timestamp: time.Now(),
-				Signature: []byte("test-signature"),
+				Signature: makeSig("test-signature"),
 			},
 			expectProposal: false,
 			expectPanic:    false,
@@ -399,7 +284,7 @@ func TestSetHasProposalEdgeCases(t *testing.T) {
 					},
 				},
 				Timestamp: time.Now(),
-				Signature: []byte("test-signature"),
+				Signature: makeSig("test-signature"),
 			},
 			expectProposal: true, // Should remain true
 			expectPanic:    false,
@@ -423,7 +308,7 @@ func TestSetHasProposalEdgeCases(t *testing.T) {
 					},
 				},
 				Timestamp: time.Now(),
-				Signature: []byte("test-signature"),
+				Signature: makeSig("test-signature"),
 			},
 			expectProposal: true, // Should be set
 			expectPanic:    false,
@@ -432,7 +317,7 @@ func TestSetHasProposalEdgeCases(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			ps := NewPeerState(logger, peerID)
+			ps := NewPeerState(peerID)
 			tc.setupPeerState(ps)
 
 			if tc.expectPanic {

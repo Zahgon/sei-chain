@@ -1,4 +1,4 @@
-package cli
+package cli_test
 
 import (
 	"context"
@@ -8,28 +8,28 @@ import (
 	"path"
 	"testing"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/testutil"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	"github.com/cosmos/cosmos-sdk/x/genutil"
-	genutiltest "github.com/cosmos/cosmos-sdk/x/genutil/client/testutil"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/hd"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keyring"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/server"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil"
+	genutiltest "github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil/client/testutil"
+	genutiltypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil/types"
+	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
-	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/CosmWasm/wasmd/x/wasm/keeper"
-	"github.com/CosmWasm/wasmd/x/wasm/types"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/client/cli"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/keeper"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 )
 
 var wasmIdent = []byte("\x00\x61\x73\x6D")
@@ -90,7 +90,7 @@ func TestGenesisStoreCodeCmd(t *testing.T) {
 			homeDir := setupGenesis(t, spec.srcGenesis)
 
 			// when
-			cmd := GenesisStoreCodeCmd(homeDir, NewDefaultGenesisIO())
+			cmd := cli.GenesisStoreCodeCmd(homeDir, cli.NewDefaultGenesisIO())
 			spec.mutator(cmd)
 			err := executeCmdWithContext(t, homeDir, cmd)
 			if spec.expError {
@@ -348,7 +348,7 @@ func TestInstantiateContractCmd(t *testing.T) {
 			homeDir := setupGenesis(t, spec.srcGenesis)
 
 			// when
-			cmd := GenesisInstantiateContractCmd(homeDir, NewDefaultGenesisIO())
+			cmd := cli.GenesisInstantiateContractCmd(homeDir, cli.NewDefaultGenesisIO())
 			spec.mutator(cmd)
 			err := executeCmdWithContext(t, homeDir, cmd)
 			if spec.expError {
@@ -364,7 +364,7 @@ func TestInstantiateContractCmd(t *testing.T) {
 }
 
 func TestExecuteContractCmd(t *testing.T) {
-	const firstContractAddress = "cosmos14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9s4hmalr"
+	const firstContractAddress = "sei14hj2tavq8fpesdwxxcu44rty3hh90vhujrvcmstl4zr3txmfvw9sh9m79m"
 	minimalWasmGenesis := types.GenesisState{
 		Params: types.DefaultParams(),
 	}
@@ -446,11 +446,11 @@ func TestExecuteContractCmd(t *testing.T) {
 			},
 			mutator: func(cmd *cobra.Command) {
 				// See TestBuildContractAddress in keeper_test.go
-				cmd.SetArgs([]string{"cosmos1mujpjkwhut9yjw4xueyugc02evfv46y0dtmnz4lh8xxkkdapym9stu5qm8", `{}`})
+				cmd.SetArgs([]string{"sei1l976cvcndrr6hnuyzn93azaxx8sc2xre5crtpz", `{}`})
 				flagSet := cmd.Flags()
 				flagSet.Set("run-as", myWellFundedAccount)
 			},
-			expMsgCount: 2,
+			expError: true,
 		},
 		"fails with unknown contract address": {
 			srcGenesis: minimalWasmGenesis,
@@ -548,7 +548,7 @@ func TestExecuteContractCmd(t *testing.T) {
 	for msg, spec := range specs {
 		t.Run(msg, func(t *testing.T) {
 			homeDir := setupGenesis(t, spec.srcGenesis)
-			cmd := GenesisExecuteContractCmd(homeDir, NewDefaultGenesisIO())
+			cmd := cli.GenesisExecuteContractCmd(homeDir, cli.NewDefaultGenesisIO())
 			spec.mutator(cmd)
 
 			// when
@@ -568,7 +568,7 @@ func TestExecuteContractCmd(t *testing.T) {
 func TestGetAllContracts(t *testing.T) {
 	specs := map[string]struct {
 		src types.GenesisState
-		exp []ContractMeta
+		exp []cli.ContractMeta
 	}{
 		"read from contracts state": {
 			src: types.GenesisState{
@@ -583,7 +583,7 @@ func TestGetAllContracts(t *testing.T) {
 					},
 				},
 			},
-			exp: []ContractMeta{
+			exp: []cli.ContractMeta{
 				{
 					ContractAddress: "first-contract",
 					Info:            types.ContractInfo{Label: "first"},
@@ -601,7 +601,7 @@ func TestGetAllContracts(t *testing.T) {
 					{Sum: &types.GenesisState_GenMsgs_InstantiateContract{InstantiateContract: &types.MsgInstantiateContract{Label: "second"}}},
 				},
 			},
-			exp: []ContractMeta{
+			exp: []cli.ContractMeta{
 				{
 					ContractAddress: keeper.BuildContractAddress(0, 1).String(),
 					Info:            types.ContractInfo{Label: "first"},
@@ -621,7 +621,7 @@ func TestGetAllContracts(t *testing.T) {
 					{Sum: &types.GenesisState_GenMsgs_InstantiateContract{InstantiateContract: &types.MsgInstantiateContract{Label: "hundred"}}},
 				},
 			},
-			exp: []ContractMeta{
+			exp: []cli.ContractMeta{
 				{
 					ContractAddress: keeper.BuildContractAddress(0, 100).String(),
 					Info:            types.ContractInfo{Label: "hundred"},
@@ -643,7 +643,7 @@ func TestGetAllContracts(t *testing.T) {
 					{Sum: &types.GenesisState_GenMsgs_InstantiateContract{InstantiateContract: &types.MsgInstantiateContract{Label: "hundred"}}},
 				},
 			},
-			exp: []ContractMeta{
+			exp: []cli.ContractMeta{
 				{
 					ContractAddress: "first-contract",
 					Info:            types.ContractInfo{Label: "first"},
@@ -657,7 +657,7 @@ func TestGetAllContracts(t *testing.T) {
 	}
 	for msg, spec := range specs {
 		t.Run(msg, func(t *testing.T) {
-			got := GetAllContracts(&spec.src)
+			got := cli.GetAllContracts(&spec.src)
 			assert.Equal(t, spec.exp, got)
 		})
 	}
@@ -694,11 +694,11 @@ func setupGenesis(t *testing.T, wasmGenesis types.GenesisState) string {
 }
 
 func executeCmdWithContext(t *testing.T, homeDir string, cmd *cobra.Command) error {
-	logger := log.NewNopLogger()
+
 	cfg, err := genutiltest.CreateDefaultTendermintConfig(homeDir)
 	require.NoError(t, err)
 	appCodec := keeper.MakeEncodingConfig(t).Marshaler
-	serverCtx := server.NewContext(viper.New(), cfg, logger)
+	serverCtx := server.NewContext(viper.New(), cfg)
 	clientCtx := client.Context{}.WithCodec(appCodec).WithHomeDir(homeDir)
 
 	ctx := context.Background()
@@ -724,6 +724,6 @@ func loadModuleState(t *testing.T, homeDir string) types.GenesisState {
 
 	appCodec := keeper.MakeEncodingConfig(t).Marshaler
 	var moduleState types.GenesisState
-	require.NoError(t, appCodec.UnmarshalJSON(appState[types.ModuleName], &moduleState))
+	require.NoError(t, appCodec.UnmarshalAsJSON(appState[types.ModuleName], &moduleState))
 	return moduleState
 }

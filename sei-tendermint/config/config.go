@@ -4,16 +4,16 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"math"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
 	"time"
 
-	tmjson "github.com/tendermint/tendermint/libs/json"
-	"github.com/tendermint/tendermint/libs/log"
-	tmos "github.com/tendermint/tendermint/libs/os"
-	"github.com/tendermint/tendermint/types"
+	mempoolcfg "github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
+	tmos "github.com/sei-protocol/sei-chain/sei-tendermint/libs/os"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 const (
@@ -73,7 +73,10 @@ type Config struct {
 	Instrumentation *InstrumentationConfig `mapstructure:"instrumentation"`
 	PrivValidator   *PrivValidatorConfig   `mapstructure:"priv-validator"`
 	SelfRemediation *SelfRemediationConfig `mapstructure:"self-remediation"`
-	DBSync          *DBSyncConfig          `mapstructure:"db-sync"`
+
+	// AutobahnConfigFile is the path to a JSON file containing the Autobahn (GigaRouter)
+	// configuration. Leave empty to disable Autobahn.
+	AutobahnConfigFile string `mapstructure:"autobahn-config-file"`
 }
 
 // DefaultConfig returns a default configuration for a Tendermint node
@@ -89,7 +92,6 @@ func DefaultConfig() *Config {
 		Instrumentation: DefaultInstrumentationConfig(),
 		PrivValidator:   DefaultPrivValidatorConfig(),
 		SelfRemediation: DefaultSelfRemediationConfig(),
-		DBSync:          DefaultDBSyncConfig(),
 	}
 }
 
@@ -114,13 +116,12 @@ func TestConfig() *Config {
 		Instrumentation: TestInstrumentationConfig(),
 		PrivValidator:   DefaultPrivValidatorConfig(),
 		SelfRemediation: DefaultSelfRemediationConfig(),
-		DBSync:          DefaultDBSyncConfig(),
 	}
 }
 
 // SetRoot sets the RootDir for all Config structs
 func (cfg *Config) SetRoot(root string) *Config {
-	cfg.BaseConfig.RootDir = root
+	cfg.RootDir = root
 	cfg.RPC.RootDir = root
 	cfg.P2P.RootDir = root
 	cfg.Mempool.RootDir = root
@@ -164,7 +165,7 @@ func (cfg *Config) DeprecatedFieldWarning() error {
 // BaseConfig
 
 // BaseConfig defines the base configuration for a Tendermint node
-type BaseConfig struct { //nolint: maligned
+type BaseConfig struct {
 	// chainID is unexposed and immutable but here for convenience
 	chainID string
 
@@ -172,8 +173,8 @@ type BaseConfig struct { //nolint: maligned
 	// This should be set in viper so it can unmarshal into this struct
 	RootDir string `mapstructure:"home"`
 
-	// TCP or UNIX socket address of the ABCI application,
-	// or the name of an ABCI application compiled in with the Tendermint binary
+	// Deprecated: out-of-process ABCI has been removed and this option no longer
+	// has any effect.
 	ProxyApp string `mapstructure:"proxy-app"`
 
 	// A custom human readable name for this node
@@ -227,30 +228,29 @@ type BaseConfig struct { //nolint: maligned
 	// A JSON file containing the private key to use for p2p authenticated encryption
 	NodeKey string `mapstructure:"node-key-file"`
 
-	// Mechanism to connect to the ABCI application: socket | grpc
+	// Deprecated: out-of-process ABCI has been removed and this option no longer
+	// has any effect.
 	ABCI string `mapstructure:"abci"`
 
-	// If true, query the ABCI app on connecting to a new peer
-	// so the app can decide if we should keep the connection or not
-	FilterPeers bool `mapstructure:"filter-peers"` // false
+	// Deprecated: peer filtering via ABCI has been removed and this option no longer has any effect.
+	FilterPeers bool `mapstructure:"filter-peers"`
 
-	Other map[string]interface{} `mapstructure:",remain"`
+	Other map[string]any `mapstructure:",remain"`
 }
 
 // DefaultBaseConfig returns a default base configuration for a Tendermint node
 func DefaultBaseConfig() BaseConfig {
 	return BaseConfig{
-		Genesis:     defaultGenesisJSONPath,
-		NodeKey:     defaultNodeKeyPath,
-		Mode:        defaultMode,
-		Moniker:     defaultMoniker,
-		ProxyApp:    "tcp://127.0.0.1:26658",
-		ABCI:        "socket",
-		LogLevel:    DefaultLogLevel,
-		LogFormat:   log.LogFormatPlain,
-		FilterPeers: false,
-		DBBackend:   "goleveldb",
-		DBPath:      "data",
+		Genesis:   defaultGenesisJSONPath,
+		NodeKey:   defaultNodeKeyPath,
+		Mode:      defaultMode,
+		Moniker:   defaultMoniker,
+		ProxyApp:  "tcp://127.0.0.1:26658",
+		ABCI:      "socket",
+		LogLevel:  DefaultLogLevel,
+		LogFormat: "text",
+		DBBackend: "goleveldb",
+		DBPath:    "data",
 	}
 }
 
@@ -285,32 +285,23 @@ func (cfg BaseConfig) LoadNodeKeyID() (types.NodeID, error) {
 		return "", err
 	}
 	nodeKey := types.NodeKey{}
-	err = tmjson.Unmarshal(jsonBytes, &nodeKey)
-	if err != nil {
+	if err := nodeKey.UnmarshalJSON(jsonBytes); err != nil {
 		return "", err
 	}
-	nodeKey.ID = types.NodeIDFromPubKey(nodeKey.PubKey())
-	return nodeKey.ID, nil
+	return nodeKey.ID(), nil
 }
 
 // LoadOrGenNodeKey attempts to load the NodeKey from the given filePath. If
 // the file does not exist, it generates and saves a new NodeKey.
 func (cfg BaseConfig) LoadOrGenNodeKeyID() (types.NodeID, error) {
 	if tmos.FileExists(cfg.NodeKeyFile()) {
-		nodeKey, err := cfg.LoadNodeKeyID()
-		if err != nil {
-			return "", err
-		}
-		return nodeKey, nil
+		return cfg.LoadNodeKeyID()
 	}
-
 	nodeKey := types.GenNodeKey()
-
 	if err := nodeKey.SaveAs(cfg.NodeKeyFile()); err != nil {
 		return "", err
 	}
-
-	return nodeKey.ID, nil
+	return nodeKey.ID(), nil
 }
 
 // DBDir returns the full path to the database directory
@@ -322,7 +313,7 @@ func (cfg BaseConfig) DBDir() string {
 // returns an error if any check fails.
 func (cfg BaseConfig) ValidateBasic() error {
 	switch cfg.LogFormat {
-	case log.LogFormatJSON, log.LogFormatText, log.LogFormatPlain:
+	case "json", "text", "plain":
 	default:
 		return errors.New("unknown log format (must be 'plain', 'text' or 'json')")
 	}
@@ -626,7 +617,7 @@ func (cfg RPCConfig) IsTLSEnabled() bool {
 // P2PConfig
 
 // P2PConfig defines the configuration options for the Tendermint peer-to-peer networking layer
-type P2PConfig struct { //nolint: maligned
+type P2PConfig struct {
 	RootDir string `mapstructure:"home"`
 
 	// Address to listen for incoming connections
@@ -646,12 +637,16 @@ type P2PConfig struct { //nolint: maligned
 	// Comma separated list of nodes for block sync only
 	BlockSyncPeers string `mapstructure:"blocksync-peers"`
 
-	// UPNP port forwarding
+	// UPNP port forwarding. UNUSED
 	UPNP bool `mapstructure:"upnp"`
 
-	// MaxConnections defines the maximum number of connected peers (inbound and
-	// outbound).
-	MaxConnections uint16 `mapstructure:"max-connections"`
+	// MaxConnections limits the number of connected peers (inbound and outbound).
+	MaxConnections uint `mapstructure:"max-connections"`
+
+	// MaxOutboundConnections limits the number of outbound connections to regular (non-persistent) peers.
+	// It should be significantly lower than MaxConnections, unless
+	// the node is supposed to have a small number of connections altogether.
+	MaxOutboundConnections *uint `mapstructure:"max-outbound-connections"`
 
 	// MaxIncomingConnectionAttempts rate limits the number of incoming connection
 	// attempts per IP address.
@@ -664,7 +659,7 @@ type P2PConfig struct { //nolint: maligned
 	// other peers)
 	PrivatePeerIDs string `mapstructure:"private-peer-ids"`
 
-	// Toggle to disable guard against peers connecting from the same ip.
+	// Toggle to disable guard against peers connecting from the same ip. UNUSED
 	AllowDuplicateIP bool `mapstructure:"allow-duplicate-ip"`
 
 	// Time to wait before flushing messages out on the connection
@@ -683,6 +678,9 @@ type P2PConfig struct { //nolint: maligned
 	HandshakeTimeout time.Duration `mapstructure:"handshake-timeout"`
 	DialTimeout      time.Duration `mapstructure:"dial-timeout"`
 
+	// How often node should dial a new peer.
+	DialInterval time.Duration `mapstructure:"dial-interval"`
+
 	// Testing params.
 	// Force dial to fail
 	TestDialFail bool `mapstructure:"test-dial-fail"`
@@ -692,7 +690,7 @@ type P2PConfig struct { //nolint: maligned
 	// with the default being "priority".
 	QueueType string `mapstructure:"queue-type"`
 
-	// List of node IDs, to which a connection will be (re)established, dropping an existing peer if any existing limit has been reached
+	// List of node IDs, from which a connection will be accepted regardless of the connection limits.
 	UnconditionalPeerIDs string `mapstructure:"unconditional-peer-ids"`
 }
 
@@ -705,20 +703,16 @@ func DefaultP2PConfig() *P2PConfig {
 		MaxConnections:                100,
 		MaxIncomingConnectionAttempts: 100,
 		FlushThrottleTimeout:          100 * time.Millisecond,
-		// The MTU (Maximum Transmission Unit) for Ethernet is 1500 bytes.
-		// The IP header and the TCP header take up 20 bytes each at least (unless
-		// optional header fields are used) and thus the max for (non-Jumbo frame)
-		// Ethernet is 1500 - 20 -20 = 1460
-		// Source: https://stackoverflow.com/a/3074427/820520
-		MaxPacketMsgPayloadSize: 1400,
-		SendRate:                20971520, // 20 MiB/s per connection
-		RecvRate:                20971520, // 20 MiB/s per connection
-		PexReactor:              true,
-		AllowDuplicateIP:        false,
-		HandshakeTimeout:        10 * time.Second,
-		DialTimeout:             3 * time.Second,
-		TestDialFail:            false,
-		QueueType:               "simple-priority",
+		MaxPacketMsgPayloadSize:       1000000,
+		SendRate:                      20971520, // 20 MiB/s per connection
+		RecvRate:                      20971520, // 20 MiB/s per connection
+		PexReactor:                    true,
+		AllowDuplicateIP:              false,
+		HandshakeTimeout:              10 * time.Second,
+		DialTimeout:                   3 * time.Second,
+		DialInterval:                  10 * time.Second,
+		TestDialFail:                  false,
+		QueueType:                     "simple-priority",
 	}
 }
 
@@ -865,37 +859,60 @@ type MempoolConfig struct {
 	DropPriorityReservoirSize int `mapstructure:"drop-priority-reservoir-size"`
 }
 
+func (cfg *MempoolConfig) ToMempoolConfig() *mempoolcfg.Config {
+	return &mempoolcfg.Config{
+		Size:                      cfg.Size,
+		MaxTxsBytes:               cfg.MaxTxsBytes,
+		CacheSize:                 cfg.CacheSize,
+		DuplicateTxsCacheSize:     cfg.DuplicateTxsCacheSize,
+		KeepInvalidTxsInCache:     cfg.KeepInvalidTxsInCache,
+		MaxTxBytes:                cfg.MaxTxBytes,
+		TTLDuration:               cfg.TTLDuration,
+		TTLNumBlocks:              cfg.TTLNumBlocks,
+		TxNotifyThreshold:         cfg.TxNotifyThreshold,
+		PendingSize:               cfg.PendingSize,
+		MaxPendingTxsBytes:        cfg.MaxPendingTxsBytes,
+		RemoveExpiredTxsFromQueue: cfg.RemoveExpiredTxsFromQueue,
+		DropPriorityThreshold:     cfg.DropPriorityThreshold,
+		DropUtilisationThreshold:  cfg.DropUtilisationThreshold,
+		DropPriorityReservoirSize: cfg.DropPriorityReservoirSize,
+	}
+}
+
 // DefaultMempoolConfig returns a default configuration for the Tendermint mempool.
 func DefaultMempoolConfig() *MempoolConfig {
+	cfg := mempoolcfg.DefaultConfig()
 	return &MempoolConfig{
-		Broadcast: true,
-		// Each signature verification takes .5ms, Size reduced until we implement
-		// ABCI Recheck
-		Size:                         5000,
-		MaxTxsBytes:                  1024 * 1024 * 1024, // 1GB
-		CacheSize:                    10000,
-		DuplicateTxsCacheSize:        100000,
-		MaxTxBytes:                   1024 * 1024,     // 1MB
-		TTLDuration:                  5 * time.Second, // prevent stale txs from filling mempool
-		TTLNumBlocks:                 10,              // remove txs after 10 blocks
-		TxNotifyThreshold:            0,
-		CheckTxErrorBlacklistEnabled: false,
-		CheckTxErrorThreshold:        0,
-		PendingSize:                  5000,
-		MaxPendingTxsBytes:           1024 * 1024 * 1024, // 1GB
-		PendingTTLDuration:           0 * time.Second,
+		Broadcast:                    true,
+		Size:                         cfg.Size,
+		MaxTxsBytes:                  cfg.MaxTxsBytes,
+		CacheSize:                    cfg.CacheSize,
+		DuplicateTxsCacheSize:        cfg.DuplicateTxsCacheSize,
+		KeepInvalidTxsInCache:        cfg.KeepInvalidTxsInCache,
+		MaxTxBytes:                   cfg.MaxTxBytes,
+		MaxBatchBytes:                0,
+		TTLDuration:                  cfg.TTLDuration,
+		TTLNumBlocks:                 cfg.TTLNumBlocks,
+		TxNotifyThreshold:            cfg.TxNotifyThreshold,
+		CheckTxErrorBlacklistEnabled: true,
+		CheckTxErrorThreshold:        50,
+		PendingSize:                  cfg.PendingSize,
+		MaxPendingTxsBytes:           cfg.MaxPendingTxsBytes,
+		PendingTTLDuration:           0,
 		PendingTTLNumBlocks:          0,
-		RemoveExpiredTxsFromQueue:    true,
-		DropPriorityThreshold:        0.1,
-		DropUtilisationThreshold:     1.0,
-		DropPriorityReservoirSize:    10_240,
+		RemoveExpiredTxsFromQueue:    cfg.RemoveExpiredTxsFromQueue,
+		DropPriorityThreshold:        cfg.DropPriorityThreshold,
+		DropUtilisationThreshold:     cfg.DropUtilisationThreshold,
+		DropPriorityReservoirSize:    cfg.DropPriorityReservoirSize,
 	}
 }
 
 // TestMempoolConfig returns a configuration for testing the Tendermint mempool
 func TestMempoolConfig() *MempoolConfig {
 	cfg := DefaultMempoolConfig()
-	cfg.CacheSize = 1000
+	testCfg := mempoolcfg.TestConfig()
+	cfg.CacheSize = testCfg.CacheSize
+	cfg.DropUtilisationThreshold = testCfg.DropUtilisationThreshold
 	return cfg
 }
 
@@ -920,9 +937,7 @@ func (cfg *MempoolConfig) ValidateBasic() error {
 	if cfg.TTLNumBlocks < 0 {
 		return errors.New("ttl-num-blocks can't be negative")
 	}
-	if cfg.TxNotifyThreshold < 0 {
-		return errors.New("tx-notify-threshold can't be negative")
-	}
+	// cfg.TxNotifyThreshold is a uint64; no need to check for less than zero.
 	if cfg.CheckTxErrorThreshold < 0 {
 		return errors.New("check-tx-error-threshold can't be negative")
 	}
@@ -1102,7 +1117,6 @@ func (cfg *StateSyncConfig) ValidateBasic() error {
 type ConsensusConfig struct {
 	RootDir string `mapstructure:"home"`
 	WalPath string `mapstructure:"wal-file"`
-	walFile string // overrides WalPath if set
 
 	// EmptyBlocks mode and possible interval between empty blocks
 	CreateEmptyBlocks         bool          `mapstructure:"create-empty-blocks"`
@@ -1115,6 +1129,11 @@ type ConsensusConfig struct {
 	PeerQueryMaj23SleepDuration time.Duration `mapstructure:"peer-query-maj23-sleep-duration"`
 
 	DoubleSignCheckHeight int64 `mapstructure:"double-sign-check-height"`
+
+	// Deprecated: stateless leader election is always enabled when constructing
+	// the consensus RoundState. This field is retained only for config parsing
+	// compatibility and is ignored.
+	StatelessLeaderElection bool `mapstructure:"stateless-leader-election"`
 
 	// TODO: The following fields are all temporary overrides that should exist only
 	// for the duration of the v0.36 release. The below fields should be completely
@@ -1154,20 +1173,20 @@ type ConsensusConfig struct {
 	// been included and provide a helpful error message.
 	// These fields should be completely removed in v0.37.
 	// See: https://github.com/tendermint/tendermint/issues/8188
-	DeprecatedTimeoutPropose        *interface{} `mapstructure:"timeout-propose"`
-	DeprecatedTimeoutProposeDelta   *interface{} `mapstructure:"timeout-propose-delta"`
-	DeprecatedTimeoutPrevote        *interface{} `mapstructure:"timeout-prevote"`
-	DeprecatedTimeoutPrevoteDelta   *interface{} `mapstructure:"timeout-prevote-delta"`
-	DeprecatedTimeoutPrecommit      *interface{} `mapstructure:"timeout-precommit"`
-	DeprecatedTimeoutPrecommitDelta *interface{} `mapstructure:"timeout-precommit-delta"`
-	DeprecatedTimeoutCommit         *interface{} `mapstructure:"timeout-commit"`
-	DeprecatedSkipTimeoutCommit     *interface{} `mapstructure:"skip-timeout-commit"`
+	DeprecatedTimeoutPropose        *any `mapstructure:"timeout-propose"`
+	DeprecatedTimeoutProposeDelta   *any `mapstructure:"timeout-propose-delta"`
+	DeprecatedTimeoutPrevote        *any `mapstructure:"timeout-prevote"`
+	DeprecatedTimeoutPrevoteDelta   *any `mapstructure:"timeout-prevote-delta"`
+	DeprecatedTimeoutPrecommit      *any `mapstructure:"timeout-precommit"`
+	DeprecatedTimeoutPrecommitDelta *any `mapstructure:"timeout-precommit-delta"`
+	DeprecatedTimeoutCommit         *any `mapstructure:"timeout-commit"`
+	DeprecatedSkipTimeoutCommit     *any `mapstructure:"skip-timeout-commit"`
 }
 
 // DefaultConsensusConfig returns a default configuration for the consensus service
 func DefaultConsensusConfig() *ConsensusConfig {
 	return &ConsensusConfig{
-		WalPath:                     filepath.Join(defaultDataDir, "cs.wal", "wal"),
+		WalPath:                     filepath.Join(defaultDataDir, "tendermint", "cs.wal", "wal"),
 		CreateEmptyBlocks:           true,
 		CreateEmptyBlocksInterval:   0 * time.Second,
 		PeerGossipSleepDuration:     100 * time.Millisecond,
@@ -1175,6 +1194,7 @@ func DefaultConsensusConfig() *ConsensusConfig {
 		DoubleSignCheckHeight:       int64(0),
 		// Sei Configurations
 		GossipTransactionKeyOnly: true,
+		StatelessLeaderElection:  true,
 	}
 }
 
@@ -1194,17 +1214,24 @@ func (cfg *ConsensusConfig) WaitForTxs() bool {
 	return !cfg.CreateEmptyBlocks || cfg.CreateEmptyBlocksInterval > 0
 }
 
-// WalFile returns the full path to the write-ahead log file
+// WalFile returns the full path to the write-ahead log file.
+// When either the old default (data/cs.wal/wal) or the new default
+// (data/tendermint/cs.wal/wal) is configured, the directory is chosen
+// automatically: legacy data/cs.wal/ is used when it exists on disk,
+// otherwise data/tendermint/cs.wal/ is used. Custom or absolute paths
+// are returned as-is.
 func (cfg *ConsensusConfig) WalFile() string {
-	if cfg.walFile != "" {
-		return cfg.walFile
+	oldDefault := filepath.Join(defaultDataDir, "cs.wal", "wal")
+	newDefault := filepath.Join(defaultDataDir, "tendermint", "cs.wal", "wal")
+
+	if cfg.WalPath == oldDefault || cfg.WalPath == newDefault {
+		legacyDir := filepath.Join(rootify(defaultDataDir, cfg.RootDir), "cs.wal")
+		if dirExists(legacyDir) {
+			return filepath.Join(legacyDir, "wal")
+		}
+		return filepath.Join(rootify(defaultDataDir, cfg.RootDir), "tendermint", "cs.wal", "wal")
 	}
 	return rootify(cfg.WalPath, cfg.RootDir)
-}
-
-// SetWalFile sets the path to the write-ahead log file
-func (cfg *ConsensusConfig) SetWalFile(walFile string) {
-	cfg.walFile = walFile
 }
 
 // ValidateBasic performs basic validation (checking param bounds, etc.) and
@@ -1365,56 +1392,6 @@ func (cfg *InstrumentationConfig) ValidateBasic() error {
 	return nil
 }
 
-type DBSyncConfig struct {
-	// When true, the node will try to import DB files that overwrite its
-	// application DB. Note that it will NOT automatically detect whether
-	// the application DB is good-to-go or not upon start, and will always
-	// perform the import, so if the import is complete, this flag should
-	// be turned off the next time the chain restarts.
-	Enable bool `mapstructure:"db-sync-enable"`
-	// This is NOT currently used but reserved for future implementation
-	// of snapshotting logics that don't require chain halts.
-	SnapshotInterval        int           `mapstructure:"snapshot-interval"`
-	SnapshotDirectory       string        `mapstructure:"snapshot-directory"`
-	SnapshotWorkerCount     int           `mapstructure:"snapshot-worker-count"`
-	TimeoutInSeconds        int           `mapstructure:"timeout-in-seconds"`
-	NoFileSleepInSeconds    int           `mapstructure:"no-file-sleep-in-seconds"`
-	FileWorkerCount         int           `mapstructure:"file-worker-count"`
-	FileWorkerTimeout       int           `mapstructure:"file-worker-timeout"`
-	TrustHeight             int64         `mapstructure:"trust-height"`
-	TrustHash               string        `mapstructure:"trust-hash"`
-	TrustPeriod             time.Duration `mapstructure:"trust-period"`
-	VerifyLightBlockTimeout time.Duration `mapstructure:"verify-light-block-timeout"`
-	BlacklistTTL            time.Duration `mapstructure:"blacklist-ttl"`
-}
-
-func DefaultDBSyncConfig() *DBSyncConfig {
-	return &DBSyncConfig{
-		Enable:                  false,
-		SnapshotInterval:        0,
-		SnapshotDirectory:       "",
-		SnapshotWorkerCount:     16,
-		TimeoutInSeconds:        1200,
-		NoFileSleepInSeconds:    1,
-		FileWorkerCount:         32,
-		FileWorkerTimeout:       30,
-		TrustHeight:             0,
-		TrustHash:               "",
-		TrustPeriod:             86400 * time.Second,
-		VerifyLightBlockTimeout: 60 * time.Second,
-		BlacklistTTL:            5 * time.Minute,
-	}
-}
-
-func (cfg *DBSyncConfig) TrustHashBytes() []byte {
-	// validated in ValidateBasic, so we can safely panic here
-	bytes, err := hex.DecodeString(cfg.TrustHash)
-	if err != nil {
-		panic(err)
-	}
-	return bytes
-}
-
 //-----------------------------------------------------------------------------
 // Utils
 
@@ -1459,7 +1436,7 @@ type SelfRemediationConfig struct {
 	BlocksBehindThreshold uint64 `mapstructure:"blocks-behind-threshold"`
 
 	// How often to check if node is behind in seconds
-	BlocksBehindCheckIntervalSeconds uint64 `mapstructure:"blocks-behind-check-interval-seconds"`
+	BlocksBehindCheckIntervalSeconds uint64 `mapstructure:"blocks-behind-check-interval"`
 
 	// Cooldown between each restart
 	RestartCooldownSeconds uint64 `mapstructure:"restart-cooldown-seconds"`
@@ -1485,5 +1462,23 @@ func TestSelfRemediationConfig() *SelfRemediationConfig {
 // ValidateBasic performs basic validation (checking param bounds, etc.) and
 // returns an error if any check fails.
 func (cfg *SelfRemediationConfig) ValidateBasic() error {
+	if cfg == nil {
+		return nil
+	}
+	if cfg.P2pNoPeersRestarWindowSeconds > math.MaxInt64 {
+		return errors.New("p2p-no-peers-available-window-seconds exceeds max int64")
+	}
+	if cfg.StatesyncNoPeersRestartWindowSeconds > math.MaxInt64 {
+		return errors.New("statesync-no-peers-available-window-seconds exceeds max int64")
+	}
+	if cfg.BlocksBehindThreshold > math.MaxInt64 {
+		return errors.New("blocks-behind-threshold exceeds max int64")
+	}
+	if cfg.BlocksBehindCheckIntervalSeconds > math.MaxInt64 {
+		return errors.New("blocks-behind-check-interval exceeds max int64")
+	}
+	if cfg.RestartCooldownSeconds > math.MaxInt64 {
+		return errors.New("restart-cooldown-seconds exceeds max int64")
+	}
 	return nil
 }

@@ -5,7 +5,7 @@ import (
 	"strconv"
 
 	"github.com/go-kit/kit/metrics"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 const (
@@ -90,7 +90,7 @@ type Metrics struct {
 	// CheckTxPriorityDistribution is a histogram of the priority of transactions
 	// submitted via CheckTx, labeled by whether a priority hint was provided,
 	// whether the transaction was submitted locally (i.e. no sender node ID), and
-	// whether an error occured during transaction priority determination.
+	// whether an error occurred during transaction priority determination.
 	//
 	// Note that the priority is normalized as a float64 value between zero and
 	// maximum tx priority.
@@ -105,11 +105,11 @@ type Metrics struct {
 	CheckTxMetDropUtilisationThreshold metrics.Counter
 }
 
-func (m *Metrics) observeCheckTxPriorityDistribution(priority int64, hint bool, senderNodeID types.NodeID, err error) {
+func (m *Metrics) observeCheckTxPriorityDistribution(priority int64, hint bool, senderNodeID types.NodeID, isError bool) {
 	normalizedPriority := float64(priority) / float64(math.MaxInt64) // Normalize to [0.0, 1.0]
 	m.CheckTxPriorityDistribution.With(
 		"hint", strconv.FormatBool(hint),
 		"local", strconv.FormatBool(senderNodeID == ""),
-		"error", strconv.FormatBool(err != nil),
+		"error", strconv.FormatBool(isError),
 	).Observe(normalizedPriority)
 }

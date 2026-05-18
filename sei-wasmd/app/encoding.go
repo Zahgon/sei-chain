@@ -1,9 +1,9 @@
 package app
 
 import (
-	"github.com/cosmos/cosmos-sdk/std"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/std"
 
-	"github.com/CosmWasm/wasmd/app/params"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/app/params"
 )
 
 // MakeEncodingConfig creates a new EncodingConfig with all modules registered

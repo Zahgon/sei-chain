@@ -4,8 +4,8 @@ import (
 	"testing"
 	"time"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 	epochTypes "github.com/sei-protocol/sei-chain/x/epoch/types"
 	"github.com/sei-protocol/sei-chain/x/mint/keeper"
 	mintKeeper "github.com/sei-protocol/sei-chain/x/mint/keeper"
@@ -138,7 +138,7 @@ func TestGetNextScheduledTokenRelease(t *testing.T) {
 
 func TestGetOrUpdateLatestMinter(t *testing.T) {
 	t.Parallel()
-	app, ctx := createTestApp(false)
+	app, ctx := createTestApp(t, false)
 	mintKeeper := app.MintKeeper
 	currentTime := time.Now()
 	epoch := epochTypes.Epoch{
@@ -222,7 +222,7 @@ func TestGetOrUpdateLatestMinter(t *testing.T) {
 
 func TestBaseCases(t *testing.T) {
 	t.Parallel()
-	app, ctx := createTestApp(false)
+	app, ctx := createTestApp(t, false)
 	mintKeeper := app.MintKeeper
 
 	t.Run("invalid module name", func(t *testing.T) {
@@ -252,7 +252,7 @@ func TestBaseCases(t *testing.T) {
 	})
 
 	t.Run("nil minter", func(t *testing.T) {
-		nilApp, nilCtx := createTestApp(false)
+		nilApp, nilCtx := createTestApp(t, false)
 
 		store := nilCtx.KVStore(nilApp.MintKeeper.GetStoreKey())
 		store.Delete(types.MinterKey)

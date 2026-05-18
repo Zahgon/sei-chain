@@ -5,21 +5,20 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 //-----------------------------------------------------
 // Validate block
 
-func validateBlock(state State, block *types.Block) error {
+func validateBlock(state State, block *types.Block, policy types.ConsensusPolicy) error {
 	// Validate internal consistency.
-	if err := block.ValidateBasic(); err != nil {
-		return err
+	if err := block.ValidateBasic(policy); err != nil {
+		return fmt.Errorf("ValidateBasic(): %w", err)
 	}
 
 	// Validate basic info.
-	if block.Version.App != state.Version.Consensus.App ||
-		block.Version.Block != state.Version.Consensus.Block {
+	if block.Version != state.Version.Consensus {
 		return fmt.Errorf("wrong Block.Header.Version. Expected %v, got %v",
 			state.Version.Consensus,
 			block.Version,
@@ -50,7 +49,7 @@ func validateBlock(state State, block *types.Block) error {
 	}
 
 	// Validate app info
-	if !bytes.Equal(block.AppHash, state.AppHash) {
+	if !policy.SkipAppHashValidation() && !bytes.Equal(block.AppHash, state.AppHash) {
 		return fmt.Errorf("wrong Block.Header.AppHash.  Expected %X, got %v",
 			state.AppHash,
 			block.AppHash,
@@ -63,7 +62,7 @@ func validateBlock(state State, block *types.Block) error {
 			block.ConsensusHash,
 		)
 	}
-	if !bytes.Equal(block.LastResultsHash, state.LastResultsHash) {
+	if !types.SkipLastResultsHashValidation.Load() && !bytes.Equal(block.LastResultsHash, state.LastResultsHash) {
 		return fmt.Errorf("wrong Block.Header.LastResultsHash.  Expected %X, got %v",
 			state.LastResultsHash,
 			block.LastResultsHash,
@@ -91,7 +90,7 @@ func validateBlock(state State, block *types.Block) error {
 		// LastCommit.Signatures length is checked in VerifyCommit.
 		if err := state.LastValidators.VerifyCommit(
 			state.ChainID, state.LastBlockID, block.Height-1, block.LastCommit); err != nil {
-			return err
+			return fmt.Errorf("VerifyCommit(): %w", err)
 		}
 	}
 

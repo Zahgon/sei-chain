@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto/merkle"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/merkle"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
 )
 
 const (
@@ -90,6 +90,30 @@ func TestWrongProof(t *testing.T) {
 	}
 }
 
+func TestAddPartWithSwappedProof(t *testing.T) {
+	// Create a part set with multiple parts
+	data := tmrand.Bytes(testPartSize * 4)
+	partSet := NewPartSetFromData(data, testPartSize)
+
+	// Get two different parts
+	part0 := partSet.GetPart(0)
+	part1 := partSet.GetPart(1)
+
+	// Create a malicious part: part0's index with part1's proof.
+	// The proof is cryptographically valid (it proves part1.Bytes is in the tree)
+	// but it's for a different index position.
+	maliciousPart := &Part{
+		Index: part0.Index,
+		Bytes: part1.Bytes,
+		Proof: part1.Proof,
+	}
+
+	// ValidateBasic should reject this because Part.Index != Proof.Index
+	err := maliciousPart.ValidateBasic()
+	assert.Error(t, err, "ValidateBasic should reject part with mismatched proof index")
+	assert.Contains(t, err.Error(), "does not match proof index")
+}
+
 func TestPartSetHeaderValidateBasic(t *testing.T) {
 	testCases := []struct {
 		testName              string
@@ -162,35 +186,15 @@ func TestParSetHeaderProtoBuf(t *testing.T) {
 }
 
 func TestPartProtoBuf(t *testing.T) {
-
 	proof := merkle.Proof{
 		Total:    1,
 		Index:    1,
 		LeafHash: tmrand.Bytes(32),
 	}
-	testCases := []struct {
-		msg     string
-		ps1     *Part
-		expPass bool
-	}{
-		{"failure empty", &Part{}, false},
-		{"failure nil", nil, false},
-		{"success",
-			&Part{Index: 1, Bytes: tmrand.Bytes(32), Proof: proof}, true},
-	}
-
-	for _, tc := range testCases {
-		proto, err := tc.ps1.ToProto()
-		if tc.expPass {
-			require.NoError(t, err, tc.msg)
-		}
-
-		p, err := PartFromProto(proto)
-		if tc.expPass {
-			require.NoError(t, err)
-			require.Equal(t, tc.ps1, p, tc.msg)
-		}
-	}
+	want := &Part{Index: 1, Bytes: tmrand.Bytes(32), Proof: proof}
+	got, err := PartFromProto(want.ToProto())
+	require.NoError(t, err)
+	require.Equal(t, want, got)
 }
 
 func TestNewPartSetFromHeaderMemoryLimit(t *testing.T) {

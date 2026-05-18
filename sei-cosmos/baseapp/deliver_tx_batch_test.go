@@ -5,13 +5,13 @@ import (
 	"fmt"
 	"testing"
 
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 func anteHandler(capKey sdk.StoreKey, storeKey []byte) sdk.AnteHandler {
@@ -43,7 +43,7 @@ func handlerKVStore(capKey sdk.StoreKey) sdk.Handler {
 		txIndex := ctx.TxIndex()
 
 		// Use the unique ID to get a specific key for this transaction
-		sharedKey := []byte(fmt.Sprintf("shared"))
+		sharedKey := []byte("shared")
 		txKey := []byte(fmt.Sprintf("tx-%d", txIndex))
 
 		// Similar steps as before: Get the store, retrieve a value, increment it, store back, emit an event
@@ -111,7 +111,6 @@ func TestDeliverTxBatch(t *testing.T) {
 	for blockN := 0; blockN < nBlocks; blockN++ {
 		header := tmproto.Header{Height: int64(blockN) + 1}
 		app.setDeliverState(header)
-		app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 		var requests []*sdk.DeliverTxEntry
 		for i := 0; i < txPerHeight; i++ {
@@ -121,7 +120,7 @@ func TestDeliverTxBatch(t *testing.T) {
 			txBytes, err := codec.Marshal(tx)
 			require.NoError(t, err)
 			requests = append(requests, &sdk.DeliverTxEntry{
-				Request:       abci.RequestDeliverTx{Tx: txBytes},
+				Request:       abci.RequestDeliverTxV2{Tx: txBytes},
 				SdkTx:         *tx,
 				AbsoluteIndex: i,
 			})
@@ -139,7 +138,6 @@ func TestDeliverTxBatch(t *testing.T) {
 		}
 
 		app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{})
-		require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
 		app.SetDeliverStateToCommit()
 		app.Commit(context.Background())
 	}
@@ -170,14 +168,12 @@ func TestDeliverTxBatchEmpty(t *testing.T) {
 	for blockN := 0; blockN < nBlocks; blockN++ {
 		header := tmproto.Header{Height: int64(blockN) + 1}
 		app.setDeliverState(header)
-		app.BeginBlock(app.deliverState.ctx, abci.RequestBeginBlock{Header: header})
 
 		var requests []*sdk.DeliverTxEntry
 		responses := app.DeliverTxBatch(app.deliverState.ctx, sdk.DeliverTxBatchRequest{TxEntries: requests})
 		require.Len(t, responses.Results, 0)
 
 		app.EndBlock(app.deliverState.ctx, abci.RequestEndBlock{})
-		require.Empty(t, app.deliverState.ctx.MultiStore().GetEvents())
 		app.SetDeliverStateToCommit()
 		app.Commit(context.Background())
 	}

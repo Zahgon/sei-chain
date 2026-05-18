@@ -8,15 +8,15 @@ import (
 	"strings"
 
 	"github.com/gorilla/mux"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/spf13/cobra"
-	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/rest"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
 )
 
 // TODO these next two functions feel kinda hacky based on their placement
@@ -48,8 +48,12 @@ func ValidatorCommand() *cobra.Command {
 
 			page, _ := cmd.Flags().GetInt(flags.FlagPage)
 			limit, _ := cmd.Flags().GetInt(flags.FlagLimit)
-
-			result, err := GetValidators(cmd.Context(), clientCtx, height, &page, &limit)
+			// get the node
+			node, err := clientCtx.GetNode()
+			if err != nil {
+				return err
+			}
+			result, err := GetValidators(cmd.Context(), node, height, &page, &limit)
 			if err != nil {
 				return err
 			}
@@ -118,13 +122,7 @@ func validatorOutput(validator *tmtypes.Validator) (ValidatorOutput, error) {
 }
 
 // GetValidators from client
-func GetValidators(ctx context.Context, clientCtx client.Context, height *int64, page, limit *int) (ResultValidatorsOutput, error) {
-	// get the node
-	node, err := clientCtx.GetNode()
-	if err != nil {
-		return ResultValidatorsOutput{}, err
-	}
-
+func GetValidators(ctx context.Context, node client.Client, height *int64, page, limit *int) (ResultValidatorsOutput, error) {
 	validatorsRes, err := node.Validators(ctx, height, page, limit)
 	if err != nil {
 		return ResultValidatorsOutput{}, err
@@ -137,7 +135,7 @@ func GetValidators(ctx context.Context, clientCtx client.Context, height *int64,
 	out := ResultValidatorsOutput{
 		BlockHeight: validatorsRes.BlockHeight,
 		Validators:  make([]ValidatorOutput, len(validatorsRes.Validators)),
-		Total:       uint64(total),
+		Total:       uint64(total), //nolint:gosec // total is guaranteed non-negative by the check above
 	}
 	for i := 0; i < len(validatorsRes.Validators); i++ {
 		out.Validators[i], err = validatorOutput(validatorsRes.Validators[i])
@@ -166,8 +164,11 @@ func ValidatorSetRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse block height")
 			return
 		}
-
-		chainHeight, err := GetChainHeight(clientCtx)
+		node, err := clientCtx.GetNode()
+		if rest.CheckInternalServerError(w, err) {
+			return
+		}
+		chainHeight, err := GetChainHeight(r.Context(), node)
 		if err != nil {
 			rest.WriteErrorResponse(w, http.StatusInternalServerError, "failed to parse chain height")
 			return
@@ -177,7 +178,7 @@ func ValidatorSetRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		output, err := GetValidators(r.Context(), clientCtx, &height, &page, &limit)
+		output, err := GetValidators(r.Context(), node, &height, &page, &limit)
 		if rest.CheckInternalServerError(w, err) {
 			return
 		}
@@ -193,8 +194,11 @@ func LatestValidatorSetRequestHandlerFn(clientCtx client.Context) http.HandlerFu
 			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse pagination parameters")
 			return
 		}
-
-		output, err := GetValidators(r.Context(), clientCtx, nil, &page, &limit)
+		node, err := clientCtx.GetNode()
+		if rest.CheckInternalServerError(w, err) {
+			return
+		}
+		output, err := GetValidators(r.Context(), node, nil, &page, &limit)
 		if rest.CheckInternalServerError(w, err) {
 			return
 		}

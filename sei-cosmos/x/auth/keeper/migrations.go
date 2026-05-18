@@ -3,10 +3,9 @@ package keeper
 import (
 	"github.com/gogo/protobuf/grpc"
 
-	v043 "github.com/cosmos/cosmos-sdk/x/auth/legacy/v043"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
 // Migrator is a struct for handling in-place store migrations.
@@ -25,17 +24,6 @@ func (m Migrator) Migrate1to2(ctx sdk.Context) error {
 	var iterErr error
 
 	m.keeper.IterateAccounts(ctx, func(account types.AccountI) (stop bool) {
-		wb, err := v043.MigrateAccount(ctx, account, m.queryServer)
-		if err != nil {
-			iterErr = err
-			return true
-		}
-
-		if wb == nil {
-			return false
-		}
-
-		m.keeper.SetAccount(ctx, wb)
 		return false
 	})
 

@@ -3,25 +3,26 @@ package consensus
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/tendermint/tendermint/version"
 	"math"
 	"testing"
 	"time"
+
+	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/merkle"
-	cstypes "github.com/tendermint/tendermint/internal/consensus/types"
-	"github.com/tendermint/tendermint/internal/test/factory"
-	"github.com/tendermint/tendermint/libs/bits"
-	"github.com/tendermint/tendermint/libs/bytes"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmcons "github.com/tendermint/tendermint/proto/tendermint/consensus"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/merkle"
+	cstypes "github.com/sei-protocol/sei-chain/sei-tendermint/internal/consensus/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/test/factory"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bits"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	tmcons "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/consensus"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func TestMsgToProto(t *testing.T) {
@@ -50,8 +51,7 @@ func TestMsgToProto(t *testing.T) {
 			Aunts:    [][]byte{},
 		},
 	}
-	pbParts, err := parts.ToProto()
-	require.NoError(t, err)
+	pbParts := parts.ToProto()
 
 	pv := types.NewMockPV()
 	pubKey, err := pv.GetPubKey(ctx)
@@ -65,12 +65,12 @@ func TestMsgToProto(t *testing.T) {
 
 	proposal := types.Proposal{
 		Type:            tmproto.ProposalType,
-		Height:          1,
-		Round:           1,
+		Height:          3,
+		Round:           2,
 		POLRound:        1,
 		BlockID:         bi,
 		Timestamp:       time.Now(),
-		Signature:       tmrand.Bytes(20),
+		Signature:       testKey.Sign([]byte("somedata")),
 		Header:          header,
 		Evidence:        types.EvidenceList{},
 		LastCommit:      &types.Commit{Signatures: []types.CommitSig{}},
@@ -87,12 +87,13 @@ func TestMsgToProto(t *testing.T) {
 		testName string
 		msg      Message
 		want     *tmcons.Message
-		wantErr  bool
 	}{
 		{"successful NewRoundStepMessage", &NewRoundStepMessage{
-			Height:                2,
-			Round:                 1,
-			Step:                  1,
+			HRS: cstypes.HRS{
+				Height: 2,
+				Round:  1,
+				Step:   1,
+			},
 			SecondsSinceStartTime: 1,
 			LastCommitRound:       2,
 		}, &tmcons.Message{
@@ -105,7 +106,7 @@ func TestMsgToProto(t *testing.T) {
 					LastCommitRound:       2,
 				},
 			},
-		}, false},
+		}},
 
 		{"successful NewValidBlockMessage", &NewValidBlockMessage{
 			Height:             1,
@@ -123,7 +124,7 @@ func TestMsgToProto(t *testing.T) {
 					IsCommit:           false,
 				},
 			},
-		}, false},
+		}},
 		{"successful BlockPartMessage", &BlockPartMessage{
 			Height: 100,
 			Round:  1,
@@ -136,7 +137,7 @@ func TestMsgToProto(t *testing.T) {
 					Part:   *pbParts,
 				},
 			},
-		}, false},
+		}},
 		{"successful ProposalPOLMessage", &ProposalPOLMessage{
 			Height:           1,
 			ProposalPOLRound: 1,
@@ -148,7 +149,8 @@ func TestMsgToProto(t *testing.T) {
 					ProposalPolRound: 1,
 					ProposalPol:      *pbBits,
 				},
-			}}, false},
+			},
+		}},
 		{"successful ProposalMessage", &ProposalMessage{
 			Proposal: &proposal,
 		}, &tmcons.Message{
@@ -157,7 +159,7 @@ func TestMsgToProto(t *testing.T) {
 					Proposal: *pbProposal,
 				},
 			},
-		}, false},
+		}},
 		{"successful VoteMessage", &VoteMessage{
 			Vote: vote,
 		}, &tmcons.Message{
@@ -166,7 +168,7 @@ func TestMsgToProto(t *testing.T) {
 					Vote: pbVote,
 				},
 			},
-		}, false},
+		}},
 		{"successful VoteSetMaj23", &VoteSetMaj23Message{
 			Height:  1,
 			Round:   1,
@@ -181,7 +183,7 @@ func TestMsgToProto(t *testing.T) {
 					BlockID: pbBi,
 				},
 			},
-		}, false},
+		}},
 		{"successful VoteSetBits", &VoteSetBitsMessage{
 			Height:  1,
 			Round:   1,
@@ -198,28 +200,16 @@ func TestMsgToProto(t *testing.T) {
 					Votes:   *pbBits,
 				},
 			},
-		}, false},
-		{"failure", nil, &tmcons.Message{}, true},
+		}},
 	}
 	for _, tt := range testsCases {
-		tt := tt
 		t.Run(tt.testName, func(t *testing.T) {
-			pb, err := MsgToProto(tt.msg)
-			if tt.wantErr == true {
-				assert.Equal(t, err != nil, tt.wantErr)
-				return
-			}
+			pb := MsgToProto(tt.msg)
 			assert.EqualValues(t, tt.want, pb, tt.testName)
-
 			msg, err := MsgFromProto(pb)
-
-			if !tt.wantErr {
-				require.NoError(t, err)
-				bcm := assert.Equal(t, tt.msg, msg, tt.testName)
-				assert.True(t, bcm, tt.testName)
-			} else {
-				require.Error(t, err, tt.testName)
-			}
+			require.NoError(t, err)
+			bcm := assert.Equal(t, tt.msg, msg, tt.testName)
+			assert.True(t, bcm, tt.testName)
 		})
 	}
 }
@@ -236,20 +226,18 @@ func TestWALMsgProto(t *testing.T) {
 			Aunts:    [][]byte{},
 		},
 	}
-	pbParts, err := parts.ToProto()
-	require.NoError(t, err)
+	pbParts := parts.ToProto()
 
 	testsCases := []struct {
 		testName string
 		msg      WALMessage
 		want     *tmcons.WALMessage
-		wantErr  bool
 	}{
-		{"successful EventDataRoundState", types.EventDataRoundState{
+		{"successful EventDataRoundState", NewWALMessage(types.EventDataRoundState{
 			Height: 2,
 			Round:  1,
 			Step:   "ronies",
-		}, &tmcons.WALMessage{
+		}), &tmcons.WALMessage{
 			Sum: &tmcons.WALMessage_EventDataRoundState{
 				EventDataRoundState: &tmproto.EventDataRoundState{
 					Height: 2,
@@ -257,15 +245,15 @@ func TestWALMsgProto(t *testing.T) {
 					Step:   "ronies",
 				},
 			},
-		}, false},
-		{"successful msgInfo", msgInfo{
+		}},
+		{"successful msgInfo", NewWALMessage(msgInfo{
 			Msg: &BlockPartMessage{
 				Height: 100,
 				Round:  1,
 				Part:   &parts,
 			},
 			PeerID: types.NodeID("string"),
-		}, &tmcons.WALMessage{
+		}), &tmcons.WALMessage{
 			Sum: &tmcons.WALMessage_MsgInfo{
 				MsgInfo: &tmcons.MsgInfo{
 					Msg: tmcons.Message{
@@ -280,13 +268,13 @@ func TestWALMsgProto(t *testing.T) {
 					PeerID: "string",
 				},
 			},
-		}, false},
-		{"successful timeoutInfo", timeoutInfo{
+		}},
+		{"successful timeoutInfo", NewWALMessage(timeoutInfo{
 			Duration: time.Duration(100),
 			Height:   1,
 			Round:    1,
 			Step:     1,
-		}, &tmcons.WALMessage{
+		}), &tmcons.WALMessage{
 			Sum: &tmcons.WALMessage_TimeoutInfo{
 				TimeoutInfo: &tmcons.TimeoutInfo{
 					Duration: time.Duration(100),
@@ -295,36 +283,24 @@ func TestWALMsgProto(t *testing.T) {
 					Step:     1,
 				},
 			},
-		}, false},
-		{"successful EndHeightMessage", EndHeightMessage{
+		}},
+		{"successful EndHeightMessage", NewWALMessage(EndHeightMessage{
 			Height: 1,
-		}, &tmcons.WALMessage{
+		}), &tmcons.WALMessage{
 			Sum: &tmcons.WALMessage_EndHeight{
 				EndHeight: &tmcons.EndHeight{
 					Height: 1,
 				},
 			},
-		}, false},
-		{"failure", nil, &tmcons.WALMessage{}, true},
+		}},
 	}
 	for _, tt := range testsCases {
-		tt := tt
 		t.Run(tt.testName, func(t *testing.T) {
-			pb, err := WALToProto(tt.msg)
-			if tt.wantErr == true {
-				assert.Equal(t, err != nil, tt.wantErr)
-				return
-			}
+			pb := tt.msg.toProto()
 			assert.EqualValues(t, tt.want, pb, tt.testName)
-
-			msg, err := WALFromProto(pb)
-
-			if !tt.wantErr {
-				require.NoError(t, err)
-				assert.Equal(t, tt.msg, msg, tt.testName) // need the concrete type as WAL Message is a empty interface
-			} else {
-				require.Error(t, err, tt.testName)
-			}
+			msg, err := walFromProto(pb)
+			require.NoError(t, err)
+			assert.Equal(t, tt.msg, msg, tt.testName) // need the concrete type as WAL Message is a empty interface
 		})
 	}
 }
@@ -355,8 +331,7 @@ func TestConsMsgsVectors(t *testing.T) {
 			Aunts:    [][]byte{},
 		},
 	}
-	pbParts, err := parts.ToProto()
-	require.NoError(t, err)
+	pbParts := parts.ToProto()
 
 	proposal := types.Proposal{
 		Type:      tmproto.ProposalType,
@@ -365,9 +340,10 @@ func TestConsMsgsVectors(t *testing.T) {
 		POLRound:  1,
 		BlockID:   bi,
 		Timestamp: date,
-		Signature: []byte("add_more_exclamation"),
 	}
 	pbProposal := proposal.ToProto()
+	// We populate the signature with invalid data to match the hash.
+	pbProposal.Signature = []byte("add_more_exclamation")
 
 	v := &types.Vote{
 		ValidatorAddress: []byte("add_more_exclamation"),
@@ -454,7 +430,7 @@ func TestVoteSetMaj23MessageValidateBasic(t *testing.T) {
 		},
 	}
 
-	testCases := []struct { // nolint: maligned
+	testCases := []struct {
 		expectErr      bool
 		messageRound   int32
 		messageHeight  int64
@@ -524,7 +500,7 @@ func TestVoteSetBitsMessageValidateBasic(t *testing.T) {
 }
 
 func TestNewRoundStepMessageValidateBasic(t *testing.T) {
-	testCases := []struct { // nolint: maligned
+	testCases := []struct {
 		expectErr              bool
 		messageRound           int32
 		messageLastCommitRound int32
@@ -544,9 +520,11 @@ func TestNewRoundStepMessageValidateBasic(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.testName, func(t *testing.T) {
 			message := NewRoundStepMessage{
-				Height:          tc.messageHeight,
-				Round:           tc.messageRound,
-				Step:            tc.messageStep,
+				HRS: cstypes.HRS{
+					Height: tc.messageHeight,
+					Round:  tc.messageRound,
+					Step:   tc.messageStep,
+				},
 				LastCommitRound: tc.messageLastCommitRound,
 			}
 
@@ -562,7 +540,7 @@ func TestNewRoundStepMessageValidateBasic(t *testing.T) {
 
 func TestNewRoundStepMessageValidateHeight(t *testing.T) {
 	initialHeight := int64(10)
-	testCases := []struct { // nolint: maligned
+	testCases := []struct {
 		expectErr              bool
 		messageLastCommitRound int32
 		messageHeight          int64
@@ -578,9 +556,11 @@ func TestNewRoundStepMessageValidateHeight(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.testName, func(t *testing.T) {
 			message := NewRoundStepMessage{
-				Height:          tc.messageHeight,
-				Round:           0,
-				Step:            cstypes.RoundStepNewHeight,
+				HRS: cstypes.HRS{
+					Height: tc.messageHeight,
+					Round:  0,
+					Step:   cstypes.RoundStepNewHeight,
+				},
 				LastCommitRound: tc.messageLastCommitRound,
 			}
 
@@ -671,7 +651,7 @@ func TestProposalPOLMessageValidateBasic(t *testing.T) {
 
 func TestBlockPartMessageValidateBasic(t *testing.T) {
 	testPart := new(types.Part)
-	testPart.Proof.LeafHash = crypto.Checksum([]byte("leaf"))
+	testPart.Proof.LeafHash = crypto.Checksum([]byte("leaf")).Bytes()
 	testCases := []struct {
 		testName      string
 		messageHeight int64
@@ -708,7 +688,7 @@ func TestHasVoteMessageValidateBasic(t *testing.T) {
 		invalidSignedMsgType tmproto.SignedMsgType = 0x03
 	)
 
-	testCases := []struct { // nolint: maligned
+	testCases := []struct {
 		expectErr     bool
 		messageRound  int32
 		messageIndex  int32

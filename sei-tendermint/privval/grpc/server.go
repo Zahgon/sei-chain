@@ -6,24 +6,20 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/encoding"
-	"github.com/tendermint/tendermint/libs/log"
-	privvalproto "github.com/tendermint/tendermint/proto/tendermint/privval"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	privvalproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/privval"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 // SignerServer implements PrivValidatorAPIServer 9generated via protobuf services)
 // Handles remote validator connections that provide signing services
 type SignerServer struct {
-	logger  log.Logger
 	chainID string
 	privVal types.PrivValidator
 }
 
-func NewSignerServer(logger log.Logger, chainID string, privVal types.PrivValidator) *SignerServer {
+func NewSignerServer(chainID string, privVal types.PrivValidator) *SignerServer {
 	return &SignerServer{
-		logger:  logger,
 		chainID: chainID,
 		privVal: privVal,
 	}
@@ -41,15 +37,8 @@ func (ss *SignerServer) GetPubKey(ctx context.Context, req *privvalproto.PubKeyR
 	if err != nil {
 		return nil, status.Errorf(codes.NotFound, "error getting pubkey: %v", err)
 	}
-
-	pk, err := encoding.PubKeyToProto(pubKey)
-	if err != nil {
-		return nil, status.Errorf(codes.Internal, "error transitioning pubkey to proto: %v", err)
-	}
-
-	ss.logger.Info("SignerServer: GetPubKey Success")
-
-	return &privvalproto.PubKeyResponse{PubKey: pk}, nil
+	logger.Info("SignerServer: GetPubKey Success")
+	return &privvalproto.PubKeyResponse{PubKey: crypto.PubKeyToProto(pubKey)}, nil
 }
 
 // SignVote receives a vote sign requests, attempts to sign it
@@ -62,7 +51,7 @@ func (ss *SignerServer) SignVote(ctx context.Context, req *privvalproto.SignVote
 		return nil, status.Errorf(codes.InvalidArgument, "error signing vote: %v", err)
 	}
 
-	ss.logger.Info("SignerServer: SignVote Success", "height", req.Vote.Height)
+	logger.Info("SignerServer: SignVote Success", "height", req.Vote.Height)
 
 	return &privvalproto.SignedVoteResponse{Vote: *vote}, nil
 }
@@ -77,7 +66,7 @@ func (ss *SignerServer) SignProposal(ctx context.Context, req *privvalproto.Sign
 		return nil, status.Errorf(codes.InvalidArgument, "error signing proposal: %v", err)
 	}
 
-	ss.logger.Info("SignerServer: SignProposal Success", "height", req.Proposal.Height)
+	logger.Info("SignerServer: SignProposal Success", "height", req.Proposal.Height)
 
 	return &privvalproto.SignedProposalResponse{Proposal: *proposal}, nil
 }

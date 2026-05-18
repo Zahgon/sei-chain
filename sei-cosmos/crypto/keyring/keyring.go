@@ -4,9 +4,7 @@ import (
 	"bufio"
 	"encoding/hex"
 	"fmt"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
 	"io"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
@@ -15,18 +13,19 @@ import (
 	"github.com/99designs/keyring"
 	bip39 "github.com/cosmos/go-bip39"
 	"github.com/pkg/errors"
+	tmcrypto "github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
 	"github.com/tendermint/crypto/bcrypt"
-	tmcrypto "github.com/tendermint/tendermint/crypto"
 
-	"github.com/cosmos/cosmos-sdk/client/input"
-	"github.com/cosmos/cosmos-sdk/codec/legacy"
-	"github.com/cosmos/cosmos-sdk/crypto"
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/sr25519"
-	"github.com/cosmos/cosmos-sdk/crypto/ledger"
-	"github.com/cosmos/cosmos-sdk/crypto/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/input"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/hd"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/sr25519"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/ledger"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 // Backend options for Keyring
@@ -152,7 +151,7 @@ func NewInMemory(opts ...Option) Keyring {
 // NewInMemoryWithKeyring returns an in memory keyring using the specified keyring.Keyring
 // as the backing keyring.
 func NewInMemoryWithKeyring(kr keyring.Keyring, opts ...Option) Keyring {
-	return newKeystore(kr, BackendMemory, opts...)
+	return newKeystore(kr, opts...)
 }
 
 // New creates a new instance of a keyring.
@@ -187,7 +186,7 @@ func New(
 		return nil, err
 	}
 
-	return newKeystore(db, backend, opts...), nil
+	return newKeystore(db, opts...), nil
 }
 
 type keystore struct {
@@ -195,7 +194,7 @@ type keystore struct {
 	options Options
 }
 
-func newKeystore(kr keyring.Keyring, backend string, opts ...Option) keystore {
+func newKeystore(kr keyring.Keyring, opts ...Option) keystore {
 	// Default options for keybase
 	options := Options{
 		SupportedAlgos:       SigningAlgoList{hd.Sr25519, hd.Secp256k1},
@@ -235,8 +234,7 @@ func (ks keystore) ExportPrivateKeyObject(uid string) ([]byte, error) {
 	switch linfo := info.(type) {
 	case LocalInfo:
 		if linfo.PrivKeyArmor == "" {
-			err = fmt.Errorf("private key not available")
-			return nil, err
+			return nil, fmt.Errorf("private key not available")
 		}
 
 		if linfo.Algo == hd.Sr25519Type {
@@ -585,20 +583,21 @@ func SignWithLedger(info Info, msg []byte) (sig []byte, pub types.PubKey, err er
 
 	path, err := info.GetPath()
 	if err != nil {
-		return
+		return nil, nil, fmt.Errorf("failed to get BIP44 path from ledger info: %w", err)
 	}
 
-	priv, err := ledger.NewPrivKeySecp256k1Unsafe(*path)
+	// Use single-connection signing to avoid race conditions from multiple device open/close cycles
+	sig, pub, err = ledger.SignWithPath(*path, msg)
 	if err != nil {
-		return
+		return nil, nil, fmt.Errorf("ledger signing failed: %w", err)
 	}
 
-	sig, err = priv.Sign(msg)
-	if err != nil {
-		return nil, nil, err
+	// Validate that the public key from the device matches the cached key in the keyring
+	if !pub.Equals(info.GetPubKey()) {
+		return nil, nil, errors.New("the public key from the Ledger device does not match the cached key in the keyring")
 	}
 
-	return sig, priv.PubKey(), nil
+	return sig, pub, nil
 }
 
 func newOSBackendKeyringConfig(appName, dir string, buf io.Reader) keyring.Config {
@@ -654,7 +653,7 @@ func newFileBackendKeyringConfig(name, dir string, buf io.Reader) keyring.Config
 func newRealPrompt(dir string, buf io.Reader) func(string) (string, error) {
 	return func(prompt string) (string, error) {
 		keyhashStored := false
-		keyhashFilePath := filepath.Join(dir, "keyhash")
+		keyhashFilePath := filepath.Clean(filepath.Join(dir, "keyhash"))
 
 		var keyhash []byte
 
@@ -662,7 +661,7 @@ func newRealPrompt(dir string, buf io.Reader) func(string) (string, error) {
 
 		switch {
 		case err == nil:
-			keyhash, err = ioutil.ReadFile(keyhashFilePath)
+			keyhash, err = os.ReadFile(keyhashFilePath)
 			if err != nil {
 				return "", fmt.Errorf("failed to read %s: %v", keyhashFilePath, err)
 			}
@@ -691,13 +690,13 @@ func newRealPrompt(dir string, buf io.Reader) func(string) (string, error) {
 				// but we only log the error.
 				//
 				// lgtm [go/clear-text-logging]
-				fmt.Fprintln(os.Stderr, err)
+				_, _ = fmt.Fprintln(os.Stderr, err)
 				continue
 			}
 
 			if keyhashStored {
 				if err := bcrypt.CompareHashAndPassword(keyhash, []byte(pass)); err != nil {
-					fmt.Fprintln(os.Stderr, "incorrect passphrase")
+					_, _ = fmt.Fprintln(os.Stderr, "incorrect passphrase")
 					continue
 				}
 
@@ -710,23 +709,24 @@ func newRealPrompt(dir string, buf io.Reader) func(string) (string, error) {
 				// but we only log the error.
 				//
 				// lgtm [go/clear-text-logging]
-				fmt.Fprintln(os.Stderr, err)
+				_, _ = fmt.Fprintln(os.Stderr, err)
 				continue
 			}
 
 			if pass != reEnteredPass {
-				fmt.Fprintln(os.Stderr, "passphrase do not match")
+				_, _ = fmt.Fprintln(os.Stderr, "passphrase do not match")
 				continue
 			}
 
 			saltBytes := tmcrypto.CRandBytes(16)
 			passwordHash, err := bcrypt.GenerateFromPassword(saltBytes, []byte(pass), 2)
 			if err != nil {
-				fmt.Fprintln(os.Stderr, err)
+				_, _ = fmt.Fprintln(os.Stderr, err)
 				continue
 			}
 
-			if err := ioutil.WriteFile(dir+"/keyhash", passwordHash, 0555); err != nil {
+			name := filepath.Clean(filepath.Join(dir, "keyhash"))
+			if err := os.WriteFile(name, passwordHash, 0600); err != nil {
 				return "", err
 			}
 

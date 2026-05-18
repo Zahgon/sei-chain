@@ -6,16 +6,16 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
 
 	"github.com/sei-protocol/sei-chain/app"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/sei-protocol/sei-chain/x/epoch"
 	"github.com/sei-protocol/sei-chain/x/epoch/types"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
 
 func TestNewHandler(t *testing.T) {
-	app := app.Setup(false, false, false) // Your setup function here
+	app := app.Setup(t, false, false, false) // Your setup function here
 	handler := epoch.NewHandler(app.EpochKeeper)
 
 	// Test unrecognized message type

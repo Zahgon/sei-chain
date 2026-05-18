@@ -6,9 +6,9 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	authclient "github.com/cosmos/cosmos-sdk/x/auth/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	authclient "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/client"
 )
 
 // GetBroadcastCommand returns the tx broadcast command.
@@ -44,7 +44,11 @@ $ <appd> tx broadcast ./mytxn.json
 				return err
 			}
 
-			res, err := clientCtx.BroadcastTx(txBytes)
+			node, err := clientCtx.GetNode()
+			if err != nil {
+				return err
+			}
+			res, err := client.BroadcastTx(cmd.Context(), node, clientCtx.BroadcastMode, txBytes)
 			if err != nil {
 				return err
 			}

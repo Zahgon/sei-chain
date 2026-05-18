@@ -6,8 +6,7 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/cosmos/cosmos-sdk/store/types"
-	sdktypes "github.com/cosmos/cosmos-sdk/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
 
 // Iterates over iterKVCache items.
@@ -16,10 +15,8 @@ import (
 type memIterator struct {
 	types.Iterator
 
-	lastKey      []byte
-	deleted      *sync.Map
-	eventManager *sdktypes.EventManager
-	storeKey     sdktypes.StoreKey
+	lastKey []byte
+	deleted *sync.Map
 }
 
 func newMemIterator(
@@ -27,8 +24,6 @@ func newMemIterator(
 	items *dbm.MemDB,
 	deleted *sync.Map,
 	ascending bool,
-	eventManager *sdktypes.EventManager,
-	storeKey sdktypes.StoreKey,
 ) *memIterator {
 	var iter types.Iterator
 	var err error
@@ -41,22 +36,20 @@ func newMemIterator(
 
 	if err != nil {
 		if iter != nil {
-			iter.Close()
+			_ = iter.Close()
 		}
 		panic(err)
 	}
 
 	return &memIterator{
-		Iterator:     iter,
-		lastKey:      nil,
-		deleted:      deleted,
-		eventManager: eventManager,
-		storeKey:     storeKey,
+		Iterator: iter,
+		lastKey:  nil,
+		deleted:  deleted,
 	}
 }
 
 func (mi *memIterator) Value() []byte {
-	key := mi.Iterator.Key()
+	key := mi.Key()
 	// We need to handle the case where deleted is modified and includes our current key
 	// We handle this by maintaining a lastKey object in the iterator.
 	// If the current key is the same as the last key (and last key is not nil / the start)

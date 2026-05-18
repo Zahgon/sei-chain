@@ -9,7 +9,6 @@ import (
 	math "math"
 	math_bits "math/bits"
 
-	"github.com/cosmos/iavl"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 )
@@ -27,8 +26,8 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // NamedChangeSet combine a tree name with the changeset
 type NamedChangeSet struct {
-	Changeset iavl.ChangeSet `protobuf:"bytes,1,opt,name=changeset,proto3" json:"changeset"`
-	Name      string         `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Changeset ChangeSet `protobuf:"bytes,1,opt,name=changeset,proto3" json:"changeset"`
+	Name      string    `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 }
 
 func (m *NamedChangeSet) Reset()         { *m = NamedChangeSet{} }
@@ -64,11 +63,11 @@ func (m *NamedChangeSet) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_NamedChangeSet proto.InternalMessageInfo
 
-func (m *NamedChangeSet) GetChangeset() iavl.ChangeSet {
+func (m *NamedChangeSet) GetChangeset() ChangeSet {
 	if m != nil {
 		return m.Changeset
 	}
-	return iavl.ChangeSet{}
+	return ChangeSet{}
 }
 
 func (m *NamedChangeSet) GetName() string {

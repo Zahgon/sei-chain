@@ -8,21 +8,19 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/CosmWasm/wasmd/x/wasm"
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
+	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm"
+	wasmkeeper "github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/keeper"
 	"github.com/spf13/cast"
 	"github.com/spf13/cobra"
 
-	"github.com/cosmos/cosmos-sdk/baseapp"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/store"
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
-	aclkeeper "github.com/cosmos/cosmos-sdk/x/accesscontrol/keeper"
 	ethtests "github.com/ethereum/go-ethereum/tests"
 	"github.com/sei-protocol/sei-chain/app"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/server"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store"
+	storetypes "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
-	"github.com/tendermint/tendermint/libs/log"
 )
 
 func BlocktestCmd(defaultNodeHome string) *cobra.Command {
@@ -48,20 +46,14 @@ func BlocktestCmd(defaultNodeHome string) *cobra.Command {
 				return err
 			}
 			home := serverCtx.Viper.GetString(flags.FlagHome)
-			db, err := openDB(home)
-			if err != nil {
-				return err
-			}
 
-			logger := log.NewTMLogger(log.NewSyncWriter(os.Stdout))
 			cache := store.NewCommitKVStoreCacheManager()
 			wasmGasRegisterConfig := wasmkeeper.DefaultGasRegisterConfig()
 			wasmGasRegisterConfig.GasMultiplier = 21_000_000
 			// turn on Cancun for block test
 			evmtypes.CancunTime = 0
 			a := app.New(
-				logger,
-				db,
+				nil,
 				nil,
 				true,
 				map[int64]bool{},
@@ -79,7 +71,6 @@ func BlocktestCmd(defaultNodeHome string) *cobra.Command {
 						),
 					),
 				},
-				[]aclkeeper.Option{},
 				app.EmptyAppOptions,
 				baseapp.SetPruning(storetypes.PruneEverything),
 				baseapp.SetMinGasPrices(cast.ToString(serverCtx.Viper.Get(server.FlagMinGasPrices))),

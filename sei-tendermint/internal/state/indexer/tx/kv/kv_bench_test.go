@@ -7,9 +7,9 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/internal/pubsub/query"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func BenchmarkTxSearch(b *testing.B) {
@@ -38,7 +38,7 @@ func BenchmarkTxSearch(b *testing.B) {
 			b.Errorf("failed produce random bytes: %s", err)
 		}
 
-		txResult := &abci.TxResult{
+		txResult := &abci.TxResultV2{
 			Height: int64(i),
 			Index:  0,
 			Tx:     types.Tx(string(txBz)),
@@ -50,7 +50,7 @@ func BenchmarkTxSearch(b *testing.B) {
 			},
 		}
 
-		if err := indexer.Index([]*abci.TxResult{txResult}); err != nil {
+		if err := indexer.Index([]*abci.TxResultV2{txResult}); err != nil {
 			b.Errorf("failed to index tx: %s", err)
 		}
 	}

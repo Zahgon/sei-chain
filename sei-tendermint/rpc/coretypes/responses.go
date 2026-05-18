@@ -7,12 +7,13 @@ import (
 	"strings"
 	"time"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/internal/jsontypes"
-	"github.com/tendermint/tendermint/libs/bytes"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 // List of standardized errors used across RPC
@@ -27,6 +28,24 @@ var (
 	// made an invalid request
 	ErrInvalidRequest = errors.New("invalid request")
 )
+
+// WrapErrHeightNotAvailable wraps ErrHeightNotAvailable with the requested
+// height and (when known) the lower bound that excluded it. Pass Some(base)
+// when the caller has the active lower bound — e.g. CometBFT's
+// BlockStore.Base() in env.getHeight. Pass None when the caller only knows
+// the height was unavailable but not what the bound is — e.g. the Autobahn
+// path where data.GlobalBlock returns data.ErrPruned and the bound
+// (data.State.inner.first) is internal to data.State.
+//
+// Centralizing this format means both paths produce identical error
+// strings for the same case modulo the optional base height, so callers
+// (evmrpc, ops tooling) get one shape to recognize.
+func WrapErrHeightNotAvailable(height int64, base utils.Option[int64]) error {
+	if b, ok := base.Get(); ok {
+		return fmt.Errorf("%w (requested height: %d, base height: %d)", ErrHeightNotAvailable, height, b)
+	}
+	return fmt.Errorf("%w (requested height: %d)", ErrHeightNotAvailable, height)
+}
 
 // List of blocks
 type ResultBlockchainInfo struct {
@@ -97,6 +116,15 @@ type SyncInfo struct {
 	LatestBlockHeight int64          `json:"latest_block_height,string"`
 	LatestBlockTime   time.Time      `json:"latest_block_time"`
 
+	// LastCommittedBlockHeight is the last block finalized by consensus.
+	//
+	// Under CometBFT this is guaranteed to equal LatestBlockHeight (commit
+	// and app-apply happen in one step). Under Autobahn it comes from the
+	// latest CommitQC, where the invariant is LastCommittedBlockHeight >=
+	// LatestBlockHeight: consensus finalizes first, then the app executes.
+	// The two can be briefly unequal while the app catches up.
+	LastCommittedBlockHeight int64 `json:"last_committed_block_height,string"`
+
 	EarliestBlockHash   bytes.HexBytes `json:"earliest_block_hash"`
 	EarliestAppHash     bytes.HexBytes `json:"earliest_app_hash"`
 	EarliestBlockHeight int64          `json:"earliest_block_height,string"`
@@ -124,11 +152,11 @@ type ApplicationInfo struct {
 
 // Info about the node's validator
 type ValidatorInfo struct {
-	Address     bytes.HexBytes
-	PubKey      crypto.PubKey
+	PubKey      utils.Option[crypto.PubKey]
 	VotingPower int64
 }
 
+// CosmJS compatible response, which contains a public key = 0 in case of non-validator nodes.
 type validatorInfoJSON struct {
 	Address     bytes.HexBytes  `json:"address"`
 	PubKey      json.RawMessage `json:"pub_key"`
@@ -136,12 +164,15 @@ type validatorInfoJSON struct {
 }
 
 func (v ValidatorInfo) MarshalJSON() ([]byte, error) {
-	pk, err := jsontypes.Marshal(v.PubKey)
+	k := v.PubKey.Or(crypto.PubKey{})
+	pk, err := jsontypes.Marshal(k)
 	if err != nil {
 		return nil, err
 	}
 	return json.Marshal(validatorInfoJSON{
-		Address: v.Address, PubKey: pk, VotingPower: v.VotingPower,
+		VotingPower: v.VotingPower,
+		PubKey:      pk,
+		Address:     k.Address(),
 	})
 }
 
@@ -150,10 +181,13 @@ func (v *ValidatorInfo) UnmarshalJSON(data []byte) error {
 	if err := json.Unmarshal(data, &val); err != nil {
 		return err
 	}
-	if err := jsontypes.Unmarshal(val.PubKey, &v.PubKey); err != nil {
+	var pk crypto.PubKey
+	if err := jsontypes.Unmarshal(val.PubKey, &pk); err != nil {
 		return err
 	}
-	v.Address = val.Address
+	if pk != (crypto.PubKey{}) {
+		v.PubKey = utils.Some(pk)
+	}
 	v.VotingPower = val.VotingPower
 	return nil
 }

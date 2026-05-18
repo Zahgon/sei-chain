@@ -3,7 +3,7 @@ package tests
 import (
 	"testing"
 
-	"github.com/cosmos/cosmos-sdk/x/auth/signing"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/signing"
 	"github.com/sei-protocol/sei-chain/testutil/processblock"
 	"github.com/sei-protocol/sei-chain/testutil/processblock/msgs"
 	"github.com/sei-protocol/sei-chain/testutil/processblock/verify"
@@ -26,7 +26,7 @@ func (c *TestCase) run(t *testing.T, app *processblock.App) {
 }
 
 func TestTemplate(t *testing.T) {
-	app := processblock.NewTestApp()
+	app := processblock.NewTestApp(t)
 	p := processblock.CommonPreset(app) // choose a preset
 	for _, testCase := range []TestCase{
 		{

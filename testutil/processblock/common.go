@@ -4,21 +4,23 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/json"
+	"testing"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/x/auth/signing"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/go-bip39"
 	"github.com/sei-protocol/sei-chain/app"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/hd"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/ed25519"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/signing"
+	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/sei-protocol/sei-chain/utils"
-	"github.com/tendermint/tendermint/abci/types"
-	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 type App struct {
@@ -31,9 +33,9 @@ type App struct {
 	lastCtx       sdk.Context
 }
 
-func NewTestApp() *App {
+func NewTestApp(t *testing.T) *App {
 	a := &App{
-		App:           app.Setup(false, false, false),
+		App:           app.Setup(t, false, false, false),
 		height:        1,
 		accToMnemonic: map[string]string{},
 		accToSeqDelta: map[string]uint64{},
@@ -50,7 +52,6 @@ func NewTestApp() *App {
 		Time:            time.Now(),
 		ChainId:         "tendermint_test",
 		ConsensusParams: &cp,
-		Validators:      []types.ValidatorUpdate{},
 		InitialHeight:   1,
 		AppStateBytes:   gbz,
 	})
@@ -94,9 +95,12 @@ func (a *App) RunBlock(txs []signing.Tx) (resultCodes []uint32) {
 		},
 		ByzantineValidators: []types.Misbehavior{},
 		Hash:                []byte("abc"), // no needed for application logic
-		Height:              a.height,
-		ProposerAddress:     getValAddress(a.GetProposer()),
-		Time:                time.Now(),
+		Header: &tmproto.Header{
+			ChainID:         a.ChainID,
+			Height:          a.height,
+			ProposerAddress: getValAddress(a.GetProposer()),
+			Time:            time.Now(),
+		},
 	})
 	if err != nil {
 		panic(err)
@@ -142,12 +146,7 @@ func (a *App) GenerateSignableKey(_ string) (addr sdk.AccAddress) {
 }
 
 func GenerateRandomPubKey() cryptotypes.PubKey {
-	pubBz := make([]byte, secp256k1.PubKeySize)
-	pub := &secp256k1.PubKey{Key: pubBz}
-	if _, err := rand.Read(pub.Key); err != nil {
-		panic(err)
-	}
-	return pub
+	return ed25519.GenPrivKey().PubKey()
 }
 
 func generateRandomStringOfLength(len int) string {
@@ -159,7 +158,7 @@ func generateRandomStringOfLength(len int) string {
 }
 
 func getValAddress(v stakingtypes.Validator) []byte {
-	pub := secp256k1.PubKey{}
+	pub := ed25519.PubKey{}
 	if err := pub.Unmarshal(v.ConsensusPubkey.Value); err != nil {
 		panic(err)
 	}

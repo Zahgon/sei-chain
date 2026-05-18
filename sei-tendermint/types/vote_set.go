@@ -7,8 +7,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/tendermint/tendermint/libs/bits"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bits"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
 const (
@@ -138,20 +138,13 @@ func (voteSet *VoteSet) Size() int {
 // NOTE: VoteSet must not be nil
 // NOTE: Vote must not be nil
 func (voteSet *VoteSet) AddVote(vote *Vote) (added bool, err error) {
-	if voteSet == nil {
-		panic("AddVote() on nil VoteSet")
-	}
 	voteSet.mtx.Lock()
 	defer voteSet.mtx.Unlock()
-
 	return voteSet.addVote(vote)
 }
 
 // NOTE: Validates as much as possible before attempting to verify the signature.
 func (voteSet *VoteSet) addVote(vote *Vote) (added bool, err error) {
-	if vote == nil {
-		return false, ErrVoteNil
-	}
 	valIndex := vote.ValidatorIndex
 	valAddr := vote.ValidatorAddress
 	blockKey := vote.BlockID.Key()
@@ -173,8 +166,8 @@ func (voteSet *VoteSet) addVote(vote *Vote) (added bool, err error) {
 	}
 
 	// Ensure that signer is a validator.
-	lookupAddr, val := voteSet.valSet.GetByIndex(valIndex)
-	if val == nil {
+	lookupAddr, val, ok := voteSet.valSet.GetByIndex(valIndex)
+	if !ok {
 		return false, fmt.Errorf(
 			"cannot find validator %d in valSet of size %d: %w",
 			valIndex, voteSet.valSet.Size(), ErrVoteInvalidValidatorIndex)
@@ -190,7 +183,7 @@ func (voteSet *VoteSet) addVote(vote *Vote) (added bool, err error) {
 
 	// If we already know of this vote, return false.
 	if existing, ok := voteSet.getVote(valIndex, blockKey); ok {
-		if bytes.Equal(existing.Signature, vote.Signature) {
+		if existing.Signature == vote.Signature {
 			return false, nil // duplicate
 		}
 		return false, fmt.Errorf("existing vote: %v; new vote: %v: %w", existing, vote, ErrVoteNonDeterministicSignature)
@@ -363,16 +356,19 @@ func (voteSet *VoteSet) BitArrayByBlockID(blockID BlockID) *bits.BitArray {
 
 // NOTE: if validator has conflicting votes, returns "canonical" vote
 // Implements VoteSetReader.
-func (voteSet *VoteSet) GetByIndex(valIndex int32) *Vote {
+func (voteSet *VoteSet) GetByIndex(valIndex int32) (*Vote, bool) {
 	if voteSet == nil {
-		return nil
+		return nil, false
 	}
 	voteSet.mtx.Lock()
 	defer voteSet.mtx.Unlock()
 	if int(valIndex) >= len(voteSet.votes) {
-		return nil
+		return nil, false
 	}
-	return voteSet.votes[valIndex]
+	if vote := voteSet.votes[valIndex]; vote != nil {
+		return vote, true
+	}
+	return nil, false
 }
 
 // List returns a copy of the list of votes stored by the VoteSet.
@@ -389,17 +385,20 @@ func (voteSet *VoteSet) List() []Vote {
 	return votes
 }
 
-func (voteSet *VoteSet) GetByAddress(address []byte) *Vote {
+func (voteSet *VoteSet) GetByAddress(address []byte) (*Vote, bool) {
 	if voteSet == nil {
-		return nil
+		return nil, false
 	}
 	voteSet.mtx.Lock()
 	defer voteSet.mtx.Unlock()
-	valIndex, val := voteSet.valSet.GetByAddress(address)
-	if val == nil {
-		panic("GetByAddress(address) returned nil")
+	valIndex, _, ok := voteSet.valSet.GetByAddress(address)
+	if !ok {
+		return nil, false
 	}
-	return voteSet.votes[valIndex]
+	if vote := voteSet.votes[valIndex]; vote != nil {
+		return vote, true
+	}
+	return nil, false
 }
 
 func (voteSet *VoteSet) HasTwoThirdsMajority() bool {
@@ -602,7 +601,7 @@ func (voteSet *VoteSet) sumTotalFrac() (int64, int64, float64) {
 //--------------------------------------------------------------------------------
 // Commit
 
-// MakeExtendedCommit constructs a Commit from the VoteSet. It only includes
+// MakeCommit constructs a Commit from the VoteSet. It only includes
 // precommits for the block, which has 2/3+ majority, and nil.
 //
 // Panics if the vote type is not PrecommitType or if there's no +2/3 votes for
@@ -688,6 +687,6 @@ type VoteSetReader interface {
 	Type() byte
 	Size() int
 	BitArray() *bits.BitArray
-	GetByIndex(int32) *Vote
+	GetByIndex(int32) (*Vote, bool)
 	IsCommit() bool
 }

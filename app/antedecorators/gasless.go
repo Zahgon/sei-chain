@@ -1,27 +1,27 @@
 package antedecorators
 
 import (
-	"encoding/hex"
 	"fmt"
 
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkacltypes "github.com/cosmos/cosmos-sdk/types/accesscontrol"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	storetypes "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	evmkeeper "github.com/sei-protocol/sei-chain/x/evm/keeper"
 	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
 	oraclekeeper "github.com/sei-protocol/sei-chain/x/oracle/keeper"
 	oracletypes "github.com/sei-protocol/sei-chain/x/oracle/types"
+	"github.com/sei-protocol/seilog"
 )
 
+var logger = seilog.NewLogger("app", "antedecorators")
+
 type GaslessDecorator struct {
-	wrapped      []sdk.AnteFullDecorator
+	wrapped      []sdk.AnteDecorator
 	oracleKeeper oraclekeeper.Keeper
 	evmKeeper    *evmkeeper.Keeper
 }
 
-func NewGaslessDecorator(wrapped []sdk.AnteFullDecorator, oracleKeeper oraclekeeper.Keeper, evmKeeper *evmkeeper.Keeper) GaslessDecorator {
+func NewGaslessDecorator(wrapped []sdk.AnteDecorator, oracleKeeper oraclekeeper.Keeper, evmKeeper *evmkeeper.Keeper) GaslessDecorator {
 	return GaslessDecorator{wrapped: wrapped, oracleKeeper: oracleKeeper, evmKeeper: evmKeeper}
 }
 
@@ -70,52 +70,10 @@ func (gd GaslessDecorator) handleWrapped(ctx sdk.Context, tx sdk.Tx, simulate bo
 	return next(ctx, tx, simulate)
 }
 
-func (gd GaslessDecorator) AnteDeps(txDeps []sdkacltypes.AccessOperation, tx sdk.Tx, txIndex int, next sdk.AnteDepGenerator) (newTxDeps []sdkacltypes.AccessOperation, err error) {
-	deps := []sdkacltypes.AccessOperation{}
-	terminatorDeps := func(txDeps []sdkacltypes.AccessOperation, _ sdk.Tx, _ int) ([]sdkacltypes.AccessOperation, error) {
-		return txDeps, nil
-	}
-	for _, depGen := range gd.wrapped {
-		deps, _ = depGen.AnteDeps(deps, tx, txIndex, terminatorDeps)
-	}
-	for _, msg := range tx.GetMsgs() {
-		// Error checking will be handled in AnteHandler
-		switch m := msg.(type) {
-		case *oracletypes.MsgAggregateExchangeRateVote:
-			valAddr, _ := sdk.ValAddressFromBech32(m.Validator)
-			deps = append(deps, []sdkacltypes.AccessOperation{
-				// validate feeder
-				// read feeder delegation for val addr - READ
-				{
-					ResourceType:       sdkacltypes.ResourceType_KV_ORACLE_FEEDERS,
-					AccessType:         sdkacltypes.AccessType_READ,
-					IdentifierTemplate: hex.EncodeToString(oracletypes.GetFeederDelegationKey(valAddr)),
-				},
-				// read validator from staking - READ
-				{
-					ResourceType:       sdkacltypes.ResourceType_KV_STAKING_VALIDATOR,
-					AccessType:         sdkacltypes.AccessType_READ,
-					IdentifierTemplate: hex.EncodeToString(stakingtypes.GetValidatorKey(valAddr)),
-				},
-				// check exchange rate vote exists - READ
-				{
-					ResourceType:       sdkacltypes.ResourceType_KV_ORACLE_AGGREGATE_VOTES,
-					AccessType:         sdkacltypes.AccessType_READ,
-					IdentifierTemplate: hex.EncodeToString(oracletypes.GetAggregateExchangeRateVoteKey(valAddr)),
-				},
-			}...)
-		default:
-			continue
-		}
-	}
-
-	return next(append(txDeps, deps...), tx, txIndex)
-}
-
 func IsTxGasless(tx sdk.Tx, ctx sdk.Context, oracleKeeper oraclekeeper.Keeper, evmKeeper *evmkeeper.Keeper) (isGasless bool, err error) {
 	defer func() {
 		if r := recover(); r != nil {
-			ctx.Logger().Error("panic recovered in IsTxGasless", "panic", r)
+			logger.Error("panic recovered in IsTxGasless", "err", r)
 			err = fmt.Errorf("panic in IsTxGasless: %v", r)
 			isGasless = false
 		}

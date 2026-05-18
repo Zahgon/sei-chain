@@ -4,14 +4,12 @@ import (
 	"fmt"
 
 	gogotypes "github.com/gogo/protobuf/types"
-	"github.com/tendermint/tendermint/libs/log"
-
-	"github.com/cosmos/cosmos-sdk/codec"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
+	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
 )
 
 // AccountKeeperI is the interface contract that x/auth's keeper implements.
@@ -91,11 +89,6 @@ func NewAccountKeeper(
 	}
 }
 
-// Logger returns a module-specific logger.
-func (ak AccountKeeper) Logger(ctx sdk.Context) log.Logger {
-	return ctx.Logger().With("module", "x/"+types.ModuleName)
-}
-
 // GetPubKey Returns the PubKey of the account at address
 func (ak AccountKeeper) GetPubKey(ctx sdk.Context, addr sdk.AccAddress) (cryptotypes.PubKey, error) {
 	acc := ak.GetAccount(ctx, addr)
@@ -141,6 +134,20 @@ func (ak AccountKeeper) GetNextAccountNumber(ctx sdk.Context) uint64 {
 	store.Set(types.GlobalAccountNumberKey, bz)
 
 	return accNumber
+}
+
+func (ak AccountKeeper) GetGlobalAccountNumberBytes(ctx sdk.Context) []byte {
+	bz := ctx.KVStore(ak.key).Get(types.GlobalAccountNumberKey)
+	return append([]byte(nil), bz...)
+}
+
+func (ak AccountKeeper) SetGlobalAccountNumberBytes(ctx sdk.Context, bz []byte) {
+	store := ctx.KVStore(ak.key)
+	if bz == nil {
+		store.Delete(types.GlobalAccountNumberKey)
+		return
+	}
+	store.Set(types.GlobalAccountNumberKey, bz)
 }
 
 // ValidatePermissions validates that the module account has been granted
@@ -223,7 +230,7 @@ func (ak AccountKeeper) decodeAccount(bz []byte) types.AccountI {
 }
 
 // MarshalAccount protobuf serializes an Account interface
-func (ak AccountKeeper) MarshalAccount(accountI types.AccountI) ([]byte, error) { // nolint:interfacer
+func (ak AccountKeeper) MarshalAccount(accountI types.AccountI) ([]byte, error) {
 	return ak.cdc.MarshalInterface(accountI)
 }
 

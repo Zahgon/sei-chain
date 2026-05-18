@@ -1,13 +1,13 @@
 package types
 
 import (
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 )
 
 // DeliverTxEntry represents an individual transaction's request within a batch.
 // This can be extended to include tx-level metadata
 type DeliverTxEntry struct {
-	Request       abci.RequestDeliverTx
+	Request       abci.RequestDeliverTxV2
 	SdkTx         Tx
 	Checksum      [32]byte
 	AbsoluteIndex int

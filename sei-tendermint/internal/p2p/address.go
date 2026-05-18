@@ -11,8 +11,10 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
+
+const defaultPort uint16 = 26657
 
 var (
 	// stringHasScheme tries to detect URLs with schemes. It looks for a : before a / (if any).
@@ -26,11 +28,7 @@ var (
 )
 
 // NodeAddress is a node address URL. It differs from a transport Endpoint in
-// that it contains the node's ID, and that the address hostname may be resolved
-// into multiple IP addresses (and thus multiple endpoints).
-//
-// If the URL is opaque, i.e. of the form "scheme:opaque", then the opaque part
-// is expected to contain a node ID.
+// that it contains the node's ID, and that the hostname migth be either an IP or a DNS address.
 type NodeAddress struct {
 	NodeID   types.NodeID
 	Hostname string
@@ -53,25 +51,23 @@ func ParseNodeAddress(urlString string) (NodeAddress, error) {
 
 	address := NodeAddress{}
 
-	// Opaque URLs are expected to contain only a node ID.
-	if url.Opaque != "" {
-		address.NodeID = types.NodeID(url.Opaque)
-		return address, address.Validate()
-	}
-
 	// Otherwise, just parse a normal networked URL.
 	if url.User != nil {
 		address.NodeID = types.NodeID(strings.ToLower(url.User.Username()))
 	}
 
-	address.Hostname = strings.ToLower(url.Hostname())
+	address.Hostname = url.Hostname()
 
 	if portString := url.Port(); portString != "" {
 		port64, err := strconv.ParseUint(portString, 10, 16)
 		if err != nil {
-			return NodeAddress{}, fmt.Errorf("invalid port %q: %w", portString, err)
+			return NodeAddress{}, fmt.Errorf("invalid port %q: %w", url.Port(), err)
 		}
 		address.Port = uint16(port64)
+	}
+	// For some reasons, missing or 0 port on parsing is interpretented as the default port.
+	if address.Port == 0 {
+		address.Port = defaultPort
 	}
 	return address, address.Validate()
 }
@@ -79,6 +75,7 @@ func ParseNodeAddress(urlString string) (NodeAddress, error) {
 // Resolve resolves a NodeAddress into a set of Endpoints, by expanding
 // out a DNS hostname to IP addresses.
 func (a NodeAddress) Resolve(ctx context.Context) ([]Endpoint, error) {
+	// LookIP for some reason returns IPv6-embedded addresses.
 	ips, err := net.DefaultResolver.LookupIP(ctx, "ip", a.Hostname)
 	if err != nil {
 		return nil, err
@@ -89,7 +86,7 @@ func (a NodeAddress) Resolve(ctx context.Context) ([]Endpoint, error) {
 		if !ok {
 			return nil, fmt.Errorf("LookupIP returned invalid IP %q", ip)
 		}
-		endpoints[i] = Endpoint{netip.AddrPortFrom(ip, a.Port)}
+		endpoints[i] = Endpoint{netip.AddrPortFrom(ip.Unmap(), a.Port)}
 	}
 	return endpoints, nil
 }
@@ -112,11 +109,15 @@ func (a NodeAddress) String() string {
 func (a NodeAddress) Validate() error {
 	if a.NodeID == "" {
 		return errors.New("no peer ID")
-	} else if err := a.NodeID.Validate(); err != nil {
+	}
+	if err := a.NodeID.Validate(); err != nil {
 		return fmt.Errorf("invalid peer ID: %w", err)
 	}
-	if a.Port > 0 && a.Hostname == "" {
-		return errors.New("cannot specify port without hostname")
+	if a.Port == 0 {
+		return errors.New("missing port")
+	}
+	if a.Hostname == "" {
+		return errors.New("missing hostname")
 	}
 	return nil
 }

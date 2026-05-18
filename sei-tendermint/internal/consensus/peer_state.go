@@ -2,18 +2,17 @@ package consensus
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"sync"
 	"time"
 
-	cstypes "github.com/tendermint/tendermint/internal/consensus/types"
-	"github.com/tendermint/tendermint/libs/bits"
-	tmjson "github.com/tendermint/tendermint/libs/json"
-	"github.com/tendermint/tendermint/libs/log"
-	tmtime "github.com/tendermint/tendermint/libs/time"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	cstypes "github.com/sei-protocol/sei-chain/sei-tendermint/internal/consensus/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bits"
+	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 var (
@@ -25,8 +24,8 @@ var (
 
 // peerStateStats holds internal statistics for a peer.
 type peerStateStats struct {
-	Votes      int `json:"votes,string"`
-	BlockParts int `json:"block_parts,string"`
+	Votes      int
+	BlockParts int
 }
 
 func (pss peerStateStats) String() string {
@@ -39,46 +38,26 @@ func (pss peerStateStats) String() string {
 // Be mindful of what you Expose.
 type PeerState struct {
 	peerID types.NodeID
-	logger log.Logger
 
 	// NOTE: Modify below using setters, never directly.
-	mtx     sync.RWMutex
-	cancel  context.CancelFunc
-	running bool
-	PRS     cstypes.PeerRoundState `json:"round_state"`
-	Stats   *peerStateStats        `json:"stats"`
+	mtx    sync.RWMutex
+	cancel context.CancelFunc
+	PRS    cstypes.PeerRoundState
+	Stats  *peerStateStats
 }
 
 // NewPeerState returns a new PeerState for the given node ID.
-func NewPeerState(logger log.Logger, peerID types.NodeID) *PeerState {
+func NewPeerState(peerID types.NodeID) *PeerState {
 	return &PeerState{
 		peerID: peerID,
-		logger: logger,
 		PRS: cstypes.PeerRoundState{
-			Round:              -1,
+			HRS:                cstypes.HRS{Round: -1},
 			ProposalPOLRound:   -1,
 			LastCommitRound:    -1,
 			CatchupCommitRound: -1,
 		},
 		Stats: &peerStateStats{},
 	}
-}
-
-// SetRunning sets the running state of the peer.
-func (ps *PeerState) SetRunning(v bool) {
-	ps.mtx.Lock()
-	defer ps.mtx.Unlock()
-
-	ps.running = v
-}
-
-// IsRunning returns true if a PeerState is considered running where multiple
-// broadcasting goroutines exist for the peer.
-func (ps *PeerState) IsRunning() bool {
-	ps.mtx.RLock()
-	defer ps.mtx.RUnlock()
-
-	return ps.running
 }
 
 // GetRoundState returns a shallow copy of the PeerRoundState. There's no point
@@ -91,11 +70,11 @@ func (ps *PeerState) GetRoundState() *cstypes.PeerRoundState {
 	return &prs
 }
 
-// ToJSON returns a json of PeerState.
+// ToJSON returns a json of PeerState. UNSTABLE.
 func (ps *PeerState) ToJSON() ([]byte, error) {
 	ps.mtx.Lock()
 	defer ps.mtx.Unlock()
-	return tmjson.Marshal(ps)
+	return json.Marshal(ps)
 }
 
 // GetHeight returns an atomic snapshot of the PeerRoundState's height used by
@@ -111,12 +90,6 @@ func (ps *PeerState) GetHeight() int64 {
 func (ps *PeerState) SetHasProposal(proposal *types.Proposal) {
 	// ignore nil proposals
 	if proposal == nil {
-		return
-	}
-
-	// Check memory limits before acquiring lock or setting any state
-	if proposal.BlockID.PartSetHeader.Total > types.MaxBlockPartsCount {
-		ps.logger.Debug("PartSetHeader.Total exceeds maximum", "total", proposal.BlockID.PartSetHeader.Total, "max", types.MaxBlockPartsCount)
 		return
 	}
 
@@ -142,8 +115,6 @@ func (ps *PeerState) SetHasProposal(proposal *types.Proposal) {
 	ps.PRS.ProposalBlockParts = bits.NewBitArray(int(proposal.BlockID.PartSetHeader.Total))
 	ps.PRS.ProposalPOLRound = proposal.POLRound
 	ps.PRS.ProposalPOL = nil // Nil until ProposalPOLMessage received.
-
-	return
 }
 
 // InitProposalBlockParts initializes the peer's proposal block parts header
@@ -158,7 +129,7 @@ func (ps *PeerState) InitProposalBlockParts(partSetHeader types.PartSetHeader) {
 
 	// Apply the same memory exhaustion protection as in SetHasProposal
 	if partSetHeader.Total > types.MaxBlockPartsCount {
-		ps.logger.Debug("InitProposalBlockParts: PartSetHeader.Total exceeds maximum", "total", partSetHeader.Total, "max", types.MaxBlockPartsCount)
+		logger.Debug("InitProposalBlockParts: PartSetHeader.Total exceeds maximum", "total", partSetHeader.Total, "max", types.MaxBlockPartsCount)
 		return
 	}
 
@@ -193,7 +164,7 @@ func (ps *PeerState) PickVoteToSend(votes types.VoteSetReader) (*types.Vote, boo
 	var (
 		height    = votes.GetHeight()
 		round     = votes.GetRound()
-		votesType = tmproto.SignedMsgType(votes.Type())
+		votesType = tmproto.SignedMsgType(votes.Type()) //nolint:gosec // Type() returns a small enum value; no overflow risk
 		size      = votes.Size()
 	)
 
@@ -210,12 +181,8 @@ func (ps *PeerState) PickVoteToSend(votes types.VoteSetReader) (*types.Vote, boo
 	}
 
 	if index, ok := votes.BitArray().Sub(psVotes).PickRandom(); ok {
-		vote := votes.GetByIndex(int32(index))
-		if vote != nil {
-			return vote, true
-		}
+		return votes.GetByIndex(int32(index)) //nolint:gosec // index is bounded by validator set size which fits in int32
 	}
-
 	return nil, false
 }
 
@@ -318,7 +285,8 @@ func (ps *PeerState) EnsureVoteBitArrays(height int64, numValidators int) {
 }
 
 func (ps *PeerState) ensureVoteBitArrays(height int64, numValidators int) {
-	if ps.PRS.Height == height {
+	switch ps.PRS.Height {
+	case height:
 		if ps.PRS.Prevotes == nil {
 			ps.PRS.Prevotes = bits.NewBitArray(numValidators)
 		}
@@ -331,7 +299,7 @@ func (ps *PeerState) ensureVoteBitArrays(height int64, numValidators int) {
 		if ps.PRS.ProposalPOL == nil {
 			ps.PRS.ProposalPOL = bits.NewBitArray(numValidators)
 		}
-	} else if ps.PRS.Height == height+1 {
+	case height + 1:
 		if ps.PRS.LastCommit == nil {
 			ps.PRS.LastCommit = bits.NewBitArray(numValidators)
 		}
@@ -380,7 +348,7 @@ func (ps *PeerState) BlockPartsSent() int {
 func (ps *PeerState) SetHasVote(vote *types.Vote) error {
 	// sanity check
 	if vote == nil {
-		return ErrPeerStateSetNilVote
+		panic(ErrPeerStateSetNilVote)
 	}
 	ps.mtx.Lock()
 	defer ps.mtx.Unlock()
@@ -390,12 +358,13 @@ func (ps *PeerState) SetHasVote(vote *types.Vote) error {
 
 // setHasVote will return an error when the index exceeds the bitArray length
 func (ps *PeerState) setHasVote(height int64, round int32, voteType tmproto.SignedMsgType, index int32) error {
-	logger := ps.logger.With(
-		"peerH/R", fmt.Sprintf("%d/%d", ps.PRS.Height, ps.PRS.Round),
-		"H/R", fmt.Sprintf("%d/%d", height, round),
-	)
 
-	logger.Debug("setHasVote", "type", voteType, "index", index)
+	logger.Debug("setHasVote", "type", voteType, "index", index,
+		"peer-height", ps.PRS.Height,
+		"peer-round", ps.PRS.Round,
+		"height", height,
+		"round", round,
+	)
 
 	// NOTE: some may be nil BitArrays -> no side effects
 	psVotes := ps.getVoteBitArray(height, round, voteType)
@@ -414,7 +383,7 @@ func (ps *PeerState) ApplyNewRoundStepMessage(msg *NewRoundStepMessage) {
 	defer ps.mtx.Unlock()
 
 	// ignore duplicates or decreases
-	if CompareHRS(msg.Height, msg.Round, msg.Step, ps.PRS.Height, ps.PRS.Round, ps.PRS.Step) <= 0 {
+	if msg.Cmp(ps.PRS.HRS) <= 0 {
 		return
 	}
 
@@ -423,12 +392,10 @@ func (ps *PeerState) ApplyNewRoundStepMessage(msg *NewRoundStepMessage) {
 		psRound              = ps.PRS.Round
 		psCatchupCommitRound = ps.PRS.CatchupCommitRound
 		psCatchupCommit      = ps.PRS.CatchupCommit
-		startTime            = tmtime.Now().Add(-1 * time.Duration(msg.SecondsSinceStartTime) * time.Second)
+		startTime            = tmtime.Now().Add(time.Duration(msg.SecondsSinceStartTime) * (-time.Second))
 	)
 
-	ps.PRS.Height = msg.Height
-	ps.PRS.Round = msg.Round
-	ps.PRS.Step = msg.Step
+	ps.PRS.HRS = msg.HRS
 	ps.PRS.StartTime = startTime
 
 	if psHeight != msg.Height || psRound != msg.Round {
@@ -532,25 +499,4 @@ func (ps *PeerState) ApplyVoteSetBitsMessage(msg *VoteSetBitsMessage, ourVotes *
 			votes.Update(hasVotes)
 		}
 	}
-}
-
-// String returns a string representation of the PeerState
-func (ps *PeerState) String() string {
-	return ps.StringIndented("")
-}
-
-// StringIndented returns a string representation of the PeerState
-func (ps *PeerState) StringIndented(indent string) string {
-	ps.mtx.Lock()
-	defer ps.mtx.Unlock()
-	return fmt.Sprintf(`PeerState{
-%s  Key        %v
-%s  RoundState %v
-%s  Stats      %v
-%s}`,
-		indent, ps.peerID,
-		indent, ps.PRS.StringIndented(indent+"  "),
-		indent, ps.Stats,
-		indent,
-	)
 }

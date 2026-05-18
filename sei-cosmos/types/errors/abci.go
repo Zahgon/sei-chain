@@ -2,15 +2,16 @@ package errors
 
 import (
 	"fmt"
+	"math"
 	"reflect"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 )
 
 const (
 	// SuccessABCICode declares an ABCI response use 0 to signal that the
 	// processing was successful and no error is returned.
-	SuccessABCICode = 0
+	SuccessABCICode = abci.CodeTypeOK
 
 	// All unclassified errors that do not provide an ABCI code are clubbed
 	// under an internal error code and a generic message instead of
@@ -18,6 +19,14 @@ const (
 	internalABCICodespace        = UndefinedCodespace
 	internalABCICode      uint32 = 1
 )
+
+// safeIntFromUint64 converts uint64 to int64, capping at math.MaxInt64 to prevent overflow.
+func safeIntFromUint64(v uint64) int64 {
+	if v > math.MaxInt64 {
+		return math.MaxInt64
+	}
+	return int64(v)
+}
 
 // ABCIInfo returns the ABCI error information as consumed by the tendermint
 // client. Returned codespace, code, and log message should be used as a ABCI response.
@@ -39,17 +48,6 @@ func ABCIInfo(err error, debug bool) (codespace string, code uint32, log string)
 	return abciCodespace(err), abciCode(err), encode(err)
 }
 
-// ResponseCheckTx returns an ABCI ResponseCheckTx object with fields filled in
-// from the given error and gas values.
-func ResponseCheckTx(err error, gw, gu uint64, debug bool) abci.ResponseCheckTx {
-	space, code, _ := ABCIInfo(err, debug)
-	return abci.ResponseCheckTx{
-		Codespace: space,
-		Code:      code,
-		GasWanted: int64(gw),
-	}
-}
-
 // ResponseDeliverTx returns an ABCI ResponseDeliverTx object with fields filled in
 // from the given error and gas values.
 func ResponseDeliverTx(err error, gw, gu uint64, debug bool) abci.ResponseDeliverTx {
@@ -58,8 +56,8 @@ func ResponseDeliverTx(err error, gw, gu uint64, debug bool) abci.ResponseDelive
 		Codespace: space,
 		Code:      code,
 		Log:       log,
-		GasWanted: int64(gw),
-		GasUsed:   int64(gu),
+		GasWanted: safeIntFromUint64(gw),
+		GasUsed:   safeIntFromUint64(gu),
 	}
 }
 
@@ -71,8 +69,8 @@ func ResponseDeliverTxWithEvents(err error, gw, gu uint64, events []abci.Event, 
 		Codespace: space,
 		Code:      code,
 		Log:       log,
-		GasWanted: int64(gw),
-		GasUsed:   int64(gu),
+		GasWanted: safeIntFromUint64(gw),
+		GasUsed:   safeIntFromUint64(gu),
 		Events:    events,
 	}
 }

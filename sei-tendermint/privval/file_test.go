@@ -9,15 +9,15 @@ import (
 	"time"
 
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	tmjson "github.com/tendermint/tendermint/libs/json"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmtime "github.com/tendermint/tendermint/libs/time"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	tmjson "github.com/sei-protocol/sei-chain/sei-tendermint/libs/json"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/require"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func TestGenLoadValidator(t *testing.T) {
@@ -108,12 +108,14 @@ func TestUnmarshalValidatorState(t *testing.T) {
 
 func TestUnmarshalValidatorKey(t *testing.T) {
 	// create some fixed values
-	privKey := ed25519.GenPrivKey()
-	pubKey := privKey.PubKey()
+	privKey := ed25519.GenerateSecretKey()
+	pubKey := privKey.Public()
 	addr := pubKey.Address()
-	pubBytes := pubKey.Bytes()
-	privBytes := privKey.Bytes()
-	pubB64 := base64.StdEncoding.EncodeToString(pubBytes)
+	pubB64 := base64.StdEncoding.EncodeToString(pubKey.Bytes())
+	privJSON, err := json.Marshal(privKey)
+	require.NoError(t, err)
+	var privBytes []byte
+	require.NoError(t, json.Unmarshal(privJSON, &privBytes))
 	privB64 := base64.StdEncoding.EncodeToString(privBytes)
 
 	serialized := fmt.Sprintf(`{
@@ -129,13 +131,13 @@ func TestUnmarshalValidatorKey(t *testing.T) {
 }`, addr, pubB64, privB64)
 
 	val := FilePVKey{}
-	err := tmjson.Unmarshal([]byte(serialized), &val)
+	err = tmjson.Unmarshal([]byte(serialized), &val)
 	require.NoError(t, err)
 
 	// make sure the values match
 	assert.EqualValues(t, addr, val.Address)
 	assert.EqualValues(t, pubKey, val.PubKey)
-	assert.EqualValues(t, privKey, val.PrivKey)
+	assert.EqualValues(t, pubKey, val.PrivKey.Public())
 
 	// export it and make sure it is the same
 	out, err := tmjson.Marshal(val)

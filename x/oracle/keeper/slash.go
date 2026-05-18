@@ -3,10 +3,16 @@ package keeper
 import (
 	"strconv"
 
-	cosmostelemetry "github.com/cosmos/cosmos-sdk/telemetry"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"go.opentelemetry.io/otel/attribute"
+	otelmetric "go.opentelemetry.io/otel/metric"
+
+	cosmostelemetry "github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/x/oracle/types"
+	"github.com/sei-protocol/seilog"
 )
+
+var logger = seilog.NewLogger("x", "oracle", "keeper")
 
 // SlashAndResetCounters do slash any operator who over criteria & clear all operators miss counter to zero
 func (k Keeper) SlashAndResetCounters(ctx sdk.Context) {
@@ -23,7 +29,7 @@ func (k Keeper) SlashAndResetCounters(ctx sdk.Context) {
 		// as opposed to the one expected based on the number of vote period expected based on the ending slash window or vote period
 		totalVotes := votePenaltyCounter.SuccessCount + votePenaltyCounter.AbstainCount + votePenaltyCounter.MissCount
 		if totalVotes == 0 {
-			ctx.Logger().Error("zero votes in penalty counter, this should never happen")
+			logger.Error("zero votes in penalty counter, this should never happen")
 			return false
 		}
 		validVoteRate := sdk.NewDecFromInt(
@@ -44,6 +50,8 @@ func (k Keeper) SlashAndResetCounters(ctx sdk.Context) {
 					distributionHeight, validator.GetConsensusPower(powerReduction), slashFraction,
 				)
 				k.StakingKeeper.Jail(ctx, consAddr)
+				oracleKeeperMetrics.validatorSlashedTotal.Add(ctx.Context(), 1, otelmetric.WithAttributes(attribute.String("validator", consAddr.String()), attribute.String("type", "oracle")))
+				// TODO(PLT-336): remove once oracle_validator_slashed_total verified
 				cosmostelemetry.IncrValidatorSlashedCounter(consAddr.String(), "oracle")
 			}
 		}

@@ -7,22 +7,22 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/gogo/protobuf/proto"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/crypto/secp256k1"
-	"github.com/tendermint/tendermint/internal/jsontypes"
-	"github.com/tendermint/tendermint/internal/libs/protoio"
-	"github.com/tendermint/tendermint/internal/libs/tempfile"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmjson "github.com/tendermint/tendermint/libs/json"
-	tmos "github.com/tendermint/tendermint/libs/os"
-	tmtime "github.com/tendermint/tendermint/libs/time"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/protoio"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/tempfile"
+	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	tmjson "github.com/sei-protocol/sei-chain/sei-tendermint/libs/json"
+	tmos "github.com/sei-protocol/sei-chain/sei-tendermint/libs/os"
+	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 // TODO: type ?
@@ -102,7 +102,14 @@ func (pvKey FilePVKey) Save() error {
 	if err != nil {
 		return err
 	}
-	return tempfile.WriteFileAtomic(outFile, data, 0600)
+	if err := tempfile.WriteFileAtomic(outFile, data, 0600); err != nil {
+		return err
+	}
+	// Write pubkey in autobahn-compatible format alongside the key file.
+	// TODO: use atypes.PublicKey.String() directly to avoid duplicating the "validator:" prefix.
+	pubKeyStr := fmt.Sprintf("validator:%s", pvKey.PubKey)
+	pubKeyPath := filepath.Join(filepath.Dir(outFile), "validator_pubkey.txt")
+	return os.WriteFile(pubKeyPath, []byte(pubKeyStr), 0600)
 }
 
 //-------------------------------------------------------------------------------
@@ -198,8 +205,8 @@ var _ types.PrivValidator = (*FilePV)(nil)
 func NewFilePV(privKey crypto.PrivKey, keyFilePath, stateFilePath string) *FilePV {
 	return &FilePV{
 		Key: FilePVKey{
-			Address:  privKey.PubKey().Address(),
-			PubKey:   privKey.PubKey(),
+			Address:  privKey.Public().Address(),
+			PubKey:   privKey.Public(),
 			PrivKey:  privKey,
 			filePath: keyFilePath,
 		},
@@ -213,14 +220,11 @@ func NewFilePV(privKey crypto.PrivKey, keyFilePath, stateFilePath string) *FileP
 // GenFilePV generates a new validator with randomly generated private key
 // and sets the filePaths, but does not call Save().
 func GenFilePV(keyFilePath, stateFilePath, keyType string) (*FilePV, error) {
-	switch keyType {
-	case types.ABCIPubKeyTypeSecp256k1:
-		return NewFilePV(secp256k1.GenPrivKey(), keyFilePath, stateFilePath), nil
-	case "", types.ABCIPubKeyTypeEd25519:
-		return NewFilePV(ed25519.GenPrivKey(), keyFilePath, stateFilePath), nil
-	default:
+	if keyType != "" && keyType != types.ABCIPubKeyTypeEd25519 {
 		return nil, fmt.Errorf("key type: %s is not supported", keyType)
 	}
+	privKey := ed25519.GenerateSecretKey()
+	return NewFilePV(privKey, keyFilePath, stateFilePath), nil
 }
 
 // LoadFilePV loads a FilePV from the filePaths.  The FilePV handles double
@@ -238,7 +242,7 @@ func LoadFilePVEmptyState(keyFilePath, stateFilePath string) (*FilePV, error) {
 
 // If loadState is true, we load from the stateFilePath. Otherwise, we use an empty LastSignState.
 func loadFilePV(keyFilePath, stateFilePath string, loadState bool) (*FilePV, error) {
-	keyJSONBytes, err := os.ReadFile(keyFilePath)
+	keyJSONBytes, err := os.ReadFile(filepath.Clean(keyFilePath))
 	if err != nil {
 		return nil, err
 	}
@@ -249,14 +253,14 @@ func loadFilePV(keyFilePath, stateFilePath string, loadState bool) (*FilePV, err
 	}
 
 	// overwrite pubkey and address for convenience
-	pvKey.PubKey = pvKey.PrivKey.PubKey()
+	pvKey.PubKey = pvKey.PrivKey.Public()
 	pvKey.Address = pvKey.PubKey.Address()
 	pvKey.filePath = keyFilePath
 
 	pvState := FilePVLastSignState{}
 
 	if loadState {
-		stateJSONBytes, err := os.ReadFile(stateFilePath)
+		stateJSONBytes, err := os.ReadFile(filepath.Clean(stateFilePath))
 		if err != nil {
 			return nil, err
 		}
@@ -401,14 +405,12 @@ func (pv *FilePV) signVote(chainID string, vote *tmproto.Vote) error {
 	}
 
 	// It passed the checks. Sign the vote
-	sig, err := pv.Key.PrivKey.Sign(signBytes)
-	if err != nil {
+	sig := pv.Key.PrivKey.Sign(signBytes)
+	sigBytes := sig.Bytes()
+	if err := pv.saveSigned(height, round, step, signBytes, sigBytes); err != nil {
 		return err
 	}
-	if err := pv.saveSigned(height, round, step, signBytes, sig); err != nil {
-		return err
-	}
-	vote.Signature = sig
+	vote.Signature = sigBytes
 
 	return nil
 }
@@ -438,14 +440,12 @@ func (pv *FilePV) signProposal(chainID string, proposal *tmproto.Proposal) error
 	}
 
 	// It passed the checks. Sign the proposal
-	sig, err := pv.Key.PrivKey.Sign(signBytes)
-	if err != nil {
+	sig := pv.Key.PrivKey.Sign(signBytes)
+	sigBytes := sig.Bytes()
+	if err := pv.saveSigned(height, round, step, signBytes, sigBytes); err != nil {
 		return err
 	}
-	if err := pv.saveSigned(height, round, step, signBytes, sig); err != nil {
-		return err
-	}
-	proposal.Signature = sig
+	proposal.Signature = sigBytes
 	return nil
 }
 

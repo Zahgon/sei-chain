@@ -1,6 +1,11 @@
 package types
 
-import "context"
+import (
+	"context"
+	"math/big"
+
+	"github.com/ethereum/go-ethereum/common"
+)
 
 // Application is an interface that enables any finite, deterministic state machine
 // to be driven by a blockchain-based replication engine via the ABCI.
@@ -10,20 +15,19 @@ type Application interface {
 	// Info/Query Connection
 	Info(context.Context, *RequestInfo) (*ResponseInfo, error)    // Return application info
 	Query(context.Context, *RequestQuery) (*ResponseQuery, error) // Query for state
+	GetValidators() []ValidatorUpdate
 
 	// Mempool Connection
-	CheckTx(context.Context, *RequestCheckTx) (*ResponseCheckTxV2, error) // Validate a tx for the mempool
+	CheckTx(context.Context, *RequestCheckTxV2) *ResponseCheckTxV2                                      // Validate a tx for the mempool
+	GetTxPriorityHint(context.Context, *RequestGetTxPriorityHintV2) (*ResponseGetTxPriorityHint, error) // Get tx priority before checkTx
+	EvmNonce(common.Address) uint64
+	EvmBalance(common.Address, []byte) *big.Int
 
 	// Consensus Connection
 	InitChain(context.Context, *RequestInitChain) (*ResponseInitChain, error) // Initialize blockchain w validators/other info from TendermintCore
-	PrepareProposal(context.Context, *RequestPrepareProposal) (*ResponsePrepareProposal, error)
 	ProcessProposal(context.Context, *RequestProcessProposal) (*ResponseProcessProposal, error)
 	// Commit the state and return the application Merkle root hash
 	Commit(context.Context) (*ResponseCommit, error)
-	// Create application specific vote extension
-	ExtendVote(context.Context, *RequestExtendVote) (*ResponseExtendVote, error)
-	// Verify application's vote extension data
-	VerifyVoteExtension(context.Context, *RequestVerifyVoteExtension) (*ResponseVerifyVoteExtension, error)
 	// Deliver the decided block with its txs to the Application
 	FinalizeBlock(context.Context, *RequestFinalizeBlock) (*ResponseFinalizeBlock, error)
 
@@ -32,42 +36,26 @@ type Application interface {
 	OfferSnapshot(context.Context, *RequestOfferSnapshot) (*ResponseOfferSnapshot, error)                // Offer a snapshot to the application
 	LoadSnapshotChunk(context.Context, *RequestLoadSnapshotChunk) (*ResponseLoadSnapshotChunk, error)    // Load a snapshot chunk
 	ApplySnapshotChunk(context.Context, *RequestApplySnapshotChunk) (*ResponseApplySnapshotChunk, error) // Apply a shapshot chunk
-	// Notify application to load latest application state (e.g. after DBSync finishes)
-	LoadLatest(context.Context, *RequestLoadLatest) (*ResponseLoadLatest, error)
-	GetTxPriorityHint(context.Context, *RequestGetTxPriorityHint) (*ResponseGetTxPriorityHint, error)
 }
 
 //-------------------------------------------------------
 // BaseApplication is a base form of Application
 
-var _ Application = (*BaseApplication)(nil)
+var _ Application = BaseApplication{}
 
 type BaseApplication struct{}
-
-func NewBaseApplication() *BaseApplication {
-	return &BaseApplication{}
-}
 
 func (BaseApplication) Info(_ context.Context, req *RequestInfo) (*ResponseInfo, error) {
 	return &ResponseInfo{}, nil
 }
+func (BaseApplication) GetValidators() []ValidatorUpdate { return nil }
 
-func (BaseApplication) CheckTx(_ context.Context, req *RequestCheckTx) (*ResponseCheckTxV2, error) {
-	return &ResponseCheckTxV2{ResponseCheckTx: &ResponseCheckTx{Code: CodeTypeOK}}, nil
+func (BaseApplication) CheckTx(_ context.Context, req *RequestCheckTxV2) *ResponseCheckTxV2 {
+	return &ResponseCheckTxV2{ResponseCheckTx: &ResponseCheckTx{Code: CodeTypeOK}}
 }
 
 func (BaseApplication) Commit(_ context.Context) (*ResponseCommit, error) {
 	return &ResponseCommit{}, nil
-}
-
-func (BaseApplication) ExtendVote(_ context.Context, req *RequestExtendVote) (*ResponseExtendVote, error) {
-	return &ResponseExtendVote{}, nil
-}
-
-func (BaseApplication) VerifyVoteExtension(_ context.Context, req *RequestVerifyVoteExtension) (*ResponseVerifyVoteExtension, error) {
-	return &ResponseVerifyVoteExtension{
-		Status: ResponseVerifyVoteExtension_ACCEPT,
-	}, nil
 }
 
 func (BaseApplication) Query(_ context.Context, req *RequestQuery) (*ResponseQuery, error) {
@@ -94,24 +82,20 @@ func (BaseApplication) ApplySnapshotChunk(_ context.Context, req *RequestApplySn
 	return &ResponseApplySnapshotChunk{}, nil
 }
 
-func (BaseApplication) PrepareProposal(_ context.Context, req *RequestPrepareProposal) (*ResponsePrepareProposal, error) {
-	trs := make([]*TxRecord, 0, len(req.Txs))
-	var totalBytes int64
-	for _, tx := range req.Txs {
-		totalBytes += int64(len(tx))
-		if totalBytes > req.MaxTxBytes {
-			break
-		}
-		trs = append(trs, &TxRecord{
-			Action: TxRecord_UNMODIFIED,
-			Tx:     tx,
-		})
-	}
-	return &ResponsePrepareProposal{TxRecords: trs}, nil
-}
-
 func (BaseApplication) ProcessProposal(_ context.Context, req *RequestProcessProposal) (*ResponseProcessProposal, error) {
 	return &ResponseProcessProposal{Status: ResponseProcessProposal_ACCEPT}, nil
+}
+
+func (BaseApplication) GetTxPriorityHint(context.Context, *RequestGetTxPriorityHintV2) (*ResponseGetTxPriorityHint, error) {
+	return &ResponseGetTxPriorityHint{}, nil
+}
+
+func (BaseApplication) EvmNonce(common.Address) uint64 {
+	return 0
+}
+
+func (BaseApplication) EvmBalance(common.Address, []byte) *big.Int {
+	return big.NewInt(0)
 }
 
 func (BaseApplication) FinalizeBlock(_ context.Context, req *RequestFinalizeBlock) (*ResponseFinalizeBlock, error) {
@@ -119,15 +103,5 @@ func (BaseApplication) FinalizeBlock(_ context.Context, req *RequestFinalizeBloc
 	for i := range req.Txs {
 		txs[i] = &ExecTxResult{Code: CodeTypeOK}
 	}
-	return &ResponseFinalizeBlock{
-		TxResults: txs,
-	}, nil
-}
-
-func (BaseApplication) LoadLatest(_ context.Context, _ *RequestLoadLatest) (*ResponseLoadLatest, error) {
-	return &ResponseLoadLatest{}, nil
-}
-
-func (BaseApplication) GetTxPriorityHint(context.Context, *RequestGetTxPriorityHint) (*ResponseGetTxPriorityHint, error) {
-	return &ResponseGetTxPriorityHint{}, nil
+	return &ResponseFinalizeBlock{TxResults: txs}, nil
 }

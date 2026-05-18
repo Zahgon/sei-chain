@@ -4,10 +4,10 @@ import (
 	"encoding/hex"
 	"encoding/json"
 
-	"github.com/cosmos/cosmos-sdk/simapp"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	"github.com/sei-protocol/sei-chain/app/apptesting"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 )
 
 func (suite *IntegrationTestSuite) TestViewKeeperStoreTrace() {
@@ -17,7 +17,7 @@ func (suite *IntegrationTestSuite) TestViewKeeperStoreTrace() {
 	acc := app.AccountKeeper.NewAccountWithAddress(ctx, addr)
 
 	app.AccountKeeper.SetAccount(ctx, acc)
-	suite.Require().NoError(simapp.FundAccount(app.BankKeeper, ctx, acc.GetAddress(), origCoins))
+	suite.Require().NoError(apptesting.FundAccount(app.BankKeeper, ctx, acc.GetAddress(), origCoins))
 
 	ctx = ctx.WithIsTracing(true)
 	app.BankKeeper.GetBalance(ctx, addr, fooDenom)
@@ -32,9 +32,11 @@ func (suite *IntegrationTestSuite) TestViewKeeperStoreTrace() {
 	bankDump := typedTrace.Modules["bank"]
 	fooKey := append(banktypes.CreateAccountBalancesPrefix(addr), []byte(fooDenom)...)
 	barKey := append(banktypes.CreateAccountBalancesPrefix(addr), []byte(barDenom)...)
-	suite.Require().Len(bankDump.Has, 2)
-	suite.Require().Contains(bankDump.Has, hex.EncodeToString(fooKey))
-	suite.Require().Contains(bankDump.Has, hex.EncodeToString(barKey))
+	suite.Require().Len(bankDump.Iterators, 1)
+	iterKeys := bankDump.Iterators[0].Keys
+	suite.Require().Len(iterKeys, 2)
+	suite.Require().Contains(iterKeys, hex.EncodeToString(fooKey))
+	suite.Require().Contains(iterKeys, hex.EncodeToString(barKey))
 	suite.Require().Len(bankDump.Reads, 2)
 	suite.Require().Contains(bankDump.Reads, hex.EncodeToString(fooKey))
 	suite.Require().Contains(bankDump.Reads, hex.EncodeToString(barKey))

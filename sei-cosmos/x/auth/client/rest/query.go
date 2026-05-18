@@ -8,14 +8,14 @@ import (
 
 	"github.com/gorilla/mux"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	clientrest "github.com/cosmos/cosmos-sdk/client/rest"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/rest"
-	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
-	genutilrest "github.com/cosmos/cosmos-sdk/x/genutil/client/rest"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	clientrest "github.com/sei-protocol/sei-chain/sei-cosmos/client/rest"
+	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
+	authtx "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/tx"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
+	genutilrest "github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil/client/rest"
 )
 
 // QueryAccountRequestHandlerFn is the query accountREST Handler.
@@ -99,13 +99,24 @@ func QueryTxsRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		searchResult, err := authtx.QueryTxsByEvents(clientCtx, events, page, limit, "")
+		node, err := clientCtx.GetNode()
+		if rest.CheckBadRequestError(w, err) {
+			return
+		}
+		searchResult, err := authtx.QueryTxsByEvents(r.Context(), node, clientCtx.TxConfig, events, page, limit, "")
 		if rest.CheckInternalServerError(w, err) {
 			return
 		}
 
 		for _, txRes := range searchResult.Txs {
-			packStdTxResponse(w, clientCtx, txRes)
+			err := packStdTxResponse(w, clientCtx, txRes)
+			if err != nil {
+				rest.WriteErrorResponse(
+					w, http.StatusBadRequest,
+					fmt.Sprintf("failed to convert to standard tx: %s", err),
+				)
+				return
+			}
 		}
 
 		err = checkAminoMarshalError(clientCtx, searchResult, "/cosmos/tx/v1beta1/txs")
@@ -131,7 +142,11 @@ func QueryTxRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
 			return
 		}
 
-		output, err := authtx.QueryTx(clientCtx, hashHexStr)
+		node, err := clientCtx.GetNode()
+		if rest.CheckInternalServerError(w, err) {
+			return
+		}
+		output, err := authtx.QueryTx(r.Context(), node, clientCtx.TxConfig, hashHexStr)
 		if err != nil {
 			if strings.Contains(err.Error(), hashHexStr) {
 				rest.WriteErrorResponse(w, http.StatusNotFound, err.Error())
@@ -200,11 +215,11 @@ func packStdTxResponse(w http.ResponseWriter, clientCtx client.Context, txRes *s
 
 // checkAminoMarshalError checks if there are errors with marshalling non-amino
 // txs with amino.
-func checkAminoMarshalError(ctx client.Context, resp interface{}, grpcEndPoint string) error {
+func checkAminoMarshalError(ctx client.Context, resp any, grpcEndPoint string) error {
 	// LegacyAmino used intentionally here to handle the SignMode errors
 	marshaler := ctx.LegacyAmino
 
-	_, err := marshaler.MarshalJSON(resp)
+	_, err := marshaler.MarshalAsJSON(resp)
 	if err != nil {
 
 		// If there's an unmarshalling error, we assume that it's because we're

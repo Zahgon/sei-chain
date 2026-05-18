@@ -1,16 +1,17 @@
 package rest
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/gorilla/mux"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/rest"
-	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
-	"github.com/cosmos/cosmos-sdk/x/staking/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
+	authtx "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/tx"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 )
 
 // contains checks if the a given query contains one of the tx types
@@ -25,7 +26,7 @@ func contains(stringSlice []string, txType string) bool {
 }
 
 // queries staking txs
-func queryTxs(clientCtx client.Context, action string, delegatorAddr string) (*sdk.SearchTxsResult, error) {
+func queryTxs(ctx context.Context, clientCtx client.Context, action string, delegatorAddr string) (*sdk.SearchTxsResult, error) {
 	page := 1
 	limit := 100
 	events := []string{
@@ -33,7 +34,11 @@ func queryTxs(clientCtx client.Context, action string, delegatorAddr string) (*s
 		fmt.Sprintf("%s.%s='%s'", sdk.EventTypeMessage, sdk.AttributeKeySender, delegatorAddr),
 	}
 
-	return authtx.QueryTxsByEvents(clientCtx, events, page, limit, "")
+	node, err := clientCtx.GetNode()
+	if err != nil {
+		return nil, err
+	}
+	return authtx.QueryTxsByEvents(ctx, node, clientCtx.TxConfig, events, page, limit, "")
 }
 
 func queryBonds(clientCtx client.Context, endpoint string) http.HandlerFunc {
@@ -59,7 +64,7 @@ func queryBonds(clientCtx client.Context, endpoint string) http.HandlerFunc {
 
 		params := types.QueryDelegatorValidatorRequest{DelegatorAddr: delegatorAddr.String(), ValidatorAddr: validatorAddr.String()}
 
-		bz, err := clientCtx.LegacyAmino.MarshalJSON(params)
+		bz, err := clientCtx.LegacyAmino.MarshalAsJSON(params)
 		if rest.CheckBadRequestError(w, err) {
 			return
 		}
@@ -91,7 +96,7 @@ func queryDelegator(clientCtx client.Context, endpoint string) http.HandlerFunc 
 
 		params := types.NewQueryDelegatorParams(delegatorAddr)
 
-		bz, err := clientCtx.LegacyAmino.MarshalJSON(params)
+		bz, err := clientCtx.LegacyAmino.MarshalAsJSON(params)
 		if rest.CheckBadRequestError(w, err) {
 			return
 		}
@@ -128,7 +133,7 @@ func queryValidator(clientCtx client.Context, endpoint string) http.HandlerFunc 
 
 		params := types.NewQueryValidatorParams(validatorAddr, page, limit)
 
-		bz, err := clientCtx.LegacyAmino.MarshalJSON(params)
+		bz, err := clientCtx.LegacyAmino.MarshalAsJSON(params)
 		if rest.CheckBadRequestError(w, err) {
 			return
 		}

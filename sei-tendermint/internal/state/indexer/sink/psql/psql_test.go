@@ -17,9 +17,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/internal/state/indexer"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 
 	// Register the Postgres database driver.
 	_ "github.com/lib/pq"
@@ -184,9 +184,9 @@ func TestIndexing(t *testing.T) {
 
 			{Type: "", Attributes: []abci.EventAttribute{{Key: []byte("not_allowed"), Value: []byte("Vlad"), Index: true}}},
 		})
-		require.NoError(t, indexer.IndexTxEvents([]*abci.TxResult{txResult}))
+		require.NoError(t, indexer.IndexTxEvents([]*abci.TxResultV2{txResult}))
 
-		txr, err := loadTxResult(types.Tx(txResult.Tx).Hash())
+		txr, err := loadTxResult(types.Tx(txResult.Tx).Hash().Bytes())
 		require.NoError(t, err)
 		assert.Equal(t, txResult, txr)
 
@@ -194,7 +194,7 @@ func TestIndexing(t *testing.T) {
 		require.NoError(t, verifyTimeStamp(viewTxEvents))
 
 		verifyNotImplemented(t, "getTxByHash", func() (bool, error) {
-			txr, err := indexer.GetTxByHash(types.Tx(txResult.Tx).Hash())
+			txr, err := indexer.GetTxByHash(types.Tx(txResult.Tx).Hash().Bytes())
 			return txr != nil, err
 		})
 		verifyNotImplemented(t, "tx search", func() (bool, error) {
@@ -203,7 +203,7 @@ func TestIndexing(t *testing.T) {
 		})
 
 		// try to insert the duplicate tx events.
-		err = indexer.IndexTxEvents([]*abci.TxResult{txResult})
+		err = indexer.IndexTxEvents([]*abci.TxResultV2{txResult})
 		require.NoError(t, err)
 	})
 }
@@ -258,8 +258,8 @@ func resetDatabase(db *sql.DB) error {
 
 // txResultWithEvents constructs a fresh transaction result with fixed values
 // for testing, that includes the specified events.
-func txResultWithEvents(events []abci.Event) *abci.TxResult {
-	return &abci.TxResult{
+func txResultWithEvents(events []abci.Event) *abci.TxResultV2 {
+	return &abci.TxResultV2{
 		Height: 1,
 		Index:  0,
 		Tx:     types.Tx("HELLO WORLD"),
@@ -272,7 +272,7 @@ func txResultWithEvents(events []abci.Event) *abci.TxResult {
 	}
 }
 
-func loadTxResult(hash []byte) (*abci.TxResult, error) {
+func loadTxResult(hash []byte) (*abci.TxResultV2, error) {
 	hashString := fmt.Sprintf("%X", hash)
 	var resultData []byte
 	if err := testDB().QueryRow(`
@@ -286,7 +286,7 @@ SELECT tx_result FROM `+tableTxResults+` WHERE tx_hash = $1;
 		return nil, fmt.Errorf("unmarshaling txr: %w", err)
 	}
 
-	return txr, nil
+	return &abci.TxResultV2{Height: txr.Height, Index: txr.Index, Tx: txr.Tx, Result: txr.Result}, nil
 }
 
 func verifyTimeStamp(tableName string) error {

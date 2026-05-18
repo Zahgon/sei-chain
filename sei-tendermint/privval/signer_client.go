@@ -5,18 +5,15 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/encoding"
-	"github.com/tendermint/tendermint/libs/log"
-	privvalproto "github.com/tendermint/tendermint/proto/tendermint/privval"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	privvalproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/privval"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 // SignerClient implements PrivValidator.
 // Handles remote validator connections that provide signing services
 type SignerClient struct {
-	logger   log.Logger
 	endpoint *SignerListenerEndpoint
 	chainID  string
 }
@@ -33,7 +30,6 @@ func NewSignerClient(ctx context.Context, endpoint *SignerListenerEndpoint, chai
 	}
 
 	return &SignerClient{
-		logger:   endpoint.logger,
 		endpoint: endpoint,
 		chainID:  chainID,
 	}, nil
@@ -66,7 +62,7 @@ func (sc *SignerClient) WaitForConnection(ctx context.Context, maxWait time.Dura
 func (sc *SignerClient) Ping(ctx context.Context) error {
 	response, err := sc.endpoint.SendRequest(ctx, mustWrapMsg(&privvalproto.PingRequest{}))
 	if err != nil {
-		sc.logger.Error("SignerClient::Ping", "err", err)
+		logger.Error("SignerClient::Ping", "err", err)
 		return nil
 	}
 
@@ -83,23 +79,18 @@ func (sc *SignerClient) Ping(ctx context.Context) error {
 func (sc *SignerClient) GetPubKey(ctx context.Context) (crypto.PubKey, error) {
 	response, err := sc.endpoint.SendRequest(ctx, mustWrapMsg(&privvalproto.PubKeyRequest{ChainId: sc.chainID}))
 	if err != nil {
-		return nil, fmt.Errorf("send: %w", err)
+		return crypto.PubKey{}, fmt.Errorf("send: %w", err)
 	}
 
 	resp := response.GetPubKeyResponse()
 	if resp == nil {
-		return nil, ErrUnexpectedResponse
+		return crypto.PubKey{}, ErrUnexpectedResponse
 	}
 	if resp.Error != nil {
-		return nil, &RemoteSignerError{Code: int(resp.Error.Code), Description: resp.Error.Description}
+		return crypto.PubKey{}, &RemoteSignerError{Code: int(resp.Error.Code), Description: resp.Error.Description}
 	}
 
-	pk, err := encoding.PubKeyFromProto(resp.PubKey)
-	if err != nil {
-		return nil, err
-	}
-
-	return pk, nil
+	return crypto.PubKeyFromProto(resp.PubKey)
 }
 
 // SignVote requests a remote signer to sign a vote

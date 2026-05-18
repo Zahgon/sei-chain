@@ -3,14 +3,12 @@ package server
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"html/template"
 	"io"
 	"net/http"
 	"strings"
 
-	"github.com/tendermint/tendermint/libs/log"
-	rpctypes "github.com/tendermint/tendermint/rpc/jsonrpc/types"
+	rpctypes "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/jsonrpc/types"
 )
 
 // HTTP + JSON handler
@@ -18,19 +16,19 @@ import (
 const REQUEST_BATCH_SIZE_LIMIT = 10
 
 // jsonrpc calls grab the given method's function info and runs reflect.Call
-func makeJSONRPCHandler(funcMap map[string]*RPCFunc, logger log.Logger) http.HandlerFunc {
+func makeJSONRPCHandler(funcMap map[string]*RPCFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, hreq *http.Request) {
 		// For POST requests, reject a non-root URL path. This should not happen
 		// in the standard configuration, since the wrapper checks the path.
 		if hreq.URL.Path != "/" {
-			writeRPCResponse(w, logger, rpctypes.RPCRequest{}.MakeErrorf(
+			writeRPCResponse(w, rpctypes.RPCRequest{}.MakeErrorf(
 				rpctypes.CodeInvalidRequest, "invalid path: %q", hreq.URL.Path))
 			return
 		}
 
 		b, err := io.ReadAll(hreq.Body)
 		if err != nil {
-			writeRPCResponse(w, logger, rpctypes.RPCRequest{}.MakeErrorf(
+			writeRPCResponse(w, rpctypes.RPCRequest{}.MakeErrorf(
 				rpctypes.CodeInvalidRequest, "reading request body: %v", err))
 			return
 		}
@@ -38,18 +36,18 @@ func makeJSONRPCHandler(funcMap map[string]*RPCFunc, logger log.Logger) http.Han
 		// if its an empty request (like from a browser), just display a list of
 		// functions
 		if len(b) == 0 {
-			writeListOfEndpoints(w, hreq, funcMap)
+			writeListOfEndpoints(w, funcMap)
 			return
 		}
 
 		requests, err := parseRequests(b)
 		if len(requests) > REQUEST_BATCH_SIZE_LIMIT {
-			writeRPCResponse(w, logger, rpctypes.RPCRequest{}.MakeErrorf(
+			writeRPCResponse(w, rpctypes.RPCRequest{}.MakeErrorf(
 				rpctypes.CodeParseError, "Batch size limit exceeded."))
 			return
 		}
 		if err != nil {
-			writeRPCResponse(w, logger, rpctypes.RPCRequest{}.MakeErrorf(
+			writeRPCResponse(w, rpctypes.RPCRequest{}.MakeErrorf(
 				rpctypes.CodeParseError, "decoding request: %v", err))
 			return
 		}
@@ -84,13 +82,13 @@ func makeJSONRPCHandler(funcMap map[string]*RPCFunc, logger log.Logger) http.Han
 		if len(responses) == 0 {
 			return
 		}
-		writeRPCResponse(w, logger, responses...)
+		writeRPCResponse(w, responses...)
 	}
 }
 
 func ensureBodyClose(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		defer r.Body.Close()
+		defer func() { _ = r.Body.Close() }()
 		next(w, r)
 	}
 }
@@ -126,20 +124,19 @@ func parseRequests(data []byte) ([]rpctypes.RPCRequest, error) {
 }
 
 // writes a list of available rpc endpoints as an html page
-func writeListOfEndpoints(w http.ResponseWriter, r *http.Request, funcMap map[string]*RPCFunc) {
+func writeListOfEndpoints(w http.ResponseWriter, funcMap map[string]*RPCFunc) {
 	hasArgs := make(map[string]string)
 	noArgs := make(map[string]string)
 	for name, rf := range funcMap {
-		base := fmt.Sprintf("//%s/%s", r.Host, name)
 		if len(rf.args) == 0 {
-			noArgs[name] = base
+			noArgs[name] = name
 			continue
 		}
-		var query []string
+		query := make([]string, 0, len(rf.args))
 		for _, arg := range rf.args {
 			query = append(query, arg.name+"=_")
 		}
-		hasArgs[name] = base + "?" + strings.Join(query, "&")
+		hasArgs[name] = name + "?" + strings.Join(query, "&")
 	}
 	w.Header().Set("Content-Type", "text/html")
 	_ = listOfEndpoints.Execute(w, map[string]map[string]string{

@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/internal/jsontypes"
 )
 
 // Verify that the event data types satisfy their shared interface.
@@ -48,7 +48,7 @@ func TestQueryForEvent(t *testing.T) {
 
 func TestTryUnmarshalForEvent(t *testing.T) {
 	eventData := EventDataTx{
-		TxResult: types.TxResult{
+		TxResultV2: types.TxResultV2{
 			Height: 123,
 		},
 	}

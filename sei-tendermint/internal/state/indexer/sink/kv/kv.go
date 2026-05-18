@@ -5,12 +5,12 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/internal/pubsub/query"
-	"github.com/tendermint/tendermint/internal/state/indexer"
-	kvb "github.com/tendermint/tendermint/internal/state/indexer/block/kv"
-	kvt "github.com/tendermint/tendermint/internal/state/indexer/tx/kv"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer"
+	kvb "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer/block/kv"
+	kvt "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer/tx/kv"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 var _ indexer.EventSink = (*EventSink)(nil)
@@ -39,7 +39,7 @@ func (kves *EventSink) IndexBlockEvents(bh types.EventDataNewBlockHeader) error 
 	return kves.bi.Index(bh)
 }
 
-func (kves *EventSink) IndexTxEvents(results []*abci.TxResult) error {
+func (kves *EventSink) IndexTxEvents(results []*abci.TxResultV2) error {
 	return kves.txi.Index(results)
 }
 
@@ -47,11 +47,11 @@ func (kves *EventSink) SearchBlockEvents(ctx context.Context, q *query.Query) ([
 	return kves.bi.Search(ctx, q)
 }
 
-func (kves *EventSink) SearchTxEvents(ctx context.Context, q *query.Query) ([]*abci.TxResult, error) {
+func (kves *EventSink) SearchTxEvents(ctx context.Context, q *query.Query) ([]*abci.TxResultV2, error) {
 	return kves.txi.Search(ctx, q)
 }
 
-func (kves *EventSink) GetTxByHash(hash []byte) (*abci.TxResult, error) {
+func (kves *EventSink) GetTxByHash(hash []byte) (*abci.TxResultV2, error) {
 	return kves.txi.Get(hash)
 }
 

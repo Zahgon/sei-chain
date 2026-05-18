@@ -7,10 +7,10 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/internal/libs/protoio"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/protoio"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func aVote(t testing.TB) *types.Vote {
@@ -24,10 +24,10 @@ func aVote(t testing.TB) *types.Vote {
 		Round:     2,
 		Timestamp: stamp,
 		BlockID: types.BlockID{
-			Hash: crypto.Checksum([]byte("blockID_hash")),
+			Hash: crypto.Checksum([]byte("blockID_hash")).Bytes(),
 			PartSetHeader: types.PartSetHeader{
 				Total: 1000000,
-				Hash:  crypto.Checksum([]byte("blockID_part_set_header_hash")),
+				Hash:  crypto.Checksum([]byte("blockID_part_set_header_hash")).Bytes(),
 			},
 		},
 		ValidatorAddress: crypto.AddressHash([]byte("validator_address")),

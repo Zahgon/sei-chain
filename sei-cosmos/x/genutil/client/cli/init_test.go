@@ -7,26 +7,22 @@ import (
 	"io"
 	"os"
 	"testing"
-	"time"
 
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/cli"
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
-	abci_server "github.com/tendermint/tendermint/abci/server"
-	"github.com/tendermint/tendermint/libs/cli"
-	"github.com/tendermint/tendermint/libs/log"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/codec/types"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
-	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/server/mock"
-	"github.com/cosmos/cosmos-sdk/testutil"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/x/genutil"
-	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
-	genutiltest "github.com/cosmos/cosmos-sdk/x/genutil/client/testutil"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/server"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil"
+	genutilcli "github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil/client/cli"
+	genutiltest "github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil/client/testutil"
 )
 
 var testMbm = module.NewBasicManager(genutil.AppModuleBasic{})
@@ -54,11 +50,11 @@ func TestInitCmd(t *testing.T) {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
 			home := t.TempDir()
-			logger := log.NewNopLogger()
+
 			cfg, err := genutiltest.CreateDefaultTendermintConfig(home)
 			require.NoError(t, err)
 
-			serverCtx := server.NewContext(viper.New(), cfg, logger)
+			serverCtx := server.NewContext(viper.New(), cfg)
 			interfaceRegistry := types.NewInterfaceRegistry()
 			marshaler := codec.NewProtoCodec(interfaceRegistry)
 			clientCtx := client.Context{}.
@@ -88,11 +84,11 @@ func TestInitCmd(t *testing.T) {
 
 func TestInitRecover(t *testing.T) {
 	home := t.TempDir()
-	logger := log.NewNopLogger()
+
 	cfg, err := genutiltest.CreateDefaultTendermintConfig(home)
 	require.NoError(t, err)
 
-	serverCtx := server.NewContext(viper.New(), cfg, logger)
+	serverCtx := server.NewContext(viper.New(), cfg)
 	interfaceRegistry := types.NewInterfaceRegistry()
 	marshaler := codec.NewProtoCodec(interfaceRegistry)
 	clientCtx := client.Context{}.
@@ -119,11 +115,11 @@ func TestInitRecover(t *testing.T) {
 
 func TestEmptyState(t *testing.T) {
 	home := t.TempDir()
-	logger := log.NewNopLogger()
+
 	cfg, err := genutiltest.CreateDefaultTendermintConfig(home)
 	require.NoError(t, err)
 
-	serverCtx := server.NewContext(viper.New(), cfg, logger)
+	serverCtx := server.NewContext(viper.New(), cfg)
 	interfaceRegistry := types.NewInterfaceRegistry()
 	marshaler := codec.NewProtoCodec(interfaceRegistry)
 	clientCtx := client.Context{}.
@@ -166,42 +162,11 @@ func TestEmptyState(t *testing.T) {
 	require.Contains(t, out, "app_state")
 }
 
-func TestStartStandAlone(t *testing.T) {
-	home := t.TempDir()
-	logger := log.NewNopLogger()
-	interfaceRegistry := types.NewInterfaceRegistry()
-	marshaler := codec.NewProtoCodec(interfaceRegistry)
-	err := genutiltest.ExecInitCmd(testMbm, home, marshaler)
-	require.NoError(t, err)
-
-	app, err := mock.NewApp(home, logger)
-	require.NoError(t, err)
-
-	svrAddr, _, err := server.FreeTCPAddr()
-	require.NoError(t, err)
-
-	svr, err := abci_server.NewServer(logger, svrAddr, "socket", app)
-	require.NoError(t, err, "error creating listener")
-
-	ctx, cancelFn := context.WithCancel(context.Background())
-	defer cancelFn()
-	err = svr.Start(ctx)
-	require.NoError(t, err)
-
-	timer := time.NewTimer(time.Duration(2) * time.Second)
-	for range timer.C {
-		cancelFn()
-		svr.Wait()
-		require.NoError(t, err)
-		break
-	}
-}
-
 func TestInitNodeValidatorFiles(t *testing.T) {
 	home := t.TempDir()
 	cfg, err := genutiltest.CreateDefaultTendermintConfig(home)
+	require.Nil(t, err)
 	nodeID, valPubKey, err := genutil.InitializeNodeValidatorFiles(cfg)
-
 	require.Nil(t, err)
 	require.NotEqual(t, "", nodeID)
 	require.NotEqual(t, 0, len(valPubKey.Bytes()))

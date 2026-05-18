@@ -42,10 +42,6 @@ pending-ttl-num-blocks = 0
 ###                   Main Base Config Options                      ###
 #######################################################################
 
-# TCP or UNIX socket address of the ABCI application,
-# or the name of an ABCI application compiled in with the Tendermint binary
-proxy-app = "tcp://127.0.0.1:26658"
-
 # A custom human readable name for this node
 moniker = "demo"
 
@@ -98,14 +94,6 @@ genesis-file = "config/genesis.json"
 
 # Path to the JSON file containing the private key to use for node authentication in the p2p protocol
 node-key-file = "config/node_key.json"
-
-# Mechanism to connect to the ABCI application: socket | grpc
-abci = "socket"
-
-# If true, query the ABCI app on connecting to a new peer
-# so the app can decide if we should keep the connection or not
-filter-peers = false
-
 
 #######################################################
 ###       Priv Validator Configuration              ###
@@ -701,7 +689,7 @@ evm_query_gas_limit = 300000
 # The minimum gas prices a validator is willing to accept for processing a
 # transaction. A transaction's fees must meet the minimum of any denomination
 # specified in this config (e.g. 0.25token1;0.0001token2).
-minimum-gas-prices = "0.02usei"
+minimum-gas-prices = "0.01usei"
 
 # Pruning Strategies:
 # - default: Keep the recent 362880 blocks and prune is triggered every 10 blocks

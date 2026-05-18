@@ -3,9 +3,9 @@ package baseapp
 import (
 	"crypto/sha256"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
 func (app *BaseApp) Check(txEncoder sdk.TxEncoder, tx sdk.Tx) (sdk.GasInfo, *sdk.Result, error) {
@@ -16,26 +16,9 @@ func (app *BaseApp) Check(txEncoder sdk.TxEncoder, tx sdk.Tx) (sdk.GasInfo, *sdk
 	if err != nil {
 		return sdk.GasInfo{}, nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "%s", err)
 	}
-	ctx := app.checkState.ctx.WithTxBytes(bz).WithVoteInfos(app.voteInfos).WithConsensusParams(app.GetConsensusParams(app.checkState.ctx))
-	gasInfo, result, _, _, _, _, _, err := app.runTx(ctx, runTxModeCheck, tx, sha256.Sum256(bz))
-	if len(ctx.MultiStore().GetEvents()) > 0 {
-		panic("Expected checkTx events to be empty")
-	}
-	return gasInfo, result, err
-}
-
-func (app *BaseApp) Simulate(txBytes []byte) (sdk.GasInfo, *sdk.Result, error) {
-	ctx := app.checkState.ctx.WithTxBytes(txBytes).WithVoteInfos(app.voteInfos).WithConsensusParams(app.GetConsensusParams(app.checkState.ctx))
-	ctx, _ = ctx.CacheContext()
-	tx, err := app.txDecoder(txBytes)
-	if err != nil {
-		return sdk.GasInfo{}, nil, err
-	}
-	gasInfo, result, _, _, _, _, _, err := app.runTx(ctx, runTxModeSimulate, tx, sha256.Sum256(txBytes))
-	if len(ctx.MultiStore().GetEvents()) > 0 {
-		panic("Expected simulate events to be empty")
-	}
-	return gasInfo, result, err
+	ctx := app.checkState.ctx.WithTxBytes(bz).WithConsensusParams(app.GetConsensusParams(app.checkState.ctx))
+	runTxRes, err := app.runTx(ctx, runTxModeCheck, tx, sha256.Sum256(bz))
+	return runTxRes.gasInfo, runTxRes.result, err
 }
 
 func (app *BaseApp) Deliver(txEncoder sdk.TxEncoder, tx sdk.Tx) (sdk.GasInfo, *sdk.Result, error) {
@@ -44,27 +27,36 @@ func (app *BaseApp) Deliver(txEncoder sdk.TxEncoder, tx sdk.Tx) (sdk.GasInfo, *s
 	if err != nil {
 		return sdk.GasInfo{}, nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "%s", err)
 	}
-	ctx := app.deliverState.ctx.WithTxBytes(bz).WithVoteInfos(app.voteInfos).WithConsensusParams(app.GetConsensusParams(app.deliverState.ctx))
+	ctx := app.deliverState.ctx.WithTxBytes(bz).WithConsensusParams(app.GetConsensusParams(app.deliverState.ctx))
 	decoded, err := app.txDecoder(bz)
 	if err != nil {
 		return sdk.GasInfo{}, &sdk.Result{}, err
 	}
-	gasInfo, result, _, _, _, _, _, err := app.runTx(ctx, runTxModeDeliver, decoded, sha256.Sum256(bz))
-	return gasInfo, result, err
+	runTxRes, err := app.runTx(ctx, runTxModeDeliver, decoded, sha256.Sum256(bz))
+	return runTxRes.gasInfo, runTxRes.result, err
 }
 
 // Context with current {check, deliver}State of the app used by tests.
 func (app *BaseApp) NewContext(isCheckTx bool, header tmproto.Header) sdk.Context {
 	if isCheckTx {
-		return sdk.NewContext(app.checkState.ms, header, true, app.logger).
+		return sdk.NewContext(app.checkState.ms, header, true).
 			WithMinGasPrices(app.minGasPrices)
 	}
 
-	return sdk.NewContext(app.deliverState.ms, header, false, app.logger)
+	return sdk.NewContext(app.deliverState.ms, header, false)
 }
 
 func (app *BaseApp) NewUncachedContext(isCheckTx bool, header tmproto.Header) sdk.Context {
-	return sdk.NewContext(app.cms, header, isCheckTx, app.logger)
+	return sdk.NewContext(app.cms, header, isCheckTx)
+}
+
+// DeliverContext returns the current deliverState context, or nil if not in a deliver block.
+// Useful for reading uncommitted state (e.g. after InitChain before Commit).
+func (app *BaseApp) DeliverContext() *sdk.Context {
+	if app.deliverState == nil {
+		return nil
+	}
+	return &app.deliverState.ctx
 }
 
 func (app *BaseApp) GetContextForDeliverTx(txBytes []byte) sdk.Context {

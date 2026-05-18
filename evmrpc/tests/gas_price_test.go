@@ -4,12 +4,12 @@ import (
 	"math/big"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/sei-protocol/sei-chain/app"
 	"github.com/sei-protocol/sei-chain/evmrpc"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/stretchr/testify/require"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 )
 
 func TestGasPriceCongestionThreshold(t *testing.T) {
@@ -22,7 +22,7 @@ func TestGasPriceCongestionThreshold(t *testing.T) {
 	baseCtx = baseCtx.WithConsensusParams(consensusParams)
 	ctxProvider := func(int64) sdk.Context { return baseCtx }
 
-	i := evmrpc.NewInfoAPI(nil, nil, ctxProvider, nil, t.TempDir(), 1024, evmrpc.ConnectionTypeHTTP, nil)
+	i := evmrpc.NewInfoAPI(nil, nil, ctxProvider, nil, t.TempDir(), 1024, evmrpc.ConnectionTypeHTTP, nil, nil)
 
 	oneGwei := big.NewInt(1000000000)
 	median := big.NewInt(2000000000) // 2 gwei
@@ -54,7 +54,7 @@ func TestGasPriceCongestionThreshold(t *testing.T) {
 func TestGasPriceInvokesFeeHistoryMedian(t *testing.T) {
 	// Single empty block is sufficient; FeeHistory will still execute and return zeros
 	// and GasPrice will compute based on baseFee without error.
-	SetupMockPacificTestServer(func(app *app.App, _ *MockClient) sdk.Context {
+	SetupMockPacificTestServer(t, func(app *app.App, _ *MockClient) sdk.Context {
 		// height can be any valid block height
 		ctx := app.RPCContextProvider(evmrpc.LatestCtxHeight).WithClosestUpgradeName("pacific-1")
 		cp := &tmproto.ConsensusParams{Block: &tmproto.BlockParams{MaxGas: 10_000_000}}

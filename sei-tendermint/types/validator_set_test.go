@@ -3,6 +3,7 @@ package types
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"math"
 	"math/rand"
@@ -15,11 +16,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	tmmath "github.com/tendermint/tendermint/libs/math"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
 func TestValidatorSetBasic(t *testing.T) {
@@ -33,18 +34,14 @@ func TestValidatorSetBasic(t *testing.T) {
 
 	assert.EqualValues(t, vset, vset.Copy())
 	assert.False(t, vset.HasAddress([]byte("some val")))
-	idx, val := vset.GetByAddress([]byte("some val"))
-	assert.EqualValues(t, -1, idx)
-	assert.Nil(t, val)
-	addr, val := vset.GetByIndex(-100)
-	assert.Nil(t, addr)
-	assert.Nil(t, val)
-	addr, val = vset.GetByIndex(0)
-	assert.Nil(t, addr)
-	assert.Nil(t, val)
-	addr, val = vset.GetByIndex(100)
-	assert.Nil(t, addr)
-	assert.Nil(t, val)
+	_, _, ok := vset.GetByAddress([]byte("some val"))
+	require.False(t, ok)
+	_, _, ok = vset.GetByIndex(-100)
+	require.False(t, ok)
+	_, _, ok = vset.GetByIndex(0)
+	require.False(t, ok)
+	_, _, ok = vset.GetByIndex(100)
+	require.False(t, ok)
 	assert.Zero(t, vset.Size())
 	assert.Equal(t, int64(0), vset.TotalVotingPower())
 	assert.Nil(t, vset.GetProposer())
@@ -52,13 +49,15 @@ func TestValidatorSetBasic(t *testing.T) {
 		0xc8, 0x99, 0x6f, 0xb9, 0x24, 0x27, 0xae, 0x41, 0xe4, 0x64, 0x9b, 0x93, 0x4c, 0xa4, 0x95,
 		0x99, 0x1b, 0x78, 0x52, 0xb8, 0x55}, vset.Hash())
 	// add
-	val = randModuloValidator(vset.TotalVotingPower())
+	val := randModuloValidator(vset.TotalVotingPower())
 	assert.NoError(t, vset.UpdateWithChangeSet([]*Validator{val}))
 
 	assert.True(t, vset.HasAddress(val.Address))
-	idx, _ = vset.GetByAddress(val.Address)
+	idx, _, ok := vset.GetByAddress(val.Address)
+	assert.True(t, ok)
 	assert.EqualValues(t, 0, idx)
-	addr, _ = vset.GetByIndex(0)
+	addr, _, ok := vset.GetByIndex(0)
+	assert.True(t, ok)
 	assert.Equal(t, []byte(val.Address), addr)
 	assert.Equal(t, 1, vset.Size())
 	assert.Equal(t, val.VotingPower, vset.TotalVotingPower())
@@ -69,15 +68,16 @@ func TestValidatorSetBasic(t *testing.T) {
 	// update
 	val = randModuloValidator(vset.TotalVotingPower())
 	assert.NoError(t, vset.UpdateWithChangeSet([]*Validator{val}))
-	_, val = vset.GetByAddress(val.Address)
+	_, val, ok = vset.GetByAddress(val.Address)
+	assert.True(t, ok)
 	val.VotingPower += 100
 	proposerPriority := val.ProposerPriority
 
 	val.ProposerPriority = 0
 	assert.NoError(t, vset.UpdateWithChangeSet([]*Validator{val}))
-	_, val = vset.GetByAddress(val.Address)
+	_, val, ok = vset.GetByAddress(val.Address)
+	assert.True(t, ok)
 	assert.Equal(t, proposerPriority, val.ProposerPriority)
-
 }
 
 func TestValidatorSetValidateBasic(t *testing.T) {
@@ -92,59 +92,50 @@ func TestValidatorSetValidateBasic(t *testing.T) {
 
 	testCases := []struct {
 		vals ValidatorSet
-		err  bool
-		msg  string
+		err  utils.Option[error]
 	}{
 		{
 			vals: ValidatorSet{},
-			err:  true,
-			msg:  "validator set is nil or empty",
+			err:  utils.Some(ErrValidatorSetEmpty),
 		},
 		{
 			vals: ValidatorSet{
 				Validators: []*Validator{},
 			},
-			err: true,
-			msg: "validator set is nil or empty",
+			err: utils.Some(ErrValidatorSetEmpty),
 		},
 		{
 			vals: ValidatorSet{
 				Validators: []*Validator{val},
 			},
-			err: true,
-			msg: "proposer failed validate basic, error: nil validator",
+			err: utils.Some(ErrNilValidator),
 		},
 		{
 			vals: ValidatorSet{
 				Validators: []*Validator{badVal},
+				Proposer:   val,
 			},
-			err: true,
-			msg: "invalid validator #0: validator does not have a public key",
+			err: utils.Some(ErrBadAddressSize),
 		},
 		{
 			vals: ValidatorSet{
 				Validators: []*Validator{val},
 				Proposer:   val,
 			},
-			err: false,
-			msg: "",
 		},
 		{
 			vals: ValidatorSet{
 				Validators: []*Validator{val},
 				Proposer:   val2,
 			},
-			err: true,
-			msg: ErrProposerNotInVals.Error(),
+			err: utils.Some(ErrProposerNotInVals),
 		},
 	}
 
 	for _, tc := range testCases {
 		err := tc.vals.ValidateBasic()
-		if tc.err {
-			if assert.Error(t, err) {
-				assert.Equal(t, tc.msg, err.Error())
-			}
+		if wantErr, ok := tc.err.Get(); ok {
+			assert.True(t, errors.Is(err, wantErr))
 		} else {
 			assert.NoError(t, err)
 		}
@@ -189,6 +180,14 @@ func TestValidatorSet_ProposerPriorityHash(t *testing.T) {
 	vset.IncrementProposerPriority(1)
 	assert.Equal(t, vset.Hash(), vsetCopy.Hash())
 	assert.NotEqual(t, vset.ProposerPriorityHash(), vsetCopy.ProposerPriorityHash())
+
+	// Changing only one validator's priority must change the hash.
+	// This verifies that each validator's priority occupies a distinct
+	// position in the buffer rather than overwriting the same offset.
+	vsetA := vset.Copy()
+	vsetB := vset.Copy()
+	vsetB.Validators[0].ProposerPriority += 1
+	assert.NotEqual(t, vsetA.ProposerPriorityHash(), vsetB.ProposerPriorityHash())
 }
 
 // Test that IncrementProposerPriority requires positive times.
@@ -205,18 +204,16 @@ func TestIncrementProposerPriorityPositiveTimes(t *testing.T) {
 }
 
 func BenchmarkValidatorSetCopy(b *testing.B) {
-	b.StopTimer()
 	vset := NewValidatorSet([]*Validator{})
-	for i := 0; i < 1000; i++ {
-		privKey := ed25519.GenPrivKey()
-		pubKey := privKey.PubKey()
+	for range 1000 {
+		privKey := ed25519.GenerateSecretKey()
+		pubKey := privKey.Public()
 		val := NewValidator(pubKey, 10)
 		err := vset.UpdateWithChangeSet([]*Validator{val})
 		require.NoError(b, err)
 	}
-	b.StartTimer()
 
-	for i := 0; i < b.N; i++ {
+	for b.Loop() {
 		vset.Copy()
 	}
 }
@@ -230,7 +227,7 @@ func TestProposerSelection1(t *testing.T) {
 		newValidator([]byte("baz"), 330),
 	})
 	var proposers []string
-	for i := 0; i < 99; i++ {
+	for range 99 {
 		val := vset.GetProposer()
 		proposers = append(proposers, string(val.Address))
 		vset.IncrementProposerPriority(1)
@@ -346,9 +343,9 @@ func TestProposerSelection3(t *testing.T) {
 	})
 
 	proposerOrder := make([]*Validator, 4)
-	for i := 0; i < 4; i++ {
+	for i := range 4 {
 		// need to give all validators to have keys
-		pk := ed25519.GenPrivKey().PubKey()
+		pk := ed25519.GenerateSecretKey().Public()
 		vset.Validators[i].PubKey = pk
 		proposerOrder[i] = vset.GetProposer()
 		vset.IncrementProposerPriority(1)
@@ -403,9 +400,7 @@ func newValidator(address []byte, power int64) *Validator {
 }
 
 func randPubKey() crypto.PubKey {
-	pubKey := make(ed25519.PubKey, ed25519.PubKeySize)
-	copy(pubKey, tmrand.Bytes(32))
-	return ed25519.PubKey(tmrand.Bytes(32))
+	return ed25519.GenerateSecretKey().Public()
 }
 
 func randModuloValidator(totalVotingPower int64) *Validator {
@@ -434,7 +429,7 @@ func randValidator(ctx context.Context, randPower bool, minPower int64) (*Valida
 func randModuloValidatorSet(numValidators int) *ValidatorSet {
 	validators := make([]*Validator, numValidators)
 	totalVotingPower := int64(0)
-	for i := 0; i < numValidators; i++ {
+	for i := range numValidators {
 		validators[i] = randModuloValidator(totalVotingPower)
 		totalVotingPower += validators[i].VotingPower
 	}
@@ -546,7 +541,8 @@ func TestAveragingInIncrementProposerPriority(t *testing.T) {
 		// work on copy to have the old ProposerPriorities:
 		newVset := tc.vs.CopyIncrementProposerPriority(tc.times)
 		for _, val := range tc.vs.Validators {
-			_, updatedVal := newVset.GetByAddress(val.Address)
+			_, updatedVal, ok := newVset.GetByAddress(val.Address)
+			assert.True(t, ok)
 			assert.Equal(t, updatedVal.ProposerPriority, val.ProposerPriority-tc.avg, "test case: %v", i)
 		}
 	}
@@ -836,7 +832,7 @@ func toTestValList(valList []*Validator) []testVal {
 
 func testValSet(nVals int, power int64) []testVal {
 	vals := make([]testVal, nVals)
-	for i := 0; i < nVals; i++ {
+	for i := range nVals {
 		vals[i] = testVal{fmt.Sprintf("v%d", i+1), power}
 	}
 	return vals
@@ -1440,16 +1436,8 @@ func TestValidatorSetProtoBuf(t *testing.T) {
 	ctx := t.Context()
 
 	valset, _ := randValidatorPrivValSet(ctx, t, 10, 100)
-	valset2, _ := randValidatorPrivValSet(ctx, t, 10, 100)
-	valset2.Validators[0] = &Validator{}
-
 	valset3, _ := randValidatorPrivValSet(ctx, t, 10, 100)
 	valset3.Proposer = nil
-
-	valset4, _ := randValidatorPrivValSet(ctx, t, 10, 100)
-
-	valset4.Proposer = &Validator{}
-
 	testCases := []struct {
 		msg      string
 		v1       *ValidatorSet
@@ -1457,9 +1445,7 @@ func TestValidatorSetProtoBuf(t *testing.T) {
 		expPass2 bool
 	}{
 		{"success", valset, true, true},
-		{"fail valSet2, pubkey empty", valset2, false, false},
 		{"fail nil Proposer", valset3, false, false},
-		{"fail empty Proposer", valset4, false, false},
 		{"fail empty valSet", &ValidatorSet{}, true, false},
 		{"false nil", nil, true, false},
 	}
@@ -1531,7 +1517,7 @@ func BenchmarkUpdates(b *testing.B) {
 	)
 	// Init with n validators
 	vs := make([]*Validator, n)
-	for j := 0; j < n; j++ {
+	for j := range n {
 		vs[j] = newValidator([]byte(fmt.Sprintf("v%d", j)), 100)
 	}
 	valSet := NewValidatorSet(vs)
@@ -1566,7 +1552,7 @@ func BenchmarkValidatorSet_VerifyCommit_Ed25519(b *testing.B) { // nolint
 			// generate n validators
 			voteSet, valSet, vals := randVoteSet(ctx, b, h, 0, tmproto.PrecommitType, n, int64(n*5))
 			// create a commit with n validators
-			commit, err := makeCommit(ctx, blockID, h, 0, voteSet, vals, time.Now())
+			commit, err := MakeCommit(ctx, blockID, h, 0, voteSet, vals, time.Now())
 			require.NoError(b, err)
 
 			for i := 0; i < b.N/n; i++ {
@@ -1593,7 +1579,7 @@ func BenchmarkValidatorSet_VerifyCommitLight_Ed25519(b *testing.B) { // nolint
 			voteSet, valSet, vals := randVoteSet(ctx, b, h, 0, tmproto.PrecommitType, n, int64(n*5))
 
 			// create a commit with n validators
-			commit, err := makeCommit(ctx, blockID, h, 0, voteSet, vals, time.Now())
+			commit, err := MakeCommit(ctx, blockID, h, 0, voteSet, vals, time.Now())
 			require.NoError(b, err)
 
 			for i := 0; i < b.N/n; i++ {
@@ -1619,7 +1605,7 @@ func BenchmarkValidatorSet_VerifyCommitLightTrusting_Ed25519(b *testing.B) {
 			// generate n validators
 			voteSet, valSet, vals := randVoteSet(ctx, b, h, 0, tmproto.PrecommitType, n, int64(n*5))
 			// create a commit with n validators
-			commit, err := makeCommit(ctx, blockID, h, 0, voteSet, vals, time.Now())
+			commit, err := MakeCommit(ctx, blockID, h, 0, voteSet, vals, time.Now())
 			require.NoError(b, err)
 
 			for i := 0; i < b.N/n; i++ {
@@ -1644,9 +1630,9 @@ func deterministicValidatorSet(ctx context.Context, t *testing.T) (*ValidatorSet
 
 	t.Helper()
 
-	for i := 0; i < 10; i++ {
-		// val, privValidator := DeterministicValidator(ed25519.PrivKey([]byte(deterministicKeys[i])))
-		val, privValidator := deterministicValidator(ctx, t, ed25519.GenPrivKeyFromSecret([]byte(fmt.Sprintf("key: %x", i))))
+	for i := range 10 {
+		// WARNING: this key has to be stable, otherwise hashes break.
+		val, privValidator := deterministicValidator(ctx, t, ed25519.TestSecretKey(fmt.Appendf(nil, "key: %x", i)))
 		valz[i] = val
 		privValidators[i] = privValidator
 	}

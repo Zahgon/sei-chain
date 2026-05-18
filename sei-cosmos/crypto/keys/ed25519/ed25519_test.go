@@ -5,17 +5,17 @@ import (
 	"encoding/base64"
 	"testing"
 
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	tmed25519 "github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/crypto"
-	tmed25519 "github.com/tendermint/tendermint/crypto/ed25519"
 
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/codec/types"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/ed25519"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 )
 
 func TestSignAndValidateEd25519(t *testing.T) {
@@ -139,7 +139,7 @@ func TestMarshalAmino(t *testing.T) {
 	testCases := []struct {
 		desc      string
 		msg       codec.AminoMarshaler
-		typ       interface{}
+		typ       any
 		expBinary []byte
 		expJSON   string
 	}{
@@ -172,11 +172,11 @@ func TestMarshalAmino(t *testing.T) {
 			require.Equal(t, tc.msg, tc.typ)
 
 			// Do a round trip of encoding/decoding JSON.
-			bz, err = aminoCdc.MarshalJSON(tc.msg)
+			bz, err = aminoCdc.MarshalAsJSON(tc.msg)
 			require.NoError(t, err)
 			require.Equal(t, tc.expJSON, string(bz))
 
-			err = aminoCdc.UnmarshalJSON(bz, tc.typ)
+			err = aminoCdc.UnmarshalAsJSON(bz, tc.typ)
 			require.NoError(t, err)
 
 			require.Equal(t, tc.msg, tc.typ)
@@ -187,17 +187,17 @@ func TestMarshalAmino(t *testing.T) {
 func TestMarshalAmino_BackwardsCompatibility(t *testing.T) {
 	aminoCdc := codec.NewLegacyAmino()
 	// Create Tendermint keys.
-	tmPrivKey := tmed25519.GenPrivKey()
-	tmPubKey := tmPrivKey.PubKey()
+	tmPrivKey := tmed25519.GenerateSecretKey()
+	tmPubKey := tmPrivKey.Public()
 	// Create our own keys, with the same private key as Tendermint's.
-	privKey := &ed25519.PrivKey{Key: []byte(tmPrivKey)}
+	privKey := &ed25519.PrivKey{Key: tmPrivKey.SecretBytes()}
 	pubKey := privKey.PubKey().(*ed25519.PubKey)
 
 	testCases := []struct {
 		desc      string
-		tmKey     interface{}
-		ourKey    interface{}
-		marshalFn func(o interface{}) ([]byte, error)
+		tmKey     any
+		ourKey    any
+		marshalFn func(o any) ([]byte, error)
 	}{
 		{
 			"ed25519 private key, binary",
@@ -209,7 +209,7 @@ func TestMarshalAmino_BackwardsCompatibility(t *testing.T) {
 			"ed25519 private key, JSON",
 			tmPrivKey,
 			privKey,
-			aminoCdc.MarshalJSON,
+			aminoCdc.MarshalAsJSON,
 		},
 		{
 			"ed25519 public key, binary",
@@ -221,7 +221,7 @@ func TestMarshalAmino_BackwardsCompatibility(t *testing.T) {
 			"ed25519 public key, JSON",
 			tmPubKey,
 			pubKey,
-			aminoCdc.MarshalJSON,
+			aminoCdc.MarshalAsJSON,
 		},
 	}
 

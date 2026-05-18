@@ -2,11 +2,12 @@ package blocksync
 
 import (
 	"context"
-	"os"
+	"runtime"
+	"strings"
 	"testing"
 	"time"
 
-	"github.com/tendermint/tendermint/internal/mempool"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
 
 	"github.com/fortytw2/leaktest"
 	"github.com/stretchr/testify/assert"
@@ -14,34 +15,25 @@ import (
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
-	abciclient "github.com/tendermint/tendermint/abci/client"
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/config"
-	"github.com/tendermint/tendermint/internal/consensus"
-	"github.com/tendermint/tendermint/internal/eventbus"
-	mpmocks "github.com/tendermint/tendermint/internal/mempool/mocks"
-	"github.com/tendermint/tendermint/internal/p2p"
-	"github.com/tendermint/tendermint/internal/proxy"
-	sm "github.com/tendermint/tendermint/internal/state"
-	sf "github.com/tendermint/tendermint/internal/state/test/factory"
-	"github.com/tendermint/tendermint/internal/store"
-	"github.com/tendermint/tendermint/internal/test/factory"
-	"github.com/tendermint/tendermint/libs/log"
-	bcproto "github.com/tendermint/tendermint/proto/tendermint/blocksync"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/consensus"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/eventbus"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/proxy"
+	sm "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
+	sf "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/test/factory"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/store"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/test/factory"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 type reactorTestSuite struct {
 	network *p2p.TestNetwork
-	logger  log.Logger
 	nodes   []types.NodeID
 
 	reactors map[types.NodeID]*Reactor
-	app      map[types.NodeID]abciclient.Client
-
-	blockSyncChannels map[types.NodeID]*p2p.Channel
-	peerChans         map[types.NodeID]chan p2p.PeerUpdate
-	peerUpdates       map[types.NodeID]*p2p.PeerUpdates
 }
 
 func setup(
@@ -60,30 +52,14 @@ func setup(
 	require.True(t, numNodes >= 1,
 		"must specify at least one block height (nodes)")
 
-	logger, _ := log.NewDefaultLogger("plain", "info")
 	rts := &reactorTestSuite{
-		logger:            logger.With("module", "block_sync", "testCase", t.Name()),
-		network:           p2p.MakeTestNetwork(t, p2p.TestNetworkOptions{NumNodes: numNodes}),
-		nodes:             make([]types.NodeID, 0, numNodes),
-		reactors:          make(map[types.NodeID]*Reactor, numNodes),
-		app:               make(map[types.NodeID]abciclient.Client, numNodes),
-		blockSyncChannels: make(map[types.NodeID]*p2p.Channel, numNodes),
-		peerChans:         make(map[types.NodeID]chan p2p.PeerUpdate, numNodes),
-		peerUpdates:       make(map[types.NodeID]*p2p.PeerUpdates, numNodes),
+		network:  p2p.MakeTestNetwork(t, p2p.TestNetworkOptions{NumNodes: numNodes}),
+		nodes:    make([]types.NodeID, 0, numNodes),
+		reactors: make(map[types.NodeID]*Reactor, numNodes),
 	}
 
-	chDesc := &p2p.ChannelDescriptor{
-		ID:                 BlockSyncChannel,
-		MessageType:        new(bcproto.Message),
-		RecvBufferCapacity: 32,
-	}
-	rts.blockSyncChannels = rts.network.MakeChannelsNoCleanup(t, chDesc)
-
-	i := 0
-	for _, nodeID := range rts.network.NodeIDs() {
+	for i, nodeID := range rts.network.NodeIDs() {
 		rts.addNode(ctx, t, nodeID, genDoc, privVal, maxBlockHeights[i])
-		rts.reactors[nodeID].SetChannel(rts.blockSyncChannels[nodeID])
-		i++
 	}
 
 	t.Cleanup(func() {
@@ -91,7 +67,6 @@ func setup(
 		for _, nodeID := range rts.nodes {
 			if rts.reactors[nodeID].IsRunning() {
 				rts.reactors[nodeID].Wait()
-				rts.app[nodeID].Wait()
 
 				require.False(t, rts.reactors[nodeID].IsRunning())
 			}
@@ -106,67 +81,53 @@ func makeReactor(
 	ctx context.Context,
 	t *testing.T,
 	genDoc *types.GenesisDoc,
-	peerEvents p2p.PeerEventSubscriber,
-	peerManager *p2p.PeerManager,
-	restartChan chan struct{},
+	router *p2p.Router,
+	restartEvent func(),
 	selfRemediationConfig *config.SelfRemediationConfig,
 ) *Reactor {
 
-	logger := log.NewNopLogger()
-
-	app := proxy.New(abciclient.NewLocalClient(logger, &abci.BaseApplication{}), logger, proxy.NopMetrics())
-	require.NoError(t, app.Start(ctx))
+	app := abci.BaseApplication{}
 
 	blockDB := dbm.NewMemDB()
 	stateDB := dbm.NewMemDB()
 	stateStore := sm.NewStore(stateDB)
 	blockStore := store.NewBlockStore(blockDB)
+	proxyApp := proxy.New(app, proxy.NopMetrics())
 
 	state, err := sm.MakeGenesisState(genDoc)
 	require.NoError(t, err)
 	require.NoError(t, stateStore.Save(state))
-	mp := &mpmocks.Mempool{}
-	mp.On("Lock").Return()
-	mp.On("Unlock").Return()
-	mp.On("FlushAppConn", mock.Anything).Return(nil)
-	mp.On("Update",
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything,
-		mock.Anything).Return(nil)
-	mp.On("TxStore").Return(&mempool.TxStore{})
-
-	eventbus := eventbus.NewDefault(logger)
+	mp := mempool.NewTxMempool(mempool.TestConfig(), proxyApp, mempool.NopMetrics(), mempool.NopTxConstraintsFetcher)
+	eventbus := eventbus.NewDefault()
 	require.NoError(t, eventbus.Start(ctx))
 
 	blockExec := sm.NewBlockExecutor(
 		stateStore,
-		log.NewNopLogger(),
-		app,
+		proxyApp,
 		mp,
 		sm.EmptyEvidencePool{},
 		blockStore,
 		eventbus,
 		sm.NopMetrics(),
+		types.DefaultConsensusPolicy(),
 	)
 
-	return NewReactor(
-		logger,
+	r, err := NewReactor(
 		stateStore,
 		blockExec,
 		blockStore,
 		nil,
-		peerEvents,
-		peerManager,
+		router,
 		true,
 		consensus.NopMetrics(),
 		nil, // eventbus, can be nil
-		restartChan,
+		restartEvent,
 		selfRemediationConfig,
 	)
+	if err != nil {
+		t.Fatalf("NewReactor(): %v", err)
+	}
+	return r
 }
 
 func (rts *reactorTestSuite) addNode(
@@ -179,18 +140,8 @@ func (rts *reactorTestSuite) addNode(
 ) {
 	t.Helper()
 
-	logger := log.NewNopLogger()
-
 	rts.nodes = append(rts.nodes, nodeID)
-	rts.app[nodeID] = proxy.New(abciclient.NewLocalClient(logger, &abci.BaseApplication{}), logger, proxy.NopMetrics())
-	require.NoError(t, rts.app[nodeID].Start(ctx))
 
-	rts.peerChans[nodeID] = make(chan p2p.PeerUpdate)
-	rts.peerUpdates[nodeID] = p2p.NewPeerUpdates(rts.peerChans[nodeID], 1)
-	rts.network.Node(nodeID).PeerManager.Register(ctx, rts.peerUpdates[nodeID])
-
-	peerEvents := func(ctx context.Context) *p2p.PeerUpdates { return rts.peerUpdates[nodeID] }
-	restartChan := make(chan struct{})
 	remediationConfig := config.DefaultSelfRemediationConfig()
 	remediationConfig.BlocksBehindThreshold = 1000
 
@@ -198,13 +149,10 @@ func (rts *reactorTestSuite) addNode(
 		ctx,
 		t,
 		genDoc,
-		peerEvents,
-		rts.network.Node(nodeID).PeerManager,
-		restartChan,
+		rts.network.Node(nodeID).Router,
+		func() {},
 		config.DefaultSelfRemediationConfig(),
 	)
-
-	reactor.SetChannel(rts.blockSyncChannels[nodeID])
 	lastCommit := &types.Commit{}
 
 	state, err := reactor.stateStore.Load()
@@ -260,10 +208,6 @@ func makeNextBlock(ctx context.Context,
 func (rts *reactorTestSuite) start(t *testing.T) {
 	t.Helper()
 	rts.network.Start(t)
-	require.Len(t,
-		rts.network.RandomNode().PeerManager.Peers(),
-		len(rts.nodes)-1,
-		"network does not have expected number of nodes")
 }
 
 func TestReactor_AbruptDisconnect(t *testing.T) {
@@ -271,9 +215,8 @@ func TestReactor_AbruptDisconnect(t *testing.T) {
 
 	cfg, err := config.ResetTestRoot(t.TempDir(), "block_sync_reactor_test")
 	require.NoError(t, err)
-	defer os.RemoveAll(cfg.RootDir)
 
-	valSet, privVals := factory.ValidatorSet(ctx, t, 1, 30)
+	valSet, privVals := factory.ValidatorSet(ctx, 1, 30)
 	genDoc := factory.GenesisDoc(cfg, time.Now(), valSet.Validators, factory.ConsensusParams())
 	maxBlockHeight := int64(64)
 
@@ -289,7 +232,7 @@ func TestReactor_AbruptDisconnect(t *testing.T) {
 		t,
 		func() bool {
 			height, _, _ := secondaryPool.GetStatus()
-			return secondaryPool.MaxPeerHeight() > 0 && height > 0 && height < 10
+			return secondaryPool.MaxPeerHeight() == maxBlockHeight && height > 0 && height <= maxBlockHeight
 		},
 		10*time.Second,
 		10*time.Millisecond,
@@ -298,11 +241,86 @@ func TestReactor_AbruptDisconnect(t *testing.T) {
 
 	// Remove synced node from the syncing node which should not result in any
 	// deadlocks or race conditions within the context of poolRoutine.
-	rts.peerChans[rts.nodes[1]] <- p2p.PeerUpdate{
-		Status: p2p.PeerStatusDown,
-		NodeID: rts.nodes[0],
+	rts.network.Remove(t, rts.nodes[0])
+}
+
+// TestReactor_OnStopWaitsForGoroutines is a regression test for the
+// "panic: leveldb/table: reader released" shutdown panic seen on v6.4.4
+// sentry nodes. Before the fix, blocksync's long-running goroutines
+// (Reactor.requestRoutine, Reactor.poolRoutine, Reactor.processBlockSyncCh,
+// Reactor.processPeerUpdates, Reactor.autoRestartIfBehind, and
+// BlockPool.makeRequestersRoutine) were started with raw `go fn(ctx)` using
+// the outer ctx, instead of `Spawn(...)` which would register them with the
+// BaseService WaitGroup and bind them to BaseService.inner.ctx. As a result,
+// Reactor.Stop() / BlockPool.Stop() — which cancels only the inner ctx —
+// did not signal these goroutines to exit, let alone wait for them. The
+// node's OnStop then proceeded to n.blockStore.Close() while poolRoutine
+// was still mid-SaveBlock -> Base() -> bs.db.Iterator, causing goleveldb to
+// panic when the table reader was released underneath the live iterator.
+//
+// This test asserts the fix: after `reactor.Stop()` returns, the
+// blocksync-package goroutines have exited. The outer ctx is still live at
+// this point in the test, so the unfixed code keeps them running and the
+// assertion fails deterministically. On failure the live goroutine stacks
+// are dumped to make the leak obvious.
+func TestReactor_OnStopWaitsForGoroutines(t *testing.T) {
+	ctx := t.Context()
+
+	cfg, err := config.ResetTestRoot(t.TempDir(), "block_sync_reactor_stop_test")
+	require.NoError(t, err)
+
+	valSet, privVals := factory.ValidatorSet(ctx, 1, 30)
+	genDoc := factory.GenesisDoc(cfg, time.Now(), valSet.Validators, factory.ConsensusParams())
+
+	rts := setup(ctx, t, genDoc, privVals[0], []int64{0})
+
+	reactor := rts.reactors[rts.nodes[0]]
+	require.True(t, reactor.IsRunning())
+
+	dumpBlocksyncGoroutines := func() (string, int) {
+		buf := make([]byte, 1<<20)
+		n := runtime.Stack(buf, true)
+		var out strings.Builder
+		count := 0
+		for _, g := range strings.Split(string(buf[:n]), "\n\n") {
+			if !strings.Contains(g, "/internal/blocksync.") {
+				continue
+			}
+			// The test functions themselves live in the blocksync package, so
+			// runtime.Stack reports them as matches. Only count background
+			// routines spawned by Reactor.OnStart and BlockPool.OnStart,
+			// which are created by libs/service.Spawn, not testing.tRunner.
+			if strings.Contains(g, "testing.tRunner") {
+				continue
+			}
+			out.WriteString(g)
+			out.WriteString("\n\n")
+			count++
+		}
+		return out.String(), count
 	}
-	rts.network.Node(rts.nodes[1]).PeerManager.Disconnected(ctx, rts.nodes[0])
+
+	// OnStart Spawns 5 reactor routines and BlockPool.OnStart Spawns 1.
+	require.Eventually(t, func() bool {
+		_, c := dumpBlocksyncGoroutines()
+		return c >= 6
+	}, 5*time.Second, 10*time.Millisecond, "blocksync goroutines did not start")
+
+	reactor.Stop()
+	require.False(t, reactor.IsRunning())
+
+	deadline := time.Now().Add(2 * time.Second)
+	for time.Now().Before(deadline) {
+		if _, c := dumpBlocksyncGoroutines(); c == 0 {
+			return
+		}
+		time.Sleep(time.Millisecond)
+	}
+	dump, c := dumpBlocksyncGoroutines()
+	t.Fatalf("%d blocksync goroutine(s) still alive after Reactor.Stop() returned. "+
+		"This means at least one routine was not registered with the "+
+		"BaseService WaitGroup via Spawn(), so Stop did not wait for it. "+
+		"Live stacks:\n\n%s", c, dump)
 }
 
 func TestReactor_SyncTime(t *testing.T) {
@@ -310,9 +328,8 @@ func TestReactor_SyncTime(t *testing.T) {
 
 	cfg, err := config.ResetTestRoot(t.TempDir(), "block_sync_reactor_test")
 	require.NoError(t, err)
-	defer os.RemoveAll(cfg.RootDir)
 
-	valSet, privVals := factory.ValidatorSet(ctx, t, 1, 30)
+	valSet, privVals := factory.ValidatorSet(ctx, 1, 30)
 	genDoc := factory.GenesisDoc(cfg, time.Now(), valSet.Validators, factory.ConsensusParams())
 	maxBlockHeight := int64(101)
 
@@ -398,32 +415,29 @@ func TestAutoRestartIfBehind(t *testing.T) {
 			mockBlockStore.On("Height").Return(tt.selfHeight)
 
 			blockPool := &BlockPool{
-				logger:        log.TestingLogger(),
 				height:        tt.selfHeight,
 				maxPeerHeight: tt.maxPeerHeight,
 			}
 
-			restartChan := make(chan struct{}, 1)
+			restart := utils.NewAtomicSend(false)
 			r := &Reactor{
-				logger:                    log.TestingLogger(),
 				store:                     mockBlockStore,
 				pool:                      blockPool,
 				blocksBehindThreshold:     tt.blocksBehindThreshold,
 				blocksBehindCheckInterval: tt.blocksBehindCheckInterval,
-				restartCh:                 restartChan,
+				restartEvent:              func() { restart.Store(true) },
 				blockSync:                 newAtomicBool(tt.isBlockSync),
 			}
 
-			ctx, cancel := context.WithTimeout(t.Context(), 200*time.Millisecond)
-			defer cancel()
-
-			go r.autoRestartIfBehind(ctx)
-
-			select {
-			case <-restartChan:
-				assert.True(t, tt.restartExpected, "Unexpected restart")
-			case <-time.After(50 * time.Millisecond):
-				assert.False(t, tt.restartExpected, "Expected restart but did not occur")
+			ctx := t.Context()
+			if tt.restartExpected {
+				r.autoRestartIfBehind(ctx)
+				assert.True(t, restart.Load(), "Expected restart but did not occur")
+			} else {
+				ctx, cancel := context.WithTimeout(t.Context(), 50*time.Millisecond)
+				defer cancel()
+				r.autoRestartIfBehind(ctx)
+				assert.False(t, restart.Load(), "Unexpected restart")
 			}
 		})
 	}

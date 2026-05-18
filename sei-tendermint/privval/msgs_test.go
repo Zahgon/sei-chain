@@ -8,13 +8,12 @@ import (
 	"github.com/gogo/protobuf/proto"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/crypto/encoding"
-	cryptoproto "github.com/tendermint/tendermint/proto/tendermint/crypto"
-	privproto "github.com/tendermint/tendermint/proto/tendermint/privval"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	cryptoproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/crypto"
+	privproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/privval"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 var stamp = time.Date(2019, 10, 13, 16, 14, 44, 0, time.UTC)
@@ -24,7 +23,7 @@ func exampleVote() *types.Vote {
 		Type:             tmproto.PrecommitType,
 		Height:           3,
 		Round:            2,
-		BlockID:          types.BlockID{Hash: crypto.Checksum([]byte("blockID_hash")), PartSetHeader: types.PartSetHeader{Total: 1000000, Hash: crypto.Checksum([]byte("blockID_part_set_header_hash"))}},
+		BlockID:          types.BlockID{Hash: crypto.Checksum([]byte("blockID_hash")).Bytes(), PartSetHeader: types.PartSetHeader{Total: 1000000, Hash: crypto.Checksum([]byte("blockID_part_set_header_hash")).Bytes()}},
 		Timestamp:        stamp,
 		ValidatorAddress: crypto.AddressHash([]byte("validator_address")),
 		ValidatorIndex:   56789,
@@ -39,21 +38,20 @@ func exampleProposal() *types.Proposal {
 		Round:     2,
 		Timestamp: stamp,
 		POLRound:  2,
-		Signature: []byte("it's a signature"),
 		BlockID: types.BlockID{
-			Hash: crypto.Checksum([]byte("blockID_hash")),
+			Hash: crypto.Checksum([]byte("blockID_hash")).Bytes(),
 			PartSetHeader: types.PartSetHeader{
 				Total: 1000000,
-				Hash:  crypto.Checksum([]byte("blockID_part_set_header_hash")),
+				Hash:  crypto.Checksum([]byte("blockID_part_set_header_hash")).Bytes(),
 			},
 		},
 	}
 }
 
 func TestPrivvalVectors(t *testing.T) {
-	pk := ed25519.GenPrivKeyFromSecret([]byte("it's a secret")).PubKey()
-	ppk, err := encoding.PubKeyToProto(pk)
-	require.NoError(t, err)
+	// WARNING: this key has to be stable for hashes to match.
+	pk := ed25519.TestSecretKey([]byte("it's a secret")).Public()
+	ppk := crypto.PubKeyToProto(pk)
 
 	// Generate a simple vote
 	vote := exampleVote()
@@ -62,6 +60,8 @@ func TestPrivvalVectors(t *testing.T) {
 	// Generate a simple proposal
 	proposal := exampleProposal()
 	proposalpb := proposal.ToProto()
+	// we set invalid signature for the hashes to match.
+	proposalpb.Signature = []byte("it's a signature")
 
 	// Create a Reuseable remote error
 	remoteError := &privproto.RemoteSignerError{Code: 1, Description: "it's a error"}

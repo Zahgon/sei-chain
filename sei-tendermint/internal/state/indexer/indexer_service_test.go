@@ -14,13 +14,12 @@ import (
 	"github.com/stretchr/testify/require"
 	dbm "github.com/tendermint/tm-db"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/internal/eventbus"
-	"github.com/tendermint/tendermint/internal/state/indexer"
-	"github.com/tendermint/tendermint/internal/state/indexer/sink/kv"
-	"github.com/tendermint/tendermint/internal/state/indexer/sink/psql"
-	tmlog "github.com/tendermint/tendermint/libs/log"
-	"github.com/tendermint/tendermint/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/eventbus"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer/sink/kv"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer/sink/psql"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 
 	// Register the Postgre database driver.
 	_ "github.com/lib/pq"
@@ -41,9 +40,8 @@ var (
 func TestIndexerServiceIndexesBlocks(t *testing.T) {
 	ctx := t.Context()
 
-	logger := tmlog.NewNopLogger()
 	// event bus
-	eventBus := eventbus.NewDefault(logger)
+	eventBus := eventbus.NewDefault()
 	err := eventBus.Start(ctx)
 	require.NoError(t, err)
 	t.Cleanup(eventBus.Wait)
@@ -60,7 +58,6 @@ func TestIndexerServiceIndexesBlocks(t *testing.T) {
 	assert.True(t, indexer.IndexingEnabled(eventSinks))
 
 	service := indexer.NewService(indexer.ServiceArgs{
-		Logger:   logger,
 		Sinks:    eventSinks,
 		EventBus: eventBus,
 	})
@@ -73,26 +70,26 @@ func TestIndexerServiceIndexesBlocks(t *testing.T) {
 		NumTxs: int64(2),
 	})
 	require.NoError(t, err)
-	txResult1 := &abci.TxResult{
+	txResult1 := &abci.TxResultV2{
 		Height: 1,
 		Index:  uint32(0),
 		Tx:     types.Tx("foo"),
 		Result: abci.ExecTxResult{Code: 0},
 	}
-	err = eventBus.PublishEventTx(types.EventDataTx{TxResult: *txResult1})
+	err = eventBus.PublishEventTx(types.EventDataTx{TxResultV2: *txResult1})
 	require.NoError(t, err)
-	txResult2 := &abci.TxResult{
+	txResult2 := &abci.TxResultV2{
 		Height: 1,
 		Index:  uint32(1),
 		Tx:     types.Tx("bar"),
 		Result: abci.ExecTxResult{Code: 0},
 	}
-	err = eventBus.PublishEventTx(types.EventDataTx{TxResult: *txResult2})
+	err = eventBus.PublishEventTx(types.EventDataTx{TxResultV2: *txResult2})
 	require.NoError(t, err)
 
 	time.Sleep(100 * time.Millisecond)
 
-	res, err := eventSinks[0].GetTxByHash(types.Tx("foo").Hash())
+	res, err := eventSinks[0].GetTxByHash(types.Tx("foo").Hash().Bytes())
 	require.NoError(t, err)
 	require.Equal(t, txResult1, res)
 
@@ -100,7 +97,7 @@ func TestIndexerServiceIndexesBlocks(t *testing.T) {
 	require.NoError(t, err)
 	require.True(t, ok)
 
-	res, err = eventSinks[0].GetTxByHash(types.Tx("bar").Hash())
+	res, err = eventSinks[0].GetTxByHash(types.Tx("bar").Hash().Bytes())
 	require.NoError(t, err)
 	require.Equal(t, txResult2, res)
 

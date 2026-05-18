@@ -10,14 +10,15 @@ import (
 	"strings"
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/rpc"
 	"github.com/sei-protocol/sei-chain/app"
 	"github.com/sei-protocol/sei-chain/evmrpc"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/stretchr/testify/require"
-	abci "github.com/tendermint/tendermint/abci/types"
 )
 
 func TestGetBalance(t *testing.T) {
@@ -206,17 +207,33 @@ func TestGetStorageAt(t *testing.T) {
 }
 
 func TestGetProof(t *testing.T) {
-	testApp := app.Setup(false, false, false)
+	testApp := app.Setup(t, false, false, false)
 	_, evmAddr := testkeeper.MockAddressPair()
 	key, val := []byte("test"), []byte("abc")
 	testApp.EvmKeeper.SetState(testApp.GetContextForDeliverTx([]byte{}), evmAddr, common.BytesToHash(key), common.BytesToHash(val))
 	for i := 0; i < MockHeight8; i++ {
-		testApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{Height: int64(i + 1)})
+		_, err := testApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{Header: &tmproto.Header{ChainID: testApp.ChainID, Height: int64(i + 1)}})
+		require.NoError(t, err)
 		testApp.SetDeliverStateToCommit()
-		_, err := testApp.Commit(context.Background())
-		require.Nil(t, err)
+		_, err = testApp.Commit(context.Background())
+		require.NoError(t, err)
 	}
-	stateAPI := evmrpc.NewStateAPI(&MockClient{}, &testApp.EvmKeeper, func(int64) sdk.Context { return testApp.GetCheckCtx() }, evmrpc.ConnectionTypeHTTP)
+	if store := testApp.EvmKeeper.ReceiptStore(); store != nil {
+		require.NoError(t, store.SetLatestVersion(MockHeight8))
+		require.NoError(t, store.SetEarliestVersion(1))
+	}
+	client := &MockClient{}
+	ctxProvider := func(height int64) sdk.Context {
+		ctx := testApp.GetCheckCtx()
+		switch {
+		case height == evmrpc.LatestCtxHeight || height <= 0:
+			return ctx.WithBlockHeight(MockHeight8)
+		default:
+			return ctx.WithBlockHeight(height)
+		}
+	}
+	watermarks := evmrpc.NewWatermarkManager(client, ctxProvider, nil, testApp.EvmKeeper.ReceiptStore())
+	stateAPI := evmrpc.NewStateAPI(client, &testApp.EvmKeeper, ctxProvider, evmrpc.ConnectionTypeHTTP, watermarks)
 	require.Equal(t, "0x0000000000000000000000000000000000000000000000000000000000616263", testApp.EvmKeeper.GetState(testApp.GetCheckCtx(), evmAddr, common.BytesToHash(key)).Hex())
 	tests := []struct {
 		key         string

@@ -1,11 +1,11 @@
 package types_test
 
 import (
-	"github.com/cosmos/cosmos-sdk/simapp"
+	"github.com/sei-protocol/sei-chain/app"
 )
 
 var (
-	app                   = simapp.Setup(false)
-	ecdc                  = simapp.MakeTestEncodingConfig()
-	appCodec, legacyAmino = ecdc.Marshaler, ecdc.Amino
+	a        = app.SetupWithDefaultHome(false, false, false)
+	ecdc     = app.MakeEncodingConfig()
+	appCodec = ecdc.Marshaler
 )

@@ -2,21 +2,19 @@ package client_test
 
 import (
 	"bytes"
-	"context"
 	"os"
 	"testing"
 
 	"github.com/spf13/viper"
 	"github.com/stretchr/testify/require"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/codec"
-	"github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	"github.com/cosmos/cosmos-sdk/testutil/network"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/hd"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keyring"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
 )
 
 func TestMain(m *testing.M) {
@@ -102,19 +100,6 @@ value:
 `, buf.String())
 }
 
-func TestCLIQueryConn(t *testing.T) {
-	cfg := network.DefaultConfig()
-	cfg.NumValidators = 1
-
-	n := network.New(t, cfg)
-	defer n.Cleanup()
-
-	testClient := testdata.NewQueryClient(n.Validators[0].ClientCtx)
-	res, err := testClient.Echo(context.Background(), &testdata.EchoRequest{Message: "hello"})
-	require.NoError(t, err)
-	require.Equal(t, "hello", res.Message)
-}
-
 func TestGetFromFields(t *testing.T) {
 	path := hd.CreateHDPath(118, 0, 0).String()
 	testCases := []struct {
@@ -154,7 +139,7 @@ func TestGetFromFields(t *testing.T) {
 			keyring: func() keyring.Keyring {
 				return keyring.NewInMemory()
 			},
-			from:        "cosmos139f7kncmglres2nf3h4hc4tade85ekfr8sulz5",
+			from:        "sei139f7kncmglres2nf3h4hc4tade85ekfr8sulz5",
 			expectedErr: "key not found",
 		},
 		{
@@ -171,7 +156,7 @@ func TestGetFromFields(t *testing.T) {
 			keyring: func() keyring.Keyring {
 				return keyring.NewInMemory()
 			},
-			from:      "cosmos139f7kncmglres2nf3h4hc4tade85ekfr8sulz5",
+			from:      "sei139f7kncmglres2nf3h4hc4tade85ekfr2udfy4",
 			clientCtx: client.Context{}.WithSimulation(true),
 		},
 		{
@@ -188,7 +173,7 @@ func TestGetFromFields(t *testing.T) {
 			keyring: func() keyring.Keyring {
 				return keyring.NewInMemory()
 			},
-			from:      "cosmos139f7kncmglres2nf3h4hc4tade85ekfr8sulz5",
+			from:      "sei139f7kncmglres2nf3h4hc4tade85ekfr2udfy4",
 			clientCtx: client.Context{}.WithGenerateOnly(true),
 		},
 		{

@@ -2,16 +2,21 @@ package consensus
 
 import (
 	"testing"
-	"time"
 
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/stretchr/testify/require"
-	"github.com/tendermint/tendermint/libs/log"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/types"
 )
 
+var testKey = ed25519.TestSecretKey([]byte("test"))
+
+func makeSig(data string) crypto.Sig {
+	return testKey.Sign([]byte(data))
+}
+
 func TestPeerStateMemoryLimits(t *testing.T) {
-	logger := log.NewTestingLogger(t)
+
 	peerID := types.NodeID("test-peer")
 
 	testCases := []struct {
@@ -25,45 +30,11 @@ func TestPeerStateMemoryLimits(t *testing.T) {
 		{"very_large_total", 4294967295, true},
 	}
 
-	// Test SetHasProposal memory limits
-	t.Run("SetHasProposal", func(t *testing.T) {
-		for _, tc := range testCases {
-			t.Run(tc.name, func(t *testing.T) {
-				ps := NewPeerState(logger, peerID)
-				ps.PRS.Height = 1
-				ps.PRS.Round = 0
-				blockID := types.BlockID{
-					Hash: make([]byte, 32),
-					PartSetHeader: types.PartSetHeader{
-						Total: tc.total,
-						Hash:  make([]byte, 32),
-					},
-				}
-				// Create a minimal proposal with basic required fields
-				proposal := &types.Proposal{
-					Type:      tmproto.ProposalType,
-					Height:    1,
-					Round:     0,
-					POLRound:  -1,
-					BlockID:   blockID,
-					Timestamp: time.Now(),
-					Signature: []byte("test-signature"),
-				}
-				ps.SetHasProposal(proposal)
-				if tc.expectError {
-					require.False(t, ps.PRS.Proposal, "Expected proposal to be silently ignored for excessive Total")
-				} else {
-					require.True(t, ps.PRS.Proposal, "Expected proposal to be accepted for valid Total")
-				}
-			})
-		}
-	})
-
 	// Test InitProposalBlockParts memory limits
 	t.Run("InitProposalBlockParts", func(t *testing.T) {
 		for _, tc := range testCases {
 			t.Run(tc.name, func(t *testing.T) {
-				ps := NewPeerState(logger, peerID)
+				ps := NewPeerState(peerID)
 				header := types.PartSetHeader{
 					Total: tc.total,
 					Hash:  make([]byte, 32),

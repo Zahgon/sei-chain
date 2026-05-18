@@ -7,12 +7,13 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	"github.com/tendermint/tendermint/privval"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/rpc/client"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/privval"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func newEvidence(t *testing.T, val *privval.FilePV,
@@ -26,11 +27,9 @@ func newEvidence(t *testing.T, val *privval.FilePV,
 	v := vote.ToProto()
 	v2 := vote2.ToProto()
 
-	vote.Signature, err = val.Key.PrivKey.Sign(types.VoteSignBytes(chainID, v))
-	require.NoError(t, err)
+	vote.Signature = utils.Some(val.Key.PrivKey.Sign(types.VoteSignBytes(chainID, v)))
 
-	vote2.Signature, err = val.Key.PrivKey.Sign(types.VoteSignBytes(chainID, v2))
-	require.NoError(t, err)
+	vote2.Signature = utils.Some(val.Key.PrivKey.Sign(types.VoteSignBytes(chainID, v2)))
 
 	validator := types.NewValidator(val.Key.PubKey, 10)
 	valSet := types.NewValidatorSet([]*types.Validator{validator})
@@ -54,16 +53,16 @@ func makeEvidences(
 		Type:             tmproto.PrevoteType,
 		Timestamp:        timestamp,
 		BlockID: types.BlockID{
-			Hash: crypto.Checksum(tmrand.Bytes(crypto.HashSize)),
+			Hash: crypto.Checksum(tmrand.Bytes(crypto.HashSize)).Bytes(),
 			PartSetHeader: types.PartSetHeader{
-				Total: 1000,
-				Hash:  crypto.Checksum([]byte("partset")),
+				Total: types.MaxBlockPartsCount,
+				Hash:  crypto.Checksum([]byte("partset")).Bytes(),
 			},
 		},
 	}
 
 	vote2 := vote
-	vote2.BlockID.Hash = crypto.Checksum([]byte("blockhash2"))
+	vote2.BlockID.Hash = crypto.Checksum([]byte("blockhash2")).Bytes()
 	correct = newEvidence(t, val, &vote, &vote2, chainID, timestamp)
 
 	fakes = make([]*types.DuplicateVoteEvidence, 0)

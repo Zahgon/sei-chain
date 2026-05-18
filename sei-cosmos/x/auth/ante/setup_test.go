@@ -1,11 +1,11 @@
 package ante_test
 
 import (
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante"
+	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/ante"
 )
 
 func (suite *AnteTestSuite) TestSetup() {
@@ -28,7 +28,7 @@ func (suite *AnteTestSuite) TestSetup() {
 	suite.Require().NoError(err)
 
 	sud := ante.NewDefaultSetUpContextDecorator()
-	antehandler, _ := sdk.ChainAnteDecorators(sdk.DefaultWrappedAnteDecorator(sud))
+	antehandler := sdk.ChainAnteDecorators(sud)
 
 	// Set height to non-zero value for GasMeter to be set
 	suite.ctx = suite.ctx.WithBlockHeight(1)
@@ -63,7 +63,7 @@ func (suite *AnteTestSuite) TestRecoverPanic() {
 	suite.Require().NoError(err)
 
 	sud := ante.NewDefaultSetUpContextDecorator()
-	antehandler, _ := sdk.ChainAnteDecorators(sdk.DefaultWrappedAnteDecorator(sud), sdk.DefaultWrappedAnteDecorator(OutOfGasDecorator{}))
+	antehandler := sdk.ChainAnteDecorators(sud, OutOfGasDecorator{})
 
 	// Set height to non-zero value for GasMeter to be set
 	suite.ctx = suite.ctx.WithBlockHeight(1)
@@ -75,7 +75,7 @@ func (suite *AnteTestSuite) TestRecoverPanic() {
 	suite.Require().True(sdkerrors.ErrOutOfGas.Is(err), "Returned error is not an out of gas error")
 	suite.Require().Equal(gasLimit, newCtx.GasMeter().Limit())
 
-	antehandler, _ = sdk.ChainAnteDecorators(sdk.DefaultWrappedAnteDecorator(sud), sdk.DefaultWrappedAnteDecorator(PanicDecorator{}))
+	antehandler = sdk.ChainAnteDecorators(sud, PanicDecorator{})
 	suite.Require().Panics(func() { antehandler(suite.ctx, tx, false) }, "Recovered from non-Out-of-Gas panic") // nolint:errcheck
 }
 

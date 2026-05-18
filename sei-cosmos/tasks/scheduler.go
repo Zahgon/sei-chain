@@ -3,21 +3,26 @@ package tasks
 import (
 	"context"
 	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/store/multiversion"
-	store "github.com/cosmos/cosmos-sdk/store/types"
-	"github.com/cosmos/cosmos-sdk/telemetry"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/occ"
-	"github.com/cosmos/cosmos-sdk/utils/tracing"
-	"github.com/tendermint/tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/multiversion"
+	store "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/occ"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/utils/tracing"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/seilog"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 )
+
+var logger = seilog.NewLogger("cosmos", "tasks")
 
 type status string
 
@@ -49,7 +54,7 @@ type deliverTxTask struct {
 	Dependencies  map[int]struct{}
 	Abort         *occ.Abort
 	Incarnation   int
-	Request       types.RequestDeliverTx
+	Request       types.RequestDeliverTxV2
 	SdkTx         sdk.Tx
 	Checksum      [32]byte
 	AbsoluteIndex int
@@ -101,7 +106,7 @@ type Scheduler interface {
 }
 
 type scheduler struct {
-	deliverTx          func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx)
+	deliverTx          func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx)
 	workers            int
 	multiVersionStores map[sdk.StoreKey]multiversion.MultiVersionStore
 	tracingInfo        *tracing.Info
@@ -110,12 +115,14 @@ type scheduler struct {
 	executeCh          chan func()
 	validateCh         chan func()
 	metrics            *schedulerMetrics
-	synchronous        bool // true if maxIncarnation exceeds threshold
-	maxIncarnation     int  // current highest incarnation
+	synchronous        bool           // true if maxIncarnation exceeds threshold
+	maxIncarnation     int            // current highest incarnation
+	conflictKeyCounts  map[string]int // per-key conflict counts accumulated over the block
+	conflictKeyMu      sync.Mutex
 }
 
 // NewScheduler creates a new scheduler
-func NewScheduler(workers int, tracingInfo *tracing.Info, deliverTxFunc func(ctx sdk.Context, req types.RequestDeliverTx, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx)) Scheduler {
+func NewScheduler(workers int, tracingInfo *tracing.Info, deliverTxFunc func(ctx sdk.Context, req types.RequestDeliverTxV2, tx sdk.Tx, checksum [32]byte) (res types.ResponseDeliverTx)) Scheduler {
 	return &scheduler{
 		workers:     workers,
 		deliverTx:   deliverTxFunc,
@@ -163,23 +170,27 @@ func (s *scheduler) DoExecute(work func()) {
 	s.executeCh <- work
 }
 
-func (s *scheduler) findConflicts(task *deliverTxTask) (bool, []int) {
+func (s *scheduler) findConflicts(task *deliverTxTask) (bool, []int, []string) {
 	var conflicts []int
+	conflictKeys := make([]string, 0, len(s.multiVersionStores))
 	uniq := make(map[int]struct{})
 	valid := true
-	for _, mv := range s.multiVersionStores {
-		ok, mvConflicts := mv.ValidateTransactionState(task.AbsoluteIndex)
+	for storeKey, mv := range s.multiVersionStores {
+		ok, mvConflicts, mvKeys := mv.ValidateTransactionStateWithKeys(task.AbsoluteIndex)
 		for _, c := range mvConflicts {
 			if _, ok := uniq[c]; !ok {
 				conflicts = append(conflicts, c)
 				uniq[c] = struct{}{}
 			}
 		}
+		for _, k := range mvKeys {
+			conflictKeys = append(conflictKeys, storeKey.Name()+"/"+k)
+		}
 		// any non-ok value makes valid false
 		valid = valid && ok
 	}
 	sort.Ints(conflicts)
-	return valid, conflicts
+	return valid, conflicts, conflictKeys
 }
 
 func toTasks(reqs []*sdk.DeliverTxEntry) ([]*deliverTxTask, map[int]*deliverTxTask) {
@@ -237,16 +248,6 @@ func dependenciesValidated(tasksMap map[int]*deliverTxTask, deps map[int]struct{
 	return true
 }
 
-func filterTasks(tasks []*deliverTxTask, filter func(*deliverTxTask) bool) []*deliverTxTask {
-	var res []*deliverTxTask
-	for _, t := range tasks {
-		if filter(t) {
-			res = append(res, t)
-		}
-	}
-	return res
-}
-
 func allValidated(tasks []*deliverTxTask) bool {
 	for _, t := range tasks {
 		if !t.IsStatus(statusValidated) {
@@ -277,6 +278,7 @@ func (s *scheduler) ProcessAll(ctx sdk.Context, reqs []*sdk.DeliverTxEntry) ([]t
 	tasks, tasksMap := toTasks(reqs)
 	s.allTasks = tasks
 	s.allTasksMap = tasksMap
+	s.conflictKeyCounts = make(map[string]int)
 	s.executeCh = make(chan func(), len(tasks))
 	s.validateCh = make(chan func(), len(tasks))
 	defer s.emitMetrics()
@@ -331,7 +333,22 @@ func (s *scheduler) ProcessAll(ctx sdk.Context, reqs []*sdk.DeliverTxEntry) ([]t
 	}
 	s.metrics.maxIncarnation = s.maxIncarnation
 
-	ctx.Logger().Info("occ scheduler", "height", ctx.BlockHeight(), "txs", len(tasks), "latency_ms", time.Since(startTime).Milliseconds(), "retries", s.metrics.retries, "maxIncarnation", s.maxIncarnation, "iterations", iterations, "sync", s.synchronous, "workers", s.workers)
+	if s.metrics.retries > 0 && len(s.conflictKeyCounts) > 0 {
+		encoded := make(map[string]int, len(s.conflictKeyCounts))
+		for k, v := range s.conflictKeyCounts {
+			storeName, rawKey, _ := strings.Cut(k, "/")
+			var encodedKey string
+			if rawKey == "globalAccountNumber" {
+				encodedKey = storeName + "/" + rawKey
+			} else {
+				encodedKey = storeName + "/" + hex.EncodeToString([]byte(rawKey))
+			}
+			encoded[encodedKey] = v
+		}
+		logger.Info("occ scheduler key conflicts", "height", ctx.BlockHeight(), "counts", encoded)
+	}
+
+	logger.Info("occ scheduler", "height", ctx.BlockHeight(), "txs", len(tasks), "latency_ms", time.Since(startTime).Milliseconds(), "retries", s.metrics.retries, "maxIncarnation", s.maxIncarnation, "iterations", iterations, "sync", s.synchronous, "workers", s.workers)
 
 	return s.collectResponses(tasks), nil
 }
@@ -347,9 +364,14 @@ func (s *scheduler) shouldRerun(task *deliverTxTask) bool {
 		// With the current scheduler, we won't actually get to this step if a previous task has already been determined to be invalid,
 		// since we choose to fail fast and mark the subsequent tasks as invalid as well.
 		// TODO: in a future async scheduler that no longer exhaustively validates in order, we may need to carefully handle the `valid=true` with conflicts case
-		if valid, conflicts := s.findConflicts(task); !valid {
+		if valid, conflicts, conflictKeys := s.findConflicts(task); !valid {
 			s.invalidateTask(task)
 			task.AppendDependencies(conflicts)
+			s.conflictKeyMu.Lock()
+			for _, k := range conflictKeys {
+				s.conflictKeyCounts[k]++
+			}
+			s.conflictKeyMu.Unlock()
 
 			// if the conflicts are now validated, then rerun this task
 			if dependenciesValidated(s.allTasksMap, task.Dependencies) {
@@ -378,10 +400,7 @@ func (s *scheduler) validateTask(ctx sdk.Context, task *deliverTxTask) bool {
 	_, span := s.traceSpan(ctx, "SchedulerValidate", task)
 	defer span.End()
 
-	if s.shouldRerun(task) {
-		return false
-	}
-	return true
+	return !s.shouldRerun(task)
 }
 
 func (s *scheduler) findFirstNonValidated() (int, bool) {
@@ -457,12 +476,13 @@ func (s *scheduler) executeAll(ctx sdk.Context, tasks []*deliverTxTask) error {
 }
 
 func (s *scheduler) prepareAndRunTask(wg *sync.WaitGroup, ctx sdk.Context, task *deliverTxTask) {
+	defer wg.Done() // Must be deferred to prevent deadlock on panic
+
 	eCtx, eSpan := s.traceSpan(ctx, "SchedulerExecute", task)
 	defer eSpan.End()
 
 	task.Ctx = eCtx
 	s.executeTask(task)
-	wg.Done()
 }
 
 func (s *scheduler) traceSpan(ctx sdk.Context, name string, task *deliverTxTask) (sdk.Context, trace.Span) {
@@ -521,7 +541,7 @@ func (s *scheduler) executeTask(task *deliverTxTask) {
 
 	// in the synchronous case, we only want to re-execute tasks that need re-executing
 	if s.synchronous {
-		// even if already validated, it could become invalid again due to preceeding
+		// even if already validated, it could become invalid again due to preceding
 		// reruns. Make sure previous writes are invalidated before rerunning.
 		if task.IsStatus(statusValidated) {
 			s.invalidateTask(task)

@@ -6,12 +6,15 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"time"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/internal/jsontypes"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmtime "github.com/tendermint/tendermint/libs/time"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
+	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 )
 
 const (
@@ -75,6 +78,16 @@ type GenesisDoc struct {
 	AppState        json.RawMessage    `json:"app_state,omitempty"`
 }
 
+func (genDoc *GenesisDoc) ToRequestInitChain() *abci.RequestInitChain {
+	return &abci.RequestInitChain{
+		Time:            genDoc.GenesisTime,
+		ChainId:         genDoc.ChainID,
+		InitialHeight:   genDoc.InitialHeight,
+		ConsensusParams: utils.Alloc(genDoc.ConsensusParams.ToProto()),
+		AppStateBytes:   genDoc.AppState,
+	}
+}
+
 // SaveAs is a utility method for saving GenensisDoc as a JSON file.
 func (genDoc *GenesisDoc) SaveAs(file string) error {
 	genDocBytes, err := json.MarshalIndent(genDoc, "", "  ")
@@ -85,14 +98,25 @@ func (genDoc *GenesisDoc) SaveAs(file string) error {
 	return os.WriteFile(file, genDocBytes, 0644) // nolint:gosec
 }
 
-// ValidatorHash returns the hash of the validator set contained in the GenesisDoc
-func (genDoc *GenesisDoc) ValidatorHash() []byte {
+func (genDoc *GenesisDoc) ValidatorSet() *ValidatorSet {
 	vals := make([]*Validator, len(genDoc.Validators))
 	for i, v := range genDoc.Validators {
 		vals[i] = NewValidator(v.PubKey, v.Power)
 	}
-	vset := NewValidatorSet(vals)
-	return vset.Hash()
+	return NewValidatorSet(vals)
+}
+
+func (genDoc *GenesisDoc) ValidatorUpdates() []abci.ValidatorUpdate {
+	updates := make([]abci.ValidatorUpdate, len(genDoc.Validators))
+	for i, val := range genDoc.Validators {
+		updates[i] = TM2PB.ValidatorUpdate(NewValidator(val.PubKey, val.Power))
+	}
+	return updates
+}
+
+// ValidatorHash returns the hash of the validator set contained in the GenesisDoc
+func (genDoc *GenesisDoc) ValidatorHash() []byte {
+	return genDoc.ValidatorSet().Hash()
 }
 
 // ValidateAndComplete checks that all necessary fields are present
@@ -159,7 +183,7 @@ func GenesisDocFromJSON(jsonBlob []byte) (*GenesisDoc, error) {
 
 // GenesisDocFromFile reads JSON data from a file and unmarshalls it into a GenesisDoc.
 func GenesisDocFromFile(genDocFile string) (*GenesisDoc, error) {
-	jsonBlob, err := os.ReadFile(genDocFile)
+	jsonBlob, err := os.ReadFile(filepath.Clean(genDocFile))
 	if err != nil {
 		return nil, fmt.Errorf("couldn't read GenesisDoc file: %w", err)
 	}

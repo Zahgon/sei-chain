@@ -3,11 +3,11 @@ package mock
 import (
 	"io"
 
-	snapshottypes "github.com/cosmos/cosmos-sdk/snapshots/types"
-	store "github.com/cosmos/cosmos-sdk/store/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	protoio "github.com/gogo/protobuf/io"
-	abci "github.com/tendermint/tendermint/abci/types"
+	snapshottypes "github.com/sei-protocol/sei-chain/sei-cosmos/snapshots/types"
+	store "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	dbm "github.com/tendermint/tm-db"
 )
 
@@ -41,10 +41,6 @@ func (ms multiStore) CacheWrapWithTrace(_ store.StoreKey, _ io.Writer, _ sdk.Tra
 	panic("not implemented")
 }
 
-func (ms multiStore) CacheWrapWithListeners(_ store.StoreKey, _ []store.WriteListener) store.CacheWrap {
-	panic("not implemented")
-}
-
 func (ms multiStore) TracingEnabled() bool {
 	panic("not implemented")
 }
@@ -54,14 +50,6 @@ func (ms multiStore) SetTracingContext(tc sdk.TraceContext) sdk.MultiStore {
 }
 
 func (ms multiStore) SetTracer(w io.Writer) sdk.MultiStore {
-	panic("not implemented")
-}
-
-func (ms multiStore) AddListeners(key store.StoreKey, listeners []store.WriteListener) {
-	panic("not implemented")
-}
-
-func (ms multiStore) ListeningEnabled(key store.StoreKey) bool {
 	panic("not implemented")
 }
 
@@ -132,13 +120,6 @@ func (ms multiStore) GetStoreType() sdk.StoreType {
 func (ms multiStore) SetInterBlockCache(_ sdk.MultiStorePersistentCache) {
 	panic("not implemented")
 }
-func (ms multiStore) SetIAVLCacheSize(size int) {
-	panic("not implemented")
-}
-
-func (ms multiStore) SetIAVLDisableFastNode(disable bool) {
-	panic("not implemented")
-}
 
 func (ms multiStore) SetInitialVersion(version int64) error {
 	panic("not implemented")
@@ -169,10 +150,6 @@ func (kv kvStore) CacheWrap(_ store.StoreKey) sdk.CacheWrap {
 }
 
 func (kv kvStore) CacheWrapWithTrace(_ store.StoreKey, w io.Writer, tc sdk.TraceContext) sdk.CacheWrap {
-	panic("not implemented")
-}
-
-func (kv kvStore) CacheWrapWithListeners(_ store.StoreKey, _ []store.WriteListener) store.CacheWrap {
 	panic("not implemented")
 }
 

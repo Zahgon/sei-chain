@@ -11,14 +11,15 @@ import (
 	"strings"
 	"time"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/sei-protocol/sei-chain/evmrpc"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/mock"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/coretypes"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	seiutils "github.com/sei-protocol/sei-chain/utils"
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	"github.com/tendermint/tendermint/rpc/client/mock"
-	"github.com/tendermint/tendermint/rpc/coretypes"
-	tmtypes "github.com/tendermint/tendermint/types"
 )
 
 type MockClient struct {
@@ -33,6 +34,10 @@ type MockClient struct {
 	mockedBlockResultsResults map[int64]*coretypes.ResultBlockResults
 	mockedValidators          map[int64]*coretypes.ResultValidators
 	mockedGenesis             *coretypes.ResultGenesis
+}
+
+func (c *MockClient) EvmNextPendingNonce(_ common.Address) uint64 {
+	return 0
 }
 
 func (c *MockClient) Block(_ context.Context, h *int64) (*coretypes.ResultBlock, error) {
@@ -86,6 +91,13 @@ func (c *MockClient) getBlock(i int64) *coretypes.ResultBlock {
 	}
 }
 
+func (c *MockClient) Header(_ context.Context, h *int64) (*coretypes.ResultHeader, error) {
+	if h == nil {
+		return &coretypes.ResultHeader{Header: mockBlockHeader(int64(len(c.blocks)))}, nil
+	}
+	return &coretypes.ResultHeader{Header: mockBlockHeader(*h)}, nil
+}
+
 func (c *MockClient) Genesis(context.Context) (*coretypes.ResultGenesis, error) {
 	if c.mockedGenesis != nil {
 		return c.mockedGenesis, nil
@@ -108,6 +120,26 @@ func (c *MockClient) BlockResults(_ context.Context, height *int64) (*coretypes.
 	return &coretypes.ResultBlockResults{
 		TxsResults:            c.txResults[*height-1],
 		ConsensusParamUpdates: c.consParamUpdates[*height-1],
+	}, nil
+}
+
+func (c *MockClient) Status(context.Context) (*coretypes.ResultStatus, error) {
+	latest := int64(len(c.blocks))
+	if c.mockedBlockResults != nil {
+		for h := range c.mockedBlockResults {
+			if h > latest {
+				latest = h
+			}
+		}
+	}
+	if latest <= 0 {
+		latest = 1
+	}
+	return &coretypes.ResultStatus{
+		SyncInfo: coretypes.SyncInfo{
+			LatestBlockHeight:   latest,
+			EarliestBlockHeight: 1,
+		},
 	}, nil
 }
 

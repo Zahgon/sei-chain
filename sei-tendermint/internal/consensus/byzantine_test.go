@@ -16,21 +16,20 @@ package consensus
 //	dbm "github.com/tendermint/tm-db"
 //	"go.opentelemetry.io/otel/sdk/trace"
 //
-//	abciclient "github.com/tendermint/tendermint/abci/client"
-//	"github.com/tendermint/tendermint/abci/example/kvstore"
-//	abci "github.com/tendermint/tendermint/abci/types"
-//	"github.com/tendermint/tendermint/internal/eventbus"
-//	"github.com/tendermint/tendermint/internal/evidence"
-//	"github.com/tendermint/tendermint/internal/mempool"
-//	"github.com/tendermint/tendermint/internal/p2p"
-//	sm "github.com/tendermint/tendermint/internal/state"
-//	"github.com/tendermint/tendermint/internal/store"
-//	"github.com/tendermint/tendermint/internal/test/factory"
-//	"github.com/tendermint/tendermint/libs/log"
-//	tmtime "github.com/tendermint/tendermint/libs/time"
-//	tmcons "github.com/tendermint/tendermint/proto/tendermint/consensus"
-//	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-//	"github.com/tendermint/tendermint/types"
+//	abciclient "github.com/sei-protocol/sei-chain/sei-tendermint/abci/client"
+//	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/example/kvstore"
+//	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+//	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/eventbus"
+//	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/evidence"
+//	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
+//	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p"
+//	sm "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
+//	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/store"
+//	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/test/factory"
+//	tmtime "github.com/sei-protocol/sei-chain/sei-tendermint/libs/time"
+//	tmcons "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/consensus"
+//	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
+//	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 //)
 //
 //// Byzantine node sends two different prevotes (nil and blockID) to the same
@@ -78,12 +77,12 @@ package consensus
 //			blockStore := store.NewBlockStore(blockDB)
 //
 //			// one for mempool, one for consensus
-//			proxyAppConnMem := abciclient.NewLocalClient(logger, app)
-//			proxyAppConnCon := abciclient.NewLocalClient(logger, app)
+//			proxyAppConnMem := abciclient.NewLocalClient( app)
+//			proxyAppConnCon := abciclient.NewLocalClient( app)
 //
 //			// Make Mempool
 //			mempool := mempool.NewTxMempool(
-//				log.NewNopLogger().With("module", "mempool"),
+//				log. logger().With("module", "mempool"),
 //				thisConfig.Mempool,
 //				proxyAppConnMem,
 //			)
@@ -91,16 +90,16 @@ package consensus
 //				mempool.EnableTxsAvailable()
 //			}
 //
-//			eventBus := eventbus.NewDefault(log.NewNopLogger().With("module", "events"))
+//			eventBus := eventbus.NewDefault()
 //			require.NoError(t, eventBus.Start(ctx))
 //
 //			// Make a full instance of the evidence pool
 //			evidenceDB := dbm.NewMemDB()
-//			evpool := evidence.NewPool(logger.With("module", "evidence"), evidenceDB, stateStore, blockStore, evidence.NopMetrics(), eventBus)
+//			evpool := evidence.NewPool(evidenceDB, stateStore, blockStore, evidence.NopMetrics(), eventBus)
 //
 //			// Make State
-//			blockExec := sm.NewBlockExecutor(stateStore, log.NewNopLogger(), proxyAppConnCon, mempool, evpool, blockStore, eventBus, sm.NopMetrics())
-//			cs, err := NewState(logger, thisConfig.Consensus, stateStore, blockExec, blockStore, mempool, evpool, eventBus, []trace.TracerProviderOption{})
+//			blockExec := sm.NewBlockExecutor(stateStore, proxyAppConnCon, mempool, evpool, blockStore, eventBus, sm.NopMetrics())
+//			cs, err := NewState( thisConfig.Consensus, stateStore, blockExec, blockStore, mempool, evpool, eventBus, []trace.TracerProviderOption{})
 //			require.NoError(t, err)
 //			// set private validator
 //			pv := privVals[i]
@@ -220,7 +219,7 @@ package consensus
 //
 //		// Make proposal
 //		propBlockID := types.BlockID{Hash: block.Hash(), PartSetHeader: blockParts.Header()}
-//		proposal := types.NewProposal(height, round, lazyNodeState.ValidRound, propBlockID, block.Header.Time, block.GetTxKeys(), block.Header, block.LastCommit, block.Evidence, proposerAddr)
+//		proposal := types.NewProposal(height, round, lazyNodeState.ValidRound, propBlockID, block.Header.Time, block.GetTxHashes(), block.Header, block.LastCommit, block.Evidence, proposerAddr)
 //		p := proposal.ToProto()
 //		if err := lazyNodeState.privValidator.SignProposal(ctx, lazyNodeState.state.ChainID, p); err == nil {
 //			proposal.Signature = p.Signature
@@ -240,7 +239,7 @@ package consensus
 //
 //	for _, reactor := range rts.reactors {
 //		reactor.StopWaitSync()
-//		reactor.SwitchToConsensus(ctx, reactor.state.GetState(), false)
+//		reactor.SwitchToConsensus(reactor.state.GetState(), false)
 //	}
 //
 //	// Evidence should be submitted and committed at the third height but

@@ -5,9 +5,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	app "github.com/sei-protocol/sei-chain/app"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/stretchr/testify/require"
 )
 
@@ -172,7 +172,9 @@ func TestLightInvarianceChecks(t *testing.T) {
 		}
 		a.BankKeeper.SetSupply(ctx, useiCoin(tt.postSupply))
 		a.SetDeliverStateToCommit()
-		f := func() { a.LightInvarianceChecks(a.WriteState(), app.LightInvarianceConfig{SupplyEnabled: true}) }
+		f := func() {
+			a.LightInvarianceChecks(t.Context(), a.WriteState(), app.LightInvarianceConfig{SupplyEnabled: true})
+		}
 		if tt.success {
 			require.NotPanics(t, f)
 		} else {

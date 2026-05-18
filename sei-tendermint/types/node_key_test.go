@@ -5,9 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/require"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func TestLoadOrGenNodeKey(t *testing.T) {
@@ -18,7 +17,7 @@ func TestLoadOrGenNodeKey(t *testing.T) {
 
 	nodeKey2, err := types.LoadOrGenNodeKey(filePath)
 	require.NoError(t, err)
-	require.Equal(t, nodeKey, nodeKey2)
+	require.Equal(t, nodeKey.PubKey(), nodeKey2.PubKey())
 }
 
 func TestLoadNodeKey(t *testing.T) {

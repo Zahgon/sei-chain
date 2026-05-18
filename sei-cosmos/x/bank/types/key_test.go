@@ -7,9 +7,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/address"
-	"github.com/cosmos/cosmos-sdk/x/bank/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/address"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 )
 
 func cloneAppend(bz []byte, tail []byte) (res []byte) {
@@ -20,7 +20,7 @@ func cloneAppend(bz []byte, tail []byte) (res []byte) {
 }
 
 func TestAddressFromBalancesStore(t *testing.T) {
-	addr, err := sdk.AccAddressFromBech32("cosmos1n88uc38xhjgxzw9nwre4ep2c8ga4fjxcar6mn7")
+	addr, err := sdk.AccAddressFromBech32("sei1l976cvcndrr6hnuyzn93azaxx8sc2xre5crtpz")
 	require.NoError(t, err)
 	addrLen := len(addr)
 	require.Equal(t, 20, addrLen)
@@ -45,7 +45,7 @@ func TestAddressFromBalancesStore(t *testing.T) {
 			addr, err := types.AddressFromBalancesStore(tc.key)
 			if tc.wantErr {
 				assert.Error(t, err)
-				assert.True(t, errors.Is(types.ErrInvalidKey, err))
+				assert.True(t, errors.Is(err, types.ErrInvalidKey))
 			} else {
 				assert.NoError(t, err)
 			}

@@ -1,13 +1,13 @@
 package params
 
 import (
-	srvconfig "github.com/cosmos/cosmos-sdk/server/config"
-	"github.com/cosmos/cosmos-sdk/types/address"
-	"github.com/sei-protocol/sei-chain/evmrpc"
-	tmcfg "github.com/tendermint/tendermint/config"
+	evmrpcconfig "github.com/sei-protocol/sei-chain/evmrpc/config"
+	srvconfig "github.com/sei-protocol/sei-chain/sei-cosmos/server/config"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/address"
+	tmcfg "github.com/sei-protocol/sei-chain/sei-tendermint/config"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 const (
@@ -107,6 +107,8 @@ func setValidatorTypeTendermintConfig(config *tmcfg.Config) {
 // setFullnodeTypeTendermintConfig sets common Tendermint config for fullnode-like nodes
 func setFullnodeTypeTendermintConfig(config *tmcfg.Config) {
 	config.TxIndex.Indexer = []string{"kv"} // Full nodes need tx indexing for queries
+	config.RPC.ListenAddress = "tcp://0.0.0.0:26657"
+	config.P2P.ListenAddress = "tcp://0.0.0.0:26656"
 }
 
 // SetTendermintConfigByMode sets Tendermint config values based on node mode
@@ -168,9 +170,10 @@ func setArchiveTypeAppConfig(config *srvconfig.Config) {
 	setFullnodeTypeAppConfig(config)
 
 	// Archive nodes keep all history
-	config.StateStore.KeepRecent = 0 // 0 = keep all history
+	config.StateStore.KeepRecent = 0 // 0 = keep all state history
+	config.MinRetainBlocks = 0       // 0 = keep all Tendermint blocks
 
-	// Pruning and MinRetainBlocks use defaults (nothing,0,0 - keep all block history)
+	// Pruning uses defaults (nothing,0,0 - keep all state history)
 }
 
 // SetAppConfigByMode sets app config values based on node mode
@@ -194,7 +197,7 @@ func SetAppConfigByMode(config *srvconfig.Config, mode NodeMode) {
 
 // SetEVMConfigByMode sets EVM config based on node mode
 // Validators and seeds have EVM disabled, full nodes and archives have it enabled
-func SetEVMConfigByMode(config *evmrpc.Config, mode NodeMode) {
+func SetEVMConfigByMode(config *evmrpcconfig.Config, mode NodeMode) {
 	evmEnabled := mode.IsFullnodeType()
 	config.HTTPEnabled = evmEnabled
 	config.WSEnabled = evmEnabled

@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"strings"
 
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/spf13/cobra"
-	tmtypes "github.com/tendermint/tendermint/types"
 
-	"github.com/cosmos/cosmos-sdk/client"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/cosmos/cosmos-sdk/types/query"
-	"github.com/cosmos/cosmos-sdk/types/rest"
-	"github.com/cosmos/cosmos-sdk/version"
-	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
-	"github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/query"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/version"
+	authtx "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/tx"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 )
 
 const (
@@ -229,7 +229,11 @@ $ %s query txs --%s 'message.sender=cosmos1...&message.action=withdraw_delegator
 			page, _ := cmd.Flags().GetInt(flags.FlagPage)
 			limit, _ := cmd.Flags().GetInt(flags.FlagLimit)
 
-			txs, err := authtx.QueryTxsByEvents(clientCtx, tmEvents, page, limit, "")
+			node, err := clientCtx.GetNode()
+			if err != nil {
+				return err
+			}
+			txs, err := authtx.QueryTxsByEvents(cmd.Context(), node, clientCtx.TxConfig, tmEvents, page, limit, "")
 			if err != nil {
 				return err
 			}
@@ -242,7 +246,7 @@ $ %s query txs --%s 'message.sender=cosmos1...&message.action=withdraw_delegator
 	cmd.Flags().Int(flags.FlagPage, rest.DefaultPage, "Query a specific page of paginated results")
 	cmd.Flags().Int(flags.FlagLimit, rest.DefaultLimit, "Query number of transactions results per page returned")
 	cmd.Flags().String(flagEvents, "", fmt.Sprintf("list of transaction events in the form of %s", eventFormat))
-	cmd.MarkFlagRequired(flagEvents)
+	_ = cmd.MarkFlagRequired(flagEvents)
 
 	return cmd
 }
@@ -268,9 +272,11 @@ $ %s query tx --%s=%s <sig1_base64>,<sig2_base64...>
 				return err
 			}
 
-			typ, _ := cmd.Flags().GetString(flagType)
-
-			switch typ {
+			node, err := clientCtx.GetNode()
+			if err != nil {
+				return err
+			}
+			switch typ, _ := cmd.Flags().GetString(flagType); typ {
 			case typeHash:
 				{
 					if args[0] == "" {
@@ -278,7 +284,7 @@ $ %s query tx --%s=%s <sig1_base64>,<sig2_base64...>
 					}
 
 					// If hash is given, then query the tx by hash.
-					output, err := authtx.QueryTx(clientCtx, args[0])
+					output, err := authtx.QueryTx(cmd.Context(), node, clientCtx.TxConfig, args[0])
 					if err != nil {
 						return err
 					}
@@ -291,7 +297,7 @@ $ %s query tx --%s=%s <sig1_base64>,<sig2_base64...>
 				}
 			case typeSig:
 				{
-					sigParts, err := parseSigArgs(args)
+					sigParts, err := ParseSigArgs(args)
 					if err != nil {
 						return err
 					}
@@ -300,7 +306,7 @@ $ %s query tx --%s=%s <sig1_base64>,<sig2_base64...>
 						tmEvents[i] = fmt.Sprintf("%s.%s='%s'", sdk.EventTypeTx, sdk.AttributeKeySignature, sig)
 					}
 
-					txs, err := authtx.QueryTxsByEvents(clientCtx, tmEvents, rest.DefaultPage, query.DefaultLimit, "")
+					txs, err := authtx.QueryTxsByEvents(cmd.Context(), node, clientCtx.TxConfig, tmEvents, rest.DefaultPage, query.DefaultLimit, "")
 					if err != nil {
 						return err
 					}
@@ -323,7 +329,7 @@ $ %s query tx --%s=%s <sig1_base64>,<sig2_base64...>
 					tmEvents := []string{
 						fmt.Sprintf("%s.%s='%s'", sdk.EventTypeTx, sdk.AttributeKeyAccountSequence, args[0]),
 					}
-					txs, err := authtx.QueryTxsByEvents(clientCtx, tmEvents, rest.DefaultPage, query.DefaultLimit, "")
+					txs, err := authtx.QueryTxsByEvents(cmd.Context(), node, clientCtx.TxConfig, tmEvents, rest.DefaultPage, query.DefaultLimit, "")
 					if err != nil {
 						return err
 					}
@@ -350,7 +356,7 @@ $ %s query tx --%s=%s <sig1_base64>,<sig2_base64...>
 }
 
 // parseSigArgs parses comma-separated signatures from the CLI arguments.
-func parseSigArgs(args []string) ([]string, error) {
+func ParseSigArgs(args []string) ([]string, error) {
 	if len(args) != 1 || args[0] == "" {
 		return nil, fmt.Errorf("argument should be comma-separated signatures")
 	}

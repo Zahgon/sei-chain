@@ -1,6 +1,6 @@
 services:
   node0:
-    platform: linux/amd64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     container_name: sei-node-0
     image: "sei-chain/localnode"
     user: "${USERID}:${GROUPID}"
@@ -16,6 +16,11 @@ services:
       - INVARIANT_CHECK_INTERVAL
       - UPGRADE_VERSION_LIST
       - MOCK_BALANCES
+      - GIGA_EXECUTOR
+      - GIGA_OCC
+      - RECEIPT_BACKEND
+      - AUTOBAHN
+      - GIGA_STORAGE
     volumes:
       - "${PROJECT_HOME}:/sei-protocol/sei-chain:Z"
       - "${PROJECT_HOME}/../sei-tendermint:/sei-protocol/sei-tendermint:Z"
@@ -29,7 +34,7 @@ services:
         ipv4_address: 192.168.10.10
 
   node1:
-    platform: linux/amd64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     container_name: sei-node-1
     image: "sei-chain/localnode"
     user: "${USERID}:${GROUPID}"
@@ -44,6 +49,11 @@ services:
       - SKIP_BUILD
       - INVARIANT_CHECK_INTERVAL
       - UPGRADE_VERSION_LIST
+      - GIGA_EXECUTOR
+      - GIGA_OCC
+      - RECEIPT_BACKEND
+      - AUTOBAHN
+      - GIGA_STORAGE
     volumes:
       - "${PROJECT_HOME}:/sei-protocol/sei-chain:Z"
       - "${PROJECT_HOME}/../sei-tendermint:/sei-protocol/sei-tendermint:Z"
@@ -57,7 +67,7 @@ services:
         ipv4_address: 192.168.10.11
 
   node2:
-    platform: linux/amd64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     container_name: sei-node-2
     image: "sei-chain/localnode"
     user: "${USERID}:${GROUPID}"
@@ -68,6 +78,11 @@ services:
       - SKIP_BUILD
       - INVARIANT_CHECK_INTERVAL
       - UPGRADE_VERSION_LIST
+      - GIGA_EXECUTOR
+      - GIGA_OCC
+      - RECEIPT_BACKEND
+      - AUTOBAHN
+      - GIGA_STORAGE
     ports:
       - "26662-26664:26656-26658"
       - "9094-9095:9090-9091"
@@ -85,7 +100,7 @@ services:
         ipv4_address: 192.168.10.12
 
   node3:
-    platform: linux/amd64
+    platform: ${DOCKER_PLATFORM:-linux/amd64}
     container_name: sei-node-3
     image: "sei-chain/localnode"
     user: "${USERID}:${GROUPID}"
@@ -96,6 +111,11 @@ services:
       - SKIP_BUILD
       - INVARIANT_CHECK_INTERVAL
       - UPGRADE_VERSION_LIST
+      - GIGA_EXECUTOR
+      - GIGA_OCC
+      - RECEIPT_BACKEND
+      - AUTOBAHN
+      - GIGA_STORAGE
     ports:
       - "26665-26667:26656-26658"
       - "9096-9097:9090-9091"

@@ -19,7 +19,7 @@ var (
 
 // Marshal marshals the value as JSON, using Amino-compatible JSON encoding (strings for
 // 64-bit numbers, and type wrappers for registered types).
-func Marshal(v interface{}) ([]byte, error) {
+func Marshal(v any) ([]byte, error) {
 	buf := new(bytes.Buffer)
 	err := encode(buf, v)
 	if err != nil {
@@ -29,7 +29,7 @@ func Marshal(v interface{}) ([]byte, error) {
 }
 
 // MarshalIndent marshals the value as JSON, using the given prefix and indentation.
-func MarshalIndent(v interface{}, prefix, indent string) ([]byte, error) {
+func MarshalIndent(v any, prefix, indent string) ([]byte, error) {
 	bz, err := Marshal(v)
 	if err != nil {
 		return nil, err
@@ -42,21 +42,12 @@ func MarshalIndent(v interface{}, prefix, indent string) ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
-func encode(w io.Writer, v interface{}) error {
+func encode(w io.Writer, v any) error {
 	// Bare nil values can't be reflected, so we must handle them here.
 	if v == nil {
 		return writeStr(w, "null")
 	}
 	rv := reflect.ValueOf(v)
-
-	// If this is a registered type, defer to interface encoder regardless of whether the input is
-	// an interface or a bare value. This retains Amino's behavior, but is inconsistent with
-	// behavior in structs where an interface field will get the type wrapper while a bare value
-	// field will not.
-	if typeRegistry.name(rv.Type()) != "" {
-		return encodeReflectInterface(w, rv)
-	}
-
 	return encodeReflect(w, rv)
 }
 
@@ -66,7 +57,7 @@ func encodeReflect(w io.Writer, rv reflect.Value) error {
 	}
 
 	// Recursively dereference if pointer.
-	for rv.Kind() == reflect.Ptr {
+	for rv.Kind() == reflect.Pointer {
 		if rv.IsNil() {
 			return writeStr(w, "null")
 		}
@@ -90,7 +81,7 @@ func encodeReflect(w io.Writer, rv reflect.Value) error {
 	switch rv.Type().Kind() {
 	// Complex types must be recursively encoded.
 	case reflect.Interface:
-		return encodeReflectInterface(w, rv)
+		return fmt.Errorf("encoding interfaces is not supported")
 
 	case reflect.Array, reflect.Slice:
 		return encodeReflectList(w, rv)
@@ -137,7 +128,7 @@ func encodeReflectList(w io.Writer, rv reflect.Value) error {
 	if err := writeStr(w, "["); err != nil {
 		return err
 	}
-	for i := 0; i < length; i++ {
+	for i := range length {
 		if err := encodeReflect(w, rv.Index(i)); err != nil {
 			return err
 		}
@@ -212,32 +203,7 @@ func encodeReflectStruct(w io.Writer, rv reflect.Value) error {
 	return writeStr(w, "}")
 }
 
-func encodeReflectInterface(w io.Writer, rv reflect.Value) error {
-	// Get concrete value and dereference pointers.
-	for rv.Kind() == reflect.Ptr || rv.Kind() == reflect.Interface {
-		if rv.IsNil() {
-			return writeStr(w, "null")
-		}
-		rv = rv.Elem()
-	}
-
-	// Look up the name of the concrete type
-	name := typeRegistry.name(rv.Type())
-	if name == "" {
-		return fmt.Errorf("cannot encode unregistered type %v", rv.Type())
-	}
-
-	// Write value wrapped in interface envelope
-	if err := writeStr(w, fmt.Sprintf(`{"type":%q,"value":`, name)); err != nil {
-		return err
-	}
-	if err := encodeReflect(w, rv); err != nil {
-		return err
-	}
-	return writeStr(w, "}")
-}
-
-func encodeStdlib(w io.Writer, v interface{}) error {
+func encodeStdlib(w io.Writer, v any) error {
 	// Doesn't stream the output because that adds a newline, as per:
 	// https://golang.org/pkg/encoding/json/#Encoder.Encode
 	blob, err := json.Marshal(v)

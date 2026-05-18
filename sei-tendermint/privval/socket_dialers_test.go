@@ -8,8 +8,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto/ed25519"
-	tmnet "github.com/tendermint/tendermint/libs/net"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
+	tmnet "github.com/sei-protocol/sei-chain/sei-tendermint/libs/net"
 )
 
 // getFreeLocalhostAddrPort returns a free localhost:port address
@@ -30,7 +30,7 @@ func getDialerTestCases(t *testing.T) []dialerTestCase {
 	return []dialerTestCase{
 		{
 			addr:   tcpAddr,
-			dialer: DialTCPFn(tcpAddr, testTimeoutReadWrite, ed25519.GenPrivKey()),
+			dialer: DialTCPFn(tcpAddr, testTimeoutReadWrite, ed25519.GenerateSecretKey()),
 		},
 		{
 			addr:   unixAddr,
@@ -42,7 +42,7 @@ func getDialerTestCases(t *testing.T) []dialerTestCase {
 func TestIsConnTimeoutForFundamentalTimeouts(t *testing.T) {
 	// Generate a networking timeout
 	tcpAddr := getFreeLocalhostAddrPort(t)
-	dialer := DialTCPFn(tcpAddr, time.Millisecond, ed25519.GenPrivKey())
+	dialer := DialTCPFn(tcpAddr, time.Millisecond, ed25519.GenerateSecretKey())
 	_, err := dialer()
 	assert.Error(t, err)
 	assert.True(t, IsConnTimeout(err))
@@ -50,7 +50,7 @@ func TestIsConnTimeoutForFundamentalTimeouts(t *testing.T) {
 
 func TestIsConnTimeoutForWrappedConnTimeouts(t *testing.T) {
 	tcpAddr := getFreeLocalhostAddrPort(t)
-	dialer := DialTCPFn(tcpAddr, time.Millisecond, ed25519.GenPrivKey())
+	dialer := DialTCPFn(tcpAddr, time.Millisecond, ed25519.GenerateSecretKey())
 	_, err := dialer()
 	assert.Error(t, err)
 	err = fmt.Errorf("%v: %w", err, ErrConnectionTimeout)

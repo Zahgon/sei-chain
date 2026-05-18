@@ -6,9 +6,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	sm "github.com/tendermint/tendermint/internal/state"
-	tmrand "github.com/tendermint/tendermint/libs/rand"
-	"github.com/tendermint/tendermint/types"
+	sm "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
+	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func TestTxFilter(t *testing.T) {
@@ -31,11 +31,14 @@ func TestTxFilter(t *testing.T) {
 		state, err := sm.MakeGenesisState(genDoc)
 		require.NoError(t, err)
 
-		f := sm.TxPreCheckForState(state)
+		f := sm.TxConstraintsFetcherForState(state)
+		constraints, err := f()
+		require.NoError(t, err)
+		txSize := types.ComputeProtoSizeForTxs([]types.Tx{tc.tx})
 		if tc.isErr {
-			assert.NotNil(t, f(tc.tx), "#%v", i)
+			assert.Greater(t, txSize, constraints.MaxDataBytes, "#%v", i)
 		} else {
-			assert.Nil(t, f(tc.tx), "#%v", i)
+			assert.LessOrEqual(t, txSize, constraints.MaxDataBytes, "#%v", i)
 		}
 	}
 }

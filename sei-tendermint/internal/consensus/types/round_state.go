@@ -1,13 +1,20 @@
 package types
 
 import (
+	"crypto/sha256"
+	"encoding/binary"
+	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"math/big"
+	"slices"
 	"sync"
 	"time"
 
-	"github.com/tendermint/tendermint/libs/bytes"
-	"github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 //-----------------------------------------------------------------------------
@@ -63,6 +70,10 @@ func (rs RoundStepType) String() string {
 type SafeRoundState struct {
 	internal RoundState
 	mtx      sync.RWMutex
+}
+
+func NewSafeRoundState() SafeRoundState {
+	return SafeRoundState{}
 }
 
 func (s *SafeRoundState) CopyInternal() *RoundState {
@@ -178,6 +189,12 @@ func (s *SafeRoundState) Validators() *types.ValidatorSet {
 	s.mtx.RLock()
 	defer s.mtx.RUnlock()
 	return s.internal.Validators
+}
+
+func (s *SafeRoundState) Leader() crypto.PubKey {
+	s.mtx.RLock()
+	defer s.mtx.RUnlock()
+	return s.internal.Leader()
 }
 
 func (s *SafeRoundState) SetValidators(v *types.ValidatorSet) {
@@ -354,21 +371,19 @@ func (s *SafeRoundState) CompleteProposalEvent() types.EventDataCompleteProposal
 // NOTE: Not thread safe. Should only be manipulated by functions downstream
 // of the cs.receiveRoutine
 type RoundState struct {
-	Height    int64         `json:"height,string"` // Height we are working on
-	Round     int32         `json:"round"`
-	Step      RoundStepType `json:"step"`
-	StartTime time.Time     `json:"start_time"`
+	HRS
+	StartTime time.Time
 
 	// Subjective time when +2/3 precommits for Block at Round were found
-	CommitTime          time.Time           `json:"commit_time"`
-	Validators          *types.ValidatorSet `json:"validators"`
-	Proposal            *types.Proposal     `json:"proposal"`
-	ProposalReceiveTime time.Time           `json:"proposal_receive_time"`
-	ProposalBlock       *types.Block        `json:"proposal_block"`
-	ProposalBlockParts  *types.PartSet      `json:"proposal_block_parts"`
-	LockedRound         int32               `json:"locked_round"`
-	LockedBlock         *types.Block        `json:"locked_block"`
-	LockedBlockParts    *types.PartSet      `json:"locked_block_parts"`
+	CommitTime          time.Time
+	Validators          *types.ValidatorSet
+	Proposal            *types.Proposal
+	ProposalReceiveTime time.Time
+	ProposalBlock       *types.Block
+	ProposalBlockParts  *types.PartSet
+	LockedRound         int32
+	LockedBlock         *types.Block
+	LockedBlockParts    *types.PartSet
 
 	// The variables below starting with "Valid..." derive their name from
 	// the algorithm presented in this paper:
@@ -379,20 +394,50 @@ type RoundState struct {
 	//   * has nothing to do with whether the Application returned "Accept" in its
 	//     response to `ProcessProposal`, or "Reject"
 
-	// Last known round with POL for non-nil valid block.
-	ValidRound int32        `json:"valid_round"`
-	ValidBlock *types.Block `json:"valid_block"` // Last known block of POL mentioned above.
+	ValidRound      int32          // Last known round with POL for non-nil valid block.
+	ValidBlock      *types.Block   // Last known block of POL mentioned above.
+	ValidBlockParts *types.PartSet // Last known block parts of POL mentioned above.
 
-	// Last known block parts of POL mentioned above.
-	ValidBlockParts           *types.PartSet      `json:"valid_block_parts"`
-	Votes                     *HeightVoteSet      `json:"votes"`
-	CommitRound               int32               `json:"commit_round"` //
-	LastCommit                *types.VoteSet      `json:"last_commit"`  // Last precommits at Height-1
-	LastValidators            *types.ValidatorSet `json:"last_validators"`
-	TriggeredTimeoutPrecommit bool                `json:"triggered_timeout_precommit"`
+	Votes                     *HeightVoteSet
+	CommitRound               int32
+	LastCommit                *types.VoteSet // Last precommits at Height-1
+	LastValidators            *types.ValidatorSet
+	TriggeredTimeoutPrecommit bool
 }
 
-// Compressed version of the RoundState for use in RPC
+// 32 bytes crypto hash seed, generated via random.org.
+// THIS IS A PROTOCOL CONSTANT, DO NOT CHANGE.
+var leaderElectionSeed = [32]byte(utils.OrPanic1(hex.DecodeString(
+	"3793f16d412703e5805755e5282f681c70e771f151c8864c656c6c259243f85f",
+)))
+
+// Leader for each round is drawn at random from the validator set with
+// probabilities proportional to the voting powers.
+//
+// The following pseudorandom function is used to select the leader:
+// pos(height,round) := hash(height ++ round)
+// Validators are assigned subintervals of [0,TotalVotingPower) of length
+// equal to their voting poser.
+// Validator i is the leader of (height,round) <=> pos(height,round)%TotalVotingPower \in validator_interval[i]
+func (rs *RoundState) Leader() crypto.PubKey {
+	// sha256 does not support seed natively, so we add it by hand.
+	d := slices.Clone(leaderElectionSeed[:])
+	d = binary.BigEndian.AppendUint64(d, uint64(rs.Height)) //nolint:gosec
+	d = binary.BigEndian.AppendUint64(d, uint64(rs.Round))  //nolint:gosec
+	h := sha256.Sum256(d)
+	x := (&big.Int{}).SetBytes(h[:])
+	pos := x.Mod(x, big.NewInt(rs.Validators.TotalVotingPower())).Int64()
+	for val := range rs.Validators.Ordered() {
+		pos -= val.VotingPower
+		if pos < 0 {
+			return val.PubKey
+		}
+	}
+	panic("unreachable")
+}
+
+// Compressed version of the RoundState for use in RPC.
+// Used only for JSON representation.
 type RoundStateSimple struct {
 	HeightRoundStep   string              `json:"height/round/step"`
 	StartTime         time.Time           `json:"start_time"`
@@ -403,15 +448,18 @@ type RoundStateSimple struct {
 	Proposer          types.ValidatorInfo `json:"proposer"`
 }
 
-// Compress the RoundState to RoundStateSimple
+// Compress the RoundState to RoundStateSimple.
 func (rs *RoundState) RoundStateSimple() RoundStateSimple {
 	votesJSON, err := rs.Votes.MarshalJSON()
 	if err != nil {
 		panic(err)
 	}
 
-	addr := rs.Validators.GetProposer().Address
-	idx, _ := rs.Validators.GetByAddress(addr)
+	addr := rs.Leader().Address()
+	idx, _, ok := rs.Validators.GetByAddress(addr)
+	if !ok {
+		panic(fmt.Errorf("validator %v not in committee", addr))
+	}
 
 	return RoundStateSimple{
 		HeightRoundStep:   fmt.Sprintf("%d/%d/%d", rs.Height, rs.Round, rs.Step),
@@ -429,9 +477,11 @@ func (rs *RoundState) RoundStateSimple() RoundStateSimple {
 
 // NewRoundEvent returns the RoundState with proposer information as an event.
 func (rs *RoundState) NewRoundEvent() types.EventDataNewRound {
-	addr := rs.Validators.GetProposer().Address
-	idx, _ := rs.Validators.GetByAddress(addr)
-
+	addr := rs.Leader().Address()
+	idx, _, ok := rs.Validators.GetByAddress(addr)
+	if !ok {
+		panic(fmt.Errorf("validator %v not in committee", addr))
+	}
 	return types.EventDataNewRound{
 		Height: rs.Height,
 		Round:  rs.Round,

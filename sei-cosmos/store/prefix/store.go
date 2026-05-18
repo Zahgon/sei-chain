@@ -5,10 +5,9 @@ import (
 	"errors"
 	"io"
 
-	"github.com/cosmos/cosmos-sdk/store/cachekv"
-	"github.com/cosmos/cosmos-sdk/store/listenkv"
-	"github.com/cosmos/cosmos-sdk/store/tracekv"
-	"github.com/cosmos/cosmos-sdk/store/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/cachekv"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/tracekv"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
 
 var _ types.KVStore = Store{}
@@ -48,6 +47,12 @@ func (s Store) GetStoreType() types.StoreType {
 	return s.parent.GetStoreType()
 }
 
+// Parent returns the underlying KVStore (without the key prefix). Used when unwrapping
+// to a root store that supports ABCI proofs (e.g. eth_getProof).
+func (s Store) Parent() types.KVStore {
+	return s.parent
+}
+
 // Implements CacheWrap
 func (s Store) CacheWrap(storeKey types.StoreKey) types.CacheWrap {
 	return cachekv.NewStore(s, storeKey, types.DefaultCacheSizeLimit)
@@ -56,11 +61,6 @@ func (s Store) CacheWrap(storeKey types.StoreKey) types.CacheWrap {
 // CacheWrapWithTrace implements the KVStore interface.
 func (s Store) CacheWrapWithTrace(storeKey types.StoreKey, w io.Writer, tc types.TraceContext) types.CacheWrap {
 	return cachekv.NewStore(tracekv.NewStore(s, w, tc), storeKey, types.DefaultCacheSizeLimit)
-}
-
-// CacheWrapWithListeners implements the CacheWrapper interface.
-func (s Store) CacheWrapWithListeners(storeKey types.StoreKey, listeners []types.WriteListener) types.CacheWrap {
-	return cachekv.NewStore(listenkv.NewStore(s, storeKey, listeners), storeKey, types.DefaultCacheSizeLimit)
 }
 
 func (s Store) GetWorkingHash() ([]byte, error) {

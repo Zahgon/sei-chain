@@ -9,25 +9,26 @@ import (
 	"testing"
 	"time"
 
-	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
+	distrtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/types"
 
-	"github.com/cosmos/cosmos-sdk/crypto/keys/secp256k1"
-	crptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	"github.com/cosmos/cosmos-sdk/x/staking/teststaking"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	abitypes "github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/crypto"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
+	crptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	slashingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/slashing/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/teststaking"
+	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 
 	"github.com/sei-protocol/sei-chain/app"
 	pcommon "github.com/sei-protocol/sei-chain/precompiles/common"
 	"github.com/sei-protocol/sei-chain/precompiles/distribution"
 	"github.com/sei-protocol/sei-chain/precompiles/staking"
 	"github.com/sei-protocol/sei-chain/precompiles/utils"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/ante"
 	"github.com/sei-protocol/sei-chain/x/evm/keeper"
@@ -36,7 +37,6 @@ import (
 	"github.com/sei-protocol/sei-chain/x/evm/types/ethtx"
 	minttypes "github.com/sei-protocol/sei-chain/x/mint/types"
 	"github.com/stretchr/testify/require"
-	tmtypes "github.com/tendermint/tendermint/proto/tendermint/types"
 )
 
 //go:embed abi.json
@@ -126,6 +126,12 @@ func TestWithdraw(t *testing.T) {
 	require.Nil(t, err)
 	require.Empty(t, res.VmError)
 	require.Equal(t, withdrawSeiAddr.String(), testApp.DistrKeeper.GetDelegatorWithdrawAddr(ctx, seiAddr).String())
+	receipt, err := k.GetTransientReceipt(ctx, tx.Hash(), 0)
+	require.Nil(t, err)
+	require.Equal(t, 1, len(receipt.Logs))
+	require.Equal(t, distribution.SetWithdrawAddressEventSig, common.HexToHash(receipt.Logs[0].Topics[0]))
+	require.Equal(t, common.BytesToHash(evmAddr.Bytes()), common.HexToHash(receipt.Logs[0].Topics[1]))
+	require.NotEmpty(t, receipt.Logs[0].Data)
 
 	// withdraw
 	args, err = abi.Pack("withdrawDelegationRewards", val.String())
@@ -154,6 +160,13 @@ func TestWithdraw(t *testing.T) {
 	// reinitialized
 	d, found = testApp.StakingKeeper.GetDelegation(ctx, seiAddr, val)
 	require.True(t, found)
+
+	receipt, err = k.GetTransientReceipt(ctx, tx.Hash(), 0)
+	require.Nil(t, err)
+	require.Equal(t, 1, len(receipt.Logs))
+	require.Equal(t, distribution.DelegationRewardsEventSig, common.HexToHash(receipt.Logs[0].Topics[0]))
+	require.Equal(t, common.BytesToHash(evmAddr.Bytes()), common.HexToHash(receipt.Logs[0].Topics[1]))
+	require.NotEmpty(t, receipt.Logs[0].Data)
 }
 
 func TestWithdrawMultipleDelegationRewards(t *testing.T) {
@@ -273,7 +286,7 @@ func setWithdrawAddressAndWithdraw(
 	res, err := msgServer.EVMTransaction(sdk.WrapSDKContext(ctx), req)
 	require.Nil(t, err)
 	require.Empty(t, res.VmError)
-	seiAddr, _ := testkeeper.PrivateKeyToAddresses(privKey)
+	seiAddr, evmAddr := testkeeper.PrivateKeyToAddresses(privKey)
 	require.Equal(t, withdrawSeiAddr.String(), testApp.DistrKeeper.GetDelegatorWithdrawAddr(ctx, seiAddr).String())
 
 	var validators []string
@@ -303,6 +316,13 @@ func setWithdrawAddressAndWithdraw(
 	require.Nil(t, err)
 	require.Empty(t, res.VmError)
 	require.Equal(t, uint64(148290), res.GasUsed)
+
+	receipt, err := k.GetTransientReceipt(ctx, tx.Hash(), 0)
+	require.Nil(t, err)
+	require.Equal(t, 1, len(receipt.Logs))
+	require.Equal(t, distribution.MultipleDelegationRewardsEventSig, common.HexToHash(receipt.Logs[0].Topics[0]))
+	require.Equal(t, common.BytesToHash(evmAddr.Bytes()), common.HexToHash(receipt.Logs[0].Topics[1]))
+	require.NotEmpty(t, receipt.Logs[0].Data)
 
 	// reinitialized
 	for _, val := range vals {
@@ -360,14 +380,11 @@ func TestPrecompile_RunAndCalculateGas_WithdrawDelegationRewards(t *testing.T) {
 	type fields struct {
 		Precompile                          pcommon.Precompile
 		distrKeeper                         utils.DistributionKeeper
-		evmKeeper                           utils.EVMKeeper
-		address                             common.Address
 		SetWithdrawAddrID                   []byte
 		WithdrawDelegationRewardsID         []byte
 		WithdrawMultipleDelegationRewardsID []byte
 	}
 	type args struct {
-		evm                *vm.EVM
 		caller             common.Address
 		callingContract    common.Address
 		validator          string
@@ -502,7 +519,7 @@ func TestPrecompile_RunAndCalculateGas_WithdrawDelegationRewards(t *testing.T) {
 			}
 			if err != nil {
 				require.Equal(t, vm.ErrExecutionReverted, err)
-				require.Equal(t, tt.wantErrMsg, string(gotRet))
+				require.Nil(t, gotRet)
 			} else if !reflect.DeepEqual(gotRet, tt.wantRet) {
 				t.Errorf("RunAndCalculateGas() gotRet = %v, want %v", gotRet, tt.wantRet)
 			}
@@ -521,14 +538,11 @@ func TestPrecompile_RunAndCalculateGas_WithdrawMultipleDelegationRewards(t *test
 	type fields struct {
 		Precompile                          pcommon.Precompile
 		distrKeeper                         utils.DistributionKeeper
-		evmKeeper                           utils.EVMKeeper
-		address                             common.Address
 		SetWithdrawAddrID                   []byte
 		WithdrawDelegationRewardsID         []byte
 		WithdrawMultipleDelegationRewardsID []byte
 	}
 	type args struct {
-		evm                *vm.EVM
 		caller             common.Address
 		callingContract    common.Address
 		validators         []string
@@ -663,7 +677,7 @@ func TestPrecompile_RunAndCalculateGas_WithdrawMultipleDelegationRewards(t *test
 			}
 			if err != nil {
 				require.Equal(t, vm.ErrExecutionReverted, err)
-				require.Equal(t, tt.wantErrMsg, string(gotRet))
+				require.Nil(t, gotRet)
 			} else if !reflect.DeepEqual(gotRet, tt.wantRet) {
 				t.Errorf("RunAndCalculateGas() gotRet = %v, want %v", gotRet, tt.wantRet)
 			}
@@ -682,14 +696,11 @@ func TestPrecompile_RunAndCalculateGas_SetWithdrawAddress(t *testing.T) {
 	type fields struct {
 		Precompile                          pcommon.Precompile
 		distrKeeper                         utils.DistributionKeeper
-		evmKeeper                           utils.EVMKeeper
-		address                             common.Address
 		SetWithdrawAddrID                   []byte
 		WithdrawDelegationRewardsID         []byte
 		WithdrawMultipleDelegationRewardsID []byte
 	}
 	type args struct {
-		evm                *vm.EVM
 		addressToSet       common.Address
 		caller             common.Address
 		callingContract    common.Address
@@ -839,7 +850,7 @@ func TestPrecompile_RunAndCalculateGas_SetWithdrawAddress(t *testing.T) {
 			}
 			if err != nil {
 				require.Equal(t, vm.ErrExecutionReverted, err)
-				require.Equal(t, tt.wantErrMsg, string(gotRet))
+				require.Nil(t, gotRet)
 			} else if !reflect.DeepEqual(gotRet, tt.wantRet) {
 				t.Errorf("RunAndCalculateGas() gotRet = %v, want %v", gotRet, tt.wantRet)
 			}
@@ -869,6 +880,10 @@ func (tk *TestDistributionKeeper) WithdrawValidatorCommission(ctx sdk.Context, v
 	}
 
 	return sdk.NewCoins(sdk.NewCoin("usei", sdk.NewInt(50000))), nil
+}
+
+func (tk *TestDistributionKeeper) GetDelegatorWithdrawAddr(ctx sdk.Context, delAddr sdk.AccAddress) sdk.AccAddress {
+	return delAddr
 }
 
 func (tk *TestDistributionKeeper) DelegationTotalRewards(ctx context.Context, req *distrtypes.QueryDelegationTotalRewardsRequest) (*distrtypes.QueryDelegationTotalRewardsResponse, error) {
@@ -915,6 +930,10 @@ func (tk *TestEmptyRewardsDistributionKeeper) DelegationTotalRewards(ctx context
 		Total:   []sdk.DecCoin{},
 	}
 	return response, nil
+}
+
+func (tk *TestEmptyRewardsDistributionKeeper) GetDelegatorWithdrawAddr(ctx sdk.Context, delAddr sdk.AccAddress) sdk.AccAddress {
+	return delAddr
 }
 
 func TestPrecompile_RunAndCalculateGas_Rewards(t *testing.T) {
@@ -976,14 +995,11 @@ func TestPrecompile_RunAndCalculateGas_Rewards(t *testing.T) {
 	type fields struct {
 		Precompile                          pcommon.Precompile
 		distrKeeper                         utils.DistributionKeeper
-		evmKeeper                           utils.EVMKeeper
-		address                             common.Address
 		SetWithdrawAddrID                   []byte
 		WithdrawDelegationRewardsID         []byte
 		WithdrawMultipleDelegationRewardsID []byte
 	}
 	type args struct {
-		evm                *vm.EVM
 		delegatorAddress   common.Address
 		caller             common.Address
 		callingContract    common.Address
@@ -1136,7 +1152,7 @@ func TestPrecompile_RunAndCalculateGas_Rewards(t *testing.T) {
 			}
 			if err != nil {
 				require.Equal(t, vm.ErrExecutionReverted, err)
-				require.Equal(t, tt.wantErrMsg, string(gotRet))
+				require.Nil(t, gotRet)
 			} else if !reflect.DeepEqual(gotRet, tt.wantRet) {
 				t.Errorf("RunAndCalculateGas() gotRet = %v, want %v", gotRet, tt.wantRet)
 			}
@@ -1235,7 +1251,7 @@ func TestWithdrawValidatorCommission_noCommissionToWithdrawRightAfterDelegation(
 	ante.Preprocess(ctx, req, k.ChainID(ctx), false)
 	res, err = msgServer.EVMTransaction(sdk.WrapSDKContext(ctx), req)
 	require.Nil(t, err)
-	require.Equal(t, "no validator commission to withdraw", string(res.ReturnData))
+	require.Nil(t, res.ReturnData)
 
 }
 
@@ -1376,7 +1392,7 @@ func TestWithdrawValidatorCommission_InputValidation(t *testing.T) {
 
 			if tc.wantError {
 				require.NotNil(t, err, "Expected error for test case: %s", tc.name)
-				require.Equal(t, tc.wantErrMsg, string(ret))
+				require.Nil(t, ret)
 			} else {
 				require.Nil(t, err, "Expected no error for test case: %s", tc.name)
 				require.Greater(t, remainingGas, uint64(0), "Should have remaining gas")

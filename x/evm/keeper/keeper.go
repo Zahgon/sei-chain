@@ -7,19 +7,8 @@ import (
 	"fmt"
 	"math"
 	"math/big"
-	"slices"
-	"sort"
 	"sync"
 
-	wasmkeeper "github.com/CosmWasm/wasmd/x/wasm/keeper"
-	"github.com/cosmos/cosmos-sdk/store/prefix"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
-	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
-	ibctransferkeeper "github.com/cosmos/ibc-go/v3/modules/apps/transfer/keeper"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/consensus"
 	"github.com/ethereum/go-ethereum/consensus/misc/eip4844"
@@ -32,9 +21,19 @@ import (
 	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/tests"
 	"github.com/holiman/uint256"
-	seidbtypes "github.com/sei-protocol/sei-db/ss/types"
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmtypes "github.com/tendermint/tendermint/types"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/store/prefix"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	authkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/keeper"
+	bankkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/keeper"
+	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
+	stakingkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/keeper"
+	upgradekeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/keeper"
+	receipt "github.com/sei-protocol/sei-chain/sei-db/ledger_db/receipt"
+	sctypes "github.com/sei-protocol/sei-chain/sei-db/state_db/sc/types"
+	ibctransferkeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/transfer/keeper"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
+	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
+	wasmkeeper "github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/keeper"
 
 	putils "github.com/sei-protocol/sei-chain/precompiles/utils"
 	"github.com/sei-protocol/sei-chain/utils"
@@ -67,9 +66,6 @@ type Keeper struct {
 
 	cachedFeeCollectorAddressMtx *sync.RWMutex
 	cachedFeeCollectorAddress    *common.Address
-	nonceMx                      *sync.RWMutex
-	pendingTxs                   map[string][]*PendingTx
-	keyToNonce                   map[tmtypes.TxKey]*AddressNoncePair
 
 	QueryConfig *querier.Config
 
@@ -88,22 +84,21 @@ type Keeper struct {
 	Root        common.Hash
 	ReplayBlock *ethtypes.Block
 
-	receiptStore seidbtypes.StateStore
+	receiptStore receipt.ReceiptStore
 
 	customPrecompiles       map[common.Address]putils.VersionedPrecompiles
 	latestCustomPrecompiles map[common.Address]vm.PrecompiledContract
 	latestUpgrade           string
-}
 
-type AddressNoncePair struct {
-	Address common.Address
-	Nonce   uint64
-}
+	// traceDB, when non-nil, serves cached debug_trace results and
+	// forwards EndBlock heights to the registered baker. nil-safe.
+	traceDB *TraceDB
 
-type PendingTx struct {
-	Key      tmtypes.TxKey
-	Nonce    uint64
-	Priority int64
+	// traceSnapshotStore + traceSnapshotCapture, when set, capture an O(1)
+	// memiavl snapshot of the SC tree at EndBlock so the baker replays
+	// against in-memory state instead of SS-pebble. nil-safe.
+	traceSnapshotStore   *TraceSnapshotStore
+	traceSnapshotCapture func() sctypes.Committer
 }
 
 // only used during ETH replay
@@ -130,7 +125,7 @@ func (ctx *ReplayChainContext) Config() *params.ChainConfig {
 }
 
 func NewKeeper(
-	storeKey sdk.StoreKey, transientStoreKey sdk.StoreKey, paramstore paramtypes.Subspace, receiptStateStore seidbtypes.StateStore,
+	storeKey sdk.StoreKey, transientStoreKey sdk.StoreKey, paramstore paramtypes.Subspace, receiptStore receipt.ReceiptStore,
 	bankKeeper bankkeeper.Keeper, accountKeeper *authkeeper.AccountKeeper, stakingKeeper *stakingkeeper.Keeper,
 	transferKeeper ibctransferkeeper.Keeper, wasmKeeper *wasmkeeper.PermissionedKeeper, wasmViewKeeper *wasmkeeper.Keeper, upgradeKeeper *upgradekeeper.Keeper) *Keeper {
 
@@ -148,13 +143,19 @@ func NewKeeper(
 		wasmKeeper:                   wasmKeeper,
 		wasmViewKeeper:               wasmViewKeeper,
 		upgradeKeeper:                upgradeKeeper,
-		pendingTxs:                   make(map[string][]*PendingTx),
-		nonceMx:                      &sync.RWMutex{},
 		cachedFeeCollectorAddressMtx: &sync.RWMutex{},
-		keyToNonce:                   make(map[tmtypes.TxKey]*AddressNoncePair),
-		receiptStore:                 receiptStateStore,
+		receiptStore:                 receiptStore,
 	}
 	return k
+}
+
+func (k *Keeper) SetTraceDB(c *TraceDB) { k.traceDB = c }
+func (k *Keeper) TraceDB() *TraceDB     { return k.traceDB }
+
+func (k *Keeper) SetTraceSnapshotStore(s *TraceSnapshotStore) { k.traceSnapshotStore = s }
+func (k *Keeper) TraceSnapshotStore() *TraceSnapshotStore     { return k.traceSnapshotStore }
+func (k *Keeper) SetTraceSnapshotCapture(f func() sctypes.Committer) {
+	k.traceSnapshotCapture = f
 }
 
 func (k *Keeper) SetCustomPrecompiles(cp map[common.Address]putils.VersionedPrecompiles, latestUpgrade string) {
@@ -211,6 +212,10 @@ func (k *Keeper) AccountKeeper() *authkeeper.AccountKeeper {
 
 func (k *Keeper) BankKeeper() bankkeeper.Keeper {
 	return k.bankKeeper
+}
+
+func (k *Keeper) ReceiptStore() receipt.ReceiptStore {
+	return k.receiptStore
 }
 
 func (k *Keeper) WasmKeeper() *wasmkeeper.PermissionedKeeper {
@@ -304,7 +309,7 @@ func (k *Keeper) GetVMBlockContext(ctx sdk.Context, gp core.GasPool) (*vm.BlockC
 func (k *Keeper) GetHashFn(ctx sdk.Context) vm.GetHashFunc {
 	return func(height uint64) common.Hash {
 		if height > math.MaxInt64 {
-			ctx.Logger().Error("Sei block height is bounded by int64 range")
+			logger.Error("Sei block height is bounded by int64 range")
 			return common.Hash{}
 		}
 		h := int64(height)
@@ -332,127 +337,12 @@ func (k *Keeper) getHistoricalHash(ctx sdk.Context, h int64) common.Hash {
 	return common.BytesToHash(header.Hash())
 }
 
-// CalculateNextNonce calculates the next nonce for an address
-// If includePending is true, it will consider pending nonces
-// If includePending is false, it will only return the next nonce from GetNonce
-func (k *Keeper) CalculateNextNonce(ctx sdk.Context, addr common.Address, includePending bool) uint64 {
-	k.nonceMx.Lock()
-	defer k.nonceMx.Unlock()
-
-	nextNonce := k.GetNonce(ctx, addr)
-
-	// we only want the latest nonce if we're not including pending
-	if !includePending {
-		return nextNonce
-	}
-
-	// get the pending nonces (nil is fine)
-	pending := k.pendingTxs[addr.Hex()]
-
-	// Check each nonce starting from latest until we find a gap
-	// That gap is the next nonce we should use.
-	for ; ; nextNonce++ {
-		// if it's not in pending, then it's the next nonce
-		if _, found := sort.Find(len(pending), func(i int) int { return uint64Cmp(nextNonce, pending[i].Nonce) }); !found {
-			return nextNonce
-		}
-	}
-}
-
-// AddPendingNonce adds a pending nonce to the keeper
-func (k *Keeper) AddPendingNonce(key tmtypes.TxKey, addr common.Address, nonce uint64, priority int64) {
-	k.nonceMx.Lock()
-	defer k.nonceMx.Unlock()
-
-	addrStr := addr.Hex()
-	if existing, ok := k.keyToNonce[key]; ok {
-		if existing.Nonce != nonce {
-			fmt.Printf("Seeing transactions with the same hash %X but different nonces (%d vs. %d), which should be impossible\n", key, nonce, existing.Nonce)
-		}
-		if existing.Address != addr {
-			fmt.Printf("Seeing transactions with the same hash %X but different addresses (%s vs. %s), which should be impossible\n", key, addr.Hex(), existing.Address.Hex())
-		}
-		// we want to no-op whether it's a genuine duplicate or not
-		return
-	}
-	for _, pendingTx := range k.pendingTxs[addrStr] {
-		if pendingTx.Nonce == nonce {
-			if priority > pendingTx.Priority {
-				// replace existing tx
-				delete(k.keyToNonce, pendingTx.Key)
-				pendingTx.Priority = priority
-				pendingTx.Key = key
-				k.keyToNonce[key] = &AddressNoncePair{
-					Address: addr,
-					Nonce:   nonce,
-				}
-			}
-			// we don't need to return error here if priority is lower.
-			// Tendermint will take care of rejecting the tx from mempool
-			return
-		}
-	}
-	k.keyToNonce[key] = &AddressNoncePair{
-		Address: addr,
-		Nonce:   nonce,
-	}
-	k.pendingTxs[addrStr] = append(k.pendingTxs[addrStr], &PendingTx{
-		Key:      key,
-		Nonce:    nonce,
-		Priority: priority,
-	})
-	slices.SortStableFunc(k.pendingTxs[addrStr], func(a, b *PendingTx) int {
-		if a.Nonce < b.Nonce {
-			return -1
-		} else if a.Nonce > b.Nonce {
-			return 1
-		}
-		return 0
-	})
-}
-
-// RemovePendingNonce removes a pending nonce from the keeper but leaves a hole
-// so that a future transaction must use this nonce.
-func (k *Keeper) RemovePendingNonce(key tmtypes.TxKey) {
-	k.nonceMx.Lock()
-	defer k.nonceMx.Unlock()
-	tx, ok := k.keyToNonce[key]
-
-	if !ok {
-		return
-	}
-
-	delete(k.keyToNonce, key)
-
-	addr := tx.Address.Hex()
-	pendings := k.pendingTxs[addr]
-	firstMatch, found := sort.Find(len(pendings), func(i int) int { return uint64Cmp(tx.Nonce, pendings[i].Nonce) })
-	if !found {
-		fmt.Printf("Removing tx %X without a corresponding pending nonce, which should not happen\n", key)
-		return
-	}
-	k.pendingTxs[addr] = append(k.pendingTxs[addr][:firstMatch], k.pendingTxs[addr][firstMatch+1:]...)
-	if len(k.pendingTxs[addr]) == 0 {
-		delete(k.pendingTxs, addr)
-	}
-}
-
 func (k *Keeper) SetTxResults(txResults []*abci.ExecTxResult) {
 	k.txResults = txResults
 }
 
 func (k *Keeper) SetMsgs(msgs []*types.MsgEVMTransaction) {
 	k.msgs = msgs
-}
-
-// Test use only
-func (k *Keeper) GetPendingTxs() map[string][]*PendingTx {
-	return k.pendingTxs
-}
-
-// Test use only
-func (k *Keeper) GetKeysToNonces() map[tmtypes.TxKey]*AddressNoncePair {
-	return k.keyToNonce
 }
 
 // Only used in ETH replay

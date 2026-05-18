@@ -10,16 +10,18 @@ import (
 	"runtime/debug"
 	"strings"
 
-	"github.com/armon/go-metrics"
-	"github.com/cosmos/cosmos-sdk/telemetry"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	occtypes "github.com/cosmos/cosmos-sdk/types/occ"
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	armonmetrics "github.com/armon/go-metrics"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
+	occtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/occ"
+	bankkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/keeper"
+	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
+	"github.com/sei-protocol/seilog"
+	"go.opentelemetry.io/otel/attribute"
+	otelmetric "go.opentelemetry.io/otel/metric"
 
 	"github.com/sei-protocol/sei-chain/precompiles/wasmd"
 	"github.com/sei-protocol/sei-chain/utils"
@@ -30,6 +32,8 @@ import (
 	"github.com/sei-protocol/sei-chain/x/evm/state"
 	"github.com/sei-protocol/sei-chain/x/evm/types"
 )
+
+var logger = seilog.NewLogger("x", "evm", "keeper")
 
 type msgServer struct {
 	*Keeper
@@ -78,36 +82,27 @@ func (server msgServer) EVMTransaction(goCtx context.Context, msg *types.MsgEVMT
 		if pe := recover(); pe != nil {
 			if !strings.Contains(fmt.Sprintf("%s", pe), occtypes.ErrReadEstimate.Error()) {
 				debug.PrintStack()
-				ctx.Logger().Error(fmt.Sprintf("EVM PANIC: %s", pe))
-				seimetrics.SafeTelemetryIncrCounter(1, types.ModuleName, "panics")
+				logger.Error("EVM PANIC", "err", pe)
+				seimetrics.SafeTelemetryIncrCounter(1, types.ModuleName, "panics") // TODO(PLT-330): remove once evm_panics_total verified
+				evmKeeperMetrics.panics.Add(goCtx, 1)
 			}
 			panic(pe)
 		}
 		if err != nil {
-			ctx.Logger().Error(fmt.Sprintf("Got EVM state transition error (not VM error): %s", err))
+			logger.Error("Got EVM state transition error (not VM error)", "err", err)
 
-			seimetrics.SafeTelemetryIncrCounterWithLabels(
-				[]string{types.ModuleName, "errors", "state_transition"},
-				1,
-				[]metrics.Label{
-					telemetry.NewLabel("type", err.Error()),
-				},
-			)
+			seimetrics.SafeTelemetryIncrCounterWithLabels([]string{types.ModuleName, "errors", "state_transition"}, 1, []armonmetrics.Label{{Name: "type", Value: err.Error()}}) // TODO(PLT-330): remove once evm_errors_total verified
+			evmKeeperMetrics.errors.Add(goCtx, 1, otelmetric.WithAttributes(attribute.String("type", "state_transition")))
 			return
 		}
 		extraSurplus := sdk.ZeroInt()
 		surplus, ferr := stateDB.Finalize()
 		if ferr != nil {
 			err = ferr
-			ctx.Logger().Error(fmt.Sprintf("failed to finalize EVM stateDB: %s", err))
+			logger.Error("failed to finalize EVM stateDB", "err", err)
 
-			seimetrics.SafeTelemetryIncrCounterWithLabels(
-				[]string{types.ModuleName, "errors", "stateDB_finalize"},
-				1,
-				[]metrics.Label{
-					telemetry.NewLabel("type", err.Error()),
-				},
-			)
+			seimetrics.SafeTelemetryIncrCounterWithLabels([]string{types.ModuleName, "errors", "stateDB_finalize"}, 1, []armonmetrics.Label{{Name: "type", Value: err.Error()}}) // TODO(PLT-330): remove once evm_errors_total verified
+			evmKeeperMetrics.errors.Add(goCtx, 1, otelmetric.WithAttributes(attribute.String("type", "stateDB_finalize")))
 			return
 		}
 		if ctx.EVMEntryViaWasmdPrecompile() {
@@ -133,23 +128,20 @@ func (server msgServer) EVMTransaction(goCtx context.Context, msg *types.MsgEVMT
 		receipt, rerr := server.WriteReceipt(ctx, stateDB, emsg, uint32(tx.Type()), tx.Hash(), serverRes.GasUsed, serverRes.VmError)
 		if rerr != nil {
 			err = rerr
-			ctx.Logger().Error(fmt.Sprintf("failed to write EVM receipt: %s", err))
+			logger.Error("failed to write EVM receipt", "err", err)
 
-			seimetrics.SafeTelemetryIncrCounterWithLabels(
-				[]string{types.ModuleName, "errors", "write_receipt"},
-				1,
-				[]metrics.Label{
-					telemetry.NewLabel("type", err.Error()),
-				},
-			)
+			seimetrics.SafeTelemetryIncrCounterWithLabels([]string{types.ModuleName, "errors", "write_receipt"}, 1, []armonmetrics.Label{{Name: "type", Value: err.Error()}}) // TODO(PLT-330): remove once evm_errors_total verified
+			evmKeeperMetrics.errors.Add(goCtx, 1, otelmetric.WithAttributes(attribute.String("type", "write_receipt")))
 			return
 		}
 
 		// Add metrics for receipt status
 		if receipt.Status == uint32(ethtypes.ReceiptStatusFailed) {
-			seimetrics.SafeTelemetryIncrCounter(1, "receipt", "status", "failed")
+			seimetrics.SafeTelemetryIncrCounter(1, "receipt", "status", "failed") // TODO(PLT-330): remove once evm_receipt_status_total verified
+			evmKeeperMetrics.receiptStatus.Add(goCtx, 1, otelmetric.WithAttributes(attribute.String("status", "failed")))
 		} else {
-			seimetrics.SafeTelemetryIncrCounter(1, "receipt", "status", "success")
+			seimetrics.SafeTelemetryIncrCounter(1, "receipt", "status", "success") // TODO(PLT-330): remove once evm_receipt_status_total verified
+			evmKeeperMetrics.receiptStatus.Add(goCtx, 1, otelmetric.WithAttributes(attribute.String("status", "success")))
 		}
 
 		surplus = surplus.Add(extraSurplus)
@@ -175,13 +167,8 @@ func (server msgServer) EVMTransaction(goCtx context.Context, msg *types.MsgEVMT
 		// be checked in CheckTx first
 		err = applyErr
 
-		seimetrics.SafeTelemetryIncrCounterWithLabels(
-			[]string{types.ModuleName, "errors", "apply_message"},
-			1,
-			[]metrics.Label{
-				telemetry.NewLabel("type", err.Error()),
-			},
-		)
+		seimetrics.SafeTelemetryIncrCounterWithLabels([]string{types.ModuleName, "errors", "apply_message"}, 1, []armonmetrics.Label{{Name: "type", Value: err.Error()}}) // TODO(PLT-330): remove once evm_errors_total verified
+		evmKeeperMetrics.errors.Add(goCtx, 1, otelmetric.WithAttributes(attribute.String("type", "apply_message")))
 
 		return
 	}
@@ -190,13 +177,8 @@ func (server msgServer) EVMTransaction(goCtx context.Context, msg *types.MsgEVMT
 	if res.Err != nil {
 		serverRes.VmError = res.Err.Error()
 
-		seimetrics.SafeTelemetryIncrCounterWithLabels(
-			[]string{types.ModuleName, "errors", "vm_execution"},
-			1,
-			[]metrics.Label{
-				telemetry.NewLabel("type", serverRes.VmError),
-			},
-		)
+		seimetrics.SafeTelemetryIncrCounterWithLabels([]string{types.ModuleName, "errors", "vm_execution"}, 1, []armonmetrics.Label{{Name: "type", Value: serverRes.VmError}}) // TODO(PLT-330): remove once evm_errors_total verified
+		evmKeeperMetrics.errors.Add(goCtx, 1, otelmetric.WithAttributes(attribute.String("type", "vm_execution")))
 	}
 
 	serverRes.GasUsed = res.UsedGas
@@ -242,9 +224,10 @@ func (k Keeper) applyEVMMessage(ctx sdk.Context, msg *core.Message, stateDB *sta
 	if err != nil {
 		return nil, err
 	}
-	sstore := k.GetParams(ctx).SeiSstoreSetGasEip2200
+	sstore := k.GetSstoreSetGasEIP2200(ctx)
 	cfg := types.DefaultChainConfig().EthereumConfigWithSstore(k.ChainID(ctx), &sstore)
 	txCtx := core.NewEVMTxContext(msg)
+
 	evmInstance := vm.NewEVM(*blockCtx, stateDB, cfg, vm.Config{}, k.CustomPrecompiles(ctx))
 	evmInstance.SetTxContext(txCtx)
 	st := core.NewStateTransition(evmInstance, msg, &gp, true, shouldIncrementNonce) // fee already charged in ante handler
@@ -355,7 +338,7 @@ func (server msgServer) AssociateContractAddress(goCtx context.Context, msg *typ
 	existingEvmAddr, ok := server.GetEVMAddress(ctx, addr)
 	if ok {
 		if existingEvmAddr.Cmp(evmAddr) != 0 {
-			ctx.Logger().Error(fmt.Sprintf("unexpected associated EVM address %s exists for contract %s: expecting %s", existingEvmAddr.Hex(), addr.String(), evmAddr.Hex()))
+			logger.Error("unexpected associated EVM address exists for contract", "existing", existingEvmAddr, "contract", addr, "expected", evmAddr)
 		}
 		return nil, errors.New("contract already has an associated address")
 	}

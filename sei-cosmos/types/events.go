@@ -1,7 +1,6 @@
 package types
 
 import (
-	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"reflect"
@@ -15,9 +14,9 @@ import (
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/gogo/protobuf/jsonpb"
 	proto "github.com/gogo/protobuf/proto"
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 
-	"github.com/cosmos/cosmos-sdk/codec"
+	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 )
 
 // ----------------------------------------------------------------------------
@@ -107,32 +106,6 @@ func (em *EventManager) EmitTypedEvents(tevs ...proto.Message) error {
 	return nil
 }
 
-func (em *EventManager) EmitResourceAccessReadEvent(operation string, storeKey StoreKey, key, value []byte) {
-	em.EmitEvent(
-		NewEvent(
-			EventTypeResourceAccess,
-			NewAttribute(AttributeKeyAccessType, AttributeKeyAccessTypeRead),
-			NewAttribute(AttributeKeyStoreKey, storeKey.Name()),
-			NewAttribute(AttributeKeyResourceKey, hex.EncodeToString(key)),
-			NewAttribute(AttributeKeyResourceValue, hex.EncodeToString(value)),
-			NewAttribute(AttributeKeyOperation, operation),
-		),
-	)
-}
-
-func (em *EventManager) EmitResourceAccessWriteEvent(operation string, storeKey StoreKey, key, value []byte) {
-	em.EmitEvent(
-		NewEvent(
-			EventTypeResourceAccess,
-			NewAttribute(AttributeKeyAccessType, AttributeKeyAccessTypeWrite),
-			NewAttribute(AttributeKeyStoreKey, storeKey.Name()),
-			NewAttribute(AttributeKeyResourceKey, hex.EncodeToString(key)),
-			NewAttribute(AttributeKeyResourceValue, hex.EncodeToString(value)),
-			NewAttribute(AttributeKeyOperation, operation),
-		),
-	)
-}
-
 // TypedEventToEvent takes typed event and converts to Event object
 func TypedEventToEvent(tev proto.Message) (Event, error) {
 	evtType := proto.MessageName(tev)
@@ -187,7 +160,7 @@ func ParseTypedEvent(event abci.Event) (proto.Message, error) {
 
 	attrMap := make(map[string]json.RawMessage)
 	for _, attr := range event.Attributes {
-		attrMap[string(attr.Key)] = []byte(attr.Value)
+		attrMap[string(attr.Key)] = attr.Value
 	}
 
 	attrBytes, err := json.Marshal(attrMap)
@@ -273,17 +246,6 @@ func (e Events) ToABCIEvents() []abci.Event {
 	}
 
 	return res
-}
-
-func toBytes(i interface{}) []byte {
-	switch x := i.(type) {
-	case []uint8:
-		return x
-	case string:
-		return []byte(x)
-	default:
-		panic(i)
-	}
 }
 
 // Common event types and attribute keys

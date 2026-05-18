@@ -3,11 +3,13 @@ package types
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
+	"math/big"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/gogo/protobuf/jsonpb"
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/encoding"
-	"github.com/tendermint/tendermint/internal/jsontypes"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
+	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
 )
 
 const (
@@ -17,6 +19,13 @@ const (
 // IsOK returns true if Code is OK.
 func (r ResponseCheckTx) IsOK() bool {
 	return r.Code == CodeTypeOK
+}
+
+func (r ResponseCheckTx) Err() error {
+	if r.IsOK() {
+		return nil
+	}
+	return errors.New(r.Log)
 }
 
 // IsErr returns true if Code is something other than OK.
@@ -60,21 +69,6 @@ func (r ResponseProcessProposal) IsAccepted() bool {
 
 func (r ResponseProcessProposal) IsStatusUnknown() bool {
 	return r.Status == ResponseProcessProposal_UNKNOWN
-}
-
-// IsStatusUnknown returns true if Code is Unknown
-func (r ResponseVerifyVoteExtension) IsStatusUnknown() bool {
-	return r.Status == ResponseVerifyVoteExtension_UNKNOWN
-}
-
-// IsOK returns true if Code is OK
-func (r ResponseVerifyVoteExtension) IsOK() bool {
-	return r.Status == ResponseVerifyVoteExtension_ACCEPT
-}
-
-// IsErr returns true if Code is something other than OK.
-func (r ResponseVerifyVoteExtension) IsErr() bool {
-	return r.Status != ResponseVerifyVoteExtension_ACCEPT
 }
 
 //---------------------------------------------------------------------------
@@ -148,7 +142,7 @@ type validatorUpdateJSON struct {
 }
 
 func (v *ValidatorUpdate) MarshalJSON() ([]byte, error) {
-	key, err := encoding.PubKeyFromProto(v.PubKey)
+	key, err := crypto.PubKeyFromProto(v.PubKey)
 	if err != nil {
 		return nil, err
 	}
@@ -171,11 +165,7 @@ func (v *ValidatorUpdate) UnmarshalJSON(data []byte) error {
 	if err := jsontypes.Unmarshal(vu.PubKey, &key); err != nil {
 		return err
 	}
-	pkey, err := encoding.PubKeyToProto(key)
-	if err != nil {
-		return err
-	}
-	v.PubKey = pkey
+	v.PubKey = crypto.PubKeyToProto(key)
 	v.Power = vu.Power
 	return nil
 }
@@ -199,16 +189,6 @@ var _ jsonRoundTripper = (*EventAttribute)(nil)
 
 // -----------------------------------------------
 // construct Result data
-
-func RespondVerifyVoteExtension(ok bool) ResponseVerifyVoteExtension {
-	status := ResponseVerifyVoteExtension_REJECT
-	if ok {
-		status = ResponseVerifyVoteExtension_ACCEPT
-	}
-	return ResponseVerifyVoteExtension{
-		Status: status,
-	}
-}
 
 // deterministicExecTxResult constructs a copy of response that omits
 // non-deterministic fields. The input response is not modified.
@@ -246,19 +226,45 @@ const (
 	Pending
 )
 
-type PendingTxChecker func() PendingTxCheckerResponse
-type ExpireTxHandler func()
-
 // ResponseCheckTxV2 response type contains non-protobuf fields, so non-local ABCI clients will not be able
 // to utilize the new fields in V2 type (but still be backwards-compatible)
 type ResponseCheckTxV2 struct {
 	*ResponseCheckTx
-	IsPendingTransaction bool
-	Checker              PendingTxChecker // must not be nil if IsPendingTransaction is true
-	ExpireTxHandler      ExpireTxHandler
 
 	// helper properties for prioritization in mempool
-	EVMNonce         uint64
-	EVMSenderAddress string
-	IsEVM            bool
+	EVMNonce uint64
+	// EVM and sei addresses are both derived from the sender's public key.
+	// TODO(gprusak): include just the secp256k1 public key and let the CheckTx caller derive evm/sei address on their own.
+	EVMSenderAddress   common.Address
+	SeiSenderAddress   []byte
+	IsEVM              bool
+	EVMRequiredBalance *big.Int
+}
+
+type CheckTxTypeV2 int32
+
+const (
+	CheckTxTypeV2New CheckTxTypeV2 = iota
+	CheckTxTypeV2Recheck
+)
+
+type RequestCheckTxV2 struct {
+	Tx   []byte
+	Type CheckTxTypeV2
+}
+
+type RequestDeliverTxV2 struct {
+	Tx          []byte
+	SigVerified bool
+}
+
+type RequestGetTxPriorityHintV2 struct {
+	Tx []byte
+}
+
+type TxResultV2 struct {
+	Height int64
+	Index  uint32
+	Tx     []byte
+	Result ExecTxResult
 }

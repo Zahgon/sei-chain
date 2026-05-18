@@ -7,13 +7,13 @@ import (
 	"fmt"
 	"math/big"
 
-	storetypes "github.com/cosmos/cosmos-sdk/store/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/tracing"
 	"github.com/ethereum/go-ethereum/core/vm"
 	putils "github.com/sei-protocol/sei-chain/precompiles/utils"
+	storetypes "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
+	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/utils/metrics"
 	"github.com/sei-protocol/sei-chain/x/evm/state"
 	"github.com/sei-protocol/sei-chain/x/evm/types"
@@ -66,7 +66,6 @@ func (p Precompile) Run(evm *vm.EVM, caller common.Address, callingContract comm
 	defer func() {
 		HandlePrecompileError(err, evm, operation)
 		if err != nil {
-			bz = []byte(err.Error())
 			err = vm.ErrExecutionReverted
 		}
 	}()
@@ -159,7 +158,6 @@ func (d DynamicGasPrecompile) RunAndCalculateGas(evm *vm.EVM, caller common.Addr
 	defer func() {
 		HandlePrecompileError(err, evm, operation)
 		if err != nil {
-			ret = []byte(err.Error())
 			fmt.Printf("precompile %s encountered error: %v\n", d.name, err)
 			err = vm.ErrExecutionReverted
 		}
