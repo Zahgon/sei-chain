@@ -1,9 +1,6 @@
 package crypto
 
 import (
-	"fmt"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 	pb "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/crypto"
@@ -20,16 +17,10 @@ var PubKeyConv = utils.ProtoConv[PubKey, *pb.PublicKey]{
 }
 
 // PubKeyToProto takes crypto.PubKey and transforms it to a protobuf Pubkey
-func PubKeyToProto(k PubKey) pb.PublicKey {
-	return pb.PublicKey{Sum: &pb.PublicKey_Ed25519{Ed25519: k.Bytes()}}
-}
+func PubKeyToProto(k PubKey) pb.PublicKey { _ = "STUB: not implemented"; return *new(pb.PublicKey) }
 
 // PubKeyFromProto takes a protobuf Pubkey and transforms it to a crypto.Pubkey
 func PubKeyFromProto(k pb.PublicKey) (PubKey, error) {
-	switch k := k.Sum.(type) {
-	case *pb.PublicKey_Ed25519:
-		return ed25519.PublicKeyFromBytes(k.Ed25519)
-	default:
-		return PubKey{}, fmt.Errorf("fromproto: key type %v is not supported", k)
-	}
+	_ = "STUB: not implemented"
+	return *new(PubKey), nil
 }

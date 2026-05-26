@@ -5,8 +5,6 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/cachekv"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/tracekv"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
 
@@ -16,105 +14,63 @@ type Store struct {
 }
 
 func (dsa Store) GetWorkingHash() ([]byte, error) {
-	return []byte{}, nil
+	_ = "STUB: not implemented"
+	return nil,
+
+		// Get wraps the underlying DB's Get method panicing on error.
+		nil
 }
 
-// Get wraps the underlying DB's Get method panicing on error.
-func (dsa Store) Get(key []byte) []byte {
-	v, err := dsa.DB.Get(key)
-	if err != nil {
-		panic(err)
-	}
-
-	return v
-}
+func (dsa Store) Get(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // Has wraps the underlying DB's Has method panicing on error.
-func (dsa Store) Has(key []byte) bool {
-	ok, err := dsa.DB.Has(key)
-	if err != nil {
-		panic(err)
-	}
-
-	return ok
-}
+func (dsa Store) Has(key []byte) bool { _ = "STUB: not implemented"; return false }
 
 // Set wraps the underlying DB's Set method panicing on error.
-func (dsa Store) Set(key, value []byte) {
-	types.AssertValidKey(key)
-	if err := dsa.DB.Set(key, value); err != nil {
-		panic(err)
-	}
-}
+func (dsa Store) Set(key, value []byte) { _ = "STUB: not implemented"; return }
 
 // Delete wraps the underlying DB's Delete method panicing on error.
-func (dsa Store) Delete(key []byte) {
-	if err := dsa.DB.Delete(key); err != nil {
-		panic(err)
-	}
-}
+func (dsa Store) Delete(key []byte) { _ = "STUB: not implemented"; return }
 
 // Iterator wraps the underlying DB's Iterator method panicing on error.
 func (dsa Store) Iterator(start, end []byte) types.Iterator {
-	iter, err := dsa.DB.Iterator(start, end)
-	if err != nil {
-		panic(err)
-	}
-
-	return iter
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // ReverseIterator wraps the underlying DB's ReverseIterator method panicing on error.
 func (dsa Store) ReverseIterator(start, end []byte) types.Iterator {
-	iter, err := dsa.DB.ReverseIterator(start, end)
-	if err != nil {
-		panic(err)
-	}
-
-	return iter
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // GetStoreType returns the type of the store.
 func (Store) GetStoreType() types.StoreType {
-	return types.StoreTypeDB
+	_ = "STUB: not implemented"
+	return *
+
+	// CacheWrap branches the underlying store.
+	new(types.StoreType)
 }
 
-// CacheWrap branches the underlying store.
 func (dsa Store) CacheWrap(storeKey types.StoreKey) types.CacheWrap {
-	return cachekv.NewStore(dsa, storeKey, types.DefaultCacheSizeLimit)
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 // CacheWrapWithTrace implements KVStore.
 func (dsa Store) CacheWrapWithTrace(storeKey types.StoreKey, w io.Writer, tc types.TraceContext) types.CacheWrap {
-	return cachekv.NewStore(tracekv.NewStore(dsa, w, tc), storeKey, types.DefaultCacheSizeLimit)
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
-func (dsa Store) VersionExists(version int64) bool {
-	panic("no versioning for dbadater")
-}
+func (dsa Store) VersionExists(version int64) bool { _ = "STUB: not implemented"; return false }
 
-func (dsa Store) DeleteAll(start, end []byte) error {
-	iter := dsa.Iterator(start, end)
-	keys := [][]byte{}
-	for ; iter.Valid(); iter.Next() {
-		keys = append(keys, iter.Key())
-	}
-	if err := iter.Close(); err != nil {
-		return err
-	}
-	for _, key := range keys {
-		dsa.Delete(key)
-	}
-	return nil
-}
+func (dsa Store) DeleteAll(start, end []byte) error { _ = "STUB: not implemented"; return nil }
 
 func (dsa Store) GetAllKeyStrsInRange(start, end []byte) (res []string) {
-	iter := dsa.Iterator(start, end)
-	defer func() { _ = iter.Close() }()
-	for ; iter.Valid(); iter.Next() {
-		res = append(res, string(iter.Key()))
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // dbm.DB implements KVStore so we can CacheKVStore it.

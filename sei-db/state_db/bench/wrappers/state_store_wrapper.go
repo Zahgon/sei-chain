@@ -1,7 +1,6 @@
 package wrappers
 
 import (
-	"fmt"
 	"sync/atomic"
 
 	"github.com/sei-protocol/sei-chain/sei-db/common/metrics"
@@ -22,50 +21,34 @@ type stateStoreWrapper struct {
 }
 
 func NewStateStoreWrapper(store dbTypes.StateStore) DBWrapper {
-	w := &stateStoreWrapper{
-		base: store,
-	}
-	w.version.Store(store.GetLatestVersion())
-	return w
+	_ = "STUB: not implemented"
+	return *new(DBWrapper)
 }
 
 func (s *stateStoreWrapper) ApplyChangeSets(entry *proto.ChangelogEntry) error {
-	s.version.Store(entry.Version)
-	return s.base.ApplyChangesetAsync(entry.Version, entry.Changesets)
-}
-
-func (s *stateStoreWrapper) Read(key []byte) (data []byte, found bool, err error) {
-	version := s.version.Load()
-	if version == 0 {
-		return nil, false, nil
-	}
-	val, err := s.base.Get(EVMStoreName, version, key)
-	if err != nil {
-		return nil, false, err
-	}
-	return val, val != nil, nil
-}
-
-func (s *stateStoreWrapper) Commit() (int64, error) {
-	return s.version.Load(), nil
-}
-
-func (s *stateStoreWrapper) Close() error {
-	return s.base.Close()
-}
-
-func (s *stateStoreWrapper) Version() int64 {
-	return s.version.Load()
-}
-
-func (s *stateStoreWrapper) LoadVersion(_ int64) error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
+func (s *stateStoreWrapper) Read(key []byte) (data []byte, found bool, err error) {
+	_ = "STUB: not implemented"
+	return nil, false, nil
+}
+
+func (s *stateStoreWrapper) Commit() (int64, error) { _ = "STUB: not implemented"; return 0, nil }
+
+func (s *stateStoreWrapper) Close() error { _ = "STUB: not implemented"; return nil }
+
+func (s *stateStoreWrapper) Version() int64 { _ = "STUB: not implemented"; return 0 }
+
+func (s *stateStoreWrapper) LoadVersion(_ int64) error { _ = "STUB: not implemented"; return nil }
+
 func (s *stateStoreWrapper) Importer(_ int64) (scTypes.Importer, error) {
-	return nil, fmt.Errorf("import not supported for state store wrapper")
+	_ = "STUB: not implemented"
+	return *new(scTypes.Importer), nil
 }
 
 func (s *stateStoreWrapper) GetPhaseTimer() *metrics.PhaseTimer {
+	_ = "STUB: not implemented"
 	return nil
 }

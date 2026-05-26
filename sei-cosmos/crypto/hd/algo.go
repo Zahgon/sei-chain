@@ -1,10 +1,6 @@
 package hd
 
 import (
-	bip39 "github.com/cosmos/go-bip39"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/sr25519"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 )
 
@@ -42,68 +38,29 @@ type secp256k1Algo struct {
 }
 
 func (s secp256k1Algo) Name() PubKeyType {
-	return Secp256k1Type
+	_ = "STUB: not implemented"
+	return *
+
+	// Derive derives and returns the secp256k1 private key for the given seed and HD path.
+	new(PubKeyType)
 }
 
-// Derive derives and returns the secp256k1 private key for the given seed and HD path.
-func (s secp256k1Algo) Derive() DeriveFn {
-	return func(mnemonic string, bip39Passphrase, hdPath string) ([]byte, error) {
-		seed, err := bip39.NewSeedWithErrorChecking(mnemonic, bip39Passphrase)
-		if err != nil {
-			return nil, err
-		}
-
-		masterPriv, ch := ComputeMastersFromSeed(seed)
-		if len(hdPath) == 0 {
-			return masterPriv[:], nil
-		}
-		derivedKey, err := DerivePrivateKeyForPath(masterPriv, ch, hdPath)
-
-		return derivedKey, err
-	}
-}
+func (s secp256k1Algo) Derive() DeriveFn { _ = "STUB: not implemented"; return *new(DeriveFn) }
 
 // Generate generates a secp256k1 private key from the given bytes.
-func (s secp256k1Algo) Generate() GenerateFn {
-	return func(bz []byte) types.PrivKey {
-		var bzArr = make([]byte, secp256k1.PrivKeySize)
-		copy(bzArr, bz)
-
-		return &secp256k1.PrivKey{Key: bzArr}
-	}
-}
+func (s secp256k1Algo) Generate() GenerateFn { _ = "STUB: not implemented"; return *new(GenerateFn) }
 
 type sr25519Algo struct {
 }
 
 func (s sr25519Algo) Name() PubKeyType {
-	return Sr25519Type
+	_ = "STUB: not implemented"
+
+	// Derive derives and returns the sr25519 private key for the given seed and HD path.
+	return *new(PubKeyType)
 }
 
-// Derive derives and returns the sr25519 private key for the given seed and HD path.
-func (s sr25519Algo) Derive() DeriveFn {
-	return func(mnemonic string, bip39Passphrase, hdPath string) ([]byte, error) {
-		seed, err := bip39.NewSeedWithErrorChecking(mnemonic, bip39Passphrase)
-		if err != nil {
-			return nil, err
-		}
-
-		masterPriv, ch := ComputeMastersFromSeed(seed)
-		if len(hdPath) == 0 {
-			return masterPriv[:], nil
-		}
-		derivedKey, err := DerivePrivateKeyForPath(masterPriv, ch, hdPath)
-
-		return derivedKey, err
-	}
-}
+func (s sr25519Algo) Derive() DeriveFn { _ = "STUB: not implemented"; return *new(DeriveFn) }
 
 // Generate generates a sr25519 private key from the given bytes.
-func (s sr25519Algo) Generate() GenerateFn {
-	return func(bz []byte) types.PrivKey {
-		var bzArr = make([]byte, secp256k1.PrivKeySize)
-		copy(bzArr, bz)
-
-		return sr25519.GenPrivKeyFromSecret(bzArr)
-	}
-}
+func (s sr25519Algo) Generate() GenerateFn { _ = "STUB: not implemented"; return *new(GenerateFn) }

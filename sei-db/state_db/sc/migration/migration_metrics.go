@@ -5,11 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
-
-	commonmetrics "github.com/sei-protocol/sei-chain/sei-db/common/metrics"
 )
 
 // MigrationMetrics holds OpenTelemetry metrics for a MigrationManager.
@@ -61,59 +57,8 @@ func NewMigrationMetrics(
 	targetVersion uint64,
 	boundarySnapshotInterval time.Duration,
 ) *MigrationMetrics {
-	ctx, cancel := context.WithCancel(ctx)
-	meter := otel.Meter("seidb_migration")
-
-	keysMigratedTotal, _ := meter.Int64Counter(
-		"seidb_migration_keys_migrated_total",
-		metric.WithDescription("Total number of keys promoted from the old DB to the new DB"),
-		metric.WithUnit("{count}"),
-	)
-	keyBytesMigratedTotal, _ := meter.Int64Counter(
-		"seidb_migration_key_bytes_migrated_total",
-		metric.WithDescription("Running sum of bytes of migrated keys (len(Key))"),
-		metric.WithUnit("By"),
-	)
-	valueBytesMigratedTotal, _ := meter.Int64Counter(
-		"seidb_migration_value_bytes_migrated_total",
-		metric.WithDescription("Running sum of bytes of migrated values (len(Value))"),
-		metric.WithUnit("By"),
-	)
-	applyDuration, _ := meter.Float64Histogram(
-		"seidb_migration_apply_change_sets_duration_seconds",
-		metric.WithDescription("Wall-clock time spent in each MigrationManager.ApplyChangeSets call"),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-	version, _ := meter.Int64Gauge(
-		"seidb_migration_version",
-		metric.WithDescription("Currently-observed migration version. Equals targetVersion once the "+
-			"migration is complete, startVersion while in progress."),
-		metric.WithUnit("{version}"),
-	)
-	boundarySnapshot, _ := meter.Int64Gauge(
-		"seidb_migration_boundary_snapshot",
-		metric.WithDescription("Periodic snapshot of the live migration boundary. Value is always 1; inspect the "+
-			"boundary_hex label for the boundary itself."),
-		metric.WithUnit("{boundary}"),
-	)
-
-	m := &MigrationMetrics{
-		ctx:                     ctx,
-		cancel:                  cancel,
-		targetVersion:           targetVersion,
-		keysMigratedTotal:       keysMigratedTotal,
-		keyBytesMigratedTotal:   keyBytesMigratedTotal,
-		valueBytesMigratedTotal: valueBytesMigratedTotal,
-		applyDuration:           applyDuration,
-		version:                 version,
-		boundarySnapshot:        boundarySnapshot,
-	}
-
-	if boundarySnapshotInterval > 0 {
-		m.startBoundarySnapshotLoop(boundarySnapshotInterval)
-	}
-	return m
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetBoundary updates the in-memory current boundary. No DB access. Safe
@@ -121,66 +66,34 @@ func NewMigrationMetrics(
 // concurrently with itself from multiple goroutines, but the
 // MigrationManager only updates the boundary from a single ApplyChangeSets
 // caller at a time.
-func (m *MigrationMetrics) SetBoundary(b MigrationBoundary) {
-	if m == nil {
-		return
-	}
-	m.mu.Lock()
-	m.currentBoundary = b
-	m.mu.Unlock()
-}
+func (m *MigrationMetrics) SetBoundary(b MigrationBoundary) { _ = "STUB: not implemented"; return }
 
 // SetVersion updates the in-memory current migration version and records
 // the version gauge immediately so Grafana sees the transition without
 // waiting for the next snapshot tick.
-func (m *MigrationMetrics) SetVersion(v uint64) {
-	if m == nil {
-		return
-	}
-	m.mu.Lock()
-	m.currentVersion = v
-	m.mu.Unlock()
-	if m.version != nil {
-		m.version.Record(context.Background(), int64(v)) //nolint:gosec // version is monotonic and bounded
-	}
-}
+func (m *MigrationMetrics) SetVersion(v uint64) { _ = "STUB: not implemented"; return }
+
+//nolint:gosec // version is monotonic and bounded
 
 // ReportKeysMigrated records that a batch of (count) keys totaling
 // (keyBytes, valueBytes) were migrated in a single ApplyChangeSets call.
 // Pass zeros to skip; the method is a no-op on nil receiver.
 func (m *MigrationMetrics) ReportKeysMigrated(count int64, keyBytes int64, valueBytes int64) {
-	if m == nil {
-		return
-	}
-	ctx := context.Background()
-	if m.keysMigratedTotal != nil && count > 0 {
-		m.keysMigratedTotal.Add(ctx, count)
-	}
-	if m.keyBytesMigratedTotal != nil && keyBytes > 0 {
-		m.keyBytesMigratedTotal.Add(ctx, keyBytes)
-	}
-	if m.valueBytesMigratedTotal != nil && valueBytes > 0 {
-		m.valueBytesMigratedTotal.Add(ctx, valueBytes)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // RecordApplyDuration records the wall-clock time spent in a single
 // ApplyChangeSets call. Invoked from a defer in the manager so both
 // success and error paths are captured.
-func (m *MigrationMetrics) RecordApplyDuration(d time.Duration) {
-	if m == nil || m.applyDuration == nil {
-		return
-	}
-	m.applyDuration.Record(context.Background(), d.Seconds())
-}
+func (m *MigrationMetrics) RecordApplyDuration(d time.Duration) { _ = "STUB: not implemented"; return }
 
 // snapshot returns a safe copy of the in-memory boundary and version
 // under the mutex. The returned boundary shares its internal key slice
 // with the stored value; callers must not mutate it.
 func (m *MigrationMetrics) snapshot() (MigrationBoundary, uint64) {
-	m.mu.Lock()
-	defer m.mu.Unlock()
-	return m.currentBoundary, m.currentVersion
+	_ = "STUB: not implemented"
+	return *new(MigrationBoundary), 0
 }
 
 // startBoundarySnapshotLoop starts the background goroutine that
@@ -193,48 +106,13 @@ func (m *MigrationMetrics) snapshot() (MigrationBoundary, uint64) {
 // Prometheus' comfort zone — and the OTel exporter's staleness markers
 // keep only the most recent label active in the scrape set.
 func (m *MigrationMetrics) startBoundarySnapshotLoop(interval time.Duration) {
-	if m == nil || m.boundarySnapshot == nil {
-		return
-	}
-	m.wg.Add(1)
-	go func() {
-		defer m.wg.Done()
-		ticker := time.NewTicker(interval)
-		defer ticker.Stop()
-		completedEmitted := false
-		for {
-			select {
-			case <-m.ctx.Done():
-				return
-			case <-ticker.C:
-				boundary, version := m.snapshot()
-				if version == m.targetVersion {
-					if !completedEmitted {
-						m.recordBoundarySnapshot("complete")
-					}
-					return
-				}
-				m.recordBoundarySnapshot(boundary.String())
-			}
-		}
-	}()
+	_ = "STUB: not implemented"
+	return
 }
 
 // Release resources held by the metrics collector.
-func (m *MigrationMetrics) Close() {
-	if m == nil {
-		return
-	}
-	m.cancel()
-	m.wg.Wait()
-}
+func (m *MigrationMetrics) Close() { _ = "STUB: not implemented"; return }
 
 // recordBoundarySnapshot emits the labeled snapshot gauge with value 1.
 // The label is the only payload — the value itself is unused.
-func (m *MigrationMetrics) recordBoundarySnapshot(label string) {
-	m.boundarySnapshot.Record(
-		context.Background(),
-		1,
-		metric.WithAttributes(attribute.String("boundary_hex", label)),
-	)
-}
+func (m *MigrationMetrics) recordBoundarySnapshot(label string) { _ = "STUB: not implemented"; return }

@@ -9,9 +9,7 @@ the name `factory/{creator address}/{subdenom}`.
 package tokenfactory
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"math/rand"
 
 	"github.com/gorilla/mux"
@@ -25,7 +23,6 @@ import (
 	"github.com/spf13/cobra"
 
 	simtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
-	"github.com/sei-protocol/sei-chain/x/tokenfactory/client/cli"
 	"github.com/sei-protocol/sei-chain/x/tokenfactory/keeper"
 	"github.com/sei-protocol/sei-chain/x/tokenfactory/types"
 )
@@ -43,56 +40,56 @@ var (
 type AppModuleBasic struct{}
 
 func NewAppModuleBasic() AppModuleBasic {
-	return AppModuleBasic{}
+	_ = "STUB: not implemented"
+	return *
+
+	// Name returns the x/tokenfactory module's name.
+	new(AppModuleBasic)
 }
 
-// Name returns the x/tokenfactory module's name.
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterCodec(cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterInterfaces registers the module's interface types
 func (a AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
-	types.RegisterInterfaces(reg)
+	_ = "STUB: not implemented"
+	return
 }
 
 // DefaultGenesis returns the x/tokenfactory module's default genesis state.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesis())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the x/tokenfactory module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingConfig, bz json.RawMessage) error {
-	var genState types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &genState); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-
-	return genState.Validate()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // RegisterRESTRoutes registers the capability module's REST service handlers.
 func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
+	_ = "STUB: not implemented"
+
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
+	return
 }
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	_ = types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetTxCmd returns the x/tokenfactory module's root tx command.
-func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
-}
+func (a AppModuleBasic) GetTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // GetQueryCmd returns the x/tokenfactory module's root query command.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd()
-}
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // ----------------------------------------------------------------------------
 // AppModule
@@ -112,114 +109,106 @@ func NewAppModule(
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 ) AppModule {
-	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(),
-		keeper:         keeper,
-		accountKeeper:  accountKeeper,
-		bankKeeper:     bankKeeper,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // Name returns the x/tokenfactory module's name.
-func (am AppModule) Name() string {
-	return am.AppModuleBasic.Name()
-}
+func (am AppModule) Name() string { _ = "STUB: not implemented"; return "" }
 
 // Route returns the x/tokenfactory module's message routing key.
 func (am AppModule) Route() sdk.Route {
-	return sdk.Route{}
+	_ = "STUB: not implemented"
+
+	// QuerierRoute returns the x/tokenfactory module's query routing key.
+	return *new(sdk.Route)
 }
 
-// QuerierRoute returns the x/tokenfactory module's query routing key.
-func (AppModule) QuerierRoute() string { return types.QuerierRoute }
+func (AppModule) QuerierRoute() string { _ = "STUB: not implemented"; return "" }
 
 // LegacyQuerierHandler returns the x/tokenfactory module's Querier.
 func (am AppModule) LegacyQuerierHandler(_ *codec.LegacyAmino) sdk.Querier {
-	return nil
+	_ = "STUB: not implemented"
+
+	// RegisterServices registers a GRPC query service to respond to the
+	// module-specific GRPC queries.
+	return *new(sdk.Querier)
 }
 
-// RegisterServices registers a GRPC query service to respond to the
-// module-specific GRPC queries.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
-
-	m := keeper.NewMigrator(am.keeper)
-	_ = cfg.RegisterMigration(types.ModuleName, 1, func(ctx sdk.Context) error { return nil })
-	_ = cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2to3)
-	_ = cfg.RegisterMigration(types.ModuleName, 3, m.Migrate3to4)
-	_ = cfg.RegisterMigration(types.ModuleName, 4, m.Migrate4to5)
-}
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // RegisterInvariants registers the x/tokenfactory module's invariants.
-func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 
-// InitGenesis performs the x/tokenfactory module's genesis initialization. It
-// returns no validator updates.
+	// InitGenesis performs the x/tokenfactory module's genesis initialization. It
+	// returns no validator updates.
+	return
+}
+
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
-	var genState types.GenesisState
-	cdc.MustUnmarshalJSON(gs, &genState)
-
-	am.keeper.InitGenesis(ctx, genState)
-
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ExportGenesis returns the x/tokenfactory module's exported genesis state as raw
 // JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState := am.keeper.ExportGenesis(ctx)
-	return cdc.MustMarshalJSON(genState)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ExportGenesisStream returns the tokenfactory module's exported genesis state as raw JSON bytes in a streaming fashion.
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateGenesisStream performs genesis state validation for the x/tokenfactory module in a streaming fashion.
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // ConsensusVersion implements ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 5 }
+func (AppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
 
-// ___________________________________________________________________________
+	// ___________________________________________________________________________
+	return 0
+}
 
 // AppModuleSimulation functions
 
 // GenerateGenesisState creates a randomized GenState of the tokenfactory module.
 func (am AppModule) GenerateGenesisState(simState *module.SimulationState) {
-	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(types.DefaultGenesis())
+	_ = "STUB: not implemented"
+	return
 }
 
 // ProposalContents doesn't return any content functions for governance proposals.
 func (am AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {
+	_ = "STUB: not implemented"
+
+	// RandomizedParams creates randomized txfees param changes for the simulator.
 	return nil
 }
 
-// RandomizedParams creates randomized txfees param changes for the simulator.
 func (am AppModule) RandomizedParams(_ *rand.Rand) []simtypes.ParamChange {
+	_ = "STUB: not implemented"
+
+	// RegisterStoreDecoder registers a decoder for tokenfactory module's types
 	return nil
 }
 
-// RegisterStoreDecoder registers a decoder for tokenfactory module's types
 func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {
+	_ = "STUB: not implemented"
+
+	// WeightedOperations returns simulator module operations with their respective weights.
+	return
 }
 
-// WeightedOperations returns simulator module operations with their respective weights.
 func (am AppModule) WeightedOperations(_ module.SimulationState) []simtypes.WeightedOperation {
+	_ = "STUB: not implemented"
 	return nil
 }

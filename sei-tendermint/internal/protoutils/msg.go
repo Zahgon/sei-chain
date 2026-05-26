@@ -1,7 +1,6 @@
 package protoutils
 
 import (
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -12,28 +11,21 @@ type Message interface {
 }
 
 // Constructs an empty message.
-func New[T Message]() T {
-	return utils.Zero[T]().ProtoReflect().New().Interface().(T)
-}
+func New[T Message]() T { _ = "STUB: not implemented"; return *new(T) }
 
 // Computes the size of the message encoding.
-func Size[T Message](t T) int {
-	return proto.Size(t)
-}
+func Size[T Message](t T) int { _ = "STUB: not implemented"; return 0 }
 
 func Marshal[T Message](t T) []byte {
+	_ = "STUB: not implemented"
 	// Marshalling messages is always expected to succeed.
-	return utils.OrPanic1(proto.Marshal(t))
+	return nil
 }
 
-func Unmarshal[T Message](bytes []byte) (T, error) {
-	t := New[T]()
-	err := proto.Unmarshal(bytes, t)
-	return t, err
-}
+func Unmarshal[T Message](bytes []byte) (T, error) { _ = "STUB: not implemented"; return *new(T), nil }
 
 // Clone clones a proto.Message object.
-func Clone[T Message](item T) T { return proto.Clone(item).(T) }
+func Clone[T Message](item T) T { _ = "STUB: not implemented"; return *new(T) }
 
 // Equal compares two Message objects.
-func Equal[T Message](a, b T) bool { return proto.Equal(a, b) }
+func Equal[T Message](a, b T) bool { _ = "STUB: not implemented"; return false }

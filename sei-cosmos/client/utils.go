@@ -4,8 +4,6 @@ import (
 	rpchttp "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/http"
 	"github.com/spf13/pflag"
 
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/query"
 )
 
@@ -16,59 +14,22 @@ import (
 // request is invalid; it returns non-positive values if limit is non-positive and
 // defLimit is negative.
 func Paginate(numObjs, page, limit, defLimit int) (start, end int) {
-	if page <= 0 {
-		// invalid start page
-		return -1, -1
-	}
+	_ = "STUB: not implemented"
 
-	// fallback to default limit if supplied limit is invalid
-	if limit <= 0 {
-		if defLimit < 0 {
-			// invalid default limit
-			return -1, -1
-		}
-		limit = defLimit
-	}
-
-	start = (page - 1) * limit
-	end = limit + start
-
-	if end >= numObjs {
-		end = numObjs
-	}
-
-	if start >= numObjs {
-		// page is out of bounds
-		return -1, -1
-	}
-
-	return start, end
+	// invalid start page
+	return 0, 0
 }
+
+// fallback to default limit if supplied limit is invalid
+
+// invalid default limit
+
+// page is out of bounds
 
 // ReadPageRequest reads and builds the necessary page request flags for pagination.
 func ReadPageRequest(flagSet *pflag.FlagSet) (*query.PageRequest, error) {
-	pageKey, _ := flagSet.GetString(flags.FlagPageKey)
-	offset, _ := flagSet.GetUint64(flags.FlagOffset)
-	limit, _ := flagSet.GetUint64(flags.FlagLimit)
-	countTotal, _ := flagSet.GetBool(flags.FlagCountTotal)
-	page, _ := flagSet.GetUint64(flags.FlagPage)
-	reverse, _ := flagSet.GetBool(flags.FlagReverse)
-
-	if page > 1 && offset > 0 {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "page and offset cannot be used together")
-	}
-
-	if page > 1 {
-		offset = (page - 1) * limit
-	}
-
-	return &query.PageRequest{
-		Key:        []byte(pageKey),
-		Offset:     offset,
-		Limit:      limit,
-		CountTotal: countTotal,
-		Reverse:    reverse,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewClientFromNode sets up Client implementation that communicates with a Tendermint node over
@@ -76,5 +37,6 @@ func ReadPageRequest(flagSet *pflag.FlagSet) (*query.PageRequest, error) {
 // TODO: We might not need to manually append `/websocket`:
 // https://github.com/cosmos/cosmos-sdk/issues/8986
 func NewClientFromNode(nodeURI string) (*rpchttp.HTTP, error) {
-	return rpchttp.New(nodeURI)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

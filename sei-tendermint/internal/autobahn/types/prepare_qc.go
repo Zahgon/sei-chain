@@ -17,30 +17,17 @@ type PrepareQC struct {
 
 // NewPrepareQC creates a new PrepareQC.
 // PANICS if votes is empty.
-func NewPrepareQC(votes []*Signed[*PrepareVote]) *PrepareQC {
-	if len(votes) == 0 {
-		panic("qc cannot be empty")
-	}
-	sigs := make([]*Signature, len(votes))
-	for i, v := range votes {
-		sigs[i] = v.sig
-	}
-	return &PrepareQC{vote: votes[0].hashed, sigs: sigs}
-}
+func NewPrepareQC(votes []*Signed[*PrepareVote]) *PrepareQC { _ = "STUB: not implemented"; return nil }
 
 // Proposal .
-func (m *PrepareQC) Proposal() *Proposal { return m.vote.Msg().Proposal() }
+func (m *PrepareQC) Proposal() *Proposal { _ = "STUB: not implemented"; return nil }
 
 // View .
-func (m *PrepareQC) View() View {
-	return m.vote.Msg().Proposal().View()
-}
+func (m *PrepareQC) View() View { _ = "STUB: not implemented"; return *new(View) }
 
 // Verify verifies the PrepareQC against the committee.
 // Currently it doesn't require the previous CommitQC.
-func (m *PrepareQC) Verify(c *Committee) error {
-	return m.vote.verifyQC(c, c.PrepareQuorum(), m.sigs)
-}
+func (m *PrepareQC) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 // PrepareQCConv is a protobuf converter for PrepareQC.
 var PrepareQCConv = protoutils.Conv[*PrepareQC, *pb.PrepareQC]{

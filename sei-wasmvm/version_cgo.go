@@ -2,10 +2,4 @@
 
 package cosmwasm
 
-import (
-	"github.com/sei-protocol/sei-chain/sei-wasmvm/internal/api"
-)
-
-func libwasmvmVersionImpl() (string, error) {
-	return api.LibwasmvmVersion()
-}
+func libwasmvmVersionImpl() (string, error) { _ = "STUB: not implemented"; return "", nil }

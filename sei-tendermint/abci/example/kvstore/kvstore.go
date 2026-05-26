@@ -1,28 +1,15 @@
 package kvstore
 
 import (
-	"bytes"
 	"context"
-	"encoding/base64"
-	"encoding/binary"
-	"encoding/json"
-	"fmt"
-	"strconv"
-	"strings"
 	"sync"
 
 	"github.com/sei-protocol/seilog"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/gogo/protobuf/proto"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/example/code"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/proxy"
 	cryptoproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 )
 
 var (
@@ -43,37 +30,11 @@ type State struct {
 	AppHash []byte `json:"app_hash"`
 }
 
-func loadState(db dbm.DB) State {
-	var state State
-	state.db = db
-	stateBytes, err := db.Get(stateKey)
-	if err != nil {
-		panic(err)
-	}
-	if len(stateBytes) == 0 {
-		return state
-	}
-	err = json.Unmarshal(stateBytes, &state)
-	if err != nil {
-		panic(err)
-	}
-	return state
-}
+func loadState(db dbm.DB) State { _ = "STUB: not implemented"; return *new(State) }
 
-func saveState(state State) {
-	stateBytes, err := json.Marshal(state)
-	if err != nil {
-		panic(err)
-	}
-	err = state.db.Set(stateKey, stateBytes)
-	if err != nil {
-		panic(err)
-	}
-}
+func saveState(state State) { _ = "STUB: not implemented"; return }
 
-func prefixKey(key []byte) []byte {
-	return append(kvPairPrefixKey, key...)
-}
+func prefixKey(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 //---------------------------------------------------
 
@@ -90,350 +51,121 @@ type Application struct {
 	valAddrToPubKeyMap map[string]cryptoproto.PublicKey
 }
 
-func NewApplication() *Application {
-	return &Application{
-		state:              loadState(dbm.NewMemDB()),
-		valAddrToPubKeyMap: make(map[string]cryptoproto.PublicKey),
-	}
-}
+func NewApplication() *Application { _ = "STUB: not implemented"; return nil }
 
-func NewProxy() *proxy.Proxy {
-	return proxy.New(NewApplication(), proxy.NopMetrics())
-}
+func NewProxy() *proxy.Proxy { _ = "STUB: not implemented"; return nil }
 
 func (app *Application) InitChain(_ context.Context, req *types.RequestInitChain) (*types.ResponseInitChain, error) {
-	return &types.ResponseInitChain{Validators: app.Validators()}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (app *Application) Info(_ context.Context, req *types.RequestInfo) (*types.ResponseInfo, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	return &types.ResponseInfo{
-		Data:             fmt.Sprintf("{\"size\":%v}", app.state.Size),
-		Version:          version.ABCIVersion,
-		AppVersion:       ProtocolVersion,
-		LastBlockHeight:  app.state.Height,
-		LastBlockAppHash: app.state.AppHash,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (app *Application) GetValidators() []types.ValidatorUpdate {
-	return app.Validators()
+	_ = "STUB: not implemented"
+	return nil
+
+	// tx is either "val:pubkey!power" or "key=value" or just arbitrary bytes
 }
 
-// tx is either "val:pubkey!power" or "key=value" or just arbitrary bytes
 func (app *Application) handleTx(tx []byte) *types.ExecTxResult {
+	_ = "STUB: not implemented"
 	// if it starts with "val:", update the validator set
 	// format is "val:pubkey!power"
-	if isValidatorTx(tx) {
-		// update validators in the merkle tree
-		// and in app.ValUpdates
-		return app.execValidatorTx(tx)
-	}
-
-	if isPrepareTx(tx) {
-		return &types.ExecTxResult{}
-	}
-
-	var key, value string
-	parts := bytes.Split(tx, []byte("="))
-	if len(parts) == 2 {
-		key, value = string(parts[0]), string(parts[1])
-	} else {
-		key, value = string(tx), string(tx)
-	}
-
-	err := app.state.db.Set(prefixKey([]byte(key)), []byte(value))
-	if err != nil {
-		panic(err)
-	}
-	app.state.Size++
-
-	events := []types.Event{
-		{
-			Type: "app",
-			Attributes: []types.EventAttribute{
-				{Key: []byte("creator"), Value: []byte("Cosmoshi Netowoko"), Index: true},
-				{Key: []byte("key"), Value: []byte(key), Index: true},
-				{Key: []byte("index_key"), Value: []byte("index is working"), Index: true},
-				{Key: []byte("noindex_key"), Value: []byte("index is working"), Index: false},
-			},
-		},
-	}
-
-	return &types.ExecTxResult{Code: code.CodeTypeOK, Events: events}
+	return nil
 }
 
-func (app *Application) Close() error {
-	app.mu.Lock()
-	defer app.mu.Unlock()
+// update validators in the merkle tree
+// and in app.ValUpdates
 
-	return app.state.db.Close()
-}
+func (app *Application) Close() error { _ = "STUB: not implemented"; return nil }
 
 func (app *Application) FinalizeBlock(_ context.Context, req *types.RequestFinalizeBlock) (*types.ResponseFinalizeBlock, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	// reset valset changes
-	app.ValUpdates = make([]types.ValidatorUpdate, 0)
-
-	// Punish validators who committed equivocation.
-	for _, ev := range req.ByzantineValidators {
-		if ev.Type == types.MisbehaviorType_DUPLICATE_VOTE {
-			addr := string(ev.Validator.Address)
-			if pubKey, ok := app.valAddrToPubKeyMap[addr]; ok {
-				app.updateValidator(types.ValidatorUpdate{
-					PubKey: pubKey,
-					Power:  ev.Validator.Power - 1,
-				})
-				logger.Info("Decreased val power by 1 because of the equivocation",
-					"val", addr)
-			} else {
-				panic(fmt.Errorf("wanted to punish val %q but can't find it", addr))
-			}
-		}
-	}
-
-	respTxs := make([]*types.ExecTxResult, len(req.Txs))
-	for i, tx := range req.Txs {
-		respTxs[i] = app.handleTx(tx)
-	}
-
-	// Using a memdb - just return the big endian size of the db
-	appHash := make([]byte, 8)
-	binary.PutVarint(appHash, app.state.Size)
-	app.state.AppHash = appHash
-	app.state.Height++
-
-	return &types.ResponseFinalizeBlock{TxResults: respTxs, ValidatorUpdates: app.ValUpdates, AppHash: appHash}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
+// reset valset changes
+
+// Punish validators who committed equivocation.
+
+// Using a memdb - just return the big endian size of the db
+
 func (*Application) CheckTx(_ context.Context, req *types.RequestCheckTxV2) *types.ResponseCheckTxV2 {
-	return &types.ResponseCheckTxV2{ResponseCheckTx: &types.ResponseCheckTx{Code: code.CodeTypeOK, GasWanted: 1}}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (app *Application) Commit(_ context.Context) (*types.ResponseCommit, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	saveState(app.state)
-
-	resp := &types.ResponseCommit{}
-	if app.RetainBlocks > 0 && app.state.Height >= app.RetainBlocks {
-		resp.RetainHeight = app.state.Height - app.RetainBlocks + 1
-	}
-	return resp, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Returns an associated value or nil if missing.
 func (app *Application) Query(_ context.Context, reqQuery *types.RequestQuery) (*types.ResponseQuery, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	if reqQuery.Path == "/val" {
-		key := []byte("val:" + string(reqQuery.Data))
-		value, err := app.state.db.Get(key)
-		if err != nil {
-			panic(err)
-		}
-
-		return &types.ResponseQuery{
-			Key:   reqQuery.Data,
-			Value: value,
-		}, nil
-	}
-
-	if reqQuery.Prove {
-		value, err := app.state.db.Get(prefixKey(reqQuery.Data))
-		if err != nil {
-			panic(err)
-		}
-
-		resQuery := types.ResponseQuery{
-			Index:  -1,
-			Key:    reqQuery.Data,
-			Value:  value,
-			Height: app.state.Height,
-		}
-
-		if value == nil {
-			resQuery.Log = "does not exist"
-		} else {
-			resQuery.Log = "exists"
-		}
-
-		return &resQuery, nil
-	}
-
-	value, err := app.state.db.Get(prefixKey(reqQuery.Data))
-	if err != nil {
-		panic(err)
-	}
-
-	resQuery := types.ResponseQuery{
-		Key:    reqQuery.Data,
-		Value:  value,
-		Height: app.state.Height,
-	}
-
-	if value == nil {
-		resQuery.Log = "does not exist"
-	} else {
-		resQuery.Log = "exists"
-	}
-
-	return &resQuery, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (*Application) ProcessProposal(_ context.Context, req *types.RequestProcessProposal) (*types.ResponseProcessProposal, error) {
-	for _, tx := range req.Txs {
-		if len(tx) == 0 {
-			return &types.ResponseProcessProposal{Status: types.ResponseProcessProposal_REJECT}, nil
-		}
-	}
-	return &types.ResponseProcessProposal{Status: types.ResponseProcessProposal_ACCEPT}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 //---------------------------------------------
 // update validators
 
 func (app *Application) SetValidators(validators []types.ValidatorUpdate) {
-	for _, v := range app.Validators() {
-		v.Power = 0
-		app.updateValidator(v)
-	}
-	for _, v := range validators {
-		app.updateValidator(v)
-	}
-}
-
-func (app *Application) Validators() (validators []types.ValidatorUpdate) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	itr, err := app.state.db.Iterator(nil, nil)
-	if err != nil {
-		panic(err)
-	}
-	for ; itr.Valid(); itr.Next() {
-		if isValidatorTx(itr.Key()) {
-			validator := new(types.ValidatorUpdate)
-			if err := proto.Unmarshal(itr.Value(), validator); err != nil {
-				panic(err)
-			}
-			validators = append(validators, *validator)
-		}
-	}
-	if err = itr.Error(); err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
 	return
 }
 
-func MakeValSetChangeTx(pubkey cryptoproto.PublicKey, power int64) []byte {
-	pk, err := crypto.PubKeyFromProto(pubkey)
-	if err != nil {
-		panic(err)
-	}
-	pubStr := base64.StdEncoding.EncodeToString(pk.Bytes())
-	return []byte(fmt.Sprintf("val:%s!%d", pubStr, power))
+func (app *Application) Validators() (validators []types.ValidatorUpdate) {
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func isValidatorTx(tx []byte) bool {
-	return strings.HasPrefix(string(tx), ValidatorSetChangePrefix)
+func MakeValSetChangeTx(pubkey cryptoproto.PublicKey, power int64) []byte {
+	_ = "STUB: not implemented"
+	return nil
 }
+
+func isValidatorTx(tx []byte) bool { _ = "STUB: not implemented"; return false }
 
 // format is "val:pubkey!power"
 // pubkey is a base64-encoded 32-byte ed25519 key
 func (app *Application) execValidatorTx(tx []byte) *types.ExecTxResult {
-	tx = tx[len(ValidatorSetChangePrefix):]
-
-	//  get the pubkey and power
-	pubKeyAndPower := strings.Split(string(tx), "!")
-	if len(pubKeyAndPower) != 2 {
-		return &types.ExecTxResult{
-			Code: code.CodeTypeEncodingError,
-			Log:  fmt.Sprintf("Expected 'pubkey!power'. Got %v", pubKeyAndPower)}
-	}
-	pubkeyS, powerS := pubKeyAndPower[0], pubKeyAndPower[1]
-
-	// decode the pubkey
-	pubkey, err := base64.StdEncoding.DecodeString(pubkeyS)
-	if err != nil {
-		return &types.ExecTxResult{
-			Code: code.CodeTypeEncodingError,
-			Log:  fmt.Sprintf("Pubkey (%s) is invalid base64", pubkeyS)}
-	}
-
-	// decode the power
-	power, err := strconv.ParseInt(powerS, 10, 64)
-	if err != nil {
-		return &types.ExecTxResult{
-			Code: code.CodeTypeEncodingError,
-			Log:  fmt.Sprintf("Power (%s) is not an int", powerS)}
-	}
-
-	// update
-	key, err := ed25519.PublicKeyFromBytes(pubkey)
-	if err != nil {
-		return &types.ExecTxResult{
-			Code: code.CodeTypeEncodingError,
-			Log:  fmt.Sprintf("can't decode ed25519 key: %v", err),
-		}
-	}
-	return app.updateValidator(types.ValidatorUpdate{PubKey: crypto.PubKeyToProto(key), Power: power})
+	_ = "STUB: not implemented"
+	return nil
 }
+
+//  get the pubkey and power
+
+// decode the pubkey
+
+// decode the power
+
+// update
 
 // add, update, or remove a validator
 func (app *Application) updateValidator(v types.ValidatorUpdate) *types.ExecTxResult {
-	pubkey, err := crypto.PubKeyFromProto(v.PubKey)
-	if err != nil {
-		panic(fmt.Errorf("can't decode public key: %w", err))
-	}
-	key := []byte("val:" + string(pubkey.Bytes()))
-
-	if v.Power == 0 {
-		// remove validator
-		hasKey, err := app.state.db.Has(key)
-		if err != nil {
-			panic(err)
-		}
-		if !hasKey {
-			pubStr := base64.StdEncoding.EncodeToString(pubkey.Bytes())
-			return &types.ExecTxResult{
-				Code: code.CodeTypeUnauthorized,
-				Log:  fmt.Sprintf("Cannot remove non-existent validator %s", pubStr)}
-		}
-		if err = app.state.db.Delete(key); err != nil {
-			panic(err)
-		}
-		delete(app.valAddrToPubKeyMap, string(pubkey.Address()))
-	} else {
-		// add or update validator
-		bz, err := proto.Marshal(&v)
-		if err != nil {
-			return &types.ExecTxResult{
-				Code: code.CodeTypeEncodingError,
-				Log:  fmt.Sprintf("error encoding validator: %v", err)}
-		}
-		if err = app.state.db.Set(key, bz); err != nil {
-			panic(err)
-		}
-		app.valAddrToPubKeyMap[string(pubkey.Address())] = v.PubKey
-	}
-
-	// we only update the changes array if we successfully updated the tree
-	app.ValUpdates = append(app.ValUpdates, v)
-
-	return &types.ExecTxResult{Code: code.CodeTypeOK}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// remove validator
+
+// add or update validator
+
+// we only update the changes array if we successfully updated the tree
 
 // -----------------------------
 // prepare proposal machinery
 
 const PreparePrefix = "prepare"
 
-func isPrepareTx(tx []byte) bool {
-	return bytes.HasPrefix(tx, []byte(PreparePrefix))
-}
+func isPrepareTx(tx []byte) bool { _ = "STUB: not implemented"; return false }

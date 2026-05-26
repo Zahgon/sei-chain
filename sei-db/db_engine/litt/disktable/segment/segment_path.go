@@ -1,14 +1,5 @@
 package segment
 
-import (
-	"fmt"
-	"os"
-	"path"
-	"path/filepath"
-
-	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
-)
-
 // The name of the directory where segment files are stored. The segment directory is created at
 // "$STORAGE_PATH/$TABLE_NAME/segments". Each table has at least one segment directory. Tables may
 // have multiple segment directories if more than one path is provided to Litt.Config.Paths.
@@ -44,25 +35,8 @@ func NewSegmentPath(
 	softlinkRoot string,
 	tableName string,
 ) (*SegmentPath, error) {
-
-	if storageRoot == "" {
-		return nil, fmt.Errorf("storage path cannot be empty")
-	}
-
-	segmentDirectory := path.Join(storageRoot, tableName, SegmentDirectory)
-
-	softlinkPath := ""
-	hardLinkPath := ""
-	if softlinkRoot != "" {
-		softlinkPath = path.Join(softlinkRoot, tableName, SegmentDirectory)
-		hardLinkPath = path.Join(storageRoot, tableName, HardLinkDirectory)
-	}
-
-	return &SegmentPath{
-		segmentDirectory: segmentDirectory,
-		hardlinkPath:     hardLinkPath,
-		softlinkPath:     softlinkPath,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BuildSegmentPaths creates a list of SegmentPath objects for each storage root provided.
@@ -71,80 +45,26 @@ func BuildSegmentPaths(
 	softlinkRoot string,
 	tableName string,
 ) ([]*SegmentPath, error) {
-	segmentPaths := make([]*SegmentPath, len(storageRoots))
-	for i, storageRoot := range storageRoots {
-		segmentPath, err := NewSegmentPath(storageRoot, softlinkRoot, tableName)
-		if err != nil {
-			return nil, fmt.Errorf("error building segment path: %v", err)
-		}
-		segmentPaths[i] = segmentPath
-	}
-	return segmentPaths, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SegmentDirectory returns the parent directory where segment files are stored.
-func (p *SegmentPath) SegmentDirectory() string {
-	return p.segmentDirectory
-}
+func (p *SegmentPath) SegmentDirectory() string { _ = "STUB: not implemented"; return "" }
 
 // HardlinkPath returns the path where hard links to segment files will be created for snapshotting.
-func (p *SegmentPath) HardlinkPath() string {
-	return p.hardlinkPath
-}
+func (p *SegmentPath) HardlinkPath() string { _ = "STUB: not implemented"; return "" }
 
 // SoftlinkPath returns the path where soft links to hard links of segment files will be created for snapshotting.
-func (p *SegmentPath) SoftlinkPath() string {
-	return p.softlinkPath
-}
+func (p *SegmentPath) SoftlinkPath() string { _ = "STUB: not implemented"; return "" }
 
 // snapshottingEnabled checks if snapshotting is enabled.
-func (p *SegmentPath) snapshottingEnabled() bool {
-	return p.softlinkPath != ""
-}
+func (p *SegmentPath) snapshottingEnabled() bool { _ = "STUB: not implemented"; return false }
 
 // MakeDirectories creates the necessary directories described by the SegmentPath if they do not already exist.
-func (p *SegmentPath) MakeDirectories(fsync bool) error {
-	err := util.EnsureDirectoryExists(p.segmentDirectory, fsync)
-	if err != nil {
-		return fmt.Errorf("failed to ensure segment directory exists: %w", err)
-	}
-
-	if p.snapshottingEnabled() {
-		err = util.EnsureDirectoryExists(p.hardlinkPath, fsync)
-		if err != nil {
-			return fmt.Errorf("failed to ensure hard link directory exists: %w", err)
-		}
-
-		err = util.EnsureDirectoryExists(p.softlinkPath, fsync)
-		if err != nil {
-			return fmt.Errorf("failed to ensure soft link directory exists: %w", err)
-		}
-	}
-
-	return nil
-}
+func (p *SegmentPath) MakeDirectories(fsync bool) error { _ = "STUB: not implemented"; return nil }
 
 // Snapshot creates a hard link to the file in the Snapshot directory, and a symlink to that hard link in the soft link
 // directory. The fileName should just be the name of the file, not its full path. The file is expected to be in the
 // segmentDirectory.
-func (p *SegmentPath) Snapshot(fileName string) error {
-	if !p.snapshottingEnabled() {
-		return fmt.Errorf("snapshotting is not enabled, cannot Snapshot file %s", fileName)
-	}
-
-	sourcePath := filepath.Join(p.segmentDirectory, fileName)
-	hardlinkPath := filepath.Join(p.hardlinkPath, fileName)
-	symlinkPath := filepath.Join(p.softlinkPath, fileName)
-
-	err := os.Link(sourcePath, hardlinkPath)
-	if err != nil && !os.IsExist(err) {
-		return fmt.Errorf("failed to create hard link from %s to %s: %v", sourcePath, hardlinkPath, err)
-	}
-
-	err = os.Symlink(hardlinkPath, symlinkPath)
-	if err != nil {
-		return fmt.Errorf("failed to create symlink from %s to %s: %v", hardlinkPath, symlinkPath, err)
-	}
-
-	return nil
-}
+func (p *SegmentPath) Snapshot(fileName string) error { _ = "STUB: not implemented"; return nil }

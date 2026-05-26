@@ -3,15 +3,11 @@ package simulation
 // DONTCOVER
 
 import (
-	"encoding/json"
-	"fmt"
 	"math/rand"
 	"time"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 )
 
 // Simulation parameter constants
@@ -30,129 +26,56 @@ const (
 
 // GenDepositParamsDepositPeriod randomized DepositParamsDepositPeriod
 func GenDepositParamsDepositPeriod(r *rand.Rand) time.Duration {
-	return time.Duration(simulation.RandIntBetween(r, 1, 60*60*24*2)) * time.Second
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // GenDepositParamsMinDeposit randomized DepositParamsMinDeposit
 func GenDepositParamsMinDeposit(r *rand.Rand) sdk.Coins {
-	return sdk.NewCoins(sdk.NewInt64Coin(sdk.DefaultBondDenom, int64(simulation.RandIntBetween(r, 1, 1e3/2))))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // GenDepositParamsMinExpeditedDeposit randomized DepositParamsMinExpeditedDeposit
 func GenDepositParamsMinExpeditedDeposit(r *rand.Rand) sdk.Coins {
-	return sdk.NewCoins(sdk.NewInt64Coin(sdk.DefaultBondDenom, int64(simulation.RandIntBetween(r, 1e3/2, 1e3))))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // GenVotingParamsVotingPeriod randomized VotingParamsVotingPeriod
 func GenVotingParamsVotingPeriod(r *rand.Rand) time.Duration {
-	return time.Duration(simulation.RandIntBetween(r, 60*60*24, 60*60*24*2)) * time.Second
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // GenVotingParamsExpeditedVotingPeriod randomized VotingParamsExpeditedVotingPeriod
 func GenVotingParamsExpeditedVotingPeriod(r *rand.Rand) time.Duration {
-	return time.Duration(simulation.RandIntBetween(r, 1, 60*60*24)) * time.Second
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // GenTallyParamsQuorum randomized TallyParamsQuorum
-func GenTallyParamsQuorum(r *rand.Rand) sdk.Dec {
-	return sdk.NewDecWithPrec(int64(simulation.RandIntBetween(r, 334, 500)), 3)
-}
+func GenTallyParamsQuorum(r *rand.Rand) sdk.Dec { _ = "STUB: not implemented"; return *new(sdk.Dec) }
 
 // GenTallyExpeditedParamsQuorum randomized TallyParamsExpeditedQuorum
 func GenTallyExpeditedParamsQuorum(r *rand.Rand) sdk.Dec {
-	return sdk.NewDecWithPrec(int64(simulation.RandIntBetween(r, 500, 550)), 3)
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
 }
 
 // GenTallyParamsThreshold randomized TallyParamsThreshold
-func GenTallyParamsThreshold(r *rand.Rand) sdk.Dec {
-	return sdk.NewDecWithPrec(int64(simulation.RandIntBetween(r, 450, 500)), 3)
-}
+func GenTallyParamsThreshold(r *rand.Rand) sdk.Dec { _ = "STUB: not implemented"; return *new(sdk.Dec) }
 
 // GenTallyParamsExpeditedThreshold randomized TallyParamsExpeditedThreshold
 func GenTallyParamsExpeditedThreshold(r *rand.Rand) sdk.Dec {
-	return sdk.NewDecWithPrec(int64(simulation.RandIntBetween(r, 500, 550)), 3)
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
 }
 
 // GenTallyParamsVeto randomized TallyParamsVeto
-func GenTallyParamsVeto(r *rand.Rand) sdk.Dec {
-	return sdk.NewDecWithPrec(int64(simulation.RandIntBetween(r, 250, 334)), 3)
-}
+func GenTallyParamsVeto(r *rand.Rand) sdk.Dec { _ = "STUB: not implemented"; return *new(sdk.Dec) }
 
 // RandomizedGenState generates a random GenesisState for gov
-func RandomizedGenState(simState *module.SimulationState) {
-	startingProposalID := uint64(simState.Rand.Intn(100)) //nolint:gosec // Intn(100) always returns a non-negative value
+func RandomizedGenState(simState *module.SimulationState) { _ = "STUB: not implemented"; return }
 
-	var minDeposit sdk.Coins
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, DepositParamsMinDeposit, &minDeposit, simState.Rand,
-		func(r *rand.Rand) { minDeposit = GenDepositParamsMinDeposit(r) },
-	)
-
-	var minExpeditedDeposit sdk.Coins
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, DepositParamsMinExpeditedDeposit, &minExpeditedDeposit, simState.Rand,
-		func(r *rand.Rand) { minExpeditedDeposit = GenDepositParamsMinExpeditedDeposit(r) },
-	)
-
-	var depositPeriod time.Duration
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, DepositParamsDepositPeriod, &depositPeriod, simState.Rand,
-		func(r *rand.Rand) { depositPeriod = GenDepositParamsDepositPeriod(r) },
-	)
-
-	var votingPeriod time.Duration
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, VotingParamsVotingPeriod, &votingPeriod, simState.Rand,
-		func(r *rand.Rand) { votingPeriod = GenVotingParamsVotingPeriod(r) },
-	)
-
-	var expeditedVotingPeriod time.Duration
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, ExpeditedVotingParamsVotingPeriod, &expeditedVotingPeriod, simState.Rand,
-		func(r *rand.Rand) { expeditedVotingPeriod = GenVotingParamsExpeditedVotingPeriod(r) },
-	)
-
-	var quorum sdk.Dec
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, TallyParamsQuorum, &quorum, simState.Rand,
-		func(r *rand.Rand) { quorum = GenTallyParamsQuorum(r) },
-	)
-
-	var expeditedQuorum sdk.Dec
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, TallyParamsExpeditedQuorum, &expeditedQuorum, simState.Rand,
-		func(r *rand.Rand) { expeditedQuorum = GenTallyExpeditedParamsQuorum(r) },
-	)
-
-	var threshold sdk.Dec
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, TallyParamsThreshold, &threshold, simState.Rand,
-		func(r *rand.Rand) { threshold = GenTallyParamsThreshold(r) },
-	)
-
-	var expeditedThreshold sdk.Dec
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, TallyParamsExpeditedThreshold, &expeditedThreshold, simState.Rand,
-		func(r *rand.Rand) { expeditedThreshold = GenTallyParamsExpeditedThreshold(r) },
-	)
-
-	var veto sdk.Dec
-	simState.AppParams.GetOrGenerate(
-		simState.Cdc, TallyParamsVeto, &veto, simState.Rand,
-		func(r *rand.Rand) { veto = GenTallyParamsVeto(r) },
-	)
-
-	govGenesis := types.NewGenesisState(
-		startingProposalID,
-		types.NewDepositParams(minDeposit, minExpeditedDeposit, depositPeriod),
-		types.NewVotingParams(votingPeriod, expeditedVotingPeriod),
-		types.NewTallyParams(quorum, expeditedQuorum, threshold, expeditedThreshold, veto),
-	)
-
-	bz, err := json.MarshalIndent(&govGenesis, "", " ")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("Selected randomly generated governance parameters:\n%s\n", bz)
-	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(govGenesis)
-}
+//nolint:gosec // Intn(100) always returns a non-negative value

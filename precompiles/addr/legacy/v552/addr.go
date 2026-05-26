@@ -1,9 +1,7 @@
 package v552
 
 import (
-	"bytes"
 	"embed"
-	"fmt"
 	"math/big"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
@@ -42,110 +40,35 @@ type Precompile struct {
 }
 
 func NewPrecompile(keepers utils.Keepers) (*Precompile, error) {
-	abiBz, err := f.ReadFile("abi.json")
-	if err != nil {
-		return nil, fmt.Errorf("error loading the staking ABI %s", err)
-	}
-
-	newAbi, err := abi.JSON(bytes.NewReader(abiBz))
-	if err != nil {
-		return nil, err
-	}
-
-	p := &Precompile{
-		Precompile: pcommon.Precompile{ABI: newAbi},
-		evmKeeper:  keepers.EVMK(),
-		address:    common.HexToAddress(AddrAddress),
-	}
-
-	for name, m := range newAbi.Methods {
-		switch name {
-		case GetSeiAddressMethod:
-			p.GetSeiAddressID = m.ID
-		case GetEvmAddressMethod:
-			p.GetEvmAddressID = m.ID
-		}
-	}
-
-	return p, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // RequiredGas returns the required bare minimum gas to execute the precompile.
-func (p Precompile) RequiredGas(input []byte) uint64 {
-	methodID, err := pcommon.ExtractMethodID(input)
-	if err != nil {
-		return pcommon.UnknownMethodCallGas
-	}
+func (p Precompile) RequiredGas(input []byte) uint64 { _ = "STUB: not implemented"; return 0 }
 
-	method, err := p.MethodById(methodID)
-	if err != nil {
-		// This should never happen since this method is going to fail during Run
-		return pcommon.UnknownMethodCallGas
-	}
-
-	return p.Precompile.RequiredGas(input, p.IsTransaction(method.Name))
-}
+// This should never happen since this method is going to fail during Run
 
 func (p Precompile) Address() common.Address {
-	return p.address
+	_ = "STUB: not implemented"
+	return *new(common.Address)
 }
 
-func (p Precompile) GetName() string {
-	return "addr"
-}
+func (p Precompile) GetName() string { _ = "STUB: not implemented"; return "" }
 
 func (p Precompile) Run(evm *vm.EVM, _ common.Address, _ common.Address, input []byte, value *big.Int, _ bool, _ bool, hooks *tracing.Hooks) (bz []byte, err error) {
-	ctx, method, args, err := p.Prepare(evm, input)
-	if err != nil {
-		return nil, err
-	}
-
-	switch method.Name {
-	case GetSeiAddressMethod:
-		return p.getSeiAddr(ctx, method, args, value)
-	case GetEvmAddressMethod:
-		return p.getEvmAddr(ctx, method, args, value)
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (p Precompile) getSeiAddr(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, err
-	}
-
-	seiAddr, found := p.evmKeeper.GetSeiAddress(ctx, args[0].(common.Address))
-	if !found {
-		return nil, fmt.Errorf("EVM address %s is not associated", args[0].(common.Address).Hex())
-	}
-	return method.Outputs.Pack(seiAddr.String())
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (p Precompile) getEvmAddr(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, err
-	}
-
-	seiAddr, err := sdk.AccAddressFromBech32(args[0].(string))
-	if err != nil {
-		return nil, err
-	}
-
-	evmAddr, found := p.evmKeeper.GetEVMAddress(ctx, seiAddr)
-	if !found {
-		return nil, fmt.Errorf("sei address %s is not associated", args[0].(string))
-	}
-	return method.Outputs.Pack(evmAddr)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (Precompile) IsTransaction(string) bool {
-	return false
-}
+func (Precompile) IsTransaction(string) bool { _ = "STUB: not implemented"; return false }

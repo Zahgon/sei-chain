@@ -1,16 +1,9 @@
 package v630
 
 import (
-	"encoding/json"
-	"errors"
-	"fmt"
-
 	"github.com/ethereum/go-ethereum/common"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	distrtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/types"
 	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
-	paramstypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types/proposal"
-	upgradetypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/types"
 )
 
 // EVMKeeper defines the interface for EVM keeper operations
@@ -106,205 +99,102 @@ type ProposalHandler interface {
 type TextProposalHandler struct{}
 
 func (h TextProposalHandler) HandleProposal(ctx sdk.Context, proposal Proposal) (govtypes.Content, error) {
-	return govtypes.NewTextProposal(proposal.Title, proposal.Description, proposal.IsExpedited), nil
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content), nil
 }
 
-func (h TextProposalHandler) Type() string {
-	return govtypes.ProposalTypeText
-}
+func (h TextProposalHandler) Type() string { _ = "STUB: not implemented"; return "" }
 
 type ParameterChangeProposalHandler struct{}
 
 func (h ParameterChangeProposalHandler) HandleProposal(ctx sdk.Context, proposal Proposal) (govtypes.Content, error) {
-	if len(proposal.Changes) == 0 {
-		return nil, errors.New("at least one parameter change must be specified")
-	}
-
-	// Convert changes to ParamChange array
-	changes := make([]paramstypes.ParamChange, len(proposal.Changes))
-	for i, change := range proposal.Changes {
-		// Convert value to string - this is what ParamChange expects
-		valueBytes, err := json.Marshal(change.Value)
-		if err != nil {
-			return nil, fmt.Errorf("failed to marshal parameter value: %w", err)
-		}
-		changes[i] = paramstypes.ParamChange{
-			Subspace: change.Subspace,
-			Key:      change.Key,
-			Value:    string(valueBytes),
-		}
-	}
-
-	return paramstypes.NewParameterChangeProposal(
-		proposal.Title,
-		proposal.Description,
-		changes,
-		proposal.IsExpedited,
-	), nil
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content), nil
 }
 
-func (h ParameterChangeProposalHandler) Type() string {
-	return paramstypes.ProposalTypeChange
-}
+// Convert changes to ParamChange array
+
+// Convert value to string - this is what ParamChange expects
+
+func (h ParameterChangeProposalHandler) Type() string { _ = "STUB: not implemented"; return "" }
 
 type SoftwareUpgradeProposalHandler struct{}
 
 func (h SoftwareUpgradeProposalHandler) HandleProposal(ctx sdk.Context, proposal Proposal) (govtypes.Content, error) {
-	if proposal.Plan == nil {
-		return nil, errors.New("upgrade plan must be specified")
-	}
-
-	if proposal.Plan.Height == 0 {
-		return nil, errors.New("upgrade height must be specified")
-	}
-	if proposal.Plan.Name == "" {
-		return nil, errors.New("upgrade name must be specified")
-	}
-
-	return upgradetypes.NewSoftwareUpgradeProposal(
-		proposal.Title,
-		proposal.Description,
-		upgradetypes.Plan{
-			Name:   proposal.Plan.Name,
-			Height: proposal.Plan.Height,
-			Info:   proposal.Plan.Info,
-		},
-	), nil
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content), nil
 }
 
-func (h SoftwareUpgradeProposalHandler) Type() string {
-	return upgradetypes.ProposalTypeSoftwareUpgrade
-}
+func (h SoftwareUpgradeProposalHandler) Type() string { _ = "STUB: not implemented"; return "" }
 
 type CancelSoftwareUpgradeProposalHandler struct{}
 
 func (h CancelSoftwareUpgradeProposalHandler) HandleProposal(ctx sdk.Context, proposal Proposal) (govtypes.Content, error) {
+	_ = "STUB: not implemented"
 	// Cancel software upgrade proposals don't need any additional parameters
 	// They just need title and description which are already validated in createProposalContent
-	return upgradetypes.NewCancelSoftwareUpgradeProposal(
-		proposal.Title,
-		proposal.Description,
-	), nil
+	return *new(govtypes.Content), nil
 }
 
-func (h CancelSoftwareUpgradeProposalHandler) Type() string {
-	return upgradetypes.ProposalTypeCancelSoftwareUpgrade
-}
+func (h CancelSoftwareUpgradeProposalHandler) Type() string { _ = "STUB: not implemented"; return "" }
 
 type CommunityPoolSpendProposalHandler struct {
 	evmKeeper EVMKeeper
 }
 
 func (h CommunityPoolSpendProposalHandler) HandleProposal(ctx sdk.Context, proposal Proposal) (govtypes.Content, error) {
-	if proposal.CommunityPoolSpend == nil {
-		return nil, errors.New("community pool spend parameters must be specified")
-	}
-
-	// Validate that the recipient is a valid Ethereum address
-	if !common.IsHexAddress(proposal.CommunityPoolSpend.Recipient) {
-		return nil, fmt.Errorf("invalid ethereum address format")
-	}
-
-	// Parse the amount
-	amount, err := sdk.ParseCoinsNormalized(proposal.CommunityPoolSpend.Amount)
-	if err != nil {
-		return nil, fmt.Errorf("invalid amount format: %w", err)
-	}
-
-	if amount.IsZero() {
-		return nil, errors.New("amount must be greater than zero")
-	}
-
-	// Convert Ethereum address to Sei address using the EVM keeper
-	ethAddr := common.HexToAddress(proposal.CommunityPoolSpend.Recipient)
-	seiAddr, found := h.evmKeeper.GetSeiAddress(ctx, ethAddr)
-	if !found {
-		return nil, fmt.Errorf("no sei address found for ethereum address %s", ethAddr.Hex())
-	}
-
-	return distrtypes.NewCommunityPoolSpendProposal(
-		proposal.Title,
-		proposal.Description,
-		seiAddr,
-		amount,
-	), nil
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content), nil
 }
 
-func (h CommunityPoolSpendProposalHandler) Type() string {
-	return distrtypes.ProposalTypeCommunityPoolSpend
-}
+// Validate that the recipient is a valid Ethereum address
+
+// Parse the amount
+
+// Convert Ethereum address to Sei address using the EVM keeper
+
+func (h CommunityPoolSpendProposalHandler) Type() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterProposalHandlers registers all available proposal handlers
 func RegisterProposalHandlers(evmKeeper EVMKeeper) map[string]ProposalHandler {
-	proposalHandlers := make(map[string]ProposalHandler)
-
-	// Register the TextProposalHandler
-	textHandler := TextProposalHandler{}
-	proposalHandlers[textHandler.Type()] = textHandler
-	// Default handler for empty type
-	proposalHandlers[""] = textHandler
-
-	// Register the ParameterChangeProposalHandler
-	paramHandler := ParameterChangeProposalHandler{}
-	proposalHandlers[paramHandler.Type()] = paramHandler
-
-	// Register the SoftwareUpgradeProposalHandler
-	upgradeHandler := SoftwareUpgradeProposalHandler{}
-	proposalHandlers[upgradeHandler.Type()] = upgradeHandler
-
-	// Register the CancelSoftwareUpgradeProposalHandler
-	cancelUpgradeHandler := CancelSoftwareUpgradeProposalHandler{}
-	proposalHandlers[cancelUpgradeHandler.Type()] = cancelUpgradeHandler
-
-	// Register the CommunityPoolSpendProposalHandler
-	communityPoolSpendHandler := CommunityPoolSpendProposalHandler{evmKeeper: evmKeeper}
-	proposalHandlers[communityPoolSpendHandler.Type()] = communityPoolSpendHandler
-
-	return proposalHandlers
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Register the TextProposalHandler
+
+// Default handler for empty type
+
+// Register the ParameterChangeProposalHandler
+
+// Register the SoftwareUpgradeProposalHandler
+
+// Register the CancelSoftwareUpgradeProposalHandler
+
+// Register the CommunityPoolSpendProposalHandler
 
 // GetProposalHandler returns the appropriate handler for a proposal type
 func GetProposalHandler(handlers map[string]ProposalHandler, proposalType string) (ProposalHandler, error) {
-	handler, ok := handlers[proposalType]
-	if !ok {
-		return nil, fmt.Errorf("unsupported proposal type: %s", proposalType)
-	}
-	return handler, nil
+	_ = "STUB: not implemented"
+	return *new(ProposalHandler), nil
 }
 
 // createProposalContent creates the appropriate content for a proposal based on its type
 func (p PrecompileExecutor) createProposalContent(ctx sdk.Context, proposal Proposal) (govtypes.Content, error) {
+	_ = "STUB: not implemented"
 	// Validate required fields
-	if proposal.Title == "" {
-		return nil, errors.New("proposal title cannot be empty")
-	}
-	if proposal.Description == "" {
-		return nil, errors.New("proposal description cannot be empty")
-	}
-
-	// Get the appropriate handler for this proposal type
-	handler, err := GetProposalHandler(p.proposalHandlers, proposal.Type)
-	if err != nil {
-		// For unsupported types, provide more specific error messages
-		switch proposal.Type {
-		// WASM module proposal types
-		case "UpdateWasmDependencyMapping", "StoreCode", "InstantiateContract", "MigrateContract", "SudoContract",
-			"ExecuteContract", "UpdateAdmin", "ClearAdmin", "PinCodes", "UnpinCodes",
-			"UpdateInstantiateConfig":
-			return nil, fmt.Errorf("%s proposals are not supported yet via precompile", proposal.Type)
-		// IBC module proposal types
-		case "ClientUpdate", "IBCUpgrade":
-			return nil, fmt.Errorf("%s proposals are not supported yet via precompile", proposal.Type)
-		default:
-			return nil, err
-		}
-	}
-
-	// Use the handler to create the appropriate content
-	return handler.HandleProposal(ctx, proposal)
+	return *new(govtypes.Content), nil
 }
+
+// Get the appropriate handler for this proposal type
+
+// For unsupported types, provide more specific error messages
+
+// WASM module proposal types
+
+// IBC module proposal types
+
+// Use the handler to create the appropriate content
 
 // registerProposalHandlers registers all available proposal handlers
-func (p *PrecompileExecutor) registerProposalHandlers() {
-	p.proposalHandlers = RegisterProposalHandlers(p.evmKeeper)
-}
+func (p *PrecompileExecutor) registerProposalHandlers() { _ = "STUB: not implemented"; return }

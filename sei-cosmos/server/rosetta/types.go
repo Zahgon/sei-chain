@@ -58,7 +58,8 @@ type ConstructionPreprocessMetadata struct {
 }
 
 func (c *ConstructionPreprocessMetadata) FromMetadata(meta map[string]interface{}) error {
-	return unmarshalMetadata(meta, c)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // PreprocessOperationsOptionsResponse is the structured metadata options returned by the preprocess operations endpoint
@@ -70,11 +71,13 @@ type PreprocessOperationsOptionsResponse struct {
 }
 
 func (c PreprocessOperationsOptionsResponse) ToMetadata() (map[string]interface{}, error) {
-	return marshalMetadata(c)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *PreprocessOperationsOptionsResponse) FromMetadata(meta map[string]interface{}) error {
-	return unmarshalMetadata(meta, c)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SignerData contains information on the signers when the request
@@ -96,9 +99,11 @@ type ConstructionMetadata struct {
 }
 
 func (c ConstructionMetadata) ToMetadata() (map[string]interface{}, error) {
-	return marshalMetadata(c)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *ConstructionMetadata) FromMetadata(meta map[string]interface{}) error {
-	return unmarshalMetadata(meta, c)
+	_ = "STUB: not implemented"
+	return nil
 }

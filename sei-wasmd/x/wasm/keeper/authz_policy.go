@@ -15,27 +15,33 @@ type AuthorizationPolicy interface {
 type DefaultAuthorizationPolicy struct{}
 
 func (p DefaultAuthorizationPolicy) CanCreateCode(config types.AccessConfig, actor sdk.AccAddress) bool {
-	return config.Allowed(actor)
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (p DefaultAuthorizationPolicy) CanInstantiateContract(config types.AccessConfig, actor sdk.AccAddress) bool {
-	return config.Allowed(actor)
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (p DefaultAuthorizationPolicy) CanModifyContract(admin, actor sdk.AccAddress) bool {
-	return admin != nil && admin.Equals(actor)
+	_ = "STUB: not implemented"
+	return false
 }
 
 type GovAuthorizationPolicy struct{}
 
 func (p GovAuthorizationPolicy) CanCreateCode(types.AccessConfig, sdk.AccAddress) bool {
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (p GovAuthorizationPolicy) CanInstantiateContract(types.AccessConfig, sdk.AccAddress) bool {
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (p GovAuthorizationPolicy) CanModifyContract(sdk.AccAddress, sdk.AccAddress) bool {
-	return true
+	_ = "STUB: not implemented"
+	return false
 }

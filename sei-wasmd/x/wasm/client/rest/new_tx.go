@@ -5,16 +5,10 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
-
-	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 )
 
-func registerNewTxRoutes(cliCtx client.Context, r *mux.Router) {
-	r.HandleFunc("/wasm/contract/{contractAddr}/admin", setContractAdminHandlerFn(cliCtx)).Methods("PUT")
-	r.HandleFunc("/wasm/contract/{contractAddr}/code", migrateContractHandlerFn(cliCtx)).Methods("PUT")
-}
+func registerNewTxRoutes(cliCtx client.Context, r *mux.Router) { _ = "STUB: not implemented"; return }
 
 type migrateContractReq struct {
 	BaseReq rest.BaseReq `json:"base_req" yaml:"base_req"`
@@ -29,58 +23,11 @@ type updateContractAdministrateReq struct {
 }
 
 func setContractAdminHandlerFn(cliCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req updateContractAdministrateReq
-		if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-			return
-		}
-		vars := mux.Vars(r)
-		contractAddr := vars["contractAddr"]
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		msg := &types.MsgUpdateAdmin{
-			Sender:   req.BaseReq.From,
-			NewAdmin: req.Admin,
-			Contract: contractAddr,
-		}
-		if err := msg.ValidateBasic(); err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(cliCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 func migrateContractHandlerFn(cliCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req migrateContractReq
-		if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-			return
-		}
-		vars := mux.Vars(r)
-		contractAddr := vars["contractAddr"]
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		msg := &types.MsgMigrateContract{
-			Sender:   req.BaseReq.From,
-			Contract: contractAddr,
-			CodeID:   req.CodeID,
-			Msg:      req.Msg,
-		}
-		if err := msg.ValidateBasic(); err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(cliCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }

@@ -1,7 +1,5 @@
 package types
 
-import "fmt"
-
 // An Invariant is a function which tests a particular invariant.
 // The invariant returns a descriptive message about what happened
 // and a boolean indicating whether the invariant has been broken.
@@ -17,6 +15,4 @@ type InvariantRegistry interface {
 }
 
 // FormatInvariant returns a standardized invariant message.
-func FormatInvariant(module, name, msg string) string {
-	return fmt.Sprintf("%s: %s invariant\n%s\n", module, name, msg)
-}
+func FormatInvariant(module, name, msg string) string { _ = "STUB: not implemented"; return "" }

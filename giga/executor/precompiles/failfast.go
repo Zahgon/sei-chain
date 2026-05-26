@@ -42,18 +42,18 @@ var FailFastPrecompileAddresses = []common.Address{
 // through the entire call stack.
 type InvalidPrecompileCallError struct{}
 
-func (e *InvalidPrecompileCallError) Error() string {
-	return "invalid precompile call"
-}
+func (e *InvalidPrecompileCallError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // IsAbortError implements vm.AbortError interface, signaling that this error
 // should propagate through the EVM call stack instead of being swallowed.
 func (e *InvalidPrecompileCallError) IsAbortError() bool {
-	return true
+	_ = "STUB: not implemented"
+
+	// ErrInvalidPrecompileCall is the singleton error instance for invalid precompile calls.
+	// It implements vm.AbortError to ensure it propagates through the call stack.
+	return false
 }
 
-// ErrInvalidPrecompileCall is the singleton error instance for invalid precompile calls.
-// It implements vm.AbortError to ensure it propagates through the call stack.
 var ErrInvalidPrecompileCall error = &InvalidPrecompileCallError{}
 
 // BalanceMigrationAbortError signals that the transaction requires balance
@@ -61,13 +61,9 @@ var ErrInvalidPrecompileCall error = &InvalidPrecompileCallError{}
 // should fall back to v2.
 type BalanceMigrationAbortError struct{}
 
-func (e *BalanceMigrationAbortError) Error() string {
-	return "balance migration required for unassociated address"
-}
+func (e *BalanceMigrationAbortError) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e *BalanceMigrationAbortError) IsAbortError() bool {
-	return true
-}
+func (e *BalanceMigrationAbortError) IsAbortError() bool { _ = "STUB: not implemented"; return false }
 
 var ErrBalanceMigrationRequired error = &BalanceMigrationAbortError{}
 
@@ -75,12 +71,11 @@ type FailFastPrecompile struct{}
 
 var FailFastSingleton vm.PrecompiledContract = &FailFastPrecompile{}
 
-func (p *FailFastPrecompile) RequiredGas(input []byte) uint64 {
-	return 0
-}
+func (p *FailFastPrecompile) RequiredGas(input []byte) uint64 { _ = "STUB: not implemented"; return 0 }
 
 func (p *FailFastPrecompile) Run(evm *vm.EVM, caller common.Address, callingContract common.Address, input []byte, value *big.Int, readOnly bool, isFromDelegateCall bool, hooks *tracing.Hooks) ([]byte, error) {
-	return nil, ErrInvalidPrecompileCall
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var AllCustomPrecompilesFailFast = map[common.Address]vm.PrecompiledContract{}

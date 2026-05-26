@@ -2,7 +2,6 @@ package capability
 
 import (
 	"encoding/json"
-	"fmt"
 	"math/rand"
 
 	"github.com/gorilla/mux"
@@ -18,8 +17,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
 	simtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/simulation"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/types"
 )
 
 var (
@@ -38,60 +35,74 @@ type AppModuleBasic struct {
 }
 
 func NewAppModuleBasic(cdc codec.Codec) AppModuleBasic {
-	return AppModuleBasic{cdc: cdc}
+	_ = "STUB: not implemented"
+	return *new(AppModuleBasic)
 }
 
 // Name returns the capability module's name.
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterLegacyAminoCodec does nothing. Capability does not support amino.
-func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
+func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	_ = "STUB: not implemented"
 
-// RegisterInterfaces registers the module's interface types
-func (a AppModuleBasic) RegisterInterfaces(_ cdctypes.InterfaceRegistry) {}
+	// RegisterInterfaces registers the module's interface types
+	return
+}
 
-// DefaultGenesis returns the capability module's default genesis state.
+func (a AppModuleBasic) RegisterInterfaces(_ cdctypes.InterfaceRegistry) {
+	_ = "STUB: not implemented"
+
+	// DefaultGenesis returns the capability module's default genesis state.
+	return
+}
+
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesis())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the capability module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var genState types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &genState); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-	return genState.Validate()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes registers the capability module's REST service handlers.
-func (a AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {}
+func (a AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the capability module.
-func (a AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the capability module.
+	return
 }
 
-// GetTxCmd returns the capability module's root tx command.
-func (a AppModuleBasic) GetTxCmd() *cobra.Command { return nil }
+func (a AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {
+	_ = "STUB: not implemented"
 
-// GetQueryCmd returns the capability module's root query command.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command { return nil }
+	// GetTxCmd returns the capability module's root tx command.
+	return
+}
 
-// ----------------------------------------------------------------------------
-// AppModule
-// ----------------------------------------------------------------------------
+func (a AppModuleBasic) GetTxCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// GetQueryCmd returns the capability module's root query command.
+	return nil
+}
+
+func (AppModuleBasic) GetQueryCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// ----------------------------------------------------------------------------
+	// AppModule
+	// ----------------------------------------------------------------------------
+	return nil
+}
 
 // AppModule implements the AppModule interface for the capability module.
 type AppModule struct {
@@ -101,84 +112,104 @@ type AppModule struct {
 }
 
 func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
-	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(cdc),
-		keeper:         keeper,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // Name returns the capability module's name.
-func (am AppModule) Name() string {
-	return am.AppModuleBasic.Name()
-}
+func (am AppModule) Name() string { _ = "STUB: not implemented"; return "" }
 
 // Route returns the capability module's message routing key.
-func (AppModule) Route() sdk.Route { return sdk.Route{} }
+func (AppModule) Route() sdk.Route {
+	_ = "STUB: not implemented"
 
-// QuerierRoute returns the capability module's query routing key.
-func (AppModule) QuerierRoute() string { return "" }
-
-// LegacyQuerierHandler returns the capability module's Querier.
-func (am AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier { return nil }
-
-// RegisterServices registers a GRPC query service to respond to the
-// module-specific GRPC queries.
-func (am AppModule) RegisterServices(module.Configurator) {}
-
-// RegisterInvariants registers the capability module's invariants.
-func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
-
-// InitGenesis performs the capability module's genesis initialization It returns
-// no validator updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
-	var genState types.GenesisState
-	// Initialize global index to index in genesis state
-	cdc.MustUnmarshalJSON(gs, &genState)
-
-	InitGenesis(ctx, am.keeper, genState)
-
-	return []abci.ValidatorUpdate{}
+	// QuerierRoute returns the capability module's query routing key.
+	return *new(sdk.Route)
 }
+
+func (AppModule) QuerierRoute() string {
+	_ = "STUB: not implemented"
+
+	// LegacyQuerierHandler returns the capability module's Querier.
+	return ""
+}
+
+func (am AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier {
+	_ = "STUB: not implemented"
+
+	// RegisterServices registers a GRPC query service to respond to the
+	// module-specific GRPC queries.
+	return *new(sdk.Querier)
+}
+
+func (am AppModule) RegisterServices(module.Configurator) {
+	_ = "STUB: not implemented"
+
+	// RegisterInvariants registers the capability module's invariants.
+	return
+}
+
+func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
+
+	// InitGenesis performs the capability module's genesis initialization It returns
+	// no validator updates.
+	return
+}
+
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
+	_ = "STUB: not implemented"
+	return nil
+}
+
+// Initialize global index to index in genesis state
 
 // ExportGenesis returns the capability module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState := ExportGenesis(ctx, am.keeper)
-	return cdc.MustMarshalJSON(genState)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
 
-// GenerateGenesisState creates a randomized GenState of the capability module.
+	// GenerateGenesisState creates a randomized GenState of the capability module.
+	return 0
+}
+
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
-	simulation.RandomizedGenState(simState)
+	_ = "STUB: not implemented"
+	return
 }
 
 // ProposalContents performs a no-op
 func (am AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+	_ = "STUB: not implemented"
+
+	// RandomizedParams creates randomized capability param changes for the simulator.
 	return nil
 }
 
-// RandomizedParams creates randomized capability param changes for the simulator.
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	_ = "STUB: not implemented"
+
+	// RegisterStoreDecoder registers a decoder for capability module's types
 	return nil
 }
 
-// RegisterStoreDecoder registers a decoder for capability module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-	sdr[types.StoreKey] = simulation.NewDecodeStore(am.cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // WeightedOperations returns the all the gov module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+	_ = "STUB: not implemented"
 	return nil
 }

@@ -6,15 +6,12 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,52 +32,29 @@ type SetLogLevelRequest struct {
 	Level string `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"`
 }
 
-func (m *SetLogLevelRequest) Reset()         { *m = SetLogLevelRequest{} }
-func (m *SetLogLevelRequest) String() string { return proto.CompactTextString(m) }
-func (*SetLogLevelRequest) ProtoMessage()    {}
-func (*SetLogLevelRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d831d27bce99c92f, []int{0}
-}
-func (m *SetLogLevelRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *SetLogLevelRequest) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *SetLogLevelRequest) String() string            { _ = "STUB: not implemented"; return "" }
+func (*SetLogLevelRequest) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*SetLogLevelRequest) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *SetLogLevelRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *SetLogLevelRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SetLogLevelRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *SetLogLevelRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetLogLevelRequest.Merge(m, src)
-}
-func (m *SetLogLevelRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *SetLogLevelRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_SetLogLevelRequest.DiscardUnknown(m)
-}
+
+func (m *SetLogLevelRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *SetLogLevelRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *SetLogLevelRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_SetLogLevelRequest proto.InternalMessageInfo
 
-func (m *SetLogLevelRequest) GetPattern() string {
-	if m != nil {
-		return m.Pattern
-	}
-	return ""
-}
+func (m *SetLogLevelRequest) GetPattern() string { _ = "STUB: not implemented"; return "" }
 
-func (m *SetLogLevelRequest) GetLevel() string {
-	if m != nil {
-		return m.Level
-	}
-	return ""
-}
+func (m *SetLogLevelRequest) GetLevel() string { _ = "STUB: not implemented"; return "" }
 
 type SetLogLevelResponse struct {
 	Pattern  string `protobuf:"bytes,1,opt,name=pattern,proto3" json:"pattern,omitempty"`
@@ -88,297 +62,178 @@ type SetLogLevelResponse struct {
 	Affected int32  `protobuf:"varint,3,opt,name=affected,proto3" json:"affected,omitempty"`
 }
 
-func (m *SetLogLevelResponse) Reset()         { *m = SetLogLevelResponse{} }
-func (m *SetLogLevelResponse) String() string { return proto.CompactTextString(m) }
-func (*SetLogLevelResponse) ProtoMessage()    {}
+func (m *SetLogLevelResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *SetLogLevelResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*SetLogLevelResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*SetLogLevelResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d831d27bce99c92f, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *SetLogLevelResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *SetLogLevelResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *SetLogLevelResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SetLogLevelResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *SetLogLevelResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SetLogLevelResponse.Merge(m, src)
-}
-func (m *SetLogLevelResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *SetLogLevelResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_SetLogLevelResponse.DiscardUnknown(m)
-}
+
+func (m *SetLogLevelResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *SetLogLevelResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *SetLogLevelResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_SetLogLevelResponse proto.InternalMessageInfo
 
-func (m *SetLogLevelResponse) GetPattern() string {
-	if m != nil {
-		return m.Pattern
-	}
-	return ""
-}
+func (m *SetLogLevelResponse) GetPattern() string { _ = "STUB: not implemented"; return "" }
 
-func (m *SetLogLevelResponse) GetLevel() string {
-	if m != nil {
-		return m.Level
-	}
-	return ""
-}
+func (m *SetLogLevelResponse) GetLevel() string { _ = "STUB: not implemented"; return "" }
 
-func (m *SetLogLevelResponse) GetAffected() int32 {
-	if m != nil {
-		return m.Affected
-	}
-	return 0
-}
+func (m *SetLogLevelResponse) GetAffected() int32 { _ = "STUB: not implemented"; return 0 }
 
 type GetLogLevelRequest struct {
 	// logger is the exact logger name.
 	Logger string `protobuf:"bytes,1,opt,name=logger,proto3" json:"logger,omitempty"`
 }
 
-func (m *GetLogLevelRequest) Reset()         { *m = GetLogLevelRequest{} }
-func (m *GetLogLevelRequest) String() string { return proto.CompactTextString(m) }
-func (*GetLogLevelRequest) ProtoMessage()    {}
-func (*GetLogLevelRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d831d27bce99c92f, []int{2}
-}
-func (m *GetLogLevelRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *GetLogLevelRequest) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *GetLogLevelRequest) String() string            { _ = "STUB: not implemented"; return "" }
+func (*GetLogLevelRequest) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*GetLogLevelRequest) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *GetLogLevelRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetLogLevelRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetLogLevelRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetLogLevelRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetLogLevelRequest.Merge(m, src)
-}
-func (m *GetLogLevelRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetLogLevelRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetLogLevelRequest.DiscardUnknown(m)
-}
+
+func (m *GetLogLevelRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetLogLevelRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetLogLevelRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetLogLevelRequest proto.InternalMessageInfo
 
-func (m *GetLogLevelRequest) GetLogger() string {
-	if m != nil {
-		return m.Logger
-	}
-	return ""
-}
+func (m *GetLogLevelRequest) GetLogger() string { _ = "STUB: not implemented"; return "" }
 
 type GetLogLevelResponse struct {
 	Logger string `protobuf:"bytes,1,opt,name=logger,proto3" json:"logger,omitempty"`
 	Level  string `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"`
 }
 
-func (m *GetLogLevelResponse) Reset()         { *m = GetLogLevelResponse{} }
-func (m *GetLogLevelResponse) String() string { return proto.CompactTextString(m) }
-func (*GetLogLevelResponse) ProtoMessage()    {}
+func (m *GetLogLevelResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetLogLevelResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetLogLevelResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetLogLevelResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d831d27bce99c92f, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetLogLevelResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *GetLogLevelResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetLogLevelResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetLogLevelResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetLogLevelResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetLogLevelResponse.Merge(m, src)
-}
-func (m *GetLogLevelResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetLogLevelResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetLogLevelResponse.DiscardUnknown(m)
-}
+
+func (m *GetLogLevelResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetLogLevelResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetLogLevelResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetLogLevelResponse proto.InternalMessageInfo
 
-func (m *GetLogLevelResponse) GetLogger() string {
-	if m != nil {
-		return m.Logger
-	}
-	return ""
-}
+func (m *GetLogLevelResponse) GetLogger() string { _ = "STUB: not implemented"; return "" }
 
-func (m *GetLogLevelResponse) GetLevel() string {
-	if m != nil {
-		return m.Level
-	}
-	return ""
-}
+func (m *GetLogLevelResponse) GetLevel() string { _ = "STUB: not implemented"; return "" }
 
 type ListLoggersRequest struct {
 	// prefix filters loggers by name prefix (optional).
 	Prefix string `protobuf:"bytes,1,opt,name=prefix,proto3" json:"prefix,omitempty"`
 }
 
-func (m *ListLoggersRequest) Reset()         { *m = ListLoggersRequest{} }
-func (m *ListLoggersRequest) String() string { return proto.CompactTextString(m) }
-func (*ListLoggersRequest) ProtoMessage()    {}
-func (*ListLoggersRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d831d27bce99c92f, []int{4}
-}
-func (m *ListLoggersRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ListLoggersRequest) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *ListLoggersRequest) String() string            { _ = "STUB: not implemented"; return "" }
+func (*ListLoggersRequest) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ListLoggersRequest) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ListLoggersRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ListLoggersRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ListLoggersRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ListLoggersRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListLoggersRequest.Merge(m, src)
-}
-func (m *ListLoggersRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *ListLoggersRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListLoggersRequest.DiscardUnknown(m)
-}
+
+func (m *ListLoggersRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ListLoggersRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ListLoggersRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ListLoggersRequest proto.InternalMessageInfo
 
-func (m *ListLoggersRequest) GetPrefix() string {
-	if m != nil {
-		return m.Prefix
-	}
-	return ""
-}
+func (m *ListLoggersRequest) GetPrefix() string { _ = "STUB: not implemented"; return "" }
 
 type ListLoggersResponse struct {
 	Loggers []LoggerInfo `protobuf:"bytes,1,rep,name=loggers,proto3" json:"loggers"`
 }
 
-func (m *ListLoggersResponse) Reset()         { *m = ListLoggersResponse{} }
-func (m *ListLoggersResponse) String() string { return proto.CompactTextString(m) }
-func (*ListLoggersResponse) ProtoMessage()    {}
+func (m *ListLoggersResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ListLoggersResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*ListLoggersResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ListLoggersResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d831d27bce99c92f, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ListLoggersResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *ListLoggersResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ListLoggersResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ListLoggersResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ListLoggersResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListLoggersResponse.Merge(m, src)
-}
-func (m *ListLoggersResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *ListLoggersResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListLoggersResponse.DiscardUnknown(m)
-}
+
+func (m *ListLoggersResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ListLoggersResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ListLoggersResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ListLoggersResponse proto.InternalMessageInfo
 
-func (m *ListLoggersResponse) GetLoggers() []LoggerInfo {
-	if m != nil {
-		return m.Loggers
-	}
-	return nil
-}
+func (m *ListLoggersResponse) GetLoggers() []LoggerInfo { _ = "STUB: not implemented"; return nil }
 
 type LoggerInfo struct {
 	Name  string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Level string `protobuf:"bytes,2,opt,name=level,proto3" json:"level,omitempty"`
 }
 
-func (m *LoggerInfo) Reset()         { *m = LoggerInfo{} }
-func (m *LoggerInfo) String() string { return proto.CompactTextString(m) }
-func (*LoggerInfo) ProtoMessage()    {}
-func (*LoggerInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d831d27bce99c92f, []int{6}
-}
-func (m *LoggerInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *LoggerInfo) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *LoggerInfo) String() string            { _ = "STUB: not implemented"; return "" }
+func (*LoggerInfo) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*LoggerInfo) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *LoggerInfo) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *LoggerInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_LoggerInfo.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *LoggerInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LoggerInfo.Merge(m, src)
-}
-func (m *LoggerInfo) XXX_Size() int {
-	return m.Size()
-}
-func (m *LoggerInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_LoggerInfo.DiscardUnknown(m)
-}
+
+func (m *LoggerInfo) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *LoggerInfo) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *LoggerInfo) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_LoggerInfo proto.InternalMessageInfo
 
-func (m *LoggerInfo) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
+func (m *LoggerInfo) GetName() string { _ = "STUB: not implemented"; return "" }
 
-func (m *LoggerInfo) GetLevel() string {
-	if m != nil {
-		return m.Level
-	}
-	return ""
-}
+func (m *LoggerInfo) GetLevel() string { _ = "STUB: not implemented"; return "" }
 
 func init() {
 	proto.RegisterType((*SetLogLevelRequest)(nil), "seiprotocol.seichain.admin.v0.SetLogLevelRequest")
@@ -447,34 +302,23 @@ type adminServiceClient struct {
 }
 
 func NewAdminServiceClient(cc grpc1.ClientConn) AdminServiceClient {
-	return &adminServiceClient{cc}
+	_ = "STUB: not implemented"
+	return *new(AdminServiceClient)
 }
 
 func (c *adminServiceClient) SetLogLevel(ctx context.Context, in *SetLogLevelRequest, opts ...grpc.CallOption) (*SetLogLevelResponse, error) {
-	out := new(SetLogLevelResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.admin.v0.AdminService/SetLogLevel", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *adminServiceClient) GetLogLevel(ctx context.Context, in *GetLogLevelRequest, opts ...grpc.CallOption) (*GetLogLevelResponse, error) {
-	out := new(GetLogLevelResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.admin.v0.AdminService/GetLogLevel", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *adminServiceClient) ListLoggers(ctx context.Context, in *ListLoggersRequest, opts ...grpc.CallOption) (*ListLoggersResponse, error) {
-	out := new(ListLoggersResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.admin.v0.AdminService/ListLoggers", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // AdminServiceServer is the server API for AdminService service.
@@ -492,71 +336,38 @@ type UnimplementedAdminServiceServer struct {
 }
 
 func (*UnimplementedAdminServiceServer) SetLogLevel(ctx context.Context, req *SetLogLevelRequest) (*SetLogLevelResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetLogLevel not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedAdminServiceServer) GetLogLevel(ctx context.Context, req *GetLogLevelRequest) (*GetLogLevelResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLogLevel not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedAdminServiceServer) ListLoggers(ctx context.Context, req *ListLoggersRequest) (*ListLoggersResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListLoggers not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func RegisterAdminServiceServer(s grpc1.Server, srv AdminServiceServer) {
-	s.RegisterService(&_AdminService_serviceDesc, srv)
+	_ = "STUB: not implemented"
+	return
 }
 
 func _AdminService_SetLogLevel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SetLogLevelRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminServiceServer).SetLogLevel(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.admin.v0.AdminService/SetLogLevel",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).SetLogLevel(ctx, req.(*SetLogLevelRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _AdminService_GetLogLevel_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLogLevelRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminServiceServer).GetLogLevel(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.admin.v0.AdminService/GetLogLevel",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).GetLogLevel(ctx, req.(*GetLogLevelRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _AdminService_ListLoggers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListLoggersRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AdminServiceServer).ListLoggers(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.admin.v0.AdminService/ListLoggers",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AdminServiceServer).ListLoggers(ctx, req.(*ListLoggersRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _AdminService_serviceDesc = grpc.ServiceDesc{
@@ -581,1185 +392,139 @@ var _AdminService_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *SetLogLevelRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *SetLogLevelRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SetLogLevelRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Level) > 0 {
-		i -= len(m.Level)
-		copy(dAtA[i:], m.Level)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Level)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Pattern) > 0 {
-		i -= len(m.Pattern)
-		copy(dAtA[i:], m.Pattern)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Pattern)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SetLogLevelResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *SetLogLevelResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SetLogLevelResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Affected != 0 {
-		i = encodeVarintAdmin(dAtA, i, uint64(m.Affected))
-		i--
-		dAtA[i] = 0x18
-	}
-	if len(m.Level) > 0 {
-		i -= len(m.Level)
-		copy(dAtA[i:], m.Level)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Level)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Pattern) > 0 {
-		i -= len(m.Pattern)
-		copy(dAtA[i:], m.Pattern)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Pattern)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLogLevelRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetLogLevelRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLogLevelRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Logger) > 0 {
-		i -= len(m.Logger)
-		copy(dAtA[i:], m.Logger)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Logger)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLogLevelResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetLogLevelResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLogLevelResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Level) > 0 {
-		i -= len(m.Level)
-		copy(dAtA[i:], m.Level)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Level)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Logger) > 0 {
-		i -= len(m.Logger)
-		copy(dAtA[i:], m.Logger)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Logger)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListLoggersRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ListLoggersRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListLoggersRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Prefix) > 0 {
-		i -= len(m.Prefix)
-		copy(dAtA[i:], m.Prefix)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Prefix)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListLoggersResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ListLoggersResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListLoggersResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Loggers) > 0 {
-		for iNdEx := len(m.Loggers) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Loggers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintAdmin(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *LoggerInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *LoggerInfo) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *LoggerInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *LoggerInfo) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *LoggerInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Level) > 0 {
-		i -= len(m.Level)
-		copy(dAtA[i:], m.Level)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Level)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintAdmin(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintAdmin(dAtA []byte, offset int, v uint64) int {
-	offset -= sovAdmin(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *SetLogLevelRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Pattern)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	l = len(m.Level)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	return n
-}
+func encodeVarintAdmin(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *SetLogLevelResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Pattern)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	l = len(m.Level)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	if m.Affected != 0 {
-		n += 1 + sovAdmin(uint64(m.Affected))
-	}
-	return n
-}
+func (m *SetLogLevelRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetLogLevelRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Logger)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	return n
-}
+func (m *SetLogLevelResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetLogLevelResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Logger)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	l = len(m.Level)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	return n
-}
+func (m *GetLogLevelRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ListLoggersRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Prefix)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	return n
-}
+func (m *GetLogLevelResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ListLoggersResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Loggers) > 0 {
-		for _, e := range m.Loggers {
-			l = e.Size()
-			n += 1 + l + sovAdmin(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ListLoggersRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *LoggerInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	l = len(m.Level)
-	if l > 0 {
-		n += 1 + l + sovAdmin(uint64(l))
-	}
-	return n
-}
+func (m *ListLoggersResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovAdmin(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozAdmin(x uint64) (n int) {
-	return sovAdmin(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *SetLogLevelRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAdmin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SetLogLevelRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SetLogLevelRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pattern", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Pattern = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Level = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAdmin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *LoggerInfo) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SetLogLevelResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAdmin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SetLogLevelResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SetLogLevelResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pattern", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Pattern = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Level = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Affected", wireType)
-			}
-			m.Affected = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Affected |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAdmin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovAdmin(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetLogLevelRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAdmin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetLogLevelRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetLogLevelRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Logger", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Logger = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAdmin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sozAdmin(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetLogLevelResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAdmin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetLogLevelResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetLogLevelResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Logger", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Logger = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Level = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAdmin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *SetLogLevelRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ListLoggersRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAdmin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ListLoggersRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListLoggersRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Prefix", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Prefix = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAdmin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *SetLogLevelResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ListLoggersResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAdmin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ListLoggersResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListLoggersResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Loggers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Loggers = append(m.Loggers, LoggerInfo{})
-			if err := m.Loggers[len(m.Loggers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAdmin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *GetLogLevelRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *LoggerInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAdmin
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: LoggerInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LoggerInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Level", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Level = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAdmin(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAdmin
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *GetLogLevelResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipAdmin(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowAdmin
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowAdmin
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthAdmin
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupAdmin
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthAdmin
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *ListLoggersRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *ListLoggersResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *LoggerInfo) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipAdmin(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthAdmin        = fmt.Errorf("proto: negative length found during unmarshaling")

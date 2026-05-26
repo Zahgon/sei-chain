@@ -9,37 +9,21 @@ var _ sdk.Msg = &MsgVerifyInvariant{}
 
 // NewMsgVerifyInvariant creates a new MsgVerifyInvariant object
 func NewMsgVerifyInvariant(sender sdk.AccAddress, invModeName, invRoute string) *MsgVerifyInvariant {
-	return &MsgVerifyInvariant{
-		Sender:              sender.String(),
-		InvariantModuleName: invModeName,
-		InvariantRoute:      invRoute,
-	}
-}
-
-func (msg MsgVerifyInvariant) Route() string { return ModuleName }
-func (msg MsgVerifyInvariant) Type() string  { return "verify_invariant" }
-
-// get the bytes for the message signer to sign on
-func (msg MsgVerifyInvariant) GetSigners() []sdk.AccAddress {
-	sender, _ := sdk.AccAddressFromBech32(msg.Sender)
-	return []sdk.AccAddress{sender}
-}
-
-// GetSignBytes gets the sign bytes for the msg MsgVerifyInvariant
-func (msg MsgVerifyInvariant) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(&msg)
-	return sdk.MustSortJSON(bz)
-}
-
-// quick validity check
-func (msg MsgVerifyInvariant) ValidateBasic() error {
-	if msg.Sender == "" {
-		return ErrNoSender
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+func (msg MsgVerifyInvariant) Route() string { _ = "STUB: not implemented"; return "" }
+func (msg MsgVerifyInvariant) Type() string  { _ = "STUB: not implemented"; return "" }
+
+// get the bytes for the message signer to sign on
+func (msg MsgVerifyInvariant) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
+
+// GetSignBytes gets the sign bytes for the msg MsgVerifyInvariant
+func (msg MsgVerifyInvariant) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+// quick validity check
+func (msg MsgVerifyInvariant) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
 // FullInvariantRoute - get the messages full invariant route
-func (msg MsgVerifyInvariant) FullInvariantRoute() string {
-	return msg.InvariantModuleName + "/" + msg.InvariantRoute
-}
+func (msg MsgVerifyInvariant) FullInvariantRoute() string { _ = "STUB: not implemented"; return "" }

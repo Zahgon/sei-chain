@@ -1,30 +1,19 @@
 package statesync
 
 import (
-	"bytes"
 	"context"
-	"fmt"
-	"math/rand"
-	"strings"
 	"sync"
 	"time"
 
 	"github.com/sei-protocol/seilog"
-	dbm "github.com/tendermint/tm-db"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p"
 	sm "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/scope"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/light"
 	lightprovider "github.com/sei-protocol/sei-chain/sei-tendermint/light/provider"
-	lighthttp "github.com/sei-protocol/sei-chain/sei-tendermint/light/provider/http"
-	lightrpc "github.com/sei-protocol/sei-chain/sei-tendermint/light/rpc"
-	lightdb "github.com/sei-protocol/sei-chain/sei-tendermint/light/store/db"
 	pb "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/statesync"
 	rpchttp "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/http"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 )
 
 const (
@@ -65,153 +54,60 @@ func NewRPCStateProvider(
 	trustOptions light.TrustOptions,
 	blacklistTTL time.Duration,
 ) (StateProvider, error) {
-	if len(servers) < 2 {
-		return nil, fmt.Errorf("at least 2 RPC servers are required, got %d", len(servers))
-	}
-
-	providers := make([]lightprovider.Provider, 0, len(servers))
-	providerRemotes := make(map[lightprovider.Provider]string)
-	for _, server := range servers {
-		client, err := rpcClient(server)
-		if err != nil {
-			return nil, fmt.Errorf("failed to set up RPC client: %w", err)
-		}
-		provider := lighthttp.NewWithClient(chainID, client)
-		providers = append(providers, provider)
-		// We store the RPC addresses keyed by provider, so we can find the address of the primary
-		// provider used by the light client and use it to fetch consensus parameters.
-		providerRemotes[provider] = server
-	}
-
-	lc, err := light.NewClient(ctx, chainID, trustOptions, providers[0], providers[1:],
-		lightdb.New(dbm.NewMemDB()), blacklistTTL)
-	if err != nil {
-		return nil, err
-	}
-	return &stateProviderRPC{
-		lc:                      lc,
-		initialHeight:           initialHeight,
-		providers:               providerRemotes,
-		verifyLightBlockTimeout: verifyLightBlockTimeout,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(StateProvider), nil
 }
+
+// We store the RPC addresses keyed by provider, so we can find the address of the primary
+// provider used by the light client and use it to fetch consensus parameters.
 
 func (s *stateProviderRPC) verifyLightBlockAtHeight(ctx context.Context, height uint64, ts time.Time) (*types.LightBlock, error) {
-	ctx, cancel := context.WithTimeout(ctx, s.verifyLightBlockTimeout)
-	defer cancel()
-	return s.lc.VerifyLightBlockAtHeight(ctx, int64(height), ts) //nolint:gosec // height validated by Message.Validate() upstream
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // height validated by Message.Validate() upstream
 
 // AppHash implements part of StateProvider. It calls the application to verify the
 // light blocks at heights h+1 and h+2 and, if verification succeeds, reports the app
 // hash for the block at height h+1 which correlates to the state at height h.
 func (s *stateProviderRPC) AppHash(ctx context.Context, height uint64) ([]byte, error) {
-	s.Lock()
-	defer s.Unlock()
+	_ = "STUB: not implemented"
+	return nil,
 
-	// We have to fetch the next height, which contains the app hash for the previous height.
-	header, err := s.verifyLightBlockAtHeight(ctx, height+1, time.Now())
-	if err != nil {
-		return nil, err
-	}
-
-	// We also try to fetch the blocks at H+2, since we need these
-	// when building the state while restoring the snapshot. This avoids the race
-	// condition where we try to restore a snapshot before H+2 exists.
-	_, err = s.verifyLightBlockAtHeight(ctx, height+2, time.Now())
-	if err != nil {
-		return nil, err
-	}
-	return header.AppHash, nil
+		// We have to fetch the next height, which contains the app hash for the previous height.
+		nil
 }
+
+// We also try to fetch the blocks at H+2, since we need these
+// when building the state while restoring the snapshot. This avoids the race
+// condition where we try to restore a snapshot before H+2 exists.
 
 // Commit implements StateProvider.
 func (s *stateProviderRPC) Commit(ctx context.Context, height uint64) (*types.Commit, error) {
-	s.Lock()
-	defer s.Unlock()
-	header, err := s.verifyLightBlockAtHeight(ctx, height, time.Now())
-	if err != nil {
-		return nil, err
-	}
-	return header.Commit, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // State implements StateProvider.
 func (s *stateProviderRPC) State(ctx context.Context, height uint64) (sm.State, error) {
-	s.Lock()
-	defer s.Unlock()
-
-	state := sm.State{
-		ChainID:       s.lc.ChainID(),
-		InitialHeight: s.initialHeight,
-	}
-	if state.InitialHeight == 0 {
-		state.InitialHeight = 1
-	}
-
-	// The snapshot height maps onto the state heights as follows:
-	//
-	// height: last block, i.e. the snapshotted height
-	// height+1: current block, i.e. the first block we'll process after the snapshot
-	// height+2: next block, i.e. the second block after the snapshot
-	//
-	// We need to fetch the NextValidators from height+2 because if the application changed
-	// the validator set at the snapshot height then this only takes effect at height+2.
-	lastLightBlock, err := s.verifyLightBlockAtHeight(ctx, height, time.Now())
-	if err != nil {
-		return sm.State{}, err
-	}
-	currentLightBlock, err := s.verifyLightBlockAtHeight(ctx, height+1, time.Now())
-	if err != nil {
-		return sm.State{}, err
-	}
-	nextLightBlock, err := s.verifyLightBlockAtHeight(ctx, height+2, time.Now())
-	if err != nil {
-		return sm.State{}, err
-	}
-
-	state.Version = sm.Version{
-		Consensus: currentLightBlock.Version,
-		Software:  version.TMVersion,
-	}
-	state.LastBlockHeight = lastLightBlock.Height
-	state.LastBlockTime = lastLightBlock.Time
-	state.LastBlockID = lastLightBlock.Commit.BlockID
-	state.AppHash = currentLightBlock.AppHash
-	state.LastResultsHash = currentLightBlock.LastResultsHash
-	state.LastValidators = lastLightBlock.ValidatorSet
-	state.Validators = currentLightBlock.ValidatorSet
-	state.NextValidators = nextLightBlock.ValidatorSet
-	state.LastHeightValidatorsChanged = nextLightBlock.Height
-
-	// We'll also need to fetch consensus params via RPC, using light client verification.
-	primaryURL, ok := s.providers[s.lc.Primary()]
-	if !ok || primaryURL == "" {
-		return sm.State{}, fmt.Errorf("could not find address for primary light client provider")
-	}
-	primaryRPC, err := rpcClient(primaryURL)
-	if err != nil {
-		return sm.State{}, fmt.Errorf("unable to create RPC client: %w", err)
-	}
-	rpcclient := lightrpc.NewClient(primaryRPC, s.lc)
-	result, err := rpcclient.ConsensusParams(ctx, &currentLightBlock.Height)
-	if err != nil {
-		return sm.State{}, fmt.Errorf("unable to fetch consensus parameters for height %v: %w",
-			nextLightBlock.Height, err)
-	}
-	state.ConsensusParams = result.ConsensusParams
-	state.LastHeightConsensusParamsChanged = currentLightBlock.Height
-
-	return state, nil
+	_ = "STUB: not implemented"
+	return *new(sm.State), nil
 }
+
+// The snapshot height maps onto the state heights as follows:
+//
+// height: last block, i.e. the snapshotted height
+// height+1: current block, i.e. the first block we'll process after the snapshot
+// height+2: next block, i.e. the second block after the snapshot
+//
+// We need to fetch the NextValidators from height+2 because if the application changed
+// the validator set at the snapshot height then this only takes effect at height+2.
+
+// We'll also need to fetch consensus params via RPC, using light client verification.
 
 // rpcClient sets up a new RPC client
-func rpcClient(server string) (*rpchttp.HTTP, error) {
-	if !strings.Contains(server, "://") {
-		server = "http://" + server
-	}
-	return rpchttp.New(server)
-}
+func rpcClient(server string) (*rpchttp.HTTP, error) { _ = "STUB: not implemented"; return nil, nil }
 
 type StateProviderP2P struct {
 	sync.Mutex              // light.Client is not concurrency-safe
@@ -234,180 +130,93 @@ func NewP2PStateProvider(
 	paramsSendCh *p2p.Channel[*pb.Message],
 	blacklistTTL time.Duration,
 ) (StateProvider, error) {
-	if len(providers) < 2 {
-		return nil, fmt.Errorf("at least 2 peers are required, got %d", len(providers))
-	}
-
-	lc, err := light.NewClient(ctx, chainID, trustOptions, providers[0], providers[1:],
-		lightdb.New(dbm.NewMemDB()), blacklistTTL)
-	if err != nil {
-		return nil, err
-	}
-
-	return &StateProviderP2P{
-		lc:                      lc,
-		initialHeight:           initialHeight,
-		paramsSendCh:            paramsSendCh,
-		paramsRecvCh:            make(chan types.ConsensusParams),
-		verifyLightBlockTimeout: verifyLightBlockTimeout,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(StateProvider), nil
 }
 
 func (s *StateProviderP2P) verifyLightBlockAtHeight(ctx context.Context, height uint64, ts time.Time) (*types.LightBlock, error) {
-	ctx, cancel := context.WithTimeout(ctx, s.verifyLightBlockTimeout)
-	defer cancel()
-	return s.lc.VerifyLightBlockAtHeight(ctx, int64(height), ts) //nolint:gosec // height validated by Message.Validate() upstream
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // height validated by Message.Validate() upstream
 
 // AppHash implements StateProvider.
 func (s *StateProviderP2P) AppHash(ctx context.Context, height uint64) ([]byte, error) {
-	s.Lock()
-	defer s.Unlock()
+	_ = "STUB: not implemented"
+	return nil,
 
-	// We have to fetch the next height, which contains the app hash for the previous height.
-	header, err := s.verifyLightBlockAtHeight(ctx, height+1, time.Now())
-	if err != nil {
-		return nil, err
-	}
-
-	// We also try to fetch the blocks at H+2, since we need these
-	// when building the state while restoring the snapshot. This avoids the race
-	// condition where we try to restore a snapshot before H+2 exists.
-	_, err = s.verifyLightBlockAtHeight(ctx, height+2, time.Now())
-	if err != nil {
-		return nil, err
-	}
-	return header.AppHash, nil
+		// We have to fetch the next height, which contains the app hash for the previous height.
+		nil
 }
+
+// We also try to fetch the blocks at H+2, since we need these
+// when building the state while restoring the snapshot. This avoids the race
+// condition where we try to restore a snapshot before H+2 exists.
 
 // Commit implements StateProvider.
 func (s *StateProviderP2P) Commit(ctx context.Context, height uint64) (*types.Commit, error) {
-	s.Lock()
-	defer s.Unlock()
-	header, err := s.verifyLightBlockAtHeight(ctx, height, time.Now())
-	if err != nil {
-		return nil, err
-	}
-	return header.Commit, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // State implements StateProvider.
 func (s *StateProviderP2P) State(ctx context.Context, height uint64) (sm.State, error) {
-	s.Lock()
-	defer s.Unlock()
-
-	state := sm.State{
-		ChainID:       s.lc.ChainID(),
-		InitialHeight: s.initialHeight,
-	}
-	if state.InitialHeight == 0 {
-		state.InitialHeight = 1
-	}
-
-	// The snapshot height maps onto the state heights as follows:
-	//
-	// height: last block, i.e. the snapshotted height
-	// height+1: current block, i.e. the first block we'll process after the snapshot
-	// height+2: next block, i.e. the second block after the snapshot
-	//
-	// We need to fetch the NextValidators from height+2 because if the application changed
-	// the validator set at the snapshot height then this only takes effect at height+2.
-	lastLightBlock, err := s.verifyLightBlockAtHeight(ctx, height, time.Now())
-	if err != nil {
-		return sm.State{}, err
-	}
-	currentLightBlock, err := s.verifyLightBlockAtHeight(ctx, height+1, time.Now())
-	if err != nil {
-		return sm.State{}, err
-	}
-	nextLightBlock, err := s.verifyLightBlockAtHeight(ctx, height+2, time.Now())
-	if err != nil {
-		return sm.State{}, err
-	}
-
-	state.Version = sm.Version{
-		Consensus: currentLightBlock.Version,
-		Software:  version.TMVersion,
-	}
-	state.LastBlockHeight = lastLightBlock.Height
-	state.LastBlockTime = lastLightBlock.Time
-	state.LastBlockID = lastLightBlock.Commit.BlockID
-	state.AppHash = currentLightBlock.AppHash
-	state.LastResultsHash = currentLightBlock.LastResultsHash
-	state.LastValidators = lastLightBlock.ValidatorSet
-	state.Validators = currentLightBlock.ValidatorSet
-	state.NextValidators = nextLightBlock.ValidatorSet
-	state.LastHeightValidatorsChanged = nextLightBlock.Height
-
-	// We'll also need to fetch consensus params via P2P.
-	state.ConsensusParams, err = s.consensusParams(ctx, currentLightBlock.Height)
-	if err != nil {
-		return sm.State{}, fmt.Errorf("fetching consensus params: %w", err)
-	}
-	// validate the consensus params
-	if !bytes.Equal(nextLightBlock.ConsensusHash, state.ConsensusParams.HashConsensusParams()) {
-		return sm.State{}, fmt.Errorf("consensus params hash mismatch at height %d. Expected %v, got %v",
-			currentLightBlock.Height, nextLightBlock.ConsensusHash, state.ConsensusParams.HashConsensusParams())
-	}
-	// set the last height changed to the current height
-	state.LastHeightConsensusParamsChanged = currentLightBlock.Height
-
-	return state, nil
+	_ = "STUB: not implemented"
+	return *new(sm.State), nil
 }
+
+// The snapshot height maps onto the state heights as follows:
+//
+// height: last block, i.e. the snapshotted height
+// height+1: current block, i.e. the first block we'll process after the snapshot
+// height+2: next block, i.e. the second block after the snapshot
+//
+// We need to fetch the NextValidators from height+2 because if the application changed
+// the validator set at the snapshot height then this only takes effect at height+2.
+
+// We'll also need to fetch consensus params via P2P.
+
+// validate the consensus params
+
+// set the last height changed to the current height
 
 // AddProvider dynamically adds a peer as a new witness. A limit of 6 providers is kept as a
 // heuristic. Too many overburdens the network and too little compromises the second layer of security.
-func (s *StateProviderP2P) AddProvider(p lightprovider.Provider) {
-	if len(s.lc.Witnesses()) < 6 {
-		s.lc.AddProvider(p)
-	}
-}
+func (s *StateProviderP2P) AddProvider(p lightprovider.Provider) { _ = "STUB: not implemented"; return }
 
 // RemoveProviderByID removes a peer from the light client's witness list.
 func (s *StateProviderP2P) RemoveProviderByID(ID types.NodeID) error {
-	return s.lc.RemoveProviderByID(ID)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Providers returns the list of providers (useful for tests)
 func (s *StateProviderP2P) Providers() []lightprovider.Provider {
-	return s.lc.Witnesses()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (s *StateProviderP2P) ParamsRecvCh() chan types.ConsensusParams {
-	return s.paramsRecvCh
+	_ = "STUB: not implemented"
+	return nil
+
+	// consensusParams sends requests for consensus parameters to all witnesses
+	// in parallel, retrying with increasing backoff until a response is
+	// received or the context is canceled.
+	//
+	// For each witness, a goroutine sends a parameter request, retrying periodically
+	// if no response is obtained, with increasing intervals. It returns the
+	// consensus parameters upon receiving a response, or an error if the context is canceled.
 }
 
-// consensusParams sends requests for consensus parameters to all witnesses
-// in parallel, retrying with increasing backoff until a response is
-// received or the context is canceled.
-//
-// For each witness, a goroutine sends a parameter request, retrying periodically
-// if no response is obtained, with increasing intervals. It returns the
-// consensus parameters upon receiving a response, or an error if the context is canceled.
 func (s *StateProviderP2P) consensusParams(ctx context.Context, height int64) (types.ConsensusParams, error) {
-	return scope.Run1(ctx, func(ctx context.Context, scope scope.Scope) (types.ConsensusParams, error) {
-		scope.SpawnBg(func() error {
-			for iterCount := int64(1); ; iterCount++ {
-				for _, provider := range s.lc.Witnesses() {
-					p, ok := provider.(*BlockProvider)
-					if !ok {
-						return fmt.Errorf("witness is not BlockProvider [%T]", provider)
-					}
-
-					peer, err := types.NewNodeID(p.String())
-					if err != nil {
-						return fmt.Errorf("invalid provider (%v) node id: %w", p, err)
-					}
-					s.paramsSendCh.Send(wrap(&pb.ParamsRequest{Height: uint64(height)}), peer) //nolint:gosec // height is a validated positive block height
-				}
-				// jitter+backoff the retry loop
-				timeout := time.Duration(iterCount)*consensusParamsResponseTimeout +
-					time.Duration(100*rand.Int63n(iterCount))*time.Millisecond //nolint:gosec
-				if err := utils.Sleep(ctx, timeout); err != nil {
-					return nil
-				}
-			}
-		})
-		return utils.Recv(ctx, s.paramsRecvCh)
-	})
+	_ = "STUB: not implemented"
+	return *new(types.ConsensusParams), nil
 }
+
+//nolint:gosec // height is a validated positive block height
+
+// jitter+backoff the retry loop
+
+//nolint:gosec

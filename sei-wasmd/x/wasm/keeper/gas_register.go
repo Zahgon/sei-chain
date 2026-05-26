@@ -3,10 +3,7 @@ package keeper
 import (
 	storetypes "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	wasmvmtypes "github.com/sei-protocol/sei-chain/sei-wasmvm/types"
-
-	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 )
 
 const (
@@ -98,16 +95,8 @@ type WasmGasRegisterConfig struct {
 
 // DefaultGasRegisterConfig default values
 func DefaultGasRegisterConfig() WasmGasRegisterConfig {
-	return WasmGasRegisterConfig{
-		InstanceCost:               DefaultInstanceCost,
-		CompileCost:                DefaultCompileCost,
-		GasMultiplier:              DefaultGasMultiplier,
-		EventPerAttributeCost:      DefaultPerAttributeCost,
-		CustomEventCost:            DefaultPerCustomEventCost,
-		EventAttributeDataCost:     DefaultEventAttributeDataCost,
-		EventAttributeDataFreeTier: DefaultEventAttributeDataFreeTier,
-		ContractMessageDataCost:    DefaultContractMessageDataCost,
-	}
+	_ = "STUB: not implemented"
+	return *new(WasmGasRegisterConfig)
 }
 
 // WasmGasRegister implements GasRegister interface
@@ -117,111 +106,73 @@ type WasmGasRegister struct {
 
 // NewDefaultWasmGasRegister creates instance with default values
 func NewDefaultWasmGasRegister() WasmGasRegister {
-	return NewWasmGasRegister(DefaultGasRegisterConfig())
+	_ = "STUB: not implemented"
+	return *new(WasmGasRegister)
 }
 
 // NewWasmGasRegister constructor
 func NewWasmGasRegister(c WasmGasRegisterConfig) WasmGasRegister {
-	if c.GasMultiplier == 0 {
-		panic(sdkerrors.Wrap(sdkerrors.ErrLogic, "GasMultiplier can not be 0"))
-	}
-	return WasmGasRegister{
-		c: c,
-	}
+	_ = "STUB: not implemented"
+	return *new(WasmGasRegister)
 }
 
 // NewContractInstanceCosts costs to crate a new contract instance from code
 func (g WasmGasRegister) NewContractInstanceCosts(pinned bool, msgLen int) storetypes.Gas {
-	return g.InstantiateContractCosts(pinned, msgLen)
+	_ = "STUB: not implemented"
+	return *new(storetypes.Gas)
 }
 
 // CompileCosts costs to persist and "compile" a new wasm contract
 func (g WasmGasRegister) CompileCosts(byteLength int) storetypes.Gas {
-	if byteLength < 0 {
-		panic(sdkerrors.Wrap(types.ErrInvalid, "negative length"))
-	}
-	return g.c.CompileCost * uint64(byteLength)
+	_ = "STUB: not implemented"
+	return *new(storetypes.Gas)
 }
 
 // InstantiateContractCosts costs when interacting with a wasm contract
 func (g WasmGasRegister) InstantiateContractCosts(pinned bool, msgLen int) sdk.Gas {
-	if msgLen < 0 {
-		panic(sdkerrors.Wrap(types.ErrInvalid, "negative length"))
-	}
-	dataCosts := sdk.Gas(msgLen) * g.c.ContractMessageDataCost
-	if pinned {
-		return dataCosts
-	}
-	return g.c.InstanceCost + dataCosts
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }
 
 // ReplyCosts costs to handle a message reply
 func (g WasmGasRegister) ReplyCosts(pinned bool, reply wasmvmtypes.Reply) sdk.Gas {
-	var eventGas sdk.Gas
-	msgLen := len(reply.Result.Err)
-	if reply.Result.Ok != nil {
-		msgLen += len(reply.Result.Ok.Data)
-		var attrs []wasmvmtypes.EventAttribute //nolint:prealloc // not worth it
-		for _, e := range reply.Result.Ok.Events {
-			eventGas += sdk.Gas(len(e.Type)) * g.c.EventAttributeDataCost
-			attrs = append(attrs, e.Attributes...)
-		}
-		// apply free tier on the whole set not per event
-		eventGas += g.EventCosts(attrs, nil)
-	}
-	return eventGas + g.InstantiateContractCosts(pinned, msgLen)
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }
+
+//nolint:prealloc // not worth it
+
+// apply free tier on the whole set not per event
 
 // EventCosts costs to persist an event
 func (g WasmGasRegister) EventCosts(attrs []wasmvmtypes.EventAttribute, events wasmvmtypes.Events) sdk.Gas {
-	gas, remainingFreeTier := g.eventAttributeCosts(attrs, g.c.EventAttributeDataFreeTier)
-	for _, e := range events {
-		gas += g.c.CustomEventCost
-		gas += sdk.Gas(len(e.Type)) * g.c.EventAttributeDataCost // no free tier with event type
-		var attrCost sdk.Gas
-		attrCost, remainingFreeTier = g.eventAttributeCosts(e.Attributes, remainingFreeTier)
-		gas += attrCost
-	}
-	return gas
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }
 
+// no free tier with event type
+
 func (g WasmGasRegister) eventAttributeCosts(attrs []wasmvmtypes.EventAttribute, freeTier uint64) (sdk.Gas, uint64) {
-	if len(attrs) == 0 {
-		return 0, freeTier
-	}
-	var storedBytes uint64
-	for _, l := range attrs {
-		storedBytes += uint64(len(l.Key)) + uint64(len(l.Value))
-	}
-	storedBytes, freeTier = calcWithFreeTier(storedBytes, freeTier)
-	// total Length * costs + attribute count * costs
-	r := sdk.NewIntFromUint64(g.c.EventAttributeDataCost).Mul(sdk.NewIntFromUint64(storedBytes)).
-		Add(sdk.NewIntFromUint64(g.c.EventPerAttributeCost).Mul(sdk.NewIntFromUint64(uint64(len(attrs)))))
-	if !r.IsUint64() {
-		panic(sdk.ErrorOutOfGas{Descriptor: "overflow"})
-	}
-	return r.Uint64(), freeTier
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas), 0
 }
+
+// total Length * costs + attribute count * costs
 
 // apply free tier
 func calcWithFreeTier(storedBytes uint64, freeTier uint64) (uint64, uint64) {
-	if storedBytes <= freeTier {
-		return 0, freeTier - storedBytes
-	}
-	storedBytes -= freeTier
-	return storedBytes, 0
+	_ = "STUB: not implemented"
+	return 0, 0
 }
 
 // ToWasmVMGas convert to wasmVM contract runtime gas unit
 func (g WasmGasRegister) ToWasmVMGas(source storetypes.Gas) uint64 {
-	x := source * g.c.GasMultiplier
-	if x < source {
-		panic(sdk.ErrorOutOfGas{Descriptor: "overflow"})
-	}
-	return x
+	_ = "STUB: not implemented"
+	return 0
 }
 
 // FromWasmVMGas converts to SDK gas unit
 func (g WasmGasRegister) FromWasmVMGas(source uint64) sdk.Gas {
-	return source / g.c.GasMultiplier
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }

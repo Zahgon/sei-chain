@@ -36,10 +36,6 @@ type InitConfig struct {
 
 // NewInitConfig creates a new InitConfig object
 func NewInitConfig(chainID, genTxsDir, nodeID string, valPubKey cryptotypes.PubKey) InitConfig {
-	return InitConfig{
-		ChainID:   chainID,
-		GenTxsDir: genTxsDir,
-		NodeID:    nodeID,
-		ValPubKey: valPubKey,
-	}
+	_ = "STUB: not implemented"
+	return *new(InitConfig)
 }

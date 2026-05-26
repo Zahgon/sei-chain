@@ -1,13 +1,6 @@
 package ed25519
 
 import (
-	"bytes"
-	"crypto/rand"
-	"crypto/sha256"
-	"fmt"
-	"runtime"
-	"slices"
-
 	"github.com/oasisprotocol/curve25519-voi/primitives/ed25519"
 	"github.com/oasisprotocol/curve25519-voi/primitives/ed25519/extra/cache"
 
@@ -18,9 +11,7 @@ type ErrBadSig struct {
 	Idx int // Index of the first invalid signature.
 }
 
-func (e ErrBadSig) Error() string {
-	return fmt.Sprintf("invalid %vth signature", e.Idx)
-}
+func (e ErrBadSig) Error() string { _ = "STUB: not implemented"; return "" }
 
 // cacheSize is the number of public keys that will be cached in
 // an expanded format for repeated signature verification.
@@ -54,68 +45,33 @@ type SecretKey struct {
 
 // WARNING: this function should only be used when persisting the private key.
 // WARNING: caller is responsible for zeroizing the returned slice.
-func (k SecretKey) SecretBytes() []byte {
-	defer runtime.KeepAlive(k)
-	return slices.Clone((*k.key())[:])
-}
+func (k SecretKey) SecretBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // SecretKeyFromSecretBytes constructs a secret key from a raw secret material.
 // WARNING: this function zeroes the content of the input slice.
 func SecretKeyFromSecretBytes(b []byte) (SecretKey, error) {
-	if got, want := len(b), ed25519.PrivateKeySize; got != want {
-		return SecretKey{}, fmt.Errorf("ed25519: bad private key length: got %d, want %d", got, want)
-	}
-	type Secret = [ed25519.PrivateKeySize]byte
-	raw := utils.Alloc(Secret(b))
-	runtime.AddCleanup(&raw, func(raw *Secret) {
-		// Zero the memory to avoid leaking the secret.
-		for i := range raw {
-			raw[i] = 0
-		}
-	}, raw)
-	key := SecretKey{key: func() **Secret { return &raw }}
-	// Zero the input slice to avoid leaking the secret.
-	for i := range b {
-		b[i] = 0
-	}
-	return key, nil
+	_ = "STUB: not implemented"
+	return *new(SecretKey), nil
 }
+
+// Zero the memory to avoid leaking the secret.
+
+// Zero the input slice to avoid leaking the secret.
 
 // TestSecretKey generates a testonly secret key.
-func TestSecretKey(seed []byte) SecretKey {
-	h := sha256.Sum256(seed)
-	key, err := SecretKeyFromSecretBytes(ed25519.NewKeyFromSeed(h[:]))
-	if err != nil {
-		panic(err)
-	}
-	return key
-}
+func TestSecretKey(seed []byte) SecretKey { _ = "STUB: not implemented"; return *new(SecretKey) }
 
 // GenerateSecretKey generates a new secret key using a cryptographically secure random number generator.
-func GenerateSecretKey() SecretKey {
-	var seed [ed25519.SeedSize]byte
-	// rand.Read is documented to never return an error.
-	if _, err := rand.Read(seed[:]); err != nil {
-		panic(err)
-	}
-	// Generated key is always valid.
-	key, err := SecretKeyFromSecretBytes(ed25519.NewKeyFromSeed(seed[:]))
-	if err != nil {
-		panic(err)
-	}
-	// Zeroize the seed after generation.
-	for i := range seed {
-		seed[i] = 0
-	}
-	return key
-}
+func GenerateSecretKey() SecretKey { _ = "STUB: not implemented"; return *new(SecretKey) }
+
+// rand.Read is documented to never return an error.
+
+// Generated key is always valid.
+
+// Zeroize the seed after generation.
 
 // Public returns the public key corresponding to the secret key.
-func (k SecretKey) Public() PublicKey {
-	defer runtime.KeepAlive(k)
-	p := ed25519.PrivateKey((*k.key())[:]).Public().(ed25519.PublicKey)
-	return PublicKey{key: [ed25519.PublicKeySize]byte(p)}
-}
+func (k SecretKey) Public() PublicKey { _ = "STUB: not implemented"; return *new(PublicKey) }
 
 // PublicKey represents a public key in the Ed25519 signature scheme.
 type PublicKey struct {
@@ -131,54 +87,35 @@ type Signature struct {
 
 // Sign signs a message using the secret key.
 func (k SecretKey) Sign(message []byte) Signature {
-	defer runtime.KeepAlive(k)
-	return Signature{
-		sig: [ed25519.SignatureSize]byte(ed25519.Sign((*k.key())[:], message)),
-	}
+	_ = "STUB: not implemented"
+	return *new(Signature)
 }
 
 // Domain separation tag.
 type Tag struct{ tag string }
 
-func NewTag(tag string) (Tag, error) {
-	if len(tag) > ed25519.ContextMaxSize {
-		return Tag{}, fmt.Errorf("len(%q) = %v, want <= %v", tag, len(tag), ed25519.ContextMaxSize)
-	}
-	return Tag{tag}, nil
-}
+func NewTag(tag string) (Tag, error) { _ = "STUB: not implemented"; return *new(Tag), nil }
 
 // SignWithTag signs a message with a domain separation tag.
 // It is safe to assume that signatures for messages with different tags do not collide.
 // It is also safe to assume that Sign() signatures do not collide with SignWithTag() signatures.
 // It is secure to use the same secret key for signing with both Sign() and SignWithTag() [https://datatracker.ietf.org/doc/html/rfc8032#section-8.6].
 func (k SecretKey) SignWithTag(tag Tag, msg []byte) Signature {
-	defer runtime.KeepAlive(k)
-	opts := &ed25519.Options{Context: tag.tag}
-	// Returns no error if opts.Context is of correct size.
-	sig := utils.OrPanic1(ed25519.PrivateKey((*k.key())[:]).Sign(nil, msg, opts))
-	return Signature{sig: [ed25519.SignatureSize]byte(sig)}
+	_ = "STUB: not implemented"
+	return *new(Signature)
 }
+
+// Returns no error if opts.Context is of correct size.
 
 // Compare defines a total order on public keys.
-func (k PublicKey) Compare(other PublicKey) int {
-	return bytes.Compare(k.key[:], other.key[:])
-}
+func (k PublicKey) Compare(other PublicKey) int { _ = "STUB: not implemented"; return 0 }
 
 // Verify verifies a signature.
-func (k PublicKey) Verify(msg []byte, sig Signature) error {
-	opts := &ed25519.Options{Verify: verifyOptions}
-	if !cachingVerifier.VerifyWithOptions(k.key[:], msg, sig.sig[:], opts) {
-		return ErrBadSig{}
-	}
-	return nil
-}
+func (k PublicKey) Verify(msg []byte, sig Signature) error { _ = "STUB: not implemented"; return nil }
 
 // Verify verifies a signature, given domain separation tag.
 func (k PublicKey) VerifyWithTag(tag Tag, msg []byte, sig Signature) error {
-	opts := &ed25519.Options{Context: tag.tag, Verify: verifyOptions}
-	if !cachingVerifier.VerifyWithOptions(k.key[:], msg, sig.sig[:], opts) {
-		return ErrBadSig{}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -187,30 +124,19 @@ type BatchVerifier struct {
 	inner *ed25519.BatchVerifier
 }
 
-func NewBatchVerifier() *BatchVerifier { return &BatchVerifier{ed25519.NewBatchVerifier()} }
+func NewBatchVerifier() *BatchVerifier { _ = "STUB: not implemented"; return nil }
 
 func (b *BatchVerifier) Add(key PublicKey, msg []byte, sig Signature) {
-	opts := &ed25519.Options{Verify: verifyOptions}
-	cachingVerifier.AddWithOptions(b.inner, key.key[:], msg, sig.sig[:], opts)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (b *BatchVerifier) AddWithTag(key PublicKey, tag Tag, msg []byte, sig Signature) {
-	opts := &ed25519.Options{Context: tag.tag, Verify: verifyOptions}
-	cachingVerifier.AddWithOptions(b.inner, key.key[:], msg, sig.sig[:], opts)
+	_ = "STUB: not implemented"
+	return
 }
 
 // Verify verifies the batched signatures using OS entropy.
 // If any signature is invalid, returns ErrBadSig with an index
 // of the first invalid signature.
-func (b *BatchVerifier) Verify() error {
-	ok, res := b.inner.Verify(rand.Reader)
-	if ok {
-		return nil
-	}
-	for idx, ok := range res {
-		if !ok {
-			return ErrBadSig{idx}
-		}
-	}
-	panic("unreachable")
-}
+func (b *BatchVerifier) Verify() error { _ = "STUB: not implemented"; return nil }

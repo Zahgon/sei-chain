@@ -2,7 +2,6 @@ package flatkv
 
 import (
 	"context"
-	"errors"
 	"time"
 
 	"go.opentelemetry.io/otel"
@@ -132,40 +131,28 @@ var (
 	}
 )
 
-func must[V any](v V, err error) V {
-	if err != nil {
-		panic(err)
-	}
-	return v
-}
+func must[V any](v V, err error) V { _ = "STUB: not implemented"; return *new(V) }
 
-func secondsSince(start time.Time) float64 {
-	return time.Since(start).Seconds()
-}
+func secondsSince(start time.Time) float64 { _ = "STUB: not implemented"; return 0 }
 
 func successAttr(err error) attribute.KeyValue {
-	return attribute.Bool("success", err == nil)
+	_ = "STUB: not implemented"
+	return *new(attribute.KeyValue)
 }
 
 func dbAttr(db string) attribute.KeyValue {
-	return attribute.String("db", db)
+	_ = "STUB: not implemented"
+	return *new(attribute.KeyValue)
 }
 
 func recordPendingWrites(ctx context.Context, db string, count int) {
-	otelMetrics.PendingWrites.Record(ctx, int64(count), metric.WithAttributes(dbAttr(db)))
+	_ = "STUB: not implemented"
+	return
 }
 
-func addKVPairs(ctx context.Context, db string, count int) {
-	if count > 0 {
-		otelMetrics.NumKVPairs.Add(ctx, int64(count), metric.WithAttributes(dbAttr(db)))
-	}
-}
+func addKVPairs(ctx context.Context, db string, count int) { _ = "STUB: not implemented"; return }
 
-func addImportKVPairs(ctx context.Context, db string, count int) {
-	if count > 0 {
-		otelMetrics.ImportKVPairs.Add(ctx, int64(count), metric.WithAttributes(dbAttr(db)))
-	}
-}
+func addImportKVPairs(ctx context.Context, db string, count int) { _ = "STUB: not implemented"; return }
 
 // opObserver records latency, success/failure attribution, and an error log
 // for a long-running CommitStore operation. Construct one with
@@ -188,27 +175,20 @@ func (s *CommitStore) observeOp(
 	latency metric.Float64Histogram,
 	errFields ...any,
 ) *opObserver {
-	return &opObserver{
-		s:         s,
-		op:        op,
-		latency:   latency,
-		start:     time.Now(),
-		errFields: errFields,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // withAttrs adds extra attributes recorded on the latency metric. The
 // success/failure attribute is always appended automatically.
 func (o *opObserver) withAttrs(attrs ...attribute.KeyValue) *opObserver {
-	o.extraAttrs = append(o.extraAttrs, attrs...)
-	return o
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // elapsed returns the time since the operation started. Useful for callers
 // that want to include the elapsed value in their own success-path logs.
-func (o *opObserver) elapsed() time.Duration {
-	return time.Since(o.start)
-}
+func (o *opObserver) elapsed() time.Duration { _ = "STUB: not implemented"; return *new(time.Duration) }
 
 // done records the latency metric and:
 //   - on success, invokes onSuccess (if non-nil) for success-only metrics
@@ -225,24 +205,6 @@ func (o *opObserver) elapsed() time.Duration {
 // errPtr is dereferenced when done runs, so the typical pattern is to pass
 // the address of a named return error from a deferred closure.
 func (o *opObserver) done(errPtr *error, onSuccess func(), extraErrFields ...any) {
-	err := *errPtr
-	attrs := make([]attribute.KeyValue, 0, len(o.extraAttrs)+1)
-	attrs = append(attrs, o.extraAttrs...)
-	attrs = append(attrs, successAttr(err))
-	o.latency.Record(o.s.ctx, secondsSince(o.start),
-		metric.WithAttributes(attrs...))
-	if err == nil {
-		if onSuccess != nil {
-			onSuccess()
-		}
-		return
-	}
-	if errors.Is(err, errReadOnly) {
-		return
-	}
-	fields := make([]any, 0, len(o.errFields)+len(extraErrFields)+4)
-	fields = append(fields, o.errFields...)
-	fields = append(fields, extraErrFields...)
-	fields = append(fields, "elapsed", o.elapsed(), "err", err)
-	logger.Error("FlatKV "+o.op+" failed", fields...)
+	_ = "STUB: not implemented"
+	return
 }

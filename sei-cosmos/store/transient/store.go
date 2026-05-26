@@ -1,8 +1,6 @@
 package transient
 
 import (
-	dbm "github.com/tendermint/tm-db"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/dbadapter"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
@@ -16,29 +14,37 @@ type Store struct {
 }
 
 // Constructs new MemDB adapter
-func NewStore() *Store {
-	return &Store{Store: dbadapter.Store{DB: dbm.NewMemDB()}}
-}
+func NewStore() *Store { _ = "STUB: not implemented"; return nil }
 
 // Implements CommitStore
 // Commit cleans up Store.
 func (ts *Store) Commit(_ bool) (id types.CommitID) {
-	ts.Store = dbadapter.Store{DB: dbm.NewMemDB()}
+	_ = "STUB: not implemented"
+	return *new(types.CommitID)
+}
+
+func (ts *Store) SetPruning(_ types.PruningOptions) {
+	_ = "STUB: not implemented"
+
+	// GetPruning is a no-op as pruning options cannot be directly set on this store.
+	// They must be set on the root commit multi-store.
 	return
 }
 
-func (ts *Store) SetPruning(_ types.PruningOptions) {}
-
-// GetPruning is a no-op as pruning options cannot be directly set on this store.
-// They must be set on the root commit multi-store.
-func (ts *Store) GetPruning() types.PruningOptions { return types.PruningOptions{} }
+func (ts *Store) GetPruning() types.PruningOptions {
+	_ = "STUB: not implemented"
+	return *new(types.PruningOptions)
+}
 
 // Implements CommitStore
 func (ts *Store) LastCommitID() (id types.CommitID) {
-	return
+	_ = "STUB: not implemented"
+
+	// Implements Store.
+	return *new(types.CommitID)
 }
 
-// Implements Store.
 func (ts *Store) GetStoreType() types.StoreType {
-	return types.StoreTypeTransient
+	_ = "STUB: not implemented"
+	return *new(types.StoreType)
 }

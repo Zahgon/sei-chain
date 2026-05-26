@@ -1,9 +1,6 @@
 package cli
 
 import (
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence/types"
-
 	"github.com/spf13/cobra"
 )
 
@@ -12,33 +9,11 @@ import (
 // modules, under a sub-command. This allows external modules to implement custom
 // Evidence types and Handlers while having the ability to create and sign txs
 // containing them all from a single root command.
-func GetTxCmd(childCmds []*cobra.Command) *cobra.Command {
-	cmd := &cobra.Command{
-		Use:                        types.ModuleName,
-		Short:                      "Evidence transaction subcommands",
-		DisableFlagParsing:         true,
-		SuggestionsMinimumDistance: 2,
-		RunE:                       client.ValidateCmd,
-	}
+func GetTxCmd(childCmds []*cobra.Command) *cobra.Command { _ = "STUB: not implemented"; return nil }
 
-	submitEvidenceCmd := SubmitEvidenceCmd()
-	for _, childCmd := range childCmds {
-		submitEvidenceCmd.AddCommand(childCmd)
-	}
-
-	// TODO: Add tx commands.
-
-	return cmd
-}
+// TODO: Add tx commands.
 
 // SubmitEvidenceCmd returns the top-level evidence submission command handler.
 // All concrete evidence submission child command handlers should be registered
 // under this command.
-func SubmitEvidenceCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "submit",
-		Short: "Submit arbitrary evidence of misbehavior",
-	}
-
-	return cmd
-}
+func SubmitEvidenceCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }

@@ -29,52 +29,14 @@ func NewElasticPool(
 	name string,
 	warmWorkers int,
 ) Pool {
-	workQueue := make(chan func())
-	ep := &elasticPool{
-		workQueue: workQueue,
-	}
-
-	ep.wg.Add(warmWorkers)
-	for i := 0; i < warmWorkers; i++ {
-		go func() {
-			defer ep.wg.Done()
-			ep.worker()
-		}()
-	}
-
-	return ep
+	_ = "STUB: not implemented"
+	return *new(Pool)
 }
 
-func (ep *elasticPool) Submit(task func()) {
-	if task == nil {
-		return
-	}
-	if ep.closed {
-		panic("threading: submit on closed pool")
-	}
-	select {
-	case ep.workQueue <- task:
-	default:
-		ep.wg.Add(1)
-		go func() {
-			defer ep.wg.Done()
-			task()
-		}()
-	}
-}
+func (ep *elasticPool) Submit(task func()) { _ = "STUB: not implemented"; return }
 
 // Close shuts down warm workers, waits for all in-flight tasks (including
 // temporary goroutines) to finish, and returns.
-func (ep *elasticPool) Close() {
-	ep.closed = true
-	ep.closeOnce.Do(func() {
-		close(ep.workQueue)
-	})
-	ep.wg.Wait()
-}
+func (ep *elasticPool) Close() { _ = "STUB: not implemented"; return }
 
-func (ep *elasticPool) worker() {
-	for task := range ep.workQueue {
-		task()
-	}
-}
+func (ep *elasticPool) worker() { _ = "STUB: not implemented"; return }

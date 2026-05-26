@@ -1,7 +1,5 @@
 package types
 
-import "fmt"
-
 // Pruning option string constants
 const (
 	PruningOptionDefault    = "default"
@@ -40,39 +38,15 @@ type PruningOptions struct {
 }
 
 func NewPruningOptions(keepRecent, keepEvery, interval uint64) PruningOptions {
-	return PruningOptions{
-		KeepRecent: keepRecent,
-		KeepEvery:  keepEvery,
-		Interval:   interval,
-	}
+	_ = "STUB: not implemented"
+	return *new(PruningOptions)
 }
 
-func (po PruningOptions) Validate() error {
-	if po.KeepEvery == 0 && po.Interval == 0 {
-		return fmt.Errorf("invalid 'Interval' when pruning everything: %d", po.Interval)
-	}
-	if po.KeepEvery == 1 && po.Interval != 0 { // prune nothing
-		return fmt.Errorf("invalid 'Interval' when pruning nothing: %d", po.Interval)
-	}
-	if po.KeepEvery > 1 && po.Interval == 0 {
-		return fmt.Errorf("invalid 'Interval' when pruning: %d", po.Interval)
-	}
+func (po PruningOptions) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
+// prune nothing
 
 func NewPruningOptionsFromString(strategy string) PruningOptions {
-	switch strategy {
-	case PruningOptionEverything:
-		return PruneEverything
-
-	case PruningOptionNothing:
-		return PruneNothing
-
-	case PruningOptionDefault:
-		return PruneDefault
-
-	default:
-		return PruneDefault
-	}
+	_ = "STUB: not implemented"
+	return *new(PruningOptions)
 }

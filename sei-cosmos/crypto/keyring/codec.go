@@ -3,7 +3,6 @@ package keyring
 import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/hd"
 )
 
 func init() {
@@ -11,11 +10,4 @@ func init() {
 }
 
 // RegisterLegacyAminoCodec registers concrete types and interfaces on the given codec.
-func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterInterface((*Info)(nil), nil)
-	cdc.RegisterConcrete(hd.BIP44Params{}, "crypto/keys/hd/BIP44Params", nil)
-	cdc.RegisterConcrete(LocalInfo{}, "crypto/keys/localInfo", nil)
-	cdc.RegisterConcrete(ledgerInfo{}, "crypto/keys/ledgerInfo", nil)
-	cdc.RegisterConcrete(offlineInfo{}, "crypto/keys/offlineInfo", nil)
-	cdc.RegisterConcrete(multiInfo{}, "crypto/keys/multiInfo", nil)
-}
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) { _ = "STUB: not implemented"; return }

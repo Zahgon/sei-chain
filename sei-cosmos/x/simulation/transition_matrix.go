@@ -1,7 +1,6 @@
 package simulation
 
 import (
-	"fmt"
 	"math/rand"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
@@ -22,59 +21,18 @@ type TransitionMatrix struct {
 // CreateTransitionMatrix creates a transition matrix from the provided weights.
 // TODO: Provide example usage
 func CreateTransitionMatrix(weights [][]int) (simulation.TransitionMatrix, error) {
-	n := len(weights)
-	for i := 0; i < n; i++ {
-		if len(weights[i]) != n {
-			return TransitionMatrix{},
-				fmt.Errorf("transition matrix: non-square matrix provided, error on row %d", i)
-		}
-	}
-
-	totals := make([]int, n)
-
-	for row := 0; row < n; row++ {
-		for col := 0; col < n; col++ {
-			totals[col] += weights[row][col]
-		}
-	}
-
-	return TransitionMatrix{weights, totals, n}, nil
+	_ = "STUB: not implemented"
+	return *new(simulation.TransitionMatrix), nil
 }
 
 // NextState returns the next state randomly chosen using r, and the weightings
 // provided in the transition matrix.
-func (t TransitionMatrix) NextState(r *rand.Rand, i int) int {
-	randNum := r.Intn(t.totals[i])
-	for row := 0; row < t.n; row++ {
-		if randNum < t.weights[row][i] {
-			return row
-		}
+func (t TransitionMatrix) NextState(r *rand.Rand, i int) int { _ = "STUB: not implemented"; return 0 }
 
-		randNum -= t.weights[row][i]
-	}
-	// This line should never get executed
-	return -1
-}
+// This line should never get executed
 
 // GetMemberOfInitialState takes an initial array of weights, of size n.
 // It returns a weighted random number in [0,n).
-func GetMemberOfInitialState(r *rand.Rand, weights []int) int {
-	n := len(weights)
-	total := 0
+func GetMemberOfInitialState(r *rand.Rand, weights []int) int { _ = "STUB: not implemented"; return 0 }
 
-	for i := 0; i < n; i++ {
-		total += weights[i]
-	}
-
-	randNum := r.Intn(total)
-
-	for state := 0; state < n; state++ {
-		if randNum < weights[state] {
-			return state
-		}
-
-		randNum -= weights[state]
-	}
-	// This line should never get executed
-	return -1
-}
+// This line should never get executed

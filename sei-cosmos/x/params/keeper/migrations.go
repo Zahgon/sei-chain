@@ -2,7 +2,6 @@ package keeper
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
 )
 
 // Migrator is a struct for handling in-place store migrations.
@@ -11,13 +10,7 @@ type Migrator struct {
 }
 
 // NewMigrator returns a new Migrator.
-func NewMigrator(keeper Keeper) Migrator {
-	return Migrator{keeper: keeper}
-}
+func NewMigrator(keeper Keeper) Migrator { _ = "STUB: not implemented"; return *new(Migrator) }
 
 // Migrate1to2 migrates from version 1 to 2.
-func (m Migrator) Migrate1to2(ctx sdk.Context) error {
-	defaultGenesis := types.DefaultGenesis()
-	m.keeper.SetCosmosGasParams(ctx, defaultGenesis.CosmosGasParams)
-	return nil
-}
+func (m Migrator) Migrate1to2(ctx sdk.Context) error { _ = "STUB: not implemented"; return nil }

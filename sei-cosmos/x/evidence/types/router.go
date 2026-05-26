@@ -1,8 +1,6 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence/exported"
 )
@@ -30,52 +28,28 @@ type (
 	}
 )
 
-func NewRouter() Router {
-	return &router{
-		routes: make(map[string]Handler),
-	}
-}
+func NewRouter() Router { _ = "STUB: not implemented"; return *new(Router) }
 
 // Seal prevents the router from any subsequent route handlers to be registered.
 // Seal will panic if called more than once.
-func (rtr *router) Seal() {
-	if rtr.sealed {
-		panic("router already sealed")
-	}
-	rtr.sealed = true
-}
+func (rtr *router) Seal() { _ = "STUB: not implemented"; return }
 
 // Sealed returns a boolean signifying if the Router is sealed or not.
 func (rtr router) Sealed() bool {
-	return rtr.sealed
+	_ = "STUB: not implemented"
+
+	// AddRoute adds a governance handler for a given path. It returns the Router
+	// so AddRoute calls can be linked. It will panic if the router is sealed.
+	return false
 }
 
-// AddRoute adds a governance handler for a given path. It returns the Router
-// so AddRoute calls can be linked. It will panic if the router is sealed.
 func (rtr *router) AddRoute(path string, h Handler) Router {
-	if rtr.sealed {
-		panic(fmt.Sprintf("router sealed; cannot register %s route handler", path))
-	}
-	if !sdk.IsAlphaNumeric(path) {
-		panic("route expressions can only contain alphanumeric characters")
-	}
-	if rtr.HasRoute(path) {
-		panic(fmt.Sprintf("route %s has already been registered", path))
-	}
-
-	rtr.routes[path] = h
-	return rtr
+	_ = "STUB: not implemented"
+	return *new(Router)
 }
 
 // HasRoute returns true if the router has a path registered or false otherwise.
-func (rtr *router) HasRoute(path string) bool {
-	return rtr.routes[path] != nil
-}
+func (rtr *router) HasRoute(path string) bool { _ = "STUB: not implemented"; return false }
 
 // GetRoute returns a Handler for a given path.
-func (rtr *router) GetRoute(path string) Handler {
-	if !rtr.HasRoute(path) {
-		panic(fmt.Sprintf("route does not exist for path %s", path))
-	}
-	return rtr.routes[path]
-}
+func (rtr *router) GetRoute(path string) Handler { _ = "STUB: not implemented"; return *new(Handler) }

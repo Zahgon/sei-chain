@@ -1,7 +1,6 @@
 package secp256r1
 
 import (
-	"github.com/gogo/protobuf/proto"
 	tmcrypto "github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
 
 	ecdsa "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/internal/ecdsa"
@@ -9,40 +8,31 @@ import (
 )
 
 // String implements proto.Message interface.
-func (m *PubKey) String() string {
-	return m.Key.String(name)
-}
+func (m *PubKey) String() string { _ = "STUB: not implemented"; return "" }
 
 // Bytes implements SDK PubKey interface.
-func (m *PubKey) Bytes() []byte {
-	if m == nil {
-		return nil
-	}
-	return m.Key.Bytes()
-}
+func (m *PubKey) Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // Equals implements SDK PubKey interface.
-func (m *PubKey) Equals(other cryptotypes.PubKey) bool {
-	pk2, ok := other.(*PubKey)
-	if !ok {
-		return false
-	}
-	return m.Key.Equal(&pk2.Key.PublicKey)
-}
+func (m *PubKey) Equals(other cryptotypes.PubKey) bool { _ = "STUB: not implemented"; return false }
 
 // Address implements SDK PubKey interface.
 func (m *PubKey) Address() tmcrypto.Address {
-	return m.Key.Address(proto.MessageName(m))
+	_ = "STUB: not implemented"
+	return *new(tmcrypto.Address)
 }
 
 // Type returns key type name. Implements SDK PubKey interface.
 func (m *PubKey) Type() string {
-	return name
+	_ = "STUB: not implemented"
+
+	// VerifySignature implements SDK PubKey interface.
+	return ""
 }
 
-// VerifySignature implements SDK PubKey interface.
 func (m *PubKey) VerifySignature(msg []byte, sig []byte) bool {
-	return m.Key.VerifySignature(msg, sig)
+	_ = "STUB: not implemented"
+	return false
 }
 
 type ecdsaPK struct {
@@ -50,14 +40,7 @@ type ecdsaPK struct {
 }
 
 // Size implements proto.Marshaler interface
-func (pk *ecdsaPK) Size() int {
-	if pk == nil {
-		return 0
-	}
-	return pubKeySize
-}
+func (pk *ecdsaPK) Size() int { _ = "STUB: not implemented"; return 0 }
 
 // Unmarshal implements proto.Marshaler interface
-func (pk *ecdsaPK) Unmarshal(bz []byte) error {
-	return pk.PubKey.Unmarshal(bz, secp256r1, pubKeySize)
-}
+func (pk *ecdsaPK) Unmarshal(bz []byte) error { _ = "STUB: not implemented"; return nil }

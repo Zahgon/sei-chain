@@ -1,14 +1,5 @@
 package e2e
 
-import (
-	"fmt"
-	"os"
-	"path/filepath"
-	"sort"
-
-	"github.com/BurntSushi/toml"
-)
-
 // Manifest represents a TOML testnet manifest.
 type Manifest struct {
 	// IPv6 uses IPv6 networking instead of IPv4. Defaults to IPv4.
@@ -152,27 +143,15 @@ type ManifestNode struct {
 }
 
 // Stateless reports whether m is a node that does not own state, including light and seed nodes.
-func (m ManifestNode) Stateless() bool {
-	return m.Mode == string(ModeLight) || m.Mode == string(ModeSeed)
-}
+func (m ManifestNode) Stateless() bool { _ = "STUB: not implemented"; return false }
 
 // Save saves the testnet manifest to a file.
-func (m Manifest) Save(file string) error {
-	f, err := os.Create(filepath.Clean(file))
-	if err != nil {
-		return fmt.Errorf("failed to create manifest file %q: %w", file, err)
-	}
-	return toml.NewEncoder(f).Encode(m)
-}
+func (m Manifest) Save(file string) error { _ = "STUB: not implemented"; return nil }
 
 // LoadManifest loads a testnet manifest from a file.
 func LoadManifest(file string) (Manifest, error) {
-	manifest := Manifest{}
-	_, err := toml.DecodeFile(file, &manifest)
-	if err != nil {
-		return manifest, fmt.Errorf("failed to load testnet manifest %q: %w", file, err)
-	}
-	return manifest, nil
+	_ = "STUB: not implemented"
+	return *new(Manifest), nil
 }
 
 // SortManifests orders (in-place) a list of manifests such that the
@@ -182,85 +161,30 @@ func LoadManifest(file string) (Manifest, error) {
 //
 // If reverse is true, then the manifests are ordered with the most
 // complex networks before the less complex networks.
-func SortManifests(manifests []Manifest, reverse bool) {
-	sort.SliceStable(manifests, func(i, j int) bool {
-		// sort based on a point-based comparison between two
-		// manifests.
-		var (
-			left  = manifests[i]
-			right = manifests[j]
-		)
+func SortManifests(manifests []Manifest, reverse bool) { _ = "STUB: not implemented"; return }
 
-		// scores start with 100 points for each node. The
-		// number of nodes in a network is the most important
-		// factor in the complexity of the test.
-		leftScore := len(left.Nodes) * 100
-		rightScore := len(right.Nodes) * 100
+// sort based on a point-based comparison between two
+// manifests.
 
-		// add two points for every node perturbation, and one
-		// point for every node that starts after genesis.
-		for _, n := range left.Nodes {
-			leftScore += (len(n.Perturb) * 2)
+// scores start with 100 points for each node. The
+// number of nodes in a network is the most important
+// factor in the complexity of the test.
 
-			if n.StartAt > 0 {
-				leftScore += 3
-			}
-		}
-		for _, n := range right.Nodes {
-			rightScore += (len(n.Perturb) * 2)
-			if n.StartAt > 0 {
-				rightScore += 3
-			}
-		}
+// add two points for every node perturbation, and one
+// point for every node that starts after genesis.
 
-		// add one point if the network has evidence.
-		if left.Evidence > 0 {
-			leftScore += 2
-		}
-
-		if right.Evidence > 0 {
-			rightScore += 2
-		}
-
-		if left.TxSize > right.TxSize {
-			leftScore++
-		}
-
-		if right.TxSize > left.TxSize {
-			rightScore++
-		}
-
-		if reverse {
-			return leftScore >= rightScore
-		}
-
-		return leftScore < rightScore
-	})
-}
+// add one point if the network has evidence.
 
 // SplitGroups divides a list of manifests into n groups of
 // manifests.
 func SplitGroups(groups int, manifests []Manifest) [][]Manifest {
-	groupSize := (len(manifests) + groups - 1) / groups
-	splitManifests := make([][]Manifest, 0, groups)
-
-	for i := 0; i < len(manifests); i += groupSize {
-		grp := make([]Manifest, groupSize)
-		n := copy(grp, manifests[i:])
-		splitManifests = append(splitManifests, grp[:n])
-	}
-
-	return splitManifests
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // WriteManifests writes a collection of manifests into files with the
 // specified path prefix.
 func WriteManifests(prefix string, manifests []Manifest) error {
-	for i, manifest := range manifests {
-		if err := manifest.Save(fmt.Sprintf("%s-%04d.toml", prefix, i)); err != nil {
-			return err
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }

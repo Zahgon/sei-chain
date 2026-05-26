@@ -9,11 +9,6 @@
 package wireguard
 
 import (
-	"fmt"
-	"reflect"
-	"strconv"
-	"strings"
-
 	"google.golang.org/protobuf/encoding/protowire"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
@@ -47,64 +42,27 @@ type Rule struct {
 
 // Scan walks bz once, applying schema. Returns nil on success, an error on
 // malformed wire bytes or a rule violation. A nil schema is a no-op.
-func Scan(bz []byte, schema *Schema) error {
-	if schema == nil {
-		return nil
-	}
-	return scan(bz, schema, map[counterKey]int{})
-}
+func Scan(bz []byte, schema *Schema) error { _ = "STUB: not implemented"; return nil }
 
 // Scan is the method form of the package-level Scan. It's the shape a
 // ChannelDescriptor's PreDecode hook expects, so the generated SchemaForX
 // values can be wired in directly without a wrapping closure.
 func (s *Schema) Scan(bz []byte) error {
-	return Scan(bz, s)
+	_ = "STUB: not implemented"
+
+	// counterKey scopes a MaxCount accumulator by (Schema, field number) so the
+	// same Schema reached from multiple paths shares one counter, while two
+	// unrelated Schemas that happen to use the same field number don't collide.
+	return nil
 }
 
-// counterKey scopes a MaxCount accumulator by (Schema, field number) so the
-// same Schema reached from multiple paths shares one counter, while two
-// unrelated Schemas that happen to use the same field number don't collide.
 type counterKey struct {
 	schema *Schema
 	num    Number
 }
 
 func scan(bz []byte, schema *Schema, counts map[counterKey]int) error {
-	for len(bz) > 0 {
-		num, typ, tagLen := protowire.ConsumeTag(bz)
-		if tagLen < 0 {
-			return fmt.Errorf("wireguard: malformed wire tag at field %d: %w", num, protowire.ParseError(tagLen))
-		}
-		bz = bz[tagLen:]
-		rule, hasRule := schema.Rules[num]
-		if typ == protowire.BytesType {
-			val, valLen := protowire.ConsumeBytes(bz)
-			if valLen < 0 {
-				return fmt.Errorf("wireguard: malformed length-delimited field %d: %w", num, protowire.ParseError(valLen))
-			}
-			if hasRule {
-				if rule.MaxCount > 0 {
-					key := counterKey{schema, num}
-					counts[key]++
-					if counts[key] > rule.MaxCount {
-						return fmt.Errorf("wireguard: field %d exceeds max %d entries", num, rule.MaxCount)
-					}
-				}
-				if nested, ok := rule.Nested.Get(); ok {
-					if err := scan(val, nested, counts); err != nil {
-						return err
-					}
-				}
-			}
-			bz = bz[valLen:]
-			continue
-		}
-		valLen := protowire.ConsumeFieldValue(num, typ, bz)
-		if valLen < 0 {
-			return fmt.Errorf("wireguard: malformed field %d value: %w", num, protowire.ParseError(valLen))
-		}
-		bz = bz[valLen:]
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -123,31 +81,6 @@ func scan(bz []byte, schema *Schema, counts map[counterKey]int) error {
 // To remove a proto field that a Schema currently references: first delete
 // the MustFieldNum call and the Schema Rule that uses it, then regenerate
 // proto with the field gone. Doing it in the other order panics at init.
-func MustFieldNum[T any](protoName string) Number {
-	t := reflect.TypeFor[T]()
-	for i := range t.NumField() {
-		tag := t.Field(i).Tag.Get("protobuf")
-		if tag == "" {
-			continue
-		}
-		parts := strings.Split(tag, ",")
-		var name, numStr string
-		for j, p := range parts {
-			if j == 1 {
-				numStr = p
-			}
-			if strings.HasPrefix(p, "name=") {
-				name = strings.TrimPrefix(p, "name=")
-			}
-		}
-		if name != protoName {
-			continue
-		}
-		num, err := strconv.ParseInt(numStr, 10, 32)
-		if err != nil {
-			panic(fmt.Sprintf("wireguard: bad protobuf tag on %s.%s: %v", t.Name(), t.Field(i).Name, err))
-		}
-		return Number(num) //nolint:gosec // ParseInt with bitSize=32 bounds num to int32 range
-	}
-	panic(fmt.Sprintf("wireguard: proto field %q not found on %s", protoName, t.Name()))
-}
+func MustFieldNum[T any](protoName string) Number { _ = "STUB: not implemented"; return *new(Number) }
+
+//nolint:gosec // ParseInt with bitSize=32 bounds num to int32 range

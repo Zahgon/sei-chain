@@ -98,14 +98,8 @@ type ErrNoSuchContract struct {
 	Addr string
 }
 
-func (m *ErrNoSuchContract) Error() string {
-	return "no such contract: " + m.Addr
-}
+func (m *ErrNoSuchContract) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (m *ErrNoSuchContract) ABCICode() uint32 {
-	return 22
-}
+func (m *ErrNoSuchContract) ABCICode() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *ErrNoSuchContract) Codespace() string {
-	return DefaultCodespace
-}
+func (m *ErrNoSuchContract) Codespace() string { _ = "STUB: not implemented"; return "" }

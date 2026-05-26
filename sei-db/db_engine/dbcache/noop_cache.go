@@ -1,8 +1,6 @@
 package dbcache
 
 import (
-	"fmt"
-
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/types"
 )
 
@@ -15,42 +13,32 @@ var _ Cache = (*noOpCache)(nil)
 type noOpCache struct{}
 
 // NewNoOpCache creates a Cache that always reads via the provided Reader and never caches.
-func NewNoOpCache() Cache {
-	return &noOpCache{}
-}
+func NewNoOpCache() Cache { _ = "STUB: not implemented"; return *new(Cache) }
 
 func (c *noOpCache) Get(read Reader, key []byte, _ bool) ([]byte, bool, error) {
-	return read(key)
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
 func (c *noOpCache) BatchGet(read Reader, keys map[string]types.BatchGetResult) error {
-	var firstErr error
-	for k := range keys {
-		val, _, err := read([]byte(k))
-		if err != nil {
-			keys[k] = types.BatchGetResult{Error: err}
-			if firstErr == nil {
-				firstErr = err
-			}
-		} else {
-			keys[k] = types.BatchGetResult{Value: val}
-		}
-	}
-	if firstErr != nil {
-		return fmt.Errorf("unable to batch get: %w", firstErr)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (c *noOpCache) Set([]byte, []byte) {
+	_ = "STUB: not implemented"
 	// intentional no-op
+	return
 }
 
 func (c *noOpCache) Delete([]byte) {
+	_ = "STUB: not implemented"
 	// intentional no-op
+	return
 }
 
 func (c *noOpCache) BatchSet([]CacheUpdate) error {
+	_ = "STUB: not implemented"
 	// intentional no-op
 	return nil
 }

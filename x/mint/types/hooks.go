@@ -14,11 +14,11 @@ var _ MintHooks = MultiMintHooks{}
 type MultiMintHooks []MintHooks
 
 func NewMultiMintHooks(hooks ...MintHooks) MultiMintHooks {
-	return hooks
+	_ = "STUB: not implemented"
+	return *new(MultiMintHooks)
 }
 
 func (h MultiMintHooks) AfterDistributeMintedCoin(ctx sdk.Context, mintedCoin sdk.Coin) {
-	for i := range h {
-		h[i].AfterDistributeMintedCoin(ctx, mintedCoin)
-	}
+	_ = "STUB: not implemented"
+	return
 }

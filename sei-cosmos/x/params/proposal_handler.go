@@ -2,7 +2,6 @@ package params
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/params/keeper"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types/proposal"
@@ -13,30 +12,11 @@ var logger = seilog.NewLogger("cosmos", "x", "params")
 
 // NewParamChangeProposalHandler creates a new governance Handler for a ParamChangeProposal
 func NewParamChangeProposalHandler(k keeper.Keeper) govtypes.Handler {
-	return func(ctx sdk.Context, content govtypes.Content) error {
-		switch c := content.(type) {
-		case *proposal.ParameterChangeProposal:
-			return handleParameterChangeProposal(ctx, k, c)
-
-		default:
-			return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized param proposal content type: %T", c)
-		}
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Handler)
 }
 
 func handleParameterChangeProposal(ctx sdk.Context, k keeper.Keeper, p *proposal.ParameterChangeProposal) error {
-	for _, c := range p.Changes {
-		ss, ok := k.GetSubspace(c.Subspace)
-		if !ok {
-			return sdkerrors.Wrap(proposal.ErrUnknownSubspace, c.Subspace)
-		}
-
-		logger.Info("attempt to set new parameter value", "key", c.Key, "value", c.Value)
-
-		if err := ss.Update(ctx, []byte(c.Key), []byte(c.Value)); err != nil {
-			return sdkerrors.Wrapf(proposal.ErrSettingParameter, "key: %s, value: %s, err: %s", c.Key, c.Value, err.Error())
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }

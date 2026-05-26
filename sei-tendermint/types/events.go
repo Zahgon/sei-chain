@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/json"
-	"fmt"
 	"strings"
 
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
@@ -137,13 +136,10 @@ type EventDataNewBlock struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataNewBlock) TypeTag() string { return "tendermint/event/NewBlock_new" }
+func (EventDataNewBlock) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 // ABCIEvents implements the eventlog.ABCIEventer interface.
-func (e EventDataNewBlock) ABCIEvents() []abci.Event {
-	base := []abci.Event{eventWithAttr(BlockHeightKey, fmt.Sprint(e.Block.Height))}
-	return append(base, e.ResultFinalizeBlock.Events...)
-}
+func (e EventDataNewBlock) ABCIEvents() []abci.Event { _ = "STUB: not implemented"; return nil }
 
 type LegacyEventDataNewBlock struct {
 	Block            *LegacyBlock            `json:"block"`
@@ -151,7 +147,7 @@ type LegacyEventDataNewBlock struct {
 	ResultEndBlock   LegacyResponseEndBlock  `json:"result_end_block"`
 }
 
-func (LegacyEventDataNewBlock) TypeTag() string { return "tendermint/event/NewBlock" }
+func (LegacyEventDataNewBlock) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 type LegacyEvidence struct {
 	Evidence EvidenceList `json:"evidence"`
@@ -193,50 +189,8 @@ type LegacyVersionParams struct {
 }
 
 func (e EventDataNewBlock) ToLegacy() LegacyEventData {
-	block := &LegacyBlock{}
-	if e.Block != nil {
-		block = &LegacyBlock{
-			Header:     e.Block.Header,
-			Data:       e.Block.Data,
-			Evidence:   LegacyEvidence{Evidence: e.Block.Evidence},
-			LastCommit: e.Block.LastCommit,
-		}
-	}
-	consensusParamUpdates := &LegacyConsensusParams{}
-	if e.ResultFinalizeBlock.ConsensusParamUpdates != nil {
-		if e.ResultFinalizeBlock.ConsensusParamUpdates.Block != nil {
-			consensusParamUpdates.Block = &LegacyBlockParams{
-				MaxBytes: fmt.Sprintf("%d", e.ResultFinalizeBlock.ConsensusParamUpdates.Block.MaxBytes),
-				MaxGas:   fmt.Sprintf("%d", e.ResultFinalizeBlock.ConsensusParamUpdates.Block.MaxGas),
-			}
-		}
-		if e.ResultFinalizeBlock.ConsensusParamUpdates.Evidence != nil {
-			consensusParamUpdates.Evidence = &LegacyEvidenceParams{
-				MaxAgeNumBlocks: fmt.Sprintf("%d", e.ResultFinalizeBlock.ConsensusParamUpdates.Evidence.MaxAgeNumBlocks),
-				MaxAgeDuration:  fmt.Sprintf("%d", e.ResultFinalizeBlock.ConsensusParamUpdates.Evidence.MaxAgeDuration),
-				MaxBytes:        fmt.Sprintf("%d", e.ResultFinalizeBlock.ConsensusParamUpdates.Evidence.MaxBytes),
-			}
-		}
-		if e.ResultFinalizeBlock.ConsensusParamUpdates.Validator != nil {
-			consensusParamUpdates.Validator = &types.ValidatorParams{
-				PubKeyTypes: e.ResultFinalizeBlock.ConsensusParamUpdates.Validator.PubKeyTypes,
-			}
-		}
-		if e.ResultFinalizeBlock.ConsensusParamUpdates.Version != nil {
-			consensusParamUpdates.Version = &LegacyVersionParams{
-				AppVersion: fmt.Sprintf("%d", e.ResultFinalizeBlock.ConsensusParamUpdates.Version.AppVersion),
-			}
-		}
-	}
-	return &LegacyEventDataNewBlock{
-		Block:            block,
-		ResultBeginBlock: abci.ResponseBeginBlock{Events: e.ResultFinalizeBlock.Events},
-		ResultEndBlock: LegacyResponseEndBlock{
-			ValidatorUpdates:      e.ResultFinalizeBlock.ValidatorUpdates,
-			Events:                []abci.Event{},
-			ConsensusParamUpdates: consensusParamUpdates,
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 type EventDataNewBlockHeader struct {
@@ -247,16 +201,14 @@ type EventDataNewBlockHeader struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataNewBlockHeader) TypeTag() string { return "tendermint/event/NewBlockHeader" }
+func (EventDataNewBlockHeader) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 // ABCIEvents implements the eventlog.ABCIEventer interface.
-func (e EventDataNewBlockHeader) ABCIEvents() []abci.Event {
-	base := []abci.Event{eventWithAttr(BlockHeightKey, fmt.Sprint(e.Header.Height))}
-	return append(base, e.ResultFinalizeBlock.Events...)
-}
+func (e EventDataNewBlockHeader) ABCIEvents() []abci.Event { _ = "STUB: not implemented"; return nil }
 
 func (e EventDataNewBlockHeader) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 type EventDataNewEvidence struct {
@@ -266,28 +218,24 @@ type EventDataNewEvidence struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataNewEvidence) TypeTag() string { return "tendermint/event/NewEvidence" }
+func (EventDataNewEvidence) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataNewEvidence) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+
+	// All txs fire EventDataTx
+	return *new(LegacyEventData)
 }
 
-// All txs fire EventDataTx
 type EventDataTx struct {
 	abci.TxResultV2
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataTx) TypeTag() string { return "tendermint/event/Tx_new" }
+func (EventDataTx) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 // ABCIEvents implements the eventlog.ABCIEventer interface.
-func (e EventDataTx) ABCIEvents() []abci.Event {
-	base := []abci.Event{
-		eventWithAttr(TxHashKey, fmt.Sprintf("%X", Tx(e.Tx).Hash())),
-		eventWithAttr(TxHeightKey, fmt.Sprintf("%d", e.Height)),
-	}
-	return append(base, e.Result.Events...)
-}
+func (e EventDataTx) ABCIEvents() []abci.Event { _ = "STUB: not implemented"; return nil }
 
 type LegacyEventDataTx struct {
 	TxResult LegacyTxResult `json:"TxResult"`
@@ -307,24 +255,11 @@ type LegacyResult struct {
 	Events    []abci.Event `json:"events,omitempty"`
 }
 
-func (LegacyEventDataTx) TypeTag() string {
-	return "tendermint/event/Tx"
-}
+func (LegacyEventDataTx) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataTx) ToLegacy() LegacyEventData {
-	return LegacyEventDataTx{
-		TxResult: LegacyTxResult{
-			Height: fmt.Sprintf("%d", e.Height),
-			Index:  e.Index,
-			Tx:     e.Tx,
-			Result: LegacyResult{
-				Log:       e.Result.Log,
-				GasWanted: fmt.Sprintf("%d", e.Result.GasWanted),
-				GasUsed:   fmt.Sprintf("%d", e.Result.GasUsed),
-				Events:    e.Result.Events,
-			},
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 // NOTE: This goes into the replay WAL
@@ -335,10 +270,11 @@ type EventDataRoundState struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataRoundState) TypeTag() string { return "tendermint/event/RoundState" }
+func (EventDataRoundState) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataRoundState) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 type ValidatorInfo struct {
@@ -355,10 +291,11 @@ type EventDataNewRound struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataNewRound) TypeTag() string { return "tendermint/event/NewRound" }
+func (EventDataNewRound) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataNewRound) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 type EventDataCompleteProposal struct {
@@ -370,10 +307,11 @@ type EventDataCompleteProposal struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataCompleteProposal) TypeTag() string { return "tendermint/event/CompleteProposal" }
+func (EventDataCompleteProposal) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataCompleteProposal) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 type EventDataVote struct {
@@ -381,19 +319,21 @@ type EventDataVote struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataVote) TypeTag() string { return "tendermint/event/Vote" }
+func (EventDataVote) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataVote) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 type EventDataString string
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataString) TypeTag() string { return "tendermint/event/ProposalString" }
+func (EventDataString) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataString) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 type EventDataValidatorSetUpdates struct {
@@ -401,38 +341,43 @@ type EventDataValidatorSetUpdates struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataValidatorSetUpdates) TypeTag() string { return "tendermint/event/ValidatorSetUpdates" }
+func (EventDataValidatorSetUpdates) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataValidatorSetUpdates) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+
+	// EventDataBlockSyncStatus shows the fastsync status and the
+	// height when the node state sync mechanism changes.
+	return *new(LegacyEventData)
 }
 
-// EventDataBlockSyncStatus shows the fastsync status and the
-// height when the node state sync mechanism changes.
 type EventDataBlockSyncStatus struct {
 	Complete bool  `json:"complete"`
 	Height   int64 `json:"height,string"`
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataBlockSyncStatus) TypeTag() string { return "tendermint/event/FastSyncStatus" }
+func (EventDataBlockSyncStatus) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataBlockSyncStatus) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+
+	// EventDataStateSyncStatus shows the statesync status and the
+	// height when the node state sync mechanism changes.
+	return *new(LegacyEventData)
 }
 
-// EventDataStateSyncStatus shows the statesync status and the
-// height when the node state sync mechanism changes.
 type EventDataStateSyncStatus struct {
 	Complete bool  `json:"complete"`
 	Height   int64 `json:"height,string"`
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataStateSyncStatus) TypeTag() string { return "tendermint/event/StateSyncStatus" }
+func (EventDataStateSyncStatus) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataStateSyncStatus) ToLegacy() LegacyEventData {
-	return e
+	_ = "STUB: not implemented"
+	return *new(LegacyEventData)
 }
 
 type EventDataEvidenceValidated struct {
@@ -442,13 +387,14 @@ type EventDataEvidenceValidated struct {
 }
 
 // TypeTag implements the required method of jsontypes.Tagged.
-func (EventDataEvidenceValidated) TypeTag() string { return "tendermint/event/EvidenceValidated" }
+func (EventDataEvidenceValidated) TypeTag() string { _ = "STUB: not implemented"; return "" }
 
 func (e EventDataEvidenceValidated) ToLegacy() LegacyEventData {
-	return e
-}
+	_ = "STUB: not implemented"
 
-// PUBSUB
+	// PUBSUB
+	return *new(LegacyEventData)
+}
 
 const (
 	// EventTypeKey is a reserved composite key for event name.
@@ -487,13 +433,9 @@ var (
 	EventQueryEvidenceValidated   = QueryForEvent(EventEvidenceValidatedValue)
 )
 
-func EventQueryTxFor(tx Tx) *tmquery.Query {
-	return tmquery.MustCompile(fmt.Sprintf("%s='%s' AND %s='%X'", EventTypeKey, EventTxValue, TxHashKey, tx.Hash()))
-}
+func EventQueryTxFor(tx Tx) *tmquery.Query { _ = "STUB: not implemented"; return nil }
 
-func QueryForEvent(eventValue string) *tmquery.Query {
-	return tmquery.MustCompile(fmt.Sprintf("%s='%s'", EventTypeKey, eventValue))
-}
+func QueryForEvent(eventValue string) *tmquery.Query { _ = "STUB: not implemented"; return nil }
 
 // BlockEventPublisher publishes all block related events
 type BlockEventPublisher interface {
@@ -512,20 +454,11 @@ type TxEventPublisher interface {
 // The type of the event and the name of the attribute are obtained by
 // splitting the event type on period (e.g., "foo.bar").
 func eventWithAttr(etype, value string) abci.Event {
-	parts := strings.SplitN(etype, ".", 2)
-	return abci.Event{
-		Type: parts[0],
-		Attributes: []abci.EventAttribute{{
-			Key: []byte(parts[1]), Value: []byte(value),
-		}},
-	}
+	_ = "STUB: not implemented"
+	return *new(abci.Event)
 }
 
 func TryUnmarshalEventData(data json.RawMessage) (EventData, error) {
-	var eventData EventData
-	err := jsontypes.Unmarshal(data, &eventData)
-	if err != nil {
-		return nil, err
-	}
-	return eventData, nil
+	_ = "STUB: not implemented"
+	return *new(EventData), nil
 }

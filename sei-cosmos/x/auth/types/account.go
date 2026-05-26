@@ -1,17 +1,8 @@
 package types
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
-	"fmt"
-	"strings"
-
 	"github.com/gogo/protobuf/proto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"gopkg.in/yaml.v2"
 
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
@@ -27,208 +18,123 @@ var (
 
 // NewBaseAccount creates a new BaseAccount object
 func NewBaseAccount(address sdk.AccAddress, pubKey cryptotypes.PubKey, accountNumber, sequence uint64) *BaseAccount {
-	acc := &BaseAccount{
-		Address:       address.String(),
-		AccountNumber: accountNumber,
-		Sequence:      sequence,
-	}
-
-	err := acc.SetPubKey(pubKey)
-	if err != nil {
-		panic(err)
-	}
-
-	return acc
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ProtoBaseAccount - a prototype function for BaseAccount
 func ProtoBaseAccount() AccountI {
-	return &BaseAccount{}
+	_ = "STUB: not implemented"
+	return *
+
+	// NewBaseAccountWithAddress - returns a new base account with a given address
+	// leaving AccountNumber and Sequence to zero.
+	new(AccountI)
 }
 
-// NewBaseAccountWithAddress - returns a new base account with a given address
-// leaving AccountNumber and Sequence to zero.
 func NewBaseAccountWithAddress(addr sdk.AccAddress) *BaseAccount {
-	return &BaseAccount{
-		Address: addr.String(),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetAddress - Implements sdk.AccountI.
 func (acc BaseAccount) GetAddress() sdk.AccAddress {
-	addr, _ := sdk.AccAddressFromBech32(acc.Address)
-	return addr
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
 
 // SetAddress - Implements sdk.AccountI.
 func (acc *BaseAccount) SetAddress(addr sdk.AccAddress) error {
-	if len(acc.Address) != 0 {
-		return errors.New("cannot override BaseAccount address")
-	}
-
-	acc.Address = addr.String()
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // GetPubKey - Implements sdk.AccountI.
 func (acc BaseAccount) GetPubKey() (pk cryptotypes.PubKey) {
-	if acc.PubKey == nil {
-		return nil
-	}
-	content, ok := acc.PubKey.GetCachedValue().(cryptotypes.PubKey)
-	if !ok {
-		return nil
-	}
-	return content
+	_ = "STUB: not implemented"
+	return *new(cryptotypes.PubKey)
 }
 
 // SetPubKey - Implements sdk.AccountI.
 func (acc *BaseAccount) SetPubKey(pubKey cryptotypes.PubKey) error {
-	if pubKey == nil {
-		acc.PubKey = nil
-		return nil
-	}
-	any, err := codectypes.NewAnyWithValue(pubKey)
-	if err == nil {
-		acc.PubKey = any
-	}
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetAccountNumber - Implements AccountI
-func (acc BaseAccount) GetAccountNumber() uint64 {
-	return acc.AccountNumber
-}
+func (acc BaseAccount) GetAccountNumber() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // SetAccountNumber - Implements AccountI
 func (acc *BaseAccount) SetAccountNumber(accNumber uint64) error {
-	acc.AccountNumber = accNumber
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // GetSequence - Implements sdk.AccountI.
-func (acc BaseAccount) GetSequence() uint64 {
-	return acc.Sequence
-}
+func (acc BaseAccount) GetSequence() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // SetSequence - Implements sdk.AccountI.
-func (acc *BaseAccount) SetSequence(seq uint64) error {
-	acc.Sequence = seq
-	return nil
-}
+func (acc *BaseAccount) SetSequence(seq uint64) error { _ = "STUB: not implemented"; return nil }
 
 // Validate checks for errors on the account fields
-func (acc BaseAccount) Validate() error {
-	if acc.Address == "" || acc.PubKey == nil {
-		return nil
-	}
+func (acc BaseAccount) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	accAddr, err := sdk.AccAddressFromBech32(acc.Address)
-	if err != nil {
-		return err
-	}
-
-	if !bytes.Equal(acc.GetPubKey().Address().Bytes(), accAddr.Bytes()) {
-		return errors.New("account address and pubkey address do not match")
-	}
-
-	return nil
-}
-
-func (acc BaseAccount) String() string {
-	out, _ := acc.MarshalYAML()
-	return out.(string)
-}
+func (acc BaseAccount) String() string { _ = "STUB: not implemented"; return "" }
 
 // MarshalYAML returns the YAML representation of an account.
 func (acc BaseAccount) MarshalYAML() (interface{}, error) {
-	bz, err := codec.MarshalYAML(codec.NewProtoCodec(codectypes.NewInterfaceRegistry()), &acc)
-	if err != nil {
-		return nil, err
-	}
-	return string(bz), err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UnpackInterfaces implements UnpackInterfacesMessage.UnpackInterfaces
 func (acc BaseAccount) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	if acc.PubKey == nil {
-		return nil
-	}
-	var pubKey cryptotypes.PubKey
-	return unpacker.UnpackAny(acc.PubKey, &pubKey)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewModuleAddress creates an AccAddress from the hash of the module's name
 func NewModuleAddress(name string) sdk.AccAddress {
-	return sdk.AccAddress(crypto.AddressHash([]byte(name)))
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
 
 // NewEmptyModuleAccount creates a empty ModuleAccount from a string
 func NewEmptyModuleAccount(name string, permissions ...string) *ModuleAccount {
-	moduleAddress := NewModuleAddress(name)
-	baseAcc := NewBaseAccountWithAddress(moduleAddress)
-
-	if err := validatePermissions(permissions...); err != nil {
-		panic(err)
-	}
-
-	return &ModuleAccount{
-		BaseAccount: baseAcc,
-		Name:        name,
-		Permissions: permissions,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewModuleAccount creates a new ModuleAccount instance
 func NewModuleAccount(ba *BaseAccount, name string, permissions ...string) *ModuleAccount {
-	if err := validatePermissions(permissions...); err != nil {
-		panic(err)
-	}
-
-	return &ModuleAccount{
-		BaseAccount: ba,
-		Name:        name,
-		Permissions: permissions,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // HasPermission returns whether or not the module account has permission.
 func (ma ModuleAccount) HasPermission(permission string) bool {
-	for _, perm := range ma.Permissions {
-		if perm == permission {
-			return true
-		}
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
 // GetName returns the the name of the holder's module
 func (ma ModuleAccount) GetName() string {
-	return ma.Name
+	_ = "STUB: not implemented"
+
+	// GetPermissions returns permissions granted to the module account
+	return ""
 }
 
-// GetPermissions returns permissions granted to the module account
-func (ma ModuleAccount) GetPermissions() []string {
-	return ma.Permissions
-}
+func (ma ModuleAccount) GetPermissions() []string { _ = "STUB: not implemented"; return nil }
 
 // SetPubKey - Implements AccountI
 func (ma ModuleAccount) SetPubKey(pubKey cryptotypes.PubKey) error {
-	return fmt.Errorf("not supported for module accounts")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Validate checks for errors on the account fields
-func (ma ModuleAccount) Validate() error {
-	if strings.TrimSpace(ma.Name) == "" {
-		return errors.New("module account name cannot be blank")
-	}
-
-	if ma.Address != sdk.AccAddress(crypto.AddressHash([]byte(ma.Name))).String() {
-		return fmt.Errorf("address %s cannot be derived from the module name '%s'", ma.Address, ma.Name)
-	}
-
-	return ma.BaseAccount.Validate()
-}
+func (ma ModuleAccount) Validate() error { _ = "STUB: not implemented"; return nil }
 
 type moduleAccountPretty struct {
 	Address       sdk.AccAddress `json:"address" yaml:"address"`
@@ -239,63 +145,19 @@ type moduleAccountPretty struct {
 	Permissions   []string       `json:"permissions" yaml:"permissions"`
 }
 
-func (ma ModuleAccount) String() string {
-	out, _ := ma.MarshalYAML()
-	return out.(string)
-}
+func (ma ModuleAccount) String() string { _ = "STUB: not implemented"; return "" }
 
 // MarshalYAML returns the YAML representation of a ModuleAccount.
 func (ma ModuleAccount) MarshalYAML() (interface{}, error) {
-	accAddr, err := sdk.AccAddressFromBech32(ma.Address)
-	if err != nil {
-		return nil, err
-	}
-
-	bs, err := yaml.Marshal(moduleAccountPretty{
-		Address:       accAddr,
-		PubKey:        "",
-		AccountNumber: ma.AccountNumber,
-		Sequence:      ma.Sequence,
-		Name:          ma.Name,
-		Permissions:   ma.Permissions,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return string(bs), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MarshalJSON returns the JSON representation of a ModuleAccount.
-func (ma ModuleAccount) MarshalJSON() ([]byte, error) {
-	accAddr, err := sdk.AccAddressFromBech32(ma.Address)
-	if err != nil {
-		return nil, err
-	}
-
-	return json.Marshal(moduleAccountPretty{
-		Address:       accAddr,
-		PubKey:        "",
-		AccountNumber: ma.AccountNumber,
-		Sequence:      ma.Sequence,
-		Name:          ma.Name,
-		Permissions:   ma.Permissions,
-	})
-}
+func (ma ModuleAccount) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON unmarshals raw JSON bytes into a ModuleAccount.
-func (ma *ModuleAccount) UnmarshalJSON(bz []byte) error {
-	var alias moduleAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
-		return err
-	}
-
-	ma.BaseAccount = NewBaseAccount(alias.Address, nil, alias.AccountNumber, alias.Sequence)
-	ma.Name = alias.Name
-	ma.Permissions = alias.Permissions
-
-	return nil
-}
+func (ma *ModuleAccount) UnmarshalJSON(bz []byte) error { _ = "STUB: not implemented"; return nil }
 
 // AccountI is an interface used to store coins at a given address within state.
 // It presumes a notion of sequence numbers for replay protection,
@@ -337,15 +199,7 @@ type GenesisAccounts []GenesisAccount
 
 // Contains returns true if the given address exists in a slice of GenesisAccount
 // objects.
-func (ga GenesisAccounts) Contains(addr sdk.Address) bool {
-	for _, acc := range ga {
-		if acc.GetAddress().Equals(addr) {
-			return true
-		}
-	}
-
-	return false
-}
+func (ga GenesisAccounts) Contains(addr sdk.Address) bool { _ = "STUB: not implemented"; return false }
 
 // GenesisAccount defines a genesis account that embeds an AccountI with validation capabilities.
 type GenesisAccount interface {

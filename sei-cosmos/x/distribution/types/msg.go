@@ -2,7 +2,6 @@ package types
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 // distribution message types
@@ -17,150 +16,98 @@ const (
 var _, _, _ sdk.Msg = &MsgSetWithdrawAddress{}, &MsgWithdrawDelegatorReward{}, &MsgWithdrawValidatorCommission{}
 
 func NewMsgSetWithdrawAddress(delAddr, withdrawAddr sdk.AccAddress) *MsgSetWithdrawAddress {
-	return &MsgSetWithdrawAddress{
-		DelegatorAddress: delAddr.String(),
-		WithdrawAddress:  withdrawAddr.String(),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (msg MsgSetWithdrawAddress) Route() string { return ModuleName }
-func (msg MsgSetWithdrawAddress) Type() string  { return TypeMsgSetWithdrawAddress }
+func (msg MsgSetWithdrawAddress) Route() string { _ = "STUB: not implemented"; return "" }
+func (msg MsgSetWithdrawAddress) Type() string  { _ = "STUB: not implemented"; return "" }
 
 // Return address that must sign over msg.GetSignBytes()
 func (msg MsgSetWithdrawAddress) GetSigners() []sdk.AccAddress {
-	delAddr, err := sdk.AccAddressFromBech32(msg.DelegatorAddress)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{delAddr}
-}
-
-// get the bytes for the message signer to sign on
-func (msg MsgSetWithdrawAddress) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(&msg)
-	return sdk.MustSortJSON(bz)
-}
-
-// quick validity check
-func (msg MsgSetWithdrawAddress) ValidateBasic() error {
-	if msg.DelegatorAddress == "" {
-		return ErrEmptyDelegatorAddr
-	}
-	if msg.WithdrawAddress == "" {
-		return ErrEmptyWithdrawAddr
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// get the bytes for the message signer to sign on
+func (msg MsgSetWithdrawAddress) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+// quick validity check
+func (msg MsgSetWithdrawAddress) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
 func NewMsgWithdrawDelegatorReward(delAddr sdk.AccAddress, valAddr sdk.ValAddress) *MsgWithdrawDelegatorReward {
-	return &MsgWithdrawDelegatorReward{
-		DelegatorAddress: delAddr.String(),
-		ValidatorAddress: valAddr.String(),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (msg MsgWithdrawDelegatorReward) Route() string { return ModuleName }
-func (msg MsgWithdrawDelegatorReward) Type() string  { return TypeMsgWithdrawDelegatorReward }
+func (msg MsgWithdrawDelegatorReward) Route() string { _ = "STUB: not implemented"; return "" }
+func (msg MsgWithdrawDelegatorReward) Type() string  { _ = "STUB: not implemented"; return "" }
 
 // Return address that must sign over msg.GetSignBytes()
 func (msg MsgWithdrawDelegatorReward) GetSigners() []sdk.AccAddress {
-	delAddr, err := sdk.AccAddressFromBech32(msg.DelegatorAddress)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{delAddr}
-}
-
-// get the bytes for the message signer to sign on
-func (msg MsgWithdrawDelegatorReward) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(&msg)
-	return sdk.MustSortJSON(bz)
-}
-
-// quick validity check
-func (msg MsgWithdrawDelegatorReward) ValidateBasic() error {
-	if msg.DelegatorAddress == "" {
-		return ErrEmptyDelegatorAddr
-	}
-	if msg.ValidatorAddress == "" {
-		return ErrEmptyValidatorAddr
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// get the bytes for the message signer to sign on
+func (msg MsgWithdrawDelegatorReward) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+// quick validity check
+func (msg MsgWithdrawDelegatorReward) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
 func NewMsgWithdrawValidatorCommission(valAddr sdk.ValAddress) *MsgWithdrawValidatorCommission {
-	return &MsgWithdrawValidatorCommission{
-		ValidatorAddress: valAddr.String(),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (msg MsgWithdrawValidatorCommission) Route() string { return ModuleName }
-func (msg MsgWithdrawValidatorCommission) Type() string  { return TypeMsgWithdrawValidatorCommission }
+func (msg MsgWithdrawValidatorCommission) Route() string { _ = "STUB: not implemented"; return "" }
+func (msg MsgWithdrawValidatorCommission) Type() string  { _ = "STUB: not implemented"; return "" }
 
 // Return address that must sign over msg.GetSignBytes()
 func (msg MsgWithdrawValidatorCommission) GetSigners() []sdk.AccAddress {
-	valAddr, err := sdk.ValAddressFromBech32(msg.ValidatorAddress)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{valAddr.Bytes()}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // get the bytes for the message signer to sign on
 func (msg MsgWithdrawValidatorCommission) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(&msg)
-	return sdk.MustSortJSON(bz)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // quick validity check
 func (msg MsgWithdrawValidatorCommission) ValidateBasic() error {
-	if msg.ValidatorAddress == "" {
-		return ErrEmptyValidatorAddr
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // NewMsgFundCommunityPool returns a new MsgFundCommunityPool with a sender and
 // a funding amount.
 func NewMsgFundCommunityPool(amount sdk.Coins, depositor sdk.AccAddress) *MsgFundCommunityPool {
-	return &MsgFundCommunityPool{
-		Amount:    amount,
-		Depositor: depositor.String(),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Route returns the MsgFundCommunityPool message route.
-func (msg MsgFundCommunityPool) Route() string { return ModuleName }
+func (msg MsgFundCommunityPool) Route() string {
+	_ = "STUB: not implemented"
 
-// Type returns the MsgFundCommunityPool message type.
-func (msg MsgFundCommunityPool) Type() string { return TypeMsgFundCommunityPool }
+	// Type returns the MsgFundCommunityPool message type.
+	return ""
+}
+
+func (msg MsgFundCommunityPool) Type() string { _ = "STUB: not implemented"; return "" }
 
 // GetSigners returns the signer addresses that are expected to sign the result
 // of GetSignBytes.
 func (msg MsgFundCommunityPool) GetSigners() []sdk.AccAddress {
-	depoAddr, err := sdk.AccAddressFromBech32(msg.Depositor)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{depoAddr}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetSignBytes returns the raw bytes for a MsgFundCommunityPool message that
 // the expected signer needs to sign.
-func (msg MsgFundCommunityPool) GetSignBytes() []byte {
-	bz := ModuleCdc.MustMarshalJSON(&msg)
-	return sdk.MustSortJSON(bz)
-}
+func (msg MsgFundCommunityPool) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // ValidateBasic performs basic MsgFundCommunityPool message validation.
-func (msg MsgFundCommunityPool) ValidateBasic() error {
-	if !msg.Amount.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, msg.Amount.String())
-	}
-	if msg.Depositor == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, msg.Depositor)
-	}
-
-	return nil
-}
+func (msg MsgFundCommunityPool) ValidateBasic() error { _ = "STUB: not implemented"; return nil }

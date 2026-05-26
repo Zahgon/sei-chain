@@ -1,42 +1,17 @@
 package types
 
-import (
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-)
+func DefaultFeesParams() *FeesParams { _ = "STUB: not implemented"; return nil }
 
-func DefaultFeesParams() *FeesParams {
-	return &FeesParams{
-		GlobalMinimumGasPrices: sdk.DecCoins{
-			sdk.NewDecCoinFromDec(sdk.DefaultBondDenom, sdk.NewDecWithPrec(1, 2)), // 0.01 by default on a chain level
-		},
-	}
-}
+// 0.01 by default on a chain level
 
-func DefaultCosmosGasParams() *CosmosGasParams {
-	return &CosmosGasParams{
-		CosmosGasMultiplierNumerator:   1,
-		CosmosGasMultiplierDenominator: 1,
-	}
-}
+func DefaultCosmosGasParams() *CosmosGasParams { _ = "STUB: not implemented"; return nil }
 
 // DefaultGenesis returns the default Capability genesis state
-func DefaultGenesis() *GenesisState {
-	return &GenesisState{
-		FeesParams:      *DefaultFeesParams(),
-		CosmosGasParams: *DefaultCosmosGasParams(),
-	}
-}
+func DefaultGenesis() *GenesisState { _ = "STUB: not implemented"; return nil }
 
 func NewGenesisState(feesParams FeesParams, cosmosGasParams CosmosGasParams) *GenesisState {
-	return &GenesisState{
-		FeesParams:      feesParams,
-		CosmosGasParams: cosmosGasParams,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (gs GenesisState) Validate() error {
-	if err := gs.CosmosGasParams.Validate(); err != nil {
-		return err
-	}
-	return gs.FeesParams.Validate()
-}
+func (gs GenesisState) Validate() error { _ = "STUB: not implemented"; return nil }

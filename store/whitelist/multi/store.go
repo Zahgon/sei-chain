@@ -2,8 +2,6 @@ package multi
 
 import (
 	storetypes "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
-	"github.com/sei-protocol/sei-chain/store/whitelist/cachemulti"
-	"github.com/sei-protocol/sei-chain/store/whitelist/kv"
 )
 
 type Store struct {
@@ -13,21 +11,18 @@ type Store struct {
 }
 
 func NewStore(parent storetypes.MultiStore, storeKeyToWriteWhitelist map[string][]string) storetypes.MultiStore {
-	return &Store{
-		MultiStore:               parent,
-		storeKeyToWriteWhitelist: storeKeyToWriteWhitelist,
-	}
+	_ = "STUB: not implemented"
+	return *new(storetypes.MultiStore)
 }
 
 func (cms Store) CacheMultiStore() storetypes.CacheMultiStore {
-	return cachemulti.NewStore(cms.MultiStore.CacheMultiStore(), cms.storeKeyToWriteWhitelist)
+	_ = "STUB: not implemented"
+	return *new(storetypes.CacheMultiStore)
 }
 
 func (cms Store) GetKVStore(key storetypes.StoreKey) storetypes.KVStore {
-	rawKVStore := cms.MultiStore.GetKVStore(key)
-	if writeWhitelist, ok := cms.storeKeyToWriteWhitelist[key.Name()]; ok {
-		return kv.NewStore(rawKVStore, writeWhitelist)
-	}
-	// whitelist nothing
-	return kv.NewStore(rawKVStore, []string{})
+	_ = "STUB: not implemented"
+	return *new(storetypes.KVStore)
 }
+
+// whitelist nothing

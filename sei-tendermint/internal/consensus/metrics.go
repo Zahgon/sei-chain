@@ -1,7 +1,6 @@
 package consensus
 
 import (
-	"strings"
 	"time"
 
 	"github.com/go-kit/kit/metrics"
@@ -174,106 +173,46 @@ type Metrics struct {
 }
 
 // RecordConsMetrics uses for recording the block related metrics during fast-sync.
-func (m *Metrics) RecordConsMetrics(block *types.Block) {
-	m.NumTxs.Set(float64(len(block.Txs)))
-	m.TotalTxs.Add(float64(len(block.Txs)))
-	m.BlockSizeBytes.Observe(float64(block.Size()))
-	m.CommittedHeight.Set(float64(block.Height))
-}
+func (m *Metrics) RecordConsMetrics(block *types.Block) { _ = "STUB: not implemented"; return }
 
-func (m *Metrics) MarkBlockGossipStarted() {
-	m.blockGossipStart = time.Now()
-}
+func (m *Metrics) MarkBlockGossipStarted() { _ = "STUB: not implemented"; return }
 
-func (m *Metrics) MarkBlockGossipComplete() {
-	m.BlockGossipReceiveLatency.Observe(time.Since(m.blockGossipStart).Seconds())
-}
+func (m *Metrics) MarkBlockGossipComplete() { _ = "STUB: not implemented"; return }
 
-func (m *Metrics) MarkProposalProcessed(accepted bool) {
-	status := "accepted"
-	if !accepted {
-		status = "rejected"
-	}
-	m.ProposalReceiveCount.With("status", status).Add(1)
-}
+func (m *Metrics) MarkProposalProcessed(accepted bool) { _ = "STUB: not implemented"; return }
 
 func (m *Metrics) MarkVoteReceived(vt tmproto.SignedMsgType, power, totalPower int64) {
-	p := float64(power) / float64(totalPower)
-	n := strings.ToLower(strings.TrimPrefix(vt.String(), "SIGNED_MSG_TYPE_"))
-	m.RoundVotingPowerPercent.With("vote_type", n).Add(p)
+	_ = "STUB: not implemented"
+	return
 }
 
-func (m *Metrics) MarkRound(r int32, st time.Time) {
-	m.Rounds.Set(float64(r))
-	roundTime := time.Since(st).Seconds()
-	m.RoundDuration.Observe(roundTime)
+func (m *Metrics) MarkRound(r int32, st time.Time) { _ = "STUB: not implemented"; return }
 
-	pvt := tmproto.PrevoteType
-	pvn := strings.ToLower(strings.TrimPrefix(pvt.String(), "SIGNED_MSG_TYPE_"))
-	m.RoundVotingPowerPercent.With("vote_type", pvn).Set(0)
+func (m *Metrics) MarkLateVote(vote *types.Vote) { _ = "STUB: not implemented"; return }
 
-	pct := tmproto.PrecommitType
-	pcn := strings.ToLower(strings.TrimPrefix(pct.String(), "SIGNED_MSG_TYPE_"))
-	m.RoundVotingPowerPercent.With("vote_type", pcn).Set(0)
-}
-
-func (m *Metrics) MarkLateVote(vote *types.Vote) {
-	validator := vote.ValidatorAddress.String()
-	m.LateVotes.With("validator_address", validator).Add(1)
-}
-
-func (m *Metrics) MarkFinalRound(round int32, proposer string) {
-	m.FinalRound.With("proposer_address", proposer).Observe(float64(round))
-}
+func (m *Metrics) MarkFinalRound(round int32, proposer string) { _ = "STUB: not implemented"; return }
 
 func (m *Metrics) MarkProposeLatency(proposer string, latency time.Duration) {
-	m.ProposeLatency.With("proposer_address", proposer).Observe(latency.Seconds())
+	_ = "STUB: not implemented"
+	return
 }
 
 func (m *Metrics) MarkPrevoteLatency(validator string, latency time.Duration) {
-	m.PrevoteLatency.With("validator_address", validator).Observe(latency.Seconds())
+	_ = "STUB: not implemented"
+	return
 }
 
 func (m *Metrics) MarkCompleteProposalTime(latency time.Duration) {
-	m.CompleteProposalTime.Observe(latency.Seconds())
+	_ = "STUB: not implemented"
+	return
 }
 
-func (m *Metrics) MarkConsensusTime(latency time.Duration) {
-	m.ConsensusTime.Observe(latency.Seconds())
-}
+func (m *Metrics) MarkConsensusTime(latency time.Duration) { _ = "STUB: not implemented"; return }
 
-func (m *Metrics) MarkApplyBlockLatency(latency time.Duration) {
-	m.ApplyBlockLatency.Observe(latency.Seconds())
-}
+func (m *Metrics) MarkApplyBlockLatency(latency time.Duration) { _ = "STUB: not implemented"; return }
 
-func (m *Metrics) MarkStep(s cstypes.RoundStepType) {
-	if !m.stepStart.IsZero() {
-		stepTime := time.Since(m.stepStart).Seconds()
-		stepName := strings.TrimPrefix(s.String(), "RoundStep")
-		m.StepDuration.With("step", stepName).Observe(stepTime)
-		m.StepCount.With("step", s.String()).Add(1)
-	}
-	m.stepStart = time.Now()
-}
+func (m *Metrics) MarkStep(s cstypes.RoundStepType) { _ = "STUB: not implemented"; return }
 
-func (m *Metrics) MarkStepLatency(s cstypes.RoundStepType) {
-	now := time.Now().UnixNano()
-	m.StepLatency.With("step", s.String()).Add(float64(now - m.lastRecordedStepLatencyNano))
-	m.lastRecordedStepLatencyNano = now
-}
+func (m *Metrics) MarkStepLatency(s cstypes.RoundStepType) { _ = "STUB: not implemented"; return }
 
-func (m *Metrics) ClearStepMetrics() {
-	for _, st := range []cstypes.RoundStepType{
-		cstypes.RoundStepNewHeight,
-		cstypes.RoundStepNewRound,
-		cstypes.RoundStepPropose,
-		cstypes.RoundStepPrevote,
-		cstypes.RoundStepPrevoteWait,
-		cstypes.RoundStepPrecommit,
-		cstypes.RoundStepPrecommitWait,
-		cstypes.RoundStepCommit,
-	} {
-		m.StepCount.With("step", st.String()).Set(0)
-		m.StepLatency.With("step", st.String()).Set(0)
-	}
-}
+func (m *Metrics) ClearStepMetrics() { _ = "STUB: not implemented"; return }

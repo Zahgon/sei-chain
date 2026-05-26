@@ -16,61 +16,64 @@ type CosmosStateStore struct {
 
 // NewCosmosStateStore wraps an existing StateStore as a CosmosStateStore.
 func NewCosmosStateStore(db types.StateStore) types.StateStore {
-	return &CosmosStateStore{db: db}
+	_ = "STUB: not implemented"
+	return *new(types.StateStore)
 }
 
 func (s *CosmosStateStore) Get(storeKey string, version int64, key []byte) ([]byte, error) {
-	return s.db.Get(storeKey, version, key)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (s *CosmosStateStore) Has(storeKey string, version int64, key []byte) (bool, error) {
-	return s.db.Has(storeKey, version, key)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 func (s *CosmosStateStore) Iterator(storeKey string, version int64, start, end []byte) (types.DBIterator, error) {
-	return s.db.Iterator(storeKey, version, start, end)
+	_ = "STUB: not implemented"
+	return *new(types.DBIterator), nil
 }
 
 func (s *CosmosStateStore) ReverseIterator(storeKey string, version int64, start, end []byte) (types.DBIterator, error) {
-	return s.db.ReverseIterator(storeKey, version, start, end)
+	_ = "STUB: not implemented"
+	return *new(types.DBIterator), nil
 }
 
 func (s *CosmosStateStore) RawIterate(storeKey string, fn func([]byte, []byte, int64) bool) (bool, error) {
-	return s.db.RawIterate(storeKey, fn)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
-func (s *CosmosStateStore) GetLatestVersion() int64 {
-	return s.db.GetLatestVersion()
-}
+func (s *CosmosStateStore) GetLatestVersion() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (s *CosmosStateStore) SetLatestVersion(version int64) error {
-	return s.db.SetLatestVersion(version)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (s *CosmosStateStore) GetEarliestVersion() int64 {
-	return s.db.GetEarliestVersion()
-}
+func (s *CosmosStateStore) GetEarliestVersion() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (s *CosmosStateStore) SetEarliestVersion(version int64, ignoreVersion bool) error {
-	return s.db.SetEarliestVersion(version, ignoreVersion)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (s *CosmosStateStore) ApplyChangesetSync(version int64, changesets []*proto.NamedChangeSet) error {
-	return s.db.ApplyChangesetSync(version, changesets)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (s *CosmosStateStore) ApplyChangesetAsync(version int64, changesets []*proto.NamedChangeSet) error {
-	return s.db.ApplyChangesetAsync(version, changesets)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (s *CosmosStateStore) Prune(version int64) error {
-	return s.db.Prune(version)
-}
+func (s *CosmosStateStore) Prune(version int64) error { _ = "STUB: not implemented"; return nil }
 
 func (s *CosmosStateStore) Import(version int64, ch <-chan types.SnapshotNode) error {
-	return s.db.Import(version, ch)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (s *CosmosStateStore) Close() error {
-	return s.db.Close()
-}
+func (s *CosmosStateStore) Close() error { _ = "STUB: not implemented"; return nil }

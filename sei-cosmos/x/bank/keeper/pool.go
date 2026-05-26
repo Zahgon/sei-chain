@@ -14,21 +14,8 @@ type SdkIntPool struct {
 	p sync.Pool
 }
 
-func newSdkIntPool() *SdkIntPool {
-	return &SdkIntPool{
-		p: sync.Pool{
-			New: func() any {
-				z := sdk.ZeroInt()
-				return &z
-			},
-		},
-	}
-}
+func newSdkIntPool() *SdkIntPool { _ = "STUB: not implemented"; return nil }
 
-func (s *SdkIntPool) Get() *sdk.Int {
-	return s.p.Get().(*sdk.Int)
-}
+func (s *SdkIntPool) Get() *sdk.Int { _ = "STUB: not implemented"; return nil }
 
-func (s *SdkIntPool) Put(i *sdk.Int) {
-	s.p.Put(i)
-}
+func (s *SdkIntPool) Put(i *sdk.Int) { _ = "STUB: not implemented"; return }

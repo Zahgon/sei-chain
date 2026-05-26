@@ -1,12 +1,5 @@
 package config
 
-import (
-	"fmt"
-	"strings"
-
-	"github.com/spf13/cast"
-)
-
 // AppOptions is a minimal interface for reading config (e.g. from Viper).
 // Implemented by sei-cosmos server/types.AppOptions; defined here to avoid import cycles.
 type AppOptions interface {
@@ -25,14 +18,7 @@ const (
 	ReceiptTxIndexBackendPebble = "pebbledb"
 )
 
-func NormalizeReceiptTxIndexBackend(backend string) string {
-	switch strings.ToLower(strings.TrimSpace(backend)) {
-	case "pebbledb":
-		return ReceiptTxIndexBackendPebble
-	default:
-		return ReceiptTxIndexBackendNone
-	}
-}
+func NormalizeReceiptTxIndexBackend(backend string) string { _ = "STUB: not implemented"; return "" }
 
 // ReceiptStoreConfig defines configuration for the receipt store database.
 type ReceiptStoreConfig struct {
@@ -76,61 +62,12 @@ type ReceiptStoreConfig struct {
 // KeepRecent defaults to 0 (no pruning). The app layer is responsible
 // for setting KeepRecent from the global min-retain-blocks flag.
 func DefaultReceiptStoreConfig() ReceiptStoreConfig {
-	return ReceiptStoreConfig{
-		Backend:              "pebbledb",
-		AsyncWriteBuffer:     DefaultSSAsyncBuffer,
-		KeepRecent:           0,
-		PruneIntervalSeconds: DefaultSSPruneInterval,
-		TxIndexBackend:       ReceiptTxIndexBackendPebble,
-	}
+	_ = "STUB: not implemented"
+	return *new(ReceiptStoreConfig)
 }
 
 // ReadReceiptConfig reads receipt store config from app options (e.g. TOML / Viper).
 func ReadReceiptConfig(opts AppOptions) (ReceiptStoreConfig, error) {
-	cfg := DefaultReceiptStoreConfig()
-	if v := opts.Get(flagRSMisnamedBackend); v != nil {
-		return cfg, fmt.Errorf("unsupported receipt-store config key %q; use %q instead", flagRSMisnamedBackend, flagRSBackend)
-	}
-	if v := opts.Get(flagRSDBDirectory); v != nil {
-		dbDirectory, err := cast.ToStringE(v)
-		if err != nil {
-			return cfg, err
-		}
-		cfg.DBDirectory = strings.TrimSpace(dbDirectory)
-	}
-	if v := opts.Get(flagRSBackend); v != nil {
-		backend, err := cast.ToStringE(v)
-		if err != nil {
-			return cfg, err
-		}
-		backend = strings.ToLower(strings.TrimSpace(backend))
-		switch backend {
-		case "pebbledb", "pebble", "parquet":
-			cfg.Backend = backend
-		default:
-			return cfg, fmt.Errorf("unsupported receipt-store backend %q; supported: pebbledb, parquet", backend)
-		}
-	}
-	if v := opts.Get(flagRSAsyncWriteBuffer); v != nil {
-		asyncWriteBuffer, err := cast.ToIntE(v)
-		if err != nil {
-			return cfg, err
-		}
-		cfg.AsyncWriteBuffer = asyncWriteBuffer
-	}
-	if v := opts.Get(flagRSPruneIntervalSeconds); v != nil {
-		pruneIntervalSeconds, err := cast.ToIntE(v)
-		if err != nil {
-			return cfg, err
-		}
-		cfg.PruneIntervalSeconds = pruneIntervalSeconds
-	}
-	if v := opts.Get(flagRSTxIndexBackend); v != nil {
-		txIndexBackend, err := cast.ToStringE(v)
-		if err != nil {
-			return cfg, err
-		}
-		cfg.TxIndexBackend = NormalizeReceiptTxIndexBackend(txIndexBackend)
-	}
-	return cfg, nil
+	_ = "STUB: not implemented"
+	return *new(ReceiptStoreConfig), nil
 }

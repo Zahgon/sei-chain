@@ -1,11 +1,7 @@
 package keeper
 
 import (
-	"time"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	wasmvmtypes "github.com/sei-protocol/sei-chain/sei-wasmvm/types"
 
 	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
@@ -23,29 +19,8 @@ func (k Keeper) OnOpenChannel(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCChannelOpenMsg,
 ) (string, error) {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-open-channel")
-	version := ""
-
-	_, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
-	if err != nil {
-		return "", err
-	}
-
-	env := types.NewEnv(ctx, contractAddr)
-	querier := k.newQueryHandler(ctx, contractAddr)
-
-	gas := k.runtimeGasForContract(ctx)
-	res, gasUsed, execErr := k.getWasmer(ctx).IBCChannelOpen(codeInfo.CodeHash, env, msg, prefixStore, cosmwasmAPI, querier, ctx.GasMeter(), gas, costJSONDeserialization)
-	k.consumeRuntimeGas(ctx, gasUsed)
-	if execErr != nil {
-		return "", sdkerrors.Wrap(types.ErrExecuteFailed, execErr.Error())
-	}
-
-	if res != nil {
-		version = res.Version
-	}
-
-	return version, nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // OnConnectChannel calls the contract to let it know the IBC channel was established.
@@ -60,23 +35,8 @@ func (k Keeper) OnConnectChannel(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCChannelConnectMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-connect-channel")
-	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
-	if err != nil {
-		return err
-	}
-
-	env := types.NewEnv(ctx, contractAddr)
-	querier := k.newQueryHandler(ctx, contractAddr)
-
-	gas := k.runtimeGasForContract(ctx)
-	res, gasUsed, execErr := k.getWasmer(ctx).IBCChannelConnect(codeInfo.CodeHash, env, msg, prefixStore, cosmwasmAPI, querier, ctx.GasMeter(), gas, costJSONDeserialization)
-	k.consumeRuntimeGas(ctx, gasUsed)
-	if execErr != nil {
-		return sdkerrors.Wrap(types.ErrExecuteFailed, execErr.Error())
-	}
-
-	return k.handleIBCBasicContractResponse(ctx, contractAddr, contractInfo.IBCPortID, res)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // OnCloseChannel calls the contract to let it know the IBC channel is closed.
@@ -90,24 +50,8 @@ func (k Keeper) OnCloseChannel(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCChannelCloseMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-close-channel")
-
-	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
-	if err != nil {
-		return err
-	}
-
-	params := types.NewEnv(ctx, contractAddr)
-	querier := k.newQueryHandler(ctx, contractAddr)
-
-	gas := k.runtimeGasForContract(ctx)
-	res, gasUsed, execErr := k.getWasmer(ctx).IBCChannelClose(codeInfo.CodeHash, params, msg, prefixStore, cosmwasmAPI, querier, ctx.GasMeter(), gas, costJSONDeserialization)
-	k.consumeRuntimeGas(ctx, gasUsed)
-	if execErr != nil {
-		return sdkerrors.Wrap(types.ErrExecuteFailed, execErr.Error())
-	}
-
-	return k.handleIBCBasicContractResponse(ctx, contractAddr, contractInfo.IBCPortID, res)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // OnRecvPacket calls the contract to process the incoming IBC packet. The contract fully owns the data processing and
@@ -121,27 +65,13 @@ func (k Keeper) OnRecvPacket(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCPacketReceiveMsg,
 ) ([]byte, error) {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-recv-packet")
-	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
-	if err != nil {
-		return nil, err
-	}
-
-	env := types.NewEnv(ctx, contractAddr)
-	querier := k.newQueryHandler(ctx, contractAddr)
-
-	gas := k.runtimeGasForContract(ctx)
-	res, gasUsed, execErr := k.getWasmer(ctx).IBCPacketReceive(codeInfo.CodeHash, env, msg, prefixStore, cosmwasmAPI, querier, ctx.GasMeter(), gas, costJSONDeserialization)
-	k.consumeRuntimeGas(ctx, gasUsed)
-	if execErr != nil {
-		return nil, sdkerrors.Wrap(types.ErrExecuteFailed, execErr.Error())
-	}
-	if res.Err != "" { // handle error case as before https://github.com/CosmWasm/wasmvm/commit/c300106fe5c9426a495f8e10821e00a9330c56c6
-		return nil, sdkerrors.Wrap(types.ErrExecuteFailed, res.Err)
-	}
-	// note submessage reply results can overwrite the `Acknowledgement` data
-	return k.handleContractResponse(ctx, contractAddr, contractInfo.IBCPortID, res.Ok.Messages, res.Ok.Attributes, res.Ok.Acknowledgement, res.Ok.Events, wasmvmtypes.MessageInfo{}, types.CodeInfo{})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// handle error case as before https://github.com/CosmWasm/wasmvm/commit/c300106fe5c9426a495f8e10821e00a9330c56c6
+
+// note submessage reply results can overwrite the `Acknowledgement` data
 
 // OnAckPacket calls the contract to handle the "acknowledgement" data which can contain success or failure of a packet
 // acknowledgement written on the receiving chain for example. This is application level data and fully owned by the
@@ -155,22 +85,8 @@ func (k Keeper) OnAckPacket(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCPacketAckMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-ack-packet")
-	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
-	if err != nil {
-		return err
-	}
-
-	env := types.NewEnv(ctx, contractAddr)
-	querier := k.newQueryHandler(ctx, contractAddr)
-
-	gas := k.runtimeGasForContract(ctx)
-	res, gasUsed, execErr := k.getWasmer(ctx).IBCPacketAck(codeInfo.CodeHash, env, msg, prefixStore, cosmwasmAPI, querier, ctx.GasMeter(), gas, costJSONDeserialization)
-	k.consumeRuntimeGas(ctx, gasUsed)
-	if execErr != nil {
-		return sdkerrors.Wrap(types.ErrExecuteFailed, execErr.Error())
-	}
-	return k.handleIBCBasicContractResponse(ctx, contractAddr, contractInfo.IBCPortID, res)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // OnTimeoutPacket calls the contract to let it know the packet was never received on the destination chain within
@@ -181,27 +97,11 @@ func (k Keeper) OnTimeoutPacket(
 	contractAddr sdk.AccAddress,
 	msg wasmvmtypes.IBCPacketTimeoutMsg,
 ) error {
-	defer telemetry.MeasureSince(time.Now(), "wasm", "contract", "ibc-timeout-packet")
-
-	contractInfo, codeInfo, prefixStore, err := k.contractInstance(ctx, contractAddr)
-	if err != nil {
-		return err
-	}
-
-	env := types.NewEnv(ctx, contractAddr)
-	querier := k.newQueryHandler(ctx, contractAddr)
-
-	gas := k.runtimeGasForContract(ctx)
-	res, gasUsed, execErr := k.getWasmer(ctx).IBCPacketTimeout(codeInfo.CodeHash, env, msg, prefixStore, cosmwasmAPI, querier, ctx.GasMeter(), gas, costJSONDeserialization)
-	k.consumeRuntimeGas(ctx, gasUsed)
-	if execErr != nil {
-		return sdkerrors.Wrap(types.ErrExecuteFailed, execErr.Error())
-	}
-
-	return k.handleIBCBasicContractResponse(ctx, contractAddr, contractInfo.IBCPortID, res)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (k Keeper) handleIBCBasicContractResponse(ctx sdk.Context, addr sdk.AccAddress, id string, res *wasmvmtypes.IBCBasicResponse) error {
-	_, err := k.handleContractResponse(ctx, addr, id, res.Messages, res.Attributes, nil, res.Events, wasmvmtypes.MessageInfo{}, types.CodeInfo{})
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }

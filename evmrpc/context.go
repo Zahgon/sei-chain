@@ -3,8 +3,6 @@ package evmrpc
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/common/hexutil"
@@ -21,8 +19,8 @@ type TendermintTraces struct {
 }
 
 func (tt *TendermintTraces) MustMarshalToJson() json.RawMessage {
-	bz, _ := json.Marshal(tt)
-	return bz
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 type ReceiptTraces struct {
@@ -30,8 +28,8 @@ type ReceiptTraces struct {
 }
 
 func (rt *ReceiptTraces) MustMarshalToJson() json.RawMessage {
-	bz, _ := json.Marshal(rt)
-	return bz
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 type RawResponseReceipt struct {
@@ -55,70 +53,28 @@ type TendermintTrace struct {
 }
 
 func WithTendermintTraces(ctx context.Context, traces *TendermintTraces) context.Context {
-	return context.WithValue(ctx, tendermintTraceKey, traces)
+	_ = "STUB: not implemented"
+	return *new(context.Context)
 }
 
 func TraceTendermintIfApplicable(ctx context.Context, endpoint string, arguments []string, response interface{}) {
-	encodedResponse, err := json.Marshal(response)
-	if err != nil {
-		panic(err)
-	}
-	trace := TendermintTrace{
-		Endpoint:  endpoint,
-		Arguments: arguments,
-		Response:  encodedResponse,
-	}
-	existing := ctx.Value(tendermintTraceKey)
-	if existing == nil {
-		return
-	}
-	typed := existing.(*TendermintTraces)
-	typed.Traces = append(typed.Traces, trace)
+	_ = "STUB: not implemented"
+	return
 }
 
 func TendermintTracesFromContext(ctx context.Context) *TendermintTraces {
-	v := ctx.Value(tendermintTraceKey)
-	if v == nil {
-		return nil
-	}
-	return v.(*TendermintTraces)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func WithReceiptTraces(ctx context.Context, traces *ReceiptTraces) context.Context {
-	return context.WithValue(ctx, receiptTraceKey, traces)
+	_ = "STUB: not implemented"
+	return *new(context.Context)
 }
 
 func TraceReceiptIfApplicable(ctx context.Context, receipt *types.Receipt) {
-	rrr := &RawResponseReceipt{
-		BlockNumber:       hexutil.Uint64(receipt.BlockNumber),
-		CumulativeGasUsed: hexutil.Uint64(receipt.CumulativeGasUsed),
-		EffectiveGasPrice: (*hexutil.Big)(new(big.Int).SetUint64(receipt.EffectiveGasPrice)),
-		From:              common.HexToAddress(receipt.From),
-		GasUsed:           hexutil.Uint64(receipt.GasUsed),
-		Status:            hexutil.Uint(receipt.Status),
-		Type:              hexutil.Uint(receipt.TxType),
-		TransactionHash:   common.HexToHash(receipt.TxHashHex),
-		TransactionIndex:  hexutil.Uint64(receipt.TransactionIndex),
-	}
-	if receipt.ContractAddress != "" {
-		ca := common.HexToAddress(receipt.ContractAddress)
-		rrr.ContractAddress = &ca
-	}
-	if receipt.To != "" {
-		to := common.HexToAddress(receipt.To)
-		rrr.To = &to
-	}
-	existing := ctx.Value(receiptTraceKey)
-	if existing == nil {
-		return
-	}
-	typed := existing.(*ReceiptTraces)
-	typed.Traces = append(typed.Traces, *rrr)
+	_ = "STUB: not implemented"
+	return
 }
 
-func stringifyInt64Ptr(i *int64) string {
-	if i == nil {
-		return ""
-	}
-	return fmt.Sprintf("%d", *i)
-}
+func stringifyInt64Ptr(i *int64) string { _ = "STUB: not implemented"; return "" }

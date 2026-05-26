@@ -6,17 +6,13 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_sei_protocol_sei_chain_sei_cosmos_types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -41,115 +37,77 @@ type MsgCreateVestingAccount struct {
 	Admin       string                                                   `protobuf:"bytes,6,opt,name=admin,proto3" json:"admin,omitempty"`
 }
 
-func (m *MsgCreateVestingAccount) Reset()         { *m = MsgCreateVestingAccount{} }
-func (m *MsgCreateVestingAccount) String() string { return proto.CompactTextString(m) }
-func (*MsgCreateVestingAccount) ProtoMessage()    {}
+func (m *MsgCreateVestingAccount) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgCreateVestingAccount) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgCreateVestingAccount) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgCreateVestingAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5338ca97811f9792, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgCreateVestingAccount) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *MsgCreateVestingAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgCreateVestingAccount.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *MsgCreateVestingAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCreateVestingAccount.Merge(m, src)
-}
-func (m *MsgCreateVestingAccount) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgCreateVestingAccount) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCreateVestingAccount.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_MsgCreateVestingAccount proto.InternalMessageInfo
-
-func (m *MsgCreateVestingAccount) GetFromAddress() string {
-	if m != nil {
-		return m.FromAddress
-	}
-	return ""
-}
-
-func (m *MsgCreateVestingAccount) GetToAddress() string {
-	if m != nil {
-		return m.ToAddress
-	}
-	return ""
-}
-
-func (m *MsgCreateVestingAccount) GetAmount() github_com_sei_protocol_sei_chain_sei_cosmos_types.Coins {
-	if m != nil {
-		return m.Amount
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *MsgCreateVestingAccount) GetEndTime() int64 {
-	if m != nil {
-		return m.EndTime
-	}
-	return 0
+func (m *MsgCreateVestingAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *MsgCreateVestingAccount) GetDelayed() bool {
-	if m != nil {
-		return m.Delayed
-	}
-	return false
+func (m *MsgCreateVestingAccount) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgCreateVestingAccount) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgCreateVestingAccount) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
+
+var xxx_messageInfo_MsgCreateVestingAccount proto.InternalMessageInfo
+
+func (m *MsgCreateVestingAccount) GetFromAddress() string { _ = "STUB: not implemented"; return "" }
+
+func (m *MsgCreateVestingAccount) GetToAddress() string { _ = "STUB: not implemented"; return "" }
+
+func (m *MsgCreateVestingAccount) GetAmount() github_com_sei_protocol_sei_chain_sei_cosmos_types.Coins {
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_cosmos_types.Coins)
 }
 
-func (m *MsgCreateVestingAccount) GetAdmin() string {
-	if m != nil {
-		return m.Admin
-	}
-	return ""
-}
+func (m *MsgCreateVestingAccount) GetEndTime() int64 { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgCreateVestingAccount) GetDelayed() bool { _ = "STUB: not implemented"; return false }
+
+func (m *MsgCreateVestingAccount) GetAdmin() string { _ = "STUB: not implemented"; return "" }
 
 // MsgCreateVestingAccountResponse defines the Msg/CreateVestingAccount response type.
 type MsgCreateVestingAccountResponse struct {
 }
 
-func (m *MsgCreateVestingAccountResponse) Reset()         { *m = MsgCreateVestingAccountResponse{} }
-func (m *MsgCreateVestingAccountResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgCreateVestingAccountResponse) ProtoMessage()    {}
+func (m *MsgCreateVestingAccountResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgCreateVestingAccountResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgCreateVestingAccountResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgCreateVestingAccountResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_5338ca97811f9792, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgCreateVestingAccountResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgCreateVestingAccountResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgCreateVestingAccountResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgCreateVestingAccountResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCreateVestingAccountResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgCreateVestingAccountResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgCreateVestingAccountResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCreateVestingAccountResponse.DiscardUnknown(m)
-}
+
+func (m *MsgCreateVestingAccountResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgCreateVestingAccountResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgCreateVestingAccountResponse proto.InternalMessageInfo
 
@@ -193,48 +151,8 @@ var fileDescriptor_5338ca97811f9792 = []byte{
 }
 
 func (this *MsgCreateVestingAccount) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MsgCreateVestingAccount)
-	if !ok {
-		that2, ok := that.(MsgCreateVestingAccount)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.FromAddress != that1.FromAddress {
-		return false
-	}
-	if this.ToAddress != that1.ToAddress {
-		return false
-	}
-	if len(this.Amount) != len(that1.Amount) {
-		return false
-	}
-	for i := range this.Amount {
-		if !this.Amount[i].Equal(&that1.Amount[i]) {
-			return false
-		}
-	}
-	if this.EndTime != that1.EndTime {
-		return false
-	}
-	if this.Delayed != that1.Delayed {
-		return false
-	}
-	if this.Admin != that1.Admin {
-		return false
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -258,17 +176,11 @@ type msgClient struct {
 	cc grpc1.ClientConn
 }
 
-func NewMsgClient(cc grpc1.ClientConn) MsgClient {
-	return &msgClient{cc}
-}
+func NewMsgClient(cc grpc1.ClientConn) MsgClient { _ = "STUB: not implemented"; return *new(MsgClient) }
 
 func (c *msgClient) CreateVestingAccount(ctx context.Context, in *MsgCreateVestingAccount, opts ...grpc.CallOption) (*MsgCreateVestingAccountResponse, error) {
-	out := new(MsgCreateVestingAccountResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.vesting.v1beta1.Msg/CreateVestingAccount", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MsgServer is the server API for Msg service.
@@ -283,29 +195,15 @@ type UnimplementedMsgServer struct {
 }
 
 func (*UnimplementedMsgServer) CreateVestingAccount(ctx context.Context, req *MsgCreateVestingAccount) (*MsgCreateVestingAccountResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method CreateVestingAccount not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
-	s.RegisterService(&_Msg_serviceDesc, srv)
-}
+func RegisterMsgServer(s grpc1.Server, srv MsgServer) { _ = "STUB: not implemented"; return }
 
 func _Msg_CreateVestingAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCreateVestingAccount)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).CreateVestingAccount(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.vesting.v1beta1.Msg/CreateVestingAccount",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).CreateVestingAccount(ctx, req.(*MsgCreateVestingAccount))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Msg_serviceDesc = grpc.ServiceDesc{
@@ -322,507 +220,56 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *MsgCreateVestingAccount) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgCreateVestingAccount) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgCreateVestingAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Admin) > 0 {
-		i -= len(m.Admin)
-		copy(dAtA[i:], m.Admin)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Admin)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.Delayed {
-		i--
-		if m.Delayed {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x28
-	}
-	if m.EndTime != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.EndTime))
-		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.Amount) > 0 {
-		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTx(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.ToAddress) > 0 {
-		i -= len(m.ToAddress)
-		copy(dAtA[i:], m.ToAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ToAddress)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.FromAddress) > 0 {
-		i -= len(m.FromAddress)
-		copy(dAtA[i:], m.FromAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.FromAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgCreateVestingAccountResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgCreateVestingAccountResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgCreateVestingAccountResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
-	offset -= sovTx(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *MsgCreateVestingAccount) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.FromAddress)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ToAddress)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	if len(m.Amount) > 0 {
-		for _, e := range m.Amount {
-			l = e.Size()
-			n += 1 + l + sovTx(uint64(l))
-		}
-	}
-	if m.EndTime != 0 {
-		n += 1 + sovTx(uint64(m.EndTime))
-	}
-	if m.Delayed {
-		n += 2
-	}
-	l = len(m.Admin)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func encodeVarintTx(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgCreateVestingAccountResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgCreateVestingAccount) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovTx(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozTx(x uint64) (n int) {
-	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
+func (m *MsgCreateVestingAccountResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sovTx(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozTx(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
 func (m *MsgCreateVestingAccount) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCreateVestingAccount: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCreateVestingAccount: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FromAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FromAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ToAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ToAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Amount = append(m.Amount, types.Coin{})
-			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
-			}
-			m.EndTime = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.EndTime |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Delayed", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Delayed = bool(v != 0)
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Admin", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Admin = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *MsgCreateVestingAccountResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCreateVestingAccountResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCreateVestingAccountResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipTx(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthTx
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupTx
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthTx
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipTx(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthTx        = fmt.Errorf("proto: negative length found during unmarshaling")

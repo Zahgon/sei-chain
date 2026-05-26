@@ -2,14 +2,7 @@ package api
 
 import (
 	"encoding/json"
-	"errors"
-	"fmt"
-	"math"
-	"strings"
 	"testing"
-
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 
 	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/artifacts/v152/api/testdb"
 	"github.com/sei-protocol/sei-chain/sei-wasmvm/types"
@@ -19,162 +12,78 @@ import (
 
 const MOCK_CONTRACT_ADDR = "contract"
 
-func MockEnv() types.Env {
-	return types.Env{
-		Block: types.BlockInfo{
-			Height:  123,
-			Time:    1578939743_987654321,
-			ChainID: "foobar",
-		},
-		Transaction: &types.TransactionInfo{
-			Index: 4,
-		},
-		Contract: types.ContractInfo{
-			Address: MOCK_CONTRACT_ADDR,
-		},
-	}
-}
+func MockEnv() types.Env { _ = "STUB: not implemented"; return *new(types.Env) }
 
-func MockEnvBin(t *testing.T) []byte {
-	bin, err := json.Marshal(MockEnv())
-	require.NoError(t, err)
-	return bin
-}
+func MockEnvBin(t *testing.T) []byte { _ = "STUB: not implemented"; return nil }
 
 func MockInfo(sender types.HumanAddress, funds []types.Coin) types.MessageInfo {
-	return types.MessageInfo{
-		Sender: sender,
-		Funds:  funds,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.MessageInfo)
 }
 
 func MockInfoWithFunds(sender types.HumanAddress) types.MessageInfo {
-	return MockInfo(sender, []types.Coin{{
-		Denom:  "ATOM",
-		Amount: "100",
-	}})
+	_ = "STUB: not implemented"
+	return *new(types.MessageInfo)
 }
 
 func MockInfoBin(t *testing.T, sender types.HumanAddress) []byte {
-	bin, err := json.Marshal(MockInfoWithFunds(sender))
-	require.NoError(t, err)
-	return bin
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func MockIBCChannel(channelID string, ordering types.IBCOrder, ibcVersion string) types.IBCChannel {
-	return types.IBCChannel{
-		Endpoint: types.IBCEndpoint{
-			PortID:    "my_port",
-			ChannelID: channelID,
-		},
-		CounterpartyEndpoint: types.IBCEndpoint{
-			PortID:    "their_port",
-			ChannelID: "channel-7",
-		},
-		Order:        ordering,
-		Version:      ibcVersion,
-		ConnectionID: "connection-3",
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCChannel)
 }
 
 func MockIBCChannelOpenInit(channelID string, ordering types.IBCOrder, ibcVersion string) types.IBCChannelOpenMsg {
-	return types.IBCChannelOpenMsg{
-		OpenInit: &types.IBCOpenInit{
-			Channel: MockIBCChannel(channelID, ordering, ibcVersion),
-		},
-		OpenTry: nil,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCChannelOpenMsg)
 }
 
 func MockIBCChannelOpenTry(channelID string, ordering types.IBCOrder, ibcVersion string) types.IBCChannelOpenMsg {
-	return types.IBCChannelOpenMsg{
-		OpenInit: nil,
-		OpenTry: &types.IBCOpenTry{
-			Channel:             MockIBCChannel(channelID, ordering, ibcVersion),
-			CounterpartyVersion: ibcVersion,
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCChannelOpenMsg)
 }
 
 func MockIBCChannelConnectAck(channelID string, ordering types.IBCOrder, ibcVersion string) types.IBCChannelConnectMsg {
-	return types.IBCChannelConnectMsg{
-		OpenAck: &types.IBCOpenAck{
-			Channel:             MockIBCChannel(channelID, ordering, ibcVersion),
-			CounterpartyVersion: ibcVersion,
-		},
-		OpenConfirm: nil,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCChannelConnectMsg)
 }
 
 func MockIBCChannelConnectConfirm(channelID string, ordering types.IBCOrder, ibcVersion string) types.IBCChannelConnectMsg {
-	return types.IBCChannelConnectMsg{
-		OpenAck: nil,
-		OpenConfirm: &types.IBCOpenConfirm{
-			Channel: MockIBCChannel(channelID, ordering, ibcVersion),
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCChannelConnectMsg)
 }
 
 func MockIBCChannelCloseInit(channelID string, ordering types.IBCOrder, ibcVersion string) types.IBCChannelCloseMsg {
-	return types.IBCChannelCloseMsg{
-		CloseInit: &types.IBCCloseInit{
-			Channel: MockIBCChannel(channelID, ordering, ibcVersion),
-		},
-		CloseConfirm: nil,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCChannelCloseMsg)
 }
 
 func MockIBCChannelCloseConfirm(channelID string, ordering types.IBCOrder, ibcVersion string) types.IBCChannelCloseMsg {
-	return types.IBCChannelCloseMsg{
-		CloseInit: nil,
-		CloseConfirm: &types.IBCCloseConfirm{
-			Channel: MockIBCChannel(channelID, ordering, ibcVersion),
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCChannelCloseMsg)
 }
 
 func MockIBCPacket(myChannel string, data []byte) types.IBCPacket {
-	return types.IBCPacket{
-		Data: data,
-		Src: types.IBCEndpoint{
-			PortID:    "their_port",
-			ChannelID: "channel-7",
-		},
-		Dest: types.IBCEndpoint{
-			PortID:    "my_port",
-			ChannelID: myChannel,
-		},
-		Sequence: 15,
-		Timeout: types.IBCTimeout{
-			Block: &types.IBCTimeoutBlock{
-				Revision: 1,
-				Height:   123456,
-			},
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCPacket)
 }
 
 func MockIBCPacketReceive(myChannel string, data []byte) types.IBCPacketReceiveMsg {
-	return types.IBCPacketReceiveMsg{
-		Packet: MockIBCPacket(myChannel, data),
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCPacketReceiveMsg)
 }
 
 func MockIBCPacketAck(myChannel string, data []byte, ack types.IBCAcknowledgement) types.IBCPacketAckMsg {
-	packet := MockIBCPacket(myChannel, data)
-
-	return types.IBCPacketAckMsg{
-		Acknowledgement: ack,
-		OriginalPacket:  packet,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCPacketAckMsg)
 }
 
 func MockIBCPacketTimeout(myChannel string, data []byte) types.IBCPacketTimeoutMsg {
-	packet := MockIBCPacket(myChannel, data)
-
-	return types.IBCPacketTimeoutMsg{
-		Packet: packet,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.IBCPacketTimeoutMsg)
 }
 
 /*** Mock GasMeter ****/
@@ -203,41 +112,27 @@ type mockGasMeter struct {
 
 // NewMockGasMeter returns a reference to a new mockGasMeter.
 func NewMockGasMeter(limit types.Gas) MockGasMeter {
-	return &mockGasMeter{
-		limit:    limit,
-		consumed: 0,
-	}
+	_ = "STUB: not implemented"
+	return *new(MockGasMeter)
 }
 
-func (g *mockGasMeter) GasConsumed() types.Gas {
-	return g.consumed
-}
+func (g *mockGasMeter) GasConsumed() types.Gas { _ = "STUB: not implemented"; return *new(types.Gas) }
 
 func (g *mockGasMeter) Limit() types.Gas {
-	return g.limit
+	_ = "STUB: not implemented"
+
+	// addUint64Overflow performs the addition operation on two uint64 integers and
+	// returns a boolean on whether or not the result overflows.
+	return *new(types.Gas)
 }
 
-// addUint64Overflow performs the addition operation on two uint64 integers and
-// returns a boolean on whether or not the result overflows.
-func addUint64Overflow(a, b uint64) (uint64, bool) {
-	if math.MaxUint64-a < b {
-		return 0, true
-	}
-
-	return a + b, false
-}
+func addUint64Overflow(a, b uint64) (uint64, bool) { _ = "STUB: not implemented"; return 0, false }
 
 func (g *mockGasMeter) ConsumeGas(amount types.Gas, descriptor string) {
-	var overflow bool
-	// TODO: Should we set the consumed field after overflow checking?
-	g.consumed, overflow = addUint64Overflow(g.consumed, amount)
-	if overflow {
-		panic(ErrorGasOverflow{descriptor})
-	}
+	_ = "STUB: not implemented"
 
-	if g.consumed > g.limit {
-		panic(ErrorOutOfGas{descriptor})
-	}
+	// TODO: Should we set the consumed field after overflow checking?
+	return
 }
 
 /*** Mock types.KVStore ****/
@@ -259,71 +154,31 @@ type Lookup struct {
 	meter MockGasMeter
 }
 
-func NewLookup(meter MockGasMeter) *Lookup {
-	return &Lookup{
-		db:    testdb.NewMemDB(),
-		meter: meter,
-	}
-}
+func NewLookup(meter MockGasMeter) *Lookup { _ = "STUB: not implemented"; return nil }
 
-func (l *Lookup) SetGasMeter(meter MockGasMeter) {
-	l.meter = meter
-}
+func (l *Lookup) SetGasMeter(meter MockGasMeter) { _ = "STUB: not implemented"; return }
 
-func (l *Lookup) WithGasMeter(meter MockGasMeter) *Lookup {
-	return &Lookup{
-		db:    l.db,
-		meter: meter,
-	}
-}
+func (l *Lookup) WithGasMeter(meter MockGasMeter) *Lookup { _ = "STUB: not implemented"; return nil }
 
 // Get wraps the underlying DB's Get method panicing on error.
-func (l Lookup) Get(key []byte) []byte {
-	l.meter.ConsumeGas(GetPrice, "get")
-	v, err := l.db.Get(key)
-	if err != nil {
-		panic(err)
-	}
-
-	return v
-}
+func (l Lookup) Get(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // Set wraps the underlying DB's Set method panicing on error.
-func (l Lookup) Set(key, value []byte) {
-	l.meter.ConsumeGas(SetPrice, "set")
-	if err := l.db.Set(key, value); err != nil {
-		panic(err)
-	}
-}
+func (l Lookup) Set(key, value []byte) { _ = "STUB: not implemented"; return }
 
 // Delete wraps the underlying DB's Delete method panicing on error.
-func (l Lookup) Delete(key []byte) {
-	l.meter.ConsumeGas(RemovePrice, "remove")
-	if err := l.db.Delete(key); err != nil {
-		panic(err)
-	}
-}
+func (l Lookup) Delete(key []byte) { _ = "STUB: not implemented"; return }
 
 // Iterator wraps the underlying DB's Iterator method panicing on error.
 func (l Lookup) Iterator(start, end []byte) types.Iterator {
-	l.meter.ConsumeGas(RangePrice, "range")
-	iter, err := l.db.Iterator(start, end)
-	if err != nil {
-		panic(err)
-	}
-
-	return iter
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // ReverseIterator wraps the underlying DB's ReverseIterator method panicing on error.
 func (l Lookup) ReverseIterator(start, end []byte) types.Iterator {
-	l.meter.ConsumeGas(RangePrice, "range")
-	iter, err := l.db.ReverseIterator(start, end)
-	if err != nil {
-		panic(err)
-	}
-
-	return iter
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 var _ types.KVStore = (*Lookup)(nil)
@@ -338,48 +193,18 @@ const (
 )
 
 func MockCanonicalAddress(human string) ([]byte, uint64, error) {
-	if len(human) > CanonicalLength {
-		return nil, 0, fmt.Errorf("human encoding too long")
-	}
-	res := make([]byte, CanonicalLength)
-	copy(res, []byte(human))
-	return res, CostCanonical, nil
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func MockHumanAddress(canon []byte) (string, uint64, error) {
-	if len(canon) != CanonicalLength {
-		return "", 0, fmt.Errorf("wrong canonical length")
-	}
-	cut := CanonicalLength
-	for i, v := range canon {
-		if v == 0 {
-			cut = i
-			break
-		}
-	}
-	human := string(canon[:cut])
-	return human, CostHuman, nil
+	_ = "STUB: not implemented"
+	return "", 0, nil
 }
 
-func NewMockAPI() *types.GoAPI {
-	return &types.GoAPI{
-		HumanAddress:     MockHumanAddress,
-		CanonicalAddress: MockCanonicalAddress,
-	}
-}
+func NewMockAPI() *types.GoAPI { _ = "STUB: not implemented"; return nil }
 
-func TestMockApi(t *testing.T) {
-	const human = "foobar"
-	canon, cost, err := MockCanonicalAddress(human)
-	require.NoError(t, err)
-	assert.Equal(t, CanonicalLength, len(canon))
-	assert.Equal(t, CostCanonical, cost)
-
-	recover, cost, err := MockHumanAddress(canon)
-	require.NoError(t, err)
-	assert.Equal(t, recover, human)
-	assert.Equal(t, CostHuman, cost)
-}
+func TestMockApi(t *testing.T) { _ = "STUB: not implemented"; return }
 
 /**** MockQuerier ****/
 
@@ -394,79 +219,29 @@ type MockQuerier struct {
 var _ types.Querier = &MockQuerier{}
 
 func DefaultQuerier(contractAddr string, coins types.Coins) types.Querier {
-	balances := map[string]types.Coins{
-		contractAddr: coins,
-	}
-	return &MockQuerier{
-		Bank:    NewBankQuerier(balances),
-		Custom:  NoCustom{},
-		usedGas: 0,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.Querier)
 }
 
 func (q *MockQuerier) Query(request types.QueryRequest, _gasLimit uint64) ([]byte, error) {
-	marshaled, err := json.Marshal(request)
-	if err != nil {
-		return nil, err
-	}
-	q.usedGas += uint64(len(marshaled))
-	if request.Bank != nil {
-		return q.Bank.Query(request.Bank)
-	}
-	if request.Custom != nil {
-		return q.Custom.Query(request.Custom)
-	}
-	if request.Staking != nil {
-		return nil, types.UnsupportedRequest{Kind: "staking"}
-	}
-	if request.Wasm != nil {
-		return nil, types.UnsupportedRequest{Kind: "wasm"}
-	}
-	return nil, types.Unknown{}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (q MockQuerier) GasConsumed() uint64 {
-	return q.usedGas
-}
+func (q MockQuerier) GasConsumed() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type BankQuerier struct {
 	Balances map[string]types.Coins
 }
 
 func NewBankQuerier(balances map[string]types.Coins) BankQuerier {
-	bal := make(map[string]types.Coins, len(balances))
-	for k, v := range balances {
-		dst := make([]types.Coin, len(v))
-		copy(dst, v)
-		bal[k] = dst
-	}
-	return BankQuerier{
-		Balances: bal,
-	}
+	_ = "STUB: not implemented"
+	return *new(BankQuerier)
 }
 
 func (q BankQuerier) Query(request *types.BankQuery) ([]byte, error) {
-	if request.Balance != nil {
-		denom := request.Balance.Denom
-		coin := types.NewCoin(0, denom)
-		for _, c := range q.Balances[request.Balance.Address] {
-			if c.Denom == denom {
-				coin = c
-			}
-		}
-		resp := types.BalanceResponse{
-			Amount: coin,
-		}
-		return json.Marshal(resp)
-	}
-	if request.AllBalances != nil {
-		coins := q.Balances[request.AllBalances.Address]
-		resp := types.AllBalancesResponse{
-			Amount: coins,
-		}
-		return json.Marshal(resp)
-	}
-	return nil, types.UnsupportedRequest{Kind: "Empty BankQuery"}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 type CustomQuerier interface {
@@ -478,7 +253,8 @@ type NoCustom struct{}
 var _ CustomQuerier = NoCustom{}
 
 func (q NoCustom) Query(request json.RawMessage) ([]byte, error) {
-	return nil, types.UnsupportedRequest{Kind: "custom"}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ReflectCustom fulfills the requirements for testing `reflect` contract
@@ -501,134 +277,28 @@ type CustomResponse struct {
 }
 
 func (q ReflectCustom) Query(request json.RawMessage) ([]byte, error) {
-	var query CustomQuery
-	err := json.Unmarshal(request, &query)
-	if err != nil {
-		return nil, err
-	}
-	var resp CustomResponse
-	if query.Ping != nil {
-		resp.Msg = "PONG"
-	} else if query.Capitalized != nil {
-		resp.Msg = strings.ToUpper(query.Capitalized.Text)
-	} else {
-		return nil, errors.New("unsupported query")
-	}
-	return json.Marshal(resp)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 //************ test code for mocks *************************//
 
-func TestBankQuerierAllBalances(t *testing.T) {
-	addr := "foobar"
-	balance := types.Coins{types.NewCoin(12345678, "ATOM"), types.NewCoin(54321, "ETH")}
-	q := DefaultQuerier(addr, balance)
+func TestBankQuerierAllBalances(t *testing.T) { _ = "STUB: not implemented"; return }
 
-	// query existing account
-	req := types.QueryRequest{
-		Bank: &types.BankQuery{
-			AllBalances: &types.AllBalancesQuery{
-				Address: addr,
-			},
-		},
-	}
-	res, err := q.Query(req, DEFAULT_QUERIER_GAS_LIMIT)
-	require.NoError(t, err)
-	var resp types.AllBalancesResponse
-	err = json.Unmarshal(res, &resp)
-	require.NoError(t, err)
-	assert.Equal(t, resp.Amount, balance)
+// query existing account
 
-	// query missing account
-	req2 := types.QueryRequest{
-		Bank: &types.BankQuery{
-			AllBalances: &types.AllBalancesQuery{
-				Address: "someone-else",
-			},
-		},
-	}
-	res, err = q.Query(req2, DEFAULT_QUERIER_GAS_LIMIT)
-	require.NoError(t, err)
-	var resp2 types.AllBalancesResponse
-	err = json.Unmarshal(res, &resp2)
-	require.NoError(t, err)
-	assert.Nil(t, resp2.Amount)
-}
+// query missing account
 
-func TestBankQuerierBalance(t *testing.T) {
-	addr := "foobar"
-	balance := types.Coins{types.NewCoin(12345678, "ATOM"), types.NewCoin(54321, "ETH")}
-	q := DefaultQuerier(addr, balance)
+func TestBankQuerierBalance(t *testing.T) { _ = "STUB: not implemented"; return }
 
-	// query existing account with matching denom
-	req := types.QueryRequest{
-		Bank: &types.BankQuery{
-			Balance: &types.BalanceQuery{
-				Address: addr,
-				Denom:   "ATOM",
-			},
-		},
-	}
-	res, err := q.Query(req, DEFAULT_QUERIER_GAS_LIMIT)
-	require.NoError(t, err)
-	var resp types.BalanceResponse
-	err = json.Unmarshal(res, &resp)
-	require.NoError(t, err)
-	assert.Equal(t, resp.Amount, types.NewCoin(12345678, "ATOM"))
+// query existing account with matching denom
 
-	// query existing account with missing denom
-	req2 := types.QueryRequest{
-		Bank: &types.BankQuery{
-			Balance: &types.BalanceQuery{
-				Address: addr,
-				Denom:   "BTC",
-			},
-		},
-	}
-	res, err = q.Query(req2, DEFAULT_QUERIER_GAS_LIMIT)
-	require.NoError(t, err)
-	var resp2 types.BalanceResponse
-	err = json.Unmarshal(res, &resp2)
-	require.NoError(t, err)
-	assert.Equal(t, resp2.Amount, types.NewCoin(0, "BTC"))
+// query existing account with missing denom
 
-	// query missing account
-	req3 := types.QueryRequest{
-		Bank: &types.BankQuery{
-			Balance: &types.BalanceQuery{
-				Address: "someone-else",
-				Denom:   "ATOM",
-			},
-		},
-	}
-	res, err = q.Query(req3, DEFAULT_QUERIER_GAS_LIMIT)
-	require.NoError(t, err)
-	var resp3 types.BalanceResponse
-	err = json.Unmarshal(res, &resp3)
-	require.NoError(t, err)
-	assert.Equal(t, resp3.Amount, types.NewCoin(0, "ATOM"))
-}
+// query missing account
 
-func TestReflectCustomQuerier(t *testing.T) {
-	q := ReflectCustom{}
+func TestReflectCustomQuerier(t *testing.T) { _ = "STUB: not implemented"; return }
 
-	// try ping
-	msg, err := json.Marshal(CustomQuery{Ping: &struct{}{}})
-	require.NoError(t, err)
-	bz, err := q.Query(msg)
-	require.NoError(t, err)
-	var resp CustomResponse
-	err = json.Unmarshal(bz, &resp)
-	require.NoError(t, err)
-	assert.Equal(t, resp.Msg, "PONG")
+// try ping
 
-	// try capital
-	msg2, err := json.Marshal(CustomQuery{Capitalized: &CapitalizedQuery{Text: "small."}})
-	require.NoError(t, err)
-	bz, err = q.Query(msg2)
-	require.NoError(t, err)
-	var resp2 CustomResponse
-	err = json.Unmarshal(bz, &resp2)
-	require.NoError(t, err)
-	assert.Equal(t, resp2.Msg, "SMALL.")
-}
+// try capital

@@ -1,12 +1,6 @@
 package cryptosim
 
 import (
-	"encoding/json"
-	"fmt"
-	"os"
-	"path/filepath"
-	"strings"
-
 	"github.com/sei-protocol/sei-chain/sei-db/config"
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/bench/wrappers"
 	flatkvConfig "github.com/sei-protocol/sei-chain/sei-db/state_db/sc/flatkv/config"
@@ -246,225 +240,32 @@ type CryptoSimConfig struct {
 
 // Returns the default configuration for the cryptosim benchmark.
 func DefaultCryptoSimConfig() *CryptoSimConfig {
+	_ = "STUB: not implemented"
 
 	// Note: if you add new fields or modify default values, be sure to keep config/basic-config.json in sync.
 	// That file should contain every available config set to its default value, as a reference.
-
-	cfg := &CryptoSimConfig{
-		NumberOfHotAccounts:               100,
-		MinimumNumberOfColdAccounts:       1_000_000,
-		MinimumNumberOfDormantAccounts:    1_000_000,
-		NewAccountDormancyProbability:     1.0,
-		HotAccountProbability:             0.1,
-		NewAccountProbability:             0.001,
-		PaddedAccountSize:                 32,
-		MinimumNumberOfErc20Contracts:     10_000,
-		HotErc20ContractProbability:       0.5,
-		HotErc20ContractSetSize:           100,
-		Erc20ContractSize:                 1024 * 2, // 2kb
-		Erc20StorageSlotSize:              32,
-		AccountBalanceSize:                32,
-		Erc20InteractionsPerAccount:       10,
-		TransactionsPerBlock:              1024,
-		BlocksPerCommit:                   1,
-		Seed:                              1337,
-		CannedRandomSize:                  1024 * 1024 * 1024, // 1GB
-		Backend:                           wrappers.FlatKV,
-		StateStoreConfig:                  wrappers.DefaultBenchStateStoreConfig(),
-		ConsoleUpdateIntervalSeconds:      1,
-		ConsoleUpdateIntervalTransactions: 1_000_000,
-		SetupUpdateIntervalCount:          100_000,
-		ThreadsPerCore:                    2.0,
-		ConstantThreadCount:               0,
-		ExecutorQueueSize:                 1024,
-		MaxRuntimeSeconds:                 0,
-		MetricsAddr:                       ":9090",
-		TransactionMetricsSampleRate:      0.001,
-		BackgroundMetricsScrapeInterval:   60,
-		EnableSuspension:                  true,
-		DeleteDataDirOnStartup:            false,
-		DeleteLogDirOnStartup:             false,
-		DeleteDataDirOnShutdown:           false,
-		DeleteLogDirOnShutdown:            false,
-		FlatKVConfig:                      flatkvConfig.DefaultConfig(),
-		BlockChannelCapacity:              8,
-		GenerateReceipts:                  false,
-		RecieptChannelCapacity:            32,
-		DisableTransactionExecution:       false,
-		DisableTransactionReads:           false,
-		MaxTPS:                            0,
-		ReceiptReadConcurrency:            0,
-		ReceiptReadsPerSecond:             100,
-		ReceiptReadMode:                   receiptReadModeCache,
-		ReceiptTxIndexBackend:             config.ReceiptTxIndexBackendPebble,
-		ReceiptLogFilterReadConcurrency:   0,
-		ReceiptLogFilterReadsPerSecond:    100,
-		ReceiptLogFilterReadMode:          receiptReadModeCache,
-		ReceiptLogFilterMinBlockRange:     1,
-		ReceiptLogFilterMaxBlockRange:     10,
-		ReceiptKeepRecent:                 100_000,
-		ReceiptPruneIntervalSeconds:       600,
-		LogLevel:                          "info",
-	}
-
-	return cfg
+	return nil
 }
+
+// 2kb
+
+// 1GB
 
 // StringifiedConfig returns the config as human-readable, multi-line JSON.
 func (c *CryptoSimConfig) StringifiedConfig() (string, error) {
-	b, err := json.MarshalIndent(c, "", "  ")
-	if err != nil {
-		return "", err
-	}
-	return string(b), nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Validate checks that the configuration is sane and returns an error if not.
-func (c *CryptoSimConfig) Validate() error {
-	if c.DataDir == "" {
-		return fmt.Errorf("DataDir is required")
-	}
-	if c.LogDir == "" {
-		return fmt.Errorf("LogDir is required")
-	}
-	if c.PaddedAccountSize < minPaddedAccountSize {
-		return fmt.Errorf("PaddedAccountSize must be at least %d (got %d)", minPaddedAccountSize, c.PaddedAccountSize)
-	}
-	if c.MinimumNumberOfColdAccounts+c.MinimumNumberOfDormantAccounts < 2 {
-		return fmt.Errorf("MinimumNumberOfColdAccounts+MinimumNumberOfDormantAccounts must be at least 2 (got %d)",
-			c.MinimumNumberOfColdAccounts+c.MinimumNumberOfDormantAccounts)
-	}
-	if c.NewAccountDormancyProbability < 0 || c.NewAccountDormancyProbability > 1 {
-		return fmt.Errorf("NewAccountDormancyProbability must be in [0, 1] (got %f)", c.NewAccountDormancyProbability)
-	}
-	if c.MinimumNumberOfErc20Contracts < c.HotErc20ContractSetSize+1 {
-		return fmt.Errorf("MinimumNumberOfErc20Contracts must be at least HotErc20ContractSetSize+1 (%d)",
-			c.HotErc20ContractSetSize+1)
-	}
-	if c.HotAccountProbability < 0 || c.HotAccountProbability > 1 {
-		return fmt.Errorf("HotAccountProbability must be in [0, 1] (got %f)", c.HotAccountProbability)
-	}
-	if c.NewAccountProbability < 0 || c.NewAccountProbability > 1 {
-		return fmt.Errorf("NewAccountProbability must be in [0, 1] (got %f)", c.NewAccountProbability)
-	}
-	if c.HotErc20ContractProbability < 0 || c.HotErc20ContractProbability > 1 {
-		return fmt.Errorf("HotErc20ContractProbability must be in [0, 1] (got %f)", c.HotErc20ContractProbability)
-	}
-	if c.Erc20StorageSlotSize < minErc20StorageSlotSize {
-		return fmt.Errorf("Erc20StorageSlotSize must be at least %d (got %d)",
-			minErc20StorageSlotSize, c.Erc20StorageSlotSize)
-	}
-	if c.Erc20InteractionsPerAccount < minErc20InteractionsPerAcct {
-		return fmt.Errorf("Erc20InteractionsPerAccount must be at least %d (got %d)",
-			minErc20InteractionsPerAcct, c.Erc20InteractionsPerAccount)
-	}
-	if c.TransactionsPerBlock < 1 {
-		return fmt.Errorf("TransactionsPerBlock must be at least 1 (got %d)", c.TransactionsPerBlock)
-	}
-	if c.BlocksPerCommit < 1 {
-		return fmt.Errorf("BlocksPerCommit must be at least 1 (got %d)", c.BlocksPerCommit)
-	}
-	if c.CannedRandomSize < 8 {
-		return fmt.Errorf("CannedRandomSize must be at least 8 (got %d)", c.CannedRandomSize)
-	}
-	if c.ExecutorQueueSize < 1 {
-		return fmt.Errorf("ExecutorQueueSize must be at least 1 (got %d)", c.ExecutorQueueSize)
-	}
-	if c.SetupUpdateIntervalCount < 1 {
-		return fmt.Errorf("SetupUpdateIntervalCount must be at least 1 (got %d)", c.SetupUpdateIntervalCount)
-	}
-	if c.MaxRuntimeSeconds < 0 {
-		return fmt.Errorf("MaxRuntimeSeconds must be at least 0 (got %d)", c.MaxRuntimeSeconds)
-	}
-	if c.TransactionMetricsSampleRate < 0 || c.TransactionMetricsSampleRate > 1 {
-		return fmt.Errorf("TransactionMetricsSampleRate must be in [0, 1] (got %f)", c.TransactionMetricsSampleRate)
-	}
-	if c.BackgroundMetricsScrapeInterval < 0 {
-		return fmt.Errorf("BackgroundMetricsScrapeInterval must be non-negative (got %d)", c.BackgroundMetricsScrapeInterval)
-	}
-	if c.BlockChannelCapacity < 1 {
-		return fmt.Errorf("BlockChannelCapacity must be at least 1 (got %d)", c.BlockChannelCapacity)
-	}
-	if c.RecieptChannelCapacity < 1 {
-		return fmt.Errorf("RecieptChannelCapacity must be at least 1 (got %d)", c.RecieptChannelCapacity)
-	}
-	if c.MaxTPS < 0 {
-		return fmt.Errorf("MaxTPS must be non-negative (got %f)", c.MaxTPS)
-	}
-	if c.ReceiptReadConcurrency < 0 {
-		return fmt.Errorf("ReceiptReadConcurrency must be non-negative (got %d)", c.ReceiptReadConcurrency)
-	}
-	if c.ReceiptReadConcurrency > 0 {
-		switch c.ReceiptReadMode {
-		case receiptReadModeCache, receiptReadModeDuckDB:
-		default:
-			return fmt.Errorf("ReceiptReadMode must be %q or %q (got %q)",
-				receiptReadModeCache, receiptReadModeDuckDB, c.ReceiptReadMode)
-		}
-	}
-	if c.ReceiptLogFilterReadConcurrency < 0 {
-		return fmt.Errorf("ReceiptLogFilterReadConcurrency must be non-negative (got %d)", c.ReceiptLogFilterReadConcurrency)
-	}
-	if c.ReceiptLogFilterReadConcurrency > 0 {
-		switch c.ReceiptLogFilterReadMode {
-		case receiptReadModeCache, receiptReadModeDuckDB:
-		default:
-			return fmt.Errorf("ReceiptLogFilterReadMode must be %q or %q (got %q)",
-				receiptReadModeCache, receiptReadModeDuckDB, c.ReceiptLogFilterReadMode)
-		}
-	}
-	if c.ReceiptLogFilterMinBlockRange < 1 {
-		return fmt.Errorf("ReceiptLogFilterMinBlockRange must be at least 1 (got %d)", c.ReceiptLogFilterMinBlockRange)
-	}
-	if c.ReceiptLogFilterMaxBlockRange < c.ReceiptLogFilterMinBlockRange {
-		return fmt.Errorf("ReceiptLogFilterMaxBlockRange must be >= ReceiptLogFilterMinBlockRange (got %d < %d)",
-			c.ReceiptLogFilterMaxBlockRange, c.ReceiptLogFilterMinBlockRange)
-	}
-	if c.StateStoreConfig == nil {
-		return fmt.Errorf("StateStoreConfig is required")
-	}
-	switch c.StateStoreConfig.Backend {
-	case config.PebbleDBBackend, config.RocksDBBackend:
-	default:
-		return fmt.Errorf("StateStoreConfig.Backend must be one of %q or %q (got %q)",
-			config.PebbleDBBackend, config.RocksDBBackend, c.StateStoreConfig.Backend)
-	}
-	if c.Backend == wrappers.SSHistoricalOffload {
-		if err := c.HistoricalOffload.Validate(); err != nil {
-			return err
-		}
-	}
-	switch strings.ToLower(c.LogLevel) {
-	case "debug", "info", "warn", "error":
-	default:
-		return fmt.Errorf("LogLevel must be one of debug, info, warn, error (got %q)", c.LogLevel)
-	}
-	return nil
-}
+func (c *CryptoSimConfig) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // LoadConfigFromFile parses a JSON config file at the given path.
 // Returns defaults with file values overlaid. Fails if the file contains
 // unrecognized configuration keys.
 func LoadConfigFromFile(path string) (*CryptoSimConfig, error) {
-	cfg := DefaultCryptoSimConfig()
-	//nolint:gosec // G304 - path comes from config file, filepath.Clean used to mitigate traversal
-	f, err := os.Open(filepath.Clean(path))
-	if err != nil {
-		return nil, fmt.Errorf("open config file: %w", err)
-	}
-	defer func() {
-		if err := f.Close(); err != nil {
-			fmt.Printf("failed to close config file: %v\n", err)
-		}
-	}()
+	_ = "STUB: not implemented"
+	return nil, nil
 
-	dec := json.NewDecoder(f)
-	dec.DisallowUnknownFields()
-	if err := dec.Decode(cfg); err != nil {
-		return nil, fmt.Errorf("decode config: %w", err)
-	}
-	if err := cfg.Validate(); err != nil {
-		return nil, fmt.Errorf("invalid config: %w", err)
-	}
-	return cfg, nil
+	//nolint:gosec // G304 - path comes from config file, filepath.Clean used to mitigate traversal
 }

@@ -5,8 +5,6 @@
 package flowrate
 
 import (
-	"math"
-	"strconv"
 	"time"
 )
 
@@ -14,45 +12,25 @@ import (
 const clockRate = 20 * time.Millisecond
 
 // clock returns a low resolution timestamp relative to the process start time.
-func clock(startAt time.Time) time.Duration {
-	return time.Now().Round(clockRate).Sub(startAt)
-}
+func clock(startAt time.Time) time.Duration { _ = "STUB: not implemented"; return *new(time.Duration) }
 
 // clockRound returns d rounded to the nearest clockRate increment.
 func clockRound(d time.Duration) time.Duration {
-	return (d + clockRate>>1) / clockRate * clockRate
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // round returns x rounded to the nearest int64 (non-negative values only).
-func round(x float64) int64 {
-	if _, frac := math.Modf(x); frac >= 0.5 {
-		return int64(math.Ceil(x))
-	}
-	return int64(math.Floor(x))
-}
+func round(x float64) int64 { _ = "STUB: not implemented"; return 0 }
 
 // Percent represents a percentage in increments of 1/1000th of a percent.
 type Percent uint32
 
 // percentOf calculates what percent of the total is x.
-func percentOf(x, total float64) Percent {
-	if x < 0 || total <= 0 {
-		return 0
-	} else if p := round(x / total * 1e5); p <= math.MaxUint32 {
-		return Percent(p) //nolint:gosec // bounds checked above against MaxUint32
-	}
-	return Percent(math.MaxUint32)
-}
+func percentOf(x, total float64) Percent { _ = "STUB: not implemented"; return *new(Percent) }
 
-func (p Percent) Float() float64 {
-	return float64(p) * 1e-3
-}
+//nolint:gosec // bounds checked above against MaxUint32
 
-func (p Percent) String() string {
-	var buf [12]byte
-	b := strconv.AppendUint(buf[:0], uint64(p)/1000, 10)
-	n := len(b)
-	b = strconv.AppendUint(b, 1000+uint64(p)%1000, 10)
-	b[n] = '.'
-	return string(append(b, '%'))
-}
+func (p Percent) Float() float64 { _ = "STUB: not implemented"; return 0 }
+
+func (p Percent) String() string { _ = "STUB: not implemented"; return "" }

@@ -1,8 +1,6 @@
 package v0
 
 import (
-	"fmt"
-
 	"github.com/sei-protocol/sei-chain/app/upgrades"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm"
@@ -22,53 +20,30 @@ type HardForkUpgradeHandler struct {
 }
 
 func NewHardForkUpgradeHandler(height int64, chainID string, wk wasm.Keeper) upgrades.HardForkHandler {
-	return HardForkUpgradeHandler{
-		TargetHeight:  height,
-		TargetChainID: chainID,
-		WasmKeeper:    wk,
-	}
+	_ = "STUB: not implemented"
+	return *new(upgrades.HardForkHandler)
 }
 
-func (h HardForkUpgradeHandler) GetName() string {
-	return UpgradeName
-}
+func (h HardForkUpgradeHandler) GetName() string { _ = "STUB: not implemented"; return "" }
 
-func (h HardForkUpgradeHandler) GetTargetChainID() string {
-	return h.TargetChainID
-}
+func (h HardForkUpgradeHandler) GetTargetChainID() string { _ = "STUB: not implemented"; return "" }
 
-func (h HardForkUpgradeHandler) GetTargetHeight() int64 {
-	return h.TargetHeight
-}
+func (h HardForkUpgradeHandler) GetTargetHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (h HardForkUpgradeHandler) ExecuteHandler(ctx sdk.Context) error {
-	govKeeper := wasmkeeper.NewGovPermissionKeeper(h.WasmKeeper)
-	// If other contract need to be migrated, create functions for them and pass
-	// the govKeeper to them.
-	return h.migrateGringotts(ctx, govKeeper)
-}
-
-func (h HardForkUpgradeHandler) migrateGringotts(ctx sdk.Context, govKeeper *wasmkeeper.PermissionedKeeper) error {
-	var (
-		contractAddr sdk.AccAddress
-		newCodeID    uint64
-		msg          []byte
-	)
-
-	switch h.TargetChainID {
-	case upgrades.ChainIDSeiHardForkTest:
-		// TODO: Fill in the appropriate fields (contractAddr, newCodeID, and msg) here!
-
-	default:
-		return fmt.Errorf("unknown chain ID: %s", h.TargetChainID)
-	}
-
-	// Note: Since we're using a GovPermissionKeeper, the caller is not used/required,
-	// since the authz policy will automatically allow the migration.
-	_, err := govKeeper.Migrate(ctx, contractAddr, sdk.AccAddress{}, newCodeID, msg)
-	if err != nil {
-		return fmt.Errorf("failed to execute wasm migration: %w", err)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// If other contract need to be migrated, create functions for them and pass
+// the govKeeper to them.
+
+func (h HardForkUpgradeHandler) migrateGringotts(ctx sdk.Context, govKeeper *wasmkeeper.PermissionedKeeper) error {
+	_ = "STUB: not implemented"
+	return nil
+}
+
+// TODO: Fill in the appropriate fields (contractAddr, newCodeID, and msg) here!
+
+// Note: Since we're using a GovPermissionKeeper, the caller is not used/required,
+// since the authz policy will automatically allow the migration.

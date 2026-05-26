@@ -1,9 +1,6 @@
 package simulation
 
 import (
-	"bytes"
-	"fmt"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
 
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/transfer/types"
@@ -17,18 +14,6 @@ type TransferUnmarshaler interface {
 // NewDecodeStore returns a decoder function closure that unmarshals the KVPair's
 // Value to the corresponding DenomTrace type.
 func NewDecodeStore(cdc TransferUnmarshaler) func(kvA, kvB kv.Pair) string {
-	return func(kvA, kvB kv.Pair) string {
-		switch {
-		case bytes.Equal(kvA.Key[:1], types.PortKey):
-			return fmt.Sprintf("Port A: %s\nPort B: %s", string(kvA.Value), string(kvB.Value))
-
-		case bytes.Equal(kvA.Key[:1], types.DenomTraceKey):
-			denomTraceA := cdc.MustUnmarshalDenomTrace(kvA.Value)
-			denomTraceB := cdc.MustUnmarshalDenomTrace(kvB.Value)
-			return fmt.Sprintf("DenomTrace A: %s\nDenomTrace B: %s", denomTraceA.IBCDenom(), denomTraceB.IBCDenom())
-
-		default:
-			panic(fmt.Sprintf("invalid %s key prefix %X", types.ModuleName, kvA.Key[:1]))
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }

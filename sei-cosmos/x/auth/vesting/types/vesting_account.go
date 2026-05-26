@@ -1,15 +1,10 @@
 package types
 
 import (
-	"errors"
-	"fmt"
 	"time"
-
-	yaml "gopkg.in/yaml.v2"
 
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 	vestexported "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/vesting/exported"
 )
@@ -28,14 +23,8 @@ var (
 // callers responsibility to ensure the base account has sufficient funds with
 // regards to the original vesting amount.
 func NewBaseVestingAccount(baseAccount *authtypes.BaseAccount, originalVesting sdk.Coins, endTime int64, admin sdk.AccAddress) *BaseVestingAccount {
-	return &BaseVestingAccount{
-		BaseAccount:      baseAccount,
-		OriginalVesting:  originalVesting,
-		DelegatedFree:    sdk.NewCoins(),
-		DelegatedVesting: sdk.NewCoins(),
-		EndTime:          endTime,
-		Admin:            admin.String(),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // LockedCoinsFromVesting returns all the coins that are not spendable (i.e. locked)
@@ -44,11 +33,8 @@ func NewBaseVestingAccount(baseAccount *authtypes.BaseAccount, originalVesting s
 //
 // CONTRACT: Delegated vesting coins and vestingCoins must be sorted.
 func (bva BaseVestingAccount) LockedCoinsFromVesting(vestingCoins sdk.Coins) sdk.Coins {
-	lockedCoins := vestingCoins.Sub(vestingCoins.Min(bva.DelegatedVesting))
-	if lockedCoins == nil {
-		return sdk.Coins{}
-	}
-	return lockedCoins
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // TrackDelegation tracks a delegation amount for any given vesting account type
@@ -58,34 +44,16 @@ func (bva BaseVestingAccount) LockedCoinsFromVesting(vestingCoins sdk.Coins) sdk
 // CONTRACT: The account's coins, delegation coins, vesting coins, and delegated
 // vesting coins must be sorted.
 func (bva *BaseVestingAccount) TrackDelegation(balance, vestingCoins, amount sdk.Coins) {
-	for _, coin := range amount {
-		baseAmt := balance.AmountOf(coin.Denom)
-		vestingAmt := vestingCoins.AmountOf(coin.Denom)
-		delVestingAmt := bva.DelegatedVesting.AmountOf(coin.Denom)
-
-		// Panic if the delegation amount is zero or if the base coins does not
-		// exceed the desired delegation amount.
-		if coin.Amount.IsZero() || baseAmt.LT(coin.Amount) {
-			panic("delegation attempt with zero coins or insufficient funds")
-		}
-
-		// compute x and y per the specification, where:
-		// X := min(max(V - DV, 0), D)
-		// Y := D - X
-		x := sdk.MinInt(sdk.MaxInt(vestingAmt.Sub(delVestingAmt), sdk.ZeroInt()), coin.Amount)
-		y := coin.Amount.Sub(x)
-
-		if !x.IsZero() {
-			xCoin := sdk.NewCoin(coin.Denom, x)
-			bva.DelegatedVesting = bva.DelegatedVesting.Add(xCoin)
-		}
-
-		if !y.IsZero() {
-			yCoin := sdk.NewCoin(coin.Denom, y)
-			bva.DelegatedFree = bva.DelegatedFree.Add(yCoin)
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+// Panic if the delegation amount is zero or if the base coins does not
+// exceed the desired delegation amount.
+
+// compute x and y per the specification, where:
+// X := min(max(V - DV, 0), D)
+// Y := D - X
 
 // TrackUndelegation tracks an undelegation amount by setting the necessary
 // values by which delegated vesting and delegated vesting need to decrease and
@@ -98,61 +66,47 @@ func (bva *BaseVestingAccount) TrackDelegation(balance, vestingCoins, amount sdk
 //
 // CONTRACT: The account's coins and undelegation coins must be sorted.
 func (bva *BaseVestingAccount) TrackUndelegation(amount sdk.Coins) {
-	for _, coin := range amount {
-		// panic if the undelegation amount is zero
-		if coin.Amount.IsZero() {
-			panic("undelegation attempt with zero coins")
-		}
-		delegatedFree := bva.DelegatedFree.AmountOf(coin.Denom)
-		delegatedVesting := bva.DelegatedVesting.AmountOf(coin.Denom)
-
-		// compute x and y per the specification, where:
-		// X := min(DF, D)
-		// Y := min(DV, D - X)
-		x := sdk.MinInt(delegatedFree, coin.Amount)
-		y := sdk.MinInt(delegatedVesting, coin.Amount.Sub(x))
-
-		if !x.IsZero() {
-			xCoin := sdk.NewCoin(coin.Denom, x)
-			bva.DelegatedFree = bva.DelegatedFree.Sub(sdk.Coins{xCoin})
-		}
-
-		if !y.IsZero() {
-			yCoin := sdk.NewCoin(coin.Denom, y)
-			bva.DelegatedVesting = bva.DelegatedVesting.Sub(sdk.Coins{yCoin})
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+// panic if the undelegation amount is zero
+
+// compute x and y per the specification, where:
+// X := min(DF, D)
+// Y := min(DV, D - X)
 
 // GetOriginalVesting returns a vesting account's original vesting amount
 func (bva BaseVestingAccount) GetOriginalVesting() sdk.Coins {
-	return bva.OriginalVesting
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // GetDelegatedFree returns a vesting account's delegation amount that is not
 // vesting.
 func (bva BaseVestingAccount) GetDelegatedFree() sdk.Coins {
-	return bva.DelegatedFree
+	_ = "STUB: not implemented"
+	return *
+
+	// GetDelegatedVesting returns a vesting account's delegation amount that is
+	// still vesting.
+	new(sdk.Coins)
 }
 
-// GetDelegatedVesting returns a vesting account's delegation amount that is
-// still vesting.
 func (bva BaseVestingAccount) GetDelegatedVesting() sdk.Coins {
-	return bva.DelegatedVesting
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // GetEndTime returns a vesting account's end time
 func (bva BaseVestingAccount) GetEndTime() int64 {
-	return bva.EndTime
+	_ = "STUB: not implemented"
+
+	// Validate checks for errors on the account fields
+	return 0
 }
 
-// Validate checks for errors on the account fields
-func (bva BaseVestingAccount) Validate() error {
-	if !(bva.DelegatedVesting.IsAllLTE(bva.OriginalVesting)) {
-		return errors.New("delegated vesting amount cannot be greater than original vesting amount")
-	}
-	return bva.BaseAccount.Validate()
-}
+func (bva BaseVestingAccount) Validate() error { _ = "STUB: not implemented"; return nil }
 
 type vestingAccountYAML struct {
 	Address          sdk.AccAddress `json:"address" yaml:"address"`
@@ -170,29 +124,12 @@ type vestingAccountYAML struct {
 	VestingPeriods Periods `json:"vesting_periods,omitempty" yaml:"vesting_periods,omitempty"`
 }
 
-func (bva BaseVestingAccount) String() string {
-	out, _ := bva.MarshalYAML()
-	return out.(string)
-}
+func (bva BaseVestingAccount) String() string { _ = "STUB: not implemented"; return "" }
 
 // MarshalYAML returns the YAML representation of a BaseVestingAccount.
 func (bva BaseVestingAccount) MarshalYAML() (interface{}, error) {
-	accAddr, err := sdk.AccAddressFromBech32(bva.Address)
-	if err != nil {
-		return nil, err
-	}
-
-	out := vestingAccountYAML{
-		Address:          accAddr,
-		AccountNumber:    bva.AccountNumber,
-		PubKey:           getPKString(bva),
-		Sequence:         bva.Sequence,
-		OriginalVesting:  bva.OriginalVesting,
-		DelegatedFree:    bva.DelegatedFree,
-		DelegatedVesting: bva.DelegatedVesting,
-		EndTime:          bva.EndTime,
-	}
-	return marshalYaml(out)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Continuous Vesting Account
@@ -202,112 +139,65 @@ var _ authtypes.GenesisAccount = (*ContinuousVestingAccount)(nil)
 
 // NewContinuousVestingAccountRaw creates a new ContinuousVestingAccount object from BaseVestingAccount
 func NewContinuousVestingAccountRaw(bva *BaseVestingAccount, startTime int64) *ContinuousVestingAccount {
-	return &ContinuousVestingAccount{
-		BaseVestingAccount: bva,
-		StartTime:          startTime,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewContinuousVestingAccount returns a new ContinuousVestingAccount
 func NewContinuousVestingAccount(baseAcc *authtypes.BaseAccount, originalVesting sdk.Coins, startTime, endTime int64, admin sdk.AccAddress) *ContinuousVestingAccount {
-	baseVestingAcc := &BaseVestingAccount{
-		BaseAccount:     baseAcc,
-		OriginalVesting: originalVesting,
-		EndTime:         endTime,
-		Admin:           admin.String(),
-	}
-
-	return &ContinuousVestingAccount{
-		StartTime:          startTime,
-		BaseVestingAccount: baseVestingAcc,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetVestedCoins returns the total number of vested coins. If no coins are vested,
 // nil is returned.
 func (cva ContinuousVestingAccount) GetVestedCoins(blockTime time.Time) sdk.Coins {
-	var vestedCoins sdk.Coins
+	_ = "STUB: not implemented"
+	return *
 
 	// We must handle the case where the start time for a vesting account has
 	// been set into the future or when the start of the chain is not exactly
 	// known.
-	if blockTime.Unix() <= cva.StartTime {
-		return vestedCoins
-	} else if blockTime.Unix() >= cva.EndTime {
-		return cva.OriginalVesting
-	}
-
-	// calculate the vesting scalar
-	x := blockTime.Unix() - cva.StartTime
-	y := cva.EndTime - cva.StartTime
-	s := sdk.NewDec(x).Quo(sdk.NewDec(y))
-
-	for _, ovc := range cva.OriginalVesting {
-		vestedAmt := ovc.Amount.ToDec().Mul(s).RoundInt()
-		vestedCoins = append(vestedCoins, sdk.NewCoin(ovc.Denom, vestedAmt))
-	}
-
-	return vestedCoins
+	new(sdk.Coins)
 }
+
+// calculate the vesting scalar
 
 // GetVestingCoins returns the total number of vesting coins. If no coins are
 // vesting, nil is returned.
 func (cva ContinuousVestingAccount) GetVestingCoins(blockTime time.Time) sdk.Coins {
-	return cva.OriginalVesting.Sub(cva.GetVestedCoins(blockTime))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // LockedCoins returns the set of coins that are not spendable (i.e. locked),
 // defined as the vesting coins that are not delegated.
 func (cva ContinuousVestingAccount) LockedCoins(blockTime time.Time) sdk.Coins {
-	return cva.LockedCoinsFromVesting(cva.GetVestingCoins(blockTime))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // TrackDelegation tracks a desired delegation amount by setting the appropriate
 // values for the amount of delegated vesting, delegated free, and reducing the
 // overall amount of base coins.
 func (cva *ContinuousVestingAccount) TrackDelegation(blockTime time.Time, balance, amount sdk.Coins) {
-	cva.BaseVestingAccount.TrackDelegation(balance, cva.GetVestingCoins(blockTime), amount)
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetStartTime returns the time when vesting starts for a continuous vesting
 // account.
-func (cva ContinuousVestingAccount) GetStartTime() int64 {
-	return cva.StartTime
-}
+func (cva ContinuousVestingAccount) GetStartTime() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Validate checks for errors on the account fields
-func (cva ContinuousVestingAccount) Validate() error {
-	if cva.GetStartTime() >= cva.GetEndTime() {
-		return errors.New("vesting start-time cannot be before end-time")
-	}
+func (cva ContinuousVestingAccount) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	return cva.BaseVestingAccount.Validate()
-}
-
-func (cva ContinuousVestingAccount) String() string {
-	out, _ := cva.MarshalYAML()
-	return out.(string)
-}
+func (cva ContinuousVestingAccount) String() string { _ = "STUB: not implemented"; return "" }
 
 // MarshalYAML returns the YAML representation of a ContinuousVestingAccount.
 func (cva ContinuousVestingAccount) MarshalYAML() (interface{}, error) {
-	accAddr, err := sdk.AccAddressFromBech32(cva.Address)
-	if err != nil {
-		return nil, err
-	}
-
-	out := vestingAccountYAML{
-		Address:          accAddr,
-		AccountNumber:    cva.AccountNumber,
-		PubKey:           getPKString(cva),
-		Sequence:         cva.Sequence,
-		OriginalVesting:  cva.OriginalVesting,
-		DelegatedFree:    cva.DelegatedFree,
-		DelegatedVesting: cva.DelegatedVesting,
-		EndTime:          cva.EndTime,
-		StartTime:        cva.StartTime,
-	}
-	return marshalYaml(out)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Periodic Vesting Account
@@ -317,156 +207,75 @@ var _ authtypes.GenesisAccount = (*PeriodicVestingAccount)(nil)
 
 // NewPeriodicVestingAccountRaw creates a new PeriodicVestingAccount object from BaseVestingAccount
 func NewPeriodicVestingAccountRaw(bva *BaseVestingAccount, startTime int64, periods Periods) *PeriodicVestingAccount {
-	return &PeriodicVestingAccount{
-		BaseVestingAccount: bva,
-		StartTime:          startTime,
-		VestingPeriods:     periods,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewPeriodicVestingAccount returns a new PeriodicVestingAccount
 func NewPeriodicVestingAccount(baseAcc *authtypes.BaseAccount, originalVesting sdk.Coins, startTime int64, periods Periods, admin sdk.AccAddress) *PeriodicVestingAccount {
-	endTime := startTime
-	for _, p := range periods {
-		endTime += p.Length
-	}
-	baseVestingAcc := &BaseVestingAccount{
-		BaseAccount:     baseAcc,
-		OriginalVesting: originalVesting,
-		EndTime:         endTime,
-		Admin:           admin.String(),
-	}
-
-	return &PeriodicVestingAccount{
-		BaseVestingAccount: baseVestingAcc,
-		StartTime:          startTime,
-		VestingPeriods:     periods,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetVestedCoins returns the total number of vested coins. If no coins are vested,
 // nil is returned.
 func (pva PeriodicVestingAccount) GetVestedCoins(blockTime time.Time) sdk.Coins {
-	var vestedCoins sdk.Coins
+	_ = "STUB: not implemented"
+	return *
 
 	// We must handle the case where the start time for a vesting account has
 	// been set into the future or when the start of the chain is not exactly
 	// known.
-	if blockTime.Unix() <= pva.StartTime {
-		return vestedCoins
-	} else if blockTime.Unix() >= pva.EndTime {
-		return pva.OriginalVesting
-	}
-
-	// track the start time of the next period
-	currentPeriodStartTime := pva.StartTime
-
-	// for each period, if the period is over, add those coins as vested and check the next period.
-	for _, period := range pva.VestingPeriods {
-		x := blockTime.Unix() - currentPeriodStartTime
-		if x < period.Length {
-			break
-		}
-
-		vestedCoins = vestedCoins.Add(period.Amount...)
-
-		// update the start time of the next period
-		currentPeriodStartTime += period.Length
-	}
-
-	return vestedCoins
+	new(sdk.Coins)
 }
+
+// track the start time of the next period
+
+// for each period, if the period is over, add those coins as vested and check the next period.
+
+// update the start time of the next period
 
 // GetVestingCoins returns the total number of vesting coins. If no coins are
 // vesting, nil is returned.
 func (pva PeriodicVestingAccount) GetVestingCoins(blockTime time.Time) sdk.Coins {
-	return pva.OriginalVesting.Sub(pva.GetVestedCoins(blockTime))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // LockedCoins returns the set of coins that are not spendable (i.e. locked),
 // defined as the vesting coins that are not delegated.
 func (pva PeriodicVestingAccount) LockedCoins(blockTime time.Time) sdk.Coins {
-	return pva.LockedCoinsFromVesting(pva.GetVestingCoins(blockTime))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // TrackDelegation tracks a desired delegation amount by setting the appropriate
 // values for the amount of delegated vesting, delegated free, and reducing the
 // overall amount of base coins.
 func (pva *PeriodicVestingAccount) TrackDelegation(blockTime time.Time, balance, amount sdk.Coins) {
-	pva.BaseVestingAccount.TrackDelegation(balance, pva.GetVestingCoins(blockTime), amount)
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetStartTime returns the time when vesting starts for a periodic vesting
 // account.
-func (pva PeriodicVestingAccount) GetStartTime() int64 {
-	return pva.StartTime
-}
+func (pva PeriodicVestingAccount) GetStartTime() int64 { _ = "STUB: not implemented"; return 0 }
 
 // GetVestingPeriods returns vesting periods associated with periodic vesting account.
 func (pva PeriodicVestingAccount) GetVestingPeriods() Periods {
-	return pva.VestingPeriods
+	_ = "STUB: not implemented"
+	return *new(Periods)
 }
 
 // Validate checks for errors on the account fields
-func (pva PeriodicVestingAccount) Validate() error {
-	if pva.GetStartTime() >= pva.GetEndTime() {
-		return errors.New("vesting start-time cannot be before end-time")
-	}
-	endTime := pva.StartTime
-	originalVesting := sdk.NewCoins()
-	for _, p := range pva.VestingPeriods {
-		endTime += p.Length
-		originalVesting = originalVesting.Add(p.Amount...)
-	}
-	if endTime != pva.EndTime {
-		return errors.New("vesting end time does not match length of all vesting periods")
-	}
-	if !originalVesting.IsEqual(pva.OriginalVesting) {
-		return errors.New("original vesting coins does not match the sum of all coins in vesting periods")
-	}
+func (pva PeriodicVestingAccount) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	for i, period := range pva.VestingPeriods {
-		if !period.Amount.IsValid() {
-			return sdkerrors.ErrInvalidCoins.Wrap(period.Amount.String())
-		}
-
-		if !period.Amount.IsAllPositive() {
-			return sdkerrors.ErrInvalidCoins.Wrap(period.Amount.String())
-		}
-
-		if period.Length < 1 {
-			return fmt.Errorf("invalid period length of %d in period %d, length must be greater than 0", period.Length, i)
-		}
-	}
-
-	return pva.BaseVestingAccount.Validate()
-}
-
-func (pva PeriodicVestingAccount) String() string {
-	out, _ := pva.MarshalYAML()
-	return out.(string)
-}
+func (pva PeriodicVestingAccount) String() string { _ = "STUB: not implemented"; return "" }
 
 // MarshalYAML returns the YAML representation of a PeriodicVestingAccount.
 func (pva PeriodicVestingAccount) MarshalYAML() (interface{}, error) {
-	accAddr, err := sdk.AccAddressFromBech32(pva.Address)
-	if err != nil {
-		return nil, err
-	}
-
-	out := vestingAccountYAML{
-		Address:          accAddr,
-		AccountNumber:    pva.AccountNumber,
-		PubKey:           getPKString(pva),
-		Sequence:         pva.Sequence,
-		OriginalVesting:  pva.OriginalVesting,
-		DelegatedFree:    pva.DelegatedFree,
-		DelegatedVesting: pva.DelegatedVesting,
-		EndTime:          pva.EndTime,
-		StartTime:        pva.StartTime,
-		VestingPeriods:   pva.VestingPeriods,
-	}
-	return marshalYaml(out)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Delayed Vesting Account
@@ -476,66 +285,56 @@ var _ authtypes.GenesisAccount = (*DelayedVestingAccount)(nil)
 
 // NewDelayedVestingAccountRaw creates a new DelayedVestingAccount object from BaseVestingAccount
 func NewDelayedVestingAccountRaw(bva *BaseVestingAccount) *DelayedVestingAccount {
-	return &DelayedVestingAccount{
-		BaseVestingAccount: bva,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewDelayedVestingAccount returns a DelayedVestingAccount
 func NewDelayedVestingAccount(baseAcc *authtypes.BaseAccount, originalVesting sdk.Coins, endTime int64, admin sdk.AccAddress) *DelayedVestingAccount {
-	baseVestingAcc := &BaseVestingAccount{
-		BaseAccount:     baseAcc,
-		OriginalVesting: originalVesting,
-		EndTime:         endTime,
-		Admin:           admin.String(),
-	}
-
-	return &DelayedVestingAccount{baseVestingAcc}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetVestedCoins returns the total amount of vested coins for a delayed vesting
 // account. All coins are only vested once the schedule has elapsed.
 func (dva DelayedVestingAccount) GetVestedCoins(blockTime time.Time) sdk.Coins {
-	if blockTime.Unix() >= dva.EndTime {
-		return dva.OriginalVesting
-	}
-
-	return nil
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // GetVestingCoins returns the total number of vesting coins for a delayed
 // vesting account.
 func (dva DelayedVestingAccount) GetVestingCoins(blockTime time.Time) sdk.Coins {
-	return dva.OriginalVesting.Sub(dva.GetVestedCoins(blockTime))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // LockedCoins returns the set of coins that are not spendable (i.e. locked),
 // defined as the vesting coins that are not delegated.
 func (dva DelayedVestingAccount) LockedCoins(blockTime time.Time) sdk.Coins {
-	return dva.LockedCoinsFromVesting(dva.GetVestingCoins(blockTime))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // TrackDelegation tracks a desired delegation amount by setting the appropriate
 // values for the amount of delegated vesting, delegated free, and reducing the
 // overall amount of base coins.
 func (dva *DelayedVestingAccount) TrackDelegation(blockTime time.Time, balance, amount sdk.Coins) {
-	dva.BaseVestingAccount.TrackDelegation(balance, dva.GetVestingCoins(blockTime), amount)
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetStartTime returns zero since a delayed vesting account has no start time.
 func (dva DelayedVestingAccount) GetStartTime() int64 {
+	_ = "STUB: not implemented"
+
+	// Validate checks for errors on the account fields
 	return 0
 }
 
-// Validate checks for errors on the account fields
-func (dva DelayedVestingAccount) Validate() error {
-	return dva.BaseVestingAccount.Validate()
-}
+func (dva DelayedVestingAccount) Validate() error { _ = "STUB: not implemented"; return nil }
 
-func (dva DelayedVestingAccount) String() string {
-	out, _ := dva.MarshalYAML()
-	return out.(string)
-}
+func (dva DelayedVestingAccount) String() string { _ = "STUB: not implemented"; return "" }
 
 //-----------------------------------------------------------------------------
 // Permanent Locked Vesting Account
@@ -545,81 +344,66 @@ var _ authtypes.GenesisAccount = (*PermanentLockedAccount)(nil)
 
 // NewPermanentLockedAccount returns a PermanentLockedAccount
 func NewPermanentLockedAccount(baseAcc *authtypes.BaseAccount, coins sdk.Coins, admin sdk.AccAddress) *PermanentLockedAccount {
-	baseVestingAcc := &BaseVestingAccount{
-		BaseAccount:     baseAcc,
-		OriginalVesting: coins,
-		EndTime:         0, // ensure EndTime is set to 0, as PermanentLockedAccount's do not have an EndTime
-		Admin:           admin.String(),
-	}
-
-	return &PermanentLockedAccount{baseVestingAcc}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// ensure EndTime is set to 0, as PermanentLockedAccount's do not have an EndTime
 
 // GetVestedCoins returns the total amount of vested coins for a permanent locked vesting
 // account. All coins are only vested once the schedule has elapsed.
 func (plva PermanentLockedAccount) GetVestedCoins(_ time.Time) sdk.Coins {
-	return nil
+	_ = "STUB: not implemented"
+
+	// GetVestingCoins returns the total number of vesting coins for a permanent locked
+	// vesting account.
+	return *new(sdk.Coins)
 }
 
-// GetVestingCoins returns the total number of vesting coins for a permanent locked
-// vesting account.
 func (plva PermanentLockedAccount) GetVestingCoins(_ time.Time) sdk.Coins {
-	return plva.OriginalVesting
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // LockedCoins returns the set of coins that are not spendable (i.e. locked),
 // defined as the vesting coins that are not delegated.
 func (plva PermanentLockedAccount) LockedCoins(_ time.Time) sdk.Coins {
-	return plva.LockedCoinsFromVesting(plva.OriginalVesting)
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // TrackDelegation tracks a desired delegation amount by setting the appropriate
 // values for the amount of delegated vesting, delegated free, and reducing the
 // overall amount of base coins.
 func (plva *PermanentLockedAccount) TrackDelegation(blockTime time.Time, balance, amount sdk.Coins) {
-	plva.BaseVestingAccount.TrackDelegation(balance, plva.OriginalVesting, amount)
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetStartTime returns zero since a permanent locked vesting account has no start time.
 func (plva PermanentLockedAccount) GetStartTime() int64 {
+	_ = "STUB: not implemented"
+
+	// GetEndTime returns a vesting account's end time, we return 0 to denote that
+	// a permanently locked vesting account has no end time.
 	return 0
 }
 
-// GetEndTime returns a vesting account's end time, we return 0 to denote that
-// a permanently locked vesting account has no end time.
 func (plva PermanentLockedAccount) GetEndTime() int64 {
+	_ = "STUB: not implemented"
+
+	// Validate checks for errors on the account fields
 	return 0
 }
 
-// Validate checks for errors on the account fields
-func (plva PermanentLockedAccount) Validate() error {
-	if plva.EndTime > 0 {
-		return errors.New("permanently vested accounts cannot have an end-time")
-	}
+func (plva PermanentLockedAccount) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	return plva.BaseVestingAccount.Validate()
-}
-
-func (plva PermanentLockedAccount) String() string {
-	out, _ := plva.MarshalYAML()
-	return out.(string)
-}
+func (plva PermanentLockedAccount) String() string { _ = "STUB: not implemented"; return "" }
 
 type getPK interface {
 	GetPubKey() cryptotypes.PubKey
 }
 
-func getPKString(g getPK) string {
-	if pk := g.GetPubKey(); pk != nil {
-		return pk.String()
-	}
-	return ""
-}
+func getPKString(g getPK) string { _ = "STUB: not implemented"; return "" }
 
-func marshalYaml(i interface{}) (interface{}, error) {
-	bz, err := yaml.Marshal(i)
-	if err != nil {
-		return nil, err
-	}
-	return string(bz), nil
-}
+func marshalYaml(i interface{}) (interface{}, error) { _ = "STUB: not implemented"; return nil, nil }

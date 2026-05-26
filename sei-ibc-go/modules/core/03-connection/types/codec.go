@@ -3,40 +3,11 @@ package types
 import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/msgservice"
-
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
 // RegisterInterfaces register the ibc interfaces submodule implementations to protobuf
 // Any.
-func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	registry.RegisterInterface(
-		"ibc.core.connection.v1.ConnectionI",
-		(*exported.ConnectionI)(nil),
-		&ConnectionEnd{},
-	)
-	registry.RegisterInterface(
-		"ibc.core.connection.v1.CounterpartyConnectionI",
-		(*exported.CounterpartyConnectionI)(nil),
-		&Counterparty{},
-	)
-	registry.RegisterInterface(
-		"ibc.core.connection.v1.Version",
-		(*exported.Version)(nil),
-		&Version{},
-	)
-	registry.RegisterImplementations(
-		(*sdk.Msg)(nil),
-		&MsgConnectionOpenInit{},
-		&MsgConnectionOpenTry{},
-		&MsgConnectionOpenAck{},
-		&MsgConnectionOpenConfirm{},
-	)
-
-	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
-}
+func RegisterInterfaces(registry codectypes.InterfaceRegistry) { _ = "STUB: not implemented"; return }
 
 // SubModuleCdc references the global x/ibc/core/03-connection module codec. Note, the codec should
 // ONLY be used in certain instances of tests and for JSON encoding.

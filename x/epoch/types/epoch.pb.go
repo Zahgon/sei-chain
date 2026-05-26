@@ -5,14 +5,12 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+	time "time"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,73 +33,41 @@ type Epoch struct {
 	CurrentEpochHeight    int64         `protobuf:"varint,5,opt,name=current_epoch_height,json=currentEpochHeight,proto3" json:"current_epoch_height" yaml:"current_epoch_height"`
 }
 
-func (m *Epoch) Reset()         { *m = Epoch{} }
-func (m *Epoch) String() string { return proto.CompactTextString(m) }
-func (*Epoch) ProtoMessage()    {}
-func (*Epoch) Descriptor() ([]byte, []int) {
-	return fileDescriptor_36a9d1673530db42, []int{0}
-}
-func (m *Epoch) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Epoch) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *Epoch) String() string            { _ = "STUB: not implemented"; return "" }
+func (*Epoch) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Epoch) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Epoch) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Epoch) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Epoch.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Epoch) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Epoch.Merge(m, src)
-}
-func (m *Epoch) XXX_Size() int {
-	return m.Size()
-}
-func (m *Epoch) XXX_DiscardUnknown() {
-	xxx_messageInfo_Epoch.DiscardUnknown(m)
-}
+
+func (m *Epoch) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Epoch) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Epoch) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Epoch proto.InternalMessageInfo
 
-func (m *Epoch) GetGenesisTime() time.Time {
-	if m != nil {
-		return m.GenesisTime
-	}
-	return time.Time{}
-}
+func (m *Epoch) GetGenesisTime() time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
 func (m *Epoch) GetEpochDuration() time.Duration {
-	if m != nil {
-		return m.EpochDuration
-	}
-	return 0
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
-func (m *Epoch) GetCurrentEpoch() uint64 {
-	if m != nil {
-		return m.CurrentEpoch
-	}
-	return 0
-}
+func (m *Epoch) GetCurrentEpoch() uint64 { _ = "STUB: not implemented"; return 0 }
 
 func (m *Epoch) GetCurrentEpochStartTime() time.Time {
-	if m != nil {
-		return m.CurrentEpochStartTime
-	}
-	return time.Time{}
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-func (m *Epoch) GetCurrentEpochHeight() int64 {
-	if m != nil {
-		return m.CurrentEpochHeight
-	}
-	return 0
-}
+func (m *Epoch) GetCurrentEpochHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 func init() {
 	proto.RegisterType((*Epoch)(nil), "seiprotocol.seichain.epoch.Epoch")
@@ -139,366 +105,26 @@ var fileDescriptor_36a9d1673530db42 = []byte{
 	0x19, 0x1f, 0xee, 0x02, 0x00, 0x00, 0xff, 0xff, 0xa0, 0xad, 0x1e, 0xf4, 0xfc, 0x02, 0x00, 0x00,
 }
 
-func (m *Epoch) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Epoch) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Epoch) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Epoch) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Epoch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.CurrentEpochHeight != 0 {
-		i = encodeVarintEpoch(dAtA, i, uint64(m.CurrentEpochHeight))
-		i--
-		dAtA[i] = 0x28
-	}
-	n1, err1 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.CurrentEpochStartTime, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.CurrentEpochStartTime):])
-	if err1 != nil {
-		return 0, err1
-	}
-	i -= n1
-	i = encodeVarintEpoch(dAtA, i, uint64(n1))
-	i--
-	dAtA[i] = 0x22
-	if m.CurrentEpoch != 0 {
-		i = encodeVarintEpoch(dAtA, i, uint64(m.CurrentEpoch))
-		i--
-		dAtA[i] = 0x18
-	}
-	n2, err2 := github_com_gogo_protobuf_types.StdDurationMarshalTo(m.EpochDuration, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(m.EpochDuration):])
-	if err2 != nil {
-		return 0, err2
-	}
-	i -= n2
-	i = encodeVarintEpoch(dAtA, i, uint64(n2))
-	i--
-	dAtA[i] = 0x12
-	n3, err3 := github_com_gogo_protobuf_types.StdTimeMarshalTo(m.GenesisTime, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdTime(m.GenesisTime):])
-	if err3 != nil {
-		return 0, err3
-	}
-	i -= n3
-	i = encodeVarintEpoch(dAtA, i, uint64(n3))
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintEpoch(dAtA []byte, offset int, v uint64) int {
-	offset -= sovEpoch(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *Epoch) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.GenesisTime)
-	n += 1 + l + sovEpoch(uint64(l))
-	l = github_com_gogo_protobuf_types.SizeOfStdDuration(m.EpochDuration)
-	n += 1 + l + sovEpoch(uint64(l))
-	if m.CurrentEpoch != 0 {
-		n += 1 + sovEpoch(uint64(m.CurrentEpoch))
-	}
-	l = github_com_gogo_protobuf_types.SizeOfStdTime(m.CurrentEpochStartTime)
-	n += 1 + l + sovEpoch(uint64(l))
-	if m.CurrentEpochHeight != 0 {
-		n += 1 + sovEpoch(uint64(m.CurrentEpochHeight))
-	}
-	return n
-}
+func encodeVarintEpoch(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func sovEpoch(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozEpoch(x uint64) (n int) {
-	return sovEpoch(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *Epoch) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowEpoch
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Epoch: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Epoch: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GenesisTime", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.GenesisTime, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EpochDuration", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(&m.EpochDuration, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CurrentEpoch", wireType)
-			}
-			m.CurrentEpoch = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CurrentEpoch |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CurrentEpochStartTime", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdTimeUnmarshal(&m.CurrentEpochStartTime, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CurrentEpochHeight", wireType)
-			}
-			m.CurrentEpochHeight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CurrentEpochHeight |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipEpoch(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthEpoch
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *Epoch) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipEpoch(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowEpoch
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowEpoch
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthEpoch
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupEpoch
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthEpoch
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func sovEpoch(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozEpoch(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *Epoch) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipEpoch(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthEpoch        = fmt.Errorf("proto: negative length found during unmarshaling")

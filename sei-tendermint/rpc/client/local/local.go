@@ -2,15 +2,11 @@ package local
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"net/url"
-	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/eventbus"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query"
 	rpccore "github.com/sei-protocol/sei-chain/sei-tendermint/internal/rpc/core"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/service"
@@ -56,245 +52,171 @@ type NodeService interface {
 }
 
 // New configures a client that calls the Node directly.
-func New(node NodeService) (*Local, error) {
-	env := node.RPCEnvironment()
-	if env == nil {
-		return nil, errors.New("rpc is nil")
-	}
-	return &Local{
-		EventBus:    node.EventBus(),
-		Environment: env,
-	}, nil
-}
+func New(node NodeService) (*Local, error) { _ = "STUB: not implemented"; return nil, nil }
 
 var _ rpcclient.Client = (*Local)(nil)
 
 func (c *Local) ABCIQuery(ctx context.Context, path string, data bytes.HexBytes) (*coretypes.ResultABCIQuery, error) {
-	return c.ABCIQueryWithOptions(ctx, path, data, rpcclient.DefaultABCIQueryOptions)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) ABCIQueryWithOptions(ctx context.Context, path string, data bytes.HexBytes, opts rpcclient.ABCIQueryOptions) (*coretypes.ResultABCIQuery, error) {
-	return c.Environment.ABCIQuery(ctx, &coretypes.RequestABCIQuery{
-		Path: path, Data: data, Height: coretypes.Int64(opts.Height), Prove: opts.Prove,
-	})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BroadcastTxCommit(ctx context.Context, tx types.Tx) (*coretypes.ResultBroadcastTxCommit, error) {
-	return c.Environment.BroadcastTxCommit(ctx, &coretypes.RequestBroadcastTx{Tx: tx})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BroadcastTx(ctx context.Context, tx types.Tx) (*coretypes.ResultBroadcastTx, error) {
-	return c.Environment.BroadcastTx(ctx, &coretypes.RequestBroadcastTx{Tx: tx})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BroadcastTxAsync(ctx context.Context, tx types.Tx) (*coretypes.ResultBroadcastTx, error) {
-	return c.Environment.BroadcastTxAsync(ctx, &coretypes.RequestBroadcastTx{Tx: tx})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BroadcastTxSync(ctx context.Context, tx types.Tx) (*coretypes.ResultBroadcastTx, error) {
-	return c.Environment.BroadcastTxSync(ctx, &coretypes.RequestBroadcastTx{Tx: tx})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) UnconfirmedTxs(ctx context.Context, page, perPage *int) (*coretypes.ResultUnconfirmedTxs, error) {
-	return c.Environment.UnconfirmedTxs(ctx, &coretypes.RequestUnconfirmedTxs{
-		Page:    coretypes.Int64Ptr(page),
-		PerPage: coretypes.Int64Ptr(perPage),
-	})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) CheckTx(ctx context.Context, tx types.Tx) (*coretypes.ResultCheckTx, error) {
-	return c.Environment.CheckTx(ctx, &coretypes.RequestCheckTx{Tx: tx})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) EvmNextPendingNonce(addr common.Address) uint64 {
-	return c.Mempool.EvmNextPendingNonce(addr)
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func (c *Local) EvmProxy(sender common.Address) (*url.URL, bool) {
-	return c.Environment.EvmProxy(sender)
+	_ = "STUB: not implemented"
+	return nil, false
 }
 
 func (c *Local) ConsensusState(ctx context.Context) (*coretypes.ResultConsensusState, error) {
-	return c.GetConsensusState(ctx)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) ConsensusParams(ctx context.Context, height *int64) (*coretypes.ResultConsensusParams, error) {
-	return c.Environment.ConsensusParams(ctx, &coretypes.RequestConsensusParams{Height: (*coretypes.Int64)(height)})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BlockchainInfo(ctx context.Context, minHeight, maxHeight int64) (*coretypes.ResultBlockchainInfo, error) {
-	return c.Environment.BlockchainInfo(ctx, &coretypes.RequestBlockchainInfo{
-		MinHeight: coretypes.Int64(minHeight),
-		MaxHeight: coretypes.Int64(maxHeight),
-	})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) GenesisChunked(ctx context.Context, id uint) (*coretypes.ResultGenesisChunk, error) {
-	return c.Environment.GenesisChunked(ctx, &coretypes.RequestGenesisChunked{Chunk: coretypes.Int64(id)}) //nolint:gosec // id is a small genesis chunk index
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
+//nolint:gosec // id is a small genesis chunk index
+
 func (c *Local) Block(ctx context.Context, height *int64) (*coretypes.ResultBlock, error) {
-	return c.Environment.Block(ctx, &coretypes.RequestBlockInfo{Height: (*coretypes.Int64)(height)})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BlockByHash(ctx context.Context, hash bytes.HexBytes) (*coretypes.ResultBlock, error) {
-	return c.Environment.BlockByHash(ctx, &coretypes.RequestBlockByHash{Hash: hash})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BlockResults(ctx context.Context, height *int64) (*coretypes.ResultBlockResults, error) {
-	return c.Environment.BlockResults(ctx, &coretypes.RequestBlockInfo{Height: (*coretypes.Int64)(height)})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) Header(ctx context.Context, height *int64) (*coretypes.ResultHeader, error) {
-	return c.Environment.Header(ctx, &coretypes.RequestBlockInfo{Height: (*coretypes.Int64)(height)})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) HeaderByHash(ctx context.Context, hash bytes.HexBytes) (*coretypes.ResultHeader, error) {
-	return c.Environment.HeaderByHash(ctx, &coretypes.RequestBlockByHash{Hash: hash})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) Commit(ctx context.Context, height *int64) (*coretypes.ResultCommit, error) {
-	return c.Environment.Commit(ctx, &coretypes.RequestBlockInfo{Height: (*coretypes.Int64)(height)})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) Validators(ctx context.Context, height *int64, page, perPage *int) (*coretypes.ResultValidators, error) {
-	return c.Environment.Validators(ctx, &coretypes.RequestValidators{
-		Height:  (*coretypes.Int64)(height),
-		Page:    coretypes.Int64Ptr(page),
-		PerPage: coretypes.Int64Ptr(perPage),
-	})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) Tx(ctx context.Context, hash bytes.HexBytes, prove bool) (*coretypes.ResultTx, error) {
-	return c.Environment.Tx(ctx, &coretypes.RequestTx{Hash: hash, Prove: prove})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) TxSearch(ctx context.Context, queryString string, prove bool, page, perPage *int, orderBy string) (*coretypes.ResultTxSearch, error) {
-	return c.Environment.TxSearch(ctx, &coretypes.RequestTxSearch{
-		Query:   queryString,
-		Prove:   prove,
-		Page:    coretypes.Int64Ptr(page),
-		PerPage: coretypes.Int64Ptr(perPage),
-		OrderBy: orderBy,
-	})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BlockSearch(ctx context.Context, queryString string, page, perPage *int, orderBy string) (*coretypes.ResultBlockSearch, error) {
-	return c.Environment.BlockSearch(ctx, &coretypes.RequestBlockSearch{
-		Query:   queryString,
-		Page:    coretypes.Int64Ptr(page),
-		PerPage: coretypes.Int64Ptr(perPage),
-		OrderBy: orderBy,
-	})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) BroadcastEvidence(ctx context.Context, ev types.Evidence) (*coretypes.ResultBroadcastEvidence, error) {
-	return c.Environment.BroadcastEvidence(ctx, &coretypes.RequestBroadcastEvidence{Evidence: ev})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) Subscribe(ctx context.Context, subscriber, queryString string, capacity ...int) (<-chan coretypes.ResultEvent, error) {
-	q, err := query.New(queryString)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse query: %w", err)
-	}
-
-	limit, quota := 1, 0
-	if len(capacity) > 0 {
-		limit = capacity[0]
-		if len(capacity) > 1 {
-			quota = capacity[1]
-		}
-	}
-
-	ctx, cancel := context.WithCancel(ctx)
-	go func() { c.Wait(); cancel() }()
-
-	subArgs := pubsub.SubscribeArgs{
-		ClientID: subscriber,
-		Query:    q,
-		Quota:    quota,
-		Limit:    limit,
-	}
-	sub, err := c.SubscribeWithArgs(ctx, subArgs)
-	if err != nil {
-		return nil, fmt.Errorf("failed to subscribe: %w", err)
-	}
-
-	outc := make(chan coretypes.ResultEvent, 1)
-	go c.eventsRoutine(ctx, sub, subArgs, outc)
-
-	return outc, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *Local) eventsRoutine(ctx context.Context, sub eventbus.Subscription, subArgs pubsub.SubscribeArgs, outc chan<- coretypes.ResultEvent) {
-	qstr := subArgs.Query.String()
-	for {
-		msg, err := sub.Next(ctx)
-		if errors.Is(err, pubsub.ErrUnsubscribed) {
-			return // client unsubscribed
-		} else if err != nil {
-			logger.Error("subscription was canceled, resubscribing", "query", subArgs.Query, "err", err)
-			sub = c.resubscribe(ctx, subArgs)
-			if sub == nil {
-				return // client terminated
-			}
-			continue
-		}
-		select {
-		case outc <- coretypes.ResultEvent{
-			SubscriptionID: msg.SubscriptionID(),
-			Query:          qstr,
-			Data:           msg.LegacyData(),
-			Events:         msg.Events(),
-		}:
-		case <-ctx.Done():
-			return
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+// client unsubscribed
+
+// client terminated
 
 // Try to resubscribe with exponential backoff.
 func (c *Local) resubscribe(ctx context.Context, subArgs pubsub.SubscribeArgs) eventbus.Subscription {
-	timer := time.NewTimer(0)
-	defer timer.Stop()
-
-	attempts := 0
-	for {
-		if !c.IsRunning() {
-			return nil
-		}
-
-		sub, err := c.SubscribeWithArgs(ctx, subArgs)
-		if err == nil {
-			return sub
-		}
-
-		attempts++
-		timer.Reset((10 << min(uint(attempts), 31)) * time.Millisecond) //nolint:gosec // attempts is a small non-negative counter
-		select {
-		case <-timer.C:
-			continue
-		case <-ctx.Done():
-			return nil
-		}
-	}
+	_ = "STUB: not implemented"
+	return *new(eventbus.Subscription)
 }
+
+//nolint:gosec // attempts is a small non-negative counter
 
 func (c *Local) Unsubscribe(ctx context.Context, subscriber, queryString string) error {
-	args := pubsub.UnsubscribeArgs{Subscriber: subscriber}
-	var err error
-	args.Query, err = query.New(queryString)
-	if err != nil {
-		// if this isn't a valid query it might be an ID, so
-		// we'll try that. It'll turn into an error when we
-		// try to unsubscribe. Eventually, perhaps, we'll want
-		// to change the interface to only allow
-		// unsubscription by ID, but that's a larger change.
-		args.ID = queryString
-	}
-	return c.EventBus.Unsubscribe(ctx, args)
+	_ = "STUB: not implemented"
+	return nil
 }
 
+// if this isn't a valid query it might be an ID, so
+// we'll try that. It'll turn into an error when we
+// try to unsubscribe. Eventually, perhaps, we'll want
+// to change the interface to only allow
+// unsubscription by ID, but that's a larger change.
+
 func (c *Local) UnsubscribeAll(ctx context.Context, subscriber string) error {
-	return c.EventBus.UnsubscribeAll(ctx, subscriber)
+	_ = "STUB: not implemented"
+	return nil
 }

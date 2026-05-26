@@ -22,47 +22,12 @@ func NewFixedPool(
 	// The size of the work queue. Once full, Submit will block until a slot is available.
 	queueSize int,
 ) Pool {
-
-	if workers <= 0 {
-		workers = 1
-	}
-
-	workQueue := make(chan func(), queueSize)
-	fp := &fixedPool{
-		workQueue: workQueue,
-	}
-
-	fp.wg.Add(workers)
-	for i := 0; i < workers; i++ {
-		go func() {
-			defer fp.wg.Done()
-			fp.worker()
-		}()
-	}
-
-	return fp
+	_ = "STUB: not implemented"
+	return *new(Pool)
 }
 
-func (fp *fixedPool) Submit(task func()) {
-	if task == nil {
-		return
-	}
-	if fp.closed {
-		panic("threading: submit on closed pool")
-	}
-	fp.workQueue <- task
-}
+func (fp *fixedPool) Submit(task func()) { _ = "STUB: not implemented"; return }
 
-func (fp *fixedPool) Close() {
-	fp.closed = true
-	fp.closeOnce.Do(func() {
-		close(fp.workQueue)
-	})
-	fp.wg.Wait()
-}
+func (fp *fixedPool) Close() { _ = "STUB: not implemented"; return }
 
-func (fp *fixedPool) worker() {
-	for task := range fp.workQueue {
-		task()
-	}
-}
+func (fp *fixedPool) worker() { _ = "STUB: not implemented"; return }

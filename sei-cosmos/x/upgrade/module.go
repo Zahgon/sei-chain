@@ -1,7 +1,6 @@
 package upgrade
 
 import (
-	"context"
 	"encoding/json"
 
 	"github.com/gorilla/mux"
@@ -14,8 +13,6 @@ import (
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/client/cli"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/client/rest"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/keeper"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/types"
 )
@@ -33,37 +30,35 @@ var (
 type AppModuleBasic struct{}
 
 // Name returns the ModuleName
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterLegacyAminoCodec registers the upgrade types on the LegacyAmino codec
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterLegacyAminoCodec(cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterRESTRoutes registers all REST query handlers
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, r *mux.Router) {
-	rest.RegisterRoutes(clientCtx, r)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the upgrade module.
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	_ = types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetQueryCmd returns the cli query commands for this module
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd()
-}
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // GetTxCmd returns the transaction commands for this module
-func (AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
-}
+func (AppModuleBasic) GetTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 func (b AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	types.RegisterInterfaces(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // AppModule implements the sdk.AppModule interface
@@ -74,70 +69,72 @@ type AppModule struct {
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(keeper keeper.Keeper) AppModule {
-	return AppModule{
-		AppModuleBasic: AppModuleBasic{},
-		keeper:         keeper,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // RegisterInvariants does nothing, there are no invariants to enforce
-func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 
-// Route is empty, as we do not handle Messages (just proposals)
-func (AppModule) Route() sdk.Route { return sdk.Route{} }
+	// Route is empty, as we do not handle Messages (just proposals)
+	return
+}
 
-// QuerierRoute returns the route we respond to for abci queries
-func (AppModule) QuerierRoute() string { return types.QuerierKey }
+func (AppModule) Route() sdk.Route {
+	_ = "STUB: not implemented"
+
+	// QuerierRoute returns the route we respond to for abci queries
+	return *new(sdk.Route)
+}
+
+func (AppModule) QuerierRoute() string { _ = "STUB: not implemented"; return "" }
 
 // LegacyQuerierHandler registers a query handler to respond to the module-specific queries
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
+	_ = "STUB: not implemented"
+	return *new(sdk.Querier)
 }
 
 // RegisterServices registers a GRPC query service to respond to the
 // module-specific GRPC queries.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
-}
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // InitGenesis is ignored, no sense in serializing future upgrades
 func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMessage) []abci.ValidatorUpdate {
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // DefaultGenesis is an empty object
 func (AppModuleBasic) DefaultGenesis(_ codec.JSONCodec) json.RawMessage {
-	return []byte("{}")
+	_ = "STUB: not implemented"
+	return *
+
+	// ValidateGenesis is always successful, as we ignore the value
+	new(json.RawMessage)
 }
 
-// ValidateGenesis is always successful, as we ignore the value
 func (AppModuleBasic) ValidateGenesis(_ codec.JSONCodec, config client.TxEncodingConfig, _ json.RawMessage) error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // ExportGenesis is always empty, as InitGenesis does nothing either
 func (am AppModule) ExportGenesis(_ sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	return am.DefaultGenesis(cdc)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 { _ = "STUB: not implemented"; return 0 }

@@ -1,8 +1,6 @@
 package migration
 
 import (
-	"fmt"
-
 	ics23 "github.com/confio/ics23/go"
 	"github.com/sei-protocol/sei-chain/sei-db/proto"
 	db "github.com/tendermint/tm-db"
@@ -30,43 +28,18 @@ func NewTestOnlyDualWriteRouter(
 	// Write traffic is dual-written and also sent here. Reads, proofs, and iteration are not sent here.
 	secondary DBWriter,
 ) (*TestOnlyDualWriteRouter, error) {
-
-	if primary == nil {
-		return nil, fmt.Errorf("primary must not be nil")
-	}
-	if primary.proofBuilder == nil {
-		return nil, fmt.Errorf("primary proof builder must not be nil")
-	}
-	if primary.iteratorBuilder == nil {
-		return nil, fmt.Errorf("primary iterator builder must not be nil")
-	}
-	if secondary == nil {
-		return nil, fmt.Errorf("secondary must not be nil")
-	}
-
-	return &TestOnlyDualWriteRouter{primary: primary, secondary: secondary}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (t *TestOnlyDualWriteRouter) ApplyChangeSets(changesets []*proto.NamedChangeSet) error {
-	err := t.primary.writer(changesets)
-	if err != nil {
-		return fmt.Errorf("primary writer: %w", err)
-	}
-
-	err = t.secondary(changesets)
-	if err != nil {
-		return fmt.Errorf("secondary writer: %w", err)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (t *TestOnlyDualWriteRouter) GetProof(store string, key []byte) (*ics23.CommitmentProof, error) {
-	proof, err := t.primary.proofBuilder(store, key)
-	if err != nil {
-		return nil, fmt.Errorf("primary proof builder: %w", err)
-	}
-	return proof, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (t *TestOnlyDualWriteRouter) Iterator(
@@ -75,19 +48,13 @@ func (t *TestOnlyDualWriteRouter) Iterator(
 	end []byte,
 	ascending bool,
 ) (db.Iterator, error) {
-	iterator, err := t.primary.iteratorBuilder(store, start, end, ascending)
-	if err != nil {
-		return nil, fmt.Errorf("primary iterator builder: %w", err)
-	}
-	return iterator, nil
+	_ = "STUB: not implemented"
+	return *new(db.Iterator), nil
 }
 
 func (t *TestOnlyDualWriteRouter) Read(store string, key []byte) ([]byte, bool, error) {
-	value, found, err := t.primary.reader(store, key)
-	if err != nil {
-		return nil, false, fmt.Errorf("primary reader: %w", err)
-	}
-	return value, found, nil
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
 // BuildRoute returns a Route that dispatches the given module names to
@@ -98,5 +65,6 @@ func (t *TestOnlyDualWriteRouter) Read(store string, key []byte) ([]byte, bool, 
 // returned Route may be passed to NewModuleRouter alongside other
 // Routes to compose multi-database setups.
 func (t *TestOnlyDualWriteRouter) BuildRoute(moduleNames ...string) (*Route, error) {
-	return NewRoute(t.Read, t.ApplyChangeSets, t.Iterator, t.GetProof, moduleNames...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

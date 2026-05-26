@@ -2,7 +2,6 @@ package blocktest
 
 import (
 	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
-	"github.com/spf13/cast"
 )
 
 type Config struct {
@@ -21,17 +20,7 @@ const (
 )
 
 func ReadConfig(opts servertypes.AppOptions) (Config, error) {
-	cfg := DefaultConfig // copy
-	var err error
-	if v := opts.Get(flagEnabled); v != nil {
-		if cfg.Enabled, err = cast.ToBoolE(v); err != nil {
-			return cfg, err
-		}
-	}
-	if v := opts.Get(flagTestDataPath); v != nil {
-		if cfg.TestDataPath, err = cast.ToStringE(v); err != nil {
-			return cfg, err
-		}
-	}
-	return cfg, nil
+	_ = "STUB: not implemented"
+	// copy
+	return *new(Config), nil
 }

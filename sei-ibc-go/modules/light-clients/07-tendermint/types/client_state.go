@@ -1,21 +1,14 @@
 package types
 
 import (
-	"strings"
 	"time"
 
 	ics23 "github.com/confio/ics23/go"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/light"
-	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 
 	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	connectiontypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/03-connection/types"
-	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
 	commitmenttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/23-commitment/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
@@ -28,167 +21,91 @@ func NewClientState(
 	latestHeight clienttypes.Height, specs []*ics23.ProofSpec,
 	upgradePath []string, allowUpdateAfterExpiry, allowUpdateAfterMisbehaviour bool,
 ) *ClientState {
-	return &ClientState{
-		ChainId:                      chainID,
-		TrustLevel:                   trustLevel,
-		TrustingPeriod:               trustingPeriod,
-		UnbondingPeriod:              ubdPeriod,
-		MaxClockDrift:                maxClockDrift,
-		LatestHeight:                 latestHeight,
-		FrozenHeight:                 clienttypes.ZeroHeight(),
-		ProofSpecs:                   specs,
-		UpgradePath:                  upgradePath,
-		AllowUpdateAfterExpiry:       allowUpdateAfterExpiry,
-		AllowUpdateAfterMisbehaviour: allowUpdateAfterMisbehaviour,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetChainID returns the chain-id
 func (cs ClientState) GetChainID() string {
-	return cs.ChainId
+	_ = "STUB: not implemented"
+
+	// ClientType is tendermint.
+	return ""
 }
 
-// ClientType is tendermint.
-func (cs ClientState) ClientType() string {
-	return exported.Tendermint
-}
+func (cs ClientState) ClientType() string { _ = "STUB: not implemented"; return "" }
 
 // GetLatestHeight returns latest block height.
 func (cs ClientState) GetLatestHeight() exported.Height {
-	return cs.LatestHeight
+	_ = "STUB: not implemented"
+	return *
+
+	// Status returns the status of the tendermint client.
+	// The client may be:
+	// - Active: FrozenHeight is zero and client is not expired
+	// - Frozen: Frozen Height is not zero
+	// - Expired: the latest consensus state timestamp + trusting period <= current time
+	//
+	// A frozen client will become expired, so the Frozen status
+	// has higher precedence.
+	new(exported.Height)
 }
 
-// Status returns the status of the tendermint client.
-// The client may be:
-// - Active: FrozenHeight is zero and client is not expired
-// - Frozen: Frozen Height is not zero
-// - Expired: the latest consensus state timestamp + trusting period <= current time
-//
-// A frozen client will become expired, so the Frozen status
-// has higher precedence.
 func (cs ClientState) Status(
 	ctx sdk.Context,
 	clientStore sdk.KVStore,
 	cdc codec.BinaryCodec,
 ) exported.Status {
-	if !cs.FrozenHeight.IsZero() {
-		return exported.Frozen
-	}
-
-	// get latest consensus state from clientStore to check for expiry
-	consState, err := GetConsensusState(clientStore, cdc, cs.GetLatestHeight())
-	if err != nil {
-		// if the client state does not have an associated consensus state for its latest height
-		// then it must be expired
-		return exported.Expired
-	}
-
-	if cs.IsExpired(consState.Timestamp, ctx.BlockTime()) {
-		return exported.Expired
-	}
-
-	return exported.Active
+	_ = "STUB: not implemented"
+	return *new(exported.Status)
 }
+
+// get latest consensus state from clientStore to check for expiry
+
+// if the client state does not have an associated consensus state for its latest height
+// then it must be expired
 
 // IsExpired returns whether or not the client has passed the trusting period since the last
 // update (in which case no headers are considered valid).
 func (cs ClientState) IsExpired(latestTimestamp, now time.Time) bool {
-	expirationTime := latestTimestamp.Add(cs.TrustingPeriod)
-	return !expirationTime.After(now)
+	_ = "STUB: not implemented"
+	return false
 }
 
 // Validate performs a basic validation of the client state fields.
-func (cs ClientState) Validate() error {
-	if strings.TrimSpace(cs.ChainId) == "" {
-		return sdkerrors.Wrap(ErrInvalidChainID, "chain id cannot be empty string")
-	}
+func (cs ClientState) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	// NOTE: the value of tmtypes.MaxChainIDLen may change in the future.
-	// If this occurs, the code here must account for potential difference
-	// between the tendermint version being run by the counterparty chain
-	// and the tendermint version used by this light client.
-	// https://github.com/cosmos/ibc-go/issues/177
-	if len(cs.ChainId) > tmtypes.MaxChainIDLen {
-		return sdkerrors.Wrapf(ErrInvalidChainID, "chainID is too long; got: %d, max: %d", len(cs.ChainId), tmtypes.MaxChainIDLen)
-	}
+// NOTE: the value of tmtypes.MaxChainIDLen may change in the future.
+// If this occurs, the code here must account for potential difference
+// between the tendermint version being run by the counterparty chain
+// and the tendermint version used by this light client.
+// https://github.com/cosmos/ibc-go/issues/177
 
-	if err := light.ValidateTrustLevel(cs.TrustLevel.ToTendermint()); err != nil {
-		return err
-	}
-	if cs.TrustingPeriod == 0 {
-		return sdkerrors.Wrap(ErrInvalidTrustingPeriod, "trusting period cannot be zero")
-	}
-	if cs.UnbondingPeriod == 0 {
-		return sdkerrors.Wrap(ErrInvalidUnbondingPeriod, "unbonding period cannot be zero")
-	}
-	if cs.MaxClockDrift == 0 {
-		return sdkerrors.Wrap(ErrInvalidMaxClockDrift, "max clock drift cannot be zero")
-	}
+// the latest height revision number must match the chain id revision number
 
-	// the latest height revision number must match the chain id revision number
-	if cs.LatestHeight.RevisionNumber != clienttypes.ParseChainID(cs.ChainId) {
-		return sdkerrors.Wrapf(ErrInvalidHeaderHeight,
-			"latest height revision number must match chain id revision number (%d != %d)", cs.LatestHeight.RevisionNumber, clienttypes.ParseChainID(cs.ChainId))
-	}
-	if cs.LatestHeight.RevisionHeight == 0 {
-		return sdkerrors.Wrapf(ErrInvalidHeaderHeight, "tendermint client's latest height revision height cannot be zero")
-	}
-	if cs.TrustingPeriod >= cs.UnbondingPeriod {
-		return sdkerrors.Wrapf(
-			ErrInvalidTrustingPeriod,
-			"trusting period (%s) should be < unbonding period (%s)", cs.TrustingPeriod, cs.UnbondingPeriod,
-		)
-	}
-
-	if cs.ProofSpecs == nil {
-		return sdkerrors.Wrap(ErrInvalidProofSpecs, "proof specs cannot be nil for tm client")
-	}
-	for i, spec := range cs.ProofSpecs {
-		if spec == nil {
-			return sdkerrors.Wrapf(ErrInvalidProofSpecs, "proof spec cannot be nil at index: %d", i)
-		}
-	}
-	// UpgradePath may be empty, but if it isn't, each key must be non-empty
-	for i, k := range cs.UpgradePath {
-		if strings.TrimSpace(k) == "" {
-			return sdkerrors.Wrapf(clienttypes.ErrInvalidClient, "key in upgrade path at index %d cannot be empty", i)
-		}
-	}
-
-	return nil
-}
+// UpgradePath may be empty, but if it isn't, each key must be non-empty
 
 // GetProofSpecs returns the format the client expects for proof verification
 // as a string array specifying the proof type for each position in chained proof
-func (cs ClientState) GetProofSpecs() []*ics23.ProofSpec {
-	return cs.ProofSpecs
-}
+func (cs ClientState) GetProofSpecs() []*ics23.ProofSpec { _ = "STUB: not implemented"; return nil }
 
 // ZeroCustomFields returns a ClientState that is a copy of the current ClientState
 // with all client customizable fields zeroed out
 func (cs ClientState) ZeroCustomFields() exported.ClientState {
+	_ = "STUB: not implemented"
 	// copy over all chain-specified fields
 	// and leave custom fields empty
-	return &ClientState{
-		ChainId:         cs.ChainId,
-		UnbondingPeriod: cs.UnbondingPeriod,
-		LatestHeight:    cs.LatestHeight,
-		ProofSpecs:      cs.ProofSpecs,
-		UpgradePath:     cs.UpgradePath,
-	}
+	return *new(exported.ClientState)
 }
 
 // Initialize will check that initial consensus state is a Tendermint consensus state
 // and will store ProcessedTime for initial consensus state as ctx.BlockTime()
 func (cs ClientState) Initialize(ctx sdk.Context, _ codec.BinaryCodec, clientStore sdk.KVStore, consState exported.ConsensusState) error {
-	if _, ok := consState.(*ConsensusState); !ok {
-		return sdkerrors.Wrapf(clienttypes.ErrInvalidConsensus, "invalid initial consensus state. expected type: %T, got: %T",
-			&ConsensusState{}, consState)
-	}
-	// set metadata for initial consensus state.
-	setConsensusMetadata(ctx, clientStore, cs.GetLatestHeight())
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// set metadata for initial consensus state.
 
 // VerifyClientState verifies a proof of the client state of the running chain
 // stored on the target machine
@@ -201,32 +118,8 @@ func (cs ClientState) VerifyClientState(
 	proof []byte,
 	clientState exported.ClientState,
 ) error {
-	merkleProof, provingConsensusState, err := produceVerificationArgs(store, cdc, cs, height, prefix, proof)
-	if err != nil {
-		return err
-	}
-
-	clientPrefixedPath := commitmenttypes.NewMerklePath(host.FullClientStatePath(counterpartyClientIdentifier))
-	path, err := commitmenttypes.ApplyPrefix(prefix, clientPrefixedPath)
-	if err != nil {
-		return err
-	}
-
-	if clientState == nil {
-		return sdkerrors.Wrap(clienttypes.ErrInvalidClient, "client state cannot be empty")
-	}
-
-	_, ok := clientState.(*ClientState)
-	if !ok {
-		return sdkerrors.Wrapf(clienttypes.ErrInvalidClient, "invalid client type %T, expected %T", clientState, &ClientState{})
-	}
-
-	bz, err := cdc.MarshalInterface(clientState)
-	if err != nil {
-		return err
-	}
-
-	return merkleProof.VerifyMembership(cs.ProofSpecs, provingConsensusState.GetRoot(), path, bz)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // VerifyClientConsensusState verifies a proof of the consensus state of the
@@ -241,35 +134,7 @@ func (cs ClientState) VerifyClientConsensusState(
 	proof []byte,
 	consensusState exported.ConsensusState,
 ) error {
-	merkleProof, provingConsensusState, err := produceVerificationArgs(store, cdc, cs, height, prefix, proof)
-	if err != nil {
-		return err
-	}
-
-	clientPrefixedPath := commitmenttypes.NewMerklePath(host.FullConsensusStatePath(counterpartyClientIdentifier, consensusHeight))
-	path, err := commitmenttypes.ApplyPrefix(prefix, clientPrefixedPath)
-	if err != nil {
-		return err
-	}
-
-	if consensusState == nil {
-		return sdkerrors.Wrap(clienttypes.ErrInvalidConsensus, "consensus state cannot be empty")
-	}
-
-	_, ok := consensusState.(*ConsensusState)
-	if !ok {
-		return sdkerrors.Wrapf(clienttypes.ErrInvalidConsensus, "invalid consensus type %T, expected %T", consensusState, &ConsensusState{})
-	}
-
-	bz, err := cdc.MarshalInterface(consensusState)
-	if err != nil {
-		return err
-	}
-
-	if err := merkleProof.VerifyMembership(cs.ProofSpecs, provingConsensusState.GetRoot(), path, bz); err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -284,31 +149,7 @@ func (cs ClientState) VerifyConnectionState(
 	connectionID string,
 	connectionEnd exported.ConnectionI,
 ) error {
-	merkleProof, consensusState, err := produceVerificationArgs(store, cdc, cs, height, prefix, proof)
-	if err != nil {
-		return err
-	}
-
-	connectionPath := commitmenttypes.NewMerklePath(host.ConnectionPath(connectionID))
-	path, err := commitmenttypes.ApplyPrefix(prefix, connectionPath)
-	if err != nil {
-		return err
-	}
-
-	connection, ok := connectionEnd.(connectiontypes.ConnectionEnd)
-	if !ok {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "invalid connection type %T", connectionEnd)
-	}
-
-	bz, err := cdc.Marshal(&connection)
-	if err != nil {
-		return err
-	}
-
-	if err := merkleProof.VerifyMembership(cs.ProofSpecs, consensusState.GetRoot(), path, bz); err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -324,31 +165,7 @@ func (cs ClientState) VerifyChannelState(
 	channelID string,
 	channel exported.ChannelI,
 ) error {
-	merkleProof, consensusState, err := produceVerificationArgs(store, cdc, cs, height, prefix, proof)
-	if err != nil {
-		return err
-	}
-
-	channelPath := commitmenttypes.NewMerklePath(host.ChannelPath(portID, channelID))
-	path, err := commitmenttypes.ApplyPrefix(prefix, channelPath)
-	if err != nil {
-		return err
-	}
-
-	channelEnd, ok := channel.(channeltypes.Channel)
-	if !ok {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "invalid channel type %T", channel)
-	}
-
-	bz, err := cdc.Marshal(&channelEnd)
-	if err != nil {
-		return err
-	}
-
-	if err := merkleProof.VerifyMembership(cs.ProofSpecs, consensusState.GetRoot(), path, bz); err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -368,28 +185,11 @@ func (cs ClientState) VerifyPacketCommitment(
 	sequence uint64,
 	commitmentBytes []byte,
 ) error {
-	merkleProof, consensusState, err := produceVerificationArgs(store, cdc, cs, height, prefix, proof)
-	if err != nil {
-		return err
-	}
-
-	// check delay period has passed
-	if err := verifyDelayPeriodPassed(ctx, store, height, delayTimePeriod, delayBlockPeriod); err != nil {
-		return err
-	}
-
-	commitmentPath := commitmenttypes.NewMerklePath(host.PacketCommitmentPath(portID, channelID, sequence))
-	path, err := commitmenttypes.ApplyPrefix(prefix, commitmentPath)
-	if err != nil {
-		return err
-	}
-
-	if err := merkleProof.VerifyMembership(cs.ProofSpecs, consensusState.GetRoot(), path, commitmentBytes); err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// check delay period has passed
 
 // VerifyPacketAcknowledgement verifies a proof of an incoming packet
 // acknowledgement at the specified port, specified channel, and specified sequence.
@@ -407,28 +207,11 @@ func (cs ClientState) VerifyPacketAcknowledgement(
 	sequence uint64,
 	acknowledgement []byte,
 ) error {
-	merkleProof, consensusState, err := produceVerificationArgs(store, cdc, cs, height, prefix, proof)
-	if err != nil {
-		return err
-	}
-
-	// check delay period has passed
-	if err := verifyDelayPeriodPassed(ctx, store, height, delayTimePeriod, delayBlockPeriod); err != nil {
-		return err
-	}
-
-	ackPath := commitmenttypes.NewMerklePath(host.PacketAcknowledgementPath(portID, channelID, sequence))
-	path, err := commitmenttypes.ApplyPrefix(prefix, ackPath)
-	if err != nil {
-		return err
-	}
-
-	if err := merkleProof.VerifyMembership(cs.ProofSpecs, consensusState.GetRoot(), path, channeltypes.CommitAcknowledgement(acknowledgement)); err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// check delay period has passed
 
 // VerifyPacketReceiptAbsence verifies a proof of the absence of an
 // incoming packet receipt at the specified port, specified channel, and
@@ -446,28 +229,11 @@ func (cs ClientState) VerifyPacketReceiptAbsence(
 	channelID string,
 	sequence uint64,
 ) error {
-	merkleProof, consensusState, err := produceVerificationArgs(store, cdc, cs, height, prefix, proof)
-	if err != nil {
-		return err
-	}
-
-	// check delay period has passed
-	if err := verifyDelayPeriodPassed(ctx, store, height, delayTimePeriod, delayBlockPeriod); err != nil {
-		return err
-	}
-
-	receiptPath := commitmenttypes.NewMerklePath(host.PacketReceiptPath(portID, channelID, sequence))
-	path, err := commitmenttypes.ApplyPrefix(prefix, receiptPath)
-	if err != nil {
-		return err
-	}
-
-	if err := merkleProof.VerifyNonMembership(cs.ProofSpecs, consensusState.GetRoot(), path); err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// check delay period has passed
 
 // VerifyNextSequenceRecv verifies a proof of the next sequence number to be
 // received of the specified channel at the specified port.
@@ -484,64 +250,27 @@ func (cs ClientState) VerifyNextSequenceRecv(
 	channelID string,
 	nextSequenceRecv uint64,
 ) error {
-	merkleProof, consensusState, err := produceVerificationArgs(store, cdc, cs, height, prefix, proof)
-	if err != nil {
-		return err
-	}
-
-	// check delay period has passed
-	if err := verifyDelayPeriodPassed(ctx, store, height, delayTimePeriod, delayBlockPeriod); err != nil {
-		return err
-	}
-
-	nextSequenceRecvPath := commitmenttypes.NewMerklePath(host.NextSequenceRecvPath(portID, channelID))
-	path, err := commitmenttypes.ApplyPrefix(prefix, nextSequenceRecvPath)
-	if err != nil {
-		return err
-	}
-
-	bz := sdk.Uint64ToBigEndian(nextSequenceRecv)
-
-	if err := merkleProof.VerifyMembership(cs.ProofSpecs, consensusState.GetRoot(), path, bz); err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// check delay period has passed
 
 // verifyDelayPeriodPassed will ensure that at least delayTimePeriod amount of time and delayBlockPeriod number of blocks have passed
 // since consensus state was submitted before allowing verification to continue.
 func verifyDelayPeriodPassed(ctx sdk.Context, store sdk.KVStore, proofHeight exported.Height, delayTimePeriod, delayBlockPeriod uint64) error {
+	_ = "STUB: not implemented"
 	// check that executing chain's timestamp has passed consensusState's processed time + delay time period
-	processedTime, ok := GetProcessedTime(store, proofHeight)
-	if !ok {
-		return sdkerrors.Wrapf(ErrProcessedTimeNotFound, "processed time not found for height: %s", proofHeight)
-	}
-	blockTime := ctx.BlockTime().UnixNano()
-	if blockTime < 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "block time is negative")
-	}
-	currentTimestamp := uint64(blockTime) //nolint:gosec // overflow checked above
-	validTime := processedTime + delayTimePeriod
-	// NOTE: delay time period is inclusive, so if currentTimestamp is validTime, then we return no error
-	if currentTimestamp < validTime {
-		return sdkerrors.Wrapf(ErrDelayPeriodNotPassed, "cannot verify packet until time: %d, current time: %d",
-			validTime, currentTimestamp)
-	}
-	// check that executing chain's height has passed consensusState's processed height + delay block period
-	processedHeight, ok := GetProcessedHeight(store, proofHeight)
-	if !ok {
-		return sdkerrors.Wrapf(ErrProcessedHeightNotFound, "processed height not found for height: %s", proofHeight)
-	}
-	currentHeight := clienttypes.GetSelfHeight(ctx)
-	validHeight := clienttypes.NewHeight(processedHeight.GetRevisionNumber(), processedHeight.GetRevisionHeight()+delayBlockPeriod)
-	// NOTE: delay block period is inclusive, so if currentHeight is validHeight, then we return no error
-	if currentHeight.LT(validHeight) {
-		return sdkerrors.Wrapf(ErrDelayPeriodNotPassed, "cannot verify packet until height: %s, current height: %s",
-			validHeight, currentHeight)
-	}
 	return nil
 }
+
+//nolint:gosec // overflow checked above
+
+// NOTE: delay time period is inclusive, so if currentTimestamp is validTime, then we return no error
+
+// check that executing chain's height has passed consensusState's processed height + delay block period
+
+// NOTE: delay block period is inclusive, so if currentHeight is validHeight, then we return no error
 
 // produceVerificationArgs perfoms the basic checks on the arguments that are
 // shared between the verification functions and returns the unmarshalled
@@ -554,34 +283,6 @@ func produceVerificationArgs(
 	prefix exported.Prefix,
 	proof []byte,
 ) (merkleProof commitmenttypes.MerkleProof, consensusState *ConsensusState, err error) {
-	if cs.GetLatestHeight().LT(height) {
-		return commitmenttypes.MerkleProof{}, nil, sdkerrors.Wrapf(
-			sdkerrors.ErrInvalidHeight,
-			"client state height < proof height (%d < %d), please ensure the client has been updated", cs.GetLatestHeight(), height,
-		)
-	}
-
-	if prefix == nil {
-		return commitmenttypes.MerkleProof{}, nil, sdkerrors.Wrap(commitmenttypes.ErrInvalidPrefix, "prefix cannot be empty")
-	}
-
-	_, ok := prefix.(*commitmenttypes.MerklePrefix)
-	if !ok {
-		return commitmenttypes.MerkleProof{}, nil, sdkerrors.Wrapf(commitmenttypes.ErrInvalidPrefix, "invalid prefix type %T, expected *MerklePrefix", prefix)
-	}
-
-	if proof == nil {
-		return commitmenttypes.MerkleProof{}, nil, sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "proof cannot be empty")
-	}
-
-	if err = cdc.Unmarshal(proof, &merkleProof); err != nil {
-		return commitmenttypes.MerkleProof{}, nil, sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "failed to unmarshal proof into commitment merkle proof")
-	}
-
-	consensusState, err = GetConsensusState(store, cdc, height)
-	if err != nil {
-		return commitmenttypes.MerkleProof{}, nil, sdkerrors.Wrap(err, "please ensure the proof was constructed against a height that exists on the client")
-	}
-
-	return merkleProof, consensusState, nil
+	_ = "STUB: not implemented"
+	return *new(commitmenttypes.MerkleProof), nil, nil
 }

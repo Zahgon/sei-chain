@@ -2,13 +2,7 @@ package p2p
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"net"
-	"net/netip"
-	"net/url"
 	"regexp"
-	"strconv"
 	"strings"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
@@ -38,86 +32,26 @@ type NodeAddress struct {
 // ParseNodeAddress parses a node address URL into a NodeAddress, normalizing
 // and validating it.
 func ParseNodeAddress(urlString string) (NodeAddress, error) {
+	_ = "STUB: not implemented"
 	// url.Parse requires a scheme, so if it fails to parse a scheme-less URL
 	// we try to apply a default scheme.
-	url, err := url.Parse(urlString)
-	if (err != nil || url.Scheme == "") &&
-		(!stringHasScheme(urlString) || reSchemeIsHost.MatchString(urlString)) {
-		url, err = url.Parse("mconn://" + urlString)
-	}
-	if err != nil {
-		return NodeAddress{}, fmt.Errorf("invalid node address %q: %w", urlString, err)
-	}
-
-	address := NodeAddress{}
-
-	// Otherwise, just parse a normal networked URL.
-	if url.User != nil {
-		address.NodeID = types.NodeID(strings.ToLower(url.User.Username()))
-	}
-
-	address.Hostname = url.Hostname()
-
-	if portString := url.Port(); portString != "" {
-		port64, err := strconv.ParseUint(portString, 10, 16)
-		if err != nil {
-			return NodeAddress{}, fmt.Errorf("invalid port %q: %w", url.Port(), err)
-		}
-		address.Port = uint16(port64)
-	}
-	// For some reasons, missing or 0 port on parsing is interpretented as the default port.
-	if address.Port == 0 {
-		address.Port = defaultPort
-	}
-	return address, address.Validate()
+	return *new(NodeAddress), nil
 }
+
+// Otherwise, just parse a normal networked URL.
+
+// For some reasons, missing or 0 port on parsing is interpretented as the default port.
 
 // Resolve resolves a NodeAddress into a set of Endpoints, by expanding
 // out a DNS hostname to IP addresses.
 func (a NodeAddress) Resolve(ctx context.Context) ([]Endpoint, error) {
+	_ = "STUB: not implemented"
 	// LookIP for some reason returns IPv6-embedded addresses.
-	ips, err := net.DefaultResolver.LookupIP(ctx, "ip", a.Hostname)
-	if err != nil {
-		return nil, err
-	}
-	endpoints := make([]Endpoint, len(ips))
-	for i, ip := range ips {
-		ip, ok := netip.AddrFromSlice(ip)
-		if !ok {
-			return nil, fmt.Errorf("LookupIP returned invalid IP %q", ip)
-		}
-		endpoints[i] = Endpoint{netip.AddrPortFrom(ip.Unmap(), a.Port)}
-	}
-	return endpoints, nil
+	return nil, nil
 }
 
 // String formats the address as a URL string.
-func (a NodeAddress) String() string {
-	u := url.URL{Scheme: "mconn"}
-	if a.NodeID != "" {
-		u.User = url.User(string(a.NodeID))
-	}
-	if a.Port > 0 {
-		u.Host = net.JoinHostPort(a.Hostname, strconv.Itoa(int(a.Port)))
-	} else {
-		u.Host = a.Hostname
-	}
-	return strings.TrimPrefix(u.String(), "//")
-}
+func (a NodeAddress) String() string { _ = "STUB: not implemented"; return "" }
 
 // Validate validates a NodeAddress.
-func (a NodeAddress) Validate() error {
-	if a.NodeID == "" {
-		return errors.New("no peer ID")
-	}
-	if err := a.NodeID.Validate(); err != nil {
-		return fmt.Errorf("invalid peer ID: %w", err)
-	}
-	if a.Port == 0 {
-		return errors.New("missing port")
-	}
-	if a.Hostname == "" {
-		return errors.New("missing hostname")
-	}
-	return nil
-}
+func (a NodeAddress) Validate() error { _ = "STUB: not implemented"; return nil }

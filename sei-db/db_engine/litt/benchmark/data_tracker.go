@@ -2,15 +2,9 @@ package benchmark
 
 import (
 	"context"
-	"fmt"
-	"math"
 	"math/rand"
-	"os"
-	"path"
-	"strings"
 	"time"
 
-	"github.com/sei-protocol/sei-chain/sei-db/common/unit"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/benchmark/config"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
 )
@@ -108,96 +102,22 @@ func NewDataTracker(
 	config *config.BenchmarkConfig,
 	errorMonitor *util.ErrorMonitor,
 ) (*DataTracker, error) {
-
-	cohortDirectory := path.Join(config.MetadataDirectory, "cohorts")
-
-	// Create the cohort directory if it doesn't exist.
-	err := util.EnsureDirectoryExists(cohortDirectory, config.Fsync)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create cohort directory: %w", err)
-	}
-
-	lowestCohortIndex, highestCohortIndex, cohorts, err := gatherCohorts(cohortDirectory)
-	if err != nil {
-		return nil, fmt.Errorf("failed to gather cohorts: %w", err)
-	}
-
-	// Gather the set of complete cohorts. These are the cohorts we can read from.
-	completeCohortSet := make(map[uint64]struct{})
-	if len(cohorts) != 0 {
-		for i := lowestCohortIndex; i <= highestCohortIndex; i++ {
-			if cohorts[i].IsComplete() {
-				completeCohortSet[i] = struct{}{}
-			}
-		}
-	}
-
-	valueSize := uint64(config.ValueSizeMB * float64(unit.MB))
-
-	// Create an initial active cohort.
-	var activeCohort *Cohort
-	if len(cohorts) == 0 {
-		// Starting fresh, create a new cohort starting from key index 0.
-		activeCohort, err = NewCohort(
-			cohortDirectory,
-			0,
-			0,
-			config.CohortSize,
-			valueSize,
-			config.Fsync)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create genesis cohort: %w", err)
-		}
-	} else {
-		activeCohort, err = cohorts[highestCohortIndex].NextCohort(config.CohortSize, valueSize)
-		if err != nil {
-			return nil, fmt.Errorf("failed to create next cohort: %w", err)
-		}
-	}
-	highestCohortIndex = activeCohort.CohortIndex()
-	cohorts[highestCohortIndex] = activeCohort
-
-	writeInfoChan := make(chan *WriteInfo, config.WriteInfoChanelSize)
-	readInfoChan := make(chan *ReadInfo, config.ReadInfoChanelSize)
-	writtenKeyIndicesChan := make(chan uint64, 64)
-
-	ttl := time.Duration(config.TTLHours * float64(time.Hour))
-	safetyMargin := time.Duration(config.ReadSafetyMarginMinutes * float64(time.Minute))
-	safeTTL := ttl - safetyMargin
-
-	closedChan := make(chan struct{}, 1)
-	closedChan <- struct{}{} // Will be drained when the DataTracker is closed.
-
-	ctx, cancel := context.WithCancel(ctx)
-
-	tracker := &DataTracker{
-		ctx:                       ctx,
-		cancel:                    cancel,
-		rand:                      rand.New(rand.NewSource(time.Now().UnixNano())),
-		config:                    config,
-		cohortDirectory:           cohortDirectory,
-		cohorts:                   cohorts,
-		completeCohortSet:         completeCohortSet,
-		writtenKeysSet:            make(map[uint64]struct{}),
-		writeInfoChan:             writeInfoChan,
-		readInfoChan:              readInfoChan,
-		writtenKeyIndicesChan:     writtenKeyIndicesChan,
-		activeCohort:              activeCohort,
-		lowestCohortIndex:         lowestCohortIndex,
-		highestCohortIndex:        highestCohortIndex,
-		highestWrittenKeyIndex:    int64(activeCohort.LowKeyIndex()) - 1, //nolint:gosec // indices fit int64
-		highestWrittenCohortIndex: int64(highestCohortIndex) - 1,         //nolint:gosec // indices fit int64
-		safeTTL:                   safeTTL,
-		valueSize:                 valueSize,
-		generator:                 NewDataGenerator(config.Seed, config.RandomPoolSize),
-		closedChan:                closedChan,
-		errorMonitor:              errorMonitor,
-	}
-
-	go tracker.dataGenerator()
-
-	return tracker, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Create the cohort directory if it doesn't exist.
+
+// Gather the set of complete cohorts. These are the cohorts we can read from.
+
+// Create an initial active cohort.
+
+// Starting fresh, create a new cohort starting from key index 0.
+
+// Will be drained when the DataTracker is closed.
+
+//nolint:gosec // indices fit int64
+//nolint:gosec // indices fit int64
 
 // gatherCohorts loads cohorts from files on disk. The lowest/highest cohort indices are valid if and only if the
 // cohorts map is not empty. If no cohorts are found, the lowest and highest cohort indices will be 0.
@@ -206,329 +126,119 @@ func gatherCohorts(cohortDirPath string) (
 	highestCohortIndex uint64,
 	cohorts map[uint64]*Cohort,
 	err error) {
-
-	cohorts = make(map[uint64]*Cohort)
+	_ = "STUB: not implemented"
+	return 0, 0, nil, nil
 
 	// walk over files in path
 	// for each file, check if it is a cohort file
 	// if it is, load the cohort and add it to the map
 	// if it is not, ignore it
-	files, err := os.ReadDir(cohortDirPath)
-	if err != nil {
-		return 0,
-			0,
-			nil,
-			fmt.Errorf("failed to read directory: %w", err)
-	}
-
-	lowestCohortIndex = math.MaxUint64
-	highestCohortIndex = 0
-
-	for _, file := range files {
-		filePath := path.Join(cohortDirPath, file.Name())
-
-		if strings.HasSuffix(filePath, CohortFileExtension) {
-			cohort, err := LoadCohort(filePath)
-			if err != nil {
-				return 0,
-					0,
-					nil,
-					fmt.Errorf("failed to load cohort: %w", err)
-			}
-			cohorts[cohort.CohortIndex()] = cohort
-
-			if cohort.CohortIndex() < lowestCohortIndex {
-				lowestCohortIndex = cohort.CohortIndex()
-			}
-			if cohort.cohortIndex > highestCohortIndex {
-				highestCohortIndex = cohort.CohortIndex()
-			}
-		} else if strings.HasSuffix(filePath, CohortSwapFileExtension) {
-			// Delete any swap files discovered
-			err = os.Remove(filePath)
-			if err != nil && !os.IsNotExist(err) {
-				return 0,
-					0,
-					nil,
-					fmt.Errorf("failed to delete swap file: %w", err)
-			}
-		}
-	}
-
-	if len(cohorts) == 0 {
-		// Special case, no cohorts found.
-		return 0, 0, cohorts, nil
-	}
-
-	return lowestCohortIndex, highestCohortIndex, cohorts, nil
 }
+
+// Delete any swap files discovered
+
+// Special case, no cohorts found.
 
 // LargestReadableValueSize returns the size of the largest value possible to read from the database,
 // given current configuration. Considers both values previously written and stored
 // (possibly with different configurations), and values that may be written in the future with the
 // current configuration.
-func (t *DataTracker) LargestReadableValueSize() uint64 {
-	largestValue := uint64(t.config.ValueSizeMB * float64(unit.MB))
-
-	if len(t.cohorts) > 0 {
-		for i := t.lowestCohortIndex; i <= t.highestCohortIndex; i++ {
-			cohort := t.cohorts[i]
-			if cohort.IsComplete() {
-				if cohort.ValueSize() > largestValue {
-					largestValue = cohort.ValueSize()
-				}
-			}
-		}
-	}
-
-	return largestValue
-}
+func (t *DataTracker) LargestReadableValueSize() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // GetWriteInfo returns information required to perform a write operation. It returns the key index (which is needed to
 // call MarkHighestIndexWritten()), the key, and the value. Data is generated on background goroutines in order to
 // make this method very fast. Will not block as long as data can be generated in the background fast enough.
 // May return nil if the context is cancelled.
-func (t *DataTracker) GetWriteInfo() *WriteInfo {
-	select {
-	case info := <-t.writeInfoChan:
-		return info
-	case <-t.ctx.Done():
-		return nil
-	}
-}
+func (t *DataTracker) GetWriteInfo() *WriteInfo { _ = "STUB: not implemented"; return nil }
 
 // ReportWrite is called when a key has been written to the database. This means that the key is now safe to be read.
-func (t *DataTracker) ReportWrite(index uint64) {
-	select {
-	case t.writtenKeyIndicesChan <- index:
-		return
-	case <-t.ctx.Done():
-		return
-	}
-}
+func (t *DataTracker) ReportWrite(index uint64) { _ = "STUB: not implemented"; return }
 
 // GetReadInfo returns information required to perform a read operation. Blocks until there is data eligible to be read.
-func (t *DataTracker) GetReadInfo() *ReadInfo {
-	select {
-	case info := <-t.readInfoChan:
-		return info
-	case <-t.ctx.Done():
-		return nil
-	}
-}
+func (t *DataTracker) GetReadInfo() *ReadInfo { _ = "STUB: not implemented"; return nil }
 
 // GetReadInfoWithTimeout returns information required to perform a read operation. Waits the specified timeout for
 // data to be eligible to be read. If no data is available within the time limit, returns nil.
 func (t *DataTracker) GetReadInfoWithTimeout(timeout time.Duration) *ReadInfo {
-	ctx, cancel := context.WithTimeout(t.ctx, timeout)
-	defer cancel()
-
-	select {
-	case info := <-t.readInfoChan:
-		return info
-	case <-ctx.Done():
-		return nil
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Close stops the key manager's background tasks.
-func (t *DataTracker) Close() {
-	t.cancel()
-	t.closedChan <- struct{}{}
-	<-t.closedChan
-}
+func (t *DataTracker) Close() { _ = "STUB: not implemented"; return }
 
 // dataGenerator is responsible for generating data in the background.
-func (t *DataTracker) dataGenerator() {
-	ticker := time.NewTicker(time.Duration(t.config.CohortGCPeriodSeconds * float64(time.Second)))
-	defer func() {
-		ticker.Stop()
-		<-t.closedChan
-	}()
+func (t *DataTracker) dataGenerator() { _ = "STUB: not implemented"; return }
 
-	nextWriteInfo := t.generateNextWriteInfo()
-	nextReadInfo := t.generateNextReadInfo()
+// Edge case: when stared up for the first time, there won't be any values eligible to be read.
+// We have to handle this in a special manner to prevent nil values from being inserted into
+// the readInfoChan.
 
-	for {
-		if nextReadInfo == nil {
-			// Edge case: when stared up for the first time, there won't be any values eligible to be read.
-			// We have to handle this in a special manner to prevent nil values from being inserted into
-			// the readInfoChan.
+// track keys that have been written so that we can read them in the future
 
-			select {
-			case <-t.errorMonitor.ImmediateShutdownRequired():
-				return
-			case <-t.ctx.Done():
-				return
-			case keyIndex := <-t.writtenKeyIndicesChan:
-				// track keys that have been written so that we can read them in the future
-				t.handleWrittenKey(keyIndex)
-			case t.writeInfoChan <- nextWriteInfo:
-				// prepare a value to be eventually written
-				nextWriteInfo = t.generateNextWriteInfo()
-			case <-ticker.C:
-				// perform garbage collection on cohorts
-				t.DoCohortGC()
-			}
+// prepare a value to be eventually written
 
-			nextReadInfo = t.generateNextReadInfo()
+// perform garbage collection on cohorts
 
-		} else {
-			// Standard case.
+// Standard case.
 
-			select {
-			case <-t.errorMonitor.ImmediateShutdownRequired():
-				return
-			case <-t.ctx.Done():
-				return
-			case keyIndex := <-t.writtenKeyIndicesChan:
-				// track keys that have been written so that we can read them in the future
-				t.handleWrittenKey(keyIndex)
-			case t.writeInfoChan <- nextWriteInfo:
-				// prepare a value to be eventually written
-				nextWriteInfo = t.generateNextWriteInfo()
-			case t.readInfoChan <- nextReadInfo:
-				// prepare a value to be eventually read
-				nextReadInfo = t.generateNextReadInfo()
-			case <-ticker.C:
-				// perform garbage collection on cohorts
-				t.DoCohortGC()
-			}
-		}
-	}
-}
+// track keys that have been written so that we can read them in the future
+
+// prepare a value to be eventually written
+
+// prepare a value to be eventually read
+
+// perform garbage collection on cohorts
 
 // handleWrittenKey handles a key that has been written to the database.
 func (t *DataTracker) handleWrittenKey(keyIndex uint64) {
+	_ = "STUB: not implemented"
 	// Add key index to the set of written keys we are tracking.
-	t.writtenKeysSet[keyIndex] = struct{}{}
-
-	// Determine the highest key index written so far that also has all lower key indices written.
-	for {
-		nextKeyIndex := uint64(t.highestWrittenKeyIndex + 1) //nolint:gosec // index non-negative
-		if _, ok := t.writtenKeysSet[nextKeyIndex]; ok {
-			// The next key has been written, mark it as such.
-			t.highestWrittenKeyIndex = int64(nextKeyIndex) //nolint:gosec // index fits int64
-			delete(t.writtenKeysSet, nextKeyIndex)
-		} else {
-			// Once we find the first key that has not been written, we can stop checking.
-			// We want t.highestWrittenKeyIndex to be the highest key index that has been written
-			// without any gaps in the sequence.
-			break
-		}
-	}
-
-	// Determine the highest cohort index written so far that also has all lower cohorts written.
-	for {
-		nextCohortIndex := uint64(t.highestWrittenCohortIndex + 1) //nolint:gosec // index non-negative
-		if nextCohortIndex >= t.activeCohort.CohortIndex() {
-			// Don't ever mark the active cohort as complete.
-			break
-		}
-		nextCohort := t.cohorts[nextCohortIndex]
-		if int64(nextCohort.HighKeyIndex()) <= t.highestWrittenKeyIndex { //nolint:gosec // index fits int64
-			// We've found a cohort that has all keys written.
-			t.highestWrittenCohortIndex = int64(nextCohort.CohortIndex()) //nolint:gosec // index fits int64
-			t.completeCohortSet[nextCohort.CohortIndex()] = struct{}{}
-			err := nextCohort.MarkComplete()
-			if err != nil {
-				t.errorMonitor.Panic(fmt.Errorf("failed to mark cohort as complete: %v", err))
-				return
-			}
-		} else {
-			// Once we find the first cohort that does not have all keys written, we can stop checking.
-			break
-		}
-	}
+	return
 }
+
+// Determine the highest key index written so far that also has all lower key indices written.
+
+//nolint:gosec // index non-negative
+
+// The next key has been written, mark it as such.
+//nolint:gosec // index fits int64
+
+// Once we find the first key that has not been written, we can stop checking.
+// We want t.highestWrittenKeyIndex to be the highest key index that has been written
+// without any gaps in the sequence.
+
+// Determine the highest cohort index written so far that also has all lower cohorts written.
+
+//nolint:gosec // index non-negative
+
+// Don't ever mark the active cohort as complete.
+
+//nolint:gosec // index fits int64
+// We've found a cohort that has all keys written.
+//nolint:gosec // index fits int64
+
+// Once we find the first cohort that does not have all keys written, we can stop checking.
 
 // generateNextWriteInfo generates the next write info to be placed into the writeInfoChan.
-func (t *DataTracker) generateNextWriteInfo() *WriteInfo {
-	var err error
-
-	if t.activeCohort.IsExhausted() {
-		t.activeCohort, err = t.cohorts[t.highestCohortIndex].NextCohort(t.config.CohortSize, t.valueSize)
-		if err != nil {
-			t.errorMonitor.Panic(fmt.Errorf("failed to generate next cohort for highest cohort: %v", err))
-			return nil
-		}
-		t.highestCohortIndex = t.activeCohort.CohortIndex()
-		t.cohorts[t.highestCohortIndex] = t.activeCohort
-	}
-
-	keyIndex, err := t.activeCohort.GetKeyIndexForWriting()
-	if err != nil {
-		t.errorMonitor.Panic(fmt.Errorf("failed to get key index for writing: %v", err))
-		return nil
-	}
-
-	return &WriteInfo{
-		KeyIndex: keyIndex,
-		Key:      t.generator.Key(keyIndex),
-		Value:    t.generator.Value(keyIndex, t.activeCohort.valueSize),
-	}
-}
+func (t *DataTracker) generateNextWriteInfo() *WriteInfo { _ = "STUB: not implemented"; return nil }
 
 // generateNextReadInfo generates the next read info to be placed into the readInfoChan.
-func (t *DataTracker) generateNextReadInfo() *ReadInfo {
-	if len(t.completeCohortSet) == 0 {
-		// No cohorts are complete, so we can't read anything.
-		return nil
-	}
+func (t *DataTracker) generateNextReadInfo() *ReadInfo { _ = "STUB: not implemented"; return nil }
 
-	var cohortIndexToRead uint64
-	for cohortIndexToRead = range t.completeCohortSet {
-		// map iteration is random in golang, so this will yield a random complete cohort.
-		break
-	}
-	cohortToRead := t.cohorts[cohortIndexToRead]
+// No cohorts are complete, so we can't read anything.
 
-	keyIndex, err := cohortToRead.GetKeyIndexForReading(t.rand)
-	if err != nil {
-		t.errorMonitor.Panic(fmt.Errorf("failed to get key index for reading: %v", err))
-		return nil
-	}
-
-	return &ReadInfo{
-		Key:   t.generator.Key(keyIndex),
-		Value: t.generator.Value(keyIndex, cohortToRead.ValueSize()),
-	}
-}
+// map iteration is random in golang, so this will yield a random complete cohort.
 
 // DoCohortGC performs garbage collection on the cohorts, removing cohorts with entries that are nearing expiration.
 func (t *DataTracker) DoCohortGC() {
-	now := time.Now()
+	_ = "STUB: not implemented"
 
 	// Check all cohorts except for the active cohort (i.e. the one with index t.highestCohortIndex).
-	for i := t.lowestCohortIndex; i < t.highestCohortIndex; i++ {
-		cohort := t.cohorts[i]
-
-		if cohort.IsExpired(now, t.safeTTL) {
-			err := cohort.Delete()
-			if err != nil {
-				t.errorMonitor.Panic(fmt.Errorf("failed to delete expired cohort: %v", err))
-				return
-			}
-			t.lowestCohortIndex++
-			delete(t.cohorts, cohort.CohortIndex())
-			delete(t.completeCohortSet, cohort.CohortIndex())
-		} else {
-			// Stop once we find the first cohort that is not eligible for deletion.
-			break
-		}
-	}
-
-	if len(t.cohorts) == 0 {
-		// Edge case: we've been writing data slow enough that the active cohort has expired.
-		// Create a new active cohort.
-		activeCohort, err := t.activeCohort.NextCohort(t.config.CohortSize, t.valueSize)
-		if err != nil {
-			t.errorMonitor.Panic(fmt.Errorf("failed to create new active cohort: %v", err))
-			return
-		}
-
-		t.activeCohort = activeCohort
-		t.highestCohortIndex = activeCohort.CohortIndex()
-		t.cohorts[activeCohort.CohortIndex()] = activeCohort
-	}
+	return
 }
+
+// Stop once we find the first cohort that is not eligible for deletion.
+
+// Edge case: we've been writing data slow enough that the active cohort has expired.
+// Create a new active cohort.

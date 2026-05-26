@@ -4,8 +4,6 @@ import (
 	"encoding/json"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-	wasmvmtypes "github.com/sei-protocol/sei-chain/sei-wasmvm/types"
 )
 
 const (
@@ -24,24 +22,6 @@ type SeiQueryWrapper struct {
 }
 
 func CustomQuerier(qp *QueryPlugin) func(ctx sdk.Context, request json.RawMessage) ([]byte, error) {
-	return func(ctx sdk.Context, request json.RawMessage) ([]byte, error) {
-		var contractQuery SeiQueryWrapper
-		if err := json.Unmarshal(request, &contractQuery); err != nil {
-			return nil, sdkerrors.Wrap(err, "Error parsing request data")
-		}
-		switch contractQuery.Route {
-		case OracleRoute:
-			return qp.HandleOracleQuery(ctx, contractQuery.QueryData)
-		case EpochRoute:
-			return qp.HandleEpochQuery(ctx, contractQuery.QueryData)
-		case TokenFactoryRoute:
-			return qp.HandleTokenFactoryQuery(ctx, contractQuery.QueryData)
-		case EVMRoute:
-			return qp.HandleEVMQuery(ctx, contractQuery.QueryData)
-		case StakingExtRoute:
-			return qp.HandleStakingExtQuery(ctx, contractQuery.QueryData)
-		default:
-			return nil, wasmvmtypes.UnsupportedRequest{Kind: "Unknown Sei Query Route"}
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }

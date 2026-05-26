@@ -1,33 +1,23 @@
 package types
 
-import (
-	"fmt"
-)
-
 //-------------------------------------------------------------------
 
 type ErrNetAddressNoID struct {
 	Addr string
 }
 
-func (e ErrNetAddressNoID) Error() string {
-	return fmt.Sprintf("address (%s) does not contain ID", e.Addr)
-}
+func (e ErrNetAddressNoID) Error() string { _ = "STUB: not implemented"; return "" }
 
 type ErrNetAddressInvalid struct {
 	Addr string
 	Err  error
 }
 
-func (e ErrNetAddressInvalid) Error() string {
-	return fmt.Sprintf("invalid address (%s): %v", e.Addr, e.Err)
-}
+func (e ErrNetAddressInvalid) Error() string { _ = "STUB: not implemented"; return "" }
 
 type ErrNetAddressLookup struct {
 	Addr string
 	Err  error
 }
 
-func (e ErrNetAddressLookup) Error() string {
-	return fmt.Sprintf("error looking up host (%s): %v", e.Addr, e.Err)
-}
+func (e ErrNetAddressLookup) Error() string { _ = "STUB: not implemented"; return "" }

@@ -1,8 +1,6 @@
 package antedecorators
 
 import (
-	"fmt"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/utils/tracing"
 )
@@ -15,13 +13,11 @@ type TracedAnteDecorator struct {
 }
 
 func NewTracedAnteDecorator(wrapped sdk.AnteDecorator, tracingInfo *tracing.Info) TracedAnteDecorator {
-	return TracedAnteDecorator{wrapped: wrapped, traceName: fmt.Sprintf("%T", wrapped), tracingInfo: tracingInfo}
+	_ = "STUB: not implemented"
+	return *new(TracedAnteDecorator)
 }
 
 func (d TracedAnteDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
-	if d.tracingInfo != nil {
-		_, span := d.tracingInfo.Start(d.traceName)
-		defer span.End()
-	}
-	return d.wrapped.AnteHandle(ctx, tx, simulate, next)
+	_ = "STUB: not implemented"
+	return *new(sdk.Context), nil
 }

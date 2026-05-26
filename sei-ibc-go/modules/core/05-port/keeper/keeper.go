@@ -1,15 +1,12 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	capabilitykeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/keeper"
 	capabilitytypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/types"
 	"github.com/sei-protocol/seilog"
 
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/05-port/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 )
 
 var logger = seilog.NewLogger("ibc-go", "modules", "core", "05-port", "keeper")
@@ -23,15 +20,14 @@ type Keeper struct {
 
 // NewKeeper creates a new IBC connection Keeper instance
 func NewKeeper(sck capabilitykeeper.ScopedKeeper) Keeper {
-	return Keeper{
-		scopedKeeper: sck,
-	}
+	_ = "STUB: not implemented"
+	return *new(Keeper)
 }
 
 // IsBound checks a given port ID is already bounded.
 func (k Keeper) IsBound(ctx sdk.Context, portID string) bool {
-	_, ok := k.scopedKeeper.GetCapability(ctx, host.PortPath(portID))
-	return ok
+	_ = "STUB: not implemented"
+	return false
 }
 
 // BindPort binds to a port and returns the associated capability.
@@ -39,21 +35,8 @@ func (k Keeper) IsBound(ctx sdk.Context, portID string) bool {
 // The capability must then be passed to a module which will need to pass
 // it as an extra parameter when calling functions on the IBC module.
 func (k *Keeper) BindPort(ctx sdk.Context, portID string) *capabilitytypes.Capability {
-	if err := host.PortIdentifierValidator(portID); err != nil {
-		panic(err.Error())
-	}
-
-	if k.IsBound(ctx, portID) {
-		panic(fmt.Sprintf("port %s is already bound", portID))
-	}
-
-	key, err := k.scopedKeeper.NewCapability(ctx, host.PortPath(portID))
-	if err != nil {
-		panic(err.Error())
-	}
-
-	logger.Info("port binded", "port", portID)
-	return key
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Authenticate authenticates a capability key against a port ID
@@ -61,19 +44,12 @@ func (k *Keeper) BindPort(ctx sdk.Context, portID string) *capabilitytypes.Capab
 // generated and bound to the port (provided as a parameter) which the capability
 // is being authenticated against.
 func (k Keeper) Authenticate(ctx sdk.Context, key *capabilitytypes.Capability, portID string) bool {
-	if err := host.PortIdentifierValidator(portID); err != nil {
-		panic(err.Error())
-	}
-
-	return k.scopedKeeper.AuthenticateCapability(ctx, key, host.PortPath(portID))
+	_ = "STUB: not implemented"
+	return false
 }
 
 // LookupModuleByPort will return the IBCModule along with the capability associated with a given portID
 func (k Keeper) LookupModuleByPort(ctx sdk.Context, portID string) (string, *capabilitytypes.Capability, error) {
-	modules, cap, err := k.scopedKeeper.LookupModules(ctx, host.PortPath(portID))
-	if err != nil {
-		return "", nil, err
-	}
-
-	return types.GetModuleOwner(modules), cap, nil
+	_ = "STUB: not implemented"
+	return "", nil, nil
 }

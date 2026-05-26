@@ -2,17 +2,10 @@ package http
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"math/rand"
-	"net/url"
-	"strings"
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/light/provider"
 	rpcclient "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client"
-	rpchttp "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/client/http"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/coretypes"
 	rpctypes "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/jsonrpc/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
@@ -66,275 +59,120 @@ type Options struct {
 // the hood. If no scheme is provided in the remote URL, http will be used by
 // default. The 5s timeout is used for all requests.
 func New(chainID, remote string) (provider.Provider, error) {
-	return NewWithOptions(chainID, remote, defaultOptions)
+	_ = "STUB: not implemented"
+	return *new(provider.Provider), nil
 }
 
 // NewWithOptions is an extension to creating a new http provider that allows the addition
 // of a specified timeout and maxRetryAttempts
 func NewWithOptions(chainID, remote string, options Options) (provider.Provider, error) {
+	_ = "STUB: not implemented"
 	// Ensure URL scheme is set (default HTTP) when not provided.
-	if !strings.Contains(remote, "://") {
-		remote = "http://" + remote
-	}
-
-	httpClient, err := rpchttp.NewWithTimeout(remote, options.Timeout)
-	if err != nil {
-		return nil, err
-	}
-
-	return NewWithClientAndOptions(chainID, httpClient, options), nil
+	return *new(provider.Provider), nil
 }
 
 func NewWithClient(chainID string, client rpcclient.RemoteClient) provider.Provider {
-	return NewWithClientAndOptions(chainID, client, defaultOptions)
+	_ = "STUB: not implemented"
+	return *new(provider.Provider)
 }
 
 // NewWithClient allows you to provide a custom client.
 func NewWithClientAndOptions(chainID string, client rpcclient.RemoteClient, options Options) provider.Provider {
-	return &http{
-		client:              client,
-		chainID:             chainID,
-		maxRetryAttempts:    options.MaxRetryAttempts,
-		noResponseThreshold: options.NoResponseThreshold,
-		noBlockThreshold:    options.NoBlockThreshold,
-	}
+	_ = "STUB: not implemented"
+	return *new(provider.Provider)
 }
 
 // Identifies the provider with an IP in string format
-func (p *http) ID() string {
-	return fmt.Sprintf("http{%s}", p.client.Remote())
-}
+func (p *http) ID() string { _ = "STUB: not implemented"; return "" }
 
 // LightBlock fetches a LightBlock at the given height and checks the
 // chainID matches.
 func (p *http) LightBlock(ctx context.Context, height int64) (*types.LightBlock, error) {
-	h, err := validateHeight(height)
-	if err != nil {
-		return nil, provider.ErrBadLightBlock{Reason: err}
-	}
-
-	sh, err := p.signedHeader(ctx, h)
-	if err != nil {
-		return nil, err
-	}
-
-	if height != 0 && sh.Height != height {
-		return nil, provider.ErrBadLightBlock{
-			Reason: fmt.Errorf("height %d responded doesn't match height %d requested", sh.Height, height),
-		}
-	}
-
-	if sh.Header == nil {
-		return nil, provider.ErrBadLightBlock{
-			Reason: errors.New("returned header is nil unexpectedly"),
-		}
-	}
-
-	vs, err := p.validatorSet(ctx, &sh.Height)
-	if err != nil {
-		return nil, err
-	}
-
-	lb := &types.LightBlock{
-		SignedHeader: sh,
-		ValidatorSet: vs,
-	}
-
-	err = lb.ValidateBasic(p.chainID)
-	if err != nil {
-		return nil, provider.ErrBadLightBlock{Reason: err}
-	}
-
-	return lb, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ReportEvidence calls `/broadcast_evidence` endpoint.
 func (p *http) ReportEvidence(ctx context.Context, ev types.Evidence) error {
-	_, err := p.client.BroadcastEvidence(ctx, ev)
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (p *http) validatorSet(ctx context.Context, height *int64) (*types.ValidatorSet, error) {
+	_ = "STUB: not implemented"
 	// Since the malicious node could report a massive number of pages, making us
 	// spend a considerable time iterating, we restrict the number of pages here.
 	// => 10000 validators max
-	const maxPages = 100
-
-	var (
-		perPage = 100
-		vals    = []*types.Validator{}
-		page    = 1
-		total   = -1
-	)
-
-	for len(vals) != total && page <= maxPages {
-		// create another for loop to control retries. If p.maxRetryAttempts
-		// is negative we will keep repeating.
-		attempt := uint16(0)
-		for {
-			res, err := p.client.Validators(ctx, height, &page, &perPage)
-			if err == nil {
-				if len(res.Validators) == 0 {
-					return nil, provider.ErrBadLightBlock{
-						Reason: fmt.Errorf("validator set is empty (height: %d, page: %d, per_page: %d)",
-							height, page, perPage),
-					}
-				}
-				if res.Total <= 0 {
-					return nil, provider.ErrBadLightBlock{
-						Reason: fmt.Errorf("total number of vals is <= 0: %d (height: %d, page: %d, per_page: %d)",
-							res.Total, height, page, perPage),
-					}
-				}
-			} else {
-				switch e := err.(type) {
-
-				case *url.Error:
-					if e.Timeout() {
-						// if we have exceeded retry attempts then return a no response error
-						if attempt == p.maxRetryAttempts {
-							return nil, p.noResponse()
-						}
-						attempt++
-						// request timed out: we wait and try again with exponential backoff
-						time.Sleep(backoffTimeout(attempt))
-						continue
-					}
-					return nil, provider.ErrBadLightBlock{Reason: e}
-
-				case *rpctypes.RPCError:
-					// process the rpc error and return the corresponding error to the light client
-					return nil, p.parseRPCError(e)
-
-				default:
-					// check if the error stems from the context
-					if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
-						return nil, err
-					}
-
-					// If we don't know the error then by default we return an unreliable provider error and
-					// terminate the connection with the peer.
-					return nil, provider.ErrUnreliableProvider{Reason: e}
-				}
-			}
-			// update the total and increment the page index so we can fetch the
-			// next page of validators if need be
-			total = res.Total
-			vals = append(vals, res.Validators...)
-			page++
-			break
-		}
-
-	}
-
-	valSet, err := types.ValidatorSetFromExistingValidators(vals)
-	if err != nil {
-		return nil, provider.ErrBadLightBlock{Reason: err}
-	}
-	return valSet, nil
+	return nil, nil
 }
+
+// create another for loop to control retries. If p.maxRetryAttempts
+// is negative we will keep repeating.
+
+// if we have exceeded retry attempts then return a no response error
+
+// request timed out: we wait and try again with exponential backoff
+
+// process the rpc error and return the corresponding error to the light client
+
+// check if the error stems from the context
+
+// If we don't know the error then by default we return an unreliable provider error and
+// terminate the connection with the peer.
+
+// update the total and increment the page index so we can fetch the
+// next page of validators if need be
 
 func (p *http) signedHeader(ctx context.Context, height *int64) (*types.SignedHeader, error) {
+	_ = "STUB: not implemented"
 	// create a for loop to control retries. If p.maxRetryAttempts
 	// is negative we will keep repeating.
-	for attempt := uint16(0); attempt != p.maxRetryAttempts+1; attempt++ {
-		commit, err := p.client.Commit(ctx, height)
-		switch e := err.(type) {
-		case nil: // success!!
-			return &commit.SignedHeader, nil
-
-		case *url.Error:
-			// check if the request timed out
-			if e.Timeout() {
-				// we wait and try again with exponential backoff
-				time.Sleep(backoffTimeout(attempt))
-				continue
-			}
-
-			// check if the connection was refused or dropped
-			if strings.Contains(e.Error(), "connection refused") {
-				return nil, provider.ErrConnectionClosed
-			}
-
-			// else, as a catch all, we return the error as a bad light block response
-			return nil, provider.ErrBadLightBlock{Reason: e}
-
-		case *rpctypes.RPCError:
-			// process the rpc error and return the corresponding error to the light client
-			return nil, p.parseRPCError(e)
-
-		default:
-			// check if the error stems from the context
-			if errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded) {
-				return nil, err
-			}
-
-			// If we don't know the error then by default we return an unreliable provider error and
-			// terminate the connection with the peer.
-			return nil, provider.ErrUnreliableProvider{Reason: e}
-		}
-	}
-	return nil, p.noResponse()
+	return nil, nil
 }
 
-func (p *http) noResponse() error {
-	p.noResponseCount++
-	if p.noResponseCount > p.noResponseThreshold {
-		return provider.ErrUnreliableProvider{
-			Reason: fmt.Errorf("failed to respond after %d attempts", p.noResponseCount),
-		}
-	}
-	return provider.ErrNoResponse
-}
+// success!!
 
-func (p *http) noBlock(e error) error {
-	p.noBlockCount++
-	if p.noBlockCount > p.noBlockThreshold {
-		return provider.ErrUnreliableProvider{
-			Reason: fmt.Errorf("failed to provide a block after %d attempts", p.noBlockCount),
-		}
-	}
-	return e
-}
+// check if the request timed out
+
+// we wait and try again with exponential backoff
+
+// check if the connection was refused or dropped
+
+// else, as a catch all, we return the error as a bad light block response
+
+// process the rpc error and return the corresponding error to the light client
+
+// check if the error stems from the context
+
+// If we don't know the error then by default we return an unreliable provider error and
+// terminate the connection with the peer.
+
+func (p *http) noResponse() error { _ = "STUB: not implemented"; return nil }
+
+func (p *http) noBlock(e error) error { _ = "STUB: not implemented"; return nil }
 
 // parseRPCError process the error and return the corresponding error to the light clent
 // NOTE: When an error is sent over the wire it gets "flattened" hence we are unable to use error
 // checking functions like errors.Is() to unwrap the error.
 func (p *http) parseRPCError(e *rpctypes.RPCError) error {
-	switch {
+	_ = "STUB: not implemented"
+
 	// 1) check if the error indicates that the peer doesn't have the block
-	case strings.Contains(e.Data, coretypes.ErrHeightNotAvailable.Error()):
-		return p.noBlock(provider.ErrLightBlockNotFound)
-
-	// 2) check if the height requested is too high
-	case strings.Contains(e.Data, coretypes.ErrHeightExceedsChainHead.Error()):
-		return p.noBlock(provider.ErrHeightTooHigh)
-
-	// 3) check if the provider closed the connection
-	case strings.Contains(e.Data, "connection refused"):
-		return provider.ErrConnectionClosed
-
-	// 4) else return a generic error
-	default:
-		return provider.ErrBadLightBlock{Reason: e}
-	}
+	return nil
 }
 
-func validateHeight(height int64) (*int64, error) {
-	if height < 0 {
-		return nil, fmt.Errorf("expected height >= 0, got height %d", height)
-	}
+// 2) check if the height requested is too high
 
-	h := &height
-	if height == 0 {
-		h = nil
-	}
-	return h, nil
-}
+// 3) check if the provider closed the connection
+
+// 4) else return a generic error
+
+func validateHeight(height int64) (*int64, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // exponential backoff (with jitter)
 // 0.5s -> 2s -> 4.5s -> 8s -> 12.5 with 1s variation
 func backoffTimeout(attempt uint16) time.Duration {
+	_ = "STUB: not implemented"
 	// nolint:gosec // G404: Use of weak random number generator
-	return time.Duration(500*attempt*attempt)*time.Millisecond + time.Duration(rand.Intn(1000))*time.Millisecond
+	return *new(time.Duration)
 }

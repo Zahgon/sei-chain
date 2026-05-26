@@ -1,30 +1,18 @@
 package utils
 
 import (
-	"errors"
-	"fmt"
 	"sync"
 
 	"github.com/gogo/protobuf/proto"
 )
 
-func ErrorAs[T error](err error) Option[T] {
-	var target T
-	if errors.As(err, &target) {
-		return Some(target)
-	}
-	return None[T]()
-}
+func ErrorAs[T error](err error) Option[T] { _ = "STUB: not implemented"; return nil }
 
 // ProtoClone clones a proto.Message object.
-func ProtoClone[T proto.Message](item T) T {
-	return proto.Clone(item).(T)
-}
+func ProtoClone[T proto.Message](item T) T { _ = "STUB: not implemented"; return *new(T) }
 
 // ProtoEqual compares two proto.Message objects.
-func ProtoEqual[T proto.Message](a, b T) bool {
-	return proto.Equal(a, b)
-}
+func ProtoEqual[T proto.Message](a, b T) bool { _ = "STUB: not implemented"; return false }
 
 // ProtoMessage is comparable proto.Message.
 type ProtoMessage interface {
@@ -39,24 +27,12 @@ type ProtoConv[T any, P ProtoMessage] struct {
 }
 
 // EncodeSlice encodes a slice of T into a slice of P.
-func (c ProtoConv[T, P]) EncodeSlice(t []T) []P {
-	p := make([]P, len(t))
-	for i := range t {
-		p[i] = c.Encode(t[i])
-	}
-	return p
-}
+func (c ProtoConv[T, P]) EncodeSlice(t []T) []P { _ = "STUB: not implemented"; return nil }
 
 // DecodeSlice decodes a slice of P into a slice of T.
 func (c ProtoConv[T, P]) DecodeSlice(p []P) ([]T, error) {
-	t := make([]T, len(p))
-	var err error
-	for i := range p {
-		if t[i], err = c.Decode(p[i]); err != nil {
-			return nil, fmt.Errorf("[%d]: %w", i, err)
-		}
-	}
-	return t, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Slice constructs a slice.
@@ -64,29 +40,45 @@ func (c ProtoConv[T, P]) DecodeSlice(p []P) ([]T, error) {
 // spelling out T. Not very useful if you need to spell
 // out T to construct the elements: in that case
 // you might prefer the []T{{...},{...}} syntax instead.
-func Slice[T any](v ...T) []T { return v }
+func Slice[T any](v ...T) []T {
+	_ = "STUB: not implemented"
 
-// Alloc moves value to heap.
-func Alloc[T any](v T) *T { return &v }
+	// Alloc moves value to heap.
+	return nil
+}
 
-// Zero returns a zero value of type T.
-func Zero[T any]() (zero T) { return }
+func Alloc[T any](v T) *T {
+	_ = "STUB: not implemented"
 
-// NoCopy may be added to structs which must not be copied
-// after the first use.
-//
-// See https://golang.org/issues/8005#issuecomment-190753527
-// for details.
-//
-// Note that it must not be embedded, otherwise Lock and Unlock methods
-// will be exported.
+	// Zero returns a zero value of type T.
+	return nil
+}
+
+func Zero[T any]() (zero T) {
+	_ = "STUB: not implemented"
+
+	// NoCopy may be added to structs which must not be copied
+	// after the first use.
+	//
+	// See https://golang.org/issues/8005#issuecomment-190753527
+	// for details.
+	//
+	// Note that it must not be embedded, otherwise Lock and Unlock methods
+	// will be exported.
+	return *new(T)
+}
+
 type NoCopy struct{}
 
 // Lock implements sync.Locker.
-func (*NoCopy) Lock() {}
+func (*NoCopy) Lock() {
+	_ = "STUB: not implemented"
 
-// Unlock implements sync.Locker.
-func (*NoCopy) Unlock() {}
+	// Unlock implements sync.Locker.
+	return
+}
+
+func (*NoCopy) Unlock() { _ = "STUB: not implemented"; return }
 
 var _ sync.Locker = (*NoCopy)(nil)
 
@@ -95,30 +87,13 @@ var _ sync.Locker = (*NoCopy)(nil)
 type NoCompare [0]func()
 
 // EncodeOpt encodes Option[T], mapping None to Zero[P]().
-func (c ProtoConv[T, P]) EncodeOpt(mv Option[T]) P {
-	v, ok := mv.Get()
-	if !ok {
-		return Zero[P]()
-	}
-	return c.Encode(v)
-}
+func (c ProtoConv[T, P]) EncodeOpt(mv Option[T]) P { _ = "STUB: not implemented"; return *new(P) }
 
 // DecodeReq decodes a ProtoMessage into a T, returning an error if p is nil.
-func (c ProtoConv[T, P]) DecodeReq(p P) (T, error) {
-	if p == Zero[P]() {
-		return Zero[T](), errors.New("missing")
-	}
-	return c.Decode(p)
-}
+func (c ProtoConv[T, P]) DecodeReq(p P) (T, error) { _ = "STUB: not implemented"; return *new(T), nil }
 
 // DecodeOpt decodes a ProtoMessage into a T, returning nil if p is nil.
 func (c ProtoConv[T, P]) DecodeOpt(p P) (Option[T], error) {
-	if p == Zero[P]() {
-		return None[T](), nil
-	}
-	t, err := c.DecodeReq(p)
-	if err != nil {
-		return None[T](), err
-	}
-	return Some(t), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

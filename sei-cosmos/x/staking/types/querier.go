@@ -32,9 +32,8 @@ type QueryDelegatorParams struct {
 }
 
 func NewQueryDelegatorParams(delegatorAddr sdk.AccAddress) QueryDelegatorParams {
-	return QueryDelegatorParams{
-		DelegatorAddr: delegatorAddr,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryDelegatorParams)
 }
 
 // defines the params for the following queries:
@@ -47,11 +46,8 @@ type QueryValidatorParams struct {
 }
 
 func NewQueryValidatorParams(validatorAddr sdk.ValAddress, page, limit int) QueryValidatorParams {
-	return QueryValidatorParams{
-		ValidatorAddr: validatorAddr,
-		Page:          page,
-		Limit:         limit,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryValidatorParams)
 }
 
 // defines the params for the following queries:
@@ -63,11 +59,8 @@ type QueryRedelegationParams struct {
 }
 
 func NewQueryRedelegationParams(delegatorAddr sdk.AccAddress, srcValidatorAddr, dstValidatorAddr sdk.ValAddress) QueryRedelegationParams {
-	return QueryRedelegationParams{
-		DelegatorAddr:    delegatorAddr,
-		SrcValidatorAddr: srcValidatorAddr,
-		DstValidatorAddr: dstValidatorAddr,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryRedelegationParams)
 }
 
 // QueryValidatorsParams defines the params for the following queries:
@@ -78,5 +71,6 @@ type QueryValidatorsParams struct {
 }
 
 func NewQueryValidatorsParams(page, limit int, status string) QueryValidatorsParams {
-	return QueryValidatorsParams{page, limit, status}
+	_ = "STUB: not implemented"
+	return *new(QueryValidatorsParams)
 }

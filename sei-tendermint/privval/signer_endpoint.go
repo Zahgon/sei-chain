@@ -2,12 +2,10 @@ package privval
 
 import (
 	"context"
-	"fmt"
 	"net"
 	"sync"
 	"time"
 
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/protoio"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/service"
 	privvalproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/privval"
 )
@@ -26,134 +24,47 @@ type signerEndpoint struct {
 }
 
 // Close closes the underlying net.Conn.
-func (se *signerEndpoint) Close() error {
-	se.DropConnection()
-	return nil
-}
+func (se *signerEndpoint) Close() error { _ = "STUB: not implemented"; return nil }
 
 // IsConnected indicates if there is an active connection
-func (se *signerEndpoint) IsConnected() bool {
-	se.connMtx.Lock()
-	defer se.connMtx.Unlock()
-	return se.isConnected()
-}
+func (se *signerEndpoint) IsConnected() bool { _ = "STUB: not implemented"; return false }
 
 // TryGetConnection retrieves a connection if it is already available
 func (se *signerEndpoint) GetAvailableConnection(connectionAvailableCh chan net.Conn) bool {
-	se.connMtx.Lock()
-	defer se.connMtx.Unlock()
-
-	// Is there a connection ready?
-	select {
-	case se.conn = <-connectionAvailableCh:
-		return true
-	default:
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
+// Is there a connection ready?
+
 // TryGetConnection retrieves a connection if it is already available
 func (se *signerEndpoint) WaitConnection(ctx context.Context, connectionAvailableCh chan net.Conn, maxWait time.Duration) error {
-	se.connMtx.Lock()
-	defer se.connMtx.Unlock()
-
-	select {
-	case <-ctx.Done():
-		return ctx.Err()
-	case se.conn = <-connectionAvailableCh:
-	case <-time.After(maxWait):
-		return ErrConnectionTimeout
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // SetConnection replaces the current connection object
-func (se *signerEndpoint) SetConnection(newConnection net.Conn) {
-	se.connMtx.Lock()
-	defer se.connMtx.Unlock()
-	se.conn = newConnection
-}
+func (se *signerEndpoint) SetConnection(newConnection net.Conn) { _ = "STUB: not implemented"; return }
 
 // IsConnected indicates if there is an active connection
-func (se *signerEndpoint) DropConnection() {
-	se.connMtx.Lock()
-	defer se.connMtx.Unlock()
-	se.dropConnection()
-}
+func (se *signerEndpoint) DropConnection() { _ = "STUB: not implemented"; return }
 
 // ReadMessage reads a message from the endpoint
 func (se *signerEndpoint) ReadMessage() (msg privvalproto.Message, err error) {
-	se.connMtx.Lock()
-	defer se.connMtx.Unlock()
-
-	if !se.isConnected() {
-		return msg, fmt.Errorf("endpoint is not connected: %w", ErrNoConnection)
-	}
-	// Reset read deadline
-	deadline := time.Now().Add(se.timeoutReadWrite)
-
-	err = se.conn.SetReadDeadline(deadline)
-	if err != nil {
-		return
-	}
-	const maxRemoteSignerMsgSize = 1024 * 10
-	protoReader := protoio.NewDelimitedReader(se.conn, maxRemoteSignerMsgSize)
-	_, err = protoReader.ReadMsg(&msg)
-	if _, ok := err.(timeoutError); ok {
-		if err != nil {
-			err = fmt.Errorf("%v: %w", err, ErrReadTimeout)
-		} else {
-			err = fmt.Errorf("empty error: %w", ErrReadTimeout)
-		}
-
-		logger.Debug("Dropping [read]", "obj", se)
-		se.dropConnection()
-	}
-
-	return
+	_ = "STUB: not implemented"
+	return *new(privvalproto.Message), nil
 }
+
+// Reset read deadline
 
 // WriteMessage writes a message from the endpoint
 func (se *signerEndpoint) WriteMessage(msg privvalproto.Message) (err error) {
-	se.connMtx.Lock()
-	defer se.connMtx.Unlock()
-
-	if !se.isConnected() {
-		return fmt.Errorf("endpoint is not connected: %w", ErrNoConnection)
-	}
-
-	protoWriter := protoio.NewDelimitedWriter(se.conn)
-
-	// Reset read deadline
-	deadline := time.Now().Add(se.timeoutReadWrite)
-	err = se.conn.SetWriteDeadline(deadline)
-	if err != nil {
-		return
-	}
-
-	_, err = protoWriter.WriteMsg(&msg)
-	if _, ok := err.(timeoutError); ok {
-		if err != nil {
-			err = fmt.Errorf("%v: %w", err, ErrWriteTimeout)
-		} else {
-			err = fmt.Errorf("empty error: %w", ErrWriteTimeout)
-		}
-		se.dropConnection()
-	}
-
-	return
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (se *signerEndpoint) isConnected() bool {
-	return se.conn != nil
-}
+// Reset read deadline
 
-func (se *signerEndpoint) dropConnection() {
-	if se.conn != nil {
-		if err := se.conn.Close(); err != nil {
-			logger.Error("signerEndpoint::dropConnection", "err", err)
-		}
-		se.conn = nil
-	}
-}
+func (se *signerEndpoint) isConnected() bool { _ = "STUB: not implemented"; return false }
+
+func (se *signerEndpoint) dropConnection() { _ = "STUB: not implemented"; return }

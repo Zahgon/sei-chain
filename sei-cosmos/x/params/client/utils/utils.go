@@ -2,8 +2,6 @@ package utils
 
 import (
 	"encoding/json"
-	"os"
-	"path/filepath"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
@@ -48,37 +46,26 @@ type (
 )
 
 func NewParamChangeJSON(subspace, key string, value json.RawMessage) ParamChangeJSON {
-	return ParamChangeJSON{subspace, key, value}
+	_ = "STUB: not implemented"
+	return *new(ParamChangeJSON)
 }
 
 // ToParamChange converts a ParamChangeJSON object to ParamChange.
 func (pcj ParamChangeJSON) ToParamChange() proposal.ParamChange {
-	return proposal.NewParamChange(pcj.Subspace, pcj.Key, string(pcj.Value))
+	_ = "STUB: not implemented"
+	return *new(proposal.ParamChange)
 }
 
 // ToParamChanges converts a slice of ParamChangeJSON objects to a slice of
 // ParamChange.
 func (pcj ParamChangesJSON) ToParamChanges() []proposal.ParamChange {
-	res := make([]proposal.ParamChange, len(pcj))
-	for i, pc := range pcj {
-		res[i] = pc.ToParamChange()
-	}
-	return res
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ParseParamChangeProposalJSON reads and parses a ParamChangeProposalJSON from
 // file.
 func ParseParamChangeProposalJSON(cdc *codec.LegacyAmino, proposalFile string) (ParamChangeProposalJSON, error) {
-	proposal := ParamChangeProposalJSON{}
-
-	contents, err := os.ReadFile(filepath.Clean(proposalFile))
-	if err != nil {
-		return proposal, err
-	}
-
-	if err := cdc.UnmarshalAsJSON(contents, &proposal); err != nil {
-		return proposal, err
-	}
-
-	return proposal, nil
+	_ = "STUB: not implemented"
+	return *new(ParamChangeProposalJSON), nil
 }

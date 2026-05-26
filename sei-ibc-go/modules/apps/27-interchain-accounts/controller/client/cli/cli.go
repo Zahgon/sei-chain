@@ -5,18 +5,4 @@ import (
 )
 
 // GetQueryCmd returns the query commands for the ICA controller submodule
-func GetQueryCmd() *cobra.Command {
-	queryCmd := &cobra.Command{
-		Use:                        "controller",
-		Short:                      "interchain-accounts controller subcommands",
-		DisableFlagParsing:         true,
-		SuggestionsMinimumDistance: 2,
-	}
-
-	queryCmd.AddCommand(
-		GetCmdQueryInterchainAccount(),
-		GetCmdParams(),
-	)
-
-	return queryCmd
-}
+func GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }

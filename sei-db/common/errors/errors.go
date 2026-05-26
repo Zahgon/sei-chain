@@ -14,15 +14,11 @@ var (
 )
 
 // IsNotFound returns true if the error represents a "not found" condition.
-func IsNotFound(err error) bool {
-	return errors.Is(err, ErrNotFound)
-}
+func IsNotFound(err error) bool { _ = "STUB: not implemented"; return false }
 
 // IsFileLockError returns true if the error is due to a file lock
 // that could not be acquired (e.g. held by another process).
-func IsFileLockError(err error) bool {
-	return errors.Is(err, ErrFileLockUnavailable)
-}
+func IsFileLockError(err error) bool { _ = "STUB: not implemented"; return false }
 
 // Join returns an error that wraps the given errors.
 // Any nil error values are discarded.
@@ -30,6 +26,4 @@ func IsFileLockError(err error) bool {
 // Unlike the previous string-concatenation implementation, this delegates
 // to stdlib errors.Join so that wrapped sentinels remain detectable via
 // errors.Is / errors.As.
-func Join(errs ...error) error {
-	return errors.Join(errs...)
-}
+func Join(errs ...error) error { _ = "STUB: not implemented"; return nil }

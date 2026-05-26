@@ -10,11 +10,4 @@ type OpenFunc func(dbHome string, cfg config.StateStoreConfig) (types.StateStore
 
 // ResolveBackend returns the OpenFunc for the given backend name.
 // Defaults to PebbleDB. RocksDB is available only when built with -tags=rocksdbBackend.
-func ResolveBackend(backendName string) OpenFunc {
-	switch backendName {
-	case config.RocksDBBackend:
-		return openRocksDB
-	default:
-		return openPebbleDB
-	}
-}
+func ResolveBackend(backendName string) OpenFunc { _ = "STUB: not implemented"; return *new(OpenFunc) }

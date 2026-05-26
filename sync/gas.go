@@ -12,19 +12,13 @@ type GasWrapper struct {
 }
 
 func NewGasWrapper(wrapped sdk.GasMeter) sdk.GasMeter {
-	return GasWrapper{GasMeter: wrapped, mu: &sync.Mutex{}}
+	_ = "STUB: not implemented"
+	return *new(sdk.GasMeter)
 }
 
 func (g GasWrapper) ConsumeGas(amount sdk.Gas, descriptor string) {
-	g.mu.Lock()
-	defer g.mu.Unlock()
-
-	g.GasMeter.ConsumeGas(amount, descriptor)
+	_ = "STUB: not implemented"
+	return
 }
 
-func (g GasWrapper) RefundGas(amount sdk.Gas, descriptor string) {
-	g.mu.Lock()
-	defer g.mu.Unlock()
-
-	g.GasMeter.RefundGas(amount, descriptor)
-}
+func (g GasWrapper) RefundGas(amount sdk.Gas, descriptor string) { _ = "STUB: not implemented"; return }

@@ -15,7 +15,6 @@ import (
 
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/sei-protocol/seilog"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -153,21 +152,9 @@ func main() {
 }
 
 func registerPrometheus(addr string, s *grpc.Server) *http.Server {
+	_ = "STUB: not implemented"
 	// Initialize all metrics.
-	grpcMetrics.InitializeMetrics(s)
-	// create http server to serve prometheus
-	httpServer := &http.Server{
-		Handler:           promhttp.HandlerFor(reg, promhttp.HandlerOpts{}),
-		Addr:              addr,
-		ReadHeaderTimeout: 5 * time.Second,
-	}
-
-	go func() {
-		if err := httpServer.ListenAndServe(); err != nil {
-			_, _ = fmt.Fprintf(os.Stderr, "Unable to start a http server: %v", err)
-			os.Exit(1)
-		}
-	}()
-
-	return httpServer
+	return nil
 }
+
+// create http server to serve prometheus

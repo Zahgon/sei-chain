@@ -5,8 +5,6 @@
 package mocks
 
 import (
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -24,24 +22,25 @@ type MockInvariantRegistryMockRecorder struct {
 
 // NewMockInvariantRegistry creates a new mock instance.
 func NewMockInvariantRegistry(ctrl *gomock.Controller) *MockInvariantRegistry {
-	mock := &MockInvariantRegistry{ctrl: ctrl}
-	mock.recorder = &MockInvariantRegistryMockRecorder{mock}
-	return mock
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockInvariantRegistry) EXPECT() *MockInvariantRegistryMockRecorder {
-	return m.recorder
+	_ = "STUB: not implemented"
+
+	// RegisterRoute mocks base method.
+	return nil
 }
 
-// RegisterRoute mocks base method.
 func (m *MockInvariantRegistry) RegisterRoute(moduleName, route string, invar types.Invariant) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "RegisterRoute", moduleName, route, invar)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterRoute indicates an expected call of RegisterRoute.
 func (mr *MockInvariantRegistryMockRecorder) RegisterRoute(moduleName, route, invar interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterRoute", reflect.TypeOf((*MockInvariantRegistry)(nil).RegisterRoute), moduleName, route, invar)
+	_ = "STUB: not implemented"
+	return nil
 }

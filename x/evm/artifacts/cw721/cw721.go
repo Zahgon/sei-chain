@@ -99,47 +99,32 @@ type Cw721TransactorRaw struct {
 
 // NewCw721 creates a new instance of Cw721, bound to a specific deployed contract.
 func NewCw721(address common.Address, backend bind.ContractBackend) (*Cw721, error) {
-	contract, err := bindCw721(address, backend, backend, backend)
-	if err != nil {
-		return nil, err
-	}
-	return &Cw721{Cw721Caller: Cw721Caller{contract: contract}, Cw721Transactor: Cw721Transactor{contract: contract}, Cw721Filterer: Cw721Filterer{contract: contract}}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewCw721Caller creates a new read-only instance of Cw721, bound to a specific deployed contract.
 func NewCw721Caller(address common.Address, caller bind.ContractCaller) (*Cw721Caller, error) {
-	contract, err := bindCw721(address, caller, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &Cw721Caller{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewCw721Transactor creates a new write-only instance of Cw721, bound to a specific deployed contract.
 func NewCw721Transactor(address common.Address, transactor bind.ContractTransactor) (*Cw721Transactor, error) {
-	contract, err := bindCw721(address, nil, transactor, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &Cw721Transactor{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewCw721Filterer creates a new log filterer instance of Cw721, bound to a specific deployed contract.
 func NewCw721Filterer(address common.Address, filterer bind.ContractFilterer) (*Cw721Filterer, error) {
-	contract, err := bindCw721(address, nil, nil, filterer)
-	if err != nil {
-		return nil, err
-	}
-	return &Cw721Filterer{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // bindCw721 binds a generic wrapper to an already deployed contract.
 func bindCw721(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := Cw721MetaData.GetAbi()
-	if err != nil {
-		return nil, err
-	}
-	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -147,18 +132,21 @@ func bindCw721(address common.Address, caller bind.ContractCaller, transactor bi
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Cw721 *Cw721Raw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Cw721.Contract.Cw721Caller.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Cw721 *Cw721Raw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Cw721.Contract.Cw721Transactor.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Cw721 *Cw721Raw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Cw721.Contract.Cw721Transactor.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -166,620 +154,516 @@ func (_Cw721 *Cw721Raw) Transact(opts *bind.TransactOpts, method string, params 
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Cw721 *Cw721CallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Cw721.Contract.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Cw721 *Cw721TransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Cw721.Contract.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Cw721 *Cw721TransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Cw721.Contract.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // AddrPrecompile is a free data retrieval call binding the contract method 0xc2aed302.
 //
 // Solidity: function AddrPrecompile() view returns(address)
 func (_Cw721 *Cw721Caller) AddrPrecompile(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "AddrPrecompile")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // AddrPrecompile is a free data retrieval call binding the contract method 0xc2aed302.
 //
 // Solidity: function AddrPrecompile() view returns(address)
 func (_Cw721 *Cw721Session) AddrPrecompile() (common.Address, error) {
-	return _Cw721.Contract.AddrPrecompile(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // AddrPrecompile is a free data retrieval call binding the contract method 0xc2aed302.
 //
 // Solidity: function AddrPrecompile() view returns(address)
 func (_Cw721 *Cw721CallerSession) AddrPrecompile() (common.Address, error) {
-	return _Cw721.Contract.AddrPrecompile(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // Cw721Address is a free data retrieval call binding the contract method 0x5c4aead7.
 //
 // Solidity: function Cw721Address() view returns(string)
 func (_Cw721 *Cw721Caller) Cw721Address(opts *bind.CallOpts) (string, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "Cw721Address")
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Cw721Address is a free data retrieval call binding the contract method 0x5c4aead7.
 //
 // Solidity: function Cw721Address() view returns(string)
 func (_Cw721 *Cw721Session) Cw721Address() (string, error) {
-	return _Cw721.Contract.Cw721Address(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Cw721Address is a free data retrieval call binding the contract method 0x5c4aead7.
 //
 // Solidity: function Cw721Address() view returns(string)
 func (_Cw721 *Cw721CallerSession) Cw721Address() (string, error) {
-	return _Cw721.Contract.Cw721Address(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // JsonPrecompile is a free data retrieval call binding the contract method 0xde4725cc.
 //
 // Solidity: function JsonPrecompile() view returns(address)
 func (_Cw721 *Cw721Caller) JsonPrecompile(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "JsonPrecompile")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // JsonPrecompile is a free data retrieval call binding the contract method 0xde4725cc.
 //
 // Solidity: function JsonPrecompile() view returns(address)
 func (_Cw721 *Cw721Session) JsonPrecompile() (common.Address, error) {
-	return _Cw721.Contract.JsonPrecompile(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // JsonPrecompile is a free data retrieval call binding the contract method 0xde4725cc.
 //
 // Solidity: function JsonPrecompile() view returns(address)
 func (_Cw721 *Cw721CallerSession) JsonPrecompile() (common.Address, error) {
-	return _Cw721.Contract.JsonPrecompile(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // WasmdPrecompile is a free data retrieval call binding the contract method 0xf00b0255.
 //
 // Solidity: function WasmdPrecompile() view returns(address)
 func (_Cw721 *Cw721Caller) WasmdPrecompile(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "WasmdPrecompile")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // WasmdPrecompile is a free data retrieval call binding the contract method 0xf00b0255.
 //
 // Solidity: function WasmdPrecompile() view returns(address)
 func (_Cw721 *Cw721Session) WasmdPrecompile() (common.Address, error) {
-	return _Cw721.Contract.WasmdPrecompile(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // WasmdPrecompile is a free data retrieval call binding the contract method 0xf00b0255.
 //
 // Solidity: function WasmdPrecompile() view returns(address)
 func (_Cw721 *Cw721CallerSession) WasmdPrecompile() (common.Address, error) {
-	return _Cw721.Contract.WasmdPrecompile(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address owner) view returns(uint256)
 func (_Cw721 *Cw721Caller) BalanceOf(opts *bind.CallOpts, owner common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "balanceOf", owner)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address owner) view returns(uint256)
 func (_Cw721 *Cw721Session) BalanceOf(owner common.Address) (*big.Int, error) {
-	return _Cw721.Contract.BalanceOf(&_Cw721.CallOpts, owner)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address owner) view returns(uint256)
 func (_Cw721 *Cw721CallerSession) BalanceOf(owner common.Address) (*big.Int, error) {
-	return _Cw721.Contract.BalanceOf(&_Cw721.CallOpts, owner)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetApproved is a free data retrieval call binding the contract method 0x081812fc.
 //
 // Solidity: function getApproved(uint256 tokenId) view returns(address)
 func (_Cw721 *Cw721Caller) GetApproved(opts *bind.CallOpts, tokenId *big.Int) (common.Address, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "getApproved", tokenId)
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // GetApproved is a free data retrieval call binding the contract method 0x081812fc.
 //
 // Solidity: function getApproved(uint256 tokenId) view returns(address)
 func (_Cw721 *Cw721Session) GetApproved(tokenId *big.Int) (common.Address, error) {
-	return _Cw721.Contract.GetApproved(&_Cw721.CallOpts, tokenId)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // GetApproved is a free data retrieval call binding the contract method 0x081812fc.
 //
 // Solidity: function getApproved(uint256 tokenId) view returns(address)
 func (_Cw721 *Cw721CallerSession) GetApproved(tokenId *big.Int) (common.Address, error) {
-	return _Cw721.Contract.GetApproved(&_Cw721.CallOpts, tokenId)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address owner, address operator) view returns(bool)
 func (_Cw721 *Cw721Caller) IsApprovedForAll(opts *bind.CallOpts, owner common.Address, operator common.Address) (bool, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "isApprovedForAll", owner, operator)
-
-	if err != nil {
-		return *new(bool), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address owner, address operator) view returns(bool)
 func (_Cw721 *Cw721Session) IsApprovedForAll(owner common.Address, operator common.Address) (bool, error) {
-	return _Cw721.Contract.IsApprovedForAll(&_Cw721.CallOpts, owner, operator)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address owner, address operator) view returns(bool)
 func (_Cw721 *Cw721CallerSession) IsApprovedForAll(owner common.Address, operator common.Address) (bool, error) {
-	return _Cw721.Contract.IsApprovedForAll(&_Cw721.CallOpts, owner, operator)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
 // Solidity: function name() view returns(string)
 func (_Cw721 *Cw721Caller) Name(opts *bind.CallOpts) (string, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "name")
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
 // Solidity: function name() view returns(string)
-func (_Cw721 *Cw721Session) Name() (string, error) {
-	return _Cw721.Contract.Name(&_Cw721.CallOpts)
-}
+func (_Cw721 *Cw721Session) Name() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
 // Solidity: function name() view returns(string)
-func (_Cw721 *Cw721CallerSession) Name() (string, error) {
-	return _Cw721.Contract.Name(&_Cw721.CallOpts)
-}
+func (_Cw721 *Cw721CallerSession) Name() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // OwnerOf is a free data retrieval call binding the contract method 0x6352211e.
 //
 // Solidity: function ownerOf(uint256 tokenId) view returns(address)
 func (_Cw721 *Cw721Caller) OwnerOf(opts *bind.CallOpts, tokenId *big.Int) (common.Address, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "ownerOf", tokenId)
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // OwnerOf is a free data retrieval call binding the contract method 0x6352211e.
 //
 // Solidity: function ownerOf(uint256 tokenId) view returns(address)
 func (_Cw721 *Cw721Session) OwnerOf(tokenId *big.Int) (common.Address, error) {
-	return _Cw721.Contract.OwnerOf(&_Cw721.CallOpts, tokenId)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // OwnerOf is a free data retrieval call binding the contract method 0x6352211e.
 //
 // Solidity: function ownerOf(uint256 tokenId) view returns(address)
 func (_Cw721 *Cw721CallerSession) OwnerOf(tokenId *big.Int) (common.Address, error) {
-	return _Cw721.Contract.OwnerOf(&_Cw721.CallOpts, tokenId)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // RoyaltyInfo is a free data retrieval call binding the contract method 0x2a55205a.
 //
 // Solidity: function royaltyInfo(uint256 tokenId, uint256 salePrice) view returns(address, uint256)
 func (_Cw721 *Cw721Caller) RoyaltyInfo(opts *bind.CallOpts, tokenId *big.Int, salePrice *big.Int) (common.Address, *big.Int, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "royaltyInfo", tokenId, salePrice)
-
-	if err != nil {
-		return *new(common.Address), *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-	out1 := *abi.ConvertType(out[1], new(*big.Int)).(**big.Int)
-
-	return out0, out1, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil, nil
 }
 
 // RoyaltyInfo is a free data retrieval call binding the contract method 0x2a55205a.
 //
 // Solidity: function royaltyInfo(uint256 tokenId, uint256 salePrice) view returns(address, uint256)
 func (_Cw721 *Cw721Session) RoyaltyInfo(tokenId *big.Int, salePrice *big.Int) (common.Address, *big.Int, error) {
-	return _Cw721.Contract.RoyaltyInfo(&_Cw721.CallOpts, tokenId, salePrice)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil, nil
 }
 
 // RoyaltyInfo is a free data retrieval call binding the contract method 0x2a55205a.
 //
 // Solidity: function royaltyInfo(uint256 tokenId, uint256 salePrice) view returns(address, uint256)
 func (_Cw721 *Cw721CallerSession) RoyaltyInfo(tokenId *big.Int, salePrice *big.Int) (common.Address, *big.Int, error) {
-	return _Cw721.Contract.RoyaltyInfo(&_Cw721.CallOpts, tokenId, salePrice)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil, nil
 }
 
 // SupportsInterface is a free data retrieval call binding the contract method 0x01ffc9a7.
 //
 // Solidity: function supportsInterface(bytes4 interfaceId) pure returns(bool)
 func (_Cw721 *Cw721Caller) SupportsInterface(opts *bind.CallOpts, interfaceId [4]byte) (bool, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "supportsInterface", interfaceId)
-
-	if err != nil {
-		return *new(bool), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // SupportsInterface is a free data retrieval call binding the contract method 0x01ffc9a7.
 //
 // Solidity: function supportsInterface(bytes4 interfaceId) pure returns(bool)
 func (_Cw721 *Cw721Session) SupportsInterface(interfaceId [4]byte) (bool, error) {
-	return _Cw721.Contract.SupportsInterface(&_Cw721.CallOpts, interfaceId)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // SupportsInterface is a free data retrieval call binding the contract method 0x01ffc9a7.
 //
 // Solidity: function supportsInterface(bytes4 interfaceId) pure returns(bool)
 func (_Cw721 *Cw721CallerSession) SupportsInterface(interfaceId [4]byte) (bool, error) {
-	return _Cw721.Contract.SupportsInterface(&_Cw721.CallOpts, interfaceId)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
 // Solidity: function symbol() view returns(string)
 func (_Cw721 *Cw721Caller) Symbol(opts *bind.CallOpts) (string, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "symbol")
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
 // Solidity: function symbol() view returns(string)
-func (_Cw721 *Cw721Session) Symbol() (string, error) {
-	return _Cw721.Contract.Symbol(&_Cw721.CallOpts)
-}
+func (_Cw721 *Cw721Session) Symbol() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
 // Solidity: function symbol() view returns(string)
 func (_Cw721 *Cw721CallerSession) Symbol() (string, error) {
-	return _Cw721.Contract.Symbol(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // TokenByIndex is a free data retrieval call binding the contract method 0x4f6ccce7.
 //
 // Solidity: function tokenByIndex(uint256 ) view returns(uint256)
 func (_Cw721 *Cw721Caller) TokenByIndex(opts *bind.CallOpts, arg0 *big.Int) (*big.Int, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "tokenByIndex", arg0)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TokenByIndex is a free data retrieval call binding the contract method 0x4f6ccce7.
 //
 // Solidity: function tokenByIndex(uint256 ) view returns(uint256)
 func (_Cw721 *Cw721Session) TokenByIndex(arg0 *big.Int) (*big.Int, error) {
-	return _Cw721.Contract.TokenByIndex(&_Cw721.CallOpts, arg0)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TokenByIndex is a free data retrieval call binding the contract method 0x4f6ccce7.
 //
 // Solidity: function tokenByIndex(uint256 ) view returns(uint256)
 func (_Cw721 *Cw721CallerSession) TokenByIndex(arg0 *big.Int) (*big.Int, error) {
-	return _Cw721.Contract.TokenByIndex(&_Cw721.CallOpts, arg0)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TokenOfOwnerByIndex is a free data retrieval call binding the contract method 0x2f745c59.
 //
 // Solidity: function tokenOfOwnerByIndex(address , uint256 ) view returns(uint256)
 func (_Cw721 *Cw721Caller) TokenOfOwnerByIndex(opts *bind.CallOpts, arg0 common.Address, arg1 *big.Int) (*big.Int, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "tokenOfOwnerByIndex", arg0, arg1)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TokenOfOwnerByIndex is a free data retrieval call binding the contract method 0x2f745c59.
 //
 // Solidity: function tokenOfOwnerByIndex(address , uint256 ) view returns(uint256)
 func (_Cw721 *Cw721Session) TokenOfOwnerByIndex(arg0 common.Address, arg1 *big.Int) (*big.Int, error) {
-	return _Cw721.Contract.TokenOfOwnerByIndex(&_Cw721.CallOpts, arg0, arg1)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TokenOfOwnerByIndex is a free data retrieval call binding the contract method 0x2f745c59.
 //
 // Solidity: function tokenOfOwnerByIndex(address , uint256 ) view returns(uint256)
 func (_Cw721 *Cw721CallerSession) TokenOfOwnerByIndex(arg0 common.Address, arg1 *big.Int) (*big.Int, error) {
-	return _Cw721.Contract.TokenOfOwnerByIndex(&_Cw721.CallOpts, arg0, arg1)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TokenURI is a free data retrieval call binding the contract method 0xc87b56dd.
 //
 // Solidity: function tokenURI(uint256 tokenId) view returns(string)
 func (_Cw721 *Cw721Caller) TokenURI(opts *bind.CallOpts, tokenId *big.Int) (string, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "tokenURI", tokenId)
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // TokenURI is a free data retrieval call binding the contract method 0xc87b56dd.
 //
 // Solidity: function tokenURI(uint256 tokenId) view returns(string)
 func (_Cw721 *Cw721Session) TokenURI(tokenId *big.Int) (string, error) {
-	return _Cw721.Contract.TokenURI(&_Cw721.CallOpts, tokenId)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // TokenURI is a free data retrieval call binding the contract method 0xc87b56dd.
 //
 // Solidity: function tokenURI(uint256 tokenId) view returns(string)
 func (_Cw721 *Cw721CallerSession) TokenURI(tokenId *big.Int) (string, error) {
-	return _Cw721.Contract.TokenURI(&_Cw721.CallOpts, tokenId)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
 func (_Cw721 *Cw721Caller) TotalSupply(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Cw721.contract.Call(opts, &out, "totalSupply")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
 func (_Cw721 *Cw721Session) TotalSupply() (*big.Int, error) {
-	return _Cw721.Contract.TotalSupply(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
 func (_Cw721 *Cw721CallerSession) TotalSupply() (*big.Int, error) {
-	return _Cw721.Contract.TotalSupply(&_Cw721.CallOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address approved, uint256 tokenId) returns()
 func (_Cw721 *Cw721Transactor) Approve(opts *bind.TransactOpts, approved common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.contract.Transact(opts, "approve", approved, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address approved, uint256 tokenId) returns()
 func (_Cw721 *Cw721Session) Approve(approved common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.Contract.Approve(&_Cw721.TransactOpts, approved, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address approved, uint256 tokenId) returns()
 func (_Cw721 *Cw721TransactorSession) Approve(approved common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.Contract.Approve(&_Cw721.TransactOpts, approved, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0x42842e0e.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 tokenId) returns()
 func (_Cw721 *Cw721Transactor) SafeTransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.contract.Transact(opts, "safeTransferFrom", from, to, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0x42842e0e.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 tokenId) returns()
 func (_Cw721 *Cw721Session) SafeTransferFrom(from common.Address, to common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.Contract.SafeTransferFrom(&_Cw721.TransactOpts, from, to, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0x42842e0e.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 tokenId) returns()
 func (_Cw721 *Cw721TransactorSession) SafeTransferFrom(from common.Address, to common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.Contract.SafeTransferFrom(&_Cw721.TransactOpts, from, to, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom0 is a paid mutator transaction binding the contract method 0xb88d4fde.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 tokenId, bytes data) returns()
 func (_Cw721 *Cw721Transactor) SafeTransferFrom0(opts *bind.TransactOpts, from common.Address, to common.Address, tokenId *big.Int, data []byte) (*types.Transaction, error) {
-	return _Cw721.contract.Transact(opts, "safeTransferFrom0", from, to, tokenId, data)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom0 is a paid mutator transaction binding the contract method 0xb88d4fde.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 tokenId, bytes data) returns()
 func (_Cw721 *Cw721Session) SafeTransferFrom0(from common.Address, to common.Address, tokenId *big.Int, data []byte) (*types.Transaction, error) {
-	return _Cw721.Contract.SafeTransferFrom0(&_Cw721.TransactOpts, from, to, tokenId, data)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom0 is a paid mutator transaction binding the contract method 0xb88d4fde.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 tokenId, bytes data) returns()
 func (_Cw721 *Cw721TransactorSession) SafeTransferFrom0(from common.Address, to common.Address, tokenId *big.Int, data []byte) (*types.Transaction, error) {
-	return _Cw721.Contract.SafeTransferFrom0(&_Cw721.TransactOpts, from, to, tokenId, data)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
 func (_Cw721 *Cw721Transactor) SetApprovalForAll(opts *bind.TransactOpts, operator common.Address, approved bool) (*types.Transaction, error) {
-	return _Cw721.contract.Transact(opts, "setApprovalForAll", operator, approved)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
 func (_Cw721 *Cw721Session) SetApprovalForAll(operator common.Address, approved bool) (*types.Transaction, error) {
-	return _Cw721.Contract.SetApprovalForAll(&_Cw721.TransactOpts, operator, approved)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
 func (_Cw721 *Cw721TransactorSession) SetApprovalForAll(operator common.Address, approved bool) (*types.Transaction, error) {
-	return _Cw721.Contract.SetApprovalForAll(&_Cw721.TransactOpts, operator, approved)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 tokenId) returns()
 func (_Cw721 *Cw721Transactor) TransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.contract.Transact(opts, "transferFrom", from, to, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 tokenId) returns()
 func (_Cw721 *Cw721Session) TransferFrom(from common.Address, to common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.Contract.TransferFrom(&_Cw721.TransactOpts, from, to, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 tokenId) returns()
 func (_Cw721 *Cw721TransactorSession) TransferFrom(from common.Address, to common.Address, tokenId *big.Int) (*types.Transaction, error) {
-	return _Cw721.Contract.TransferFrom(&_Cw721.TransactOpts, from, to, tokenId)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Cw721ApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the Cw721 contract.
@@ -799,55 +683,25 @@ type Cw721ApprovalIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *Cw721ApprovalIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(Cw721Approval)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(Cw721Approval)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *Cw721ApprovalIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *Cw721ApprovalIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *Cw721ApprovalIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Cw721Approval represents a Approval event raised by the Cw721 contract.
 type Cw721Approval struct {
@@ -861,87 +715,26 @@ type Cw721Approval struct {
 //
 // Solidity: event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)
 func (_Cw721 *Cw721Filterer) FilterApproval(opts *bind.FilterOpts, owner []common.Address, approved []common.Address, tokenId []*big.Int) (*Cw721ApprovalIterator, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var approvedRule []interface{}
-	for _, approvedItem := range approved {
-		approvedRule = append(approvedRule, approvedItem)
-	}
-	var tokenIdRule []interface{}
-	for _, tokenIdItem := range tokenId {
-		tokenIdRule = append(tokenIdRule, tokenIdItem)
-	}
-
-	logs, sub, err := _Cw721.contract.FilterLogs(opts, "Approval", ownerRule, approvedRule, tokenIdRule)
-	if err != nil {
-		return nil, err
-	}
-	return &Cw721ApprovalIterator{contract: _Cw721.contract, event: "Approval", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchApproval is a free log subscription operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)
 func (_Cw721 *Cw721Filterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *Cw721Approval, owner []common.Address, approved []common.Address, tokenId []*big.Int) (event.Subscription, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var approvedRule []interface{}
-	for _, approvedItem := range approved {
-		approvedRule = append(approvedRule, approvedItem)
-	}
-	var tokenIdRule []interface{}
-	for _, tokenIdItem := range tokenId {
-		tokenIdRule = append(tokenIdRule, tokenIdItem)
-	}
-
-	logs, sub, err := _Cw721.contract.WatchLogs(opts, "Approval", ownerRule, approvedRule, tokenIdRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(Cw721Approval)
-				if err := _Cw721.contract.UnpackLog(event, "Approval", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseApproval is a log parse operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)
 func (_Cw721 *Cw721Filterer) ParseApproval(log types.Log) (*Cw721Approval, error) {
-	event := new(Cw721Approval)
-	if err := _Cw721.contract.UnpackLog(event, "Approval", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Cw721ApprovalForAllIterator is returned from FilterApprovalForAll and is used to iterate over the raw logs and unpacked data for ApprovalForAll events raised by the Cw721 contract.
@@ -961,55 +754,25 @@ type Cw721ApprovalForAllIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *Cw721ApprovalForAllIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(Cw721ApprovalForAll)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(Cw721ApprovalForAll)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *Cw721ApprovalForAllIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *Cw721ApprovalForAllIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *Cw721ApprovalForAllIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Cw721ApprovalForAll represents a ApprovalForAll event raised by the Cw721 contract.
 type Cw721ApprovalForAll struct {
@@ -1023,79 +786,26 @@ type Cw721ApprovalForAll struct {
 //
 // Solidity: event ApprovalForAll(address indexed owner, address indexed operator, bool approved)
 func (_Cw721 *Cw721Filterer) FilterApprovalForAll(opts *bind.FilterOpts, owner []common.Address, operator []common.Address) (*Cw721ApprovalForAllIterator, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var operatorRule []interface{}
-	for _, operatorItem := range operator {
-		operatorRule = append(operatorRule, operatorItem)
-	}
-
-	logs, sub, err := _Cw721.contract.FilterLogs(opts, "ApprovalForAll", ownerRule, operatorRule)
-	if err != nil {
-		return nil, err
-	}
-	return &Cw721ApprovalForAllIterator{contract: _Cw721.contract, event: "ApprovalForAll", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchApprovalForAll is a free log subscription operation binding the contract event 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31.
 //
 // Solidity: event ApprovalForAll(address indexed owner, address indexed operator, bool approved)
 func (_Cw721 *Cw721Filterer) WatchApprovalForAll(opts *bind.WatchOpts, sink chan<- *Cw721ApprovalForAll, owner []common.Address, operator []common.Address) (event.Subscription, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var operatorRule []interface{}
-	for _, operatorItem := range operator {
-		operatorRule = append(operatorRule, operatorItem)
-	}
-
-	logs, sub, err := _Cw721.contract.WatchLogs(opts, "ApprovalForAll", ownerRule, operatorRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(Cw721ApprovalForAll)
-				if err := _Cw721.contract.UnpackLog(event, "ApprovalForAll", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseApprovalForAll is a log parse operation binding the contract event 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31.
 //
 // Solidity: event ApprovalForAll(address indexed owner, address indexed operator, bool approved)
 func (_Cw721 *Cw721Filterer) ParseApprovalForAll(log types.Log) (*Cw721ApprovalForAll, error) {
-	event := new(Cw721ApprovalForAll)
-	if err := _Cw721.contract.UnpackLog(event, "ApprovalForAll", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Cw721TransferIterator is returned from FilterTransfer and is used to iterate over the raw logs and unpacked data for Transfer events raised by the Cw721 contract.
@@ -1115,55 +825,25 @@ type Cw721TransferIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *Cw721TransferIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(Cw721Transfer)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(Cw721Transfer)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *Cw721TransferIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *Cw721TransferIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *Cw721TransferIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Cw721Transfer represents a Transfer event raised by the Cw721 contract.
 type Cw721Transfer struct {
@@ -1177,85 +857,24 @@ type Cw721Transfer struct {
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
 func (_Cw721 *Cw721Filterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address, tokenId []*big.Int) (*Cw721TransferIterator, error) {
-
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
-	}
-	var tokenIdRule []interface{}
-	for _, tokenIdItem := range tokenId {
-		tokenIdRule = append(tokenIdRule, tokenIdItem)
-	}
-
-	logs, sub, err := _Cw721.contract.FilterLogs(opts, "Transfer", fromRule, toRule, tokenIdRule)
-	if err != nil {
-		return nil, err
-	}
-	return &Cw721TransferIterator{contract: _Cw721.contract, event: "Transfer", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchTransfer is a free log subscription operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
 func (_Cw721 *Cw721Filterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *Cw721Transfer, from []common.Address, to []common.Address, tokenId []*big.Int) (event.Subscription, error) {
-
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
-	}
-	var tokenIdRule []interface{}
-	for _, tokenIdItem := range tokenId {
-		tokenIdRule = append(tokenIdRule, tokenIdItem)
-	}
-
-	logs, sub, err := _Cw721.contract.WatchLogs(opts, "Transfer", fromRule, toRule, tokenIdRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(Cw721Transfer)
-				if err := _Cw721.contract.UnpackLog(event, "Transfer", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseTransfer is a log parse operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 indexed tokenId)
 func (_Cw721 *Cw721Filterer) ParseTransfer(log types.Log) (*Cw721Transfer, error) {
-	event := new(Cw721Transfer)
-	if err := _Cw721.contract.UnpackLog(event, "Transfer", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

@@ -1,11 +1,5 @@
 package vtype
 
-import (
-	"encoding/binary"
-	"errors"
-	"fmt"
-)
-
 type AccountDataVersion uint8
 
 // DO NOT CHANGE VERSION VALUES!!! Adding new versions is ok, but historical versions should never be removed/changed.
@@ -56,159 +50,67 @@ type AccountData struct {
 }
 
 // Create a new AccountData initialized to all 0s.
-func NewAccountData() *AccountData {
-	return &AccountData{
-		data: make([]byte, accountDataLength),
-	}
-}
+func NewAccountData() *AccountData { _ = "STUB: not implemented"; return nil }
 
 // Serialize the account data to a byte slice. If the code hash is all zeros,
 // the compact form (49 bytes) is returned; otherwise the full form (81 bytes).
 //
 // The returned byte slice is not safe to modify without first copying it.
-func (a *AccountData) Serialize() []byte {
-	if a == nil {
-		return make([]byte, accountCompactLength)
-	}
-	for i := accountCodeHashStart; i < accountDataLength; i++ {
-		if a.data[i] != 0 {
-			return a.data
-		}
-	}
-	return a.data[:accountCompactLength]
-}
+func (a *AccountData) Serialize() []byte { _ = "STUB: not implemented"; return nil }
 
 // Deserialize the account data from the given byte slice. Accepts both the
 // compact (49 byte) and full (81 byte) forms.
 func DeserializeAccountData(data []byte) (*AccountData, error) {
-	if len(data) == 0 {
-		return nil, errors.New("data is empty")
-	}
-
-	version := AccountDataVersion(data[accountVersionStart])
-	if version != AccountDataVersion0 {
-		return nil, fmt.Errorf("unsupported serialization version: %d", version)
-	}
-
-	switch len(data) {
-	case accountDataLength:
-		return &AccountData{data: data}, nil
-	case accountCompactLength:
-		full := make([]byte, accountDataLength)
-		copy(full, data)
-		return &AccountData{data: full}, nil
-	default:
-		return nil, fmt.Errorf("data length at version %d should be %d or %d, got %d",
-			version, accountCompactLength, accountDataLength, len(data))
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Get the serialization version for this AccountData instance.
 func (a *AccountData) GetSerializationVersion() AccountDataVersion {
-	if a == nil {
-		return AccountDataVersion0
-	}
-	return (AccountDataVersion)(a.data[accountVersionStart])
+	_ = "STUB: not implemented"
+	return *new(AccountDataVersion)
 }
 
 // Get the account's block height.
-func (a *AccountData) GetBlockHeight() int64 {
-	if a == nil {
-		return 0
-	}
-	return int64(binary.BigEndian.Uint64(a.data[accountBlockHeightStart:accountBalanceStart])) //nolint:gosec
-}
+func (a *AccountData) GetBlockHeight() int64 { _ = "STUB: not implemented"; return 0 }
+
+//nolint:gosec
 
 // Get the account's balance.
-func (a *AccountData) GetBalance() *Balance {
-	if a == nil {
-		var zero Balance
-		return &zero
-	}
-	return (*Balance)(a.data[accountBalanceStart:accountNonceStart])
-}
+func (a *AccountData) GetBalance() *Balance { _ = "STUB: not implemented"; return nil }
 
 // Get the account's nonce.
-func (a *AccountData) GetNonce() uint64 {
-	if a == nil {
-		return 0
-	}
-	return binary.BigEndian.Uint64(a.data[accountNonceStart:accountCodeHashStart])
-}
+func (a *AccountData) GetNonce() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // Get the account's code hash.
-func (a *AccountData) GetCodeHash() *CodeHash {
-	if a == nil {
-		var zero CodeHash
-		return &zero
-	}
-	return (*CodeHash)(a.data[accountCodeHashStart:accountDataLength])
-}
+func (a *AccountData) GetCodeHash() *CodeHash { _ = "STUB: not implemented"; return nil }
 
 // Check if this account data signifies a deletion operation. A deletion operation is automatically
 // performed when all account data fields are 0 (with the exception of the serialization version and block height).
-func (a *AccountData) IsDelete() bool {
-	if a == nil {
-		return true
-	}
-	for i := accountBalanceStart; i < accountDataLength; i++ {
-		if a.data[i] != 0 {
-			return false
-		}
-	}
-	return true
-}
+func (a *AccountData) IsDelete() bool { _ = "STUB: not implemented"; return false }
 
 // Copy returns a deep copy of this AccountData. The copy has its own backing byte slice.
-func (a *AccountData) Copy() *AccountData {
-	if a == nil {
-		return NewAccountData()
-	}
-	cp := make([]byte, len(a.data))
-	copy(cp, a.data)
-	return &AccountData{data: cp}
-}
+func (a *AccountData) Copy() *AccountData { _ = "STUB: not implemented"; return nil }
 
 // Set the account's block height when this account was last modified/touched. Returns self.
 func (a *AccountData) SetBlockHeight(blockHeight int64) *AccountData {
-	if a == nil {
-		a = NewAccountData()
-	}
-	binary.BigEndian.PutUint64(a.data[accountBlockHeightStart:accountBalanceStart], uint64(blockHeight)) //nolint:gosec
-	return a
+	_ = "STUB: not implemented"
+	return nil
 }
+
+//nolint:gosec
 
 // Set the account's balance. Returns self (or a new AccountData if nil).
 func (a *AccountData) SetBalance(balance *Balance) *AccountData {
-	if a == nil {
-		a = NewAccountData()
-	}
-	if balance == nil {
-		var zero Balance
-		balance = &zero
-	}
-	copy(a.data[accountBalanceStart:accountNonceStart], balance[:])
-	return a
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Set the account's nonce. Returns self (or a new AccountData if nil).
-func (a *AccountData) SetNonce(nonce uint64) *AccountData {
-	if a == nil {
-		a = NewAccountData()
-	}
-	binary.BigEndian.PutUint64(a.data[accountNonceStart:accountCodeHashStart], nonce)
-	return a
-}
+func (a *AccountData) SetNonce(nonce uint64) *AccountData { _ = "STUB: not implemented"; return nil }
 
 // Set the account's code hash. Returns self (or a new AccountData if nil).
 func (a *AccountData) SetCodeHash(codeHash *CodeHash) *AccountData {
-	if a == nil {
-		a = NewAccountData()
-	}
-	if codeHash == nil {
-		var zero CodeHash
-		codeHash = &zero
-	}
-	copy(a.data[accountCodeHashStart:accountDataLength], codeHash[:])
-	return a
+	_ = "STUB: not implemented"
+	return nil
 }

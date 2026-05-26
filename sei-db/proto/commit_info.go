@@ -1,7 +1,3 @@
 package proto
 
-import "fmt"
-
-func (cid CommitID) String() string {
-	return fmt.Sprintf("CommitID{%v:%X}", cid.Hash, cid.Version)
-}
+func (cid CommitID) String() string { _ = "STUB: not implemented"; return "" }

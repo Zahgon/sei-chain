@@ -1,14 +1,9 @@
 package types
 
 import (
-	"errors"
-	"fmt"
-	"net"
 	"net/netip"
-	"strings"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
-	tmstrings "github.com/sei-protocol/sei-chain/sei-tendermint/libs/strings"
 	tmp2p "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/p2p"
 )
 
@@ -18,9 +13,7 @@ const (
 )
 
 // Max size of the NodeInfo struct
-func MaxNodeInfoSize() int {
-	return maxNodeInfoSize
-}
+func MaxNodeInfoSize() int { _ = "STUB: not implemented"; return 0 }
 
 // ProtocolVersion contains the protocol versions for the software.
 type ProtocolVersion struct {
@@ -61,177 +54,63 @@ type NodeInfoOther struct {
 
 // ID returns the node's peer ID.
 func (info NodeInfo) ID() NodeID {
-	return info.NodeID
+	_ = "STUB: not implemented"
+
+	// Validate checks the self-reported NodeInfo is safe.
+	// It returns an error if there
+	// are too many Channels, if there are any duplicate Channels,
+	// if the ListenAddr is malformed, or if the ListenAddr is a host name
+	// that can not be resolved to some IP.
+	// TODO: constraints for Moniker/Other? Or is that for the UI ?
+	// JAE: It needs to be done on the client, but to prevent ambiguous
+	// unicode characters, maybe it's worth sanitizing it here.
+	// In the future we might want to validate these, once we have a
+	// name-resolution system up.
+	// International clients could then use punycode (or we could use
+	// url-encoding), and we just need to be careful with how we handle that in our
+	// clients. (e.g. off by default).
+	return *new(NodeID)
 }
 
-// Validate checks the self-reported NodeInfo is safe.
-// It returns an error if there
-// are too many Channels, if there are any duplicate Channels,
-// if the ListenAddr is malformed, or if the ListenAddr is a host name
-// that can not be resolved to some IP.
-// TODO: constraints for Moniker/Other? Or is that for the UI ?
-// JAE: It needs to be done on the client, but to prevent ambiguous
-// unicode characters, maybe it's worth sanitizing it here.
-// In the future we might want to validate these, once we have a
-// name-resolution system up.
-// International clients could then use punycode (or we could use
-// url-encoding), and we just need to be careful with how we handle that in our
-// clients. (e.g. off by default).
-func (info NodeInfo) Validate() error {
-	if _, err := ResolveAddressString(info.ID().AddressString(info.ListenAddr)); err != nil {
-		return err
-	}
+func (info NodeInfo) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	// Validate Version
-	if len(info.Version) > 0 {
-		if ver, err := tmstrings.ASCIITrim(info.Version); err != nil || ver == "" {
-			return fmt.Errorf("info.Version must be valid ASCII text without tabs, but got, %q [%s]", info.Version, ver)
-		}
-	}
+// Validate Version
 
-	// Validate Channels - ensure max and check for duplicates.
-	if len(info.Channels) > maxNumChannels {
-		return fmt.Errorf("info.Channels is too long (%v). Max is %v", len(info.Channels), maxNumChannels)
-	}
-	channels := make(map[byte]struct{})
-	for _, ch := range info.Channels {
-		_, ok := channels[ch]
-		if ok {
-			return fmt.Errorf("info.Channels contains duplicate channel id %v", ch)
-		}
-		channels[ch] = struct{}{}
-	}
+// Validate Channels - ensure max and check for duplicates.
 
-	if m, err := tmstrings.ASCIITrim(info.Moniker); err != nil || m == "" {
-		return fmt.Errorf("info.Moniker must be valid non-empty ASCII text without tabs, but got %v", info.Moniker)
-	}
+// Validate Other.
 
-	// Validate Other.
-	other := info.Other
-	txIndex := other.TxIndex
-	switch txIndex {
-	case "", "on", "off":
-	default:
-		return fmt.Errorf("info.Other.TxIndex should be either 'on', 'off', or empty string, got '%v'", txIndex)
-	}
-	// XXX: Should we be more strict about address formats?
-	rpcAddr := other.RPCAddress
-	if len(rpcAddr) > 0 {
-		if a, err := tmstrings.ASCIITrim(rpcAddr); err != nil || a == "" {
-			return fmt.Errorf("info.Other.RPCAddress=%v must be valid ASCII text without tabs", rpcAddr)
-		}
-	}
-
-	return nil
-}
+// XXX: Should we be more strict about address formats?
 
 // CompatibleWith checks if two NodeInfo are compatible with each other.
 // CONTRACT: two nodes are compatible if the Block version and network match
 // and they have at least one channel in common.
-func (info NodeInfo) CompatibleWith(other NodeInfo) error {
-	if info.ProtocolVersion.Block != other.ProtocolVersion.Block {
-		return fmt.Errorf("peer is on a different Block version. Got %v, expected %v",
-			other.ProtocolVersion.Block, info.ProtocolVersion.Block)
-	}
+func (info NodeInfo) CompatibleWith(other NodeInfo) error { _ = "STUB: not implemented"; return nil }
 
-	// nodes must be on the same network
-	if info.Network != other.Network {
-		return fmt.Errorf("peer is on a different network. Got %v, expected %v", other.Network, info.Network)
-	}
-	return nil
-}
+// nodes must be on the same network
 
 // AddChannel is used by the router when a channel is opened to add it to the node info
 func (info *NodeInfo) AddChannel(channel uint16) {
+	_ = "STUB: not implemented"
 	// check that the channel doesn't already exist
-	for _, ch := range info.Channels {
-		if ch == byte(channel) {
-			return
-		}
-	}
-
-	info.Channels = append(info.Channels, byte(channel))
+	return
 }
 
-func (info NodeInfo) ToProto() *tmp2p.NodeInfo {
-
-	dni := new(tmp2p.NodeInfo)
-	dni.ProtocolVersion = tmp2p.ProtocolVersion{
-		P2P:   info.ProtocolVersion.P2P,
-		Block: info.ProtocolVersion.Block,
-		App:   info.ProtocolVersion.App,
-	}
-
-	dni.NodeID = string(info.NodeID)
-	dni.ListenAddr = info.ListenAddr
-	dni.Network = info.Network
-	dni.Version = info.Version
-	dni.Channels = info.Channels
-	dni.Moniker = info.Moniker
-	dni.Other = tmp2p.NodeInfoOther{
-		TxIndex:    info.Other.TxIndex,
-		RPCAddress: info.Other.RPCAddress,
-	}
-
-	return dni
-}
+func (info NodeInfo) ToProto() *tmp2p.NodeInfo { _ = "STUB: not implemented"; return nil }
 
 func NodeInfoFromProto(pb *tmp2p.NodeInfo) (NodeInfo, error) {
-	if pb == nil {
-		return NodeInfo{}, errors.New("nil node info")
-	}
-	dni := NodeInfo{
-		ProtocolVersion: ProtocolVersion{
-			P2P:   pb.ProtocolVersion.P2P,
-			Block: pb.ProtocolVersion.Block,
-			App:   pb.ProtocolVersion.App,
-		},
-		NodeID:     NodeID(pb.NodeID),
-		ListenAddr: pb.ListenAddr,
-		Network:    pb.Network,
-		Version:    pb.Version,
-		Channels:   pb.Channels,
-		Moniker:    pb.Moniker,
-		Other: NodeInfoOther{
-			TxIndex:    pb.Other.TxIndex,
-			RPCAddress: pb.Other.RPCAddress,
-		},
-	}
-
-	return dni, nil
+	_ = "STUB: not implemented"
+	return *new(NodeInfo), nil
 }
 
 // ResolveAddressString reads an address string, and returns the IP
 // address and port information, returning an error for any validation
 // errors.
 func ResolveAddressString(addr string) (netip.AddrPort, error) {
-	addrWithoutProtocol := removeProtocolIfDefined(addr)
-	spl := strings.Split(addrWithoutProtocol, "@")
-	if len(spl) != 2 {
-		return netip.AddrPort{}, errors.New("invalid address")
-	}
-
-	id, err := NewNodeID(spl[0])
-	if err != nil {
-		return netip.AddrPort{}, err
-	}
-
-	if err := id.Validate(); err != nil {
-		return netip.AddrPort{}, err
-	}
-	// ResolveTCPAddr returns IPv6-embedded IPv4 addresses for no reason.
-	tcpAddr, err := net.ResolveTCPAddr("tcp", spl[1])
-	if err != nil {
-		return netip.AddrPort{}, err
-	}
-	ap := tcpAddr.AddrPort()
-	return netip.AddrPortFrom(ap.Addr().Unmap(), ap.Port()), nil
+	_ = "STUB: not implemented"
+	return *new(netip.AddrPort), nil
 }
 
-func removeProtocolIfDefined(addr string) string {
-	if strings.Contains(addr, "://") {
-		return strings.Split(addr, "://")[1]
-	}
-	return addr
+// ResolveTCPAddr returns IPv6-embedded IPv4 addresses for no reason.
 
-}
+func removeProtocolIfDefined(addr string) string { _ = "STUB: not implemented"; return "" }

@@ -1,7 +1,6 @@
 package types
 
 import (
-	"fmt"
 	"time"
 
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
@@ -15,40 +14,23 @@ var KeyMaxExpectedTimePerBlock = []byte("MaxExpectedTimePerBlock")
 
 // ParamKeyTable type declaration for parameters
 func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
+	_ = "STUB: not implemented"
+	return *new(paramtypes.KeyTable)
 }
 
 // NewParams creates a new parameter configuration for the ibc connection module
-func NewParams(timePerBlock uint64) Params {
-	return Params{
-		MaxExpectedTimePerBlock: timePerBlock,
-	}
-}
+func NewParams(timePerBlock uint64) Params { _ = "STUB: not implemented"; return *new(Params) }
 
 // DefaultParams is the default parameter configuration for the ibc connection module
-func DefaultParams() Params {
-	return NewParams(uint64(DefaultTimePerBlock))
-}
+func DefaultParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
 // Validate ensures MaxExpectedTimePerBlock is non-zero
-func (p Params) Validate() error {
-	if p.MaxExpectedTimePerBlock == 0 {
-		return fmt.Errorf("MaxExpectedTimePerBlock cannot be zero")
-	}
-	return nil
-}
+func (p Params) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // ParamSetPairs implements params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeyMaxExpectedTimePerBlock, p.MaxExpectedTimePerBlock, validateParams),
-	}
+	_ = "STUB: not implemented"
+	return *new(paramtypes.ParamSetPairs)
 }
 
-func validateParams(i interface{}) error {
-	_, ok := i.(uint64)
-	if !ok {
-		return fmt.Errorf("invalid parameter. expected %T, got type: %T", uint64(1), i)
-	}
-	return nil
-}
+func validateParams(i interface{}) error { _ = "STUB: not implemented"; return nil }

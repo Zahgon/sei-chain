@@ -1,13 +1,9 @@
 package types
 
 import (
-	"reflect"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
-	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
@@ -22,42 +18,8 @@ func (cs ClientState) CheckSubstituteAndUpdateState(
 	ctx sdk.Context, cdc codec.BinaryCodec, subjectClientStore,
 	_ sdk.KVStore, substituteClient exported.ClientState,
 ) (exported.ClientState, error) {
-	if !cs.AllowUpdateAfterProposal {
-		return nil, sdkerrors.Wrapf(
-			clienttypes.ErrUpdateClientFailed,
-			"solo machine client is not allowed to updated with a proposal",
-		)
-	}
-
-	substituteClientState, ok := substituteClient.(*ClientState)
-	if !ok {
-		return nil, sdkerrors.Wrapf(
-			clienttypes.ErrInvalidClientType, "substitute client state type %T, expected  %T", substituteClient, &ClientState{},
-		)
-	}
-
-	subjectPublicKey, err := cs.ConsensusState.GetPubKey()
-	if err != nil {
-		return nil, sdkerrors.Wrap(err, "failed to get consensus public key")
-	}
-
-	substitutePublicKey, err := substituteClientState.ConsensusState.GetPubKey()
-	if err != nil {
-		return nil, sdkerrors.Wrap(err, "failed to get substitute client public key")
-	}
-
-	if reflect.DeepEqual(subjectPublicKey, substitutePublicKey) {
-		return nil, sdkerrors.Wrapf(
-			clienttypes.ErrInvalidHeader, "subject and substitute have the same public key",
-		)
-	}
-
-	clientState := &cs
-
-	// update to substitute parameters
-	clientState.Sequence = substituteClientState.Sequence
-	clientState.ConsensusState = substituteClientState.ConsensusState
-	clientState.IsFrozen = false
-
-	return clientState, nil
+	_ = "STUB: not implemented"
+	return *new(exported.ClientState), nil
 }
+
+// update to substitute parameters

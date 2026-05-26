@@ -5,11 +5,10 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,57 +34,32 @@ type GenesisState struct {
 	MissedBlocks []ValidatorMissedBlockArray `protobuf:"bytes,3,rep,name=missed_blocks,json=missedBlocks,proto3" json:"missed_blocks" yaml:"missed_blocks"`
 }
 
-func (m *GenesisState) Reset()         { *m = GenesisState{} }
-func (m *GenesisState) String() string { return proto.CompactTextString(m) }
-func (*GenesisState) ProtoMessage()    {}
-func (*GenesisState) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1923b9188b635394, []int{0}
-}
-func (m *GenesisState) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *GenesisState) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *GenesisState) String() string            { _ = "STUB: not implemented"; return "" }
+func (*GenesisState) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*GenesisState) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *GenesisState) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GenesisState) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GenesisState.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GenesisState) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GenesisState.Merge(m, src)
-}
-func (m *GenesisState) XXX_Size() int {
-	return m.Size()
-}
-func (m *GenesisState) XXX_DiscardUnknown() {
-	xxx_messageInfo_GenesisState.DiscardUnknown(m)
-}
+
+func (m *GenesisState) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GenesisState) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GenesisState) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GenesisState proto.InternalMessageInfo
 
-func (m *GenesisState) GetParams() Params {
-	if m != nil {
-		return m.Params
-	}
-	return Params{}
-}
+func (m *GenesisState) GetParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
-func (m *GenesisState) GetSigningInfos() []SigningInfo {
-	if m != nil {
-		return m.SigningInfos
-	}
-	return nil
-}
+func (m *GenesisState) GetSigningInfos() []SigningInfo { _ = "STUB: not implemented"; return nil }
 
 func (m *GenesisState) GetMissedBlocks() []ValidatorMissedBlockArray {
-	if m != nil {
-		return m.MissedBlocks
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -101,57 +75,47 @@ type GenesisStateLegacyMissingHeights struct {
 	MissedBlocks []ValidatorMissedBlockArrayLegacyMissedHeights `protobuf:"bytes,3,rep,name=missed_blocks,json=missedBlocks,proto3" json:"missed_blocks" yaml:"missed_blocks"`
 }
 
-func (m *GenesisStateLegacyMissingHeights) Reset()         { *m = GenesisStateLegacyMissingHeights{} }
-func (m *GenesisStateLegacyMissingHeights) String() string { return proto.CompactTextString(m) }
-func (*GenesisStateLegacyMissingHeights) ProtoMessage()    {}
+func (m *GenesisStateLegacyMissingHeights) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GenesisStateLegacyMissingHeights) String() string { _ = "STUB: not implemented"; return "" }
+func (*GenesisStateLegacyMissingHeights) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GenesisStateLegacyMissingHeights) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1923b9188b635394, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GenesisStateLegacyMissingHeights) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GenesisStateLegacyMissingHeights) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GenesisStateLegacyMissingHeights.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GenesisStateLegacyMissingHeights) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GenesisStateLegacyMissingHeights.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GenesisStateLegacyMissingHeights) XXX_Size() int {
-	return m.Size()
-}
-func (m *GenesisStateLegacyMissingHeights) XXX_DiscardUnknown() {
-	xxx_messageInfo_GenesisStateLegacyMissingHeights.DiscardUnknown(m)
-}
+
+func (m *GenesisStateLegacyMissingHeights) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GenesisStateLegacyMissingHeights) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GenesisStateLegacyMissingHeights proto.InternalMessageInfo
 
 func (m *GenesisStateLegacyMissingHeights) GetParams() Params {
-	if m != nil {
-		return m.Params
-	}
-	return Params{}
+	_ = "STUB: not implemented"
+	return *new(Params)
 }
 
 func (m *GenesisStateLegacyMissingHeights) GetSigningInfos() []SigningInfo {
-	if m != nil {
-		return m.SigningInfos
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *GenesisStateLegacyMissingHeights) GetMissedBlocks() []ValidatorMissedBlockArrayLegacyMissedHeights {
-	if m != nil {
-		return m.MissedBlocks
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -167,57 +131,41 @@ type GenesisStateLegacyV43 struct {
 	MissedBlocks []ValidatorMissedBlocks `protobuf:"bytes,3,rep,name=missed_blocks,json=missedBlocks,proto3" json:"missed_blocks" yaml:"missed_blocks"`
 }
 
-func (m *GenesisStateLegacyV43) Reset()         { *m = GenesisStateLegacyV43{} }
-func (m *GenesisStateLegacyV43) String() string { return proto.CompactTextString(m) }
-func (*GenesisStateLegacyV43) ProtoMessage()    {}
+func (m *GenesisStateLegacyV43) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GenesisStateLegacyV43) String() string { _ = "STUB: not implemented"; return "" }
+func (*GenesisStateLegacyV43) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GenesisStateLegacyV43) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1923b9188b635394, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GenesisStateLegacyV43) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GenesisStateLegacyV43) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GenesisStateLegacyV43.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GenesisStateLegacyV43) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GenesisStateLegacyV43.Merge(m, src)
-}
-func (m *GenesisStateLegacyV43) XXX_Size() int {
-	return m.Size()
-}
-func (m *GenesisStateLegacyV43) XXX_DiscardUnknown() {
-	xxx_messageInfo_GenesisStateLegacyV43.DiscardUnknown(m)
-}
+
+func (m *GenesisStateLegacyV43) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GenesisStateLegacyV43) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GenesisStateLegacyV43) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GenesisStateLegacyV43 proto.InternalMessageInfo
 
-func (m *GenesisStateLegacyV43) GetParams() Params {
-	if m != nil {
-		return m.Params
-	}
-	return Params{}
-}
+func (m *GenesisStateLegacyV43) GetParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
 func (m *GenesisStateLegacyV43) GetSigningInfos() []SigningInfo {
-	if m != nil {
-		return m.SigningInfos
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *GenesisStateLegacyV43) GetMissedBlocks() []ValidatorMissedBlocks {
-	if m != nil {
-		return m.MissedBlocks
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -229,51 +177,31 @@ type SigningInfo struct {
 	ValidatorSigningInfo ValidatorSigningInfo `protobuf:"bytes,2,opt,name=validator_signing_info,json=validatorSigningInfo,proto3" json:"validator_signing_info" yaml:"validator_signing_info"`
 }
 
-func (m *SigningInfo) Reset()         { *m = SigningInfo{} }
-func (m *SigningInfo) String() string { return proto.CompactTextString(m) }
-func (*SigningInfo) ProtoMessage()    {}
-func (*SigningInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1923b9188b635394, []int{3}
-}
-func (m *SigningInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *SigningInfo) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *SigningInfo) String() string            { _ = "STUB: not implemented"; return "" }
+func (*SigningInfo) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*SigningInfo) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *SigningInfo) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *SigningInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SigningInfo.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *SigningInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SigningInfo.Merge(m, src)
-}
-func (m *SigningInfo) XXX_Size() int {
-	return m.Size()
-}
-func (m *SigningInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_SigningInfo.DiscardUnknown(m)
-}
+
+func (m *SigningInfo) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *SigningInfo) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *SigningInfo) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_SigningInfo proto.InternalMessageInfo
 
-func (m *SigningInfo) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
+func (m *SigningInfo) GetAddress() string { _ = "STUB: not implemented"; return "" }
 
 func (m *SigningInfo) GetValidatorSigningInfo() ValidatorSigningInfo {
-	if m != nil {
-		return m.ValidatorSigningInfo
-	}
-	return ValidatorSigningInfo{}
+	_ = "STUB: not implemented"
+	return *new(ValidatorSigningInfo)
 }
 
 // SigningInfo stores validator signing info of corresponding address.
@@ -284,51 +212,40 @@ type SigningInfoLegacyMissedHeights struct {
 	ValidatorSigningInfo ValidatorSigningInfoLegacyMissedHeights `protobuf:"bytes,2,opt,name=validator_signing_info,json=validatorSigningInfo,proto3" json:"validator_signing_info" yaml:"validator_signing_info"`
 }
 
-func (m *SigningInfoLegacyMissedHeights) Reset()         { *m = SigningInfoLegacyMissedHeights{} }
-func (m *SigningInfoLegacyMissedHeights) String() string { return proto.CompactTextString(m) }
-func (*SigningInfoLegacyMissedHeights) ProtoMessage()    {}
+func (m *SigningInfoLegacyMissedHeights) Reset()         { _ = "STUB: not implemented"; return }
+func (m *SigningInfoLegacyMissedHeights) String() string { _ = "STUB: not implemented"; return "" }
+func (*SigningInfoLegacyMissedHeights) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*SigningInfoLegacyMissedHeights) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1923b9188b635394, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *SigningInfoLegacyMissedHeights) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *SigningInfoLegacyMissedHeights) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SigningInfoLegacyMissedHeights.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *SigningInfoLegacyMissedHeights) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SigningInfoLegacyMissedHeights.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *SigningInfoLegacyMissedHeights) XXX_Size() int {
-	return m.Size()
-}
-func (m *SigningInfoLegacyMissedHeights) XXX_DiscardUnknown() {
-	xxx_messageInfo_SigningInfoLegacyMissedHeights.DiscardUnknown(m)
-}
+
+func (m *SigningInfoLegacyMissedHeights) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *SigningInfoLegacyMissedHeights) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_SigningInfoLegacyMissedHeights proto.InternalMessageInfo
 
-func (m *SigningInfoLegacyMissedHeights) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
+func (m *SigningInfoLegacyMissedHeights) GetAddress() string { _ = "STUB: not implemented"; return "" }
 
 func (m *SigningInfoLegacyMissedHeights) GetValidatorSigningInfo() ValidatorSigningInfoLegacyMissedHeights {
-	if m != nil {
-		return m.ValidatorSigningInfo
-	}
-	return ValidatorSigningInfoLegacyMissedHeights{}
+	_ = "STUB: not implemented"
+	return *new(ValidatorSigningInfoLegacyMissedHeights)
 }
 
 // ValidatorMissedBlocks contains array of missed blocks of corresponding
@@ -340,50 +257,36 @@ type ValidatorMissedBlocks struct {
 	MissedBlocks []MissedBlock `protobuf:"bytes,2,rep,name=missed_blocks,json=missedBlocks,proto3" json:"missed_blocks" yaml:"missed_blocks"`
 }
 
-func (m *ValidatorMissedBlocks) Reset()         { *m = ValidatorMissedBlocks{} }
-func (m *ValidatorMissedBlocks) String() string { return proto.CompactTextString(m) }
-func (*ValidatorMissedBlocks) ProtoMessage()    {}
+func (m *ValidatorMissedBlocks) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ValidatorMissedBlocks) String() string { _ = "STUB: not implemented"; return "" }
+func (*ValidatorMissedBlocks) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ValidatorMissedBlocks) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1923b9188b635394, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ValidatorMissedBlocks) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ValidatorMissedBlocks) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ValidatorMissedBlocks.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ValidatorMissedBlocks) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidatorMissedBlocks.Merge(m, src)
-}
-func (m *ValidatorMissedBlocks) XXX_Size() int {
-	return m.Size()
-}
-func (m *ValidatorMissedBlocks) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidatorMissedBlocks.DiscardUnknown(m)
-}
+
+func (m *ValidatorMissedBlocks) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ValidatorMissedBlocks) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ValidatorMissedBlocks) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ValidatorMissedBlocks proto.InternalMessageInfo
 
-func (m *ValidatorMissedBlocks) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
+func (m *ValidatorMissedBlocks) GetAddress() string { _ = "STUB: not implemented"; return "" }
 
 func (m *ValidatorMissedBlocks) GetMissedBlocks() []MissedBlock {
-	if m != nil {
-		return m.MissedBlocks
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -395,52 +298,29 @@ type MissedBlock struct {
 	Missed bool `protobuf:"varint,2,opt,name=missed,proto3" json:"missed,omitempty"`
 }
 
-func (m *MissedBlock) Reset()         { *m = MissedBlock{} }
-func (m *MissedBlock) String() string { return proto.CompactTextString(m) }
-func (*MissedBlock) ProtoMessage()    {}
-func (*MissedBlock) Descriptor() ([]byte, []int) {
-	return fileDescriptor_1923b9188b635394, []int{6}
-}
-func (m *MissedBlock) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MissedBlock) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MissedBlock) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MissedBlock) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MissedBlock) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MissedBlock) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MissedBlock) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MissedBlock.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MissedBlock) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MissedBlock.Merge(m, src)
-}
-func (m *MissedBlock) XXX_Size() int {
-	return m.Size()
-}
-func (m *MissedBlock) XXX_DiscardUnknown() {
-	xxx_messageInfo_MissedBlock.DiscardUnknown(m)
-}
+
+func (m *MissedBlock) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MissedBlock) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MissedBlock) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MissedBlock proto.InternalMessageInfo
 
-func (m *MissedBlock) GetIndex() int64 {
-	if m != nil {
-		return m.Index
-	}
-	return 0
-}
+func (m *MissedBlock) GetIndex() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *MissedBlock) GetMissed() bool {
-	if m != nil {
-		return m.Missed
-	}
-	return false
-}
+func (m *MissedBlock) GetMissed() bool { _ = "STUB: not implemented"; return false }
 
 func init() {
 	proto.RegisterType((*GenesisState)(nil), "cosmos.slashing.v1beta1.GenesisState")
@@ -495,1466 +375,148 @@ var fileDescriptor_1923b9188b635394 = []byte{
 }
 
 func (m *GenesisState) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GenesisState) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.MissedBlocks) > 0 {
-		for iNdEx := len(m.MissedBlocks) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.MissedBlocks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.SigningInfos) > 0 {
-		for iNdEx := len(m.SigningInfos) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.SigningInfos[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	{
-		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GenesisStateLegacyMissingHeights) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GenesisStateLegacyMissingHeights) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GenesisStateLegacyMissingHeights) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.MissedBlocks) > 0 {
-		for iNdEx := len(m.MissedBlocks) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.MissedBlocks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.SigningInfos) > 0 {
-		for iNdEx := len(m.SigningInfos) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.SigningInfos[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	{
-		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GenesisStateLegacyV43) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GenesisStateLegacyV43) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GenesisStateLegacyV43) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.MissedBlocks) > 0 {
-		for iNdEx := len(m.MissedBlocks) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.MissedBlocks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.SigningInfos) > 0 {
-		for iNdEx := len(m.SigningInfos) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.SigningInfos[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	{
-		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SigningInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *SigningInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *SigningInfo) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *SigningInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.ValidatorSigningInfo.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintGenesis(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SigningInfoLegacyMissedHeights) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *SigningInfoLegacyMissedHeights) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SigningInfoLegacyMissedHeights) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.ValidatorSigningInfo.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintGenesis(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintGenesis(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorMissedBlocks) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ValidatorMissedBlocks) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorMissedBlocks) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.MissedBlocks) > 0 {
-		for iNdEx := len(m.MissedBlocks) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.MissedBlocks[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintGenesis(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintGenesis(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MissedBlock) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *MissedBlock) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *MissedBlock) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *MissedBlock) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Missed {
-		i--
-		if m.Missed {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Index != 0 {
-		i = encodeVarintGenesis(dAtA, i, uint64(m.Index))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintGenesis(dAtA []byte, offset int, v uint64) int {
-	offset -= sovGenesis(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *GenesisState) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Params.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	if len(m.SigningInfos) > 0 {
-		for _, e := range m.SigningInfos {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
-	if len(m.MissedBlocks) > 0 {
-		for _, e := range m.MissedBlocks {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *GenesisStateLegacyMissingHeights) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Params.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	if len(m.SigningInfos) > 0 {
-		for _, e := range m.SigningInfos {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
-	if len(m.MissedBlocks) > 0 {
-		for _, e := range m.MissedBlocks {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
-	return n
-}
+func (m *GenesisState) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GenesisStateLegacyV43) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Params.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	if len(m.SigningInfos) > 0 {
-		for _, e := range m.SigningInfos {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
-	if len(m.MissedBlocks) > 0 {
-		for _, e := range m.MissedBlocks {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
-	return n
-}
+func (m *GenesisStateLegacyMissingHeights) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *SigningInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovGenesis(uint64(l))
-	}
-	l = m.ValidatorSigningInfo.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
+func (m *GenesisStateLegacyV43) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *SigningInfoLegacyMissedHeights) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovGenesis(uint64(l))
-	}
-	l = m.ValidatorSigningInfo.Size()
-	n += 1 + l + sovGenesis(uint64(l))
-	return n
-}
+func (m *SigningInfo) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ValidatorMissedBlocks) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovGenesis(uint64(l))
-	}
-	if len(m.MissedBlocks) > 0 {
-		for _, e := range m.MissedBlocks {
-			l = e.Size()
-			n += 1 + l + sovGenesis(uint64(l))
-		}
-	}
-	return n
-}
+func (m *SigningInfoLegacyMissedHeights) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MissedBlock) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Index != 0 {
-		n += 1 + sovGenesis(uint64(m.Index))
-	}
-	if m.Missed {
-		n += 2
-	}
-	return n
-}
+func (m *ValidatorMissedBlocks) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovGenesis(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozGenesis(x uint64) (n int) {
-	return sovGenesis(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *GenesisState) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GenesisState: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GenesisState: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SigningInfos", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SigningInfos = append(m.SigningInfos, SigningInfo{})
-			if err := m.SigningInfos[len(m.SigningInfos)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MissedBlocks", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MissedBlocks = append(m.MissedBlocks, ValidatorMissedBlockArray{})
-			if err := m.MissedBlocks[len(m.MissedBlocks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MissedBlock) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func sovGenesis(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozGenesis(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *GenesisState) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GenesisStateLegacyMissingHeights) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GenesisStateLegacyMissingHeights: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GenesisStateLegacyMissingHeights: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SigningInfos", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SigningInfos = append(m.SigningInfos, SigningInfo{})
-			if err := m.SigningInfos[len(m.SigningInfos)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MissedBlocks", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MissedBlocks = append(m.MissedBlocks, ValidatorMissedBlockArrayLegacyMissedHeights{})
-			if err := m.MissedBlocks[len(m.MissedBlocks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *GenesisStateLegacyV43) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GenesisStateLegacyV43: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GenesisStateLegacyV43: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SigningInfos", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SigningInfos = append(m.SigningInfos, SigningInfo{})
-			if err := m.SigningInfos[len(m.SigningInfos)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MissedBlocks", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MissedBlocks = append(m.MissedBlocks, ValidatorMissedBlocks{})
-			if err := m.MissedBlocks[len(m.MissedBlocks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SigningInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SigningInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SigningInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorSigningInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ValidatorSigningInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *GenesisStateLegacyV43) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *SigningInfo) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *SigningInfoLegacyMissedHeights) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SigningInfoLegacyMissedHeights: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SigningInfoLegacyMissedHeights: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorSigningInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ValidatorSigningInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *ValidatorMissedBlocks) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ValidatorMissedBlocks: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ValidatorMissedBlocks: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MissedBlocks", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MissedBlocks = append(m.MissedBlocks, MissedBlock{})
-			if err := m.MissedBlocks[len(m.MissedBlocks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MissedBlock) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MissedBlock: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MissedBlock: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
-			}
-			m.Index = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Index |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Missed", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Missed = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipGenesis(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthGenesis
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *ValidatorMissedBlocks) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipGenesis(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowGenesis
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowGenesis
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthGenesis
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupGenesis
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthGenesis
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *MissedBlock) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipGenesis(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthGenesis        = fmt.Errorf("proto: negative length found during unmarshaling")

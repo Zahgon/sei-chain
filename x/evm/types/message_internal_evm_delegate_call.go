@@ -9,23 +9,13 @@ var (
 )
 
 func NewMessageInternalEVMDelegateCall(from sdk.AccAddress, to string, codeHash []byte, data []byte, fromContract string) *MsgInternalEVMDelegateCall {
-	return &MsgInternalEVMDelegateCall{
-		Sender:       from.String(),
-		To:           to,
-		Data:         data,
-		CodeHash:     codeHash,
-		FromContract: fromContract,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (msg *MsgInternalEVMDelegateCall) GetSigners() []sdk.AccAddress {
-	contractAddr, err := sdk.AccAddressFromBech32(msg.FromContract)
-	if err != nil {
-		return []sdk.AccAddress{}
-	}
-	return []sdk.AccAddress{contractAddr}
-}
-
-func (msg *MsgInternalEVMDelegateCall) ValidateBasic() error {
+	_ = "STUB: not implemented"
 	return nil
 }
+
+func (msg *MsgInternalEVMDelegateCall) ValidateBasic() error { _ = "STUB: not implemented"; return nil }

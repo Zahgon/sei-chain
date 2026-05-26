@@ -1,9 +1,6 @@
 package dbcache
 
 import (
-	"fmt"
-
-	errorutils "github.com/sei-protocol/sei-chain/sei-db/common/errors"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/types"
 )
 
@@ -22,17 +19,8 @@ type cachedKeyValueDB struct {
 // Due to the nature of a Cache, it is not safe to mutate byte slices (keys or values) passed to or received from
 // any of the methods on a cachedKeyValueDB after calling them.
 func NewCachedKeyValueDB(db types.KeyValueDB, cache Cache) types.KeyValueDB {
-	read := func(key []byte) ([]byte, bool, error) {
-		val, err := db.Get(key)
-		if err != nil {
-			if errorutils.IsNotFound(err) {
-				return nil, false, nil
-			}
-			return nil, false, err
-		}
-		return val, true, nil
-	}
-	return &cachedKeyValueDB{db: db, cache: cache, read: read}
+	_ = "STUB: not implemented"
+	return *new(types.KeyValueDB)
 }
 
 // Get returns the value for the given key, or ErrNotFound if not found.
@@ -40,14 +28,8 @@ func NewCachedKeyValueDB(db types.KeyValueDB, cache Cache) types.KeyValueDB {
 // It is not safe to mutate the key slice after calling this method, nor is it safe to mutate the value slice
 // that is returned.
 func (c *cachedKeyValueDB) Get(key []byte) ([]byte, error) {
-	val, found, err := c.cache.Get(c.read, key, true)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get value from cache: %w", err)
-	}
-	if !found {
-		return nil, errorutils.ErrNotFound
-	}
-	return val, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BatchGet performs a batch read operation. Given a map of keys to read, performs the reads and updates the
@@ -56,10 +38,7 @@ func (c *cachedKeyValueDB) Get(key []byte) ([]byte, error) {
 // It is not thread safe to read or mutate the map while this method is running. It is also not safe to mutate the
 // key or value slices in the map after calling this method.
 func (c *cachedKeyValueDB) BatchGet(keys map[string]types.BatchGetResult) error {
-	err := c.cache.BatchGet(c.read, keys)
-	if err != nil {
-		return fmt.Errorf("failed to get values from cache: %w", err)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -67,11 +46,7 @@ func (c *cachedKeyValueDB) BatchGet(keys map[string]types.BatchGetResult) error 
 //
 // It is not safe to mutate the key or value slices after calling this method.
 func (c *cachedKeyValueDB) Set(key []byte, value []byte, opts types.WriteOptions) error {
-	err := c.db.Set(key, value, opts)
-	if err != nil {
-		return fmt.Errorf("failed to set value in database: %w", err)
-	}
-	c.cache.Set(key, value)
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -79,16 +54,13 @@ func (c *cachedKeyValueDB) Set(key []byte, value []byte, opts types.WriteOptions
 //
 // It is not safe to mutate the key slice after calling this method.
 func (c *cachedKeyValueDB) Delete(key []byte, opts types.WriteOptions) error {
-	err := c.db.Delete(key, opts)
-	if err != nil {
-		return fmt.Errorf("failed to delete value in database: %w", err)
-	}
-	c.cache.Delete(key)
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (c *cachedKeyValueDB) NewIter(opts *types.IterOptions) (types.KeyValueDBIterator, error) {
-	return c.db.NewIter(opts)
+	_ = "STUB: not implemented"
+	return *new(types.KeyValueDBIterator), nil
 }
 
 // NewBatch returns a new batch for atomic writes.
@@ -96,21 +68,12 @@ func (c *cachedKeyValueDB) NewIter(opts *types.IterOptions) (types.KeyValueDBIte
 // It is not safe to mutate the key/value slices passed to the batch once inserted. This remains true even
 // after the batch is committed.
 func (c *cachedKeyValueDB) NewBatch() types.Batch {
-	return newCachedBatch(c.db.NewBatch(), c.cache)
+	_ = "STUB: not implemented"
+	return *new(types.Batch)
 }
 
-func (c *cachedKeyValueDB) Flush() error {
-	return c.db.Flush()
-}
+func (c *cachedKeyValueDB) Flush() error { _ = "STUB: not implemented"; return nil }
 
-func (c *cachedKeyValueDB) Close() error {
-	return c.db.Close()
-}
+func (c *cachedKeyValueDB) Close() error { _ = "STUB: not implemented"; return nil }
 
-func (c *cachedKeyValueDB) Checkpoint(destDir string) error {
-	cp, ok := c.db.(types.Checkpointable)
-	if !ok {
-		return fmt.Errorf("underlying database does not support Checkpoint")
-	}
-	return cp.Checkpoint(destDir)
-}
+func (c *cachedKeyValueDB) Checkpoint(destDir string) error { _ = "STUB: not implemented"; return nil }

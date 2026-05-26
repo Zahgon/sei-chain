@@ -16,27 +16,21 @@ type LaneQC struct {
 }
 
 // NewLaneQC constructs a new LaneQC.
-func NewLaneQC(votes []*Signed[*LaneVote]) *LaneQC {
-	if len(votes) == 0 {
-		panic("qc cannot be empty")
-	}
-	sigs := make([]*Signature, len(votes))
-	for i, v := range votes {
-		sigs[i] = v.sig
-	}
-	return &LaneQC{vote: votes[0].hashed, sigs: sigs}
-}
+func NewLaneQC(votes []*Signed[*LaneVote]) *LaneQC { _ = "STUB: not implemented"; return nil }
 
 // Header .
-func (m *LaneQC) Header() *BlockHeader { return m.vote.Msg().header }
+func (m *LaneQC) Header() *BlockHeader { _ = "STUB: not implemented"; return nil }
 
 // Next is the number of the first block not known to be available.
-func (m *LaneQC) Next() BlockNumber { return m.Header().Next() }
+func (m *LaneQC) Next() BlockNumber {
+	_ = "STUB: not implemented"
+	return *
 
-// Verify verifies LaneQC against the committee.
-func (m *LaneQC) Verify(c *Committee) error {
-	return m.vote.verifyQC(c, c.LaneQuorum(), m.sigs)
+	// Verify verifies LaneQC against the committee.
+	new(BlockNumber)
 }
+
+func (m *LaneQC) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 // LaneQCConv is a protobuf converter for LaneQC.
 var LaneQCConv = protoutils.Conv[*LaneQC, *pb.LaneQC]{

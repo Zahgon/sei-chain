@@ -1,12 +1,8 @@
 package feegrant
 
 import (
-	"github.com/gogo/protobuf/proto"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/legacy/legacytx"
 )
 
@@ -19,124 +15,56 @@ var (
 
 // NewMsgGrantAllowance creates a new MsgGrantAllowance.
 func NewMsgGrantAllowance(feeAllowance FeeAllowanceI, granter, grantee sdk.AccAddress) (*MsgGrantAllowance, error) {
-	msg, ok := feeAllowance.(proto.Message)
-	if !ok {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrPackAny, "cannot proto marshal %T", msg)
-	}
-	any, err := types.NewAnyWithValue(msg)
-	if err != nil {
-		return nil, err
-	}
-
-	return &MsgGrantAllowance{
-		Granter:   granter.String(),
-		Grantee:   grantee.String(),
-		Allowance: any,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ValidateBasic implements the sdk.Msg interface.
-func (msg MsgGrantAllowance) ValidateBasic() error {
-	if msg.Granter == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "missing granter address")
-	}
-	if msg.Grantee == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "missing grantee address")
-	}
-	if msg.Grantee == msg.Granter {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "cannot self-grant fee authorization")
-	}
-
-	allowance, err := msg.GetFeeAllowanceI()
-	if err != nil {
-		return err
-	}
-
-	return allowance.ValidateBasic()
-}
+func (msg MsgGrantAllowance) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // GetSigners gets the granter account associated with an allowance
-func (msg MsgGrantAllowance) GetSigners() []sdk.AccAddress {
-	granter, err := sdk.AccAddressFromBech32(msg.Granter)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{granter}
-}
+func (msg MsgGrantAllowance) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 // Type implements the LegacyMsg.Type method.
-func (msg MsgGrantAllowance) Type() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgGrantAllowance) Type() string { _ = "STUB: not implemented"; return "" }
 
 // Route implements the LegacyMsg.Route method.
-func (msg MsgGrantAllowance) Route() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgGrantAllowance) Route() string { _ = "STUB: not implemented"; return "" }
 
 // GetSignBytes implements the LegacyMsg.GetSignBytes method.
-func (msg MsgGrantAllowance) GetSignBytes() []byte {
-	return sdk.MustSortJSON(legacy.Cdc.MustMarshalJSON(&msg))
-}
+func (msg MsgGrantAllowance) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // GetFeeAllowanceI returns unpacked FeeAllowance
 func (msg MsgGrantAllowance) GetFeeAllowanceI() (FeeAllowanceI, error) {
-	allowance, ok := msg.Allowance.GetCachedValue().(FeeAllowanceI)
-	if !ok {
-		return nil, sdkerrors.Wrap(ErrNoAllowance, "failed to get allowance")
-	}
-
-	return allowance, nil
+	_ = "STUB: not implemented"
+	return *new(FeeAllowanceI), nil
 }
 
 // UnpackInterfaces implements UnpackInterfacesMessage.UnpackInterfaces
 func (msg MsgGrantAllowance) UnpackInterfaces(unpacker types.AnyUnpacker) error {
-	var allowance FeeAllowanceI
-	return unpacker.UnpackAny(msg.Allowance, &allowance)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewMsgRevokeAllowance returns a message to revoke a fee allowance for a given
 // granter and grantee
 func NewMsgRevokeAllowance(granter sdk.AccAddress, grantee sdk.AccAddress) MsgRevokeAllowance {
-	return MsgRevokeAllowance{Granter: granter.String(), Grantee: grantee.String()}
+	_ = "STUB: not implemented"
+	return *new(MsgRevokeAllowance)
 }
 
 // ValidateBasic implements the sdk.Msg interface.
-func (msg MsgRevokeAllowance) ValidateBasic() error {
-	if msg.Granter == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "missing granter address")
-	}
-	if msg.Grantee == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "missing grantee address")
-	}
-	if msg.Grantee == msg.Granter {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "addresses must be different")
-	}
-
-	return nil
-}
+func (msg MsgRevokeAllowance) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // GetSigners gets the granter address associated with an Allowance
 // to revoke.
-func (msg MsgRevokeAllowance) GetSigners() []sdk.AccAddress {
-	granter, err := sdk.AccAddressFromBech32(msg.Granter)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{granter}
-}
+func (msg MsgRevokeAllowance) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 // Type implements the LegacyMsg.Type method.
-func (msg MsgRevokeAllowance) Type() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgRevokeAllowance) Type() string { _ = "STUB: not implemented"; return "" }
 
 // Route implements the LegacyMsg.Route method.
-func (msg MsgRevokeAllowance) Route() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgRevokeAllowance) Route() string { _ = "STUB: not implemented"; return "" }
 
 // GetSignBytes implements the LegacyMsg.GetSignBytes method.
-func (msg MsgRevokeAllowance) GetSignBytes() []byte {
-	return sdk.MustSortJSON(legacy.Cdc.MustMarshalJSON(&msg))
-}
+func (msg MsgRevokeAllowance) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }

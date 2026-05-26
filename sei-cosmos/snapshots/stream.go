@@ -7,8 +7,6 @@ import (
 
 	protoio "github.com/gogo/protobuf/io"
 	"github.com/gogo/protobuf/proto"
-
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 const (
@@ -29,49 +27,16 @@ type StreamWriter struct {
 }
 
 // NewStreamWriter set up a stream pipeline to serialize snapshot DB records.
-func NewStreamWriter(ch chan<- io.ReadCloser) *StreamWriter {
-	chunkWriter := NewChunkWriter(ch, snapshotChunkSize)
-	bufWriter := bufio.NewWriterSize(chunkWriter, snapshotBufferSize)
-	zWriter, err := zlib.NewWriterLevel(bufWriter, snapshotCompressionLevel)
-	if err != nil {
-		chunkWriter.CloseWithError(sdkerrors.Wrap(err, "zlib failure"))
-		return nil
-	}
-	protoWriter := protoio.NewDelimitedWriter(zWriter)
-	return &StreamWriter{
-		chunkWriter: chunkWriter,
-		bufWriter:   bufWriter,
-		zWriter:     zWriter,
-		protoWriter: protoWriter,
-	}
-}
+func NewStreamWriter(ch chan<- io.ReadCloser) *StreamWriter { _ = "STUB: not implemented"; return nil }
 
 // WriteMsg implements protoio.Write interface
-func (sw *StreamWriter) WriteMsg(msg proto.Message) error {
-	return sw.protoWriter.WriteMsg(msg)
-}
+func (sw *StreamWriter) WriteMsg(msg proto.Message) error { _ = "STUB: not implemented"; return nil }
 
 // Close implements io.Closer interface
-func (sw *StreamWriter) Close() error {
-	if err := sw.protoWriter.Close(); err != nil {
-		sw.chunkWriter.CloseWithError(err)
-		return err
-	}
-	if err := sw.zWriter.Close(); err != nil {
-		sw.chunkWriter.CloseWithError(err)
-		return err
-	}
-	if err := sw.bufWriter.Flush(); err != nil {
-		sw.chunkWriter.CloseWithError(err)
-		return err
-	}
-	return sw.chunkWriter.Close()
-}
+func (sw *StreamWriter) Close() error { _ = "STUB: not implemented"; return nil }
 
 // CloseWithError pass error to chunkWriter
-func (sw *StreamWriter) CloseWithError(err error) {
-	sw.chunkWriter.CloseWithError(err)
-}
+func (sw *StreamWriter) CloseWithError(err error) { _ = "STUB: not implemented"; return }
 
 // StreamReader set up a restore stream pipeline
 // chan io.ReadCloser -> chunkReader -> zlib -> delimited Protobuf -> ExportNode
@@ -83,27 +48,12 @@ type StreamReader struct {
 
 // NewStreamReader set up a restore stream pipeline.
 func NewStreamReader(chunks <-chan io.ReadCloser) (*StreamReader, error) {
-	chunkReader := NewChunkReader(chunks)
-	zReader, err := zlib.NewReader(chunkReader)
-	if err != nil {
-		return nil, sdkerrors.Wrap(err, "zlib failure")
-	}
-	protoReader := protoio.NewDelimitedReader(zReader, snapshotMaxItemSize)
-	return &StreamReader{
-		chunkReader: chunkReader,
-		zReader:     zReader,
-		protoReader: protoReader,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ReadMsg implements protoio.Reader interface
-func (sr *StreamReader) ReadMsg(msg proto.Message) error {
-	return sr.protoReader.ReadMsg(msg)
-}
+func (sr *StreamReader) ReadMsg(msg proto.Message) error { _ = "STUB: not implemented"; return nil }
 
 // Close implements io.Closer interface
-func (sr *StreamReader) Close() error {
-	_ = sr.protoReader.Close()
-	_ = sr.zReader.Close()
-	return sr.chunkReader.Close()
-}
+func (sr *StreamReader) Close() error { _ = "STUB: not implemented"; return nil }

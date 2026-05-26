@@ -1,7 +1,6 @@
 package types
 
 import (
-	"fmt"
 	"time"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
@@ -32,7 +31,8 @@ var (
 
 // ParamKeyTable for slashing module
 func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
+	_ = "STUB: not implemented"
+	return *new(paramtypes.KeyTable)
 }
 
 // NewParams creates a new Params object
@@ -40,105 +40,25 @@ func NewParams(
 	signedBlocksWindow int64, minSignedPerWindow sdk.Dec, downtimeJailDuration time.Duration,
 	slashFractionDoubleSign, slashFractionDowntime sdk.Dec,
 ) Params {
-
-	return Params{
-		SignedBlocksWindow:      signedBlocksWindow,
-		MinSignedPerWindow:      minSignedPerWindow,
-		DowntimeJailDuration:    downtimeJailDuration,
-		SlashFractionDoubleSign: slashFractionDoubleSign,
-		SlashFractionDowntime:   slashFractionDowntime,
-	}
+	_ = "STUB: not implemented"
+	return *new(Params)
 }
 
 // ParamSetPairs - Implements params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeySignedBlocksWindow, &p.SignedBlocksWindow, validateSignedBlocksWindow),
-		paramtypes.NewParamSetPair(KeyMinSignedPerWindow, &p.MinSignedPerWindow, validateMinSignedPerWindow),
-		paramtypes.NewParamSetPair(KeyDowntimeJailDuration, &p.DowntimeJailDuration, validateDowntimeJailDuration),
-		paramtypes.NewParamSetPair(KeySlashFractionDoubleSign, &p.SlashFractionDoubleSign, validateSlashFractionDoubleSign),
-		paramtypes.NewParamSetPair(KeySlashFractionDowntime, &p.SlashFractionDowntime, validateSlashFractionDowntime),
-	}
+	_ = "STUB: not implemented"
+	return *new(paramtypes.ParamSetPairs)
 }
 
 // DefaultParams defines the parameters for this module
-func DefaultParams() Params {
-	return NewParams(
-		DefaultSignedBlocksWindow, DefaultMinSignedPerWindow, DefaultDowntimeJailDuration,
-		DefaultSlashFractionDoubleSign, DefaultSlashFractionDowntime,
-	)
-}
+func DefaultParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
-func validateSignedBlocksWindow(i interface{}) error {
-	v, ok := i.(int64)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
+func validateSignedBlocksWindow(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	if v <= 0 {
-		return fmt.Errorf("signed blocks window must be positive: %d", v)
-	}
+func validateMinSignedPerWindow(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
+func validateDowntimeJailDuration(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-func validateMinSignedPerWindow(i interface{}) error {
-	v, ok := i.(sdk.Dec)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
+func validateSlashFractionDoubleSign(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	if v.IsNegative() {
-		return fmt.Errorf("min signed per window cannot be negative: %s", v)
-	}
-	if v.GT(sdk.OneDec()) {
-		return fmt.Errorf("min signed per window too large: %s", v)
-	}
-
-	return nil
-}
-
-func validateDowntimeJailDuration(i interface{}) error {
-	v, ok := i.(time.Duration)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v <= 0 {
-		return fmt.Errorf("downtime jail duration must be positive: %s", v)
-	}
-
-	return nil
-}
-
-func validateSlashFractionDoubleSign(i interface{}) error {
-	v, ok := i.(sdk.Dec)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v.IsNegative() {
-		return fmt.Errorf("double sign slash fraction cannot be negative: %s", v)
-	}
-	if v.GT(sdk.OneDec()) {
-		return fmt.Errorf("double sign slash fraction too large: %s", v)
-	}
-
-	return nil
-}
-
-func validateSlashFractionDowntime(i interface{}) error {
-	v, ok := i.(sdk.Dec)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v.IsNegative() {
-		return fmt.Errorf("downtime slash fraction cannot be negative: %s", v)
-	}
-	if v.GT(sdk.OneDec()) {
-		return fmt.Errorf("downtime slash fraction too large: %s", v)
-	}
-
-	return nil
-}
+func validateSlashFractionDowntime(i interface{}) error { _ = "STUB: not implemented"; return nil }

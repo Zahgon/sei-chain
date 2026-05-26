@@ -99,47 +99,32 @@ type Univ2SwapperTransactorRaw struct {
 
 // NewUniv2Swapper creates a new instance of Univ2Swapper, bound to a specific deployed contract.
 func NewUniv2Swapper(address common.Address, backend bind.ContractBackend) (*Univ2Swapper, error) {
-	contract, err := bindUniv2Swapper(address, backend, backend, backend)
-	if err != nil {
-		return nil, err
-	}
-	return &Univ2Swapper{Univ2SwapperCaller: Univ2SwapperCaller{contract: contract}, Univ2SwapperTransactor: Univ2SwapperTransactor{contract: contract}, Univ2SwapperFilterer: Univ2SwapperFilterer{contract: contract}}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewUniv2SwapperCaller creates a new read-only instance of Univ2Swapper, bound to a specific deployed contract.
 func NewUniv2SwapperCaller(address common.Address, caller bind.ContractCaller) (*Univ2SwapperCaller, error) {
-	contract, err := bindUniv2Swapper(address, caller, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &Univ2SwapperCaller{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewUniv2SwapperTransactor creates a new write-only instance of Univ2Swapper, bound to a specific deployed contract.
 func NewUniv2SwapperTransactor(address common.Address, transactor bind.ContractTransactor) (*Univ2SwapperTransactor, error) {
-	contract, err := bindUniv2Swapper(address, nil, transactor, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &Univ2SwapperTransactor{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewUniv2SwapperFilterer creates a new log filterer instance of Univ2Swapper, bound to a specific deployed contract.
 func NewUniv2SwapperFilterer(address common.Address, filterer bind.ContractFilterer) (*Univ2SwapperFilterer, error) {
-	contract, err := bindUniv2Swapper(address, nil, nil, filterer)
-	if err != nil {
-		return nil, err
-	}
-	return &Univ2SwapperFilterer{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // bindUniv2Swapper binds a generic wrapper to an already deployed contract.
 func bindUniv2Swapper(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := Univ2SwapperMetaData.GetAbi()
-	if err != nil {
-		return nil, err
-	}
-	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -147,18 +132,21 @@ func bindUniv2Swapper(address common.Address, caller bind.ContractCaller, transa
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Univ2Swapper *Univ2SwapperRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Univ2Swapper.Contract.Univ2SwapperCaller.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Univ2Swapper *Univ2SwapperRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Univ2Swapper.Contract.Univ2SwapperTransactor.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Univ2Swapper *Univ2SwapperRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Univ2Swapper.Contract.Univ2SwapperTransactor.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -166,161 +154,139 @@ func (_Univ2Swapper *Univ2SwapperRaw) Transact(opts *bind.TransactOpts, method s
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Univ2Swapper *Univ2SwapperCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Univ2Swapper.Contract.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Univ2Swapper *Univ2SwapperTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Univ2Swapper.Contract.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Univ2Swapper *Univ2SwapperTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Univ2Swapper.Contract.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BIGNUMBER is a free data retrieval call binding the contract method 0x2f4fda30.
 //
 // Solidity: function BIG_NUMBER() view returns(uint256)
 func (_Univ2Swapper *Univ2SwapperCaller) BIGNUMBER(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Univ2Swapper.contract.Call(opts, &out, "BIG_NUMBER")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BIGNUMBER is a free data retrieval call binding the contract method 0x2f4fda30.
 //
 // Solidity: function BIG_NUMBER() view returns(uint256)
 func (_Univ2Swapper *Univ2SwapperSession) BIGNUMBER() (*big.Int, error) {
-	return _Univ2Swapper.Contract.BIGNUMBER(&_Univ2Swapper.CallOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BIGNUMBER is a free data retrieval call binding the contract method 0x2f4fda30.
 //
 // Solidity: function BIG_NUMBER() view returns(uint256)
 func (_Univ2Swapper *Univ2SwapperCallerSession) BIGNUMBER() (*big.Int, error) {
-	return _Univ2Swapper.Contract.BIGNUMBER(&_Univ2Swapper.CallOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // T1 is a free data retrieval call binding the contract method 0xfb5343f3.
 //
 // Solidity: function t1() view returns(address)
 func (_Univ2Swapper *Univ2SwapperCaller) T1(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Univ2Swapper.contract.Call(opts, &out, "t1")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // T1 is a free data retrieval call binding the contract method 0xfb5343f3.
 //
 // Solidity: function t1() view returns(address)
 func (_Univ2Swapper *Univ2SwapperSession) T1() (common.Address, error) {
-	return _Univ2Swapper.Contract.T1(&_Univ2Swapper.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // T1 is a free data retrieval call binding the contract method 0xfb5343f3.
 //
 // Solidity: function t1() view returns(address)
 func (_Univ2Swapper *Univ2SwapperCallerSession) T1() (common.Address, error) {
-	return _Univ2Swapper.Contract.T1(&_Univ2Swapper.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // T2 is a free data retrieval call binding the contract method 0xbaf2f868.
 //
 // Solidity: function t2() view returns(address)
 func (_Univ2Swapper *Univ2SwapperCaller) T2(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Univ2Swapper.contract.Call(opts, &out, "t2")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // T2 is a free data retrieval call binding the contract method 0xbaf2f868.
 //
 // Solidity: function t2() view returns(address)
 func (_Univ2Swapper *Univ2SwapperSession) T2() (common.Address, error) {
-	return _Univ2Swapper.Contract.T2(&_Univ2Swapper.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // T2 is a free data retrieval call binding the contract method 0xbaf2f868.
 //
 // Solidity: function t2() view returns(address)
 func (_Univ2Swapper *Univ2SwapperCallerSession) T2() (common.Address, error) {
-	return _Univ2Swapper.Contract.T2(&_Univ2Swapper.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // UniV2Router is a free data retrieval call binding the contract method 0x958c2e52.
 //
 // Solidity: function uniV2Router() view returns(address)
 func (_Univ2Swapper *Univ2SwapperCaller) UniV2Router(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Univ2Swapper.contract.Call(opts, &out, "uniV2Router")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // UniV2Router is a free data retrieval call binding the contract method 0x958c2e52.
 //
 // Solidity: function uniV2Router() view returns(address)
 func (_Univ2Swapper *Univ2SwapperSession) UniV2Router() (common.Address, error) {
-	return _Univ2Swapper.Contract.UniV2Router(&_Univ2Swapper.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // UniV2Router is a free data retrieval call binding the contract method 0x958c2e52.
 //
 // Solidity: function uniV2Router() view returns(address)
 func (_Univ2Swapper *Univ2SwapperCallerSession) UniV2Router() (common.Address, error) {
-	return _Univ2Swapper.Contract.UniV2Router(&_Univ2Swapper.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x8119c065.
 //
 // Solidity: function swap() returns()
 func (_Univ2Swapper *Univ2SwapperTransactor) Swap(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Univ2Swapper.contract.Transact(opts, "swap")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x8119c065.
 //
 // Solidity: function swap() returns()
 func (_Univ2Swapper *Univ2SwapperSession) Swap() (*types.Transaction, error) {
-	return _Univ2Swapper.Contract.Swap(&_Univ2Swapper.TransactOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Swap is a paid mutator transaction binding the contract method 0x8119c065.
 //
 // Solidity: function swap() returns()
 func (_Univ2Swapper *Univ2SwapperTransactorSession) Swap() (*types.Transaction, error) {
-	return _Univ2Swapper.Contract.Swap(&_Univ2Swapper.TransactOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

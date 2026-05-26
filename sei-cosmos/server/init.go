@@ -1,8 +1,6 @@
 package server
 
 import (
-	"fmt"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keyring"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -10,19 +8,9 @@ import (
 // Deprecated: GenerateCoinKey generates a new key mnemonic along with its addrress.
 // Please use testutils.GenerateCoinKey instead.
 func GenerateCoinKey(algo keyring.SignatureAlgo) (sdk.AccAddress, string, error) {
+	_ = "STUB: not implemented"
 	// generate a private key, with mnemonic
-	info, secret, err := keyring.NewInMemory().NewMnemonic(
-		"name",
-		keyring.English,
-		sdk.GetConfig().GetFullBIP44Path(),
-		keyring.DefaultBIP39Passphrase,
-		algo,
-	)
-	if err != nil {
-		return sdk.AccAddress{}, "", err
-	}
-
-	return sdk.AccAddress(info.GetPubKey().Address()), secret, nil
+	return *new(sdk.AccAddress), "", nil
 }
 
 // Deprecated: GenerateSaveCoinKey generates a new key mnemonic with its addrress.
@@ -36,28 +24,10 @@ func GenerateSaveCoinKey(
 	overwrite bool,
 	algo keyring.SignatureAlgo,
 ) (sdk.AccAddress, string, error) {
-	exists := false
-	_, err := keybase.Key(keyName)
-	if err == nil {
-		exists = true
-	}
-
-	// ensure no overwrite
-	if !overwrite && exists {
-		return sdk.AccAddress{}, "", fmt.Errorf("key already exists, overwrite is disabled")
-	}
-
-	// remove the old key by name if it exists
-	if exists {
-		if err := keybase.Delete(keyName); err != nil {
-			return sdk.AccAddress{}, "", fmt.Errorf("failed to overwrite key")
-		}
-	}
-
-	k, mnemonic, err := keybase.NewMnemonic(keyName, keyring.English, sdk.GetConfig().GetFullBIP44Path(), keyring.DefaultBIP39Passphrase, algo)
-	if err != nil {
-		return sdk.AccAddress{}, "", err
-	}
-
-	return k.GetAddress(), mnemonic, nil
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), "", nil
 }
+
+// ensure no overwrite
+
+// remove the old key by name if it exists

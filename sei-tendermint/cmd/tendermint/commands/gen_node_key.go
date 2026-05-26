@@ -1,12 +1,7 @@
 package commands
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
-
-	tmjson "github.com/sei-protocol/sei-chain/sei-tendermint/libs/json"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 // GenNodeKeyCmd allows the generation of a node key. It prints JSON-encoded
@@ -17,16 +12,4 @@ var GenNodeKeyCmd = &cobra.Command{
 	RunE:  genNodeKey,
 }
 
-func genNodeKey(cmd *cobra.Command, args []string) error {
-	nodeKey := types.GenNodeKey()
-
-	bz, err := tmjson.Marshal(nodeKey)
-	if err != nil {
-		return fmt.Errorf("nodeKey -> json: %w", err)
-	}
-
-	fmt.Printf(`%v
-`, string(bz))
-
-	return nil
-}
+func genNodeKey(cmd *cobra.Command, args []string) error { _ = "STUB: not implemented"; return nil }

@@ -1,11 +1,5 @@
 package vtype
 
-import (
-	"encoding/binary"
-	"errors"
-	"fmt"
-)
-
 type CodeDataVersion uint8
 
 // DO NOT CHANGE VERSION VALUES!!! Adding new versions is ok, but historical versions should never be removed/changed.
@@ -43,95 +37,42 @@ type CodeData struct {
 }
 
 // Create a new CodeData with the given bytecode.
-func NewCodeData() *CodeData {
-	return &CodeData{version: CodeDataVersion0}
-}
+func NewCodeData() *CodeData { _ = "STUB: not implemented"; return nil }
 
 // Serialize the code data to a byte slice.
-func (c *CodeData) Serialize() []byte {
-	if c == nil {
-		return make([]byte, codeBytecodeStart)
-	}
-	data := make([]byte, codeBytecodeStart+len(c.bytecode))
-	data[codeVersionStart] = byte(c.version)
-	binary.BigEndian.PutUint64(data[codeBlockHeightStart:codeBytecodeStart], uint64(c.blockHeight)) //nolint:gosec
-	copy(data[codeBytecodeStart:], c.bytecode)
-	return data
-}
+func (c *CodeData) Serialize() []byte { _ = "STUB: not implemented"; return nil }
+
+//nolint:gosec
 
 // Deserialize the code data from the given byte slice.
 func DeserializeCodeData(data []byte) (*CodeData, error) {
-	if len(data) == 0 {
-		return nil, errors.New("data is empty")
-	}
-
-	version := CodeDataVersion(data[codeVersionStart])
-	if version != CodeDataVersion0 {
-		return nil, fmt.Errorf("unsupported serialization version: %d", version)
-	}
-
-	if len(data) < codeBytecodeStart {
-		return nil, fmt.Errorf("data length at version %d should be at least %d, got %d",
-			version, codeBytecodeStart, len(data))
-	}
-
-	bytecode := make([]byte, len(data)-codeBytecodeStart)
-	copy(bytecode, data[codeBytecodeStart:])
-
-	return &CodeData{
-		version:     version,
-		blockHeight: int64(binary.BigEndian.Uint64(data[codeBlockHeightStart:codeBytecodeStart])), //nolint:gosec
-		bytecode:    bytecode,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec
 
 // Get the serialization version for this CodeData instance.
 func (c *CodeData) GetSerializationVersion() CodeDataVersion {
-	if c == nil {
-		return CodeDataVersion0
-	}
-	return c.version
+	_ = "STUB: not implemented"
+	return *new(CodeDataVersion)
 }
 
 // Get the block height when this code was last modified.
-func (c *CodeData) GetBlockHeight() int64 {
-	if c == nil {
-		return 0
-	}
-	return c.blockHeight
-}
+func (c *CodeData) GetBlockHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Get the contract bytecode.
-func (c *CodeData) GetBytecode() []byte {
-	if c == nil {
-		return []byte{}
-	}
-	return c.bytecode
-}
+func (c *CodeData) GetBytecode() []byte { _ = "STUB: not implemented"; return nil }
 
 // Set the contract bytecode. Returns self (or a new CodeData if nil).
-func (c *CodeData) SetBytecode(bytecode []byte) *CodeData {
-	if c == nil {
-		c = NewCodeData()
-	}
-	c.bytecode = append([]byte(nil), bytecode...)
-	return c
-}
+func (c *CodeData) SetBytecode(bytecode []byte) *CodeData { _ = "STUB: not implemented"; return nil }
 
 // Check if this code data signifies a deletion operation. A deletion operation is automatically
 // performed when the bytecode is empty (with the exception of the serialization version and block height).
-func (c *CodeData) IsDelete() bool {
-	if c == nil {
-		return true
-	}
-	return len(c.bytecode) == 0
-}
+func (c *CodeData) IsDelete() bool { _ = "STUB: not implemented"; return false }
 
 // Set the block height when this code was last modified/touched. Returns self (or a new CodeData if nil).
 func (c *CodeData) SetBlockHeight(blockHeight int64) *CodeData {
-	if c == nil {
-		c = NewCodeData()
-	}
-	c.blockHeight = blockHeight
-	return c
+	_ = "STUB: not implemented"
+	return nil
 }

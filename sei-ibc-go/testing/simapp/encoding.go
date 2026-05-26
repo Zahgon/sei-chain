@@ -1,8 +1,6 @@
 package simapp
 
 import (
-	"github.com/sei-protocol/sei-chain/sei-cosmos/std"
-
 	simappparams "github.com/sei-protocol/sei-chain/sei-ibc-go/testing/simapp/params"
 )
 
@@ -11,10 +9,6 @@ import (
 // App user shouldn't create new codecs - use the app.AppCodec instead.
 // [DEPRECATED]
 func MakeTestEncodingConfig() simappparams.EncodingConfig {
-	encodingConfig := simappparams.MakeTestEncodingConfig()
-	std.RegisterLegacyAminoCodec(encodingConfig.Amino)
-	std.RegisterInterfaces(encodingConfig.InterfaceRegistry)
-	ModuleBasics.RegisterLegacyAminoCodec(encodingConfig.Amino)
-	ModuleBasics.RegisterInterfaces(encodingConfig.InterfaceRegistry)
-	return encodingConfig
+	_ = "STUB: not implemented"
+	return *new(simappparams.EncodingConfig)
 }

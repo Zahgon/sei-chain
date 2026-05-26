@@ -2,18 +2,15 @@ package types
 
 import (
 	"context"
-	fmt "fmt"
 	"math/big"
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/gogo/protobuf/proto"
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/gaskv"
-	stypes "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
 
 /*
@@ -76,453 +73,352 @@ type Context struct {
 type Request = Context
 
 // Read-only accessors
-func (c Context) Context() context.Context {
-	return c.ctx
-}
+func (c Context) Context() context.Context { _ = "STUB: not implemented"; return *new(context.Context) }
 
-func (c Context) MultiStore() MultiStore {
-	return c.ms
-}
+func (c Context) MultiStore() MultiStore { _ = "STUB: not implemented"; return *new(MultiStore) }
 
 func (c Context) GigaMultiStore() GigaMultiStore {
-	gigaMultiStore, ok := c.ms.(GigaMultiStore)
-	if !ok {
-		panic(fmt.Sprintf("multi store is not a giga multi store: %T", c.MultiStore()))
-	}
-	return gigaMultiStore
+	_ = "STUB: not implemented"
+	return *new(GigaMultiStore)
 }
 
-func (c Context) BlockHeight() int64 {
-	return c.header.Height
-}
+func (c Context) BlockHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (c Context) BlockTime() time.Time {
-	return c.header.Time
-}
+func (c Context) BlockTime() time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-func (c Context) ChainID() string {
-	return c.chainID
-}
+func (c Context) ChainID() string { _ = "STUB: not implemented"; return "" }
 
-func (c Context) TxBytes() []byte {
-	return c.txBytes
-}
+func (c Context) TxBytes() []byte { _ = "STUB: not implemented"; return nil }
 
-func (c Context) TxSum() [32]byte {
-	return c.txSum
-}
+func (c Context) TxSum() [32]byte { _ = "STUB: not implemented"; return nil }
 
-func (c Context) VoteInfos() []abci.VoteInfo {
-	return c.voteInfo
-}
+func (c Context) VoteInfos() []abci.VoteInfo { _ = "STUB: not implemented"; return nil }
 
-func (c Context) GasMeter() GasMeter {
-	return c.gasMeter
-}
+func (c Context) GasMeter() GasMeter { _ = "STUB: not implemented"; return *new(GasMeter) }
 
-func (c Context) GasEstimate() uint64 {
-	return c.gasEstimate
-}
+func (c Context) GasEstimate() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (c Context) IsCheckTx() bool {
-	return c.checkTx
-}
+func (c Context) IsCheckTx() bool { _ = "STUB: not implemented"; return false }
 
-func (c Context) IsReCheckTx() bool {
-	return c.recheckTx
-}
+func (c Context) IsReCheckTx() bool { _ = "STUB: not implemented"; return false }
 
-func (c Context) IsOCCEnabled() bool {
-	return c.occEnabled
-}
+func (c Context) IsOCCEnabled() bool { _ = "STUB: not implemented"; return false }
 
-func (c Context) MinGasPrices() DecCoins {
-	return c.minGasPrice
-}
+func (c Context) MinGasPrices() DecCoins { _ = "STUB: not implemented"; return *new(DecCoins) }
 
-func (c Context) EventManager() *EventManager {
-	return c.eventManager
-}
+func (c Context) EventManager() *EventManager { _ = "STUB: not implemented"; return nil }
 
-func (c Context) EVMEventManager() *EVMEventManager {
-	return c.evmEventManager
-}
+func (c Context) EVMEventManager() *EVMEventManager { _ = "STUB: not implemented"; return nil }
 
-func (c Context) Priority() int64 {
-	return c.priority
-}
+func (c Context) Priority() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (c Context) EVMSenderAddress() common.Address {
-	return c.evmSenderAddress
+	_ = "STUB: not implemented"
+	return *new(common.Address)
 }
 
-func (c Context) EVMNonce() uint64 {
-	return c.evmNonce
-}
+func (c Context) EVMNonce() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (c Context) SeiSenderAddress() AccAddress {
-	return c.seiSenderAddress
-}
+func (c Context) SeiSenderAddress() AccAddress { _ = "STUB: not implemented"; return *new(AccAddress) }
 
-func (c Context) EVMTxHash() string {
-	return c.evmTxHash
-}
+func (c Context) EVMTxHash() string { _ = "STUB: not implemented"; return "" }
 
-func (c Context) IsEVM() bool {
-	return c.evm
-}
+func (c Context) IsEVM() bool { _ = "STUB: not implemented"; return false }
 
-func (c Context) EVMVMError() string {
-	return c.evmVmError
-}
+func (c Context) EVMVMError() string { _ = "STUB: not implemented"; return "" }
 
-func (c Context) EVMEntryViaWasmdPrecompile() bool {
-	return c.evmEntryViaWasmdPrecompile
-}
+func (c Context) EVMEntryViaWasmdPrecompile() bool { _ = "STUB: not implemented"; return false }
 
 func (c Context) EVMPrecompileCalledFromDelegateCall() bool {
-	return c.evmPrecompileCalledFromDelegateCall
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (c Context) DeliverTxCallback() func(Context) {
-	return c.deliverTxCallback
-}
+func (c Context) DeliverTxCallback() func(Context) { _ = "STUB: not implemented"; return nil }
 
-func (c Context) EVMRequiredBalance() *big.Int {
-	if c.evmRequiredBalance == nil {
-		return nil
-	}
-	return new(big.Int).Set(c.evmRequiredBalance)
-}
+func (c Context) EVMRequiredBalance() *big.Int { _ = "STUB: not implemented"; return nil }
 
-func (c Context) MessageIndex() int {
-	return c.messageIndex
-}
+func (c Context) MessageIndex() int { _ = "STUB: not implemented"; return 0 }
 
 func (c Context) TxIndex() int {
-	return c.txIndex
+	_ = "STUB: not implemented"
+
+	// clone the header before returning
+	return 0
 }
 
-// clone the header before returning
 func (c Context) BlockHeader() tmproto.Header {
-	msg := proto.Clone(&c.header).(*tmproto.Header)
-	return *msg
+	_ = "STUB: not implemented"
+	return *new(tmproto.Header)
 }
 
 func (c Context) TraceSpanContext() context.Context {
-	return c.traceSpanContext
+	_ = "STUB: not implemented"
+	return *new(context.Context)
 }
 
 func (c Context) IsTracing() bool {
-	return c.isTracing
+	_ = "STUB: not implemented"
+
+	// IsSimulation reports whether the context is being run in transaction
+	// simulation mode.
+	return false
 }
 
-// IsSimulation reports whether the context is being run in transaction
-// simulation mode.
-func (c Context) IsSimulation() bool {
-	return c.isSimulation
-}
+func (c Context) IsSimulation() bool { _ = "STUB: not implemented"; return false }
 
 func (c Context) StoreTracer() gaskv.IStoreTracer {
-	if c.storeTracer == nil {
-		return nil
-	}
-	return c.storeTracer
+	_ = "STUB: not implemented"
+	return *new(gaskv.IStoreTracer)
 }
 
 // WithPriority returns a Context with an updated tx priority.
-func (c Context) WithPriority(p int64) Context {
-	c.priority = p
-	c.hasPriority = true
-	return c
-}
+func (c Context) WithPriority(p int64) Context { _ = "STUB: not implemented"; return *new(Context) }
 
 // HasPriority returns true iff the priority is set for this Context even if it
 // was set to zero.
-func (c Context) HasPriority() bool {
-	return c.hasPriority
-}
+func (c Context) HasPriority() bool { _ = "STUB: not implemented"; return false }
 
 // HeaderHash returns a copy of the header hash obtained during abci.RequestBeginBlock
 func (c Context) HeaderHash() tmbytes.HexBytes {
-	hash := make([]byte, len(c.headerHash))
-	copy(hash, c.headerHash)
-	return hash
+	_ = "STUB: not implemented"
+	return *new(tmbytes.HexBytes)
 }
 
-func (c Context) ConsensusParams() *tmproto.ConsensusParams {
-	return proto.Clone(c.consParams).(*tmproto.ConsensusParams)
-}
+func (c Context) ConsensusParams() *tmproto.ConsensusParams { _ = "STUB: not implemented"; return nil }
 
 // create a new context
 func NewContext(ms MultiStore, header tmproto.Header, isCheckTx bool) Context {
+	_ = "STUB: not implemented"
 	// https://github.com/gogo/protobuf/issues/519
-	header.Time = header.Time.UTC()
-	return Context{
-		ctx:             context.Background(),
-		ms:              ms,
-		header:          header,
-		chainID:         header.ChainID,
-		checkTx:         isCheckTx,
-		gasMeter:        NewInfiniteGasMeter(1, 1),
-		minGasPrice:     DecCoins{},
-		eventManager:    NewEventManager(),
-		evmEventManager: NewEVMEventManager(),
-	}
+	return *new(Context)
 }
 
 // WithContext returns a Context with an updated context.Context.
 func (c Context) WithContext(ctx context.Context) Context {
-	c.ctx = ctx
-	return c
+	_ = "STUB: not implemented"
+	return *
+
+	// WithMultiStore returns a Context with an updated MultiStore.
+	new(Context)
 }
 
-// WithMultiStore returns a Context with an updated MultiStore.
 func (c Context) WithMultiStore(ms MultiStore) Context {
-	c.ms = ms
-	return c
+	_ = "STUB: not implemented"
+	return *
+
+	// WithBlockHeader returns a Context with an updated tendermint block header in UTC time.
+	new(Context)
 }
 
-// WithBlockHeader returns a Context with an updated tendermint block header in UTC time.
 func (c Context) WithBlockHeader(header tmproto.Header) Context {
+	_ = "STUB: not implemented"
 	// https://github.com/gogo/protobuf/issues/519
-	header.Time = header.Time.UTC()
-	c.header = header
-	return c
+	return *new(Context)
 }
 
 // WithHeaderHash returns a Context with an updated tendermint block header hash.
 func (c Context) WithHeaderHash(hash []byte) Context {
-	temp := make([]byte, len(hash))
-	copy(temp, hash)
-
-	c.headerHash = temp
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithBlockTime returns a Context with an updated tendermint block header time in UTC time
 func (c Context) WithBlockTime(newTime time.Time) Context {
-	newHeader := c.BlockHeader()
-	// https://github.com/gogo/protobuf/issues/519
-	newHeader.Time = newTime.UTC()
-	return c.WithBlockHeader(newHeader)
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
+
+// https://github.com/gogo/protobuf/issues/519
 
 // WithProposer returns a Context with an updated proposer consensus address.
 func (c Context) WithProposer(addr ConsAddress) Context {
-	newHeader := c.BlockHeader()
-	newHeader.ProposerAddress = addr.Bytes()
-	return c.WithBlockHeader(newHeader)
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithBlockHeight returns a Context with an updated block height.
 func (c Context) WithBlockHeight(height int64) Context {
-	newHeader := c.BlockHeader()
-	newHeader.Height = height
-	return c.WithBlockHeader(newHeader)
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithChainID returns a Context with an updated chain identifier.
 func (c Context) WithChainID(chainID string) Context {
-	c.chainID = chainID
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithTxBytes returns a Context with an updated txBytes.
 func (c Context) WithTxBytes(txBytes []byte) Context {
-	c.txBytes = txBytes
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithTxSum(txSum [32]byte) Context {
-	c.txSum = txSum
-	return c
+	_ = "STUB: not implemented"
+	return *
+
+	// WithVoteInfos returns a Context with an updated consensus VoteInfo.
+	new(Context)
 }
 
-// WithVoteInfos returns a Context with an updated consensus VoteInfo.
 func (c Context) WithVoteInfos(voteInfo []abci.VoteInfo) Context {
-	c.voteInfo = voteInfo
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithGasMeter returns a Context with an updated transaction GasMeter.
 func (c Context) WithGasMeter(meter GasMeter) Context {
-	c.gasMeter = meter
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithGasEstimate returns a Context with an updated gas estimate.
 func (c Context) WithGasEstimate(gasEstimate uint64) Context {
-	c.gasEstimate = gasEstimate
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithIsCheckTx enables or disables CheckTx value for verifying transactions and returns an updated Context
 func (c Context) WithIsCheckTx(isCheckTx bool) Context {
-	c.checkTx = isCheckTx
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithIsOCCEnabled enables or disables whether OCC is used as the concurrency algorithm
 func (c Context) WithIsOCCEnabled(isOCCEnabled bool) Context {
-	c.occEnabled = isOCCEnabled
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithIsRecheckTx called with true will also set true on checkTx in order to
 // enforce the invariant that if recheckTx = true then checkTx = true as well.
 func (c Context) WithIsReCheckTx(isRecheckTx bool) Context {
-	if isRecheckTx {
-		c.checkTx = true
-	}
-	c.recheckTx = isRecheckTx
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithMinGasPrices returns a Context with an updated minimum gas price value
 func (c Context) WithMinGasPrices(gasPrices DecCoins) Context {
-	c.minGasPrice = gasPrices
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithConsensusParams returns a Context with an updated consensus params
 func (c Context) WithConsensusParams(params *tmproto.ConsensusParams) Context {
-	c.consParams = params
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithEventManager returns a Context with an updated event manager
 func (c Context) WithEventManager(em *EventManager) Context {
-	c.eventManager = em
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithEvmEventManager(em *EVMEventManager) Context {
-	c.evmEventManager = em
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithMessageIndex returns a Context with the current message index that's being processed
 func (c Context) WithMessageIndex(messageIndex int) Context {
-	c.messageIndex = messageIndex
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithTxIndex returns a Context with the current transaction index that's being processed
-func (c Context) WithTxIndex(txIndex int) Context {
-	c.txIndex = txIndex
-	return c
-}
+func (c Context) WithTxIndex(txIndex int) Context { _ = "STUB: not implemented"; return *new(Context) }
 
 func (c Context) WithTraceSpanContext(ctx context.Context) Context {
-	c.traceSpanContext = ctx
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithEVMSenderAddress(address common.Address) Context {
-	c.evmSenderAddress = address
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithEVMNonce(nonce uint64) Context {
-	c.evmNonce = nonce
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithSeiSenderAddress(address AccAddress) Context {
-	c.seiSenderAddress = address
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
-func (c Context) WithIsEVM(isEVM bool) Context {
-	c.evm = isEVM
-	return c
-}
+func (c Context) WithIsEVM(isEVM bool) Context { _ = "STUB: not implemented"; return *new(Context) }
 
 func (c Context) WithEVMTxHash(txHash string) Context {
-	c.evmTxHash = txHash
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithEVMVMError(vmError string) Context {
-	c.evmVmError = vmError
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithEVMEntryViaWasmdPrecompile(e bool) Context {
-	c.evmEntryViaWasmdPrecompile = e
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithEVMPrecompileCalledFromDelegateCall(e bool) Context {
-	c.evmPrecompileCalledFromDelegateCall = e
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithDeliverTxCallback(deliverTxCallback func(Context)) Context {
-	c.deliverTxCallback = deliverTxCallback
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 func (c Context) WithEVMRequiredBalance(evmRequiredBalance *big.Int) Context {
-	if evmRequiredBalance == nil {
-		c.evmRequiredBalance = nil
-		return c
-	}
-	c.evmRequiredBalance = new(big.Int).Set(evmRequiredBalance)
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
-func (c Context) WithIsTracing(it bool) Context {
-	c.isTracing = it
-	if it {
-		c.storeTracer = NewStoreTracer()
-	} else {
-		c.storeTracer = nil
-	}
-	return c
-}
+func (c Context) WithIsTracing(it bool) Context { _ = "STUB: not implemented"; return *new(Context) }
 
 // WithIsSimulation sets the simulation flag on the context.
 func (c Context) WithIsSimulation(isSimulation bool) Context {
-	c.isSimulation = isSimulation
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithTraceMode enables historical tracing behavior without allocating a KV
 // store tracer. This keeps upgrade-aware tracing semantics for ordinary
 // debug_trace* RPCs without paying the per-access StoreTracer overhead.
-func (c Context) WithTraceMode(it bool) Context {
-	c.isTracing = it
-	c.storeTracer = nil
-	return c
-}
+func (c Context) WithTraceMode(it bool) Context { _ = "STUB: not implemented"; return *new(Context) }
 
 func (c Context) WithNextMs(ms MultiStore, nextStoreKeys []string) Context {
-	c.nextMs = ms
-	c.nextStoreKeys = make(map[string]struct{}, len(nextStoreKeys))
-	for _, k := range nextStoreKeys {
-		c.nextStoreKeys[k] = struct{}{}
-	}
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // TODO: remove???
 func (c Context) IsZero() bool {
-	return c.ms == nil
+	_ = "STUB: not implemented"
+
+	// WithValue is deprecated, provided for backwards compatibility
+	// Please use
+	//
+	//	ctx = ctx.WithContext(context.WithValue(ctx.Context(), key, false))
+	//
+	// instead of
+	//
+	//	ctx = ctx.WithValue(key, false)
+	return false
 }
 
-// WithValue is deprecated, provided for backwards compatibility
-// Please use
-//
-//	ctx = ctx.WithContext(context.WithValue(ctx.Context(), key, false))
-//
-// instead of
-//
-//	ctx = ctx.WithValue(key, false)
 func (c Context) WithValue(key, value interface{}) Context {
-	c.ctx = context.WithValue(c.ctx, key, value)
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // Value is deprecated, provided for backwards compatibility
@@ -533,45 +429,29 @@ func (c Context) WithValue(key, value interface{}) Context {
 // instead of
 //
 //	ctx.Value(key)
-func (c Context) Value(key interface{}) interface{} {
-	return c.ctx.Value(key)
-}
+func (c Context) Value(key interface{}) interface{} { _ = "STUB: not implemented"; return nil }
 
 // ----------------------------------------------------------------------------
 // Store / Caching
 // ----------------------------------------------------------------------------
 
 // KVStore fetches a KVStore from the MultiStore.
-func (c Context) KVStore(key StoreKey) KVStore {
-	if c.isTracing {
-		if _, ok := c.nextStoreKeys[key.Name()]; ok {
-			return gaskv.NewStore(c.nextMs.GetKVStore(key), c.GasMeter(), stypes.KVGasConfig(), key.Name(), c.StoreTracer())
-		}
-	}
-	return gaskv.NewStore(c.MultiStore().GetKVStore(key), c.GasMeter(), stypes.KVGasConfig(), key.Name(), c.StoreTracer())
-}
+func (c Context) KVStore(key StoreKey) KVStore { _ = "STUB: not implemented"; return *new(KVStore) }
 
-func (c Context) GigaKVStore(key StoreKey) KVStore {
-	return c.GigaMultiStore().GetGigaKVStore(key)
-}
+func (c Context) GigaKVStore(key StoreKey) KVStore { _ = "STUB: not implemented"; return *new(KVStore) }
 
 // TransientStore fetches a TransientStore from the MultiStore.
 func (c Context) TransientStore(key StoreKey) KVStore {
-	if c.isTracing {
-		if _, ok := c.nextStoreKeys[key.Name()]; ok {
-			return gaskv.NewStore(c.nextMs.GetKVStore(key), c.GasMeter(), stypes.TransientGasConfig(), key.Name(), c.StoreTracer())
-		}
-	}
-	return gaskv.NewStore(c.MultiStore().GetKVStore(key), c.GasMeter(), stypes.TransientGasConfig(), key.Name(), c.StoreTracer())
+	_ = "STUB: not implemented"
+	return *new(KVStore)
 }
 
 // CacheContext returns a new Context with the multi-store cached and a new
 // EventManager. The cached context is written to the context when writeCache
 // is called.
 func (c Context) CacheContext() (cc Context, writeCache func()) {
-	cms := c.MultiStore().CacheMultiStore()
-	cc = c.WithMultiStore(cms).WithEventManager(NewEventManager())
-	return cc, cms.Write
+	_ = "STUB: not implemented"
+	return *new(Context), nil
 }
 
 // ContextKey defines a type alias for a stdlib Context key.
@@ -585,21 +465,18 @@ const SdkContextKey ContextKey = "sdk-context"
 // stdlib context.Context parameter such as generated gRPC methods. To get the original
 // sdk.Context back, call UnwrapSDKContext.
 func WrapSDKContext(ctx Context) context.Context {
-	return context.WithValue(ctx.ctx, SdkContextKey, ctx)
+	_ = "STUB: not implemented"
+	return *new(context.Context)
 }
 
 // UnwrapSDKContext retrieves a Context from a context.Context instance
 // attached with WrapSDKContext. It panics if a Context was not properly
 // attached
-func UnwrapSDKContext(ctx context.Context) Context {
-	return ctx.Value(SdkContextKey).(Context)
-}
+func UnwrapSDKContext(ctx context.Context) Context { _ = "STUB: not implemented"; return *new(Context) }
 
-func (c Context) ClosestUpgradeName() string {
-	return c.closestUpgradeName
-}
+func (c Context) ClosestUpgradeName() string { _ = "STUB: not implemented"; return "" }
 
 func (c Context) WithClosestUpgradeName(name string) Context {
-	c.closestUpgradeName = name
-	return c
+	_ = "STUB: not implemented"
+	return *new(Context)
 }

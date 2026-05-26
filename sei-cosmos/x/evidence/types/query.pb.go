@@ -6,6 +6,8 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
@@ -14,11 +16,6 @@ import (
 	github_com_sei_protocol_sei_chain_sei_tendermint_libs_bytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -38,44 +35,32 @@ type QueryEvidenceRequest struct {
 	EvidenceHash github_com_sei_protocol_sei_chain_sei_tendermint_libs_bytes.HexBytes `protobuf:"bytes,1,opt,name=evidence_hash,json=evidenceHash,proto3,casttype=github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes.HexBytes" json:"evidence_hash,omitempty"`
 }
 
-func (m *QueryEvidenceRequest) Reset()         { *m = QueryEvidenceRequest{} }
-func (m *QueryEvidenceRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryEvidenceRequest) ProtoMessage()    {}
+func (m *QueryEvidenceRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryEvidenceRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryEvidenceRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryEvidenceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_07043de1a84d215a, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryEvidenceRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *QueryEvidenceRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryEvidenceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryEvidenceRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryEvidenceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryEvidenceRequest.Merge(m, src)
-}
-func (m *QueryEvidenceRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryEvidenceRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryEvidenceRequest.DiscardUnknown(m)
-}
+
+func (m *QueryEvidenceRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryEvidenceRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryEvidenceRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryEvidenceRequest proto.InternalMessageInfo
 
 func (m *QueryEvidenceRequest) GetEvidenceHash() github_com_sei_protocol_sei_chain_sei_tendermint_libs_bytes.HexBytes {
-	if m != nil {
-		return m.EvidenceHash
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_tendermint_libs_bytes.HexBytes)
 }
 
 // QueryEvidenceResponse is the response type for the Query/Evidence RPC method.
@@ -84,45 +69,33 @@ type QueryEvidenceResponse struct {
 	Evidence *types.Any `protobuf:"bytes,1,opt,name=evidence,proto3" json:"evidence,omitempty"`
 }
 
-func (m *QueryEvidenceResponse) Reset()         { *m = QueryEvidenceResponse{} }
-func (m *QueryEvidenceResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryEvidenceResponse) ProtoMessage()    {}
+func (m *QueryEvidenceResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryEvidenceResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryEvidenceResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryEvidenceResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_07043de1a84d215a, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryEvidenceResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryEvidenceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryEvidenceResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryEvidenceResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryEvidenceResponse.Merge(m, src)
-}
-func (m *QueryEvidenceResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryEvidenceResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryEvidenceResponse.DiscardUnknown(m)
-}
+
+func (m *QueryEvidenceResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryEvidenceResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryEvidenceResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryEvidenceResponse proto.InternalMessageInfo
 
-func (m *QueryEvidenceResponse) GetEvidence() *types.Any {
-	if m != nil {
-		return m.Evidence
-	}
-	return nil
-}
+func (m *QueryEvidenceResponse) GetEvidence() *types.Any { _ = "STUB: not implemented"; return nil }
 
 // QueryEvidenceRequest is the request type for the Query/AllEvidence RPC
 // method.
@@ -131,43 +104,34 @@ type QueryAllEvidenceRequest struct {
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryAllEvidenceRequest) Reset()         { *m = QueryAllEvidenceRequest{} }
-func (m *QueryAllEvidenceRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryAllEvidenceRequest) ProtoMessage()    {}
+func (m *QueryAllEvidenceRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryAllEvidenceRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryAllEvidenceRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryAllEvidenceRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_07043de1a84d215a, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryAllEvidenceRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryAllEvidenceRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryAllEvidenceRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryAllEvidenceRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryAllEvidenceRequest.Merge(m, src)
-}
-func (m *QueryAllEvidenceRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryAllEvidenceRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryAllEvidenceRequest.DiscardUnknown(m)
-}
+
+func (m *QueryAllEvidenceRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryAllEvidenceRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryAllEvidenceRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryAllEvidenceRequest proto.InternalMessageInfo
 
 func (m *QueryAllEvidenceRequest) GetPagination() *query.PageRequest {
-	if m != nil {
-		return m.Pagination
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -180,50 +144,39 @@ type QueryAllEvidenceResponse struct {
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryAllEvidenceResponse) Reset()         { *m = QueryAllEvidenceResponse{} }
-func (m *QueryAllEvidenceResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryAllEvidenceResponse) ProtoMessage()    {}
+func (m *QueryAllEvidenceResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryAllEvidenceResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryAllEvidenceResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryAllEvidenceResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_07043de1a84d215a, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryAllEvidenceResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryAllEvidenceResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryAllEvidenceResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryAllEvidenceResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryAllEvidenceResponse.Merge(m, src)
-}
-func (m *QueryAllEvidenceResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryAllEvidenceResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryAllEvidenceResponse.DiscardUnknown(m)
-}
+
+func (m *QueryAllEvidenceResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryAllEvidenceResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryAllEvidenceResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryAllEvidenceResponse proto.InternalMessageInfo
 
 func (m *QueryAllEvidenceResponse) GetEvidence() []*types.Any {
-	if m != nil {
-		return m.Evidence
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *QueryAllEvidenceResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -295,25 +248,18 @@ type queryClient struct {
 }
 
 func NewQueryClient(cc grpc1.ClientConn) QueryClient {
-	return &queryClient{cc}
+	_ = "STUB: not implemented"
+	return *new(QueryClient)
 }
 
 func (c *queryClient) Evidence(ctx context.Context, in *QueryEvidenceRequest, opts ...grpc.CallOption) (*QueryEvidenceResponse, error) {
-	out := new(QueryEvidenceResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.evidence.v1beta1.Query/Evidence", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) AllEvidence(ctx context.Context, in *QueryAllEvidenceRequest, opts ...grpc.CallOption) (*QueryAllEvidenceResponse, error) {
-	out := new(QueryAllEvidenceResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.evidence.v1beta1.Query/AllEvidence", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // QueryServer is the server API for Query service.
@@ -329,50 +275,25 @@ type UnimplementedQueryServer struct {
 }
 
 func (*UnimplementedQueryServer) Evidence(ctx context.Context, req *QueryEvidenceRequest) (*QueryEvidenceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Evidence not implemented")
-}
-func (*UnimplementedQueryServer) AllEvidence(ctx context.Context, req *QueryAllEvidenceRequest) (*QueryAllEvidenceResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AllEvidence not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
-	s.RegisterService(&_Query_serviceDesc, srv)
+func (*UnimplementedQueryServer) AllEvidence(ctx context.Context, req *QueryAllEvidenceRequest) (*QueryAllEvidenceResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func RegisterQueryServer(s grpc1.Server, srv QueryServer) { _ = "STUB: not implemented"; return }
 
 func _Query_Evidence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryEvidenceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Evidence(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.evidence.v1beta1.Query/Evidence",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Evidence(ctx, req.(*QueryEvidenceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_AllEvidence_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryAllEvidenceRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).AllEvidence(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.evidence.v1beta1.Query/AllEvidence",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).AllEvidence(ctx, req.(*QueryAllEvidenceRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Query_serviceDesc = grpc.ServiceDesc{
@@ -393,683 +314,94 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *QueryEvidenceRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryEvidenceRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryEvidenceRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.EvidenceHash) > 0 {
-		i -= len(m.EvidenceHash)
-		copy(dAtA[i:], m.EvidenceHash)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.EvidenceHash)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryEvidenceResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryEvidenceResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryEvidenceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Evidence != nil {
-		{
-			size, err := m.Evidence.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryAllEvidenceRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryAllEvidenceRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryAllEvidenceRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryAllEvidenceResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryAllEvidenceResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryAllEvidenceResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Evidence) > 0 {
-		for iNdEx := len(m.Evidence) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Evidence[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
-	offset -= sovQuery(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *QueryEvidenceRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.EvidenceHash)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func encodeVarintQuery(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryEvidenceResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Evidence != nil {
-		l = m.Evidence.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryEvidenceRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryAllEvidenceRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryEvidenceResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryAllEvidenceResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Evidence) > 0 {
-		for _, e := range m.Evidence {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryAllEvidenceRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovQuery(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozQuery(x uint64) (n int) {
-	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *QueryEvidenceRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryEvidenceRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryEvidenceRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EvidenceHash", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EvidenceHash = append(m.EvidenceHash[:0], dAtA[iNdEx:postIndex]...)
-			if m.EvidenceHash == nil {
-				m.EvidenceHash = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *QueryAllEvidenceResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryEvidenceResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryEvidenceResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryEvidenceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Evidence", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Evidence == nil {
-				m.Evidence = &types.Any{}
-			}
-			if err := m.Evidence.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func sozQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryEvidenceRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *QueryEvidenceResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryAllEvidenceRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryAllEvidenceRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryAllEvidenceRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageRequest{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryAllEvidenceResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryAllEvidenceResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryAllEvidenceResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Evidence", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Evidence = append(m.Evidence, &types.Any{})
-			if err := m.Evidence[len(m.Evidence)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageResponse{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipQuery(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthQuery
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupQuery
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthQuery
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipQuery(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthQuery        = fmt.Errorf("proto: negative length found during unmarshaling")

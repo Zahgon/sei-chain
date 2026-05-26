@@ -1,10 +1,7 @@
 package dbcache
 
 import (
-	"fmt"
 	"time"
-
-	"github.com/sei-protocol/sei-chain/sei-db/common/unit"
 )
 
 // CacheConfig defines configuration for a sharded LRU read-through cache.
@@ -23,21 +20,7 @@ type CacheConfig struct {
 }
 
 // DefaultCacheConfig returns a CacheConfig with sensible defaults.
-func DefaultCacheConfig() CacheConfig {
-	return CacheConfig{
-		ShardCount:                8,
-		MaxSize:                   512 * unit.MB,
-		EstimatedOverheadPerEntry: DefaultEstimatedOverheadPerEntry,
-	}
-}
+func DefaultCacheConfig() CacheConfig { _ = "STUB: not implemented"; return *new(CacheConfig) }
 
 // Validate checks that the configuration is sane and returns an error if it is not.
-func (c *CacheConfig) Validate() error {
-	if c.MaxSize > 0 && (c.ShardCount == 0 || (c.ShardCount&(c.ShardCount-1)) != 0) {
-		return fmt.Errorf("shard count must be a non-zero power of two")
-	}
-	if c.MetricsName != "" && c.MetricsScrapeInterval <= 0 {
-		return fmt.Errorf("metrics scrape interval must be positive when metrics name is set")
-	}
-	return nil
-}
+func (c *CacheConfig) Validate() error { _ = "STUB: not implemented"; return nil }

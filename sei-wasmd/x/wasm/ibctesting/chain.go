@@ -1,45 +1,29 @@
 package ibctesting
 
 import (
-	"bytes"
 	"context"
-	"fmt"
-	"math"
 	"testing"
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
-	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/ed25519"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
-	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 	capabilitykeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/keeper"
 	capabilitytypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/types"
 	stakingkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/teststaking"
-	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
 	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
 	commitmenttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/23-commitment/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 	ibckeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/keeper"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/types"
 	ibctmtypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/light-clients/07-tendermint/types"
-	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/tmhash"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
-	tmversion "github.com/sei-protocol/sei-chain/sei-tendermint/version"
-	"github.com/stretchr/testify/require"
 
 	wasmd "github.com/sei-protocol/sei-chain/sei-wasmd/app"
 	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm"
@@ -81,34 +65,23 @@ type PV struct {
 	PrivKey cryptotypes.PrivKey
 }
 
-func NewPV() PV {
-	return PV{ed25519.GenPrivKey()}
-}
+func NewPV() PV { _ = "STUB: not implemented"; return *new(PV) }
 
 // GetPubKey implements PrivValidator interface
 func (pv PV) GetPubKey(context.Context) (crypto.PubKey, error) {
-	return cryptocodec.ToTmPubKeyInterface(pv.PrivKey.PubKey())
+	_ = "STUB: not implemented"
+	return *new(crypto.PubKey), nil
 }
 
 // SignVote implements PrivValidator interface
 func (pv PV) SignVote(_ context.Context, chainID string, vote *tmproto.Vote) error {
-	signBytes := tmtypes.VoteSignBytes(chainID, vote)
-	sig, err := pv.PrivKey.Sign(signBytes)
-	if err != nil {
-		return err
-	}
-	vote.Signature = sig
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // SignProposal implements PrivValidator interface
 func (pv PV) SignProposal(_ context.Context, chainID string, proposal *tmproto.Proposal) error {
-	signBytes := tmtypes.ProposalSignBytes(chainID, proposal)
-	sig, err := pv.PrivKey.Sign(signBytes)
-	if err != nil {
-		return err
-	}
-	proposal.Signature = sig
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -121,133 +94,65 @@ func (pv PV) SignProposal(_ context.Context, chainID string, proposal *tmproto.P
 // Time management is handled by the Coordinator in order to ensure synchrony between chains.
 // Each update of any chain increments the block header time for all chains by 5 seconds.
 func NewTestChain(t *testing.T, coord *Coordinator, chainID string, opts ...wasm.Option) *TestChain {
+	_ = "STUB: not implemented"
 	// generate validator private/public key
-	privVal := NewPV()
-	pubKey, err := privVal.GetPubKey(context.Background())
-	require.NoError(t, err)
-
-	// create validator set with single validator
-	validator := tmtypes.NewValidator(pubKey, 1)
-	valSet := tmtypes.NewValidatorSet([]*tmtypes.Validator{validator})
-	signers := []tmtypes.PrivValidator{privVal}
-
-	// generate genesis account
-	senderPrivKey := secp256k1.GenPrivKey()
-	acc := authtypes.NewBaseAccount(senderPrivKey.PubKey().Address().Bytes(), senderPrivKey.PubKey(), 0, 0)
-	amount, ok := sdk.NewIntFromString("10000000000000000000")
-	require.True(t, ok)
-
-	balance := banktypes.Balance{
-		Address: acc.GetAddress().String(),
-		Coins:   sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, amount)),
-	}
-
-	app := NewTestingAppDecorator(t, wasmd.SetupWithGenesisValSet(t, chainID, valSet, []authtypes.GenesisAccount{acc}, opts, balance))
-
-	// create current header and call begin block
-	header := tmproto.Header{
-		ChainID: chainID,
-		Height:  1,
-		Time:    coord.CurrentTime.UTC(),
-	}
-
-	txConfig := app.GetTxConfig()
-
-	// create an account to send transactions from
-	chain := &TestChain{
-		t:             t,
-		Coordinator:   coord,
-		ChainID:       chainID,
-		App:           app,
-		CurrentHeader: header,
-		QueryServer:   app.GetIBCKeeper(),
-		TxConfig:      txConfig,
-		Codec:         app.AppCodec(),
-		Vals:          valSet,
-		Signers:       signers,
-		senderPrivKey: senderPrivKey,
-		SenderAccount: acc,
-	}
-
-	coord.CommitBlock(chain)
-
-	return chain
+	return nil
 }
+
+// create validator set with single validator
+
+// generate genesis account
+
+// create current header and call begin block
+
+// create an account to send transactions from
 
 // GetContext returns the current context for the application.
 func (chain *TestChain) GetContext() sdk.Context {
-	return chain.App.GetBaseApp().NewContext(false, chain.CurrentHeader)
+	_ = "STUB: not implemented"
+	return *new(sdk.Context)
 }
 
 // QueryProof performs an abci query with the given key and returns the proto encoded merkle proof
 // for the query and the height at which the proof will succeed on a tendermint verifier.
 func (chain *TestChain) QueryProof(key []byte) ([]byte, clienttypes.Height) {
-	return chain.QueryProofAtHeight(key, chain.App.LastBlockHeight())
+	_ = "STUB: not implemented"
+	return nil, *new(clienttypes.Height)
 }
 
 // QueryProof performs an abci query with the given key and returns the proto encoded merkle proof
 // for the query and the height at which the proof will succeed on a tendermint verifier.
 func (chain *TestChain) QueryProofAtHeight(key []byte, height int64) ([]byte, clienttypes.Height) {
-	res, _ := chain.App.Query(context.Background(), &abci.RequestQuery{
-		Path:   fmt.Sprintf("store/%s/key", host.StoreKey),
-		Height: height - 1,
-		Data:   key,
-		Prove:  true,
-	})
-
-	merkleProof, err := commitmenttypes.ConvertProofs(res.ProofOps)
-	require.NoError(chain.t, err)
-
-	proof, err := chain.App.AppCodec().Marshal(&merkleProof)
-	require.NoError(chain.t, err)
-
-	revision := clienttypes.ParseChainID(chain.ChainID)
-
-	// proof height + 1 is returned as the proof created corresponds to the height the proof
-	// was created in the IAVL tree. Tendermint and subsequently the clients that rely on it
-	// have heights 1 above the IAVL tree. Thus we return proof height + 1
-	require.Greater(chain.t, res.Height, int64(0))
-	// #nosec G115 -- checked above.
-	return proof, clienttypes.NewHeight(revision, uint64(res.Height)+1)
+	_ = "STUB: not implemented"
+	return nil, *new(clienttypes.Height)
 }
+
+// proof height + 1 is returned as the proof created corresponds to the height the proof
+// was created in the IAVL tree. Tendermint and subsequently the clients that rely on it
+// have heights 1 above the IAVL tree. Thus we return proof height + 1
+
+// #nosec G115 -- checked above.
 
 // QueryUpgradeProof performs an abci query with the given key and returns the proto encoded merkle proof
 // for the query and the height at which the proof will succeed on a tendermint verifier.
 func (chain *TestChain) QueryUpgradeProof(key []byte, height uint64) ([]byte, clienttypes.Height) {
-	require.Less(chain.t, height, math.MaxInt64)
-	res, _ := chain.App.Query(context.Background(), &abci.RequestQuery{
-		Path:   "store/upgrade/key",
-		Height: int64(height - 1), // #nosec G115 -- checked above.
-		Data:   key,
-		Prove:  true,
-	})
-
-	merkleProof, err := commitmenttypes.ConvertProofs(res.ProofOps)
-	require.NoError(chain.t, err)
-
-	proof, err := chain.App.AppCodec().Marshal(&merkleProof)
-	require.NoError(chain.t, err)
-
-	revision := clienttypes.ParseChainID(chain.ChainID)
-
-	// proof height + 1 is returned as the proof created corresponds to the height the proof
-	// was created in the IAVL tree. Tendermint and subsequently the clients that rely on it
-	// have heights 1 above the IAVL tree. Thus we return proof height + 1
-	require.Greater(chain.t, res.Height, int64(0))
-	// #nosec G115 -- checked above.
-	return proof, clienttypes.NewHeight(revision, uint64(res.Height+1))
+	_ = "STUB: not implemented"
+	return nil, *new(clienttypes.Height)
 }
+
+// #nosec G115 -- checked above.
+
+// proof height + 1 is returned as the proof created corresponds to the height the proof
+// was created in the IAVL tree. Tendermint and subsequently the clients that rely on it
+// have heights 1 above the IAVL tree. Thus we return proof height + 1
+
+// #nosec G115 -- checked above.
 
 // QueryConsensusStateProof performs an abci query for a consensus state
 // stored on the given clientID. The proof and consensusHeight are returned.
 func (chain *TestChain) QueryConsensusStateProof(clientID string) ([]byte, clienttypes.Height) {
-	clientState := chain.GetClientState(clientID)
-
-	consensusHeight := clientState.GetLatestHeight().(clienttypes.Height)
-	consensusKey := host.FullConsensusStateKey(clientID, consensusHeight)
-	proofConsensus, _ := chain.QueryProof(consensusKey)
-
-	return proofConsensus, consensusHeight
+	_ = "STUB: not implemented"
+	return nil, *new(clienttypes.Height)
 }
 
 // NextBlock sets the last header to the current header and increments the current header to be
@@ -255,289 +160,134 @@ func (chain *TestChain) QueryConsensusStateProof(clientID string) ([]byte, clien
 //
 // CONTRACT: this function must only be called after app.Commit() occurs
 func (chain *TestChain) NextBlock() {
+	_ = "STUB: not implemented"
 	// set the last header to the current header
 	// use nil trusted fields
-	chain.LastHeader = chain.CurrentTMClientHeader()
-
-	// increment the current header
-	chain.CurrentHeader = tmproto.Header{
-		ChainID: chain.ChainID,
-		Height:  chain.App.LastBlockHeight() + 1,
-		AppHash: chain.App.LastCommitID().Hash,
-		// NOTE: the time is increased by the coordinator to maintain time synchrony amongst
-		// chains.
-		Time:               chain.CurrentHeader.Time,
-		ValidatorsHash:     chain.Vals.Hash(),
-		NextValidatorsHash: chain.Vals.Hash(),
-	}
-
-	wasmApp := chain.App.(*TestingAppDecorator).WasmApp
-	_, err := wasmApp.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
-		Header: &tmproto.Header{
-			ChainID: chain.ChainID,
-			Height:  chain.App.LastBlockHeight() + 1,
-			Time:    chain.CurrentHeader.Time,
-			AppHash: chain.CurrentHeader.AppHash,
-
-			ValidatorsHash:     chain.Vals.Hash(),
-			NextValidatorsHash: chain.Vals.Hash(),
-		},
-	})
-	require.NoError(chain.t, err)
-	// wasmApp.BeginBlock(wasmApp.GetContextForDeliverTx([]byte{}), abci.RequestBeginBlock{Header: chain.CurrentHeader})
+	return
 }
+
+// increment the current header
+
+// NOTE: the time is increased by the coordinator to maintain time synchrony amongst
+// chains.
+
+// wasmApp.BeginBlock(wasmApp.GetContextForDeliverTx([]byte{}), abci.RequestBeginBlock{Header: chain.CurrentHeader})
 
 // sendMsgs delivers a transaction through the application without returning the result.
-func (chain *TestChain) sendMsgs(msgs ...sdk.Msg) error {
-	_, err := chain.SendMsgs(msgs...)
-	return err
-}
+func (chain *TestChain) sendMsgs(msgs ...sdk.Msg) error { _ = "STUB: not implemented"; return nil }
 
 // SendMsgs delivers a transaction through the application. It updates the senders sequence
 // number and updates the TestChain's headers. It returns the result and error if one
 // occurred.
 func (chain *TestChain) SendMsgs(msgs ...sdk.Msg) (*sdk.Result, error) {
+	_ = "STUB: not implemented"
 	// ensure the chain has the latest time
-	chain.Coordinator.UpdateTimeForChain(chain)
-
-	_, r, err := wasmd.SignAndDeliver(
-		chain.t,
-		chain.TxConfig,
-		chain.App.GetBaseApp(),
-		chain.App.GetIBCKeeper(),
-		chain.App.GetStakingKeeper(),
-		chain.App.(*TestingAppDecorator).GetCapabilityKeeper(),
-		chain.App.(*TestingAppDecorator).GetDistrKeeper(),
-		chain.App.(*TestingAppDecorator).GetSlashingKeeper(),
-		chain.App.(*TestingAppDecorator).GetEvidenceKeeper(),
-		chain.GetContext().BlockHeader(),
-		msgs,
-		chain.ChainID,
-		[]uint64{chain.SenderAccount.GetAccountNumber()},
-		[]uint64{chain.SenderAccount.GetSequence()},
-		true, true, chain.senderPrivKey,
-	)
-	if err != nil {
-		return nil, err
-	}
-
-	// SignAndDeliver calls app.Commit()
-	chain.NextBlock()
-
-	// increment sequence for successful transaction execution
-	err = chain.SenderAccount.SetSequence(chain.SenderAccount.GetSequence() + 1)
-	if err != nil {
-		return nil, err
-	}
-
-	chain.captureIBCEvents(r)
-
-	return r, nil
+	return nil, nil
 }
 
-func (chain *TestChain) captureIBCEvents(r *sdk.Result) {
-	toSend := getSendPackets(r.Events)
-	if len(toSend) > 0 {
-		// Keep a queue on the chain that we can relay in tests
-		chain.PendingSendPackets = append(chain.PendingSendPackets, toSend...)
-	}
-	toAck := getAckPackets(r.Events)
-	if len(toAck) > 0 {
-		// Keep a queue on the chain that we can relay in tests
-		chain.PendingAckPackets = append(chain.PendingAckPackets, toAck...)
-	}
-}
+// SignAndDeliver calls app.Commit()
+
+// increment sequence for successful transaction execution
+
+func (chain *TestChain) captureIBCEvents(r *sdk.Result) { _ = "STUB: not implemented"; return }
+
+// Keep a queue on the chain that we can relay in tests
+
+// Keep a queue on the chain that we can relay in tests
 
 // GetClientState retrieves the client state for the provided clientID. The client is
 // expected to exist otherwise testing will fail.
 func (chain *TestChain) GetClientState(clientID string) exported.ClientState {
-	clientState, found := chain.App.GetIBCKeeper().ClientKeeper.GetClientState(chain.GetContext(), clientID)
-	require.True(chain.t, found)
-
-	return clientState
+	_ = "STUB: not implemented"
+	return *new(exported.ClientState)
 }
 
 // GetConsensusState retrieves the consensus state for the provided clientID and height.
 // It will return a success boolean depending on if consensus state exists or not.
 func (chain *TestChain) GetConsensusState(clientID string, height exported.Height) (exported.ConsensusState, bool) {
-	return chain.App.GetIBCKeeper().ClientKeeper.GetClientConsensusState(chain.GetContext(), clientID, height)
+	_ = "STUB: not implemented"
+	return *new(exported.ConsensusState), false
 }
 
 // GetValsAtHeight will return the validator set of the chain at a given height. It will return
 // a success boolean depending on if the validator set exists or not at that height.
 func (chain *TestChain) GetValsAtHeight(height int64) (*tmtypes.ValidatorSet, bool) {
-	histInfo, ok := chain.App.GetStakingKeeper().GetHistoricalInfo(chain.GetContext(), height)
-	if !ok {
-		return nil, false
-	}
-
-	valSet := stakingtypes.Validators(histInfo.Valset)
-
-	tmValidators, err := teststaking.ToTmValidators(valSet, sdk.DefaultPowerReduction)
-	if err != nil {
-		panic(err)
-	}
-	return tmtypes.NewValidatorSet(tmValidators), true
+	_ = "STUB: not implemented"
+	return nil, false
 }
 
 // GetAcknowledgement retrieves an acknowledgement for the provided packet. If the
 // acknowledgement does not exist then testing will fail.
 func (chain *TestChain) GetAcknowledgement(packet exported.PacketI) []byte {
-	ack, found := chain.App.GetIBCKeeper().ChannelKeeper.GetPacketAcknowledgement(chain.GetContext(), packet.GetDestPort(), packet.GetDestChannel(), packet.GetSequence())
-	require.True(chain.t, found)
-
-	return ack
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetPrefix returns the prefix for used by a chain in connection creation
 func (chain *TestChain) GetPrefix() commitmenttypes.MerklePrefix {
-	return commitmenttypes.NewMerklePrefix(chain.App.GetIBCKeeper().ConnectionKeeper.GetCommitmentPrefix().Bytes())
+	_ = "STUB: not implemented"
+	return *new(commitmenttypes.MerklePrefix)
 }
 
 // ConstructUpdateTMClientHeader will construct a valid 07-tendermint Header to update the
 // light client on the source chain.
 func (chain *TestChain) ConstructUpdateTMClientHeader(counterparty *TestChain, clientID string) (*ibctmtypes.Header, error) {
-	return chain.ConstructUpdateTMClientHeaderWithTrustedHeight(counterparty, clientID, clienttypes.ZeroHeight())
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ConstructUpdateTMClientHeader will construct a valid 07-tendermint Header to update the
 // light client on the source chain.
 func (chain *TestChain) ConstructUpdateTMClientHeaderWithTrustedHeight(counterparty *TestChain, clientID string, trustedHeight clienttypes.Height) (*ibctmtypes.Header, error) {
-	header := counterparty.LastHeader
-	// Relayer must query for LatestHeight on client to get TrustedHeight if the trusted height is not set
-	if trustedHeight.IsZero() {
-		trustedHeight = chain.GetClientState(clientID).GetLatestHeight().(clienttypes.Height)
-	}
-	var (
-		tmTrustedVals *tmtypes.ValidatorSet
-		ok            bool
-	)
-	// Once we get TrustedHeight from client, we must query the validators from the counterparty chain
-	// If the LatestHeight == LastHeader.Height, then TrustedValidators are current validators
-	// If LatestHeight < LastHeader.Height, we can query the historical validator set from HistoricalInfo
-	if trustedHeight == counterparty.LastHeader.GetHeight() {
-		tmTrustedVals = counterparty.Vals
-	} else {
-		// NOTE: We need to get validators from counterparty at height: trustedHeight+1
-		// since the last trusted validators for a header at height h
-		// is the NextValidators at h+1 committed to in header h by
-		// NextValidatorsHash
-		require.Less(chain.t, trustedHeight.RevisionHeight+1, uint64(math.MaxInt64))
-		// #nosec G115 -- checked above
-		tmTrustedVals, ok = counterparty.GetValsAtHeight(int64(trustedHeight.RevisionHeight + 1))
-		if !ok {
-			return nil, sdkerrors.Wrapf(ibctmtypes.ErrInvalidHeaderHeight, "could not retrieve trusted validators at trustedHeight: %d", trustedHeight)
-		}
-	}
-	// inject trusted fields into last header
-	// for now assume revision number is 0
-	header.TrustedHeight = trustedHeight
-
-	trustedVals, err := tmTrustedVals.ToProto()
-	if err != nil {
-		return nil, err
-	}
-	header.TrustedValidators = trustedVals
-
-	return header, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Relayer must query for LatestHeight on client to get TrustedHeight if the trusted height is not set
+
+// Once we get TrustedHeight from client, we must query the validators from the counterparty chain
+// If the LatestHeight == LastHeader.Height, then TrustedValidators are current validators
+// If LatestHeight < LastHeader.Height, we can query the historical validator set from HistoricalInfo
+
+// NOTE: We need to get validators from counterparty at height: trustedHeight+1
+// since the last trusted validators for a header at height h
+// is the NextValidators at h+1 committed to in header h by
+// NextValidatorsHash
+
+// #nosec G115 -- checked above
+
+// inject trusted fields into last header
+// for now assume revision number is 0
 
 // ExpireClient fast forwards the chain's block time by the provided amount of time which will
 // expire any clients with a trusting period less than or equal to this amount of time.
-func (chain *TestChain) ExpireClient(amount time.Duration) {
-	chain.Coordinator.IncrementTimeBy(amount)
-}
+func (chain *TestChain) ExpireClient(amount time.Duration) { _ = "STUB: not implemented"; return }
 
 // CurrentTMClientHeader creates a TM header using the current header parameters
 // on the chain. The trusted fields in the header are set to nil.
 func (chain *TestChain) CurrentTMClientHeader() *ibctmtypes.Header {
-	return chain.CreateTMClientHeader(chain.ChainID, chain.CurrentHeader.Height, clienttypes.Height{}, chain.CurrentHeader.Time, chain.Vals, nil, chain.Signers)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // CreateTMClientHeader creates a TM header to update the TM client. Args are passed in to allow
 // caller flexibility to use params that differ from the chain.
 func (chain *TestChain) CreateTMClientHeader(chainID string, blockHeight int64, trustedHeight clienttypes.Height, timestamp time.Time, tmValSet, tmTrustedVals *tmtypes.ValidatorSet, signers []tmtypes.PrivValidator) *ibctmtypes.Header {
-	var (
-		valSet      *tmproto.ValidatorSet
-		trustedVals *tmproto.ValidatorSet
-	)
-	require.NotNil(chain.t, tmValSet)
-
-	vsetHash := tmValSet.Hash()
-
-	tmHeader := tmtypes.Header{
-		Version:            tmversion.Consensus{Block: tmversion.BlockProtocol, App: 2},
-		ChainID:            chainID,
-		Height:             blockHeight,
-		Time:               timestamp,
-		LastBlockID:        MakeBlockID(make([]byte, tmhash.Size), tmtypes.MaxBlockPartsCount, make([]byte, tmhash.Size)),
-		LastCommitHash:     chain.App.LastCommitID().Hash,
-		DataHash:           tmhash.Sum([]byte("data_hash")),
-		ValidatorsHash:     vsetHash,
-		NextValidatorsHash: vsetHash,
-		ConsensusHash:      tmhash.Sum([]byte("consensus_hash")),
-		AppHash:            chain.CurrentHeader.AppHash,
-		LastResultsHash:    tmhash.Sum([]byte("last_results_hash")),
-		EvidenceHash:       tmhash.Sum([]byte("evidence_hash")),
-		ProposerAddress:    tmValSet.Proposer.Address, //nolint:staticcheck
-	}
-	hhash := tmHeader.Hash()
-	blockID := MakeBlockID(hhash, 3, tmhash.Sum([]byte("part_set")))
-	voteSet := tmtypes.NewVoteSet(chainID, blockHeight, 1, tmproto.PrecommitType, tmValSet)
-	require.LessOrEqual(chain.t, len(tmValSet.Validators), math.MaxInt32, "validator set size exceeds max int32")
-	for i, val := range tmValSet.Validators {
-		privVal := signers[i]
-		vote := &tmtypes.Vote{
-			Type:             tmproto.PrecommitType,
-			Height:           blockHeight,
-			Round:            1,
-			BlockID:          blockID,
-			Timestamp:        timestamp,
-			ValidatorAddress: val.Address,
-			ValidatorIndex:   int32(i), // #nosec G115 -- validator set size is checked above
-		}
-		v := vote.ToProto()
-		err := privVal.SignVote(context.Background(), chainID, v)
-		require.NoError(chain.t, err)
-		vote.Signature = utils.Some(utils.OrPanic1(crypto.SigFromBytes(v.Signature)))
-		_, err = voteSet.AddVote(vote)
-		require.NoError(chain.t, err)
-	}
-
-	commit := voteSet.MakeCommit()
-
-	signedHeader := &tmproto.SignedHeader{
-		Header: tmHeader.ToProto(),
-		Commit: commit.ToProto(),
-	}
-
-	valSet, err := tmValSet.ToProto()
-	require.NoError(chain.t, err)
-
-	if tmTrustedVals != nil {
-		trustedVals, err = tmTrustedVals.ToProto()
-		require.NoError(chain.t, err)
-	}
-
-	// The trusted fields may be nil. They may be filled before relaying messages to a client.
-	// The relayer is responsible for querying client and injecting appropriate trusted fields.
-	return &ibctmtypes.Header{
-		SignedHeader:      signedHeader,
-		ValidatorSet:      valSet,
-		TrustedHeight:     trustedHeight,
-		TrustedValidators: trustedVals,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+//nolint:staticcheck
+
+// #nosec G115 -- validator set size is checked above
+
+// The trusted fields may be nil. They may be filled before relaying messages to a client.
+// The relayer is responsible for querying client and injecting appropriate trusted fields.
 
 // MakeBlockID copied unimported test functions from tmtypes to use them here
 func MakeBlockID(hash []byte, partSetSize uint32, partSetHash []byte) tmtypes.BlockID {
-	return tmtypes.BlockID{
-		Hash: hash,
-		PartSetHeader: tmtypes.PartSetHeader{
-			Total: partSetSize,
-			Hash:  partSetHash,
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(tmtypes.BlockID)
 }
 
 // CreateSortedSignerArray takes two PrivValidators, and the corresponding Validator structs
@@ -547,17 +297,8 @@ func MakeBlockID(hash []byte, partSetSize uint32, partSetHash []byte) tmtypes.Bl
 func CreateSortedSignerArray(altPrivVal, suitePrivVal tmtypes.PrivValidator,
 	altVal, suiteVal *tmtypes.Validator,
 ) []tmtypes.PrivValidator {
-	switch {
-	case altVal.VotingPower > suiteVal.VotingPower:
-		return []tmtypes.PrivValidator{altPrivVal, suitePrivVal}
-	case altVal.VotingPower < suiteVal.VotingPower:
-		return []tmtypes.PrivValidator{suitePrivVal, altPrivVal}
-	default:
-		if bytes.Compare(altVal.Address, suiteVal.Address) == -1 {
-			return []tmtypes.PrivValidator{altPrivVal, suitePrivVal}
-		}
-		return []tmtypes.PrivValidator{suitePrivVal, altPrivVal}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // CreatePortCapability binds and claims a capability for the given portID if it does not
@@ -565,79 +306,52 @@ func CreateSortedSignerArray(altPrivVal, suitePrivVal tmtypes.PrivValidator,
 // NOTE: only creation of a capbility for a transfer or mock port is supported
 // Other applications must bind to the port in InitGenesis or modify this code.
 func (chain *TestChain) CreatePortCapability(scopedKeeper capabilitykeeper.ScopedKeeper, portID string) {
+	_ = "STUB: not implemented"
 	// ensure the chain has the latest time
 	// check if the portId is already binded, if not bind it
-	_, ok := chain.App.GetScopedIBCKeeper().GetCapability(chain.GetContext(), host.PortPath(portID))
-	if !ok {
-		// create capability using the IBC capability keeper
-		cap, err := chain.App.GetScopedIBCKeeper().NewCapability(chain.GetContext(), host.PortPath(portID))
-		require.NoError(chain.t, err)
-
-		// claim capability using the scopedKeeper
-		err = scopedKeeper.ClaimCapability(chain.GetContext(), cap, host.PortPath(portID))
-		require.NoError(chain.t, err)
-	}
-
-	wasmApp := chain.App.(*TestingAppDecorator).WasmApp
-	wasmApp.SetDeliverStateToCommit()
-	_, err := chain.App.Commit(context.Background())
-	require.NoError(chain.t, err)
-
-	chain.NextBlock()
+	return
 }
+
+// create capability using the IBC capability keeper
+
+// claim capability using the scopedKeeper
 
 // GetPortCapability returns the port capability for the given portID. The capability must
 // exist, otherwise testing will fail.
 func (chain *TestChain) GetPortCapability(portID string) *capabilitytypes.Capability {
-	cap, ok := chain.App.GetScopedIBCKeeper().GetCapability(chain.GetContext(), host.PortPath(portID))
-	require.True(chain.t, ok)
-
-	return cap
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // CreateChannelCapability binds and claims a capability for the given portID and channelID
 // if it does not already exist. This function will fail testing on any resulting error. The
 // scoped keeper passed in will claim the new capability.
 func (chain *TestChain) CreateChannelCapability(scopedKeeper capabilitykeeper.ScopedKeeper, portID, channelID string) {
+	_ = "STUB: not implemented"
 	// ensure the chain has the latest time
-	capName := host.ChannelCapabilityPath(portID, channelID)
-	// check if the portId is already binded, if not bind it
-	_, ok := chain.App.GetScopedIBCKeeper().GetCapability(chain.GetContext(), capName)
-	if !ok {
-		cap, err := chain.App.GetScopedIBCKeeper().NewCapability(chain.GetContext(), capName)
-		require.NoError(chain.t, err)
-		err = scopedKeeper.ClaimCapability(chain.GetContext(), cap, capName)
-		require.NoError(chain.t, err)
-	}
-
-	wasmApp := chain.App.(*TestingAppDecorator).WasmApp
-	wasmApp.SetDeliverStateToCommit()
-	_, err := chain.App.Commit(context.Background())
-	require.NoError(chain.t, err)
-
-	chain.NextBlock()
+	return
 }
+
+// check if the portId is already binded, if not bind it
 
 // GetChannelCapability returns the channel capability for the given portID and channelID.
 // The capability must exist, otherwise testing will fail.
 func (chain *TestChain) GetChannelCapability(portID, channelID string) *capabilitytypes.Capability {
-	cap, ok := chain.App.GetScopedIBCKeeper().GetCapability(chain.GetContext(), host.ChannelCapabilityPath(portID, channelID))
-	require.True(chain.t, ok)
-
-	return cap
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (chain *TestChain) Balance(acc sdk.AccAddress, denom string) sdk.Coin {
-	return chain.GetTestSupport().BankKeeper().GetBalance(chain.GetContext(), acc, denom)
+	_ = "STUB: not implemented"
+	return *new(sdk.Coin)
 }
 
 func (chain *TestChain) AllBalances(acc sdk.AccAddress) sdk.Coins {
-	return chain.GetTestSupport().BankKeeper().GetAllBalances(chain.GetContext(), acc)
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
-func (chain TestChain) GetTestSupport() *wasmd.TestSupport {
-	return chain.App.(*TestingAppDecorator).TestSupport()
-}
+func (chain TestChain) GetTestSupport() *wasmd.TestSupport { _ = "STUB: not implemented"; return nil }
 
 var _ TestingApp = TestingAppDecorator{}
 
@@ -647,29 +361,33 @@ type TestingAppDecorator struct {
 }
 
 func NewTestingAppDecorator(t *testing.T, wasmApp *wasmd.WasmApp) *TestingAppDecorator {
-	return &TestingAppDecorator{WasmApp: wasmApp, t: t}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (a TestingAppDecorator) GetBaseApp() *baseapp.BaseApp {
-	return a.TestSupport().GetBaseApp()
-}
+func (a TestingAppDecorator) GetBaseApp() *baseapp.BaseApp { _ = "STUB: not implemented"; return nil }
 
 func (a TestingAppDecorator) GetStakingKeeper() stakingkeeper.Keeper {
-	return a.TestSupport().StakingKeeper()
+	_ = "STUB: not implemented"
+	return *new(stakingkeeper.Keeper)
 }
 
 func (a TestingAppDecorator) GetIBCKeeper() *ibckeeper.Keeper {
-	return a.TestSupport().IBCKeeper()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (a TestingAppDecorator) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
-	return a.TestSupport().ScopeIBCKeeper()
+	_ = "STUB: not implemented"
+	return *new(capabilitykeeper.ScopedKeeper)
 }
 
 func (a TestingAppDecorator) GetTxConfig() client.TxConfig {
-	return a.TestSupport().GetTxConfig()
+	_ = "STUB: not implemented"
+	return *new(client.TxConfig)
 }
 
 func (a TestingAppDecorator) TestSupport() *wasmd.TestSupport {
-	return wasmd.NewTestSupport(a.t, a.WasmApp)
+	_ = "STUB: not implemented"
+	return nil
 }

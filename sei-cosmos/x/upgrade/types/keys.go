@@ -1,7 +1,5 @@
 package types
 
-import "fmt"
-
 const (
 	// ModuleName is the name of this module
 	ModuleName = "upgrade"
@@ -40,20 +38,14 @@ const (
 
 // PlanKey is the key under which the current plan is saved
 // We store PlanByte as a const to keep it immutable (unlike a []byte)
-func PlanKey() []byte {
-	return []byte{PlanByte}
-}
+func PlanKey() []byte { _ = "STUB: not implemented"; return nil }
 
 // UpgradedClientKey is the key under which the upgraded client state is saved
 // Connecting IBC chains can verify against the upgraded client in this path before
 // upgrading their clients
-func UpgradedClientKey(height int64) []byte {
-	return []byte(fmt.Sprintf("%s/%d/%s", KeyUpgradedIBCState, height, KeyUpgradedClient))
-}
+func UpgradedClientKey(height int64) []byte { _ = "STUB: not implemented"; return nil }
 
 // UpgradedConsStateKey is the key under which the upgraded consensus state is saved
 // Connecting IBC chains can verify against the upgraded consensus state in this path before
 // upgrading their clients.
-func UpgradedConsStateKey(height int64) []byte {
-	return []byte(fmt.Sprintf("%s/%d/%s", KeyUpgradedIBCState, height, KeyUpgradedConsState))
-}
+func UpgradedConsStateKey(height int64) []byte { _ = "STUB: not implemented"; return nil }

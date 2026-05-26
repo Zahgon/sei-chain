@@ -1,17 +1,9 @@
 package utils
 
 import (
-	crand "crypto/rand"
-	"crypto/sha256"
 	"io"
 )
 
-func Sha256(bytes []byte) []byte {
-	hasher := sha256.New()
-	hasher.Write(bytes)
-	return hasher.Sum(nil)
-}
+func Sha256(bytes []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-func CReader() io.Reader {
-	return crand.Reader
-}
+func CReader() io.Reader { _ = "STUB: not implemented"; return *new(io.Reader) }

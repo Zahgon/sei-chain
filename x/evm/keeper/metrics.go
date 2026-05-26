@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"math"
 	"math/big"
 
 	"go.opentelemetry.io/otel"
@@ -99,25 +98,8 @@ var (
 	}
 )
 
-func must[V any](v V, err error) V {
-	if err != nil {
-		panic(err)
-	}
-	return v
-}
+func must[V any](v V, err error) V { _ = "STUB: not implemented"; return *new(V) }
 
 // bigIntToFloat64 converts a *big.Int to float64 without calling Uint64(), which
 // has undefined behavior for values > math.MaxUint64 per the math/big docs.
-func bigIntToFloat64(v *big.Int) float64 {
-	if v == nil || v.Sign() < 0 {
-		return 0
-	}
-	if v.IsUint64() {
-		return float64(v.Uint64())
-	}
-	f, _ := new(big.Float).SetInt(v).Float64()
-	if math.IsInf(f, 1) {
-		return math.MaxFloat64
-	}
-	return f
-}
+func bigIntToFloat64(v *big.Int) float64 { _ = "STUB: not implemented"; return 0 }

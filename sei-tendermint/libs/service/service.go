@@ -2,12 +2,9 @@ package service
 
 import (
 	"context"
-	"errors"
-	"fmt"
 	"sync"
 	"sync/atomic"
 
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 	"github.com/sei-protocol/seilog"
 )
 
@@ -97,52 +94,30 @@ type BaseService struct {
 
 // NewBaseService creates a new BaseService.
 func NewBaseService(name string, impl Implementation) *BaseService {
-	return &BaseService{
-		name: name,
-		impl: impl,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Start starts the Service and calls its OnStart method. An error
 // will be returned if the service is stopped, but not if it is
 // already running.
-func (bs *BaseService) Start(ctx context.Context) error {
-	sCtx, cancel := context.WithCancel(ctx)
-	inner := &baseService{sCtx, cancel, sync.WaitGroup{}, make(chan struct{})}
-	if !bs.inner.CompareAndSwap(nil, inner) {
-		cancel() // free the context.
-		return nil
-	}
+func (bs *BaseService) Start(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-	logger.Debug("starting service", "service", bs.name, "impl", bs.name)
-	// Currently sei-tendermint services (and tests) rely on the fact that OnStart is called with
-	// exactly the same context as Start.
-	if err := bs.impl.OnStart(ctx); err != nil {
-		cancel() // free the context.
-		return err
-	}
+// free the context.
 
-	go func() {
-		<-inner.ctx.Done()
-		inner.cancel() // free the context.
-		logger.Debug("stopping service", "service", bs.name)
-		bs.impl.OnStop()
-		inner.wg.Wait() // wait for all spawned tasks to finish
-		logger.Info("stopped service", "service", bs.name)
-		close(inner.done)
-	}()
-	return nil
-}
+// Currently sei-tendermint services (and tests) rely on the fact that OnStart is called with
+// exactly the same context as Start.
+
+// free the context.
+
+// free the context.
+
+// wait for all spawned tasks to finish
 
 // Stop manually terminates the service by calling OnStop method from
 // the implementation and releases all resources related to the
 // service.
-func (bs *BaseService) Stop() {
-	if inner := bs.inner.Load(); inner != nil {
-		inner.cancel()
-		<-inner.done
-	}
-}
+func (bs *BaseService) Stop() { _ = "STUB: not implemented"; return }
 
 // Spawn spawns a new goroutine executing the task, which will be cancelled
 // when outer context is cancelled or when the service is stopped.
@@ -153,16 +128,8 @@ func (bs *BaseService) Stop() {
 // provided to OnStart(). This is intentional.
 // Panics if the service has not been started yet.
 func (bs *BaseService) Spawn(name string, task func(ctx context.Context) error) {
-	inner := bs.inner.Load()
-	if inner == nil {
-		panic("service is not started yet")
-	}
-
-	inner.wg.Go(func() {
-		if err := utils.IgnoreCancel(task(inner.ctx)); err != nil {
-			logger.Error("task failed", "name", name, "service", bs.name, "error", err)
-		}
-	})
+	_ = "STUB: not implemented"
+	return
 }
 
 // Spawns a critical task which should run until success OR as long as the service is running.
@@ -170,42 +137,18 @@ func (bs *BaseService) Spawn(name string, task func(ctx context.Context) error) 
 // * task returns context.Canceled BEFORE the service is canceled.
 // * task returns an error other than context.Canceled.
 func (bs *BaseService) SpawnCritical(name string, task func(ctx context.Context) error) {
-	inner := bs.inner.Load()
-	if inner == nil {
-		panic("service is not started yet")
-	}
-
-	inner.wg.Go(func() {
-		if err := task(inner.ctx); err != nil {
-			//nolint:staticcheck // QF1001: linter wants to apply De Morgan's law, as if outer negation was objectively worse.
-			if !(errors.Is(err, context.Canceled) || errors.Is(err, context.DeadlineExceeded)) || inner.ctx.Err() == nil {
-				panic(fmt.Sprintf("critical task failed: name=%v, service=%v: %v", name, bs.name, err))
-			}
-		}
-	})
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:staticcheck // QF1001: linter wants to apply De Morgan's law, as if outer negation was objectively worse.
 
 // IsRunning implements Service by returning true or false depending on the
 // service's state.
-func (bs *BaseService) IsRunning() bool {
-	inner := bs.inner.Load()
-	if inner == nil {
-		return false
-	}
-	select {
-	case <-inner.done:
-		return false
-	default:
-		return true
-	}
-}
+func (bs *BaseService) IsRunning() bool { _ = "STUB: not implemented"; return false }
 
 // Wait blocks until the service is stopped.
-func (bs *BaseService) Wait() {
-	if inner := bs.inner.Load(); inner != nil {
-		<-inner.done
-	}
-}
+func (bs *BaseService) Wait() { _ = "STUB: not implemented"; return }
 
 // String provides a human-friendly representation of the service.
-func (bs *BaseService) String() string { return bs.name }
+func (bs *BaseService) String() string { _ = "STUB: not implemented"; return "" }

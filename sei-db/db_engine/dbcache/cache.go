@@ -2,7 +2,6 @@ package dbcache
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/sei-protocol/sei-chain/sei-db/common/threading"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/types"
@@ -88,9 +87,7 @@ type CacheUpdate struct {
 }
 
 // IsDelete returns true if the update is a delete operation.
-func (u *CacheUpdate) IsDelete() bool {
-	return u.Value == nil
-}
+func (u *CacheUpdate) IsDelete() bool { _ = "STUB: not implemented"; return false }
 
 // BuildCache creates a new Cache. When cfg.MaxSize is 0 a no-op (passthrough) cache is returned.
 func BuildCache(
@@ -99,13 +96,6 @@ func BuildCache(
 	readPool threading.Pool,
 	miscPool threading.Pool,
 ) (Cache, error) {
-	if cfg.MaxSize == 0 {
-		return NewNoOpCache(), nil
-	}
-
-	cache, err := NewStandardCache(ctx, cfg, readPool, miscPool)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create cache: %w", err)
-	}
-	return cache, nil
+	_ = "STUB: not implemented"
+	return *new(Cache), nil
 }

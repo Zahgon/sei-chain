@@ -1,16 +1,10 @@
 package types
 
 import (
-	"fmt"
-	"math"
 	"sort"
-	"strings"
 
-	proto "github.com/gogo/protobuf/proto"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
@@ -21,25 +15,14 @@ var (
 
 // NewIdentifiedClientState creates a new IdentifiedClientState instance
 func NewIdentifiedClientState(clientID string, clientState exported.ClientState) IdentifiedClientState {
-	msg, ok := clientState.(proto.Message)
-	if !ok {
-		panic(fmt.Errorf("cannot proto marshal %T", clientState))
-	}
-
-	anyClientState, err := codectypes.NewAnyWithValue(msg)
-	if err != nil {
-		panic(err)
-	}
-
-	return IdentifiedClientState{
-		ClientId:    clientID,
-		ClientState: anyClientState,
-	}
+	_ = "STUB: not implemented"
+	return *new(IdentifiedClientState)
 }
 
 // UnpackInterfaces implements UnpackInterfacesMesssage.UnpackInterfaces
 func (ics IdentifiedClientState) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(ics.ClientState, new(exported.ClientState))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 var _ sort.Interface = IdentifiedClientStates{}
@@ -48,64 +31,38 @@ var _ sort.Interface = IdentifiedClientStates{}
 type IdentifiedClientStates []IdentifiedClientState
 
 // Len implements sort.Interface
-func (ics IdentifiedClientStates) Len() int { return len(ics) }
+func (ics IdentifiedClientStates) Len() int {
+	_ = "STUB: not implemented"
 
-// Less implements sort.Interface
-func (ics IdentifiedClientStates) Less(i, j int) bool { return ics[i].ClientId < ics[j].ClientId }
+	// Less implements sort.Interface
+	return 0
+}
+
+func (ics IdentifiedClientStates) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
 
 // Swap implements sort.Interface
-func (ics IdentifiedClientStates) Swap(i, j int) { ics[i], ics[j] = ics[j], ics[i] }
+func (ics IdentifiedClientStates) Swap(i, j int) { _ = "STUB: not implemented"; return }
 
 // Sort is a helper function to sort the set of IdentifiedClientStates in place
 func (ics IdentifiedClientStates) Sort() IdentifiedClientStates {
-	sort.Sort(ics)
-	return ics
+	_ = "STUB: not implemented"
+	return *new(IdentifiedClientStates)
 }
 
 // NewConsensusStateWithHeight creates a new ConsensusStateWithHeight instance
 func NewConsensusStateWithHeight(height Height, consensusState exported.ConsensusState) ConsensusStateWithHeight {
-	msg, ok := consensusState.(proto.Message)
-	if !ok {
-		panic(fmt.Errorf("cannot proto marshal %T", consensusState))
-	}
-
-	anyConsensusState, err := codectypes.NewAnyWithValue(msg)
-	if err != nil {
-		panic(err)
-	}
-
-	return ConsensusStateWithHeight{
-		Height:         height,
-		ConsensusState: anyConsensusState,
-	}
+	_ = "STUB: not implemented"
+	return *new(ConsensusStateWithHeight)
 }
 
 // UnpackInterfaces implements UnpackInterfacesMesssage.UnpackInterfaces
 func (cswh ConsensusStateWithHeight) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(cswh.ConsensusState, new(exported.ConsensusState))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateClientType validates the client type. It cannot be blank or empty. It must be a valid
 // client identifier when used with '0' or the maximum uint64 as the sequence.
-func ValidateClientType(clientType string) error {
-	if strings.TrimSpace(clientType) == "" {
-		return sdkerrors.Wrap(ErrInvalidClientType, "client type cannot be blank")
-	}
+func ValidateClientType(clientType string) error { _ = "STUB: not implemented"; return nil }
 
-	smallestPossibleClientID := FormatClientIdentifier(clientType, 0)
-	largestPossibleClientID := FormatClientIdentifier(clientType, uint64(math.MaxUint64))
-
-	// IsValidClientID will check client type format and if the sequence is a uint64
-	if !IsValidClientID(smallestPossibleClientID) {
-		return sdkerrors.Wrap(ErrInvalidClientType, "")
-	}
-
-	if err := host.ClientIdentifierValidator(smallestPossibleClientID); err != nil {
-		return sdkerrors.Wrap(err, "client type results in smallest client identifier being invalid")
-	}
-	if err := host.ClientIdentifierValidator(largestPossibleClientID); err != nil {
-		return sdkerrors.Wrap(err, "client type results in largest client identifier being invalid")
-	}
-
-	return nil
-}
+// IsValidClientID will check client type format and if the sequence is a uint64

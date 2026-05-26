@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"errors"
 	"sync"
 	"time"
 
@@ -19,29 +18,13 @@ type VMWrapper struct {
 }
 
 func NewVMWrapper(inner types.WasmerEngine) types.WasmerEngine {
-	return &VMWrapper{
-		inner,
-		&sync.Mutex{},
-	}
+	_ = "STUB: not implemented"
+	return *new(types.WasmerEngine)
 }
 
 func (w *VMWrapper) Create(code wasmvm.WasmCode) (checksum wasmvm.Checksum, err error) {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	timer := time.NewTimer(CreateTimeout)
-	done := make(chan struct{}, 1)
-	go func() {
-		checksum, err = w.WasmerEngine.Create(code)
-		done <- struct{}{}
-	}()
-	select {
-	case <-done:
-		timer.Stop()
-		return
-	case <-timer.C:
-		err = errors.New("create wasm code timed out")
-		return
-	}
+	_ = "STUB: not implemented"
+	return *new(wasmvm.Checksum), nil
 }
 
 func (w *VMWrapper) Instantiate(
@@ -56,9 +39,8 @@ func (w *VMWrapper) Instantiate(
 	gasLimit uint64,
 	deserCost wasmvmtypes.UFraction,
 ) (*wasmvmtypes.Response, uint64, error) {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	return w.WasmerEngine.Instantiate(checksum, env, info, initMsg, store, goapi, querier, gasMeter, gasLimit, deserCost)
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (w *VMWrapper) Execute(
@@ -73,9 +55,8 @@ func (w *VMWrapper) Execute(
 	gasLimit uint64,
 	deserCost wasmvmtypes.UFraction,
 ) (*wasmvmtypes.Response, uint64, error) {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	return w.WasmerEngine.Execute(code, env, info, executeMsg, store, goapi, querier, gasMeter, gasLimit, deserCost)
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (w *VMWrapper) Migrate(
@@ -89,9 +70,8 @@ func (w *VMWrapper) Migrate(
 	gasLimit uint64,
 	deserCost wasmvmtypes.UFraction,
 ) (*wasmvmtypes.Response, uint64, error) {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	return w.WasmerEngine.Migrate(checksum, env, migrateMsg, store, goapi, querier, gasMeter, gasLimit, deserCost)
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (w *VMWrapper) Sudo(
@@ -105,9 +85,8 @@ func (w *VMWrapper) Sudo(
 	gasLimit uint64,
 	deserCost wasmvmtypes.UFraction,
 ) (*wasmvmtypes.Response, uint64, error) {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	return w.WasmerEngine.Sudo(checksum, env, sudoMsg, store, goapi, querier, gasMeter, gasLimit, deserCost)
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (w *VMWrapper) Reply(
@@ -121,19 +100,10 @@ func (w *VMWrapper) Reply(
 	gasLimit uint64,
 	deserCost wasmvmtypes.UFraction,
 ) (*wasmvmtypes.Response, uint64, error) {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	return w.WasmerEngine.Reply(checksum, env, reply, store, goapi, querier, gasMeter, gasLimit, deserCost)
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
-func (w *VMWrapper) Unpin(checksum wasmvm.Checksum) error {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	return w.WasmerEngine.Unpin(checksum)
-}
+func (w *VMWrapper) Unpin(checksum wasmvm.Checksum) error { _ = "STUB: not implemented"; return nil }
 
-func (w *VMWrapper) Pin(checksum wasmvm.Checksum) error {
-	w.mu.Lock()
-	defer w.mu.Unlock()
-	return w.WasmerEngine.Pin(checksum)
-}
+func (w *VMWrapper) Pin(checksum wasmvm.Checksum) error { _ = "STUB: not implemented"; return nil }

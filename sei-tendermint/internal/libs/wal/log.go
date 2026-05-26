@@ -15,11 +15,9 @@ package wal
 
 import (
 	"errors"
-	"fmt"
 	"os"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"golang.org/x/sys/unix"
 )
 
 const headerSize int64 = 8
@@ -33,28 +31,14 @@ type Config struct {
 	TotalSizeLimit int64
 }
 
-func DefaultConfig() *Config {
-	return &Config{
-		FileSizeLimit:  10 * 1024 * 1024,       // 10MB
-		TotalSizeLimit: 1 * 1024 * 1024 * 1024, // 1GB
-	}
-}
+func DefaultConfig() *Config { _ = "STUB: not implemented"; return nil }
 
-func lockPath(headPath string) string {
-	return fmt.Sprintf("%s.lock", headPath)
-}
+// 10MB
+// 1GB
 
-func openLockFile(headPath string) (*os.File, error) {
-	guard, err := os.OpenFile(lockPath(headPath), os.O_CREATE|os.O_RDONLY, filePerms)
-	if err != nil {
-		return nil, err
-	}
-	if err := unix.Flock(int(guard.Fd()), unix.LOCK_EX|unix.LOCK_NB); err != nil {
-		_ = guard.Close()
-		return nil, fmt.Errorf("unix.Flock(): %w", err)
-	}
-	return guard, nil
-}
+func lockPath(headPath string) string { _ = "STUB: not implemented"; return "" }
+
+func openLockFile(headPath string) (*os.File, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // logInner is a non-threadsafe inner implementation of Log.
 // It is invalidated whenever ANY of the method call returns an error.
@@ -68,69 +52,28 @@ type logInner struct {
 
 // ReadFile reads the whole log file at a given offset.
 func (i *logInner) ReadFile(fileOffset int) ([][]byte, error) {
-	path, err := i.view.PathByOffset(fileOffset)
-	if err != nil {
-		return nil, err
-	}
-	// If head is requested, we need first sync it do disk.
-	if fileOffset == 0 {
-		if err := i.writer.Sync(); err != nil {
-			return nil, fmt.Errorf("i.Sync(): %w", err)
-		}
-	}
-	r, err := openLogReader(path)
-	if err != nil {
-		return nil, fmt.Errorf("openLogReader(): %w", err)
-	}
-	var entries [][]byte
-	for {
-		entry, err := r.ReadEntry()
-		if err != nil {
-			if errors.Is(err, errEOF) {
-				return entries, nil
-			}
-			return nil, fmt.Errorf("r.ReadEntry(): %w", err)
-		}
-		entries = append(entries, entry)
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (i *logInner) Append(entry []byte) (err error) {
-	if limit := i.cfg.FileSizeLimit; limit > 0 && i.writer.bytesSize >= limit {
-		// Sync and close head.
-		if err := i.writer.Sync(); err != nil {
-			return err
-		}
-		i.writer.Close()
-		// Move head to tail.
-		if err := i.view.Rotate(i.cfg); err != nil {
-			return fmt.Errorf("i.view.Rotate(): %w", err)
-		}
-		// Reopen head.
-		writer, err := openLogWriter(i.view.headPath)
-		if err != nil {
-			return fmt.Errorf("openLogWriter(): %w", err)
-		}
-		i.writer = writer
-	}
-	return i.writer.AppendEntry(entry)
-}
+// If head is requested, we need first sync it do disk.
 
-func (i *logInner) Size() (int64, error) {
-	size, err := i.view.TailSize()
-	if err != nil {
-		return 0, err
-	}
-	size += i.writer.bytesSize
-	return size, nil
-}
+func (i *logInner) Append(entry []byte) (err error) { _ = "STUB: not implemented"; return nil }
+
+// Sync and close head.
+
+// Move head to tail.
+
+// Reopen head.
+
+func (i *logInner) Size() (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Close releases all resources unconditionally.
 // It invalidates logInner object.
 func (i *logInner) Close() {
-	_ = i.writer.Sync() // Best effort syncing at close. No guarantees.
-	i.writer.Close()
-	_ = i.lockFile.Close()
+	_ = "STUB: not implemented"
+	// Best effort syncing at close. No guarantees.
+	return
 }
 
 // non-threadsafe WAL.
@@ -141,85 +84,31 @@ type Log struct {
 }
 
 func OpenLog(headPath string, cfg *Config) (*Log, error) {
-	lockFile, err := openLockFile(headPath)
-	if err != nil {
-		return nil, fmt.Errorf("openLockFile(): %w", err)
-	}
-	view, err := loadLogView(headPath)
-	if err != nil {
-		_ = lockFile.Close()
-		return nil, fmt.Errorf("loadLogView(): %w", err)
-	}
-	writer, err := openLogWriter(headPath)
-	if err != nil {
-		_ = lockFile.Close()
-		return nil, fmt.Errorf("openLogWriter(): %w", err)
-	}
-	return &Log{
-		inner: utils.Some(&logInner{
-			cfg:      cfg,
-			lockFile: lockFile,
-			view:     view,
-			writer:   writer,
-		}),
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (l *Log) MinOffset() int {
-	if inner, ok := l.inner.Get(); ok {
-		return inner.view.firstIdx - inner.view.nextIdx
-	}
-	return 0
-}
+func (l *Log) MinOffset() int { _ = "STUB: not implemented"; return 0 }
 
 // ReadFile reads all entries from a file at a given offset.
 // Available offsets are from range [MinOffset(),0]
 func (l *Log) ReadFile(fileOffset int) ([][]byte, error) {
-	if inner, ok := l.inner.Get(); ok {
-		return inner.ReadFile(fileOffset)
-	}
-	return nil, ErrClosed
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Append appends entry to the log atomically.
 // You need to call Sync afterwards to ensure that the entry is persisted.
-func (l *Log) Append(entry []byte) (err error) {
-	defer l.closeOnErr(&err)
-	if inner, ok := l.inner.Get(); ok {
-		return inner.Append(entry)
-	}
-	return ErrClosed
-}
+func (l *Log) Append(entry []byte) (err error) { _ = "STUB: not implemented"; return nil }
 
 // Sync writes all buffered data to disk and calls fsync to ensure persistence.
-func (l *Log) Sync() (err error) {
-	defer l.closeOnErr(&err)
-	if inner, ok := l.inner.Get(); ok {
-		return inner.writer.Sync()
-	}
-	return ErrClosed
-}
+func (l *Log) Sync() (err error) { _ = "STUB: not implemented"; return nil }
 
 // Returns the total size of the log in bytes.
-func (l *Log) Size() (res int64, err error) {
-	defer l.closeOnErr(&err)
-	if inner, ok := l.inner.Get(); ok {
-		return inner.Size()
-	}
-	return 0, ErrClosed
-}
+func (l *Log) Size() (res int64, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Close releases all resources unconditionally.
-func (l *Log) Close() {
-	if i, ok := l.inner.Get(); ok {
-		i.Close()
-		l.inner = utils.None[*logInner]()
-	}
-}
+func (l *Log) Close() { _ = "STUB: not implemented"; return }
 
 // Closes Log iff *err!=nil.
-func (l *Log) closeOnErr(err *error) {
-	if *err != nil {
-		l.Close()
-	}
-}
+func (l *Log) closeOnErr(err *error) { _ = "STUB: not implemented"; return }

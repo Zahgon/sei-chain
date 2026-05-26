@@ -1,14 +1,10 @@
 package metrics
 
 import (
-	"context"
 	"time"
 
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
 
-	commonmetrics "github.com/sei-protocol/sei-chain/sei-db/common/metrics"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
 )
@@ -96,169 +92,26 @@ type LittDBMetrics struct {
 // OTel MeterProvider. The caller must configure a MeterProvider with a
 // Prometheus or other exporter before calling this (e.g. via
 // commonmetrics.SetupOtelPrometheus).
-func NewLittDBMetrics() *LittDBMetrics {
-	meter := otel.Meter(littMeterName)
-
-	tableSizeInBytes, _ := meter.Int64Gauge(
-		"litt_table_size_bytes",
-		metric.WithDescription("The size of individual tables in the database in bytes."),
-		metric.WithUnit("By"),
-	)
-
-	tableKeyCount, _ := meter.Int64Gauge(
-		"litt_table_key_count",
-		metric.WithDescription("The number of keys in individual tables in the database."),
-		metric.WithUnit("{count}"),
-	)
-
-	bytesReadCounter, _ := meter.Int64Counter(
-		"litt_bytes_read",
-		metric.WithDescription("The number of bytes read from disk since startup."),
-		metric.WithUnit("By"),
-	)
-
-	keysReadCounter, _ := meter.Int64Counter(
-		"litt_keys_read",
-		metric.WithDescription("The number of keys read from disk since startup."),
-		metric.WithUnit("{count}"),
-	)
-
-	cacheHitCounter, _ := meter.Int64Counter(
-		"litt_cache_hits",
-		metric.WithDescription("The number of cache hits since startup."),
-		metric.WithUnit("{count}"),
-	)
-
-	cacheMissCounter, _ := meter.Int64Counter(
-		"litt_cache_misses",
-		metric.WithDescription("The number of cache misses since startup."),
-		metric.WithUnit("{count}"),
-	)
-
-	readLatency, _ := meter.Float64Histogram(
-		"litt_read_latency_seconds",
-		metric.WithDescription(
-			"Reports on the read latency of the database. "+
-				"This metric includes both cache hits and cache misses."),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-
-	cacheMissLatency, _ := meter.Float64Histogram(
-		"litt_cache_miss_latency_seconds",
-		metric.WithDescription(
-			"Reports on the read latency of the database, "+
-				"but only measures the time to read a value when a cache miss occurs."),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-
-	bytesWrittenCounter, _ := meter.Int64Counter(
-		"litt_bytes_written",
-		metric.WithDescription("The number of bytes written to disk since startup. Only includes values, not metadata."),
-		metric.WithUnit("By"),
-	)
-
-	keysWrittenCounter, _ := meter.Int64Counter(
-		"litt_keys_written",
-		metric.WithDescription("The number of keys written to disk since startup."),
-		metric.WithUnit("{count}"),
-	)
-
-	writeLatency, _ := meter.Float64Histogram(
-		"litt_write_latency_seconds",
-		metric.WithDescription("Reports on the write latency of the database."),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-
-	flushCount, _ := meter.Int64Counter(
-		"litt_flush_count",
-		metric.WithDescription("The number of times a flush operation has been performed."),
-		metric.WithUnit("{count}"),
-	)
-
-	flushLatency, _ := meter.Float64Histogram(
-		"litt_flush_latency_seconds",
-		metric.WithDescription("Reports on the latency of a flush operation."),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-
-	segmentFlushLatency, _ := meter.Float64Histogram(
-		"litt_segment_flush_latency_seconds",
-		metric.WithDescription("Reports on segment flush latency. This is a subset of the time spent during a flush operation."),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-
-	keymapFlushLatency, _ := meter.Float64Histogram(
-		"litt_keymap_flush_latency_seconds",
-		metric.WithDescription(
-			"Reports on the latency of a keymap flush operation. "+
-				"This is a subset of the time spent during a flush operation."),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-
-	garbageCollectionLatency, _ := meter.Float64Histogram(
-		"litt_garbage_collection_latency_seconds",
-		metric.WithDescription("Reports on the latency of garbage collection operations."),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-
-	writeCacheMetrics := util.NewCacheMetrics("chunk_write")
-	readCacheMetrics := util.NewCacheMetrics("chunk_read")
-
-	return &LittDBMetrics{
-		tableSizeInBytes:         tableSizeInBytes,
-		tableKeyCount:            tableKeyCount,
-		bytesReadCounter:         bytesReadCounter,
-		keysReadCounter:          keysReadCounter,
-		cacheHitCounter:          cacheHitCounter,
-		cacheMissCounter:         cacheMissCounter,
-		readLatency:              readLatency,
-		cacheMissLatency:         cacheMissLatency,
-		bytesWrittenCounter:      bytesWrittenCounter,
-		keysWrittenCounter:       keysWrittenCounter,
-		writeLatency:             writeLatency,
-		flushCount:               flushCount,
-		flushLatency:             flushLatency,
-		garbageCollectionLatency: garbageCollectionLatency,
-		segmentFlushLatency:      segmentFlushLatency,
-		keymapFlushLatency:       keymapFlushLatency,
-		writeCacheMetrics:        writeCacheMetrics,
-		readCacheMetrics:         readCacheMetrics,
-	}
-}
+func NewLittDBMetrics() *LittDBMetrics { _ = "STUB: not implemented"; return nil }
 
 // tableAttr returns the OTel measurement option that tags an observation with
 // the given table name. Allocated per call rather than cached because callers
 // pass arbitrary table names; for hot-path call sites consider caching upstream.
 func tableAttr(tableName string) metric.MeasurementOption {
-	return metric.WithAttributes(attribute.String("table", tableName))
+	_ = "STUB: not implemented"
+	return *new(metric.MeasurementOption)
 }
 
 // CollectPeriodicMetrics is a method that is periodically called to collect metrics. Tables are not permitted to be
 // added or dropped while this method is running.
 func (m *LittDBMetrics) CollectPeriodicMetrics(tables map[string]litt.ManagedTable) {
-	if m == nil {
-		return
-	}
-
-	ctx := context.Background()
-	for _, table := range tables {
-		tableName := table.Name()
-		attrs := tableAttr(tableName)
-
-		tableSize := table.Size()
-		m.tableSizeInBytes.Record(ctx, int64(tableSize), attrs) //nolint:gosec // table size fits int64
-
-		tableKeyCount := table.KeyCount()
-		m.tableKeyCount.Record(ctx, int64(tableKeyCount), attrs) //nolint:gosec // key count fits int64
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec // table size fits int64
+
+//nolint:gosec // key count fits int64
 
 // ReportReadOperation reports the results of a read operation.
 func (m *LittDBMetrics) ReportReadOperation(
@@ -266,25 +119,11 @@ func (m *LittDBMetrics) ReportReadOperation(
 	latency time.Duration,
 	dataSize uint64,
 	cacheHit bool) {
-
-	if m == nil {
-		return
-	}
-
-	ctx := context.Background()
-	attrs := tableAttr(tableName)
-
-	m.bytesReadCounter.Add(ctx, int64(dataSize), attrs) //nolint:gosec // data size fits int64
-	m.keysReadCounter.Add(ctx, 1, attrs)
-	m.readLatency.Record(ctx, latency.Seconds(), attrs)
-
-	if cacheHit {
-		m.cacheHitCounter.Add(ctx, 1, attrs)
-	} else {
-		m.cacheMissCounter.Add(ctx, 1, attrs)
-		m.cacheMissLatency.Record(ctx, latency.Seconds(), attrs)
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec // data size fits int64
 
 // ReportWriteOperation reports the results of a write operation.
 func (m *LittDBMetrics) ReportWriteOperation(
@@ -292,69 +131,43 @@ func (m *LittDBMetrics) ReportWriteOperation(
 	latency time.Duration,
 	batchSize uint64,
 	dataSize uint64) {
-
-	if m == nil {
-		return
-	}
-
-	ctx := context.Background()
-	attrs := tableAttr(tableName)
-
-	m.bytesWrittenCounter.Add(ctx, int64(dataSize), attrs) //nolint:gosec // data size fits int64
-	m.keysWrittenCounter.Add(ctx, int64(batchSize), attrs) //nolint:gosec // batch size fits int64
-	m.writeLatency.Record(ctx, latency.Seconds(), attrs)
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec // data size fits int64
+//nolint:gosec // batch size fits int64
 
 // ReportFlushOperation reports the results of a flush operation.
 func (m *LittDBMetrics) ReportFlushOperation(tableName string, latency time.Duration) {
-	if m == nil {
-		return
-	}
-
-	ctx := context.Background()
-	attrs := tableAttr(tableName)
-
-	m.flushCount.Add(ctx, 1, attrs)
-	m.flushLatency.Record(ctx, latency.Seconds(), attrs)
+	_ = "STUB: not implemented"
+	return
 }
 
 // ReportSegmentFlushLatency reports the amount of time taken to flush value files.
 func (m *LittDBMetrics) ReportSegmentFlushLatency(tableName string, latency time.Duration) {
-	if m == nil {
-		return
-	}
-
-	m.segmentFlushLatency.Record(context.Background(), latency.Seconds(), tableAttr(tableName))
+	_ = "STUB: not implemented"
+	return
 }
 
 // ReportKeymapFlushLatency reports the amount of time taken to flush the keymap.
 func (m *LittDBMetrics) ReportKeymapFlushLatency(tableName string, latency time.Duration) {
-	if m == nil {
-		return
-	}
-
-	m.keymapFlushLatency.Record(context.Background(), latency.Seconds(), tableAttr(tableName))
+	_ = "STUB: not implemented"
+	return
 }
 
 // ReportGarbageCollectionLatency reports the latency of a garbage collection operation.
 func (m *LittDBMetrics) ReportGarbageCollectionLatency(tableName string, latency time.Duration) {
-	if m == nil {
-		return
-	}
-
-	m.garbageCollectionLatency.Record(context.Background(), latency.Seconds(), tableAttr(tableName))
+	_ = "STUB: not implemented"
+	return
 }
 
 func (m *LittDBMetrics) GetWriteCacheMetrics() *util.CacheMetrics {
-	if m == nil {
-		return nil
-	}
-	return m.writeCacheMetrics
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (m *LittDBMetrics) GetReadCacheMetrics() *util.CacheMetrics {
-	if m == nil {
-		return nil
-	}
-	return m.readCacheMetrics
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -2,7 +2,6 @@ package null
 
 import (
 	"context"
-	"errors"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer"
@@ -15,13 +14,16 @@ var _ indexer.BlockIndexer = (*BlockerIndexer)(nil)
 type BlockerIndexer struct{}
 
 func (idx *BlockerIndexer) Has(height int64) (bool, error) {
-	return false, errors.New(`indexing is disabled (set 'tx_index = "kv"' in config)`)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 func (idx *BlockerIndexer) Index(types.EventDataNewBlockHeader) error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (idx *BlockerIndexer) Search(ctx context.Context, q *query.Query) ([]int64, error) {
-	return []int64{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

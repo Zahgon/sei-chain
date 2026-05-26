@@ -5,23 +5,16 @@ import (
 )
 
 func (k Keeper) addDenomFromCreator(ctx sdk.Context, creator, denom string) {
-	store := k.GetCreatorPrefixStore(ctx, creator)
-	store.Set([]byte(denom), []byte(denom))
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) getDenomsFromCreator(ctx sdk.Context, creator string) []string {
-	store := k.GetCreatorPrefixStore(ctx, creator)
-
-	iterator := store.Iterator(nil, nil)
-	defer func() { _ = iterator.Close() }()
-
-	denoms := []string{}
-	for ; iterator.Valid(); iterator.Next() {
-		denoms = append(denoms, string(iterator.Key()))
-	}
-	return denoms
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (k Keeper) GetAllDenomsIterator(ctx sdk.Context) sdk.Iterator {
-	return k.GetCreatorsPrefixStore(ctx).Iterator(nil, nil)
+	_ = "STUB: not implemented"
+	return *new(sdk.Iterator)
 }

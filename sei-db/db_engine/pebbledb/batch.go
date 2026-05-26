@@ -1,8 +1,6 @@
 package pebbledb
 
 import (
-	"fmt"
-
 	"github.com/cockroachdb/pebble/v2"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/types"
 )
@@ -16,34 +14,16 @@ type pebbleBatch struct {
 
 var _ types.Batch = (*pebbleBatch)(nil)
 
-func (p *pebbleDB) NewBatch() types.Batch {
-	return &pebbleBatch{b: p.db.NewBatch()}
-}
+func (p *pebbleDB) NewBatch() types.Batch { _ = "STUB: not implemented"; return *new(types.Batch) }
 
-func (pb *pebbleBatch) Set(key, value []byte) error {
-	return pb.b.Set(key, value, nil)
-}
+func (pb *pebbleBatch) Set(key, value []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (pb *pebbleBatch) Delete(key []byte) error {
-	return pb.b.Delete(key, nil)
-}
+func (pb *pebbleBatch) Delete(key []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (pb *pebbleBatch) Commit(opts types.WriteOptions) error {
-	err := pb.b.Commit(toPebbleWriteOpts(opts))
-	if err != nil {
-		return fmt.Errorf("failed to commit batch: %w", err)
-	}
-	return nil
-}
+func (pb *pebbleBatch) Commit(opts types.WriteOptions) error { _ = "STUB: not implemented"; return nil }
 
-func (pb *pebbleBatch) Len() int {
-	return pb.b.Len()
-}
+func (pb *pebbleBatch) Len() int { _ = "STUB: not implemented"; return 0 }
 
-func (pb *pebbleBatch) Reset() {
-	pb.b.Reset()
-}
+func (pb *pebbleBatch) Reset() { _ = "STUB: not implemented"; return }
 
-func (pb *pebbleBatch) Close() error {
-	return pb.b.Close()
-}
+func (pb *pebbleBatch) Close() error { _ = "STUB: not implemented"; return nil }

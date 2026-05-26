@@ -6,7 +6,6 @@ import (
 )
 
 func MigrateBaseFeeOffByOne(ctx sdk.Context, k *keeper.Keeper) error {
-	baseFee := k.GetCurrBaseFeePerGas(ctx)
-	k.SetNextBaseFeePerGas(ctx, baseFee)
+	_ = "STUB: not implemented"
 	return nil
 }

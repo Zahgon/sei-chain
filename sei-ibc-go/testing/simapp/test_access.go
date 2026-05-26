@@ -6,8 +6,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 
-	"github.com/sei-protocol/sei-chain/sei-wasmd/app/params"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	bankkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/keeper"
 	capabilitykeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/keeper"
@@ -24,50 +22,41 @@ type TestSupport struct {
 	app *SimApp
 }
 
-func NewTestSupport(t testing.TB, app *SimApp) *TestSupport {
-	return &TestSupport{t: t, app: app}
-}
+func NewTestSupport(t testing.TB, app *SimApp) *TestSupport { _ = "STUB: not implemented"; return nil }
 
-func (s TestSupport) IBCKeeper() *ibckeeper.Keeper {
-	return s.app.IBCKeeper
-}
+func (s TestSupport) IBCKeeper() *ibckeeper.Keeper { _ = "STUB: not implemented"; return nil }
 
-func (s TestSupport) AppCodec() codec.Codec {
-	return s.app.appCodec
-}
+func (s TestSupport) AppCodec() codec.Codec { _ = "STUB: not implemented"; return *new(codec.Codec) }
 
 func (s TestSupport) StakingKeeper() stakingkeeper.Keeper {
-	return s.app.StakingKeeper
+	_ = "STUB: not implemented"
+	return *new(stakingkeeper.Keeper)
 }
 
 func (s TestSupport) BankKeeper() bankkeeper.Keeper {
-	return s.app.BankKeeper
+	_ = "STUB: not implemented"
+	return *new(bankkeeper.Keeper)
 }
 
 func (s TestSupport) TransferKeeper() ibctransferkeeper.Keeper {
-	return s.app.TransferKeeper
+	_ = "STUB: not implemented"
+	return *new(ibctransferkeeper.Keeper)
 }
 
 func (s TestSupport) CapabilityKeeper() *capabilitykeeper.Keeper {
-	return s.app.CapabilityKeeper
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (s TestSupport) DistrKeeper() *distrkeeper.Keeper {
-	return &s.app.DistrKeeper
-}
+func (s TestSupport) DistrKeeper() *distrkeeper.Keeper { _ = "STUB: not implemented"; return nil }
 
-func (s TestSupport) SlashingKeeper() *slashingkeeper.Keeper {
-	return &s.app.SlashingKeeper
-}
+func (s TestSupport) SlashingKeeper() *slashingkeeper.Keeper { _ = "STUB: not implemented"; return nil }
 
-func (s TestSupport) EvidenceKeeper() *evidencekeeper.Keeper {
-	return &s.app.EvidenceKeeper
-}
+func (s TestSupport) EvidenceKeeper() *evidencekeeper.Keeper { _ = "STUB: not implemented"; return nil }
 
-func (s TestSupport) GetBaseApp() *baseapp.BaseApp {
-	return s.app.BaseApp
-}
+func (s TestSupport) GetBaseApp() *baseapp.BaseApp { _ = "STUB: not implemented"; return nil }
 
 func (s TestSupport) GetTxConfig() client.TxConfig {
-	return params.MakeEncodingConfig().TxConfig
+	_ = "STUB: not implemented"
+	return *new(client.TxConfig)
 }

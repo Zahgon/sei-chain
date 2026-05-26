@@ -1,8 +1,6 @@
 package query
 
 import (
-	"fmt"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
@@ -20,104 +18,13 @@ func FilteredPaginate(
 	pageRequest *PageRequest,
 	onResult func(key []byte, value []byte, accumulate bool) (bool, error),
 ) (*PageResponse, error) {
+	_ = "STUB: not implemented"
 
 	// if the PageRequest is nil, use default PageRequest
-	if pageRequest == nil {
-		pageRequest = &PageRequest{}
-	}
-
-	offset := pageRequest.Offset
-	key := pageRequest.Key
-	limit := pageRequest.Limit
-	countTotal := pageRequest.CountTotal
-	reverse := pageRequest.Reverse
-
-	if offset > 0 && key != nil {
-		return nil, fmt.Errorf("invalid request, either offset or key is expected, got both")
-	}
-
-	if limit == 0 {
-		limit = DefaultLimit
-
-		// count total results when the limit is zero/not supplied
-		countTotal = true
-	}
-
-	if len(key) != 0 {
-		iterator := getIterator(prefixStore, key, reverse)
-		defer func() { _ = iterator.Close() }()
-
-		var (
-			numHits uint64
-			nextKey []byte
-		)
-
-		for ; iterator.Valid(); iterator.Next() {
-			if numHits == limit {
-				nextKey = iterator.Key()
-				break
-			}
-
-			if iterator.Error() != nil {
-				return nil, iterator.Error()
-			}
-
-			hit, err := onResult(iterator.Key(), iterator.Value(), true)
-			if err != nil {
-				return nil, err
-			}
-
-			if hit {
-				numHits++
-			}
-		}
-
-		return &PageResponse{
-			NextKey: nextKey,
-		}, nil
-	}
-
-	iterator := getIterator(prefixStore, nil, reverse)
-	defer func() { _ = iterator.Close() }()
-
-	end := offset + limit
-
-	var (
-		numHits uint64
-		nextKey []byte
-	)
-
-	for ; iterator.Valid(); iterator.Next() {
-		if iterator.Error() != nil {
-			return nil, iterator.Error()
-		}
-
-		accumulate := numHits >= offset && numHits < end
-		hit, err := onResult(iterator.Key(), iterator.Value(), accumulate)
-		if err != nil {
-			return nil, err
-		}
-
-		if hit {
-			numHits++
-		}
-
-		if numHits == end+1 {
-			nextKey = iterator.Key()
-
-			if !countTotal {
-				break
-			}
-		}
-	}
-
-	res := &PageResponse{NextKey: nextKey}
-	if countTotal {
-		res.Total = numHits
-	}
-
-	return res, nil
+	return nil, nil
 }
+
+// count total results when the limit is zero/not supplied
 
 // GenericFilteredPaginate does pagination of all the results in the PrefixStore based on the
 // provided PageRequest. `onResult` should be used to filter or transform the results.
@@ -134,121 +41,11 @@ func GenericFilteredPaginate[T codec.ProtoMarshaler, F codec.ProtoMarshaler](
 	onResult func(key []byte, value T) (F, error),
 	constructor func() T,
 ) ([]F, *PageResponse, error) {
+	_ = "STUB: not implemented"
 	// if the PageRequest is nil, use default PageRequest
-	if pageRequest == nil {
-		pageRequest = &PageRequest{}
-	}
-
-	offset := pageRequest.Offset
-	key := pageRequest.Key
-	limit := pageRequest.Limit
-	countTotal := pageRequest.CountTotal
-	reverse := pageRequest.Reverse
-	var results []F
-
-	if offset > 0 && key != nil {
-		return results, nil, fmt.Errorf("invalid request, either offset or key is expected, got both")
-	}
-
-	if limit == 0 {
-		limit = DefaultLimit
-
-		// count total results when the limit is zero/not supplied
-		countTotal = true
-	}
-
-	if len(key) != 0 {
-		iterator := getIterator(prefixStore, key, reverse)
-		defer func() { _ = iterator.Close() }()
-
-		var (
-			numHits uint64
-			nextKey []byte
-		)
-
-		for ; iterator.Valid(); iterator.Next() {
-			if numHits == limit {
-				nextKey = iterator.Key()
-				break
-			}
-
-			if iterator.Error() != nil {
-				return nil, nil, iterator.Error()
-			}
-
-			protoMsg := constructor()
-
-			err := cdc.Unmarshal(iterator.Value(), protoMsg)
-			if err != nil {
-				return nil, nil, err
-			}
-
-			val, err := onResult(iterator.Key(), protoMsg)
-			if err != nil {
-				return nil, nil, err
-			}
-
-			if val.Size() != 0 {
-				results = append(results, val)
-				numHits++
-			}
-		}
-
-		return results, &PageResponse{
-			NextKey: nextKey,
-		}, nil
-	}
-
-	iterator := getIterator(prefixStore, nil, reverse)
-	defer func() { _ = iterator.Close() }()
-
-	end := offset + limit
-
-	var (
-		numHits uint64
-		nextKey []byte
-	)
-
-	for ; iterator.Valid(); iterator.Next() {
-		if iterator.Error() != nil {
-			return nil, nil, iterator.Error()
-		}
-
-		protoMsg := constructor()
-
-		err := cdc.Unmarshal(iterator.Value(), protoMsg)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		val, err := onResult(iterator.Key(), protoMsg)
-		if err != nil {
-			return nil, nil, err
-		}
-
-		if val.Size() != 0 {
-			// Previously this was the "accumulate" flag
-			if numHits >= offset && numHits < end {
-				results = append(results, val)
-			}
-			numHits++
-		}
-
-		if numHits == end+1 {
-			if nextKey == nil {
-				nextKey = iterator.Key()
-			}
-
-			if !countTotal {
-				break
-			}
-		}
-	}
-
-	res := &PageResponse{NextKey: nextKey}
-	if countTotal {
-		res.Total = numHits
-	}
-
-	return results, res, nil
+	return nil, nil, nil
 }
+
+// count total results when the limit is zero/not supplied
+
+// Previously this was the "accumulate" flag

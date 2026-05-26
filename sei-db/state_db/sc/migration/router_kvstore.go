@@ -1,8 +1,6 @@
 package migration
 
 import (
-	"fmt"
-
 	ics23 "github.com/confio/ics23/go"
 	"github.com/sei-protocol/sei-chain/sei-db/proto"
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/types"
@@ -34,69 +32,34 @@ func NewRouterCommitKVStore(
 	storeName string,
 	versionProvider func() int64,
 ) *RouterCommitKVStore {
-	return &RouterCommitKVStore{
-		router:          router,
-		storeName:       storeName,
-		versionProvider: versionProvider,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Close is illegal during the standard CommitKVStore lifecycle for this type:
 // the wrapped Router is owned by the caller and must outlive this view.
-func (r *RouterCommitKVStore) Close() error {
-	return fmt.Errorf("RouterCommitKVStore.Close: illegal during standard lifecycle")
-}
+func (r *RouterCommitKVStore) Close() error { _ = "STUB: not implemented"; return nil }
 
-func (r *RouterCommitKVStore) Get(key []byte) []byte {
-	value, _, err := r.router.Read(r.storeName, key)
-	if err != nil {
-		panic(fmt.Errorf("RouterCommitKVStore.Get(store=%q): %w", r.storeName, err))
-	}
-	return value
-}
+func (r *RouterCommitKVStore) Get(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-func (r *RouterCommitKVStore) Has(key []byte) bool {
-	_, found, err := r.router.Read(r.storeName, key)
-	if err != nil {
-		panic(fmt.Errorf("RouterCommitKVStore.Has(store=%q): %w", r.storeName, err))
-	}
-	return found
-}
+func (r *RouterCommitKVStore) Has(key []byte) bool { _ = "STUB: not implemented"; return false }
 
-func (r *RouterCommitKVStore) Set(key []byte, value []byte) {
-	r.applyOne(&proto.KVPair{Key: key, Value: value})
-}
+func (r *RouterCommitKVStore) Set(key []byte, value []byte) { _ = "STUB: not implemented"; return }
 
-func (r *RouterCommitKVStore) Remove(key []byte) {
-	r.applyOne(&proto.KVPair{Key: key, Delete: true})
-}
+func (r *RouterCommitKVStore) Remove(key []byte) { _ = "STUB: not implemented"; return }
 
 // applyOne dispatches a single KV change as a one-pair NamedChangeSet through
 // the router, panicking on any router error.
-func (r *RouterCommitKVStore) applyOne(pair *proto.KVPair) {
-	cs := []*proto.NamedChangeSet{{
-		Name:      r.storeName,
-		Changeset: proto.ChangeSet{Pairs: []*proto.KVPair{pair}},
-	}}
-	if err := r.router.ApplyChangeSets(cs); err != nil {
-		panic(fmt.Errorf("RouterCommitKVStore.ApplyChangeSets(store=%q): %w", r.storeName, err))
-	}
-}
+func (r *RouterCommitKVStore) applyOne(pair *proto.KVPair) { _ = "STUB: not implemented"; return }
 
 func (r *RouterCommitKVStore) Iterator(start []byte, end []byte, ascending bool) db.Iterator {
-	it, err := r.router.Iterator(r.storeName, start, end, ascending)
-	if err != nil {
-		panic(fmt.Errorf("RouterCommitKVStore.Iterator(store=%q): %w", r.storeName, err))
-	}
-	return it
+	_ = "STUB: not implemented"
+	return *new(db.Iterator)
 }
 
 func (r *RouterCommitKVStore) GetProof(key []byte) *ics23.CommitmentProof {
-	proof, err := r.router.GetProof(r.storeName, key)
-	if err != nil {
-		panic(fmt.Errorf("RouterCommitKVStore.GetProof(store=%q): %w", r.storeName, err))
-	}
-	return proof
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // RootHash is a placeholder that returns a fresh zeroed 32-byte slice on every
@@ -105,10 +68,6 @@ func (r *RouterCommitKVStore) GetProof(key []byte) *ics23.CommitmentProof {
 //
 // TODO: revisit before shipping to production once the production usage of
 // RootHash() across this code path is understood.
-func (r *RouterCommitKVStore) RootHash() []byte {
-	return make([]byte, rootHashSize)
-}
+func (r *RouterCommitKVStore) RootHash() []byte { _ = "STUB: not implemented"; return nil }
 
-func (r *RouterCommitKVStore) Version() int64 {
-	return r.versionProvider()
-}
+func (r *RouterCommitKVStore) Version() int64 { _ = "STUB: not implemented"; return 0 }

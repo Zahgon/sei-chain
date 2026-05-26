@@ -121,9 +121,7 @@ type Table interface {
 }
 
 // isTableNameValid returns true if the table name is valid.
-func IsTableNameValid(name string) bool {
-	return TableNameRegex.MatchString(name)
-}
+func IsTableNameValid(name string) bool { _ = "STUB: not implemented"; return false }
 
 // ManagedTable is a Table that can perform garbage collection on its data. This type should not be directly used
 // by clients, and is a type that is used internally by the database.

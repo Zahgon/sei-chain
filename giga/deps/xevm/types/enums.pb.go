@@ -53,13 +53,9 @@ var PointerType_value = map[string]int32{
 	"CW1155":  6,
 }
 
-func (x PointerType) String() string {
-	return proto.EnumName(PointerType_name, int32(x))
-}
+func (x PointerType) String() string { _ = "STUB: not implemented"; return "" }
 
-func (PointerType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_9ba0923a26222f98, []int{0}
-}
+func (PointerType) EnumDescriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 type AssetType int32
 
@@ -84,13 +80,9 @@ var AssetType_value = map[string]int32{
 	"TYPENATIVE":  3,
 }
 
-func (x AssetType) String() string {
-	return proto.EnumName(AssetType_name, int32(x))
-}
+func (x AssetType) String() string { _ = "STUB: not implemented"; return "" }
 
-func (AssetType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_9ba0923a26222f98, []int{1}
-}
+func (AssetType) EnumDescriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 func init() {
 	proto.RegisterEnum("seiprotocol.seichain.gigaevm.PointerType", PointerType_name, PointerType_value)

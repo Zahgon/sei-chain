@@ -5,9 +5,7 @@ package types
 
 import (
 	fmt "fmt"
-	io "io"
 	math "math"
-	math_bits "math/bits"
 
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -29,45 +27,27 @@ type Whitelist struct {
 	Hashes []string `protobuf:"bytes,1,rep,name=hashes,proto3" json:"hashes,omitempty" yaml:"hashes"`
 }
 
-func (m *Whitelist) Reset()         { *m = Whitelist{} }
-func (m *Whitelist) String() string { return proto.CompactTextString(m) }
-func (*Whitelist) ProtoMessage()    {}
-func (*Whitelist) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6eba926c274d8fd0, []int{0}
-}
-func (m *Whitelist) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Whitelist) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *Whitelist) String() string            { _ = "STUB: not implemented"; return "" }
+func (*Whitelist) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Whitelist) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Whitelist) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Whitelist) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Whitelist.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Whitelist) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Whitelist.Merge(m, src)
-}
-func (m *Whitelist) XXX_Size() int {
-	return m.Size()
-}
-func (m *Whitelist) XXX_DiscardUnknown() {
-	xxx_messageInfo_Whitelist.DiscardUnknown(m)
-}
+
+func (m *Whitelist) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Whitelist) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Whitelist) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Whitelist proto.InternalMessageInfo
 
-func (m *Whitelist) GetHashes() []string {
-	if m != nil {
-		return m.Hashes
-	}
-	return nil
-}
+func (m *Whitelist) GetHashes() []string { _ = "STUB: not implemented"; return nil }
 
 type DeferredInfo struct {
 	TxIndex uint32                                 `protobuf:"varint,1,opt,name=tx_index,json=txIndex,proto3" json:"tx_index,omitempty"`
@@ -77,66 +57,33 @@ type DeferredInfo struct {
 	Error   string                                 `protobuf:"bytes,5,opt,name=error,proto3" json:"error,omitempty"`
 }
 
-func (m *DeferredInfo) Reset()         { *m = DeferredInfo{} }
-func (m *DeferredInfo) String() string { return proto.CompactTextString(m) }
-func (*DeferredInfo) ProtoMessage()    {}
-func (*DeferredInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6eba926c274d8fd0, []int{1}
-}
-func (m *DeferredInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *DeferredInfo) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *DeferredInfo) String() string            { _ = "STUB: not implemented"; return "" }
+func (*DeferredInfo) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*DeferredInfo) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *DeferredInfo) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *DeferredInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DeferredInfo.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *DeferredInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeferredInfo.Merge(m, src)
-}
-func (m *DeferredInfo) XXX_Size() int {
-	return m.Size()
-}
-func (m *DeferredInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeferredInfo.DiscardUnknown(m)
-}
+
+func (m *DeferredInfo) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *DeferredInfo) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *DeferredInfo) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_DeferredInfo proto.InternalMessageInfo
 
-func (m *DeferredInfo) GetTxIndex() uint32 {
-	if m != nil {
-		return m.TxIndex
-	}
-	return 0
-}
+func (m *DeferredInfo) GetTxIndex() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *DeferredInfo) GetTxHash() []byte {
-	if m != nil {
-		return m.TxHash
-	}
-	return nil
-}
+func (m *DeferredInfo) GetTxHash() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *DeferredInfo) GetTxBloom() []byte {
-	if m != nil {
-		return m.TxBloom
-	}
-	return nil
-}
+func (m *DeferredInfo) GetTxBloom() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *DeferredInfo) GetError() string {
-	if m != nil {
-		return m.Error
-	}
-	return ""
-}
+func (m *DeferredInfo) GetError() string { _ = "STUB: not implemented"; return "" }
 
 func init() {
 	proto.RegisterType((*Whitelist)(nil), "seiprotocol.seichain.gigaevm.Whitelist")
@@ -170,518 +117,45 @@ var fileDescriptor_6eba926c274d8fd0 = []byte{
 	0x45, 0x8a, 0x01, 0x00, 0x00,
 }
 
-func (m *Whitelist) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Whitelist) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Whitelist) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Whitelist) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Whitelist) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Hashes) > 0 {
-		for iNdEx := len(m.Hashes) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Hashes[iNdEx])
-			copy(dAtA[i:], m.Hashes[iNdEx])
-			i = encodeVarintTypes(dAtA, i, uint64(len(m.Hashes[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DeferredInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *DeferredInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DeferredInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Error) > 0 {
-		i -= len(m.Error)
-		copy(dAtA[i:], m.Error)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.Error)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	{
-		size := m.Surplus.Size()
-		i -= size
-		if _, err := m.Surplus.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintTypes(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x22
-	if len(m.TxBloom) > 0 {
-		i -= len(m.TxBloom)
-		copy(dAtA[i:], m.TxBloom)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TxBloom)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.TxHash) > 0 {
-		i -= len(m.TxHash)
-		copy(dAtA[i:], m.TxHash)
-		i = encodeVarintTypes(dAtA, i, uint64(len(m.TxHash)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.TxIndex != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.TxIndex))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
-	offset -= sovTypes(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *Whitelist) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Hashes) > 0 {
-		for _, s := range m.Hashes {
-			l = len(s)
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
+func encodeVarintTypes(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *DeferredInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.TxIndex != 0 {
-		n += 1 + sovTypes(uint64(m.TxIndex))
-	}
-	l = len(m.TxHash)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = len(m.TxBloom)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	l = m.Surplus.Size()
-	n += 1 + l + sovTypes(uint64(l))
-	l = len(m.Error)
-	if l > 0 {
-		n += 1 + l + sovTypes(uint64(l))
-	}
-	return n
-}
+func (m *Whitelist) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovTypes(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozTypes(x uint64) (n int) {
-	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *Whitelist) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Whitelist: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Whitelist: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Hashes", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Hashes = append(m.Hashes, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *DeferredInfo) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *DeferredInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DeferredInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DeferredInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TxIndex", wireType)
-			}
-			m.TxIndex = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.TxIndex |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TxHash", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TxHash = append(m.TxHash[:0], dAtA[iNdEx:postIndex]...)
-			if m.TxHash == nil {
-				m.TxHash = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TxBloom", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TxBloom = append(m.TxBloom[:0], dAtA[iNdEx:postIndex]...)
-			if m.TxBloom == nil {
-				m.TxBloom = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Surplus", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Surplus.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Error = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovTypes(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipTypes(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthTypes
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupTypes
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthTypes
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func sozTypes(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *Whitelist) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *DeferredInfo) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipTypes(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")

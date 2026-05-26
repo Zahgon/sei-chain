@@ -1,10 +1,5 @@
 package ioutils
 
-import (
-	"bytes"
-	"compress/gzip"
-)
-
 // Note: []byte can never be const as they are inherently mutable
 var (
 	// magic bytes to identify gzip.
@@ -16,28 +11,16 @@ var (
 )
 
 // IsGzip returns checks if the file contents are gzip compressed
-func IsGzip(input []byte) bool {
-	return bytes.Equal(input[:3], gzipIdent)
-}
+func IsGzip(input []byte) bool { _ = "STUB: not implemented"; return false }
 
 // IsWasm checks if the file contents are of wasm binary
-func IsWasm(input []byte) bool {
-	return bytes.Equal(input[:4], wasmIdent)
-}
+func IsWasm(input []byte) bool { _ = "STUB: not implemented"; return false }
 
 // GzipIt compresses the input ([]byte)
 func GzipIt(input []byte) ([]byte, error) {
+	_ = "STUB: not implemented"
 	// Create gzip writer.
-	var b bytes.Buffer
-	w := gzip.NewWriter(&b)
-	_, err := w.Write(input)
-	if err != nil {
-		return nil, err
-	}
-	err = w.Close() // You must close this first to flush the bytes to the buffer.
-	if err != nil {
-		return nil, err
-	}
-
-	return b.Bytes(), nil
+	return nil, nil
 }
+
+// You must close this first to flush the bytes to the buffer.

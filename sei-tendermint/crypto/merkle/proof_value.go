@@ -1,10 +1,6 @@
 package merkle
 
 import (
-	"bytes"
-	"crypto/sha256"
-	"fmt"
-
 	tmcrypto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/crypto"
 )
 
@@ -30,79 +26,24 @@ type ValueOp struct {
 
 var _ ProofOperator = ValueOp{}
 
-func NewValueOp(key []byte, proof *Proof) ValueOp {
-	return ValueOp{
-		key:   key,
-		Proof: proof,
-	}
-}
+func NewValueOp(key []byte, proof *Proof) ValueOp { _ = "STUB: not implemented"; return *new(ValueOp) }
 
 func ValueOpDecoder(pop tmcrypto.ProofOp) (ProofOperator, error) {
-	if pop.Type != ProofOpValue {
-		return nil, fmt.Errorf("unexpected ProofOp.Type; got %v, want %v", pop.Type, ProofOpValue)
-	}
-	var pbop tmcrypto.ValueOp // a bit strange as we'll discard this, but it works.
-	err := pbop.Unmarshal(pop.Data)
-	if err != nil {
-		return nil, fmt.Errorf("decoding ProofOp.Data into ValueOp: %w", err)
-	}
-
-	sp, err := ProofFromProto(pbop.Proof)
-	if err != nil {
-		return nil, err
-	}
-	return NewValueOp(pop.Key, sp), nil
+	_ = "STUB: not implemented"
+	return *new(ProofOperator), nil
 }
+
+// a bit strange as we'll discard this, but it works.
 
 func (op ValueOp) ProofOp() tmcrypto.ProofOp {
-	pbval := tmcrypto.ValueOp{
-		Key:   op.key,
-		Proof: op.Proof.ToProto(),
-	}
-	bz, err := pbval.Marshal()
-	if err != nil {
-		panic(err)
-	}
-	return tmcrypto.ProofOp{
-		Type: ProofOpValue,
-		Key:  op.key,
-		Data: bz,
-	}
+	_ = "STUB: not implemented"
+	return *new(tmcrypto.ProofOp)
 }
 
-func (op ValueOp) String() string {
-	return fmt.Sprintf("ValueOp{%v}", op.GetKey())
-}
+func (op ValueOp) String() string { _ = "STUB: not implemented"; return "" }
 
-func (op ValueOp) Run(args [][]byte) ([][]byte, error) {
-	if len(args) != 1 {
-		return nil, fmt.Errorf("expected 1 arg, got %v", len(args))
-	}
-	value := args[0]
+func (op ValueOp) Run(args [][]byte) ([][]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-	vhash := sha256.Sum256(value)
+// Wrap <op.Key, vhash> to hash the KVPair.
 
-	bz := new(bytes.Buffer)
-	// Wrap <op.Key, vhash> to hash the KVPair.
-	if err := encodeByteSlice(bz, op.key); err != nil {
-		return nil, err
-	}
-	if err := encodeByteSlice(bz, vhash[:]); err != nil {
-		return nil, err
-	}
-	kvhash := leafHash(bz.Bytes())
-
-	if !bytes.Equal(kvhash, op.Proof.LeafHash) {
-		return nil, fmt.Errorf("leaf hash mismatch: want %X got %X", op.Proof.LeafHash, kvhash)
-	}
-
-	rootHash, err := op.Proof.ComputeRootHash()
-	if err != nil {
-		return nil, err
-	}
-	return [][]byte{rootHash}, nil
-}
-
-func (op ValueOp) GetKey() []byte {
-	return op.key
-}
+func (op ValueOp) GetKey() []byte { _ = "STUB: not implemented"; return nil }

@@ -6,17 +6,13 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_sei_protocol_sei_chain_sei_cosmos_types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -37,36 +33,29 @@ type MsgSetWithdrawAddress struct {
 	WithdrawAddress  string `protobuf:"bytes,2,opt,name=withdraw_address,json=withdrawAddress,proto3" json:"withdraw_address,omitempty" yaml:"withdraw_address"`
 }
 
-func (m *MsgSetWithdrawAddress) Reset()         { *m = MsgSetWithdrawAddress{} }
-func (m *MsgSetWithdrawAddress) String() string { return proto.CompactTextString(m) }
-func (*MsgSetWithdrawAddress) ProtoMessage()    {}
+func (m *MsgSetWithdrawAddress) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgSetWithdrawAddress) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgSetWithdrawAddress) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgSetWithdrawAddress) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ed4f433d965e58ca, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgSetWithdrawAddress) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgSetWithdrawAddress) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgSetWithdrawAddress.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgSetWithdrawAddress) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSetWithdrawAddress.Merge(m, src)
-}
-func (m *MsgSetWithdrawAddress) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgSetWithdrawAddress) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSetWithdrawAddress.DiscardUnknown(m)
-}
+
+func (m *MsgSetWithdrawAddress) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgSetWithdrawAddress) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgSetWithdrawAddress) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgSetWithdrawAddress proto.InternalMessageInfo
 
@@ -74,36 +63,32 @@ var xxx_messageInfo_MsgSetWithdrawAddress proto.InternalMessageInfo
 type MsgSetWithdrawAddressResponse struct {
 }
 
-func (m *MsgSetWithdrawAddressResponse) Reset()         { *m = MsgSetWithdrawAddressResponse{} }
-func (m *MsgSetWithdrawAddressResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgSetWithdrawAddressResponse) ProtoMessage()    {}
+func (m *MsgSetWithdrawAddressResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgSetWithdrawAddressResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgSetWithdrawAddressResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgSetWithdrawAddressResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ed4f433d965e58ca, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgSetWithdrawAddressResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgSetWithdrawAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgSetWithdrawAddressResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgSetWithdrawAddressResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgSetWithdrawAddressResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgSetWithdrawAddressResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgSetWithdrawAddressResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgSetWithdrawAddressResponse.DiscardUnknown(m)
-}
+
+func (m *MsgSetWithdrawAddressResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgSetWithdrawAddressResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgSetWithdrawAddressResponse proto.InternalMessageInfo
 
@@ -114,36 +99,32 @@ type MsgWithdrawDelegatorReward struct {
 	ValidatorAddress string `protobuf:"bytes,2,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty" yaml:"validator_address"`
 }
 
-func (m *MsgWithdrawDelegatorReward) Reset()         { *m = MsgWithdrawDelegatorReward{} }
-func (m *MsgWithdrawDelegatorReward) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawDelegatorReward) ProtoMessage()    {}
+func (m *MsgWithdrawDelegatorReward) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgWithdrawDelegatorReward) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgWithdrawDelegatorReward) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgWithdrawDelegatorReward) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ed4f433d965e58ca, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgWithdrawDelegatorReward) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgWithdrawDelegatorReward) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawDelegatorReward.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgWithdrawDelegatorReward) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawDelegatorReward.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgWithdrawDelegatorReward) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgWithdrawDelegatorReward) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawDelegatorReward.DiscardUnknown(m)
-}
+
+func (m *MsgWithdrawDelegatorReward) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgWithdrawDelegatorReward) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgWithdrawDelegatorReward proto.InternalMessageInfo
 
@@ -151,35 +132,34 @@ var xxx_messageInfo_MsgWithdrawDelegatorReward proto.InternalMessageInfo
 type MsgWithdrawDelegatorRewardResponse struct {
 }
 
-func (m *MsgWithdrawDelegatorRewardResponse) Reset()         { *m = MsgWithdrawDelegatorRewardResponse{} }
-func (m *MsgWithdrawDelegatorRewardResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawDelegatorRewardResponse) ProtoMessage()    {}
+func (m *MsgWithdrawDelegatorRewardResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgWithdrawDelegatorRewardResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgWithdrawDelegatorRewardResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgWithdrawDelegatorRewardResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ed4f433d965e58ca, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgWithdrawDelegatorRewardResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgWithdrawDelegatorRewardResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawDelegatorRewardResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgWithdrawDelegatorRewardResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawDelegatorRewardResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgWithdrawDelegatorRewardResponse) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *MsgWithdrawDelegatorRewardResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *MsgWithdrawDelegatorRewardResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawDelegatorRewardResponse.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_MsgWithdrawDelegatorRewardResponse proto.InternalMessageInfo
@@ -190,36 +170,32 @@ type MsgWithdrawValidatorCommission struct {
 	ValidatorAddress string `protobuf:"bytes,1,opt,name=validator_address,json=validatorAddress,proto3" json:"validator_address,omitempty" yaml:"validator_address"`
 }
 
-func (m *MsgWithdrawValidatorCommission) Reset()         { *m = MsgWithdrawValidatorCommission{} }
-func (m *MsgWithdrawValidatorCommission) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawValidatorCommission) ProtoMessage()    {}
+func (m *MsgWithdrawValidatorCommission) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgWithdrawValidatorCommission) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgWithdrawValidatorCommission) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgWithdrawValidatorCommission) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ed4f433d965e58ca, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgWithdrawValidatorCommission) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgWithdrawValidatorCommission) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawValidatorCommission.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgWithdrawValidatorCommission) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawValidatorCommission.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgWithdrawValidatorCommission) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgWithdrawValidatorCommission) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawValidatorCommission.DiscardUnknown(m)
-}
+
+func (m *MsgWithdrawValidatorCommission) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgWithdrawValidatorCommission) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgWithdrawValidatorCommission proto.InternalMessageInfo
 
@@ -227,37 +203,41 @@ var xxx_messageInfo_MsgWithdrawValidatorCommission proto.InternalMessageInfo
 type MsgWithdrawValidatorCommissionResponse struct {
 }
 
-func (m *MsgWithdrawValidatorCommissionResponse) Reset() {
-	*m = MsgWithdrawValidatorCommissionResponse{}
+func (m *MsgWithdrawValidatorCommissionResponse) Reset() { _ = "STUB: not implemented"; return }
+
+func (m *MsgWithdrawValidatorCommissionResponse) String() string {
+	_ = "STUB: not implemented"
+	return ""
 }
-func (m *MsgWithdrawValidatorCommissionResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgWithdrawValidatorCommissionResponse) ProtoMessage()    {}
+func (*MsgWithdrawValidatorCommissionResponse) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*MsgWithdrawValidatorCommissionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ed4f433d965e58ca, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgWithdrawValidatorCommissionResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgWithdrawValidatorCommissionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgWithdrawValidatorCommissionResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgWithdrawValidatorCommissionResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgWithdrawValidatorCommissionResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
+
 func (m *MsgWithdrawValidatorCommissionResponse) XXX_Size() int {
-	return m.Size()
+	_ = "STUB: not implemented"
+	return 0
 }
+
 func (m *MsgWithdrawValidatorCommissionResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgWithdrawValidatorCommissionResponse.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_MsgWithdrawValidatorCommissionResponse proto.InternalMessageInfo
@@ -269,36 +249,26 @@ type MsgFundCommunityPool struct {
 	Depositor string                                                   `protobuf:"bytes,2,opt,name=depositor,proto3" json:"depositor,omitempty"`
 }
 
-func (m *MsgFundCommunityPool) Reset()         { *m = MsgFundCommunityPool{} }
-func (m *MsgFundCommunityPool) String() string { return proto.CompactTextString(m) }
-func (*MsgFundCommunityPool) ProtoMessage()    {}
+func (m *MsgFundCommunityPool) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgFundCommunityPool) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgFundCommunityPool) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgFundCommunityPool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ed4f433d965e58ca, []int{6}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgFundCommunityPool) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *MsgFundCommunityPool) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgFundCommunityPool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgFundCommunityPool.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgFundCommunityPool) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgFundCommunityPool.Merge(m, src)
-}
-func (m *MsgFundCommunityPool) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgFundCommunityPool) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgFundCommunityPool.DiscardUnknown(m)
-}
+
+func (m *MsgFundCommunityPool) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgFundCommunityPool) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgFundCommunityPool) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgFundCommunityPool proto.InternalMessageInfo
 
@@ -306,36 +276,32 @@ var xxx_messageInfo_MsgFundCommunityPool proto.InternalMessageInfo
 type MsgFundCommunityPoolResponse struct {
 }
 
-func (m *MsgFundCommunityPoolResponse) Reset()         { *m = MsgFundCommunityPoolResponse{} }
-func (m *MsgFundCommunityPoolResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgFundCommunityPoolResponse) ProtoMessage()    {}
+func (m *MsgFundCommunityPoolResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgFundCommunityPoolResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgFundCommunityPoolResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgFundCommunityPoolResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ed4f433d965e58ca, []int{7}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgFundCommunityPoolResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgFundCommunityPoolResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgFundCommunityPoolResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgFundCommunityPoolResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgFundCommunityPoolResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgFundCommunityPoolResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgFundCommunityPoolResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgFundCommunityPoolResponse.DiscardUnknown(m)
-}
+
+func (m *MsgFundCommunityPoolResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgFundCommunityPoolResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgFundCommunityPoolResponse proto.InternalMessageInfo
 
@@ -395,88 +361,23 @@ var fileDescriptor_ed4f433d965e58ca = []byte{
 }
 
 func (this *MsgSetWithdrawAddressResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MsgSetWithdrawAddressResponse)
-	if !ok {
-		that2, ok := that.(MsgSetWithdrawAddressResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *MsgWithdrawDelegatorRewardResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MsgWithdrawDelegatorRewardResponse)
-	if !ok {
-		that2, ok := that.(MsgWithdrawDelegatorRewardResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *MsgWithdrawValidatorCommissionResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*MsgWithdrawValidatorCommissionResponse)
-	if !ok {
-		that2, ok := that.(MsgWithdrawValidatorCommissionResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
-func (this *MsgFundCommunityPoolResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
 
-	that1, ok := that.(*MsgFundCommunityPoolResponse)
-	if !ok {
-		that2, ok := that.(MsgFundCommunityPoolResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	return true
+func (this *MsgFundCommunityPoolResponse) Equal(that interface{}) bool {
+	_ = "STUB: not implemented"
+	return false
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -509,44 +410,26 @@ type msgClient struct {
 	cc grpc1.ClientConn
 }
 
-func NewMsgClient(cc grpc1.ClientConn) MsgClient {
-	return &msgClient{cc}
-}
+func NewMsgClient(cc grpc1.ClientConn) MsgClient { _ = "STUB: not implemented"; return *new(MsgClient) }
 
 func (c *msgClient) SetWithdrawAddress(ctx context.Context, in *MsgSetWithdrawAddress, opts ...grpc.CallOption) (*MsgSetWithdrawAddressResponse, error) {
-	out := new(MsgSetWithdrawAddressResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.distribution.v1beta1.Msg/SetWithdrawAddress", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) WithdrawDelegatorReward(ctx context.Context, in *MsgWithdrawDelegatorReward, opts ...grpc.CallOption) (*MsgWithdrawDelegatorRewardResponse, error) {
-	out := new(MsgWithdrawDelegatorRewardResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.distribution.v1beta1.Msg/WithdrawDelegatorReward", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) WithdrawValidatorCommission(ctx context.Context, in *MsgWithdrawValidatorCommission, opts ...grpc.CallOption) (*MsgWithdrawValidatorCommissionResponse, error) {
-	out := new(MsgWithdrawValidatorCommissionResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.distribution.v1beta1.Msg/WithdrawValidatorCommission", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) FundCommunityPool(ctx context.Context, in *MsgFundCommunityPool, opts ...grpc.CallOption) (*MsgFundCommunityPoolResponse, error) {
-	out := new(MsgFundCommunityPoolResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.distribution.v1beta1.Msg/FundCommunityPool", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MsgServer is the server API for Msg service.
@@ -570,92 +453,45 @@ type UnimplementedMsgServer struct {
 }
 
 func (*UnimplementedMsgServer) SetWithdrawAddress(ctx context.Context, req *MsgSetWithdrawAddress) (*MsgSetWithdrawAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SetWithdrawAddress not implemented")
-}
-func (*UnimplementedMsgServer) WithdrawDelegatorReward(ctx context.Context, req *MsgWithdrawDelegatorReward) (*MsgWithdrawDelegatorRewardResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WithdrawDelegatorReward not implemented")
-}
-func (*UnimplementedMsgServer) WithdrawValidatorCommission(ctx context.Context, req *MsgWithdrawValidatorCommission) (*MsgWithdrawValidatorCommissionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WithdrawValidatorCommission not implemented")
-}
-func (*UnimplementedMsgServer) FundCommunityPool(ctx context.Context, req *MsgFundCommunityPool) (*MsgFundCommunityPoolResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FundCommunityPool not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
-	s.RegisterService(&_Msg_serviceDesc, srv)
+func (*UnimplementedMsgServer) WithdrawDelegatorReward(ctx context.Context, req *MsgWithdrawDelegatorReward) (*MsgWithdrawDelegatorRewardResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func (*UnimplementedMsgServer) WithdrawValidatorCommission(ctx context.Context, req *MsgWithdrawValidatorCommission) (*MsgWithdrawValidatorCommissionResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedMsgServer) FundCommunityPool(ctx context.Context, req *MsgFundCommunityPool) (*MsgFundCommunityPoolResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func RegisterMsgServer(s grpc1.Server, srv MsgServer) { _ = "STUB: not implemented"; return }
 
 func _Msg_SetWithdrawAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgSetWithdrawAddress)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).SetWithdrawAddress(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.distribution.v1beta1.Msg/SetWithdrawAddress",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).SetWithdrawAddress(ctx, req.(*MsgSetWithdrawAddress))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_WithdrawDelegatorReward_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgWithdrawDelegatorReward)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).WithdrawDelegatorReward(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.distribution.v1beta1.Msg/WithdrawDelegatorReward",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).WithdrawDelegatorReward(ctx, req.(*MsgWithdrawDelegatorReward))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_WithdrawValidatorCommission_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgWithdrawValidatorCommission)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).WithdrawValidatorCommission(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.distribution.v1beta1.Msg/WithdrawValidatorCommission",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).WithdrawValidatorCommission(ctx, req.(*MsgWithdrawValidatorCommission))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_FundCommunityPool_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgFundCommunityPool)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).FundCommunityPool(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.distribution.v1beta1.Msg/FundCommunityPool",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).FundCommunityPool(ctx, req.(*MsgFundCommunityPool))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Msg_serviceDesc = grpc.ServiceDesc{
@@ -684,1068 +520,185 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *MsgSetWithdrawAddress) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgSetWithdrawAddress) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgSetWithdrawAddress) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.WithdrawAddress) > 0 {
-		i -= len(m.WithdrawAddress)
-		copy(dAtA[i:], m.WithdrawAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.WithdrawAddress)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.DelegatorAddress) > 0 {
-		i -= len(m.DelegatorAddress)
-		copy(dAtA[i:], m.DelegatorAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.DelegatorAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgSetWithdrawAddressResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgSetWithdrawAddressResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgSetWithdrawAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgWithdrawDelegatorReward) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgWithdrawDelegatorReward) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgWithdrawDelegatorReward) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ValidatorAddress) > 0 {
-		i -= len(m.ValidatorAddress)
-		copy(dAtA[i:], m.ValidatorAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.DelegatorAddress) > 0 {
-		i -= len(m.DelegatorAddress)
-		copy(dAtA[i:], m.DelegatorAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.DelegatorAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgWithdrawDelegatorRewardResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgWithdrawDelegatorRewardResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgWithdrawDelegatorRewardResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgWithdrawValidatorCommission) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgWithdrawValidatorCommission) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgWithdrawValidatorCommission) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ValidatorAddress) > 0 {
-		i -= len(m.ValidatorAddress)
-		copy(dAtA[i:], m.ValidatorAddress)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ValidatorAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgWithdrawValidatorCommissionResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgWithdrawValidatorCommissionResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgWithdrawValidatorCommissionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgFundCommunityPool) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgFundCommunityPool) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgFundCommunityPool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Depositor) > 0 {
-		i -= len(m.Depositor)
-		copy(dAtA[i:], m.Depositor)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Depositor)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Amount) > 0 {
-		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTx(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgFundCommunityPoolResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgFundCommunityPoolResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgFundCommunityPoolResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
-	offset -= sovTx(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *MsgSetWithdrawAddress) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.DelegatorAddress)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.WithdrawAddress)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func encodeVarintTx(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgSetWithdrawAddressResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgSetWithdrawAddress) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgWithdrawDelegatorReward) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.DelegatorAddress)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ValidatorAddress)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgSetWithdrawAddressResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgWithdrawDelegatorRewardResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgWithdrawDelegatorReward) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgWithdrawValidatorCommission) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ValidatorAddress)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgWithdrawDelegatorRewardResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgWithdrawValidatorCommission) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
 func (m *MsgWithdrawValidatorCommissionResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *MsgFundCommunityPool) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Amount) > 0 {
-		for _, e := range m.Amount {
-			l = e.Size()
-			n += 1 + l + sovTx(uint64(l))
-		}
-	}
-	l = len(m.Depositor)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgFundCommunityPool) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgFundCommunityPoolResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgFundCommunityPoolResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovTx(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozTx(x uint64) (n int) {
-	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *MsgSetWithdrawAddress) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSetWithdrawAddress: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSetWithdrawAddress: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WithdrawAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.WithdrawAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovTx(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func sozTx(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgSetWithdrawAddress) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgSetWithdrawAddressResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgSetWithdrawAddressResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgSetWithdrawAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *MsgWithdrawDelegatorReward) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawDelegatorReward: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawDelegatorReward: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DelegatorAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DelegatorAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *MsgWithdrawDelegatorRewardResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawDelegatorRewardResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawDelegatorRewardResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *MsgWithdrawValidatorCommission) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawValidatorCommission: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawValidatorCommission: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *MsgWithdrawValidatorCommissionResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgWithdrawValidatorCommissionResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgWithdrawValidatorCommissionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgFundCommunityPool) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgFundCommunityPool: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgFundCommunityPool: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Amount = append(m.Amount, types.Coin{})
-			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Depositor", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Depositor = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgFundCommunityPool) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgFundCommunityPoolResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgFundCommunityPoolResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgFundCommunityPoolResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipTx(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthTx
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupTx
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthTx
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipTx(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthTx        = fmt.Errorf("proto: negative length found during unmarshaling")

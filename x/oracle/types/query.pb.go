@@ -6,16 +6,13 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -35,36 +32,29 @@ type QueryExchangeRateRequest struct {
 	Denom string `protobuf:"bytes,1,opt,name=denom,proto3" json:"denom,omitempty"`
 }
 
-func (m *QueryExchangeRateRequest) Reset()         { *m = QueryExchangeRateRequest{} }
-func (m *QueryExchangeRateRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryExchangeRateRequest) ProtoMessage()    {}
+func (m *QueryExchangeRateRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryExchangeRateRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryExchangeRateRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryExchangeRateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryExchangeRateRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryExchangeRateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryExchangeRateRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryExchangeRateRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryExchangeRateRequest.Merge(m, src)
-}
-func (m *QueryExchangeRateRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryExchangeRateRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryExchangeRateRequest.DiscardUnknown(m)
-}
+
+func (m *QueryExchangeRateRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryExchangeRateRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryExchangeRateRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryExchangeRateRequest proto.InternalMessageInfo
 
@@ -75,80 +65,64 @@ type QueryExchangeRateResponse struct {
 	OracleExchangeRate OracleExchangeRate `protobuf:"bytes,1,opt,name=oracle_exchange_rate,json=oracleExchangeRate,proto3" json:"oracle_exchange_rate"`
 }
 
-func (m *QueryExchangeRateResponse) Reset()         { *m = QueryExchangeRateResponse{} }
-func (m *QueryExchangeRateResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryExchangeRateResponse) ProtoMessage()    {}
+func (m *QueryExchangeRateResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryExchangeRateResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryExchangeRateResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryExchangeRateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryExchangeRateResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryExchangeRateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryExchangeRateResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryExchangeRateResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryExchangeRateResponse.Merge(m, src)
-}
-func (m *QueryExchangeRateResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryExchangeRateResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryExchangeRateResponse.DiscardUnknown(m)
-}
+
+func (m *QueryExchangeRateResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryExchangeRateResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryExchangeRateResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryExchangeRateResponse proto.InternalMessageInfo
 
 func (m *QueryExchangeRateResponse) GetOracleExchangeRate() OracleExchangeRate {
-	if m != nil {
-		return m.OracleExchangeRate
-	}
-	return OracleExchangeRate{}
+	_ = "STUB: not implemented"
+	return *new(OracleExchangeRate)
 }
 
 // QueryExchangeRatesRequest is the request type for the Query/ExchangeRates RPC method.
 type QueryExchangeRatesRequest struct {
 }
 
-func (m *QueryExchangeRatesRequest) Reset()         { *m = QueryExchangeRatesRequest{} }
-func (m *QueryExchangeRatesRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryExchangeRatesRequest) ProtoMessage()    {}
+func (m *QueryExchangeRatesRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryExchangeRatesRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryExchangeRatesRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryExchangeRatesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryExchangeRatesRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryExchangeRatesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryExchangeRatesRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryExchangeRatesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryExchangeRatesRequest.Merge(m, src)
-}
-func (m *QueryExchangeRatesRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryExchangeRatesRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryExchangeRatesRequest.DiscardUnknown(m)
-}
+
+func (m *QueryExchangeRatesRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryExchangeRatesRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryExchangeRatesRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryExchangeRatesRequest proto.InternalMessageInfo
 
@@ -157,51 +131,40 @@ type DenomOracleExchangeRatePair struct {
 	OracleExchangeRate OracleExchangeRate `protobuf:"bytes,2,opt,name=oracle_exchange_rate,json=oracleExchangeRate,proto3" json:"oracle_exchange_rate"`
 }
 
-func (m *DenomOracleExchangeRatePair) Reset()         { *m = DenomOracleExchangeRatePair{} }
-func (m *DenomOracleExchangeRatePair) String() string { return proto.CompactTextString(m) }
-func (*DenomOracleExchangeRatePair) ProtoMessage()    {}
+func (m *DenomOracleExchangeRatePair) Reset()         { _ = "STUB: not implemented"; return }
+func (m *DenomOracleExchangeRatePair) String() string { _ = "STUB: not implemented"; return "" }
+func (*DenomOracleExchangeRatePair) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*DenomOracleExchangeRatePair) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *DenomOracleExchangeRatePair) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *DenomOracleExchangeRatePair) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DenomOracleExchangeRatePair.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *DenomOracleExchangeRatePair) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DenomOracleExchangeRatePair.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *DenomOracleExchangeRatePair) XXX_Size() int {
-	return m.Size()
-}
-func (m *DenomOracleExchangeRatePair) XXX_DiscardUnknown() {
-	xxx_messageInfo_DenomOracleExchangeRatePair.DiscardUnknown(m)
-}
+
+func (m *DenomOracleExchangeRatePair) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *DenomOracleExchangeRatePair) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_DenomOracleExchangeRatePair proto.InternalMessageInfo
 
-func (m *DenomOracleExchangeRatePair) GetDenom() string {
-	if m != nil {
-		return m.Denom
-	}
-	return ""
-}
+func (m *DenomOracleExchangeRatePair) GetDenom() string { _ = "STUB: not implemented"; return "" }
 
 func (m *DenomOracleExchangeRatePair) GetOracleExchangeRate() OracleExchangeRate {
-	if m != nil {
-		return m.OracleExchangeRate
-	}
-	return OracleExchangeRate{}
+	_ = "STUB: not implemented"
+	return *new(OracleExchangeRate)
 }
 
 // QueryExchangeRatesResponse is response type for the
@@ -211,80 +174,64 @@ type QueryExchangeRatesResponse struct {
 	DenomOracleExchangeRatePairs DenomOracleExchangeRatePairs `protobuf:"bytes,1,rep,name=denom_oracle_exchange_rate_pairs,json=denomOracleExchangeRatePairs,proto3,castrepeated=DenomOracleExchangeRatePairs" json:"denom_oracle_exchange_rate_pairs"`
 }
 
-func (m *QueryExchangeRatesResponse) Reset()         { *m = QueryExchangeRatesResponse{} }
-func (m *QueryExchangeRatesResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryExchangeRatesResponse) ProtoMessage()    {}
+func (m *QueryExchangeRatesResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryExchangeRatesResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryExchangeRatesResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryExchangeRatesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryExchangeRatesResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryExchangeRatesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryExchangeRatesResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryExchangeRatesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryExchangeRatesResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryExchangeRatesResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryExchangeRatesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryExchangeRatesResponse.DiscardUnknown(m)
-}
+
+func (m *QueryExchangeRatesResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryExchangeRatesResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryExchangeRatesResponse proto.InternalMessageInfo
 
 func (m *QueryExchangeRatesResponse) GetDenomOracleExchangeRatePairs() DenomOracleExchangeRatePairs {
-	if m != nil {
-		return m.DenomOracleExchangeRatePairs
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(DenomOracleExchangeRatePairs)
 }
 
 // QueryActivesRequest is the request type for the Query/Actives RPC method.
 type QueryActivesRequest struct {
 }
 
-func (m *QueryActivesRequest) Reset()         { *m = QueryActivesRequest{} }
-func (m *QueryActivesRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryActivesRequest) ProtoMessage()    {}
+func (m *QueryActivesRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryActivesRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryActivesRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryActivesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryActivesRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *QueryActivesRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryActivesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryActivesRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryActivesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryActivesRequest.Merge(m, src)
-}
-func (m *QueryActivesRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryActivesRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryActivesRequest.DiscardUnknown(m)
-}
+
+func (m *QueryActivesRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryActivesRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryActivesRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryActivesRequest proto.InternalMessageInfo
 
@@ -295,80 +242,58 @@ type QueryActivesResponse struct {
 	Actives []string `protobuf:"bytes,1,rep,name=actives,proto3" json:"actives,omitempty"`
 }
 
-func (m *QueryActivesResponse) Reset()         { *m = QueryActivesResponse{} }
-func (m *QueryActivesResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryActivesResponse) ProtoMessage()    {}
+func (m *QueryActivesResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryActivesResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryActivesResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryActivesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{6}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryActivesResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *QueryActivesResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryActivesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryActivesResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryActivesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryActivesResponse.Merge(m, src)
-}
-func (m *QueryActivesResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryActivesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryActivesResponse.DiscardUnknown(m)
-}
+
+func (m *QueryActivesResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryActivesResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryActivesResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryActivesResponse proto.InternalMessageInfo
 
-func (m *QueryActivesResponse) GetActives() []string {
-	if m != nil {
-		return m.Actives
-	}
-	return nil
-}
+func (m *QueryActivesResponse) GetActives() []string { _ = "STUB: not implemented"; return nil }
 
 // QueryVoteTargetsRequest is the request type for the Query/VoteTargets RPC method.
 type QueryVoteTargetsRequest struct {
 }
 
-func (m *QueryVoteTargetsRequest) Reset()         { *m = QueryVoteTargetsRequest{} }
-func (m *QueryVoteTargetsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryVoteTargetsRequest) ProtoMessage()    {}
+func (m *QueryVoteTargetsRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryVoteTargetsRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryVoteTargetsRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryVoteTargetsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{7}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryVoteTargetsRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryVoteTargetsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryVoteTargetsRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryVoteTargetsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryVoteTargetsRequest.Merge(m, src)
-}
-func (m *QueryVoteTargetsRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryVoteTargetsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryVoteTargetsRequest.DiscardUnknown(m)
-}
+
+func (m *QueryVoteTargetsRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryVoteTargetsRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryVoteTargetsRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryVoteTargetsRequest proto.InternalMessageInfo
 
@@ -380,80 +305,64 @@ type QueryVoteTargetsResponse struct {
 	VoteTargets []string `protobuf:"bytes,1,rep,name=vote_targets,json=voteTargets,proto3" json:"vote_targets,omitempty"`
 }
 
-func (m *QueryVoteTargetsResponse) Reset()         { *m = QueryVoteTargetsResponse{} }
-func (m *QueryVoteTargetsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryVoteTargetsResponse) ProtoMessage()    {}
+func (m *QueryVoteTargetsResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryVoteTargetsResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryVoteTargetsResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryVoteTargetsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{8}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryVoteTargetsResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryVoteTargetsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryVoteTargetsResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryVoteTargetsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryVoteTargetsResponse.Merge(m, src)
-}
-func (m *QueryVoteTargetsResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryVoteTargetsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryVoteTargetsResponse.DiscardUnknown(m)
-}
+
+func (m *QueryVoteTargetsResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryVoteTargetsResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryVoteTargetsResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryVoteTargetsResponse proto.InternalMessageInfo
 
-func (m *QueryVoteTargetsResponse) GetVoteTargets() []string {
-	if m != nil {
-		return m.VoteTargets
-	}
-	return nil
-}
+func (m *QueryVoteTargetsResponse) GetVoteTargets() []string { _ = "STUB: not implemented"; return nil }
 
 // request type for price snapshot history RPC method
 type QueryPriceSnapshotHistoryRequest struct {
 }
 
-func (m *QueryPriceSnapshotHistoryRequest) Reset()         { *m = QueryPriceSnapshotHistoryRequest{} }
-func (m *QueryPriceSnapshotHistoryRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryPriceSnapshotHistoryRequest) ProtoMessage()    {}
+func (m *QueryPriceSnapshotHistoryRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryPriceSnapshotHistoryRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryPriceSnapshotHistoryRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryPriceSnapshotHistoryRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{9}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryPriceSnapshotHistoryRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryPriceSnapshotHistoryRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryPriceSnapshotHistoryRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryPriceSnapshotHistoryRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryPriceSnapshotHistoryRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryPriceSnapshotHistoryRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryPriceSnapshotHistoryRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryPriceSnapshotHistoryRequest.DiscardUnknown(m)
-}
+
+func (m *QueryPriceSnapshotHistoryRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryPriceSnapshotHistoryRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryPriceSnapshotHistoryRequest proto.InternalMessageInfo
 
@@ -461,44 +370,38 @@ type QueryPriceSnapshotHistoryResponse struct {
 	PriceSnapshots PriceSnapshots `protobuf:"bytes,1,rep,name=price_snapshots,json=priceSnapshots,proto3,castrepeated=PriceSnapshots" json:"price_snapshots"`
 }
 
-func (m *QueryPriceSnapshotHistoryResponse) Reset()         { *m = QueryPriceSnapshotHistoryResponse{} }
-func (m *QueryPriceSnapshotHistoryResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryPriceSnapshotHistoryResponse) ProtoMessage()    {}
+func (m *QueryPriceSnapshotHistoryResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryPriceSnapshotHistoryResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryPriceSnapshotHistoryResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryPriceSnapshotHistoryResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{10}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryPriceSnapshotHistoryResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryPriceSnapshotHistoryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryPriceSnapshotHistoryResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryPriceSnapshotHistoryResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryPriceSnapshotHistoryResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryPriceSnapshotHistoryResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryPriceSnapshotHistoryResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryPriceSnapshotHistoryResponse.DiscardUnknown(m)
-}
+
+func (m *QueryPriceSnapshotHistoryResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryPriceSnapshotHistoryResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryPriceSnapshotHistoryResponse proto.InternalMessageInfo
 
 func (m *QueryPriceSnapshotHistoryResponse) GetPriceSnapshots() PriceSnapshots {
-	if m != nil {
-		return m.PriceSnapshots
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(PriceSnapshots)
 }
 
 // request type for twap RPC method
@@ -506,88 +409,55 @@ type QueryTwapsRequest struct {
 	LookbackSeconds uint64 `protobuf:"varint,1,opt,name=lookback_seconds,json=lookbackSeconds,proto3" json:"lookback_seconds,omitempty"`
 }
 
-func (m *QueryTwapsRequest) Reset()         { *m = QueryTwapsRequest{} }
-func (m *QueryTwapsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryTwapsRequest) ProtoMessage()    {}
-func (*QueryTwapsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{11}
-}
-func (m *QueryTwapsRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *QueryTwapsRequest) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *QueryTwapsRequest) String() string            { _ = "STUB: not implemented"; return "" }
+func (*QueryTwapsRequest) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*QueryTwapsRequest) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *QueryTwapsRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryTwapsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryTwapsRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryTwapsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryTwapsRequest.Merge(m, src)
-}
-func (m *QueryTwapsRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryTwapsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryTwapsRequest.DiscardUnknown(m)
-}
+
+func (m *QueryTwapsRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryTwapsRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryTwapsRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryTwapsRequest proto.InternalMessageInfo
 
-func (m *QueryTwapsRequest) GetLookbackSeconds() uint64 {
-	if m != nil {
-		return m.LookbackSeconds
-	}
-	return 0
-}
+func (m *QueryTwapsRequest) GetLookbackSeconds() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type QueryTwapsResponse struct {
 	OracleTwaps OracleTwaps `protobuf:"bytes,1,rep,name=oracle_twaps,json=oracleTwaps,proto3,castrepeated=OracleTwaps" json:"oracle_twaps"`
 }
 
-func (m *QueryTwapsResponse) Reset()         { *m = QueryTwapsResponse{} }
-func (m *QueryTwapsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryTwapsResponse) ProtoMessage()    {}
-func (*QueryTwapsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{12}
-}
-func (m *QueryTwapsResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *QueryTwapsResponse) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *QueryTwapsResponse) String() string            { _ = "STUB: not implemented"; return "" }
+func (*QueryTwapsResponse) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*QueryTwapsResponse) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *QueryTwapsResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryTwapsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryTwapsResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryTwapsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryTwapsResponse.Merge(m, src)
-}
-func (m *QueryTwapsResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryTwapsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryTwapsResponse.DiscardUnknown(m)
-}
+
+func (m *QueryTwapsResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryTwapsResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryTwapsResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryTwapsResponse proto.InternalMessageInfo
 
 func (m *QueryTwapsResponse) GetOracleTwaps() OracleTwaps {
-	if m != nil {
-		return m.OracleTwaps
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(OracleTwaps)
 }
 
 // QueryFeederDelegationRequest is the request type for the Query/FeederDelegation RPC method.
@@ -596,36 +466,32 @@ type QueryFeederDelegationRequest struct {
 	ValidatorAddr string `protobuf:"bytes,1,opt,name=validator_addr,json=validatorAddr,proto3" json:"validator_addr,omitempty"`
 }
 
-func (m *QueryFeederDelegationRequest) Reset()         { *m = QueryFeederDelegationRequest{} }
-func (m *QueryFeederDelegationRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryFeederDelegationRequest) ProtoMessage()    {}
+func (m *QueryFeederDelegationRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryFeederDelegationRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryFeederDelegationRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryFeederDelegationRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{13}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryFeederDelegationRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryFeederDelegationRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryFeederDelegationRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryFeederDelegationRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryFeederDelegationRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryFeederDelegationRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryFeederDelegationRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryFeederDelegationRequest.DiscardUnknown(m)
-}
+
+func (m *QueryFeederDelegationRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryFeederDelegationRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryFeederDelegationRequest proto.InternalMessageInfo
 
@@ -636,43 +502,37 @@ type QueryFeederDelegationResponse struct {
 	FeederAddr string `protobuf:"bytes,1,opt,name=feeder_addr,json=feederAddr,proto3" json:"feeder_addr,omitempty"`
 }
 
-func (m *QueryFeederDelegationResponse) Reset()         { *m = QueryFeederDelegationResponse{} }
-func (m *QueryFeederDelegationResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryFeederDelegationResponse) ProtoMessage()    {}
+func (m *QueryFeederDelegationResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryFeederDelegationResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryFeederDelegationResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryFeederDelegationResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{14}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryFeederDelegationResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryFeederDelegationResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryFeederDelegationResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryFeederDelegationResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryFeederDelegationResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryFeederDelegationResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryFeederDelegationResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryFeederDelegationResponse.DiscardUnknown(m)
-}
+
+func (m *QueryFeederDelegationResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryFeederDelegationResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryFeederDelegationResponse proto.InternalMessageInfo
 
 func (m *QueryFeederDelegationResponse) GetFeederAddr() string {
-	if m != nil {
-		return m.FeederAddr
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
@@ -682,36 +542,32 @@ type QueryVotePenaltyCounterRequest struct {
 	ValidatorAddr string `protobuf:"bytes,1,opt,name=validator_addr,json=validatorAddr,proto3" json:"validator_addr,omitempty"`
 }
 
-func (m *QueryVotePenaltyCounterRequest) Reset()         { *m = QueryVotePenaltyCounterRequest{} }
-func (m *QueryVotePenaltyCounterRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryVotePenaltyCounterRequest) ProtoMessage()    {}
+func (m *QueryVotePenaltyCounterRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryVotePenaltyCounterRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryVotePenaltyCounterRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryVotePenaltyCounterRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{15}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryVotePenaltyCounterRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryVotePenaltyCounterRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryVotePenaltyCounterRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryVotePenaltyCounterRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryVotePenaltyCounterRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryVotePenaltyCounterRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryVotePenaltyCounterRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryVotePenaltyCounterRequest.DiscardUnknown(m)
-}
+
+func (m *QueryVotePenaltyCounterRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryVotePenaltyCounterRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryVotePenaltyCounterRequest proto.InternalMessageInfo
 
@@ -721,43 +577,37 @@ type QueryVotePenaltyCounterResponse struct {
 	VotePenaltyCounter *VotePenaltyCounter `protobuf:"bytes,1,opt,name=vote_penalty_counter,json=votePenaltyCounter,proto3" json:"vote_penalty_counter,omitempty"`
 }
 
-func (m *QueryVotePenaltyCounterResponse) Reset()         { *m = QueryVotePenaltyCounterResponse{} }
-func (m *QueryVotePenaltyCounterResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryVotePenaltyCounterResponse) ProtoMessage()    {}
+func (m *QueryVotePenaltyCounterResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryVotePenaltyCounterResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryVotePenaltyCounterResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryVotePenaltyCounterResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{16}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryVotePenaltyCounterResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryVotePenaltyCounterResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryVotePenaltyCounterResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryVotePenaltyCounterResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryVotePenaltyCounterResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryVotePenaltyCounterResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryVotePenaltyCounterResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryVotePenaltyCounterResponse.DiscardUnknown(m)
-}
+
+func (m *QueryVotePenaltyCounterResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryVotePenaltyCounterResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryVotePenaltyCounterResponse proto.InternalMessageInfo
 
 func (m *QueryVotePenaltyCounterResponse) GetVotePenaltyCounter() *VotePenaltyCounter {
-	if m != nil {
-		return m.VotePenaltyCounter
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -766,36 +616,29 @@ func (m *QueryVotePenaltyCounterResponse) GetVotePenaltyCounter() *VotePenaltyCo
 type QuerySlashWindowRequest struct {
 }
 
-func (m *QuerySlashWindowRequest) Reset()         { *m = QuerySlashWindowRequest{} }
-func (m *QuerySlashWindowRequest) String() string { return proto.CompactTextString(m) }
-func (*QuerySlashWindowRequest) ProtoMessage()    {}
+func (m *QuerySlashWindowRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QuerySlashWindowRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QuerySlashWindowRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QuerySlashWindowRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{17}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QuerySlashWindowRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QuerySlashWindowRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QuerySlashWindowRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QuerySlashWindowRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QuerySlashWindowRequest.Merge(m, src)
-}
-func (m *QuerySlashWindowRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QuerySlashWindowRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QuerySlashWindowRequest.DiscardUnknown(m)
-}
+
+func (m *QuerySlashWindowRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QuerySlashWindowRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QuerySlashWindowRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QuerySlashWindowRequest proto.InternalMessageInfo
 
@@ -807,80 +650,55 @@ type QuerySlashWindowResponse struct {
 	WindowProgress uint64 `protobuf:"varint,1,opt,name=window_progress,json=windowProgress,proto3" json:"window_progress,omitempty"`
 }
 
-func (m *QuerySlashWindowResponse) Reset()         { *m = QuerySlashWindowResponse{} }
-func (m *QuerySlashWindowResponse) String() string { return proto.CompactTextString(m) }
-func (*QuerySlashWindowResponse) ProtoMessage()    {}
+func (m *QuerySlashWindowResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QuerySlashWindowResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QuerySlashWindowResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QuerySlashWindowResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{18}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QuerySlashWindowResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QuerySlashWindowResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QuerySlashWindowResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QuerySlashWindowResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QuerySlashWindowResponse.Merge(m, src)
-}
-func (m *QuerySlashWindowResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QuerySlashWindowResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QuerySlashWindowResponse.DiscardUnknown(m)
-}
+
+func (m *QuerySlashWindowResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QuerySlashWindowResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QuerySlashWindowResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QuerySlashWindowResponse proto.InternalMessageInfo
 
-func (m *QuerySlashWindowResponse) GetWindowProgress() uint64 {
-	if m != nil {
-		return m.WindowProgress
-	}
-	return 0
-}
+func (m *QuerySlashWindowResponse) GetWindowProgress() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // QueryParamsRequest is the request type for the Query/Params RPC method.
 type QueryParamsRequest struct {
 }
 
-func (m *QueryParamsRequest) Reset()         { *m = QueryParamsRequest{} }
-func (m *QueryParamsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryParamsRequest) ProtoMessage()    {}
-func (*QueryParamsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{19}
-}
-func (m *QueryParamsRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *QueryParamsRequest) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *QueryParamsRequest) String() string            { _ = "STUB: not implemented"; return "" }
+func (*QueryParamsRequest) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*QueryParamsRequest) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *QueryParamsRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryParamsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryParamsRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryParamsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryParamsRequest.Merge(m, src)
-}
-func (m *QueryParamsRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryParamsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryParamsRequest.DiscardUnknown(m)
-}
+
+func (m *QueryParamsRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryParamsRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryParamsRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryParamsRequest proto.InternalMessageInfo
 
@@ -890,45 +708,30 @@ type QueryParamsResponse struct {
 	Params Params `protobuf:"bytes,1,opt,name=params,proto3" json:"params"`
 }
 
-func (m *QueryParamsResponse) Reset()         { *m = QueryParamsResponse{} }
-func (m *QueryParamsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryParamsResponse) ProtoMessage()    {}
+func (m *QueryParamsResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryParamsResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryParamsResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryParamsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_562b782cb9ac197e, []int{20}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryParamsResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *QueryParamsResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryParamsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryParamsResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryParamsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryParamsResponse.Merge(m, src)
-}
-func (m *QueryParamsResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryParamsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryParamsResponse.DiscardUnknown(m)
-}
+
+func (m *QueryParamsResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryParamsResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryParamsResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryParamsResponse proto.InternalMessageInfo
 
-func (m *QueryParamsResponse) GetParams() Params {
-	if m != nil {
-		return m.Params
-	}
-	return Params{}
-}
+func (m *QueryParamsResponse) GetParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
 func init() {
 	proto.RegisterType((*QueryExchangeRateRequest)(nil), "seiprotocol.seichain.oracle.QueryExchangeRateRequest")
@@ -1067,97 +870,58 @@ type queryClient struct {
 }
 
 func NewQueryClient(cc grpc1.ClientConn) QueryClient {
-	return &queryClient{cc}
+	_ = "STUB: not implemented"
+	return *new(QueryClient)
 }
 
 func (c *queryClient) ExchangeRate(ctx context.Context, in *QueryExchangeRateRequest, opts ...grpc.CallOption) (*QueryExchangeRateResponse, error) {
-	out := new(QueryExchangeRateResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/ExchangeRate", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) ExchangeRates(ctx context.Context, in *QueryExchangeRatesRequest, opts ...grpc.CallOption) (*QueryExchangeRatesResponse, error) {
-	out := new(QueryExchangeRatesResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/ExchangeRates", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) Actives(ctx context.Context, in *QueryActivesRequest, opts ...grpc.CallOption) (*QueryActivesResponse, error) {
-	out := new(QueryActivesResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/Actives", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) VoteTargets(ctx context.Context, in *QueryVoteTargetsRequest, opts ...grpc.CallOption) (*QueryVoteTargetsResponse, error) {
-	out := new(QueryVoteTargetsResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/VoteTargets", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) PriceSnapshotHistory(ctx context.Context, in *QueryPriceSnapshotHistoryRequest, opts ...grpc.CallOption) (*QueryPriceSnapshotHistoryResponse, error) {
-	out := new(QueryPriceSnapshotHistoryResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/PriceSnapshotHistory", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) Twaps(ctx context.Context, in *QueryTwapsRequest, opts ...grpc.CallOption) (*QueryTwapsResponse, error) {
-	out := new(QueryTwapsResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/Twaps", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) FeederDelegation(ctx context.Context, in *QueryFeederDelegationRequest, opts ...grpc.CallOption) (*QueryFeederDelegationResponse, error) {
-	out := new(QueryFeederDelegationResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/FeederDelegation", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) VotePenaltyCounter(ctx context.Context, in *QueryVotePenaltyCounterRequest, opts ...grpc.CallOption) (*QueryVotePenaltyCounterResponse, error) {
-	out := new(QueryVotePenaltyCounterResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/VotePenaltyCounter", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) SlashWindow(ctx context.Context, in *QuerySlashWindowRequest, opts ...grpc.CallOption) (*QuerySlashWindowResponse, error) {
-	out := new(QuerySlashWindowResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/SlashWindow", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) Params(ctx context.Context, in *QueryParamsRequest, opts ...grpc.CallOption) (*QueryParamsResponse, error) {
-	out := new(QueryParamsResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.oracle.Query/Params", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // QueryServer is the server API for Query service.
@@ -1188,218 +952,105 @@ type UnimplementedQueryServer struct {
 }
 
 func (*UnimplementedQueryServer) ExchangeRate(ctx context.Context, req *QueryExchangeRateRequest) (*QueryExchangeRateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeRate not implemented")
-}
-func (*UnimplementedQueryServer) ExchangeRates(ctx context.Context, req *QueryExchangeRatesRequest) (*QueryExchangeRatesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ExchangeRates not implemented")
-}
-func (*UnimplementedQueryServer) Actives(ctx context.Context, req *QueryActivesRequest) (*QueryActivesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Actives not implemented")
-}
-func (*UnimplementedQueryServer) VoteTargets(ctx context.Context, req *QueryVoteTargetsRequest) (*QueryVoteTargetsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VoteTargets not implemented")
-}
-func (*UnimplementedQueryServer) PriceSnapshotHistory(ctx context.Context, req *QueryPriceSnapshotHistoryRequest) (*QueryPriceSnapshotHistoryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PriceSnapshotHistory not implemented")
-}
-func (*UnimplementedQueryServer) Twaps(ctx context.Context, req *QueryTwapsRequest) (*QueryTwapsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Twaps not implemented")
-}
-func (*UnimplementedQueryServer) FeederDelegation(ctx context.Context, req *QueryFeederDelegationRequest) (*QueryFeederDelegationResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method FeederDelegation not implemented")
-}
-func (*UnimplementedQueryServer) VotePenaltyCounter(ctx context.Context, req *QueryVotePenaltyCounterRequest) (*QueryVotePenaltyCounterResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method VotePenaltyCounter not implemented")
-}
-func (*UnimplementedQueryServer) SlashWindow(ctx context.Context, req *QuerySlashWindowRequest) (*QuerySlashWindowResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SlashWindow not implemented")
-}
-func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Params not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
-	s.RegisterService(&_Query_serviceDesc, srv)
+func (*UnimplementedQueryServer) ExchangeRates(ctx context.Context, req *QueryExchangeRatesRequest) (*QueryExchangeRatesResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func (*UnimplementedQueryServer) Actives(ctx context.Context, req *QueryActivesRequest) (*QueryActivesResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) VoteTargets(ctx context.Context, req *QueryVoteTargetsRequest) (*QueryVoteTargetsResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) PriceSnapshotHistory(ctx context.Context, req *QueryPriceSnapshotHistoryRequest) (*QueryPriceSnapshotHistoryResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) Twaps(ctx context.Context, req *QueryTwapsRequest) (*QueryTwapsResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) FeederDelegation(ctx context.Context, req *QueryFeederDelegationRequest) (*QueryFeederDelegationResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) VotePenaltyCounter(ctx context.Context, req *QueryVotePenaltyCounterRequest) (*QueryVotePenaltyCounterResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) SlashWindow(ctx context.Context, req *QuerySlashWindowRequest) (*QuerySlashWindowResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) Params(ctx context.Context, req *QueryParamsRequest) (*QueryParamsResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func RegisterQueryServer(s grpc1.Server, srv QueryServer) { _ = "STUB: not implemented"; return }
 
 func _Query_ExchangeRate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryExchangeRateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).ExchangeRate(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/ExchangeRate",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ExchangeRate(ctx, req.(*QueryExchangeRateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_ExchangeRates_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryExchangeRatesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).ExchangeRates(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/ExchangeRates",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ExchangeRates(ctx, req.(*QueryExchangeRatesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_Actives_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryActivesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Actives(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/Actives",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Actives(ctx, req.(*QueryActivesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_VoteTargets_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryVoteTargetsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).VoteTargets(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/VoteTargets",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).VoteTargets(ctx, req.(*QueryVoteTargetsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_PriceSnapshotHistory_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryPriceSnapshotHistoryRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).PriceSnapshotHistory(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/PriceSnapshotHistory",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).PriceSnapshotHistory(ctx, req.(*QueryPriceSnapshotHistoryRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_Twaps_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryTwapsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Twaps(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/Twaps",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Twaps(ctx, req.(*QueryTwapsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_FeederDelegation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryFeederDelegationRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).FeederDelegation(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/FeederDelegation",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).FeederDelegation(ctx, req.(*QueryFeederDelegationRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_VotePenaltyCounter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryVotePenaltyCounterRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).VotePenaltyCounter(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/VotePenaltyCounter",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).VotePenaltyCounter(ctx, req.(*QueryVotePenaltyCounterRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_SlashWindow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuerySlashWindowRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).SlashWindow(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/SlashWindow",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).SlashWindow(ctx, req.(*QuerySlashWindowRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_Params_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryParamsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Params(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.oracle.Query/Params",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Params(ctx, req.(*QueryParamsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Query_serviceDesc = grpc.ServiceDesc{
@@ -1452,2534 +1103,456 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *QueryExchangeRateRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryExchangeRateRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryExchangeRateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryExchangeRateResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryExchangeRateResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryExchangeRateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.OracleExchangeRate.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryExchangeRatesRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryExchangeRatesRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryExchangeRatesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DenomOracleExchangeRatePair) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *DenomOracleExchangeRatePair) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DenomOracleExchangeRatePair) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.OracleExchangeRate.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryExchangeRatesResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryExchangeRatesResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryExchangeRatesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.DenomOracleExchangeRatePairs) > 0 {
-		for iNdEx := len(m.DenomOracleExchangeRatePairs) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.DenomOracleExchangeRatePairs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryActivesRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryActivesRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryActivesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryActivesResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryActivesResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryActivesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Actives) > 0 {
-		for iNdEx := len(m.Actives) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Actives[iNdEx])
-			copy(dAtA[i:], m.Actives[iNdEx])
-			i = encodeVarintQuery(dAtA, i, uint64(len(m.Actives[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryVoteTargetsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryVoteTargetsRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryVoteTargetsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryVoteTargetsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryVoteTargetsResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryVoteTargetsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.VoteTargets) > 0 {
-		for iNdEx := len(m.VoteTargets) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.VoteTargets[iNdEx])
-			copy(dAtA[i:], m.VoteTargets[iNdEx])
-			i = encodeVarintQuery(dAtA, i, uint64(len(m.VoteTargets[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPriceSnapshotHistoryRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryPriceSnapshotHistoryRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPriceSnapshotHistoryRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPriceSnapshotHistoryResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryPriceSnapshotHistoryResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPriceSnapshotHistoryResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.PriceSnapshots) > 0 {
-		for iNdEx := len(m.PriceSnapshots) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.PriceSnapshots[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryTwapsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryTwapsRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryTwapsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.LookbackSeconds != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.LookbackSeconds))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryTwapsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryTwapsResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryTwapsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.OracleTwaps) > 0 {
-		for iNdEx := len(m.OracleTwaps) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.OracleTwaps[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryFeederDelegationRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryFeederDelegationRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryFeederDelegationRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ValidatorAddr) > 0 {
-		i -= len(m.ValidatorAddr)
-		copy(dAtA[i:], m.ValidatorAddr)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ValidatorAddr)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryFeederDelegationResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryFeederDelegationResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryFeederDelegationResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.FeederAddr) > 0 {
-		i -= len(m.FeederAddr)
-		copy(dAtA[i:], m.FeederAddr)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.FeederAddr)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryVotePenaltyCounterRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryVotePenaltyCounterRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryVotePenaltyCounterRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ValidatorAddr) > 0 {
-		i -= len(m.ValidatorAddr)
-		copy(dAtA[i:], m.ValidatorAddr)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ValidatorAddr)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryVotePenaltyCounterResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryVotePenaltyCounterResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryVotePenaltyCounterResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.VotePenaltyCounter != nil {
-		{
-			size, err := m.VotePenaltyCounter.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QuerySlashWindowRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QuerySlashWindowRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QuerySlashWindowRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QuerySlashWindowResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QuerySlashWindowResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QuerySlashWindowResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.WindowProgress != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.WindowProgress))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryParamsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryParamsRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryParamsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryParamsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryParamsResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryParamsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.Params.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
-	offset -= sovQuery(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *QueryExchangeRateRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func encodeVarintQuery(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryExchangeRateResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.OracleExchangeRate.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
+func (m *QueryExchangeRateRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryExchangeRatesRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *QueryExchangeRateResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *DenomOracleExchangeRatePair) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = m.OracleExchangeRate.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
+func (m *QueryExchangeRatesRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryExchangeRatesResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.DenomOracleExchangeRatePairs) > 0 {
-		for _, e := range m.DenomOracleExchangeRatePairs {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	return n
-}
+func (m *DenomOracleExchangeRatePair) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryActivesRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *QueryExchangeRatesResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryActivesResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Actives) > 0 {
-		for _, s := range m.Actives {
-			l = len(s)
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	return n
-}
+func (m *QueryActivesRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryVoteTargetsRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *QueryActivesResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryVoteTargetsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.VoteTargets) > 0 {
-		for _, s := range m.VoteTargets {
-			l = len(s)
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	return n
-}
+func (m *QueryVoteTargetsRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPriceSnapshotHistoryRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *QueryVoteTargetsResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPriceSnapshotHistoryResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.PriceSnapshots) > 0 {
-		for _, e := range m.PriceSnapshots {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	return n
-}
+func (m *QueryPriceSnapshotHistoryRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryTwapsRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LookbackSeconds != 0 {
-		n += 1 + sovQuery(uint64(m.LookbackSeconds))
-	}
-	return n
-}
+func (m *QueryPriceSnapshotHistoryResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryTwapsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.OracleTwaps) > 0 {
-		for _, e := range m.OracleTwaps {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	return n
-}
+func (m *QueryTwapsRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryFeederDelegationRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ValidatorAddr)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryTwapsResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryFeederDelegationResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.FeederAddr)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryFeederDelegationRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryVotePenaltyCounterRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ValidatorAddr)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryFeederDelegationResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryVotePenaltyCounterResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.VotePenaltyCounter != nil {
-		l = m.VotePenaltyCounter.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryVotePenaltyCounterRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QuerySlashWindowRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *QueryVotePenaltyCounterResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QuerySlashWindowResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.WindowProgress != 0 {
-		n += 1 + sovQuery(uint64(m.WindowProgress))
-	}
-	return n
-}
+func (m *QuerySlashWindowRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryParamsRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *QuerySlashWindowResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryParamsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Params.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
+func (m *QueryParamsRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovQuery(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozQuery(x uint64) (n int) {
-	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
+func (m *QueryParamsResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sovQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
 func (m *QueryExchangeRateRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryExchangeRateRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryExchangeRateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryExchangeRateResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryExchangeRateResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryExchangeRateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OracleExchangeRate", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.OracleExchangeRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryExchangeRatesRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryExchangeRatesRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryExchangeRatesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *DenomOracleExchangeRatePair) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DenomOracleExchangeRatePair: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DenomOracleExchangeRatePair: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OracleExchangeRate", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.OracleExchangeRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryExchangeRatesResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryExchangeRatesResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryExchangeRatesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DenomOracleExchangeRatePairs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DenomOracleExchangeRatePairs = append(m.DenomOracleExchangeRatePairs, DenomOracleExchangeRatePair{})
-			if err := m.DenomOracleExchangeRatePairs[len(m.DenomOracleExchangeRatePairs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *QueryActivesRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryActivesRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryActivesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryActivesResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryActivesResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryActivesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Actives", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Actives = append(m.Actives, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *QueryActivesRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *QueryActivesResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryVoteTargetsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryVoteTargetsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryVoteTargetsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryVoteTargetsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryVoteTargetsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryVoteTargetsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VoteTargets", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.VoteTargets = append(m.VoteTargets, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryPriceSnapshotHistoryRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryPriceSnapshotHistoryRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryPriceSnapshotHistoryRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryPriceSnapshotHistoryResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryPriceSnapshotHistoryResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryPriceSnapshotHistoryResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PriceSnapshots", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PriceSnapshots = append(m.PriceSnapshots, PriceSnapshot{})
-			if err := m.PriceSnapshots[len(m.PriceSnapshots)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *QueryTwapsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryTwapsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryTwapsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LookbackSeconds", wireType)
-			}
-			m.LookbackSeconds = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LookbackSeconds |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryTwapsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryTwapsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryTwapsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OracleTwaps", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OracleTwaps = append(m.OracleTwaps, OracleTwap{})
-			if err := m.OracleTwaps[len(m.OracleTwaps)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *QueryTwapsRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *QueryTwapsResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryFeederDelegationRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryFeederDelegationRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryFeederDelegationRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddr", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValidatorAddr = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryFeederDelegationResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryFeederDelegationResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryFeederDelegationResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FeederAddr", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FeederAddr = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryVotePenaltyCounterRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryVotePenaltyCounterRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryVotePenaltyCounterRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddr", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValidatorAddr = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryVotePenaltyCounterResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryVotePenaltyCounterResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryVotePenaltyCounterResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VotePenaltyCounter", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.VotePenaltyCounter == nil {
-				m.VotePenaltyCounter = &VotePenaltyCounter{}
-			}
-			if err := m.VotePenaltyCounter.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QuerySlashWindowRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QuerySlashWindowRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QuerySlashWindowRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QuerySlashWindowResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QuerySlashWindowResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QuerySlashWindowResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WindowProgress", wireType)
-			}
-			m.WindowProgress = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.WindowProgress |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *QueryParamsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryParamsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryParamsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryParamsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryParamsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Params", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Params.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *QueryParamsRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipQuery(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthQuery
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupQuery
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthQuery
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *QueryParamsResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipQuery(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthQuery        = fmt.Errorf("proto: negative length found during unmarshaling")

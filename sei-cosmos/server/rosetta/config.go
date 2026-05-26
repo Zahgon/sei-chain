@@ -1,10 +1,6 @@
 package rosetta
 
 import (
-	"fmt"
-	"strings"
-	"time"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
 	"github.com/spf13/pflag"
 
@@ -73,132 +69,31 @@ type Config struct {
 
 // NetworkIdentifier returns the network identifier given the configuration
 func (c *Config) NetworkIdentifier() *types.NetworkIdentifier {
-	return &types.NetworkIdentifier{
-		Blockchain: c.Blockchain,
-		Network:    c.Network,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // validate validates a configuration and sets
 // its defaults in case they were not provided
-func (c *Config) validate() error {
-	if (c.Codec == nil) != (c.InterfaceRegistry == nil) {
-		return fmt.Errorf("codec and interface registry must be both different from nil or nil")
-	}
+func (c *Config) validate() error { _ = "STUB: not implemented"; return nil }
 
-	if c.Addr == "" {
-		c.Addr = DefaultAddr
-	}
-	if c.Blockchain == "" {
-		c.Blockchain = DefaultBlockchain
-	}
-	if c.Retries == 0 {
-		c.Retries = DefaultRetries
-	}
-	// these are must
-	if c.Network == "" {
-		return fmt.Errorf("network not provided")
-	}
-	if c.Offline {
-		return fmt.Errorf("offline mode is not supported for stargate implementation due to how sigv2 works")
-	}
+// these are must
 
-	// these are optional but it must be online
-	if c.GRPCEndpoint == "" {
-		return fmt.Errorf("grpc endpoint not provided")
-	}
-	if c.TendermintRPC == "" {
-		return fmt.Errorf("tendermint rpc not provided")
-	}
-	if !strings.HasPrefix(c.TendermintRPC, "tcp://") {
-		c.TendermintRPC = fmt.Sprintf("tcp://%s", c.TendermintRPC)
-	}
-
-	return nil
-}
+// these are optional but it must be online
 
 // WithCodec extends the configuration with a predefined Codec
 func (c *Config) WithCodec(ir codectypes.InterfaceRegistry, cdc *codec.ProtoCodec) {
-	c.Codec = cdc
-	c.InterfaceRegistry = ir
+	_ = "STUB: not implemented"
+	return
 }
 
 // FromFlags gets the configuration from flags
-func FromFlags(flags *pflag.FlagSet) (*Config, error) {
-	blockchain, err := flags.GetString(FlagBlockchain)
-	if err != nil {
-		return nil, err
-	}
-	network, err := flags.GetString(FlagNetwork)
-	if err != nil {
-		return nil, err
-	}
-	tendermintRPC, err := flags.GetString(FlagTendermintEndpoint)
-	if err != nil {
-		return nil, err
-	}
-	gRPCEndpoint, err := flags.GetString(FlagGRPCEndpoint)
-	if err != nil {
-		return nil, err
-	}
-	addr, err := flags.GetString(FlagAddr)
-	if err != nil {
-		return nil, err
-	}
-	retries, err := flags.GetInt(FlagRetries)
-	if err != nil {
-		return nil, err
-	}
-	offline, err := flags.GetBool(FlagOffline)
-	if err != nil {
-		return nil, err
-	}
-	conf := &Config{
-		Blockchain:    blockchain,
-		Network:       network,
-		TendermintRPC: tendermintRPC,
-		GRPCEndpoint:  gRPCEndpoint,
-		Addr:          addr,
-		Retries:       retries,
-		Offline:       offline,
-	}
-	err = conf.validate()
-	if err != nil {
-		return nil, err
-	}
-	return conf, nil
-}
+func FromFlags(flags *pflag.FlagSet) (*Config, error) { _ = "STUB: not implemented"; return nil, nil }
 
 func ServerFromConfig(conf *Config) (crg.Server, error) {
-	err := conf.validate()
-	if err != nil {
-		return crg.Server{}, err
-	}
-	client, err := NewClient(conf)
-	if err != nil {
-		return crg.Server{}, err
-	}
-	return crg.NewServer(
-		crg.Settings{
-			Network: &types.NetworkIdentifier{
-				Blockchain: conf.Blockchain,
-				Network:    conf.Network,
-			},
-			Client:    client,
-			Listen:    conf.Addr,
-			Offline:   conf.Offline,
-			Retries:   conf.Retries,
-			RetryWait: 15 * time.Second,
-		})
+	_ = "STUB: not implemented"
+	return *new(crg.Server), nil
 }
 
 // SetFlags sets the configuration flags to the given flagset
-func SetFlags(flags *pflag.FlagSet) {
-	flags.String(FlagBlockchain, DefaultBlockchain, "the blockchain type")
-	flags.String(FlagNetwork, DefaultNetwork, "the network name")
-	flags.String(FlagTendermintEndpoint, DefaultTendermintEndpoint, "the tendermint rpc endpoint, without tcp://")
-	flags.String(FlagGRPCEndpoint, DefaultGRPCEndpoint, "the app gRPC endpoint")
-	flags.String(FlagAddr, DefaultAddr, "the address rosetta will bind to")
-	flags.Int(FlagRetries, DefaultRetries, "the number of retries that will be done before quitting")
-	flags.Bool(FlagOffline, DefaultOffline, "run rosetta only with construction API")
-}
+func SetFlags(flags *pflag.FlagSet) { _ = "STUB: not implemented"; return }

@@ -1,9 +1,6 @@
 package types
 
 import (
-	"fmt"
-	"strings"
-
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
 
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
@@ -19,54 +16,26 @@ var (
 
 // ParamKeyTable type declaration for parameters
 func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
+	_ = "STUB: not implemented"
+	return *new(paramtypes.KeyTable)
 }
 
 // NewParams creates a new parameter configuration for the ibc client module
-func NewParams(allowedClients ...string) Params {
-	return Params{
-		AllowedClients: allowedClients,
-	}
-}
+func NewParams(allowedClients ...string) Params { _ = "STUB: not implemented"; return *new(Params) }
 
 // DefaultParams is the default parameter configuration for the ibc-client module
-func DefaultParams() Params {
-	return NewParams(DefaultAllowedClients...)
-}
+func DefaultParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
 // Validate all ibc-client module parameters
-func (p Params) Validate() error {
-	return validateClients(p.AllowedClients)
-}
+func (p Params) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // ParamSetPairs implements params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeyAllowedClients, p.AllowedClients, validateClients),
-	}
+	_ = "STUB: not implemented"
+	return *new(paramtypes.ParamSetPairs)
 }
 
 // IsAllowedClient checks if the given client type is registered on the allowlist.
-func (p Params) IsAllowedClient(clientType string) bool {
-	for _, allowedClient := range p.AllowedClients {
-		if allowedClient == clientType {
-			return true
-		}
-	}
-	return false
-}
+func (p Params) IsAllowedClient(clientType string) bool { _ = "STUB: not implemented"; return false }
 
-func validateClients(i interface{}) error {
-	clients, ok := i.([]string)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	for i, clientType := range clients {
-		if strings.TrimSpace(clientType) == "" {
-			return fmt.Errorf("client type %d cannot be blank", i)
-		}
-	}
-
-	return nil
-}
+func validateClients(i interface{}) error { _ = "STUB: not implemented"; return nil }

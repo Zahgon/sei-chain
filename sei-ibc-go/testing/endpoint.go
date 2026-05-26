@@ -1,19 +1,12 @@
 package ibctesting
 
 import (
-	"fmt"
-	"math"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/stretchr/testify/require"
 
 	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
 	connectiontypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/03-connection/types"
 	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
-	commitmenttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/23-commitment/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
-	ibctmtypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/light-clients/07-tendermint/types"
 )
 
 // Endpoint is a which represents a channel endpoint and its associated
@@ -38,206 +31,70 @@ func NewEndpoint(
 	chain *TestChain, clientConfig ClientConfig,
 	connectionConfig *ConnectionConfig, channelConfig *ChannelConfig,
 ) *Endpoint {
-	return &Endpoint{
-		Chain:            chain,
-		ClientConfig:     clientConfig,
-		ConnectionConfig: connectionConfig,
-		ChannelConfig:    channelConfig,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewDefaultEndpoint constructs a new endpoint using default values.
 // CONTRACT: the counterparty endpoitn must be set by the caller.
-func NewDefaultEndpoint(chain *TestChain) *Endpoint {
-	return &Endpoint{
-		Chain:            chain,
-		ClientConfig:     NewTendermintConfig(),
-		ConnectionConfig: NewConnectionConfig(),
-		ChannelConfig:    NewChannelConfig(),
-	}
-}
+func NewDefaultEndpoint(chain *TestChain) *Endpoint { _ = "STUB: not implemented"; return nil }
 
 // QueryProof queries proof associated with this endpoint using the lastest client state
 // height on the counterparty chain.
 func (endpoint *Endpoint) QueryProof(key []byte) ([]byte, clienttypes.Height) {
+	_ = "STUB: not implemented"
 	// obtain the counterparty client representing the chain associated with the endpoint
-	clientState := endpoint.Counterparty.Chain.GetClientState(endpoint.Counterparty.ClientID)
-
-	// query proof on the counterparty using the latest height of the IBC client
-	return endpoint.QueryProofAtHeight(key, clientState.GetLatestHeight().GetRevisionHeight())
+	return nil, *new(clienttypes.Height)
 }
+
+// query proof on the counterparty using the latest height of the IBC client
 
 // QueryProofAtHeight queries proof associated with this endpoint using the proof height
 // provided
 func (endpoint *Endpoint) QueryProofAtHeight(key []byte, height uint64) ([]byte, clienttypes.Height) {
+	_ = "STUB: not implemented"
 	// query proof on the counterparty using the latest height of the IBC client
-	if height > math.MaxInt64 {
-		panic(fmt.Sprintf("height %d exceeds max int64", height))
-	}
-	// #nosec G115 -- height is bounds checked above
-	return endpoint.Chain.QueryProofAtHeight(key, int64(height))
+	return nil, *new(clienttypes.Height)
 }
+
+// #nosec G115 -- height is bounds checked above
 
 // CreateClient creates an IBC client on the endpoint. It will update the
 // clientID for the endpoint if the message is successfully executed.
 // NOTE: a solo machine client will be created with an empty diversifier.
 func (endpoint *Endpoint) CreateClient() (err error) {
+	_ = "STUB: not implemented"
 	// ensure counterparty has committed state
-	endpoint.Chain.Coordinator.CommitBlock(endpoint.Counterparty.Chain)
-
-	var (
-		clientState    exported.ClientState
-		consensusState exported.ConsensusState
-	)
-
-	switch endpoint.ClientConfig.GetClientType() {
-	case exported.Tendermint:
-		tmConfig, ok := endpoint.ClientConfig.(*TendermintConfig)
-		require.True(endpoint.Chain.T, ok)
-
-		height := endpoint.Counterparty.Chain.LastHeader.GetHeight().(clienttypes.Height)
-		clientState = ibctmtypes.NewClientState(
-			endpoint.Counterparty.Chain.ChainID, tmConfig.TrustLevel, tmConfig.TrustingPeriod, tmConfig.UnbondingPeriod, tmConfig.MaxClockDrift,
-			height, commitmenttypes.GetSDKSpecs(), UpgradePath, tmConfig.AllowUpdateAfterExpiry, tmConfig.AllowUpdateAfterMisbehaviour,
-		)
-		consensusState = endpoint.Counterparty.Chain.LastHeader.ConsensusState()
-	case exported.Solomachine:
-		// TODO
-		//		solo := NewSolomachine(endpoint.Chain.T, endpoint.Chain.Codec, clientID, "", 1)
-		//		clientState = solo.ClientState()
-		//		consensusState = solo.ConsensusState()
-
-	default:
-		err = fmt.Errorf("client type %s is not supported", endpoint.ClientConfig.GetClientType())
-	}
-
-	if err != nil {
-		return err
-	}
-
-	msg, err := clienttypes.NewMsgCreateClient(
-		clientState, consensusState, endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	require.NoError(endpoint.Chain.T, err)
-
-	res, err := endpoint.Chain.SendMsgs(msg)
-	if err != nil {
-		return err
-	}
-
-	endpoint.ClientID, err = ParseClientIDFromEvents(res.GetEvents())
-	require.NoError(endpoint.Chain.T, err)
-
 	return nil
 }
+
+// TODO
+//		solo := NewSolomachine(endpoint.Chain.T, endpoint.Chain.Codec, clientID, "", 1)
+//		clientState = solo.ClientState()
+//		consensusState = solo.ConsensusState()
 
 // UpdateClient updates the IBC client associated with the endpoint.
 func (endpoint *Endpoint) UpdateClient() (err error) {
+	_ = "STUB: not implemented"
 	// ensure counterparty has committed state
-	endpoint.Chain.Coordinator.CommitBlock(endpoint.Counterparty.Chain)
-
-	var header exported.Header
-
-	switch endpoint.ClientConfig.GetClientType() {
-	case exported.Tendermint:
-		header, err = endpoint.Chain.ConstructUpdateTMClientHeader(endpoint.Counterparty.Chain, endpoint.ClientID)
-
-	default:
-		err = fmt.Errorf("client type %s is not supported", endpoint.ClientConfig.GetClientType())
-	}
-
-	if err != nil {
-		return err
-	}
-
-	msg, err := clienttypes.NewMsgUpdateClient(
-		endpoint.ClientID, header,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	require.NoError(endpoint.Chain.T, err)
-
-	return endpoint.Chain.sendMsgs(msg)
+	return nil
 }
 
 // ConnOpenInit will construct and execute a MsgConnectionOpenInit on the associated endpoint.
-func (endpoint *Endpoint) ConnOpenInit() error {
-	msg := connectiontypes.NewMsgConnectionOpenInit(
-		endpoint.ClientID,
-		endpoint.Counterparty.ClientID,
-		endpoint.Counterparty.Chain.GetPrefix(), DefaultOpenInitVersion, endpoint.ConnectionConfig.DelayPeriod,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	res, err := endpoint.Chain.SendMsgs(msg)
-	if err != nil {
-		return err
-	}
-
-	endpoint.ConnectionID, err = ParseConnectionIDFromEvents(res.GetEvents())
-	require.NoError(endpoint.Chain.T, err)
-
-	return nil
-}
+func (endpoint *Endpoint) ConnOpenInit() error { _ = "STUB: not implemented"; return nil }
 
 // ConnOpenTry will construct and execute a MsgConnectionOpenTry on the associated endpoint.
-func (endpoint *Endpoint) ConnOpenTry() error {
-	err := endpoint.UpdateClient()
-	require.NoError(endpoint.Chain.T, err)
+func (endpoint *Endpoint) ConnOpenTry() error { _ = "STUB: not implemented"; return nil }
 
-	counterpartyClient, proofClient, proofConsensus, consensusHeight, proofInit, proofHeight := endpoint.QueryConnectionHandshakeProof()
-
-	msg := connectiontypes.NewMsgConnectionOpenTry(
-		"", endpoint.ClientID, // does not support handshake continuation
-		endpoint.Counterparty.ConnectionID, endpoint.Counterparty.ClientID,
-		counterpartyClient, endpoint.Counterparty.Chain.GetPrefix(), []*connectiontypes.Version{ConnectionVersion}, endpoint.ConnectionConfig.DelayPeriod,
-		proofInit, proofClient, proofConsensus,
-		proofHeight, consensusHeight,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	res, err := endpoint.Chain.SendMsgs(msg)
-	if err != nil {
-		return err
-	}
-
-	if endpoint.ConnectionID == "" {
-		endpoint.ConnectionID, err = ParseConnectionIDFromEvents(res.GetEvents())
-		require.NoError(endpoint.Chain.T, err)
-	}
-
-	return nil
-}
+// does not support handshake continuation
 
 // ConnOpenAck will construct and execute a MsgConnectionOpenAck on the associated endpoint.
-func (endpoint *Endpoint) ConnOpenAck() error {
-	err := endpoint.UpdateClient()
-	require.NoError(endpoint.Chain.T, err)
+func (endpoint *Endpoint) ConnOpenAck() error { _ = "STUB: not implemented"; return nil }
 
-	counterpartyClient, proofClient, proofConsensus, consensusHeight, proofTry, proofHeight := endpoint.QueryConnectionHandshakeProof()
-
-	msg := connectiontypes.NewMsgConnectionOpenAck(
-		endpoint.ConnectionID, endpoint.Counterparty.ConnectionID, counterpartyClient, // testing doesn't use flexible selection
-		proofTry, proofClient, proofConsensus,
-		proofHeight, consensusHeight,
-		ConnectionVersion,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	return endpoint.Chain.sendMsgs(msg)
-}
+// testing doesn't use flexible selection
 
 // ConnOpenConfirm will construct and execute a MsgConnectionOpenConfirm on the associated endpoint.
-func (endpoint *Endpoint) ConnOpenConfirm() error {
-	err := endpoint.UpdateClient()
-	require.NoError(endpoint.Chain.T, err)
-
-	connectionKey := host.ConnectionKey(endpoint.Counterparty.ConnectionID)
-	proof, height := endpoint.Counterparty.Chain.QueryProof(connectionKey)
-
-	msg := connectiontypes.NewMsgConnectionOpenConfirm(
-		endpoint.ConnectionID,
-		proof, height,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	return endpoint.Chain.sendMsgs(msg)
-}
+func (endpoint *Endpoint) ConnOpenConfirm() error { _ = "STUB: not implemented"; return nil }
 
 // QueryConnectionHandshakeProof returns all the proofs necessary to execute OpenTry or Open Ack of
 // the connection handshakes. It returns the counterparty client state, proof of the counterparty
@@ -248,328 +105,160 @@ func (endpoint *Endpoint) QueryConnectionHandshakeProof() (
 	proofConsensus []byte, consensusHeight clienttypes.Height,
 	proofConnection []byte, proofHeight clienttypes.Height,
 ) {
+	_ = "STUB: not implemented"
 	// obtain the client state on the counterparty chain
-	clientState = endpoint.Counterparty.Chain.GetClientState(endpoint.Counterparty.ClientID)
-
-	// query proof for the client state on the counterparty
-	clientKey := host.FullClientStateKey(endpoint.Counterparty.ClientID)
-	proofClient, proofHeight = endpoint.Counterparty.QueryProof(clientKey)
-
-	consensusHeight = clientState.GetLatestHeight().(clienttypes.Height)
-
-	// query proof for the consensus state on the counterparty
-	consensusKey := host.FullConsensusStateKey(endpoint.Counterparty.ClientID, consensusHeight)
-	proofConsensus, _ = endpoint.Counterparty.QueryProofAtHeight(consensusKey, proofHeight.GetRevisionHeight())
-
-	// query proof for the connection on the counterparty
-	connectionKey := host.ConnectionKey(endpoint.Counterparty.ConnectionID)
-	proofConnection, _ = endpoint.Counterparty.QueryProofAtHeight(connectionKey, proofHeight.GetRevisionHeight())
-
-	return
+	return *new(exported.ClientState), nil, nil, *new(clienttypes.Height), nil, *new(clienttypes.Height)
 }
+
+// query proof for the client state on the counterparty
+
+// query proof for the consensus state on the counterparty
+
+// query proof for the connection on the counterparty
 
 // ChanOpenInit will construct and execute a MsgChannelOpenInit on the associated endpoint.
-func (endpoint *Endpoint) ChanOpenInit() error {
-	msg := channeltypes.NewMsgChannelOpenInit(
-		endpoint.ChannelConfig.PortID,
-		endpoint.ChannelConfig.Version, endpoint.ChannelConfig.Order, []string{endpoint.ConnectionID},
-		endpoint.Counterparty.ChannelConfig.PortID,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	res, err := endpoint.Chain.SendMsgs(msg)
-	if err != nil {
-		return err
-	}
-
-	endpoint.ChannelID, err = ParseChannelIDFromEvents(res.GetEvents())
-	require.NoError(endpoint.Chain.T, err)
-
-	return nil
-}
+func (endpoint *Endpoint) ChanOpenInit() error { _ = "STUB: not implemented"; return nil }
 
 // ChanOpenTry will construct and execute a MsgChannelOpenTry on the associated endpoint.
-func (endpoint *Endpoint) ChanOpenTry() error {
-	err := endpoint.UpdateClient()
-	require.NoError(endpoint.Chain.T, err)
+func (endpoint *Endpoint) ChanOpenTry() error { _ = "STUB: not implemented"; return nil }
 
-	channelKey := host.ChannelKey(endpoint.Counterparty.ChannelConfig.PortID, endpoint.Counterparty.ChannelID)
-	proof, height := endpoint.Counterparty.Chain.QueryProof(channelKey)
+// does not support handshake continuation
 
-	msg := channeltypes.NewMsgChannelOpenTry(
-		endpoint.ChannelConfig.PortID, "", // does not support handshake continuation
-		endpoint.ChannelConfig.Version, endpoint.ChannelConfig.Order, []string{endpoint.ConnectionID},
-		endpoint.Counterparty.ChannelConfig.PortID, endpoint.Counterparty.ChannelID, endpoint.Counterparty.ChannelConfig.Version,
-		proof, height,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	res, err := endpoint.Chain.SendMsgs(msg)
-	if err != nil {
-		return err
-	}
-
-	if endpoint.ChannelID == "" {
-		endpoint.ChannelID, err = ParseChannelIDFromEvents(res.GetEvents())
-		require.NoError(endpoint.Chain.T, err)
-	}
-
-	// update version to selected app version
-	// NOTE: this update must be performed after the endpoint channelID is set
-	endpoint.ChannelConfig.Version = endpoint.GetChannel().Version
-
-	return nil
-}
+// update version to selected app version
+// NOTE: this update must be performed after the endpoint channelID is set
 
 // ChanOpenAck will construct and execute a MsgChannelOpenAck on the associated endpoint.
-func (endpoint *Endpoint) ChanOpenAck() error {
-	err := endpoint.UpdateClient()
-	require.NoError(endpoint.Chain.T, err)
+func (endpoint *Endpoint) ChanOpenAck() error { _ = "STUB: not implemented"; return nil }
 
-	channelKey := host.ChannelKey(endpoint.Counterparty.ChannelConfig.PortID, endpoint.Counterparty.ChannelID)
-	proof, height := endpoint.Counterparty.Chain.QueryProof(channelKey)
-
-	msg := channeltypes.NewMsgChannelOpenAck(
-		endpoint.ChannelConfig.PortID, endpoint.ChannelID,
-		endpoint.Counterparty.ChannelID, endpoint.Counterparty.ChannelConfig.Version, // testing doesn't use flexible selection
-		proof, height,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	return endpoint.Chain.sendMsgs(msg)
-}
+// testing doesn't use flexible selection
 
 // ChanOpenConfirm will construct and execute a MsgChannelOpenConfirm on the associated endpoint.
-func (endpoint *Endpoint) ChanOpenConfirm() error {
-	err := endpoint.UpdateClient()
-	require.NoError(endpoint.Chain.T, err)
-
-	channelKey := host.ChannelKey(endpoint.Counterparty.ChannelConfig.PortID, endpoint.Counterparty.ChannelID)
-	proof, height := endpoint.Counterparty.Chain.QueryProof(channelKey)
-
-	msg := channeltypes.NewMsgChannelOpenConfirm(
-		endpoint.ChannelConfig.PortID, endpoint.ChannelID,
-		proof, height,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	return endpoint.Chain.sendMsgs(msg)
-}
+func (endpoint *Endpoint) ChanOpenConfirm() error { _ = "STUB: not implemented"; return nil }
 
 // ChanCloseInit will construct and execute a MsgChannelCloseInit on the associated endpoint.
 //
 // NOTE: does not work with ibc-transfer module
-func (endpoint *Endpoint) ChanCloseInit() error {
-	msg := channeltypes.NewMsgChannelCloseInit(
-		endpoint.ChannelConfig.PortID, endpoint.ChannelID,
-		endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-	return endpoint.Chain.sendMsgs(msg)
-}
+func (endpoint *Endpoint) ChanCloseInit() error { _ = "STUB: not implemented"; return nil }
 
 // SendPacket sends a packet through the channel keeper using the associated endpoint
 // The counterparty client is updated so proofs can be sent to the counterparty chain.
 func (endpoint *Endpoint) SendPacket(packet exported.PacketI) error {
-	channelCap := endpoint.Chain.GetChannelCapability(packet.GetSourcePort(), packet.GetSourceChannel())
-
-	// no need to send message, acting as a module
-	err := endpoint.Chain.App.GetIBCKeeper().ChannelKeeper.SendPacket(endpoint.Chain.GetContext(), channelCap, packet)
-	if err != nil {
-		return err
-	}
-
-	// commit changes since no message was sent
-	endpoint.Chain.Coordinator.CommitBlock(endpoint.Chain)
-
-	return endpoint.Counterparty.UpdateClient()
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// no need to send message, acting as a module
+
+// commit changes since no message was sent
 
 // RecvPacket receives a packet on the associated endpoint.
 // The counterparty client is updated.
 func (endpoint *Endpoint) RecvPacket(packet channeltypes.Packet) error {
-	_, err := endpoint.RecvPacketWithResult(packet)
-	if err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RecvPacketWithResult receives a packet on the associated endpoint and the result
 // of the transaction is returned. The counterparty client is updated.
 func (endpoint *Endpoint) RecvPacketWithResult(packet channeltypes.Packet) (*sdk.Result, error) {
+	_ = "STUB: not implemented"
 	// get proof of packet commitment on source
-	packetKey := host.PacketCommitmentKey(packet.GetSourcePort(), packet.GetSourceChannel(), packet.GetSequence())
-	proof, proofHeight := endpoint.Counterparty.Chain.QueryProof(packetKey)
-
-	recvMsg := channeltypes.NewMsgRecvPacket(packet, proof, proofHeight, endpoint.Chain.SenderAccount.GetAddress().String())
-
-	// receive on counterparty and update source client
-	res, err := endpoint.Chain.SendMsgs(recvMsg)
-	if err != nil {
-		return nil, err
-	}
-
-	if err := endpoint.Counterparty.UpdateClient(); err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	return nil, nil
 }
+
+// receive on counterparty and update source client
 
 // WriteAcknowledgement writes an acknowledgement on the channel associated with the endpoint.
 // The counterparty client is updated.
 func (endpoint *Endpoint) WriteAcknowledgement(ack exported.Acknowledgement, packet exported.PacketI) error {
-	channelCap := endpoint.Chain.GetChannelCapability(packet.GetDestPort(), packet.GetDestChannel())
-
-	// no need to send message, acting as a handler
-	err := endpoint.Chain.App.GetIBCKeeper().ChannelKeeper.WriteAcknowledgement(endpoint.Chain.GetContext(), channelCap, packet, ack)
-	if err != nil {
-		return err
-	}
-
-	// commit changes since no message was sent
-	endpoint.Chain.Coordinator.CommitBlock(endpoint.Chain)
-
-	return endpoint.Counterparty.UpdateClient()
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// no need to send message, acting as a handler
+
+// commit changes since no message was sent
 
 // AcknowledgePacket sends a MsgAcknowledgement to the channel associated with the endpoint.
 func (endpoint *Endpoint) AcknowledgePacket(packet channeltypes.Packet, ack []byte) error {
+	_ = "STUB: not implemented"
 	// get proof of acknowledgement on counterparty
-	packetKey := host.PacketAcknowledgementKey(packet.GetDestPort(), packet.GetDestChannel(), packet.GetSequence())
-	proof, proofHeight := endpoint.Counterparty.QueryProof(packetKey)
-
-	ackMsg := channeltypes.NewMsgAcknowledgement(packet, ack, proof, proofHeight, endpoint.Chain.SenderAccount.GetAddress().String())
-
-	return endpoint.Chain.sendMsgs(ackMsg)
+	return nil
 }
 
 // TimeoutPacket sends a MsgTimeout to the channel associated with the endpoint.
 func (endpoint *Endpoint) TimeoutPacket(packet channeltypes.Packet) error {
+	_ = "STUB: not implemented"
 	// get proof for timeout based on channel order
-	var packetKey []byte
-
-	switch endpoint.ChannelConfig.Order {
-	case channeltypes.ORDERED:
-		packetKey = host.NextSequenceRecvKey(packet.GetDestPort(), packet.GetDestChannel())
-	case channeltypes.UNORDERED:
-		packetKey = host.PacketReceiptKey(packet.GetDestPort(), packet.GetDestChannel(), packet.GetSequence())
-	default:
-		return fmt.Errorf("unsupported order type %s", endpoint.ChannelConfig.Order)
-	}
-
-	proof, proofHeight := endpoint.Counterparty.QueryProof(packetKey)
-	nextSeqRecv, found := endpoint.Counterparty.Chain.App.GetIBCKeeper().ChannelKeeper.GetNextSequenceRecv(endpoint.Counterparty.Chain.GetContext(), endpoint.ChannelConfig.PortID, endpoint.ChannelID)
-	require.True(endpoint.Chain.T, found)
-
-	timeoutMsg := channeltypes.NewMsgTimeout(
-		packet, nextSeqRecv,
-		proof, proofHeight, endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-
-	return endpoint.Chain.sendMsgs(timeoutMsg)
+	return nil
 }
 
 // TimeoutOnClose sends a MsgTimeoutOnClose to the channel associated with the endpoint.
 func (endpoint *Endpoint) TimeoutOnClose(packet channeltypes.Packet) error {
+	_ = "STUB: not implemented"
 	// get proof for timeout based on channel order
-	var packetKey []byte
-
-	switch endpoint.ChannelConfig.Order {
-	case channeltypes.ORDERED:
-		packetKey = host.NextSequenceRecvKey(packet.GetDestPort(), packet.GetDestChannel())
-	case channeltypes.UNORDERED:
-		packetKey = host.PacketReceiptKey(packet.GetDestPort(), packet.GetDestChannel(), packet.GetSequence())
-	default:
-		return fmt.Errorf("unsupported order type %s", endpoint.ChannelConfig.Order)
-	}
-
-	proof, proofHeight := endpoint.Counterparty.QueryProof(packetKey)
-
-	channelKey := host.ChannelKey(packet.GetDestPort(), packet.GetDestChannel())
-	proofClosed, _ := endpoint.Counterparty.QueryProof(channelKey)
-
-	nextSeqRecv, found := endpoint.Counterparty.Chain.App.GetIBCKeeper().ChannelKeeper.GetNextSequenceRecv(endpoint.Counterparty.Chain.GetContext(), endpoint.ChannelConfig.PortID, endpoint.ChannelID)
-	require.True(endpoint.Chain.T, found)
-
-	timeoutOnCloseMsg := channeltypes.NewMsgTimeoutOnClose(
-		packet, nextSeqRecv,
-		proof, proofClosed, proofHeight, endpoint.Chain.SenderAccount.GetAddress().String(),
-	)
-
-	return endpoint.Chain.sendMsgs(timeoutOnCloseMsg)
+	return nil
 }
 
 // SetChannelClosed sets a channel state to CLOSED.
-func (endpoint *Endpoint) SetChannelClosed() error {
-	channel := endpoint.GetChannel()
-
-	channel.State = channeltypes.CLOSED
-	endpoint.Chain.App.GetIBCKeeper().ChannelKeeper.SetChannel(endpoint.Chain.GetContext(), endpoint.ChannelConfig.PortID, endpoint.ChannelID, channel)
-
-	endpoint.Chain.Coordinator.CommitBlock(endpoint.Chain)
-
-	return endpoint.Counterparty.UpdateClient()
-}
+func (endpoint *Endpoint) SetChannelClosed() error { _ = "STUB: not implemented"; return nil }
 
 // GetClientState retrieves the Client State for this endpoint. The
 // client state is expected to exist otherwise testing will fail.
 func (endpoint *Endpoint) GetClientState() exported.ClientState {
-	return endpoint.Chain.GetClientState(endpoint.ClientID)
+	_ = "STUB: not implemented"
+	return *new(exported.ClientState)
 }
 
 // SetClientState sets the client state for this endpoint.
 func (endpoint *Endpoint) SetClientState(clientState exported.ClientState) {
-	endpoint.Chain.App.GetIBCKeeper().ClientKeeper.SetClientState(endpoint.Chain.GetContext(), endpoint.ClientID, clientState)
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetConsensusState retrieves the Consensus State for this endpoint at the provided height.
 // The consensus state is expected to exist otherwise testing will fail.
 func (endpoint *Endpoint) GetConsensusState(height exported.Height) exported.ConsensusState {
-	consensusState, found := endpoint.Chain.GetConsensusState(endpoint.ClientID, height)
-	require.True(endpoint.Chain.T, found)
-
-	return consensusState
+	_ = "STUB: not implemented"
+	return *new(exported.ConsensusState)
 }
 
 // SetConsensusState sets the consensus state for this endpoint.
 func (endpoint *Endpoint) SetConsensusState(consensusState exported.ConsensusState, height exported.Height) {
-	endpoint.Chain.App.GetIBCKeeper().ClientKeeper.SetClientConsensusState(endpoint.Chain.GetContext(), endpoint.ClientID, height, consensusState)
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetConnection retrieves an IBC Connection for the endpoint. The
 // connection is expected to exist otherwise testing will fail.
 func (endpoint *Endpoint) GetConnection() connectiontypes.ConnectionEnd {
-	connection, found := endpoint.Chain.App.GetIBCKeeper().ConnectionKeeper.GetConnection(endpoint.Chain.GetContext(), endpoint.ConnectionID)
-	require.True(endpoint.Chain.T, found)
-
-	return connection
+	_ = "STUB: not implemented"
+	return *new(connectiontypes.ConnectionEnd)
 }
 
 // SetConnection sets the connection for this endpoint.
 func (endpoint *Endpoint) SetConnection(connection connectiontypes.ConnectionEnd) {
-	endpoint.Chain.App.GetIBCKeeper().ConnectionKeeper.SetConnection(endpoint.Chain.GetContext(), endpoint.ConnectionID, connection)
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetChannel retrieves an IBC Channel for the endpoint. The channel
 // is expected to exist otherwise testing will fail.
 func (endpoint *Endpoint) GetChannel() channeltypes.Channel {
-	channel, found := endpoint.Chain.App.GetIBCKeeper().ChannelKeeper.GetChannel(endpoint.Chain.GetContext(), endpoint.ChannelConfig.PortID, endpoint.ChannelID)
-	require.True(endpoint.Chain.T, found)
-
-	return channel
+	_ = "STUB: not implemented"
+	return *new(channeltypes.Channel)
 }
 
 // SetChannel sets the channel for this endpoint.
 func (endpoint *Endpoint) SetChannel(channel channeltypes.Channel) {
-	endpoint.Chain.App.GetIBCKeeper().ChannelKeeper.SetChannel(endpoint.Chain.GetContext(), endpoint.ChannelConfig.PortID, endpoint.ChannelID, channel)
+	_ = "STUB: not implemented"
+	return
 }
 
 // QueryClientStateProof performs and abci query for a client stat associated
 // with this endpoint and returns the ClientState along with the proof.
 func (endpoint *Endpoint) QueryClientStateProof() (exported.ClientState, []byte) {
+	_ = "STUB: not implemented"
 	// retrieve client state to provide proof for
-	clientState := endpoint.GetClientState()
-
-	clientKey := host.FullClientStateKey(endpoint.ClientID)
-	proofClient, _ := endpoint.QueryProof(clientKey)
-
-	return clientState, proofClient
+	return *new(exported.ClientState), nil
 }

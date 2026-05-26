@@ -1,13 +1,8 @@
 package types
 
 import (
-	"crypto/sha256"
-	"encoding/binary"
 	"encoding/hex"
 	"encoding/json"
-	"fmt"
-	"math/big"
-	"slices"
 	"sync"
 	"time"
 
@@ -39,330 +34,138 @@ const (
 )
 
 // IsValid returns true if the step is valid, false if unknown/undefined.
-func (rs RoundStepType) IsValid() bool {
-	return uint8(rs) >= 0x01 && uint8(rs) <= 0x08
-}
+func (rs RoundStepType) IsValid() bool { _ = "STUB: not implemented"; return false }
 
 // String returns a string
-func (rs RoundStepType) String() string {
-	switch rs {
-	case RoundStepNewHeight:
-		return "RoundStepNewHeight"
-	case RoundStepNewRound:
-		return "RoundStepNewRound"
-	case RoundStepPropose:
-		return "RoundStepPropose"
-	case RoundStepPrevote:
-		return "RoundStepPrevote"
-	case RoundStepPrevoteWait:
-		return "RoundStepPrevoteWait"
-	case RoundStepPrecommit:
-		return "RoundStepPrecommit"
-	case RoundStepPrecommitWait:
-		return "RoundStepPrecommitWait"
-	case RoundStepCommit:
-		return "RoundStepCommit"
-	default:
-		return "RoundStepUnknown" // Cannot panic.
-	}
-}
+func (rs RoundStepType) String() string { _ = "STUB: not implemented"; return "" }
+
+// Cannot panic.
 
 type SafeRoundState struct {
 	internal RoundState
 	mtx      sync.RWMutex
 }
 
-func NewSafeRoundState() SafeRoundState {
-	return SafeRoundState{}
-}
+func NewSafeRoundState() SafeRoundState { _ = "STUB: not implemented"; return *new(SafeRoundState) }
 
-func (s *SafeRoundState) CopyInternal() *RoundState {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	copy := s.internal
-	return &copy
-}
+func (s *SafeRoundState) CopyInternal() *RoundState { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) GetInternalPointer() *RoundState {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return &s.internal
-}
+func (s *SafeRoundState) GetInternalPointer() *RoundState { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) Height() int64 {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.Height
-}
+func (s *SafeRoundState) Height() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (s *SafeRoundState) SetHeight(h int64) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.Height = h
-}
+func (s *SafeRoundState) SetHeight(h int64) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) Round() int32 {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.Round
-}
+func (s *SafeRoundState) Round() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (s *SafeRoundState) SetRound(r int32) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.Round = r
-}
+func (s *SafeRoundState) SetRound(r int32) { _ = "STUB: not implemented"; return }
 
 func (s *SafeRoundState) Step() RoundStepType {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.Step
+	_ = "STUB: not implemented"
+	return *new(RoundStepType)
 }
 
-func (s *SafeRoundState) SetStep(t RoundStepType) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.Step = t
-}
+func (s *SafeRoundState) SetStep(t RoundStepType) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) StartTime() time.Time {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.StartTime
-}
+func (s *SafeRoundState) StartTime() time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-func (s *SafeRoundState) SetStartTime(t time.Time) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.StartTime = t
-}
+func (s *SafeRoundState) SetStartTime(t time.Time) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) CommitTime() time.Time {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.CommitTime
-}
+func (s *SafeRoundState) CommitTime() time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
-func (s *SafeRoundState) SetCommitTime(t time.Time) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.CommitTime = t
-}
+func (s *SafeRoundState) SetCommitTime(t time.Time) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) LastCommit() *types.VoteSet {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.LastCommit
-}
+func (s *SafeRoundState) LastCommit() *types.VoteSet { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetLastCommit(c *types.VoteSet) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.LastCommit = c
-}
+func (s *SafeRoundState) SetLastCommit(c *types.VoteSet) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) CommitRound() int32 {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.CommitRound
-}
+func (s *SafeRoundState) CommitRound() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (s *SafeRoundState) SetCommitRound(r int32) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.CommitRound = r
-}
+func (s *SafeRoundState) SetCommitRound(r int32) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) Votes() *HeightVoteSet {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.Votes
-}
+func (s *SafeRoundState) Votes() *HeightVoteSet { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetVotes(v *HeightVoteSet) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.Votes = v
-}
+func (s *SafeRoundState) SetVotes(v *HeightVoteSet) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) Validators() *types.ValidatorSet {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.Validators
-}
+func (s *SafeRoundState) Validators() *types.ValidatorSet { _ = "STUB: not implemented"; return nil }
 
 func (s *SafeRoundState) Leader() crypto.PubKey {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.Leader()
+	_ = "STUB: not implemented"
+	return *new(crypto.PubKey)
 }
 
-func (s *SafeRoundState) SetValidators(v *types.ValidatorSet) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.Validators = v
-}
+func (s *SafeRoundState) SetValidators(v *types.ValidatorSet) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) Proposal() *types.Proposal {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.Proposal
-}
+func (s *SafeRoundState) Proposal() *types.Proposal { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetProposal(p *types.Proposal) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.Proposal = p
-}
+func (s *SafeRoundState) SetProposal(p *types.Proposal) { _ = "STUB: not implemented"; return }
 
 func (s *SafeRoundState) ProposalReceiveTime() time.Time {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.ProposalReceiveTime
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
-func (s *SafeRoundState) SetProposalReceiveTime(p time.Time) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.ProposalReceiveTime = p
-}
+func (s *SafeRoundState) SetProposalReceiveTime(p time.Time) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) ProposalBlock() *types.Block {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.ProposalBlock
-}
+func (s *SafeRoundState) ProposalBlock() *types.Block { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetProposalBlock(p *types.Block) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.ProposalBlock = p
-}
+func (s *SafeRoundState) SetProposalBlock(p *types.Block) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) ProposalBlockParts() *types.PartSet {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.ProposalBlockParts
-}
+func (s *SafeRoundState) ProposalBlockParts() *types.PartSet { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetProposalBlockParts(p *types.PartSet) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.ProposalBlockParts = p
-}
+func (s *SafeRoundState) SetProposalBlockParts(p *types.PartSet) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) LockedRound() int32 {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.LockedRound
-}
+func (s *SafeRoundState) LockedRound() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (s *SafeRoundState) SetLockedRound(p int32) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.LockedRound = p
-}
+func (s *SafeRoundState) SetLockedRound(p int32) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) LockedBlock() *types.Block {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.LockedBlock
-}
+func (s *SafeRoundState) LockedBlock() *types.Block { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetLockedBlock(p *types.Block) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.LockedBlock = p
-}
+func (s *SafeRoundState) SetLockedBlock(p *types.Block) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) LockedBlockParts() *types.PartSet {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.LockedBlockParts
-}
+func (s *SafeRoundState) LockedBlockParts() *types.PartSet { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetLockedBlockParts(p *types.PartSet) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.LockedBlockParts = p
-}
+func (s *SafeRoundState) SetLockedBlockParts(p *types.PartSet) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) ValidRound() int32 {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.ValidRound
-}
+func (s *SafeRoundState) ValidRound() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (s *SafeRoundState) SetValidRound(p int32) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.ValidRound = p
-}
+func (s *SafeRoundState) SetValidRound(p int32) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) ValidBlock() *types.Block {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.ValidBlock
-}
+func (s *SafeRoundState) ValidBlock() *types.Block { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetValidBlock(p *types.Block) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.ValidBlock = p
-}
+func (s *SafeRoundState) SetValidBlock(p *types.Block) { _ = "STUB: not implemented"; return }
 
-func (s *SafeRoundState) ValidBlockParts() *types.PartSet {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.ValidBlockParts
-}
+func (s *SafeRoundState) ValidBlockParts() *types.PartSet { _ = "STUB: not implemented"; return nil }
 
-func (s *SafeRoundState) SetValidBlockParts(p *types.PartSet) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.ValidBlockParts = p
-}
+func (s *SafeRoundState) SetValidBlockParts(p *types.PartSet) { _ = "STUB: not implemented"; return }
 
 func (s *SafeRoundState) LastValidators() *types.ValidatorSet {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.LastValidators
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (s *SafeRoundState) SetLastValidators(p *types.ValidatorSet) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.LastValidators = p
+	_ = "STUB: not implemented"
+	return
 }
 
-func (s *SafeRoundState) TriggeredTimeoutPrecommit() bool {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.TriggeredTimeoutPrecommit
-}
+func (s *SafeRoundState) TriggeredTimeoutPrecommit() bool { _ = "STUB: not implemented"; return false }
 
-func (s *SafeRoundState) SetTriggeredTimeoutPrecommit(p bool) {
-	s.mtx.Lock()
-	defer s.mtx.Unlock()
-	s.internal.TriggeredTimeoutPrecommit = p
-}
+func (s *SafeRoundState) SetTriggeredTimeoutPrecommit(p bool) { _ = "STUB: not implemented"; return }
 
 func (s *SafeRoundState) RoundStateEvent() types.EventDataRoundState {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.RoundStateEvent()
+	_ = "STUB: not implemented"
+	return *new(types.EventDataRoundState)
 }
 
 func (s *SafeRoundState) NewRoundEvent() types.EventDataNewRound {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.NewRoundEvent()
+	_ = "STUB: not implemented"
+	return *new(types.EventDataNewRound)
 }
 
 func (s *SafeRoundState) CompleteProposalEvent() types.EventDataCompleteProposal {
-	s.mtx.RLock()
-	defer s.mtx.RUnlock()
-	return s.internal.CompleteProposalEvent()
+	_ = "STUB: not implemented"
+	return *new(types.EventDataCompleteProposal)
 }
 
 //-----------------------------------------------------------------------------
@@ -420,21 +223,13 @@ var leaderElectionSeed = [32]byte(utils.OrPanic1(hex.DecodeString(
 // equal to their voting poser.
 // Validator i is the leader of (height,round) <=> pos(height,round)%TotalVotingPower \in validator_interval[i]
 func (rs *RoundState) Leader() crypto.PubKey {
+	_ = "STUB: not implemented"
 	// sha256 does not support seed natively, so we add it by hand.
-	d := slices.Clone(leaderElectionSeed[:])
-	d = binary.BigEndian.AppendUint64(d, uint64(rs.Height)) //nolint:gosec
-	d = binary.BigEndian.AppendUint64(d, uint64(rs.Round))  //nolint:gosec
-	h := sha256.Sum256(d)
-	x := (&big.Int{}).SetBytes(h[:])
-	pos := x.Mod(x, big.NewInt(rs.Validators.TotalVotingPower())).Int64()
-	for val := range rs.Validators.Ordered() {
-		pos -= val.VotingPower
-		if pos < 0 {
-			return val.PubKey
-		}
-	}
-	panic("unreachable")
+	return *new(crypto.PubKey)
 }
+
+//nolint:gosec
+//nolint:gosec
 
 // Compressed version of the RoundState for use in RPC.
 // Used only for JSON representation.
@@ -450,115 +245,35 @@ type RoundStateSimple struct {
 
 // Compress the RoundState to RoundStateSimple.
 func (rs *RoundState) RoundStateSimple() RoundStateSimple {
-	votesJSON, err := rs.Votes.MarshalJSON()
-	if err != nil {
-		panic(err)
-	}
-
-	addr := rs.Leader().Address()
-	idx, _, ok := rs.Validators.GetByAddress(addr)
-	if !ok {
-		panic(fmt.Errorf("validator %v not in committee", addr))
-	}
-
-	return RoundStateSimple{
-		HeightRoundStep:   fmt.Sprintf("%d/%d/%d", rs.Height, rs.Round, rs.Step),
-		StartTime:         rs.StartTime,
-		ProposalBlockHash: rs.ProposalBlock.Hash(),
-		LockedBlockHash:   rs.LockedBlock.Hash(),
-		ValidBlockHash:    rs.ValidBlock.Hash(),
-		Votes:             votesJSON,
-		Proposer: types.ValidatorInfo{
-			Address: addr,
-			Index:   idx,
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(RoundStateSimple)
 }
 
 // NewRoundEvent returns the RoundState with proposer information as an event.
 func (rs *RoundState) NewRoundEvent() types.EventDataNewRound {
-	addr := rs.Leader().Address()
-	idx, _, ok := rs.Validators.GetByAddress(addr)
-	if !ok {
-		panic(fmt.Errorf("validator %v not in committee", addr))
-	}
-	return types.EventDataNewRound{
-		Height: rs.Height,
-		Round:  rs.Round,
-		Step:   rs.Step.String(),
-		Proposer: types.ValidatorInfo{
-			Address: addr,
-			Index:   idx,
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(types.EventDataNewRound)
 }
 
 // CompleteProposalEvent returns information about a proposed block as an event.
 func (rs *RoundState) CompleteProposalEvent() types.EventDataCompleteProposal {
+	_ = "STUB: not implemented"
 	// We must construct BlockID from ProposalBlock and ProposalBlockParts
 	// cs.Proposal is not guaranteed to be set when this function is called
-	blockID := types.BlockID{
-		Hash:          rs.ProposalBlock.Hash(),
-		PartSetHeader: rs.ProposalBlockParts.Header(),
-	}
-
-	return types.EventDataCompleteProposal{
-		Height:  rs.Height,
-		Round:   rs.Round,
-		Step:    rs.Step.String(),
-		BlockID: blockID,
-	}
+	return *new(types.EventDataCompleteProposal)
 }
 
 // RoundStateEvent returns the H/R/S of the RoundState as an event.
 func (rs *RoundState) RoundStateEvent() types.EventDataRoundState {
-	return types.EventDataRoundState{
-		Height: rs.Height,
-		Round:  rs.Round,
-		Step:   rs.Step.String(),
-	}
+	_ = "STUB: not implemented"
+	return *new(types.EventDataRoundState)
 }
 
 // String returns a string
-func (rs *RoundState) String() string {
-	return rs.StringIndented("")
-}
+func (rs *RoundState) String() string { _ = "STUB: not implemented"; return "" }
 
 // StringIndented returns a string
-func (rs *RoundState) StringIndented(indent string) string {
-	return fmt.Sprintf(`RoundState{
-%s  H:%v R:%v S:%v
-%s  StartTime:     %v
-%s  CommitTime:    %v
-%s  Validators:    %v
-%s  Proposal:      %v
-%s  ProposalBlock: %v %v
-%s  LockedRound:   %v
-%s  LockedBlock:   %v %v
-%s  ValidRound:    %v
-%s  ValidBlock:    %v %v
-%s  Votes:         %v
-%s  LastCommit:    %v
-%s  LastValidators:%v
-%s}`,
-		indent, rs.Height, rs.Round, rs.Step,
-		indent, rs.StartTime,
-		indent, rs.CommitTime,
-		indent, rs.Validators.StringIndented(indent+"  "),
-		indent, rs.Proposal,
-		indent, rs.ProposalBlockParts.StringShort(), rs.ProposalBlock.StringShort(),
-		indent, rs.LockedRound,
-		indent, rs.LockedBlockParts.StringShort(), rs.LockedBlock.StringShort(),
-		indent, rs.ValidRound,
-		indent, rs.ValidBlockParts.StringShort(), rs.ValidBlock.StringShort(),
-		indent, rs.Votes.StringIndented(indent+"  "),
-		indent, rs.LastCommit.StringShort(),
-		indent, rs.LastValidators.StringIndented(indent+"  "),
-		indent)
-}
+func (rs *RoundState) StringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
 // StringShort returns a string
-func (rs *RoundState) StringShort() string {
-	return fmt.Sprintf(`RoundState{H:%v R:%v S:%v ST:%v}`,
-		rs.Height, rs.Round, rs.Step, rs.StartTime)
-}
+func (rs *RoundState) StringShort() string { _ = "STUB: not implemented"; return "" }

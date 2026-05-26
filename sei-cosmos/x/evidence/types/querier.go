@@ -14,12 +14,14 @@ const (
 
 // NewQueryEvidenceRequest creates a new instance of QueryEvidenceRequest.
 func NewQueryEvidenceRequest(hash tmbytes.HexBytes) *QueryEvidenceRequest {
-	return &QueryEvidenceRequest{EvidenceHash: hash}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewQueryAllEvidenceRequest creates a new instance of QueryAllEvidenceRequest.
 func NewQueryAllEvidenceRequest(pageReq *query.PageRequest) *QueryAllEvidenceRequest {
-	return &QueryAllEvidenceRequest{Pagination: pageReq}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // QueryAllEvidenceParams defines the parameters necessary for querying for all Evidence.
@@ -29,5 +31,6 @@ type QueryAllEvidenceParams struct {
 }
 
 func NewQueryAllEvidenceParams(page, limit int) QueryAllEvidenceParams {
-	return QueryAllEvidenceParams{Page: page, Limit: limit}
+	_ = "STUB: not implemented"
+	return *new(QueryAllEvidenceParams)
 }

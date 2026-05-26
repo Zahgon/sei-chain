@@ -1,9 +1,6 @@
 package types
 
 import (
-	"fmt"
-	"strings"
-
 	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 )
 
@@ -18,30 +15,19 @@ func init() {
 	govtypes.RegisterProposalTypeCodec(&UpdateMinterProposal{}, "mint/UpdateMinterProposal")
 }
 
-func (p *UpdateMinterProposal) GetTitle() string { return p.Title }
+func (p *UpdateMinterProposal) GetTitle() string { _ = "STUB: not implemented"; return "" }
 
-func (p *UpdateMinterProposal) GetDescription() string { return p.Description }
+func (p *UpdateMinterProposal) GetDescription() string { _ = "STUB: not implemented"; return "" }
 
-func (p *UpdateMinterProposal) ProposalRoute() string { return RouterKey }
+func (p *UpdateMinterProposal) ProposalRoute() string { _ = "STUB: not implemented"; return "" }
 
-func (p *UpdateMinterProposal) ProposalType() string {
-	return ProposalTypeUpdateMinter
-}
+func (p *UpdateMinterProposal) ProposalType() string { _ = "STUB: not implemented"; return "" }
 
-func (p *UpdateMinterProposal) ValidateBasic() error {
-	return ValidateMinter(*p.Minter)
-}
+func (p *UpdateMinterProposal) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-func (p UpdateMinterProposal) String() string {
-	var b strings.Builder
-	b.WriteString(fmt.Sprintf(`Update Minter Proposal:
-  Title:       %s
-  Description: %s
-  Minter:     %s
-`, p.Title, p.Description, p.Minter.String()))
-	return b.String()
-}
+func (p UpdateMinterProposal) String() string { _ = "STUB: not implemented"; return "" }
 
 func NewUpdateMinterProposalHandler(title, description string, minter Minter) *UpdateMinterProposal {
-	return &UpdateMinterProposal{title, description, &minter}
+	_ = "STUB: not implemented"
+	return nil
 }

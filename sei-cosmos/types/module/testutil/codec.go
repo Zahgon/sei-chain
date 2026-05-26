@@ -4,9 +4,7 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/std"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/tx"
 )
 
 // TestEncodingConfig defines an encoding configuration that is used for testing
@@ -21,32 +19,11 @@ type TestEncodingConfig struct {
 }
 
 func MakeTestEncodingConfig(modules ...module.AppModuleBasic) TestEncodingConfig {
-	cdc := codec.NewLegacyAmino()
-	interfaceRegistry := types.NewInterfaceRegistry()
-	codec := codec.NewProtoCodec(interfaceRegistry)
-
-	encCfg := TestEncodingConfig{
-		InterfaceRegistry: interfaceRegistry,
-		Codec:             codec,
-		TxConfig:          tx.NewTxConfig(codec, tx.DefaultSignModes),
-		Amino:             cdc,
-	}
-
-	mb := module.NewBasicManager(modules...)
-
-	std.RegisterLegacyAminoCodec(encCfg.Amino)
-	std.RegisterInterfaces(encCfg.InterfaceRegistry)
-	mb.RegisterLegacyAminoCodec(encCfg.Amino)
-	mb.RegisterInterfaces(encCfg.InterfaceRegistry)
-
-	return encCfg
+	_ = "STUB: not implemented"
+	return *new(TestEncodingConfig)
 }
 
-func MakeTestTxConfig() client.TxConfig {
-	interfaceRegistry := types.NewInterfaceRegistry()
-	cdc := codec.NewProtoCodec(interfaceRegistry)
-	return tx.NewTxConfig(cdc, tx.DefaultSignModes)
-}
+func MakeTestTxConfig() client.TxConfig { _ = "STUB: not implemented"; return *new(client.TxConfig) }
 
 type TestBuilderTxConfig struct {
 	client.TxConfig
@@ -54,18 +31,13 @@ type TestBuilderTxConfig struct {
 }
 
 func MakeBuilderTestTxConfig() TestBuilderTxConfig {
-	return TestBuilderTxConfig{
-		TxConfig: MakeTestTxConfig(),
-	}
+	_ = "STUB: not implemented"
+	return *new(TestBuilderTxConfig)
 }
 
 func (cfg TestBuilderTxConfig) NewTxBuilder() client.TxBuilder {
-	if cfg.TxBuilder == nil {
-		cfg.TxBuilder = &TestTxBuilder{
-			TxBuilder: cfg.TxConfig.NewTxBuilder(),
-		}
-	}
-	return cfg.TxBuilder
+	_ = "STUB: not implemented"
+	return *new(client.TxBuilder)
 }
 
 type TestTxBuilder struct {
@@ -74,5 +46,6 @@ type TestTxBuilder struct {
 }
 
 func (b *TestTxBuilder) SetExtensionOptions(extOpts ...*types.Any) {
-	b.ExtOptions = extOpts
+	_ = "STUB: not implemented"
+	return
 }

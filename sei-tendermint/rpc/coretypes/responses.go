@@ -3,13 +3,10 @@ package coretypes
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
-	"strings"
 	"time"
 
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
@@ -41,10 +38,8 @@ var (
 // strings for the same case modulo the optional base height, so callers
 // (evmrpc, ops tooling) get one shape to recognize.
 func WrapErrHeightNotAvailable(height int64, base utils.Option[int64]) error {
-	if b, ok := base.Get(); ok {
-		return fmt.Errorf("%w (requested height: %d, base height: %d)", ErrHeightNotAvailable, height, b)
-	}
-	return fmt.Errorf("%w (requested height: %d)", ErrHeightNotAvailable, height)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // List of blocks
@@ -99,14 +94,8 @@ type ResultBlockResults struct {
 // the embedded struct
 func NewResultCommit(header *types.Header, commit *types.Commit,
 	canonical bool) *ResultCommit {
-
-	return &ResultCommit{
-		SignedHeader: types.SignedHeader{
-			Header: header,
-			Commit: commit,
-		},
-		CanonicalCommit: canonical,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Info about the node's syncing state
@@ -163,34 +152,9 @@ type validatorInfoJSON struct {
 	VotingPower int64           `json:"voting_power,string"`
 }
 
-func (v ValidatorInfo) MarshalJSON() ([]byte, error) {
-	k := v.PubKey.Or(crypto.PubKey{})
-	pk, err := jsontypes.Marshal(k)
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(validatorInfoJSON{
-		VotingPower: v.VotingPower,
-		PubKey:      pk,
-		Address:     k.Address(),
-	})
-}
+func (v ValidatorInfo) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (v *ValidatorInfo) UnmarshalJSON(data []byte) error {
-	var val validatorInfoJSON
-	if err := json.Unmarshal(data, &val); err != nil {
-		return err
-	}
-	var pk crypto.PubKey
-	if err := jsontypes.Unmarshal(val.PubKey, &pk); err != nil {
-		return err
-	}
-	if pk != (crypto.PubKey{}) {
-		v.PubKey = utils.Some(pk)
-	}
-	v.VotingPower = val.VotingPower
-	return nil
-}
+func (v *ValidatorInfo) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // Node Status
 type ResultStatus struct {
@@ -209,12 +173,7 @@ type ResultLagStatus struct {
 }
 
 // Is TxIndexing enabled
-func (s *ResultStatus) TxIndexEnabled() bool {
-	if s == nil {
-		return false
-	}
-	return s.NodeInfo.Other.TxIndex == "on"
-}
+func (s *ResultStatus) TxIndexEnabled() bool { _ = "STUB: not implemented"; return false }
 
 // Info about peer connections
 type ResultNetInfo struct {
@@ -372,96 +331,21 @@ type resultEventJSON struct {
 	Events         map[string][]string `json:"events"`
 }
 
-func (r ResultEvent) MarshalJSON() ([]byte, error) {
-	evt, err := jsontypes.Marshal(r.Data)
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(resultEventJSON{
-		SubscriptionID: r.SubscriptionID,
-		Query:          r.Query,
-		Data:           evt,
-		Events:         compactEvents(r.Events),
-	})
-}
+func (r ResultEvent) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (r *ResultEvent) UnmarshalJSON(data []byte) error {
-	var res resultEventJSON
-	if err := json.Unmarshal(data, &res); err != nil {
-		return err
-	}
-	if err := jsontypes.Unmarshal(res.Data, &r.Data); err != nil {
-		return err
-	}
-	r.SubscriptionID = res.SubscriptionID
-	r.Query = res.Query
-	r.Events = decompactEvents(res.Events)
-	return nil
-}
+func (r *ResultEvent) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
-func compactEvents(events []abci.Event) map[string][]string {
-	res := map[string][]string{}
-	for _, e := range events {
-		for _, a := range e.Attributes {
-			key := e.Type + "." + string(a.Key)
-			if _, ok := res[key]; !ok {
-				res[key] = []string{}
-			}
-			res[key] = append(res[key], string(a.Value))
-		}
-	}
-	return res
-}
+func compactEvents(events []abci.Event) map[string][]string { _ = "STUB: not implemented"; return nil }
 
 // best effort decompaction that group attributes with common
 // prefix into the same event
 func decompactEvents(compact map[string][]string) []abci.Event {
-	eventTypeToAttrs := map[string]map[string][]string{}
-	for longKey, vals := range compact {
-		splitted := strings.Split(longKey, ".")
-		if len(splitted) != 2 {
-			fmt.Printf("invalid compact event key: %s\n", longKey)
-			continue
-		}
-		if _, ok := eventTypeToAttrs[splitted[0]]; !ok {
-			eventTypeToAttrs[splitted[0]] = map[string][]string{}
-		}
-		if existing, ok := eventTypeToAttrs[splitted[0]][splitted[1]]; ok {
-			fmt.Printf("duplicate compact event key: %s\n", longKey)
-			eventTypeToAttrs[splitted[0]][splitted[1]] = append(existing, vals...)
-		} else {
-			eventTypeToAttrs[splitted[0]][splitted[1]] = vals
-		}
-	}
-	res := []abci.Event{}
-	for eventType, kvs := range eventTypeToAttrs {
-		// at most N events of this type where N is the count of the most common
-		// attribute key
-		eventNum := 0
-		for _, vals := range kvs {
-			if len(vals) > eventNum {
-				eventNum = len(vals)
-			}
-		}
-		for i := 0; i < eventNum; i++ {
-			attributes := []abci.EventAttribute{}
-			for key, vals := range kvs {
-				if i < len(vals) {
-					attributes = append(attributes, abci.EventAttribute{
-						Key:   []byte(key),
-						Value: []byte(vals[i]),
-					})
-				}
-			}
-			res = append(res, abci.Event{
-				Type:       eventType,
-				Attributes: attributes,
-			})
-		}
-	}
-
-	return res
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// at most N events of this type where N is the count of the most common
+// attribute key
 
 // Evidence is an argument wrapper for a types.Evidence value, that handles
 // encoding and decoding through JSON.
@@ -469,8 +353,8 @@ type Evidence struct {
 	Value types.Evidence
 }
 
-func (e Evidence) MarshalJSON() ([]byte, error)     { return jsontypes.Marshal(e.Value) }
-func (e *Evidence) UnmarshalJSON(data []byte) error { return jsontypes.Unmarshal(data, &e.Value) }
+func (e Evidence) MarshalJSON() ([]byte, error)     { _ = "STUB: not implemented"; return nil, nil }
+func (e *Evidence) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // ResultEvents is the response from the "/events" RPC endpoint.
 type ResultEvents struct {

@@ -5,12 +5,11 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -45,13 +44,9 @@ var Type_value = map[string]int32{
 	"TYPE_EXECUTE_TX":  1,
 }
 
-func (x Type) String() string {
-	return proto.EnumName(Type_name, int32(x))
-}
+func (x Type) String() string { _ = "STUB: not implemented"; return "" }
 
-func (Type) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_89a080d7401cd393, []int{0}
-}
+func (Type) EnumDescriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 // InterchainAccountPacketData is comprised of a raw transaction, type of transaction and optional memo field.
 type InterchainAccountPacketData struct {
@@ -60,104 +55,67 @@ type InterchainAccountPacketData struct {
 	Memo string `protobuf:"bytes,3,opt,name=memo,proto3" json:"memo,omitempty"`
 }
 
-func (m *InterchainAccountPacketData) Reset()         { *m = InterchainAccountPacketData{} }
-func (m *InterchainAccountPacketData) String() string { return proto.CompactTextString(m) }
-func (*InterchainAccountPacketData) ProtoMessage()    {}
+func (m *InterchainAccountPacketData) Reset()         { _ = "STUB: not implemented"; return }
+func (m *InterchainAccountPacketData) String() string { _ = "STUB: not implemented"; return "" }
+func (*InterchainAccountPacketData) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*InterchainAccountPacketData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_89a080d7401cd393, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *InterchainAccountPacketData) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *InterchainAccountPacketData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InterchainAccountPacketData.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *InterchainAccountPacketData) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InterchainAccountPacketData.Merge(m, src)
-}
-func (m *InterchainAccountPacketData) XXX_Size() int {
-	return m.Size()
-}
-func (m *InterchainAccountPacketData) XXX_DiscardUnknown() {
-	xxx_messageInfo_InterchainAccountPacketData.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_InterchainAccountPacketData proto.InternalMessageInfo
-
-func (m *InterchainAccountPacketData) GetType() Type {
-	if m != nil {
-		return m.Type
-	}
-	return UNSPECIFIED
-}
-
-func (m *InterchainAccountPacketData) GetData() []byte {
-	if m != nil {
-		return m.Data
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *InterchainAccountPacketData) GetMemo() string {
-	if m != nil {
-		return m.Memo
-	}
-	return ""
+func (m *InterchainAccountPacketData) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func (m *InterchainAccountPacketData) XXX_Merge(src proto.Message) {
+	_ = "STUB: not implemented"
+	return
+}
+
+func (m *InterchainAccountPacketData) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *InterchainAccountPacketData) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
+
+var xxx_messageInfo_InterchainAccountPacketData proto.InternalMessageInfo
+
+func (m *InterchainAccountPacketData) GetType() Type { _ = "STUB: not implemented"; return *new(Type) }
+
+func (m *InterchainAccountPacketData) GetData() []byte { _ = "STUB: not implemented"; return nil }
+
+func (m *InterchainAccountPacketData) GetMemo() string { _ = "STUB: not implemented"; return "" }
 
 // CosmosTx contains a list of sdk.Msg's. It should be used when sending transactions to an SDK host chain.
 type CosmosTx struct {
 	Messages []*types.Any `protobuf:"bytes,1,rep,name=messages,proto3" json:"messages,omitempty"`
 }
 
-func (m *CosmosTx) Reset()         { *m = CosmosTx{} }
-func (m *CosmosTx) String() string { return proto.CompactTextString(m) }
-func (*CosmosTx) ProtoMessage()    {}
-func (*CosmosTx) Descriptor() ([]byte, []int) {
-	return fileDescriptor_89a080d7401cd393, []int{1}
-}
-func (m *CosmosTx) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *CosmosTx) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *CosmosTx) String() string            { _ = "STUB: not implemented"; return "" }
+func (*CosmosTx) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*CosmosTx) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *CosmosTx) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *CosmosTx) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CosmosTx.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CosmosTx) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CosmosTx.Merge(m, src)
-}
-func (m *CosmosTx) XXX_Size() int {
-	return m.Size()
-}
-func (m *CosmosTx) XXX_DiscardUnknown() {
-	xxx_messageInfo_CosmosTx.DiscardUnknown(m)
-}
+
+func (m *CosmosTx) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *CosmosTx) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CosmosTx) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_CosmosTx proto.InternalMessageInfo
 
-func (m *CosmosTx) GetMessages() []*types.Any {
-	if m != nil {
-		return m.Messages
-	}
-	return nil
-}
+func (m *CosmosTx) GetMessages() []*types.Any { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	proto.RegisterEnum("ibc.applications.interchain_accounts.v1.Type", Type_name, Type_value)
@@ -199,433 +157,47 @@ var fileDescriptor_89a080d7401cd393 = []byte{
 }
 
 func (m *InterchainAccountPacketData) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *InterchainAccountPacketData) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *InterchainAccountPacketData) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Memo) > 0 {
-		i -= len(m.Memo)
-		copy(dAtA[i:], m.Memo)
-		i = encodeVarintPacket(dAtA, i, uint64(len(m.Memo)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Data) > 0 {
-		i -= len(m.Data)
-		copy(dAtA[i:], m.Data)
-		i = encodeVarintPacket(dAtA, i, uint64(len(m.Data)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Type != 0 {
-		i = encodeVarintPacket(dAtA, i, uint64(m.Type))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *CosmosTx) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *CosmosTx) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *CosmosTx) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *CosmosTx) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *CosmosTx) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Messages) > 0 {
-		for iNdEx := len(m.Messages) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Messages[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintPacket(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintPacket(dAtA []byte, offset int, v uint64) int {
-	offset -= sovPacket(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *InterchainAccountPacketData) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Type != 0 {
-		n += 1 + sovPacket(uint64(m.Type))
-	}
-	l = len(m.Data)
-	if l > 0 {
-		n += 1 + l + sovPacket(uint64(l))
-	}
-	l = len(m.Memo)
-	if l > 0 {
-		n += 1 + l + sovPacket(uint64(l))
-	}
-	return n
-}
+func encodeVarintPacket(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *CosmosTx) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Messages) > 0 {
-		for _, e := range m.Messages {
-			l = e.Size()
-			n += 1 + l + sovPacket(uint64(l))
-		}
-	}
-	return n
-}
+func (m *InterchainAccountPacketData) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovPacket(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozPacket(x uint64) (n int) {
-	return sovPacket(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
+func (m *CosmosTx) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sovPacket(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozPacket(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
 func (m *InterchainAccountPacketData) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPacket
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InterchainAccountPacketData: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InterchainAccountPacketData: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Type", wireType)
-			}
-			m.Type = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Type |= Type(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthPacket
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
-			if m.Data == nil {
-				m.Data = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Memo", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthPacket
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Memo = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPacket(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthPacket
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *CosmosTx) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPacket
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CosmosTx: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CosmosTx: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Messages", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPacket
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthPacket
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthPacket
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Messages = append(m.Messages, &types.Any{})
-			if err := m.Messages[len(m.Messages)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPacket(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthPacket
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipPacket(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowPacket
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowPacket
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowPacket
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthPacket
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupPacket
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthPacket
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *CosmosTx) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipPacket(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthPacket        = fmt.Errorf("proto: negative length found during unmarshaling")

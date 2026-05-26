@@ -1,28 +1,19 @@
 package main
 
 import (
-	"bytes"
 	"encoding/json"
 	"flag"
 	"fmt"
 	"image"
 	"image/color"
-	"image/png"
-	"io"
-	"math"
 	"math/rand"
 	"net/http"
 	"os"
 	"path/filepath"
-	"sort"
 	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
-
-	"golang.org/x/image/font"
-	"golang.org/x/image/font/basicfont"
-	"golang.org/x/image/math/fixed"
 )
 
 type RPCRequest struct {
@@ -52,96 +43,11 @@ type LatencyStats struct {
 	Latencies []time.Duration
 }
 
-func (s *LatencyStats) Report() {
-	if s.Total == 0 {
-		fmt.Printf("  %-35s  no requests\n", s.Method)
-		return
-	}
-	sort.Slice(s.Latencies, func(i, j int) bool { return s.Latencies[i] < s.Latencies[j] })
-	p := func(pct float64) time.Duration {
-		idx := int(float64(len(s.Latencies)) * pct)
-		if idx >= len(s.Latencies) {
-			idx = len(s.Latencies) - 1
-		}
-		return s.Latencies[idx]
-	}
-	rps := float64(s.Total) / s.Duration.Seconds()
-	fmt.Printf("  %-35s  reqs=%-6d errs=%-4d rps=%-8.1f p50=%-10s p95=%-10s p99=%-10s\n",
-		s.Method, s.Total, s.Errors, rps, p(0.50), p(0.95), p(0.99))
-}
+func (s *LatencyStats) Report() { _ = "STUB: not implemented"; return }
 
 func configureOutput(outputFile string) (func() error, error) {
-	if outputFile == "" {
-		return func() error { return nil }, nil
-	}
-
-	cleanPath := filepath.Clean(outputFile)
-	if err := os.MkdirAll(filepath.Dir(cleanPath), 0o750); err != nil {
-		return nil, err
-	}
-
-	file, err := os.OpenFile(cleanPath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o600)
-	if err != nil {
-		return nil, err
-	}
-
-	originalStdout := os.Stdout
-	originalStderr := os.Stderr
-
-	stdoutReader, stdoutPipe, err := os.Pipe()
-	if err != nil {
-		_ = file.Close()
-		return nil, err
-	}
-	stderrReader, stderrPipe, err := os.Pipe()
-	if err != nil {
-		_ = stdoutReader.Close()
-		_ = stdoutPipe.Close()
-		_ = file.Close()
-		return nil, err
-	}
-
-	var wg sync.WaitGroup
-	wg.Add(2)
-	go func() {
-		defer wg.Done()
-		_, _ = io.Copy(io.MultiWriter(originalStdout, file), stdoutReader)
-	}()
-	go func() {
-		defer wg.Done()
-		_, _ = io.Copy(io.MultiWriter(originalStderr, file), stderrReader)
-	}()
-
-	os.Stdout = stdoutPipe
-	os.Stderr = stderrPipe
-
-	return func() error {
-		var closeErr error
-
-		if err := stdoutPipe.Close(); err != nil && closeErr == nil {
-			closeErr = err
-		}
-		if err := stderrPipe.Close(); err != nil && closeErr == nil {
-			closeErr = err
-		}
-
-		os.Stdout = originalStdout
-		os.Stderr = originalStderr
-
-		wg.Wait()
-
-		if err := stdoutReader.Close(); err != nil && closeErr == nil {
-			closeErr = err
-		}
-		if err := stderrReader.Close(); err != nil && closeErr == nil {
-			closeErr = err
-		}
-		if err := file.Close(); err != nil && closeErr == nil {
-			closeErr = err
-		}
-
-		return closeErr
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var httpClient = &http.Client{
@@ -156,37 +62,8 @@ var httpClient = &http.Client{
 var reqID atomic.Int64
 
 func rpcCall(endpoint, method string, params []interface{}) (*RPCResponse, time.Duration, error) {
-	body, err := json.Marshal(RPCRequest{
-		JSONRPC: "2.0",
-		Method:  method,
-		Params:  params,
-		ID:      int(reqID.Add(1)),
-	})
-	if err != nil {
-		return nil, 0, err
-	}
-
-	start := time.Now()
-	resp, err := httpClient.Post(endpoint, "application/json", bytes.NewReader(body))
-	elapsed := time.Since(start)
-	if err != nil {
-		return nil, elapsed, err
-	}
-
-	respBody, err := io.ReadAll(resp.Body)
-	closeErr := resp.Body.Close()
-	if err != nil {
-		return nil, elapsed, err
-	}
-	if closeErr != nil {
-		return nil, elapsed, closeErr
-	}
-
-	var rpcResp RPCResponse
-	if err := json.Unmarshal(respBody, &rpcResp); err != nil {
-		return nil, elapsed, fmt.Errorf("bad response: %s", string(respBody[:min(len(respBody), 200)]))
-	}
-	return &rpcResp, elapsed, nil
+	_ = "STUB: not implemented"
+	return nil, *new(time.Duration), nil
 }
 
 // benchMethod defines a single RPC method to benchmark.
@@ -198,11 +75,8 @@ type benchMethod struct {
 }
 
 func (m *benchMethod) call(endpoint string) (string, time.Duration, error) {
-	resp, lat, err := rpcCall(endpoint, m.name, m.params())
-	if err == nil && resp != nil && resp.Error != nil {
-		err = fmt.Errorf("rpc: %s", resp.Error.Message)
-	}
-	return m.name, lat, err
+	_ = "STUB: not implemented"
+	return "", *new(time.Duration), nil
 }
 
 type storageSlot struct {
@@ -226,431 +100,60 @@ type PerBlockTraceSample struct {
 }
 
 func discoverStorageSlots(endpoint string, txHashes []string, maxTxs int) []storageSlot {
-	if maxTxs <= 0 || len(txHashes) == 0 {
-		return nil
-	}
-	if maxTxs > len(txHashes) {
-		maxTxs = len(txHashes)
-	}
-
-	var slots []storageSlot
-	seen := make(map[string]bool)
-	tracer := "prestateTracer"
-
-	for i := 0; i < maxTxs; i++ {
-		resp, _, err := rpcCall(endpoint, "debug_traceTransaction", []interface{}{
-			txHashes[i],
-			map[string]string{"tracer": tracer},
-		})
-		if err != nil || resp == nil || resp.Error != nil {
-			continue
-		}
-
-		var prestate map[string]struct {
-			Storage map[string]json.RawMessage `json:"storage"`
-		}
-		if err := json.Unmarshal(resp.Result, &prestate); err != nil {
-			continue
-		}
-		for addr, acct := range prestate {
-			for slot := range acct.Storage {
-				key := addr + "|" + slot
-				if !seen[key] {
-					seen[key] = true
-					slots = append(slots, storageSlot{Address: addr, Slot: slot})
-				}
-			}
-		}
-	}
-	return slots
-}
-
-func getLatestBlockNumber(endpoint string) (int64, error) {
-	resp, _, err := rpcCall(endpoint, "eth_blockNumber", []interface{}{})
-	if err != nil {
-		return 0, err
-	}
-	if resp.Error != nil {
-		return 0, fmt.Errorf("rpc error: %s", resp.Error.Message)
-	}
-	var hex string
-	if err := json.Unmarshal(resp.Result, &hex); err != nil {
-		return 0, err
-	}
-	var num int64
-	if _, err := fmt.Sscanf(hex, "0x%x", &num); err != nil {
-		return 0, fmt.Errorf("parse latest block number %q: %w", hex, err)
-	}
-	return num, nil
-}
-
-func getBlockInfo(endpoint string, blockNum int64) (*BlockInfo, error) {
-	hexNum := fmt.Sprintf("0x%x", blockNum)
-	resp, _, err := rpcCall(endpoint, "eth_getBlockByNumber", []interface{}{hexNum, true})
-	if err != nil {
-		return nil, err
-	}
-	if resp.Error != nil {
-		return nil, fmt.Errorf("rpc error: %s", resp.Error.Message)
-	}
-
-	var block struct {
-		Hash         string `json:"hash"`
-		GasUsed      string `json:"gasUsed"`
-		Transactions []struct {
-			Hash string `json:"hash"`
-			From string `json:"from"`
-			To   string `json:"to"`
-		} `json:"transactions"`
-	}
-	if err := json.Unmarshal(resp.Result, &block); err != nil {
-		return nil, err
-	}
-
-	info := &BlockInfo{Number: blockNum, Hash: block.Hash}
-	if block.GasUsed != "" {
-		if _, err := fmt.Sscanf(block.GasUsed, "0x%x", &info.GasUsed); err != nil {
-			return nil, fmt.Errorf("parse block gas used for block %d: %w", blockNum, err)
-		}
-	}
-	addrSet := make(map[string]bool)
-	for _, tx := range block.Transactions {
-		info.Transactions = append(info.Transactions, tx.Hash)
-		if tx.From != "" {
-			addrSet[tx.From] = true
-		}
-		if tx.To != "" {
-			addrSet[tx.To] = true
-		}
-	}
-	for addr := range addrSet {
-		info.Addresses = append(info.Addresses, addr)
-	}
-	return info, nil
-}
-
-func runConcurrent(concurrency, total int, workFn func(i int) (string, time.Duration, error)) map[string]*LatencyStats {
-	stats := make(map[string]*LatencyStats)
-	var mu sync.Mutex
-
-	record := func(method string, lat time.Duration, err error) {
-		mu.Lock()
-		defer mu.Unlock()
-		s, ok := stats[method]
-		if !ok {
-			s = &LatencyStats{Method: method}
-			stats[method] = s
-		}
-		s.Total++
-		s.Latencies = append(s.Latencies, lat)
-		if err != nil {
-			s.Errors++
-		}
-	}
-
-	var wg sync.WaitGroup
-	work := make(chan int, total)
-	for i := 0; i < concurrency; i++ {
-		wg.Add(1)
-		go func() {
-			defer wg.Done()
-			for idx := range work {
-				method, lat, err := workFn(idx)
-				record(method, lat, err)
-			}
-		}()
-	}
-
-	start := time.Now()
-	for i := 0; i < total; i++ {
-		work <- i
-	}
-	close(work)
-	wg.Wait()
-	elapsed := time.Since(start)
-
-	for _, s := range stats {
-		s.Duration = elapsed
-	}
-	return stats
-}
-
-func printStats(title string, stats map[string]*LatencyStats) {
-	fmt.Printf("\n%s\n%s\n", title, strings.Repeat("=", len(title)))
-
-	keys := make([]string, 0, len(stats))
-	for k := range stats {
-		keys = append(keys, k)
-	}
-	sort.Strings(keys)
-
-	var totalReqs, totalErrs int
-	var totalDuration time.Duration
-	for _, k := range keys {
-		stats[k].Report()
-		totalReqs += stats[k].Total
-		totalErrs += stats[k].Errors
-		if stats[k].Duration > totalDuration {
-			totalDuration = stats[k].Duration
-		}
-	}
-	rps := float64(totalReqs) / totalDuration.Seconds()
-	fmt.Printf("  %-35s  reqs=%-6d errs=%-4d rps=%-8.1f duration=%s\n",
-		"TOTAL", totalReqs, totalErrs, rps, totalDuration.Round(time.Millisecond))
-}
-
-func buildBlockNumbers(latestBlock int64, blockCount int, startBlock, endBlock int64) ([]int64, error) {
-	if startBlock > 0 || endBlock > 0 {
-		if startBlock <= 0 {
-			return nil, fmt.Errorf("start-block is required when selecting an explicit block range")
-		}
-		if endBlock == 0 {
-			endBlock = startBlock
-		}
-		if startBlock > endBlock {
-			return nil, fmt.Errorf("start-block (%d) cannot be greater than end-block (%d)", startBlock, endBlock)
-		}
-		if endBlock > latestBlock {
-			return nil, fmt.Errorf("end-block (%d) cannot exceed latest block (%d)", endBlock, latestBlock)
-		}
-
-		blockNums := make([]int64, 0, endBlock-startBlock+1)
-		for blockNum := startBlock; blockNum <= endBlock; blockNum++ {
-			blockNums = append(blockNums, blockNum)
-		}
-		return blockNums, nil
-	}
-
-	blockNums := make([]int64, 0, blockCount)
-	for i := 0; i < blockCount; i++ {
-		blockNum := latestBlock - int64(i)
-		if blockNum < 1 {
-			break
-		}
-		blockNums = append(blockNums, blockNum)
-	}
-	return blockNums, nil
-}
-
-func writeLabel(img *image.RGBA, x, y int, text string, col color.Color) {
-	d := &font.Drawer{
-		Dst:  img,
-		Src:  image.NewUniform(col),
-		Face: basicfont.Face7x13,
-		Dot:  fixed.P(x, y),
-	}
-	d.DrawString(text)
-}
-
-func setPixel(img *image.RGBA, x, y int, col color.Color) {
-	if image.Pt(x, y).In(img.Bounds()) {
-		img.Set(x, y, col)
-	}
-}
-
-func drawLine(img *image.RGBA, x1, y1, x2, y2 int, col color.Color) {
-	dx := float64(x2 - x1)
-	dy := float64(y2 - y1)
-	steps := int(math.Max(math.Abs(dx), math.Abs(dy)))
-	if steps == 0 {
-		setPixel(img, x1, y1, col)
-		return
-	}
-	for i := 0; i <= steps; i++ {
-		t := float64(i) / float64(steps)
-		x := int(math.Round(float64(x1) + dx*t))
-		y := int(math.Round(float64(y1) + dy*t))
-		setPixel(img, x, y, col)
-	}
-}
-
-func fillCircle(img *image.RGBA, cx, cy, r int, col color.Color) {
-	for dx := -r; dx <= r; dx++ {
-		for dy := -r; dy <= r; dy++ {
-			if dx*dx+dy*dy <= r*r {
-				setPixel(img, cx+dx, cy+dy, col)
-			}
-		}
-	}
-}
-
-func scaleValue(value, minValue, maxValue, start, span float64) float64 {
-	if maxValue == minValue {
-		return start + span/2
-	}
-	return start + ((value - minValue) / (maxValue - minValue) * span)
-}
-
-func formatTick(value float64) string {
-	absValue := math.Abs(value)
-	switch {
-	case absValue >= 1_000_000_000:
-		return fmt.Sprintf("%.1fB", value/1_000_000_000)
-	case absValue >= 1_000_000:
-		return fmt.Sprintf("%.1fM", value/1_000_000)
-	case absValue >= 1_000:
-		return fmt.Sprintf("%.1fk", value/1_000)
-	case absValue >= 100:
-		return fmt.Sprintf("%.0f", value)
-	case absValue >= 10:
-		return fmt.Sprintf("%.1f", value)
-	default:
-		return fmt.Sprintf("%.2f", value)
-	}
-}
-
-func writePlotPNG(path, title, xLabel, yLabel string, points [][2]float64, connectPoints bool) error {
-	if len(points) == 0 {
-		return nil
-	}
-
-	const (
-		width        = 1400
-		height       = 900
-		leftMargin   = 120
-		rightMargin  = 40
-		topMargin    = 70
-		bottomMargin = 110
-	)
-
-	img := image.NewRGBA(image.Rect(0, 0, width, height))
-	background := color.RGBA{255, 255, 255, 255}
-	plotBackground := color.RGBA{250, 250, 252, 255}
-	axisColor := color.RGBA{60, 60, 67, 255}
-	gridColor := color.RGBA{226, 232, 240, 255}
-	seriesColor := color.RGBA{37, 99, 235, 255}
-	textColor := color.RGBA{17, 24, 39, 255}
-
-	for y := 0; y < height; y++ {
-		for x := 0; x < width; x++ {
-			img.Set(x, y, background)
-		}
-	}
-
-	plotLeft := leftMargin
-	plotTop := topMargin
-	plotRight := width - rightMargin
-	plotBottom := height - bottomMargin
-	plotWidth := plotRight - plotLeft
-	plotHeight := plotBottom - plotTop
-
-	for y := plotTop; y <= plotBottom; y++ {
-		for x := plotLeft; x <= plotRight; x++ {
-			img.Set(x, y, plotBackground)
-		}
-	}
-
-	xMin, xMax := points[0][0], points[0][0]
-	yMax := points[0][1]
-	for _, point := range points[1:] {
-		xMin = min(xMin, point[0])
-		xMax = max(xMax, point[0])
-		yMax = max(yMax, point[1])
-	}
-	yMin := 0.0
-	if yMax == yMin {
-		yMax = yMin + 1
-	}
-	yMax *= 1.05
-
-	for i := 0; i <= 5; i++ {
-		ratio := float64(i) / 5
-		yValue := yMin + (yMax-yMin)*ratio
-		y := int(math.Round(float64(plotBottom) - ratio*float64(plotHeight)))
-		drawLine(img, plotLeft, y, plotRight, y, gridColor)
-		writeLabel(img, 12, y+5, formatTick(yValue), textColor)
-	}
-
-	for i := 0; i <= 5; i++ {
-		ratio := float64(i) / 5
-		xValue := xMin + (xMax-xMin)*ratio
-		x := int(math.Round(float64(plotLeft) + ratio*float64(plotWidth)))
-		drawLine(img, x, plotTop, x, plotBottom, gridColor)
-		writeLabel(img, x-20, plotBottom+24, formatTick(xValue), textColor)
-	}
-
-	drawLine(img, plotLeft, plotBottom, plotRight, plotBottom, axisColor)
-	drawLine(img, plotLeft, plotTop, plotLeft, plotBottom, axisColor)
-
-	scaled := make([]image.Point, 0, len(points))
-	for _, point := range points {
-		x := int(math.Round(scaleValue(point[0], xMin, xMax, float64(plotLeft), float64(plotWidth))))
-		y := int(math.Round(float64(plotBottom) - scaleValue(point[1], yMin, yMax, 0, float64(plotHeight))))
-		scaled = append(scaled, image.Pt(x, y))
-	}
-
-	if connectPoints {
-		for i := 1; i < len(scaled); i++ {
-			drawLine(img, scaled[i-1].X, scaled[i-1].Y, scaled[i].X, scaled[i].Y, seriesColor)
-		}
-	}
-	for _, point := range scaled {
-		fillCircle(img, point.X, point.Y, 4, seriesColor)
-	}
-
-	writeLabel(img, width/2-len(title)*3, 30, title, textColor)
-	writeLabel(img, width/2-len(xLabel)*3, height-30, xLabel, textColor)
-	writeLabel(img, 20, 30, yLabel, textColor)
-
-	cleanPath := filepath.Clean(path)
-	// The output filename is fixed by the caller and joined onto a cleaned plot directory.
-	file, err := os.OpenFile(cleanPath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0o600)
-	if err != nil {
-		return err
-	}
-	if err := png.Encode(file, img); err != nil {
-		_ = file.Close()
-		return err
-	}
-	if err := file.Close(); err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+func getLatestBlockNumber(endpoint string) (int64, error) { _ = "STUB: not implemented"; return 0, nil }
+
+func getBlockInfo(endpoint string, blockNum int64) (*BlockInfo, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func runConcurrent(concurrency, total int, workFn func(i int) (string, time.Duration, error)) map[string]*LatencyStats {
+	_ = "STUB: not implemented"
+	return nil
+}
+
+func printStats(title string, stats map[string]*LatencyStats) { _ = "STUB: not implemented"; return }
+
+func buildBlockNumbers(latestBlock int64, blockCount int, startBlock, endBlock int64) ([]int64, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func writeLabel(img *image.RGBA, x, y int, text string, col color.Color) {
+	_ = "STUB: not implemented"
+	return
+}
+
+func setPixel(img *image.RGBA, x, y int, col color.Color) { _ = "STUB: not implemented"; return }
+
+func drawLine(img *image.RGBA, x1, y1, x2, y2 int, col color.Color) {
+	_ = "STUB: not implemented"
+	return
+}
+
+func fillCircle(img *image.RGBA, cx, cy, r int, col color.Color) { _ = "STUB: not implemented"; return }
+
+func scaleValue(value, minValue, maxValue, start, span float64) float64 {
+	_ = "STUB: not implemented"
+	return 0
+}
+
+func formatTick(value float64) string { _ = "STUB: not implemented"; return "" }
+
+func writePlotPNG(path, title, xLabel, yLabel string, points [][2]float64, connectPoints bool) error {
+	_ = "STUB: not implemented"
+	return nil
+}
+
+// The output filename is fixed by the caller and joined onto a cleaned plot directory.
+
 func writePerBlockTracePlots(plotDir string, samples []PerBlockTraceSample) ([]string, error) {
-	plotDir = filepath.Clean(plotDir)
-	if err := os.MkdirAll(plotDir, 0o750); err != nil {
-		return nil, err
-	}
-
-	ordered := append([]PerBlockTraceSample(nil), samples...)
-	sort.Slice(ordered, func(i, j int) bool { return ordered[i].Block < ordered[j].Block })
-
-	blockPoints := make([][2]float64, 0, len(ordered))
-	txPoints := make([][2]float64, 0, len(samples))
-	gasPoints := make([][2]float64, 0, len(samples))
-	for _, sample := range ordered {
-		latencyMs := float64(sample.Latency) / float64(time.Millisecond)
-		blockPoints = append(blockPoints, [2]float64{float64(sample.Block), latencyMs})
-	}
-	for _, sample := range samples {
-		latencyMs := float64(sample.Latency) / float64(time.Millisecond)
-		txPoints = append(txPoints, [2]float64{float64(sample.Txs), latencyMs})
-		gasPoints = append(gasPoints, [2]float64{float64(sample.GasUsed), latencyMs})
-	}
-
-	var written []string
-
-	blockPath := filepath.Join(plotDir, "latency_vs_block.png")
-	if err := writePlotPNG(blockPath, "Block Number vs Debug Trace Latency", "Block number", "Latency (ms)", blockPoints, true); err != nil {
-		return nil, err
-	}
-	written = append(written, blockPath)
-
-	txPath := filepath.Join(plotDir, "latency_vs_txs.png")
-	if err := writePlotPNG(txPath, "Transaction Count vs Debug Trace Latency", "Transactions per block", "Latency (ms)", txPoints, false); err != nil {
-		return nil, err
-	}
-	written = append(written, txPath)
-
-	gasPath := filepath.Join(plotDir, "latency_vs_gas.png")
-	if err := writePlotPNG(gasPath, "Block Gas Used vs Debug Trace Latency", "Gas used per block", "Latency (ms)", gasPoints, false); err != nil {
-		return nil, err
-	}
-	written = append(written, gasPath)
-
-	return written, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func main() {

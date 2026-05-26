@@ -1,28 +1,15 @@
 package ante
 
 import (
-	"errors"
 	"math/big"
 
-	"github.com/sei-protocol/sei-chain/utils/helpers"
-
-	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/params"
-	"github.com/sei-protocol/sei-chain/app/antedecorators"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	accountkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/keeper"
-	authsigning "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/signing"
-	"go.opentelemetry.io/otel/attribute"
-	otelmetric "go.opentelemetry.io/otel/metric"
 
-	"github.com/sei-protocol/sei-chain/utils"
-	utilmetrics "github.com/sei-protocol/sei-chain/utils/metrics"
 	"github.com/sei-protocol/sei-chain/x/evm/derived"
 	evmkeeper "github.com/sei-protocol/sei-chain/x/evm/keeper"
 	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
@@ -52,164 +39,59 @@ type EVMPreprocessDecorator struct {
 }
 
 func NewEVMPreprocessDecorator(evmKeeper *evmkeeper.Keeper, accountKeeper *accountkeeper.AccountKeeper) *EVMPreprocessDecorator {
-	return &EVMPreprocessDecorator{evmKeeper: evmKeeper, accountKeeper: accountKeeper}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 //nolint:revive
 func (p *EVMPreprocessDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
-	msg := evmtypes.MustGetEVMTransactionMessage(tx)
-	if err := Preprocess(ctx, msg, p.evmKeeper.ChainID(ctx), p.evmKeeper.EthBlockTestConfig.Enabled); err != nil {
-		return ctx, err
-	}
-
-	// use infinite gas meter for EVM transaction because EVM handles gas checking from within
-	ctx = ctx.WithGasMeter(sdk.NewInfiniteGasMeterWithMultiplier(ctx))
-
-	derived := msg.Derived
-	seiAddr := derived.SenderSeiAddr
-	evmAddr := derived.SenderEVMAddr
-	ctx.EventManager().EmitEvent(sdk.NewEvent(evmtypes.EventTypeSigner,
-		sdk.NewAttribute(evmtypes.AttributeKeyEvmAddress, evmAddr.Hex()),
-		sdk.NewAttribute(evmtypes.AttributeKeySeiAddress, seiAddr.String())))
-	pubkey := derived.PubKey
-	isAssociateTx := derived.IsAssociate
-	associateHelper := helpers.NewAssociationHelper(p.evmKeeper, p.evmKeeper.BankKeeper(), p.accountKeeper)
-	_, isAssociated := p.evmKeeper.GetEVMAddress(ctx, seiAddr)
-	if isAssociateTx && isAssociated {
-		return ctx, sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "account already has association set")
-	} else if isAssociateTx {
-		// check if the account has enough balance (without charging)
-		if !p.IsAccountBalancePositive(ctx, seiAddr, evmAddr) {
-			assocErr := evmtypes.NewAssociationMissingErr(seiAddr.String())
-			utilmetrics.IncrementAssociationError("associate_tx_insufficient_funds", assocErr) // TODO(PLT-330): remove once evm_association_error_total verified
-			evmAnteMetrics.associationError.Add(ctx.Context(), 1, otelmetric.WithAttributes(attribute.String("scenario", "associate_tx_insufficient_funds"), attribute.String("type", assocErr.AddressType())))
-			return ctx, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "account needs to have at least 1 wei to force association")
-		}
-		if err := associateHelper.AssociateAddresses(ctx, seiAddr, evmAddr, pubkey, false); err != nil {
-			return ctx, err
-		}
-
-		return ctx.WithPriority(antedecorators.EVMAssociatePriority), nil // short-circuit without calling next
-	} else if isAssociated {
-		// noop; for readability
-	} else {
-		// not associatedTx and not already associated
-		if err := associateHelper.AssociateAddresses(ctx, seiAddr, evmAddr, pubkey, false); err != nil {
-			return ctx, err
-		}
-		if p.evmKeeper.EthReplayConfig.Enabled {
-			p.evmKeeper.PrepareReplayedAddr(ctx, evmAddr)
-		}
-	}
-
-	return next(ctx, tx, simulate)
+	_ = "STUB: not implemented"
+	return *new(sdk.Context), nil
 }
 
+// use infinite gas meter for EVM transaction because EVM handles gas checking from within
+
+// check if the account has enough balance (without charging)
+
+// TODO(PLT-330): remove once evm_association_error_total verified
+
+// short-circuit without calling next
+
+// noop; for readability
+
+// not associatedTx and not already associated
+
 func (p *EVMPreprocessDecorator) IsAccountBalancePositive(ctx sdk.Context, seiAddr sdk.AccAddress, evmAddr common.Address) bool {
-	baseDenom := p.evmKeeper.GetBaseDenom(ctx)
-	if amt := p.evmKeeper.BankKeeper().GetBalance(ctx, seiAddr, baseDenom).Amount; amt.IsPositive() {
-		return true
-	}
-	if amt := p.evmKeeper.BankKeeper().GetBalance(ctx, sdk.AccAddress(evmAddr[:]), baseDenom).Amount; amt.IsPositive() {
-		return true
-	}
-	if amt := p.evmKeeper.BankKeeper().GetWeiBalance(ctx, seiAddr); amt.IsPositive() {
-		return true
-	}
-	return p.evmKeeper.BankKeeper().GetWeiBalance(ctx, sdk.AccAddress(evmAddr[:])).IsPositive()
+	_ = "STUB: not implemented"
+	return false
 }
 
 // stateless
 func Preprocess(ctx sdk.Context, msgEVMTransaction *evmtypes.MsgEVMTransaction, chainID *big.Int, isBlockTest bool) error {
-	return PreprocessUnpacked(ctx, msgEVMTransaction, chainID, isBlockTest, nil)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // PreprocessUnpacked does the same thing as Preprocess but accepts already unpacked txData to save computation
 // if txData is nil, it will unpack from msgEVMTransaction.Data.
 func PreprocessUnpacked(ctx sdk.Context, msgEVMTransaction *evmtypes.MsgEVMTransaction, chainID *big.Int, isBlockTest bool, txData ethtx.TxData) error {
-	if msgEVMTransaction.Derived != nil {
-		if msgEVMTransaction.Derived.PubKey == nil {
-			// this means the message has `Derived` set from the outside, in which case we should reject
-			return sdkerrors.ErrInvalidPubKey
-		}
-		// already preprocessed
-		return nil
-	}
-
-	if txData == nil {
-		// TxData not passed in, unpack it.
-		var err error
-		txData, err = evmtypes.UnpackTxData(msgEVMTransaction.Data)
-		if err != nil {
-			return err
-		}
-	}
-
-	if atx, ok := txData.(*ethtx.AssociateTx); ok {
-		V, R, S := atx.GetRawSignatureValues()
-		V = new(big.Int).Add(V, utils.Big27)
-		// Hash custom message passed in
-		customMessageHash := crypto.Keccak256Hash([]byte(atx.CustomMessage))
-		evmAddr, seiAddr, pubkey, err := helpers.GetAddresses(V, R, S, customMessageHash)
-		if err != nil {
-			return err
-		}
-		msgEVMTransaction.Derived = &derived.Derived{
-			SenderEVMAddr: evmAddr,
-			SenderSeiAddr: seiAddr,
-			PubKey:        &secp256k1.PubKey{Key: pubkey.Bytes()},
-			Version:       derived.Cancun,
-			IsAssociate:   true,
-		}
-		return nil
-	}
-
-	ethTx := ethtypes.NewTx(txData.AsEthereumData())
-	if ethTx.Type() != ethtypes.LegacyTxType {
-		chainID = ethTx.ChainId()
-	}
-	chainCfg := evmtypes.DefaultChainConfig()
-	ethCfg := chainCfg.EthereumConfig(chainID)
-	version := GetVersion(ctx, ethCfg)
-	signer := SignerMap[version](chainID)
-	if !IsTxTypeAllowed(version, ethTx.Type()) {
-		return ethtypes.ErrInvalidChainId
-	}
-
-	var txHash common.Hash
-	V, R, S := ethTx.RawSignatureValues()
-	if ethTx.Protected() {
-		V = helpers.AdjustV(V, ethTx.Type(), ethCfg.ChainID)
-		txHash = signer.Hash(ethTx)
-	} else {
-		if isBlockTest {
-			// need to allow unprotected legacy txs in blocktest
-			// to not lose coverage for other parts of the code
-			txHash = ethtypes.FrontierSigner{}.Hash(ethTx)
-		} else {
-			return errors.New("unsupported tx type: unsafe legacy tx")
-		}
-	}
-	evmAddr, seiAddr, seiPubkey, err := helpers.GetAddresses(V, R, S, txHash)
-	if err != nil {
-		return sdkerrors.ErrInvalidChainID
-	}
-	msgEVMTransaction.Derived = &derived.Derived{
-		SenderEVMAddr: evmAddr,
-		SenderSeiAddr: seiAddr,
-		PubKey:        &secp256k1.PubKey{Key: seiPubkey.Bytes()},
-		Version:       version,
-		IsAssociate:   false,
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// this means the message has `Derived` set from the outside, in which case we should reject
+
+// already preprocessed
+
+// TxData not passed in, unpack it.
+
+// Hash custom message passed in
+
+// need to allow unprotected legacy txs in blocktest
+// to not lose coverage for other parts of the code
+
 func IsTxTypeAllowed(version derived.SignerVersion, txType uint8) bool {
-	for _, t := range AllowedTxTypes[version] {
-		if t == txType {
-			return true
-		}
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
@@ -220,35 +102,18 @@ func IsTxTypeAllowed(version derived.SignerVersion, txType uint8) bool {
 // This function rejects unprotected transactions (returns error).
 // For protected transactions, it uses the appropriate signer based on the chain version.
 func RecoverSenderFromEthTx(ctx sdk.Context, ethTx *ethtypes.Transaction, chainID *big.Int) (common.Address, sdk.AccAddress, cryptotypes.PubKey, error) {
-	if !ethTx.Protected() {
-		return common.Address{}, nil, nil, errors.New("unprotected transactions not supported")
-	}
-
-	// Version-based signer selection (same logic as PreprocessUnpacked)
-	chainCfg := evmtypes.DefaultChainConfig()
-	ethCfg := chainCfg.EthereumConfig(chainID)
-	version := GetVersion(ctx, ethCfg)
-	signer := SignerMap[version](chainID)
-
-	if !IsTxTypeAllowed(version, ethTx.Type()) {
-		return common.Address{}, nil, nil, ethtypes.ErrInvalidChainId
-	}
-
-	return helpers.RecoverAddressesFromTx(ethTx, signer, ethCfg.ChainID)
+	_ = "STUB: not implemented"
+	return *new(common.Address), *new(sdk.AccAddress), *new(cryptotypes.PubKey), nil
 }
+
+// Version-based signer selection (same logic as PreprocessUnpacked)
 
 func GetVersion(ctx sdk.Context, ethCfg *params.ChainConfig) derived.SignerVersion {
-	blockNum := big.NewInt(ctx.BlockHeight())
-	ts := uint64(ctx.BlockTime().Unix()) // nolint:gosec
-	switch {
-	case ethCfg.IsPrague(blockNum, ts):
-		return derived.Prague
-	case ethCfg.IsCancun(blockNum, ts):
-		return derived.Cancun
-	default:
-		return derived.London
-	}
+	_ = "STUB: not implemented"
+	return *new(derived.SignerVersion)
 }
+
+// nolint:gosec
 
 type EVMAddressDecorator struct {
 	evmKeeper     *evmkeeper.Keeper
@@ -256,59 +121,14 @@ type EVMAddressDecorator struct {
 }
 
 func NewEVMAddressDecorator(evmKeeper *evmkeeper.Keeper, accountKeeper *accountkeeper.AccountKeeper) *EVMAddressDecorator {
-	return &EVMAddressDecorator{evmKeeper: evmKeeper, accountKeeper: accountKeeper}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 //nolint:revive
 func (p *EVMAddressDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
-	sigTx, ok := tx.(authsigning.SigVerifiableTx)
-	if !ok {
-		return ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "invalid tx type")
-	}
-	signers := sigTx.GetSigners()
-	for _, signer := range signers {
-		if evmAddr, associated := p.evmKeeper.GetEVMAddress(ctx, signer); associated {
-			ctx.EventManager().EmitEvent(sdk.NewEvent(evmtypes.EventTypeSigner,
-				sdk.NewAttribute(evmtypes.AttributeKeyEvmAddress, evmAddr.Hex()),
-				sdk.NewAttribute(evmtypes.AttributeKeySeiAddress, signer.String())))
-			continue
-		}
-		acc := p.accountKeeper.GetAccount(ctx, signer)
-		if acc.GetPubKey() == nil {
-			logger.Error("missing pubkey for signer", "signer", signer)
-			ctx.EventManager().EmitEvent(sdk.NewEvent(evmtypes.EventTypeSigner,
-				sdk.NewAttribute(evmtypes.AttributeKeySeiAddress, signer.String())))
-			continue
-		}
-		pk, err := btcec.ParsePubKey(acc.GetPubKey().Bytes())
-		if err != nil {
-			logger.Debug("failed to parse pubkey for account, likely due to the fact that it isn't on secp256k1 curve", "account", acc.GetPubKey(), "err", err)
-			ctx.EventManager().EmitEvent(sdk.NewEvent(evmtypes.EventTypeSigner,
-				sdk.NewAttribute(evmtypes.AttributeKeySeiAddress, signer.String())))
-			continue
-		}
-		evmAddr, err := helpers.PubkeyToEVMAddress(pk.SerializeUncompressed())
-		if err != nil {
-			logger.Error("failed to get EVM address from pubkey", "err", err)
-			ctx.EventManager().EmitEvent(sdk.NewEvent(evmtypes.EventTypeSigner,
-				sdk.NewAttribute(evmtypes.AttributeKeySeiAddress, signer.String())))
-			continue
-		}
-		ctx.EventManager().EmitEvent(sdk.NewEvent(evmtypes.EventTypeSigner,
-			sdk.NewAttribute(evmtypes.AttributeKeyEvmAddress, evmAddr.Hex()),
-			sdk.NewAttribute(evmtypes.AttributeKeySeiAddress, signer.String())))
-		p.evmKeeper.SetAddressMapping(ctx, signer, evmAddr)
-		associationHelper := helpers.NewAssociationHelper(p.evmKeeper, p.evmKeeper.BankKeeper(), p.accountKeeper)
-		if err := associationHelper.MigrateBalance(ctx, evmAddr, signer, false); err != nil {
-			logger.Error("failed to migrate EVM address balance", "address", evmAddr, "err", err)
-			return ctx, err
-		}
-		if evmtypes.IsTxMsgAssociate(tx) {
-			// check if there is non-zero balance
-			if !p.evmKeeper.BankKeeper().GetBalance(ctx, signer, sdk.MustGetBaseDenom()).IsPositive() && !p.evmKeeper.BankKeeper().GetWeiBalance(ctx, signer).IsPositive() {
-				return ctx, sdkerrors.Wrap(sdkerrors.ErrInsufficientFunds, "account needs to have at least 1 wei to force association")
-			}
-		}
-	}
-	return next(ctx, tx, simulate)
+	_ = "STUB: not implemented"
+	return *new(sdk.Context), nil
 }
+
+// check if there is non-zero balance

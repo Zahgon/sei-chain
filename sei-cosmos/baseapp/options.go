@@ -1,7 +1,6 @@
 package baseapp
 
 import (
-	"fmt"
 	"io"
 
 	dbm "github.com/tendermint/tm-db"
@@ -16,311 +15,168 @@ import (
 // for options that need access to non-exported fields of the BaseApp
 
 // SetPruning sets a pruning option on the multistore associated with the app
-func SetPruning(opts sdk.PruningOptions) func(*BaseApp) {
-	return func(bapp *BaseApp) { bapp.cms.SetPruning(opts) }
-}
+func SetPruning(opts sdk.PruningOptions) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetMinGasPrices returns an option that sets the minimum gas prices on the app.
-func SetMinGasPrices(gasPricesStr string) func(*BaseApp) {
-	gasPrices, err := sdk.ParseDecCoins(gasPricesStr)
-	if err != nil {
-		panic(fmt.Sprintf("invalid minimum gas prices: %v", err))
-	}
-
-	return func(bapp *BaseApp) { bapp.setMinGasPrices(gasPrices) }
-}
+func SetMinGasPrices(gasPricesStr string) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetHaltHeight returns a BaseApp option function that sets the halt block height.
-func SetHaltHeight(blockHeight uint64) func(*BaseApp) {
-	return func(bapp *BaseApp) { bapp.setHaltHeight(blockHeight) }
-}
+func SetHaltHeight(blockHeight uint64) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetHaltTime returns a BaseApp option function that sets the halt block time.
-func SetHaltTime(haltTime uint64) func(*BaseApp) {
-	return func(bapp *BaseApp) { bapp.setHaltTime(haltTime) }
-}
+func SetHaltTime(haltTime uint64) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetMinRetainBlocks returns a BaseApp option function that sets the minimum
 // block retention height value when determining which heights to prune during
 // ABCI Commit.
 func SetMinRetainBlocks(minRetainBlocks uint64) func(*BaseApp) {
-	return func(bapp *BaseApp) { bapp.setMinRetainBlocks(minRetainBlocks) }
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func SetCompactionInterval(compactionInterval uint64) func(*BaseApp) {
-	return func(bapp *BaseApp) { bapp.setCompactionInterval(compactionInterval) }
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetTrace will turn on or off trace flag
-func SetTrace(trace bool) func(*BaseApp) {
-	return func(app *BaseApp) { app.setTrace(trace) }
-}
+func SetTrace(trace bool) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetIndexEvents provides a BaseApp option function that sets the events to index.
-func SetIndexEvents(ie []string) func(*BaseApp) {
-	return func(app *BaseApp) { app.setIndexEvents(ie) }
-}
+func SetIndexEvents(ie []string) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetInterBlockCache provides a BaseApp option function that sets the
 // inter-block cache.
 func SetInterBlockCache(cache sdk.MultiStorePersistentCache) func(*BaseApp) {
-	return func(app *BaseApp) { app.setInterBlockCache(cache) }
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetSnapshotInterval sets the snapshot interval.
-func SetSnapshotInterval(interval uint64) func(*BaseApp) {
-	return func(app *BaseApp) { app.SetSnapshotInterval(interval) }
-}
+func SetSnapshotInterval(interval uint64) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
-func SetConcurrencyWorkers(workers int) func(*BaseApp) {
-	return func(app *BaseApp) { app.SetConcurrencyWorkers(workers) }
-}
+func SetConcurrencyWorkers(workers int) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
-func SetOccEnabled(occEnabled bool) func(*BaseApp) {
-	return func(app *BaseApp) { app.SetOccEnabled(occEnabled) }
-}
+func SetOccEnabled(occEnabled bool) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetSnapshotKeepRecent sets the recent snapshots to keep.
-func SetSnapshotKeepRecent(keepRecent uint32) func(*BaseApp) {
-	return func(app *BaseApp) { app.SetSnapshotKeepRecent(keepRecent) }
-}
+func SetSnapshotKeepRecent(keepRecent uint32) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetSnapshotDirectory sets the snapshot directory.
-func SetSnapshotDirectory(dir string) func(*BaseApp) {
-	return func(app *BaseApp) { app.SetSnapshotDirectory(dir) }
-}
+func SetSnapshotDirectory(dir string) func(*BaseApp) { _ = "STUB: not implemented"; return nil }
 
 // SetSnapshotStore sets the snapshot store.
 func SetSnapshotStore(snapshotStore *snapshots.Store) func(*BaseApp) {
-	return func(app *BaseApp) { app.SetSnapshotStore(snapshotStore) }
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (app *BaseApp) SetName(name string) {
-	if app.sealed {
-		panic("SetName() on sealed BaseApp")
-	}
-
-	app.name = name
-}
+func (app *BaseApp) SetName(name string) { _ = "STUB: not implemented"; return }
 
 // SetParamStore sets a parameter store on the BaseApp.
-func (app *BaseApp) SetParamStore(ps ParamStore) {
-	if app.sealed {
-		panic("SetParamStore() on sealed BaseApp")
-	}
-
-	app.paramStore = ps
-}
+func (app *BaseApp) SetParamStore(ps ParamStore) { _ = "STUB: not implemented"; return }
 
 // SetVersion sets the application's version string.
-func (app *BaseApp) SetVersion(v string) {
-	if app.sealed {
-		panic("SetVersion() on sealed BaseApp")
-	}
-	app.version = v
-}
+func (app *BaseApp) SetVersion(v string) { _ = "STUB: not implemented"; return }
 
 // SetProtocolVersion sets the application's protocol version
-func (app *BaseApp) SetProtocolVersion(v uint64) {
-	app.appVersion = v
-}
+func (app *BaseApp) SetProtocolVersion(v uint64) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) SetDB(db dbm.DB) {
-	if app.sealed {
-		panic("SetDB() on sealed BaseApp")
-	}
+func (app *BaseApp) SetDB(db dbm.DB) { _ = "STUB: not implemented"; return }
 
-	app.db = db
-}
+func (app *BaseApp) SetCMS(cms store.CommitMultiStore) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) SetCMS(cms store.CommitMultiStore) {
-	if app.sealed {
-		panic("SetEndBlocker() on sealed BaseApp")
-	}
+func (app *BaseApp) SetInitChainer(initChainer sdk.InitChainer) { _ = "STUB: not implemented"; return }
 
-	app.cms = cms
-}
+func (app *BaseApp) SetMidBlocker(midBlocker sdk.MidBlocker) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) SetInitChainer(initChainer sdk.InitChainer) {
-	if app.sealed {
-		panic("SetInitChainer() on sealed BaseApp")
-	}
-
-	app.initChainer = initChainer
-}
-
-func (app *BaseApp) SetMidBlocker(midBlocker sdk.MidBlocker) {
-	if app.sealed {
-		panic("SetMidBlocker() on sealed BaseApp")
-	}
-
-	app.midBlocker = midBlocker
-}
-
-func (app *BaseApp) SetEndBlocker(endBlocker sdk.EndBlocker) {
-	if app.sealed {
-		panic("SetEndBlocker() on sealed BaseApp")
-	}
-
-	app.endBlocker = endBlocker
-}
+func (app *BaseApp) SetEndBlocker(endBlocker sdk.EndBlocker) { _ = "STUB: not implemented"; return }
 
 func (app *BaseApp) SetPreCommitHandler(preCommitHandler sdk.PreCommitHandler) {
-	if app.sealed {
-		panic("SetPreCommitHandler() on sealed BaseApp")
-	}
-
-	app.preCommitHandler = preCommitHandler
+	_ = "STUB: not implemented"
+	return
 }
 
 func (app *BaseApp) SetCloseHandler(closeHandler sdk.CloseHandler) {
-	if app.sealed {
-		panic("SetCloseHandler() on sealed BaseApp")
-	}
-
-	app.closeHandler = closeHandler
+	_ = "STUB: not implemented"
+	return
 }
 
 func (app *BaseApp) SetProcessProposalHandler(processProposalHandler sdk.ProcessProposalHandler) {
-	if app.sealed {
-		panic("SetProcessProposalHandler() on sealed BaseApp")
-	}
-
-	app.processProposalHandler = processProposalHandler
+	_ = "STUB: not implemented"
+	return
 }
 
 func (app *BaseApp) SetFinalizeBlocker(finalizeBlocker sdk.FinalizeBlocker) {
-	if app.sealed {
-		panic("SetFinalizeBlocker() on sealed BaseApp")
-	}
-
-	app.finalizeBlocker = finalizeBlocker
+	_ = "STUB: not implemented"
+	return
 }
 
 func (app *BaseApp) SetLoadVersionHandler(loadVersionHandler sdk.LoadVersionHandler) {
-	if app.sealed {
-		panic("SetLoadVersionHandler() on sealed BaseApp")
-	}
-
-	app.loadVersionHandler = loadVersionHandler
+	_ = "STUB: not implemented"
+	return
 }
 
 func (app *BaseApp) SetInplaceTestnetInitializer(inplaceTestnetInitializer sdk.InplaceTestnetInitializer) {
-	if app.sealed {
-		panic("SetInplaceTestnetInitializer() on sealed BaseApp")
-	}
-
-	app.inplaceTestnetInitializer = inplaceTestnetInitializer
+	_ = "STUB: not implemented"
+	return
 }
 
-func (app *BaseApp) SetAnteHandler(ah sdk.AnteHandler) {
-	if app.sealed {
-		panic("SetAnteHandler() on sealed BaseApp")
-	}
+func (app *BaseApp) SetAnteHandler(ah sdk.AnteHandler) { _ = "STUB: not implemented"; return }
 
-	app.anteHandler = ah
-}
-
-func (app *BaseApp) SetFauxMerkleMode() {
-	if app.sealed {
-		panic("SetFauxMerkleMode() on sealed BaseApp")
-	}
-
-	app.fauxMerkleMode = true
-}
+func (app *BaseApp) SetFauxMerkleMode() { _ = "STUB: not implemented"; return }
 
 // SetCommitMultiStoreTracer sets the store tracer on the BaseApp's underlying
 // CommitMultiStore.
-func (app *BaseApp) SetCommitMultiStoreTracer(w io.Writer) {
-	app.cms.SetTracer(w)
-}
+func (app *BaseApp) SetCommitMultiStoreTracer(w io.Writer) { _ = "STUB: not implemented"; return }
 
 // SetStoreLoader allows us to customize the rootMultiStore initialization.
-func (app *BaseApp) SetStoreLoader(loader StoreLoader) {
-	if app.sealed {
-		panic("SetStoreLoader() on sealed BaseApp")
-	}
-
-	app.storeLoader = loader
-}
+func (app *BaseApp) SetStoreLoader(loader StoreLoader) { _ = "STUB: not implemented"; return }
 
 // SetRouter allows us to customize the router.
-func (app *BaseApp) SetRouter(router sdk.Router) {
-	if app.sealed {
-		panic("SetRouter() on sealed BaseApp")
-	}
-	app.router = router
-}
+func (app *BaseApp) SetRouter(router sdk.Router) { _ = "STUB: not implemented"; return }
 
 // SetSnapshotStore sets the snapshot store.
 func (app *BaseApp) SetSnapshotStore(snapshotStore *snapshots.Store) {
-	if app.sealed {
-		panic("SetSnapshotStore() on sealed BaseApp")
-	}
-	if snapshotStore == nil {
-		app.snapshotManager = nil
-		return
-	}
-	app.snapshotManager = snapshots.NewManager(snapshotStore, app.cms)
+	_ = "STUB: not implemented"
+	return
 }
 
 // SetSnapshotInterval sets the snapshot interval.
-func (app *BaseApp) SetSnapshotInterval(snapshotInterval uint64) {
-	if app.sealed {
-		panic("SetSnapshotInterval() on sealed BaseApp")
-	}
-	app.snapshotInterval = snapshotInterval
-}
+func (app *BaseApp) SetSnapshotInterval(snapshotInterval uint64) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) SetConcurrencyWorkers(workers int) {
-	if app.sealed {
-		panic("SetConcurrencyWorkers() on sealed BaseApp")
-	}
-	app.concurrencyWorkers = workers
-}
+func (app *BaseApp) SetConcurrencyWorkers(workers int) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) SetOccEnabled(occEnabled bool) {
-	if app.sealed {
-		panic("SetOccEnabled() on sealed BaseApp")
-	}
-	app.occEnabled = occEnabled
-}
+func (app *BaseApp) SetOccEnabled(occEnabled bool) { _ = "STUB: not implemented"; return }
 
 // SetSnapshotKeepRecent sets the number of recent snapshots to keep.
 func (app *BaseApp) SetSnapshotKeepRecent(snapshotKeepRecent uint32) {
-	if app.sealed {
-		panic("SetSnapshotKeepRecent() on sealed BaseApp")
-	}
-	app.snapshotKeepRecent = snapshotKeepRecent
+	_ = "STUB: not implemented"
+	return
 }
 
 // SetSnapshotDirectory sets the snapshot directory.
-func (app *BaseApp) SetSnapshotDirectory(dir string) {
-	if app.sealed {
-		panic("SetSnapshotDirectory() on sealed BaseApp")
-	}
-	app.snapshotDirectory = dir
-}
+func (app *BaseApp) SetSnapshotDirectory(dir string) { _ = "STUB: not implemented"; return }
 
 // SetInterfaceRegistry sets the InterfaceRegistry.
 func (app *BaseApp) SetInterfaceRegistry(registry types.InterfaceRegistry) {
-	app.interfaceRegistry = registry
-	app.grpcQueryRouter.SetInterfaceRegistry(registry)
-	app.msgServiceRouter.SetInterfaceRegistry(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // SetQueryMultiStore set a alternative MultiStore implementation to support online migration fallback read.
 func (app *BaseApp) SetQueryMultiStore(ms sdk.CommitMultiStore) {
-	app.qms = ms
+	_ = "STUB: not implemented"
+
+	// SetMigrationHeight set the migration height for online migration so that query below this height will still be served from IAVL.
+	return
 }
 
-// SetMigrationHeight set the migration height for online migration so that query below this height will still be served from IAVL.
-func (app *BaseApp) SetMigrationHeight(height int64) {
-	app.migrationHeight = height
-}
+func (app *BaseApp) SetMigrationHeight(height int64) { _ = "STUB: not implemented"; return }
 
 // SetTxPrioritizer sets the transaction prioritizer for the BaseApp. If unset,
 // calls to GetTxPriorityHint for all valid transactions will return 0.
 func (app *BaseApp) SetTxPrioritizer(prioritizer sdk.TxPrioritizer) {
-	app.txPrioritizer = prioritizer
+	_ = "STUB: not implemented"
+	return
 }

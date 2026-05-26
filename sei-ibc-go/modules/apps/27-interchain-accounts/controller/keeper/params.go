@@ -8,18 +8,13 @@ import (
 
 // IsControllerEnabled retrieves the controller enabled boolean from the paramstore.
 // True is returned if the controller submodule is enabled.
-func (k Keeper) IsControllerEnabled(ctx sdk.Context) bool {
-	var res bool
-	k.paramSpace.Get(ctx, types.KeyControllerEnabled, &res)
-	return res
-}
+func (k Keeper) IsControllerEnabled(ctx sdk.Context) bool { _ = "STUB: not implemented"; return false }
 
 // GetParams returns the total set of the controller submodule parameters.
 func (k Keeper) GetParams(ctx sdk.Context) types.Params {
-	return types.NewParams(k.IsControllerEnabled(ctx))
+	_ = "STUB: not implemented"
+	return *new(types.Params)
 }
 
 // SetParams sets the total set of the controller submodule parameters.
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramSpace.SetParamSet(ctx, &params)
-}
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) { _ = "STUB: not implemented"; return }

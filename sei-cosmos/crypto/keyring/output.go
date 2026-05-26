@@ -1,14 +1,6 @@
 package keyring
 
 import (
-	"encoding/hex"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/hd"
-
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
-	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -29,83 +21,41 @@ type KeyOutput struct {
 
 // NewKeyOutput creates a default KeyOutput instance without Mnemonic, Threshold and PubKeys
 func NewKeyOutput(name string, keyType KeyType, a sdk.Address, pk cryptotypes.PubKey) (KeyOutput, error) {
-	apk, err := codectypes.NewAnyWithValue(pk)
-	if err != nil {
-		return KeyOutput{}, err
-	}
-	bz, err := codec.ProtoMarshalJSON(apk, nil)
-	if err != nil {
-		return KeyOutput{}, err
-	}
-	return KeyOutput{
-		Name:    name,
-		Type:    keyType.String(),
-		Address: a.String(),
-		PubKey:  string(bz),
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(KeyOutput), nil
 }
 
 // MkConsKeyOutput create a KeyOutput in with "cons" Bech32 prefixes.
 func MkConsKeyOutput(keyInfo Info) (KeyOutput, error) {
-	pk := keyInfo.GetPubKey()
-	addr := sdk.ConsAddress(pk.Address())
-	return NewKeyOutput(keyInfo.GetName(), keyInfo.GetType(), addr, pk)
+	_ = "STUB: not implemented"
+	return *new(KeyOutput), nil
 }
 
 // MkValKeyOutput create a KeyOutput in with "val" Bech32 prefixes.
 func MkValKeyOutput(keyInfo Info) (KeyOutput, error) {
-	pk := keyInfo.GetPubKey()
-	addr := sdk.ValAddress(pk.Address())
-	return NewKeyOutput(keyInfo.GetName(), keyInfo.GetType(), addr, pk)
+	_ = "STUB: not implemented"
+	return *new(KeyOutput), nil
 }
 
 // MkAccKeyOutput create a KeyOutput in with "acc" Bech32 prefixes. If the
 // public key is a multisig public key, then the threshold and constituent
 // public keys will be added.
 func MkAccKeyOutput(keyInfo Info) (KeyOutput, error) {
-	pk := keyInfo.GetPubKey()
-	addr := sdk.AccAddress(pk.Address())
-	return NewKeyOutput(keyInfo.GetName(), keyInfo.GetType(), addr, pk)
+	_ = "STUB: not implemented"
+	return *new(KeyOutput), nil
 }
 
 // MkAccKeysOutput returns a slice of KeyOutput objects, each with the "acc"
 // Bech32 prefixes, given a slice of Info objects. It returns an error if any
 // call to MkKeyOutput fails.
-func MkAccKeysOutput(infos []Info) ([]KeyOutput, error) {
-	kos := make([]KeyOutput, len(infos))
-	var err error
-	for i, info := range infos {
-		kos[i], err = MkAccKeyOutput(info)
-		if err != nil {
-			return nil, err
-		}
-		if info.GetAlgo() == hd.Secp256k1Type {
-			// We only support getting evm-addr if the algo type is secp256k1 (which it should be, though there
-			// may be some legacy keys with sr25519)
-			kos[i], err = PopulateEvmAddrIfApplicable(info, kos[i])
-			if err != nil {
-				return nil, err
-			}
-		}
-	}
+func MkAccKeysOutput(infos []Info) ([]KeyOutput, error) { _ = "STUB: not implemented"; return nil, nil }
 
-	return kos, nil
-}
+// We only support getting evm-addr if the algo type is secp256k1 (which it should be, though there
+// may be some legacy keys with sr25519)
 
 func PopulateEvmAddrIfApplicable(info Info, o KeyOutput) (KeyOutput, error) {
-	localInfo, ok := info.(LocalInfo)
-	if ok {
-		// Only works with secp256k1 algo
-		priv, err := legacy.PrivKeyFromBytes([]byte(localInfo.PrivKeyArmor))
-		if err != nil {
-			return o, err
-		}
-		privHex := hex.EncodeToString(priv.Bytes())
-		privKey, err := crypto.HexToECDSA(privHex)
-		if err != nil {
-			return o, err
-		}
-		o.EvmAddress = crypto.PubkeyToAddress(privKey.PublicKey).Hex()
-	}
-	return o, nil
+	_ = "STUB: not implemented"
+	return *new(KeyOutput), nil
 }
+
+// Only works with secp256k1 algo

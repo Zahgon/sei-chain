@@ -1,9 +1,6 @@
 package types
 
 import (
-	"fmt"
-	"strings"
-
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
 )
 
@@ -21,63 +18,28 @@ var (
 
 // ParamKeyTable type declaration for parameters
 func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
+	_ = "STUB: not implemented"
+	return *new(paramtypes.KeyTable)
 }
 
 // NewParams creates a new parameter configuration for the host submodule
 func NewParams(enableHost bool, allowMsgs []string) Params {
-	return Params{
-		HostEnabled:   enableHost,
-		AllowMessages: allowMsgs,
-	}
+	_ = "STUB: not implemented"
+	return *new(Params)
 }
 
 // DefaultParams is the default parameter configuration for the host submodule
-func DefaultParams() Params {
-	return NewParams(DefaultHostEnabled, nil)
-}
+func DefaultParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
 // Validate validates all host submodule parameters
-func (p Params) Validate() error {
-	if err := validateEnabled(p.HostEnabled); err != nil {
-		return err
-	}
-
-	if err := validateAllowlist(p.AllowMessages); err != nil {
-		return err
-	}
-
-	return nil
-}
+func (p Params) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // ParamSetPairs implements params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeyHostEnabled, p.HostEnabled, validateEnabled),
-		paramtypes.NewParamSetPair(KeyAllowMessages, p.AllowMessages, validateAllowlist),
-	}
+	_ = "STUB: not implemented"
+	return *new(paramtypes.ParamSetPairs)
 }
 
-func validateEnabled(i interface{}) error {
-	_, ok := i.(bool)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
+func validateEnabled(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
-
-func validateAllowlist(i interface{}) error {
-	allowMsgs, ok := i.([]string)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	for _, typeURL := range allowMsgs {
-		if strings.TrimSpace(typeURL) == "" {
-			return fmt.Errorf("parameter must not contain empty strings: %s", allowMsgs)
-		}
-	}
-
-	return nil
-}
+func validateAllowlist(i interface{}) error { _ = "STUB: not implemented"; return nil }

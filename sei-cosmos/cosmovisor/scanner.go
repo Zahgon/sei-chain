@@ -29,16 +29,6 @@ type UpgradeInfo struct {
 // It returns (nil, err) if the input stream errored
 // It returns (nil, nil) if the input closed without ever matching the regexp
 func WaitForUpdate(scanner *bufio.Scanner) (*UpgradeInfo, error) {
-	for scanner.Scan() {
-		line := scanner.Text()
-		if upgradeRegex.MatchString(line) {
-			subs := upgradeRegex.FindStringSubmatch(line)
-			info := UpgradeInfo{
-				Name: subs[1],
-				Info: subs[7],
-			}
-			return &info, nil
-		}
-	}
-	return nil, scanner.Err()
+	_ = "STUB: not implemented"
+	return nil, nil
 }

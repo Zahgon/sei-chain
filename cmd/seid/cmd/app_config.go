@@ -38,21 +38,6 @@ type CustomAppConfig struct {
 
 // NewCustomAppConfig creates a CustomAppConfig with the given base config and EVM config
 func NewCustomAppConfig(baseConfig *srvconfig.Config, evmConfig evmrpcconfig.Config) CustomAppConfig {
-	return CustomAppConfig{
-		Config:       *baseConfig,
-		StateCommit:  seidbconfig.DefaultStateCommitConfig(),
-		StateStore:   seidbconfig.DefaultStateStoreConfig(),
-		ReceiptStore: seidbconfig.DefaultReceiptStoreConfig(),
-		WASM: WASMConfig{
-			QueryGasLimit: 300000,
-			LruSize:       1,
-		},
-		EVM:             evmConfig,
-		GigaExecutor:    gigaconfig.DefaultConfig,
-		ETHReplay:       replay.DefaultConfig,
-		ETHBlockTest:    blocktest.DefaultConfig,
-		EvmQuery:        querier.DefaultConfig,
-		LightInvariance: seiapp.DefaultLightInvarianceConfig,
-		Admin:           admin.DefaultConfig,
-	}
+	_ = "STUB: not implemented"
+	return *new(CustomAppConfig)
 }

@@ -99,47 +99,32 @@ type SendallTransactorRaw struct {
 
 // NewSendall creates a new instance of Sendall, bound to a specific deployed contract.
 func NewSendall(address common.Address, backend bind.ContractBackend) (*Sendall, error) {
-	contract, err := bindSendall(address, backend, backend, backend)
-	if err != nil {
-		return nil, err
-	}
-	return &Sendall{SendallCaller: SendallCaller{contract: contract}, SendallTransactor: SendallTransactor{contract: contract}, SendallFilterer: SendallFilterer{contract: contract}}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewSendallCaller creates a new read-only instance of Sendall, bound to a specific deployed contract.
 func NewSendallCaller(address common.Address, caller bind.ContractCaller) (*SendallCaller, error) {
-	contract, err := bindSendall(address, caller, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &SendallCaller{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewSendallTransactor creates a new write-only instance of Sendall, bound to a specific deployed contract.
 func NewSendallTransactor(address common.Address, transactor bind.ContractTransactor) (*SendallTransactor, error) {
-	contract, err := bindSendall(address, nil, transactor, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &SendallTransactor{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewSendallFilterer creates a new log filterer instance of Sendall, bound to a specific deployed contract.
 func NewSendallFilterer(address common.Address, filterer bind.ContractFilterer) (*SendallFilterer, error) {
-	contract, err := bindSendall(address, nil, nil, filterer)
-	if err != nil {
-		return nil, err
-	}
-	return &SendallFilterer{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // bindSendall binds a generic wrapper to an already deployed contract.
 func bindSendall(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := SendallMetaData.GetAbi()
-	if err != nil {
-		return nil, err
-	}
-	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -147,18 +132,21 @@ func bindSendall(address common.Address, caller bind.ContractCaller, transactor 
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Sendall *SendallRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Sendall.Contract.SendallCaller.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Sendall *SendallRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Sendall.Contract.SendallTransactor.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Sendall *SendallRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Sendall.Contract.SendallTransactor.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -166,37 +154,43 @@ func (_Sendall *SendallRaw) Transact(opts *bind.TransactOpts, method string, par
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Sendall *SendallCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Sendall.Contract.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Sendall *SendallTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Sendall.Contract.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Sendall *SendallTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Sendall.Contract.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SendAll is a paid mutator transaction binding the contract method 0x89e5af5f.
 //
 // Solidity: function sendAll(address fromAddress, address toAddress, string denom) returns()
 func (_Sendall *SendallTransactor) SendAll(opts *bind.TransactOpts, fromAddress common.Address, toAddress common.Address, denom string) (*types.Transaction, error) {
-	return _Sendall.contract.Transact(opts, "sendAll", fromAddress, toAddress, denom)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SendAll is a paid mutator transaction binding the contract method 0x89e5af5f.
 //
 // Solidity: function sendAll(address fromAddress, address toAddress, string denom) returns()
 func (_Sendall *SendallSession) SendAll(fromAddress common.Address, toAddress common.Address, denom string) (*types.Transaction, error) {
-	return _Sendall.Contract.SendAll(&_Sendall.TransactOpts, fromAddress, toAddress, denom)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SendAll is a paid mutator transaction binding the contract method 0x89e5af5f.
 //
 // Solidity: function sendAll(address fromAddress, address toAddress, string denom) returns()
 func (_Sendall *SendallTransactorSession) SendAll(fromAddress common.Address, toAddress common.Address, denom string) (*types.Transaction, error) {
-	return _Sendall.Contract.SendAll(&_Sendall.TransactOpts, fromAddress, toAddress, denom)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

@@ -6,16 +6,13 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -53,12 +50,11 @@ var ResponseResultType_value = map[string]int32{
 	"RESPONSE_RESULT_TYPE_SUCCESS":     2,
 }
 
-func (x ResponseResultType) String() string {
-	return proto.EnumName(ResponseResultType_name, int32(x))
-}
+func (x ResponseResultType) String() string { _ = "STUB: not implemented"; return "" }
 
 func (ResponseResultType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MsgChannelOpenInit defines an sdk.Msg to initialize a channel handshake. It
@@ -69,36 +65,23 @@ type MsgChannelOpenInit struct {
 	Signer  string  `protobuf:"bytes,3,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgChannelOpenInit) Reset()         { *m = MsgChannelOpenInit{} }
-func (m *MsgChannelOpenInit) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelOpenInit) ProtoMessage()    {}
-func (*MsgChannelOpenInit) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{0}
-}
-func (m *MsgChannelOpenInit) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgChannelOpenInit) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgChannelOpenInit) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelOpenInit) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgChannelOpenInit) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgChannelOpenInit) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelOpenInit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelOpenInit.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelOpenInit) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelOpenInit.Merge(m, src)
-}
-func (m *MsgChannelOpenInit) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelOpenInit) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelOpenInit.DiscardUnknown(m)
-}
+
+func (m *MsgChannelOpenInit) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgChannelOpenInit) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenInit) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelOpenInit proto.InternalMessageInfo
 
@@ -108,52 +91,38 @@ type MsgChannelOpenInitResponse struct {
 	Version   string `protobuf:"bytes,2,opt,name=version,proto3" json:"version,omitempty"`
 }
 
-func (m *MsgChannelOpenInitResponse) Reset()         { *m = MsgChannelOpenInitResponse{} }
-func (m *MsgChannelOpenInitResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelOpenInitResponse) ProtoMessage()    {}
+func (m *MsgChannelOpenInitResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelOpenInitResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelOpenInitResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelOpenInitResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelOpenInitResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgChannelOpenInitResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelOpenInitResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelOpenInitResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelOpenInitResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgChannelOpenInitResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelOpenInitResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelOpenInitResponse.DiscardUnknown(m)
-}
+
+func (m *MsgChannelOpenInitResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenInitResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelOpenInitResponse proto.InternalMessageInfo
 
-func (m *MsgChannelOpenInitResponse) GetChannelId() string {
-	if m != nil {
-		return m.ChannelId
-	}
-	return ""
-}
+func (m *MsgChannelOpenInitResponse) GetChannelId() string { _ = "STUB: not implemented"; return "" }
 
-func (m *MsgChannelOpenInitResponse) GetVersion() string {
-	if m != nil {
-		return m.Version
-	}
-	return ""
-}
+func (m *MsgChannelOpenInitResponse) GetVersion() string { _ = "STUB: not implemented"; return "" }
 
 // MsgChannelOpenInit defines a msg sent by a Relayer to try to open a channel
 // on Chain B. The version field within the Channel field has been deprecated. Its
@@ -171,36 +140,23 @@ type MsgChannelOpenTry struct {
 	Signer              string       `protobuf:"bytes,7,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgChannelOpenTry) Reset()         { *m = MsgChannelOpenTry{} }
-func (m *MsgChannelOpenTry) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelOpenTry) ProtoMessage()    {}
-func (*MsgChannelOpenTry) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{2}
-}
-func (m *MsgChannelOpenTry) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgChannelOpenTry) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgChannelOpenTry) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelOpenTry) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgChannelOpenTry) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgChannelOpenTry) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelOpenTry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelOpenTry.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelOpenTry) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelOpenTry.Merge(m, src)
-}
-func (m *MsgChannelOpenTry) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelOpenTry) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelOpenTry.DiscardUnknown(m)
-}
+
+func (m *MsgChannelOpenTry) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgChannelOpenTry) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenTry) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelOpenTry proto.InternalMessageInfo
 
@@ -209,45 +165,33 @@ type MsgChannelOpenTryResponse struct {
 	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
 }
 
-func (m *MsgChannelOpenTryResponse) Reset()         { *m = MsgChannelOpenTryResponse{} }
-func (m *MsgChannelOpenTryResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelOpenTryResponse) ProtoMessage()    {}
+func (m *MsgChannelOpenTryResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelOpenTryResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelOpenTryResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelOpenTryResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelOpenTryResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgChannelOpenTryResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelOpenTryResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelOpenTryResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelOpenTryResponse.Merge(m, src)
-}
-func (m *MsgChannelOpenTryResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelOpenTryResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelOpenTryResponse.DiscardUnknown(m)
-}
+
+func (m *MsgChannelOpenTryResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgChannelOpenTryResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenTryResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelOpenTryResponse proto.InternalMessageInfo
 
-func (m *MsgChannelOpenTryResponse) GetVersion() string {
-	if m != nil {
-		return m.Version
-	}
-	return ""
-}
+func (m *MsgChannelOpenTryResponse) GetVersion() string { _ = "STUB: not implemented"; return "" }
 
 // MsgChannelOpenAck defines a msg sent by a Relayer to Chain A to acknowledge
 // the change of channel state to TRYOPEN on Chain B.
@@ -261,36 +205,23 @@ type MsgChannelOpenAck struct {
 	Signer                string       `protobuf:"bytes,7,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgChannelOpenAck) Reset()         { *m = MsgChannelOpenAck{} }
-func (m *MsgChannelOpenAck) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelOpenAck) ProtoMessage()    {}
-func (*MsgChannelOpenAck) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{4}
-}
-func (m *MsgChannelOpenAck) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgChannelOpenAck) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgChannelOpenAck) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelOpenAck) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgChannelOpenAck) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgChannelOpenAck) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelOpenAck) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelOpenAck.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelOpenAck) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelOpenAck.Merge(m, src)
-}
-func (m *MsgChannelOpenAck) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelOpenAck) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelOpenAck.DiscardUnknown(m)
-}
+
+func (m *MsgChannelOpenAck) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgChannelOpenAck) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenAck) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelOpenAck proto.InternalMessageInfo
 
@@ -298,36 +229,29 @@ var xxx_messageInfo_MsgChannelOpenAck proto.InternalMessageInfo
 type MsgChannelOpenAckResponse struct {
 }
 
-func (m *MsgChannelOpenAckResponse) Reset()         { *m = MsgChannelOpenAckResponse{} }
-func (m *MsgChannelOpenAckResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelOpenAckResponse) ProtoMessage()    {}
+func (m *MsgChannelOpenAckResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelOpenAckResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelOpenAckResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelOpenAckResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelOpenAckResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgChannelOpenAckResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelOpenAckResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelOpenAckResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelOpenAckResponse.Merge(m, src)
-}
-func (m *MsgChannelOpenAckResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelOpenAckResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelOpenAckResponse.DiscardUnknown(m)
-}
+
+func (m *MsgChannelOpenAckResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgChannelOpenAckResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenAckResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelOpenAckResponse proto.InternalMessageInfo
 
@@ -341,36 +265,29 @@ type MsgChannelOpenConfirm struct {
 	Signer      string       `protobuf:"bytes,5,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgChannelOpenConfirm) Reset()         { *m = MsgChannelOpenConfirm{} }
-func (m *MsgChannelOpenConfirm) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelOpenConfirm) ProtoMessage()    {}
+func (m *MsgChannelOpenConfirm) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelOpenConfirm) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelOpenConfirm) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelOpenConfirm) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{6}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelOpenConfirm) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgChannelOpenConfirm) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelOpenConfirm.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelOpenConfirm) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelOpenConfirm.Merge(m, src)
-}
-func (m *MsgChannelOpenConfirm) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelOpenConfirm) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelOpenConfirm.DiscardUnknown(m)
-}
+
+func (m *MsgChannelOpenConfirm) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgChannelOpenConfirm) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenConfirm) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelOpenConfirm proto.InternalMessageInfo
 
@@ -379,36 +296,32 @@ var xxx_messageInfo_MsgChannelOpenConfirm proto.InternalMessageInfo
 type MsgChannelOpenConfirmResponse struct {
 }
 
-func (m *MsgChannelOpenConfirmResponse) Reset()         { *m = MsgChannelOpenConfirmResponse{} }
-func (m *MsgChannelOpenConfirmResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelOpenConfirmResponse) ProtoMessage()    {}
+func (m *MsgChannelOpenConfirmResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelOpenConfirmResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelOpenConfirmResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelOpenConfirmResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{7}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelOpenConfirmResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgChannelOpenConfirmResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelOpenConfirmResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelOpenConfirmResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelOpenConfirmResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgChannelOpenConfirmResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelOpenConfirmResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelOpenConfirmResponse.DiscardUnknown(m)
-}
+
+func (m *MsgChannelOpenConfirmResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenConfirmResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelOpenConfirmResponse proto.InternalMessageInfo
 
@@ -420,36 +333,26 @@ type MsgChannelCloseInit struct {
 	Signer    string `protobuf:"bytes,3,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgChannelCloseInit) Reset()         { *m = MsgChannelCloseInit{} }
-func (m *MsgChannelCloseInit) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelCloseInit) ProtoMessage()    {}
+func (m *MsgChannelCloseInit) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelCloseInit) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelCloseInit) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelCloseInit) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{8}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelCloseInit) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *MsgChannelCloseInit) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelCloseInit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelCloseInit.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelCloseInit) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelCloseInit.Merge(m, src)
-}
-func (m *MsgChannelCloseInit) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelCloseInit) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelCloseInit.DiscardUnknown(m)
-}
+
+func (m *MsgChannelCloseInit) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgChannelCloseInit) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelCloseInit) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelCloseInit proto.InternalMessageInfo
 
@@ -457,36 +360,32 @@ var xxx_messageInfo_MsgChannelCloseInit proto.InternalMessageInfo
 type MsgChannelCloseInitResponse struct {
 }
 
-func (m *MsgChannelCloseInitResponse) Reset()         { *m = MsgChannelCloseInitResponse{} }
-func (m *MsgChannelCloseInitResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelCloseInitResponse) ProtoMessage()    {}
+func (m *MsgChannelCloseInitResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelCloseInitResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelCloseInitResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelCloseInitResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{9}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelCloseInitResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgChannelCloseInitResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelCloseInitResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelCloseInitResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelCloseInitResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgChannelCloseInitResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelCloseInitResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelCloseInitResponse.DiscardUnknown(m)
-}
+
+func (m *MsgChannelCloseInitResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelCloseInitResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelCloseInitResponse proto.InternalMessageInfo
 
@@ -500,36 +399,29 @@ type MsgChannelCloseConfirm struct {
 	Signer      string       `protobuf:"bytes,5,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgChannelCloseConfirm) Reset()         { *m = MsgChannelCloseConfirm{} }
-func (m *MsgChannelCloseConfirm) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelCloseConfirm) ProtoMessage()    {}
+func (m *MsgChannelCloseConfirm) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelCloseConfirm) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelCloseConfirm) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelCloseConfirm) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{10}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelCloseConfirm) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgChannelCloseConfirm) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelCloseConfirm.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgChannelCloseConfirm) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelCloseConfirm.Merge(m, src)
-}
-func (m *MsgChannelCloseConfirm) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelCloseConfirm) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelCloseConfirm.DiscardUnknown(m)
-}
+
+func (m *MsgChannelCloseConfirm) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgChannelCloseConfirm) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelCloseConfirm) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelCloseConfirm proto.InternalMessageInfo
 
@@ -538,36 +430,32 @@ var xxx_messageInfo_MsgChannelCloseConfirm proto.InternalMessageInfo
 type MsgChannelCloseConfirmResponse struct {
 }
 
-func (m *MsgChannelCloseConfirmResponse) Reset()         { *m = MsgChannelCloseConfirmResponse{} }
-func (m *MsgChannelCloseConfirmResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgChannelCloseConfirmResponse) ProtoMessage()    {}
+func (m *MsgChannelCloseConfirmResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgChannelCloseConfirmResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgChannelCloseConfirmResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgChannelCloseConfirmResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{11}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelCloseConfirmResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgChannelCloseConfirmResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgChannelCloseConfirmResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgChannelCloseConfirmResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgChannelCloseConfirmResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgChannelCloseConfirmResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgChannelCloseConfirmResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgChannelCloseConfirmResponse.DiscardUnknown(m)
-}
+
+func (m *MsgChannelCloseConfirmResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelCloseConfirmResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgChannelCloseConfirmResponse proto.InternalMessageInfo
 
@@ -579,36 +467,23 @@ type MsgRecvPacket struct {
 	Signer          string       `protobuf:"bytes,4,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgRecvPacket) Reset()         { *m = MsgRecvPacket{} }
-func (m *MsgRecvPacket) String() string { return proto.CompactTextString(m) }
-func (*MsgRecvPacket) ProtoMessage()    {}
-func (*MsgRecvPacket) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{12}
-}
-func (m *MsgRecvPacket) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgRecvPacket) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgRecvPacket) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgRecvPacket) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgRecvPacket) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgRecvPacket) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgRecvPacket) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgRecvPacket.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgRecvPacket) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRecvPacket.Merge(m, src)
-}
-func (m *MsgRecvPacket) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgRecvPacket) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRecvPacket.DiscardUnknown(m)
-}
+
+func (m *MsgRecvPacket) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgRecvPacket) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgRecvPacket) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgRecvPacket proto.InternalMessageInfo
 
@@ -617,36 +492,29 @@ type MsgRecvPacketResponse struct {
 	Result ResponseResultType `protobuf:"varint,1,opt,name=result,proto3,enum=ibc.core.channel.v1.ResponseResultType" json:"result,omitempty"`
 }
 
-func (m *MsgRecvPacketResponse) Reset()         { *m = MsgRecvPacketResponse{} }
-func (m *MsgRecvPacketResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgRecvPacketResponse) ProtoMessage()    {}
+func (m *MsgRecvPacketResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgRecvPacketResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgRecvPacketResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgRecvPacketResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{13}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgRecvPacketResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgRecvPacketResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgRecvPacketResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgRecvPacketResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRecvPacketResponse.Merge(m, src)
-}
-func (m *MsgRecvPacketResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgRecvPacketResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRecvPacketResponse.DiscardUnknown(m)
-}
+
+func (m *MsgRecvPacketResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgRecvPacketResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgRecvPacketResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgRecvPacketResponse proto.InternalMessageInfo
 
@@ -659,36 +527,23 @@ type MsgTimeout struct {
 	Signer           string       `protobuf:"bytes,5,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgTimeout) Reset()         { *m = MsgTimeout{} }
-func (m *MsgTimeout) String() string { return proto.CompactTextString(m) }
-func (*MsgTimeout) ProtoMessage()    {}
-func (*MsgTimeout) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{14}
-}
-func (m *MsgTimeout) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgTimeout) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgTimeout) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgTimeout) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgTimeout) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgTimeout) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgTimeout) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgTimeout.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgTimeout) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgTimeout.Merge(m, src)
-}
-func (m *MsgTimeout) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgTimeout) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgTimeout.DiscardUnknown(m)
-}
+
+func (m *MsgTimeout) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgTimeout) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgTimeout) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgTimeout proto.InternalMessageInfo
 
@@ -697,36 +552,23 @@ type MsgTimeoutResponse struct {
 	Result ResponseResultType `protobuf:"varint,1,opt,name=result,proto3,enum=ibc.core.channel.v1.ResponseResultType" json:"result,omitempty"`
 }
 
-func (m *MsgTimeoutResponse) Reset()         { *m = MsgTimeoutResponse{} }
-func (m *MsgTimeoutResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgTimeoutResponse) ProtoMessage()    {}
-func (*MsgTimeoutResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{15}
-}
-func (m *MsgTimeoutResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgTimeoutResponse) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgTimeoutResponse) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgTimeoutResponse) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgTimeoutResponse) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgTimeoutResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgTimeoutResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgTimeoutResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgTimeoutResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgTimeoutResponse.Merge(m, src)
-}
-func (m *MsgTimeoutResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgTimeoutResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgTimeoutResponse.DiscardUnknown(m)
-}
+
+func (m *MsgTimeoutResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgTimeoutResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgTimeoutResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgTimeoutResponse proto.InternalMessageInfo
 
@@ -740,36 +582,23 @@ type MsgTimeoutOnClose struct {
 	Signer           string       `protobuf:"bytes,6,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgTimeoutOnClose) Reset()         { *m = MsgTimeoutOnClose{} }
-func (m *MsgTimeoutOnClose) String() string { return proto.CompactTextString(m) }
-func (*MsgTimeoutOnClose) ProtoMessage()    {}
-func (*MsgTimeoutOnClose) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{16}
-}
-func (m *MsgTimeoutOnClose) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgTimeoutOnClose) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgTimeoutOnClose) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgTimeoutOnClose) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgTimeoutOnClose) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgTimeoutOnClose) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgTimeoutOnClose) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgTimeoutOnClose.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgTimeoutOnClose) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgTimeoutOnClose.Merge(m, src)
-}
-func (m *MsgTimeoutOnClose) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgTimeoutOnClose) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgTimeoutOnClose.DiscardUnknown(m)
-}
+
+func (m *MsgTimeoutOnClose) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgTimeoutOnClose) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgTimeoutOnClose) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgTimeoutOnClose proto.InternalMessageInfo
 
@@ -778,36 +607,29 @@ type MsgTimeoutOnCloseResponse struct {
 	Result ResponseResultType `protobuf:"varint,1,opt,name=result,proto3,enum=ibc.core.channel.v1.ResponseResultType" json:"result,omitempty"`
 }
 
-func (m *MsgTimeoutOnCloseResponse) Reset()         { *m = MsgTimeoutOnCloseResponse{} }
-func (m *MsgTimeoutOnCloseResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgTimeoutOnCloseResponse) ProtoMessage()    {}
+func (m *MsgTimeoutOnCloseResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgTimeoutOnCloseResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgTimeoutOnCloseResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgTimeoutOnCloseResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{17}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgTimeoutOnCloseResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgTimeoutOnCloseResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgTimeoutOnCloseResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgTimeoutOnCloseResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgTimeoutOnCloseResponse.Merge(m, src)
-}
-func (m *MsgTimeoutOnCloseResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgTimeoutOnCloseResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgTimeoutOnCloseResponse.DiscardUnknown(m)
-}
+
+func (m *MsgTimeoutOnCloseResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgTimeoutOnCloseResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgTimeoutOnCloseResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgTimeoutOnCloseResponse proto.InternalMessageInfo
 
@@ -820,36 +642,23 @@ type MsgAcknowledgement struct {
 	Signer          string       `protobuf:"bytes,5,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgAcknowledgement) Reset()         { *m = MsgAcknowledgement{} }
-func (m *MsgAcknowledgement) String() string { return proto.CompactTextString(m) }
-func (*MsgAcknowledgement) ProtoMessage()    {}
-func (*MsgAcknowledgement) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{18}
-}
-func (m *MsgAcknowledgement) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgAcknowledgement) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgAcknowledgement) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgAcknowledgement) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgAcknowledgement) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgAcknowledgement) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgAcknowledgement) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgAcknowledgement.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgAcknowledgement) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgAcknowledgement.Merge(m, src)
-}
-func (m *MsgAcknowledgement) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgAcknowledgement) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgAcknowledgement.DiscardUnknown(m)
-}
+
+func (m *MsgAcknowledgement) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgAcknowledgement) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgAcknowledgement) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgAcknowledgement proto.InternalMessageInfo
 
@@ -858,36 +667,32 @@ type MsgAcknowledgementResponse struct {
 	Result ResponseResultType `protobuf:"varint,1,opt,name=result,proto3,enum=ibc.core.channel.v1.ResponseResultType" json:"result,omitempty"`
 }
 
-func (m *MsgAcknowledgementResponse) Reset()         { *m = MsgAcknowledgementResponse{} }
-func (m *MsgAcknowledgementResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgAcknowledgementResponse) ProtoMessage()    {}
+func (m *MsgAcknowledgementResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgAcknowledgementResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgAcknowledgementResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgAcknowledgementResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_bc4637e0ac3fc7b7, []int{19}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgAcknowledgementResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgAcknowledgementResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgAcknowledgementResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgAcknowledgementResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgAcknowledgementResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *MsgAcknowledgementResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgAcknowledgementResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgAcknowledgementResponse.DiscardUnknown(m)
-}
+
+func (m *MsgAcknowledgementResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgAcknowledgementResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgAcknowledgementResponse proto.InternalMessageInfo
 
@@ -1042,98 +847,56 @@ type msgClient struct {
 	cc grpc1.ClientConn
 }
 
-func NewMsgClient(cc grpc1.ClientConn) MsgClient {
-	return &msgClient{cc}
-}
+func NewMsgClient(cc grpc1.ClientConn) MsgClient { _ = "STUB: not implemented"; return *new(MsgClient) }
 
 func (c *msgClient) ChannelOpenInit(ctx context.Context, in *MsgChannelOpenInit, opts ...grpc.CallOption) (*MsgChannelOpenInitResponse, error) {
-	out := new(MsgChannelOpenInitResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/ChannelOpenInit", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) ChannelOpenTry(ctx context.Context, in *MsgChannelOpenTry, opts ...grpc.CallOption) (*MsgChannelOpenTryResponse, error) {
-	out := new(MsgChannelOpenTryResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/ChannelOpenTry", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) ChannelOpenAck(ctx context.Context, in *MsgChannelOpenAck, opts ...grpc.CallOption) (*MsgChannelOpenAckResponse, error) {
-	out := new(MsgChannelOpenAckResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/ChannelOpenAck", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) ChannelOpenConfirm(ctx context.Context, in *MsgChannelOpenConfirm, opts ...grpc.CallOption) (*MsgChannelOpenConfirmResponse, error) {
-	out := new(MsgChannelOpenConfirmResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/ChannelOpenConfirm", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) ChannelCloseInit(ctx context.Context, in *MsgChannelCloseInit, opts ...grpc.CallOption) (*MsgChannelCloseInitResponse, error) {
-	out := new(MsgChannelCloseInitResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/ChannelCloseInit", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) ChannelCloseConfirm(ctx context.Context, in *MsgChannelCloseConfirm, opts ...grpc.CallOption) (*MsgChannelCloseConfirmResponse, error) {
-	out := new(MsgChannelCloseConfirmResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/ChannelCloseConfirm", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) RecvPacket(ctx context.Context, in *MsgRecvPacket, opts ...grpc.CallOption) (*MsgRecvPacketResponse, error) {
-	out := new(MsgRecvPacketResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/RecvPacket", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) Timeout(ctx context.Context, in *MsgTimeout, opts ...grpc.CallOption) (*MsgTimeoutResponse, error) {
-	out := new(MsgTimeoutResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/Timeout", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) TimeoutOnClose(ctx context.Context, in *MsgTimeoutOnClose, opts ...grpc.CallOption) (*MsgTimeoutOnCloseResponse, error) {
-	out := new(MsgTimeoutOnCloseResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/TimeoutOnClose", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *msgClient) Acknowledgement(ctx context.Context, in *MsgAcknowledgement, opts ...grpc.CallOption) (*MsgAcknowledgementResponse, error) {
-	out := new(MsgAcknowledgementResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.channel.v1.Msg/Acknowledgement", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MsgServer is the server API for Msg service.
@@ -1166,218 +929,105 @@ type UnimplementedMsgServer struct {
 }
 
 func (*UnimplementedMsgServer) ChannelOpenInit(ctx context.Context, req *MsgChannelOpenInit) (*MsgChannelOpenInitResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ChannelOpenInit not implemented")
-}
-func (*UnimplementedMsgServer) ChannelOpenTry(ctx context.Context, req *MsgChannelOpenTry) (*MsgChannelOpenTryResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ChannelOpenTry not implemented")
-}
-func (*UnimplementedMsgServer) ChannelOpenAck(ctx context.Context, req *MsgChannelOpenAck) (*MsgChannelOpenAckResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ChannelOpenAck not implemented")
-}
-func (*UnimplementedMsgServer) ChannelOpenConfirm(ctx context.Context, req *MsgChannelOpenConfirm) (*MsgChannelOpenConfirmResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ChannelOpenConfirm not implemented")
-}
-func (*UnimplementedMsgServer) ChannelCloseInit(ctx context.Context, req *MsgChannelCloseInit) (*MsgChannelCloseInitResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ChannelCloseInit not implemented")
-}
-func (*UnimplementedMsgServer) ChannelCloseConfirm(ctx context.Context, req *MsgChannelCloseConfirm) (*MsgChannelCloseConfirmResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ChannelCloseConfirm not implemented")
-}
-func (*UnimplementedMsgServer) RecvPacket(ctx context.Context, req *MsgRecvPacket) (*MsgRecvPacketResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RecvPacket not implemented")
-}
-func (*UnimplementedMsgServer) Timeout(ctx context.Context, req *MsgTimeout) (*MsgTimeoutResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Timeout not implemented")
-}
-func (*UnimplementedMsgServer) TimeoutOnClose(ctx context.Context, req *MsgTimeoutOnClose) (*MsgTimeoutOnCloseResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method TimeoutOnClose not implemented")
-}
-func (*UnimplementedMsgServer) Acknowledgement(ctx context.Context, req *MsgAcknowledgement) (*MsgAcknowledgementResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Acknowledgement not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
-	s.RegisterService(&_Msg_serviceDesc, srv)
+func (*UnimplementedMsgServer) ChannelOpenTry(ctx context.Context, req *MsgChannelOpenTry) (*MsgChannelOpenTryResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func (*UnimplementedMsgServer) ChannelOpenAck(ctx context.Context, req *MsgChannelOpenAck) (*MsgChannelOpenAckResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedMsgServer) ChannelOpenConfirm(ctx context.Context, req *MsgChannelOpenConfirm) (*MsgChannelOpenConfirmResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedMsgServer) ChannelCloseInit(ctx context.Context, req *MsgChannelCloseInit) (*MsgChannelCloseInitResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedMsgServer) ChannelCloseConfirm(ctx context.Context, req *MsgChannelCloseConfirm) (*MsgChannelCloseConfirmResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedMsgServer) RecvPacket(ctx context.Context, req *MsgRecvPacket) (*MsgRecvPacketResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedMsgServer) Timeout(ctx context.Context, req *MsgTimeout) (*MsgTimeoutResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedMsgServer) TimeoutOnClose(ctx context.Context, req *MsgTimeoutOnClose) (*MsgTimeoutOnCloseResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedMsgServer) Acknowledgement(ctx context.Context, req *MsgAcknowledgement) (*MsgAcknowledgementResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func RegisterMsgServer(s grpc1.Server, srv MsgServer) { _ = "STUB: not implemented"; return }
 
 func _Msg_ChannelOpenInit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgChannelOpenInit)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ChannelOpenInit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/ChannelOpenInit",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ChannelOpenInit(ctx, req.(*MsgChannelOpenInit))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_ChannelOpenTry_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgChannelOpenTry)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ChannelOpenTry(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/ChannelOpenTry",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ChannelOpenTry(ctx, req.(*MsgChannelOpenTry))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_ChannelOpenAck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgChannelOpenAck)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ChannelOpenAck(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/ChannelOpenAck",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ChannelOpenAck(ctx, req.(*MsgChannelOpenAck))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_ChannelOpenConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgChannelOpenConfirm)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ChannelOpenConfirm(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/ChannelOpenConfirm",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ChannelOpenConfirm(ctx, req.(*MsgChannelOpenConfirm))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_ChannelCloseInit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgChannelCloseInit)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ChannelCloseInit(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/ChannelCloseInit",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ChannelCloseInit(ctx, req.(*MsgChannelCloseInit))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_ChannelCloseConfirm_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgChannelCloseConfirm)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).ChannelCloseConfirm(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/ChannelCloseConfirm",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).ChannelCloseConfirm(ctx, req.(*MsgChannelCloseConfirm))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_RecvPacket_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRecvPacket)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).RecvPacket(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/RecvPacket",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RecvPacket(ctx, req.(*MsgRecvPacket))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_Timeout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgTimeout)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Timeout(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/Timeout",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Timeout(ctx, req.(*MsgTimeout))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_TimeoutOnClose_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgTimeoutOnClose)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).TimeoutOnClose(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/TimeoutOnClose",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).TimeoutOnClose(ctx, req.(*MsgTimeoutOnClose))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Msg_Acknowledgement_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgAcknowledgement)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(MsgServer).Acknowledgement(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.channel.v1.Msg/Acknowledgement",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).Acknowledgement(ctx, req.(*MsgAcknowledgement))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Msg_serviceDesc = grpc.ServiceDesc{
@@ -1430,4143 +1080,413 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *MsgChannelOpenInit) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelOpenInit) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenInit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	{
-		size, err := m.Channel.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.PortId) > 0 {
-		i -= len(m.PortId)
-		copy(dAtA[i:], m.PortId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.PortId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenInitResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelOpenInitResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenInitResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Version) > 0 {
-		i -= len(m.Version)
-		copy(dAtA[i:], m.Version)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Version)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ChannelId) > 0 {
-		i -= len(m.ChannelId)
-		copy(dAtA[i:], m.ChannelId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ChannelId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenTry) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelOpenTry) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenTry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x32
-	if len(m.ProofInit) > 0 {
-		i -= len(m.ProofInit)
-		copy(dAtA[i:], m.ProofInit)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofInit)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.CounterpartyVersion) > 0 {
-		i -= len(m.CounterpartyVersion)
-		copy(dAtA[i:], m.CounterpartyVersion)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.CounterpartyVersion)))
-		i--
-		dAtA[i] = 0x22
-	}
-	{
-		size, err := m.Channel.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if len(m.PreviousChannelId) > 0 {
-		i -= len(m.PreviousChannelId)
-		copy(dAtA[i:], m.PreviousChannelId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.PreviousChannelId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.PortId) > 0 {
-		i -= len(m.PortId)
-		copy(dAtA[i:], m.PortId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.PortId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenTryResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelOpenTryResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenTryResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Version) > 0 {
-		i -= len(m.Version)
-		copy(dAtA[i:], m.Version)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Version)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenAck) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelOpenAck) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenAck) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x32
-	if len(m.ProofTry) > 0 {
-		i -= len(m.ProofTry)
-		copy(dAtA[i:], m.ProofTry)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofTry)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.CounterpartyVersion) > 0 {
-		i -= len(m.CounterpartyVersion)
-		copy(dAtA[i:], m.CounterpartyVersion)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.CounterpartyVersion)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.CounterpartyChannelId) > 0 {
-		i -= len(m.CounterpartyChannelId)
-		copy(dAtA[i:], m.CounterpartyChannelId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.CounterpartyChannelId)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.ChannelId) > 0 {
-		i -= len(m.ChannelId)
-		copy(dAtA[i:], m.ChannelId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ChannelId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.PortId) > 0 {
-		i -= len(m.PortId)
-		copy(dAtA[i:], m.PortId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.PortId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenAckResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelOpenAckResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenAckResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenConfirm) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelOpenConfirm) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenConfirm) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x22
-	if len(m.ProofAck) > 0 {
-		i -= len(m.ProofAck)
-		copy(dAtA[i:], m.ProofAck)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofAck)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.ChannelId) > 0 {
-		i -= len(m.ChannelId)
-		copy(dAtA[i:], m.ChannelId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ChannelId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.PortId) > 0 {
-		i -= len(m.PortId)
-		copy(dAtA[i:], m.PortId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.PortId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenConfirmResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelOpenConfirmResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelOpenConfirmResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelCloseInit) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelCloseInit) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelCloseInit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.ChannelId) > 0 {
-		i -= len(m.ChannelId)
-		copy(dAtA[i:], m.ChannelId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ChannelId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.PortId) > 0 {
-		i -= len(m.PortId)
-		copy(dAtA[i:], m.PortId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.PortId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelCloseInitResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelCloseInitResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelCloseInitResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelCloseConfirm) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelCloseConfirm) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelCloseConfirm) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x22
-	if len(m.ProofInit) > 0 {
-		i -= len(m.ProofInit)
-		copy(dAtA[i:], m.ProofInit)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofInit)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.ChannelId) > 0 {
-		i -= len(m.ChannelId)
-		copy(dAtA[i:], m.ChannelId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ChannelId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.PortId) > 0 {
-		i -= len(m.PortId)
-		copy(dAtA[i:], m.PortId)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.PortId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelCloseConfirmResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgChannelCloseConfirmResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgChannelCloseConfirmResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgRecvPacket) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgRecvPacket) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgRecvPacket) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x22
-	}
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if len(m.ProofCommitment) > 0 {
-		i -= len(m.ProofCommitment)
-		copy(dAtA[i:], m.ProofCommitment)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofCommitment)))
-		i--
-		dAtA[i] = 0x12
-	}
-	{
-		size, err := m.Packet.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgRecvPacketResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgRecvPacketResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgRecvPacketResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Result != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.Result))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *MsgTimeout) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *MsgTimeout) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *MsgTimeout) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *MsgTimeout) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *MsgTimeout) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.NextSequenceRecv != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.NextSequenceRecv))
-		i--
-		dAtA[i] = 0x20
-	}
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if len(m.ProofUnreceived) > 0 {
-		i -= len(m.ProofUnreceived)
-		copy(dAtA[i:], m.ProofUnreceived)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofUnreceived)))
-		i--
-		dAtA[i] = 0x12
-	}
-	{
-		size, err := m.Packet.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgTimeoutResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgTimeoutResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgTimeoutResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Result != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.Result))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgTimeoutOnClose) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgTimeoutOnClose) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgTimeoutOnClose) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.NextSequenceRecv != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.NextSequenceRecv))
-		i--
-		dAtA[i] = 0x28
-	}
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x22
-	if len(m.ProofClose) > 0 {
-		i -= len(m.ProofClose)
-		copy(dAtA[i:], m.ProofClose)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofClose)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.ProofUnreceived) > 0 {
-		i -= len(m.ProofUnreceived)
-		copy(dAtA[i:], m.ProofUnreceived)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofUnreceived)))
-		i--
-		dAtA[i] = 0x12
-	}
-	{
-		size, err := m.Packet.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgTimeoutOnCloseResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgTimeoutOnCloseResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgTimeoutOnCloseResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Result != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.Result))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgAcknowledgement) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgAcknowledgement) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgAcknowledgement) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x22
-	if len(m.ProofAcked) > 0 {
-		i -= len(m.ProofAcked)
-		copy(dAtA[i:], m.ProofAcked)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.ProofAcked)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Acknowledgement) > 0 {
-		i -= len(m.Acknowledgement)
-		copy(dAtA[i:], m.Acknowledgement)
-		i = encodeVarintTx(dAtA, i, uint64(len(m.Acknowledgement)))
-		i--
-		dAtA[i] = 0x12
-	}
-	{
-		size, err := m.Packet.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTx(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgAcknowledgementResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgAcknowledgementResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgAcknowledgementResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Result != 0 {
-		i = encodeVarintTx(dAtA, i, uint64(m.Result))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
-	offset -= sovTx(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *MsgChannelOpenInit) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.PortId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.Channel.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func encodeVarintTx(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelOpenInitResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ChannelId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Version)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgChannelOpenInit) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelOpenTry) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.PortId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.PreviousChannelId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.Channel.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.CounterpartyVersion)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ProofInit)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgChannelOpenInitResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelOpenTryResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Version)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgChannelOpenTry) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelOpenAck) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.PortId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ChannelId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.CounterpartyChannelId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.CounterpartyVersion)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ProofTry)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgChannelOpenTryResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelOpenAckResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgChannelOpenAck) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelOpenConfirm) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.PortId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ChannelId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ProofAck)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgChannelOpenAckResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelOpenConfirmResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgChannelOpenConfirm) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelCloseInit) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.PortId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ChannelId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgChannelOpenConfirmResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelCloseInitResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgChannelCloseInit) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelCloseConfirm) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.PortId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ChannelId)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ProofInit)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgChannelCloseInitResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgChannelCloseConfirmResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgChannelCloseConfirm) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgRecvPacket) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Packet.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.ProofCommitment)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgChannelCloseConfirmResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgRecvPacketResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Result != 0 {
-		n += 1 + sovTx(uint64(m.Result))
-	}
-	return n
-}
+func (m *MsgRecvPacket) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgTimeout) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Packet.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.ProofUnreceived)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
-	if m.NextSequenceRecv != 0 {
-		n += 1 + sovTx(uint64(m.NextSequenceRecv))
-	}
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgRecvPacketResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgTimeoutResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Result != 0 {
-		n += 1 + sovTx(uint64(m.Result))
-	}
-	return n
-}
+func (m *MsgTimeout) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgTimeoutOnClose) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Packet.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.ProofUnreceived)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ProofClose)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
-	if m.NextSequenceRecv != 0 {
-		n += 1 + sovTx(uint64(m.NextSequenceRecv))
-	}
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgTimeoutResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgTimeoutOnCloseResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Result != 0 {
-		n += 1 + sovTx(uint64(m.Result))
-	}
-	return n
-}
+func (m *MsgTimeoutOnClose) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgAcknowledgement) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.Packet.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.Acknowledgement)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = len(m.ProofAcked)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovTx(uint64(l))
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovTx(uint64(l))
-	}
-	return n
-}
+func (m *MsgTimeoutOnCloseResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgAcknowledgementResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Result != 0 {
-		n += 1 + sovTx(uint64(m.Result))
-	}
-	return n
-}
+func (m *MsgAcknowledgement) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovTx(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozTx(x uint64) (n int) {
-	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *MsgChannelOpenInit) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelOpenInit: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelOpenInit: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PortId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PortId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Channel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Channel.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MsgAcknowledgementResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func sovTx(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozTx(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgChannelOpenInit) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelOpenInitResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelOpenInitResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelOpenInitResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChannelId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ChannelId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Version = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgChannelOpenTry) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelOpenTry: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelOpenTry: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PortId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PortId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PreviousChannelId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PreviousChannelId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Channel", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Channel.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CounterpartyVersion", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CounterpartyVersion = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofInit", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofInit = append(m.ProofInit[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofInit == nil {
-				m.ProofInit = []byte{}
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgChannelOpenTry) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelOpenTryResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelOpenTryResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelOpenTryResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Version = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgChannelOpenAck) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelOpenAck: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelOpenAck: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PortId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PortId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChannelId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ChannelId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CounterpartyChannelId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CounterpartyChannelId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CounterpartyVersion", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CounterpartyVersion = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofTry", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofTry = append(m.ProofTry[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofTry == nil {
-				m.ProofTry = []byte{}
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgChannelOpenAck) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelOpenAckResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelOpenAckResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelOpenAckResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgChannelOpenConfirm) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelOpenConfirm: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelOpenConfirm: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PortId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PortId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChannelId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ChannelId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofAck", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofAck = append(m.ProofAck[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofAck == nil {
-				m.ProofAck = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgChannelOpenConfirm) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelOpenConfirmResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelOpenConfirmResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelOpenConfirmResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgChannelCloseInit) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelCloseInit: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelCloseInit: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PortId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PortId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChannelId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ChannelId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgChannelCloseInit) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgChannelCloseInitResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelCloseInitResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelCloseInitResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *MsgChannelCloseConfirm) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelCloseConfirm: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelCloseConfirm: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PortId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PortId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChannelId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ChannelId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofInit", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofInit = append(m.ProofInit[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofInit == nil {
-				m.ProofInit = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *MsgChannelCloseConfirmResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgChannelCloseConfirmResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgChannelCloseConfirmResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgRecvPacket) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRecvPacket: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRecvPacket: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Packet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Packet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofCommitment", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofCommitment = append(m.ProofCommitment[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofCommitment == nil {
-				m.ProofCommitment = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgRecvPacketResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRecvPacketResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRecvPacketResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-			}
-			m.Result = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Result |= ResponseResultType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MsgRecvPacket) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgTimeout) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgTimeout: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgTimeout: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Packet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Packet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofUnreceived", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofUnreceived = append(m.ProofUnreceived[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofUnreceived == nil {
-				m.ProofUnreceived = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NextSequenceRecv", wireType)
-			}
-			m.NextSequenceRecv = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.NextSequenceRecv |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MsgRecvPacketResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgTimeoutResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgTimeoutResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgTimeoutResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-			}
-			m.Result = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Result |= ResponseResultType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MsgTimeout) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgTimeoutOnClose) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgTimeoutOnClose: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgTimeoutOnClose: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Packet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Packet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofUnreceived", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofUnreceived = append(m.ProofUnreceived[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofUnreceived == nil {
-				m.ProofUnreceived = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofClose", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofClose = append(m.ProofClose[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofClose == nil {
-				m.ProofClose = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NextSequenceRecv", wireType)
-			}
-			m.NextSequenceRecv = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.NextSequenceRecv |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MsgTimeoutResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgTimeoutOnClose) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgTimeoutOnCloseResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgTimeoutOnCloseResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgTimeoutOnCloseResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-			}
-			m.Result = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Result |= ResponseResultType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgAcknowledgement) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgAcknowledgement: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgAcknowledgement: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Packet", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Packet.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Acknowledgement", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Acknowledgement = append(m.Acknowledgement[:0], dAtA[iNdEx:postIndex]...)
-			if m.Acknowledgement == nil {
-				m.Acknowledgement = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofAcked", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ProofAcked = append(m.ProofAcked[:0], dAtA[iNdEx:postIndex]...)
-			if m.ProofAcked == nil {
-				m.ProofAcked = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTx
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTx
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgAcknowledgement) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgAcknowledgementResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgAcknowledgementResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgAcknowledgementResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Result", wireType)
-			}
-			m.Result = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Result |= ResponseResultType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTx(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipTx(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowTx
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTx
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthTx
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupTx
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthTx
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipTx(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthTx        = fmt.Errorf("proto: negative length found during unmarshaling")

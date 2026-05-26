@@ -17,10 +17,8 @@ func newMockProxyApp(
 	appHash []byte,
 	finalizeBlockResponses *abci.ResponseFinalizeBlock,
 ) *proxy.Proxy {
-	return proxy.New(&mockProxyApp{
-		appHash:                appHash,
-		finalizeBlockResponses: finalizeBlockResponses,
-	}, proxy.NopMetrics())
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type mockProxyApp struct {
@@ -32,14 +30,11 @@ type mockProxyApp struct {
 }
 
 func (mock *mockProxyApp) FinalizeBlock(_ context.Context, req *abci.RequestFinalizeBlock) (*abci.ResponseFinalizeBlock, error) {
-	r := mock.finalizeBlockResponses
-	mock.txCount++
-	if r == nil {
-		return &abci.ResponseFinalizeBlock{}, nil
-	}
-	return r, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (mock *mockProxyApp) Commit(context.Context) (*abci.ResponseCommit, error) {
-	return &abci.ResponseCommit{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

@@ -80,16 +80,6 @@ type StateStoreConfig struct {
 
 // DefaultStateStoreConfig returns the default StateStoreConfig
 func DefaultStateStoreConfig() StateStoreConfig {
-	return StateStoreConfig{
-		Enable:               true,
-		Backend:              DefaultSSBackend,
-		AsyncWriteBuffer:     DefaultSSAsyncBuffer,
-		KeepRecent:           DefaultSSKeepRecent,
-		PruneIntervalSeconds: DefaultSSPruneInterval,
-		ImportNumWorkers:     DefaultSSImportWorkers,
-		KeepLastVersion:      true,
-		UseDefaultComparer:   false,
-		EVMSplit:             false,
-		SeparateEVMSubDBs:    false,
-	}
+	_ = "STUB: not implemented"
+	return *new(StateStoreConfig)
 }

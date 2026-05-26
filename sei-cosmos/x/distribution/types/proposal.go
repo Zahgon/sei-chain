@@ -1,9 +1,6 @@
 package types
 
 import (
-	"fmt"
-	"strings"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 )
@@ -23,45 +20,36 @@ func init() {
 
 // NewCommunityPoolSpendProposal creates a new community pool spned proposal.
 func NewCommunityPoolSpendProposal(title, description string, recipient sdk.AccAddress, amount sdk.Coins) *CommunityPoolSpendProposal {
-	return &CommunityPoolSpendProposal{title, description, recipient.String(), amount}
-}
-
-// GetTitle returns the title of a community pool spend proposal.
-func (csp *CommunityPoolSpendProposal) GetTitle() string { return csp.Title }
-
-// GetDescription returns the description of a community pool spend proposal.
-func (csp *CommunityPoolSpendProposal) GetDescription() string { return csp.Description }
-
-// GetDescription returns the routing key of a community pool spend proposal.
-func (csp *CommunityPoolSpendProposal) ProposalRoute() string { return RouterKey }
-
-// ProposalType returns the type of a community pool spend proposal.
-func (csp *CommunityPoolSpendProposal) ProposalType() string { return ProposalTypeCommunityPoolSpend }
-
-// ValidateBasic runs basic stateless validity checks
-func (csp *CommunityPoolSpendProposal) ValidateBasic() error {
-	err := govtypes.ValidateAbstract(csp)
-	if err != nil {
-		return err
-	}
-	if !csp.Amount.IsValid() {
-		return ErrInvalidProposalAmount
-	}
-	if csp.Recipient == "" {
-		return ErrEmptyProposalRecipient
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-// String implements the Stringer interface.
-func (csp CommunityPoolSpendProposal) String() string {
-	var b strings.Builder
-	b.WriteString(fmt.Sprintf(`Community Pool Spend Proposal:
-  Title:       %s
-  Description: %s
-  Recipient:   %s
-  Amount:      %s
-`, csp.Title, csp.Description, csp.Recipient, csp.Amount))
-	return b.String()
+// GetTitle returns the title of a community pool spend proposal.
+func (csp *CommunityPoolSpendProposal) GetTitle() string {
+	_ = "STUB: not implemented"
+
+	// GetDescription returns the description of a community pool spend proposal.
+	return ""
 }
+
+func (csp *CommunityPoolSpendProposal) GetDescription() string {
+	_ = "STUB: not implemented"
+	return ""
+
+	// GetDescription returns the routing key of a community pool spend proposal.
+}
+
+func (csp *CommunityPoolSpendProposal) ProposalRoute() string {
+	_ = "STUB: not implemented"
+
+	// ProposalType returns the type of a community pool spend proposal.
+	return ""
+}
+
+func (csp *CommunityPoolSpendProposal) ProposalType() string { _ = "STUB: not implemented"; return "" }
+
+// ValidateBasic runs basic stateless validity checks
+func (csp *CommunityPoolSpendProposal) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
+// String implements the Stringer interface.
+func (csp CommunityPoolSpendProposal) String() string { _ = "STUB: not implemented"; return "" }

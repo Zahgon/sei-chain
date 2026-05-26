@@ -15,17 +15,17 @@ type LaneProposal struct {
 }
 
 // NewLaneProposal constructs a new LaneProposal.
-func NewLaneProposal(block *Block) *LaneProposal {
-	return &LaneProposal{block: block}
-}
+func NewLaneProposal(block *Block) *LaneProposal { _ = "STUB: not implemented"; return nil }
 
 // Block .
-func (m *LaneProposal) Block() *Block { return m.block }
+func (m *LaneProposal) Block() *Block {
+	_ = "STUB: not implemented"
 
-// Verify verifies that the LaneProposal is consistent with the Committee.
-func (m *LaneProposal) Verify(c *Committee) error {
-	return m.block.Verify(c)
+	// Verify verifies that the LaneProposal is consistent with the Committee.
+	return nil
 }
+
+func (m *LaneProposal) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 // LaneProposalConv is a protobuf converter for LaneProposal.
 var LaneProposalConv = protoutils.Conv[*LaneProposal, *pb.Block]{

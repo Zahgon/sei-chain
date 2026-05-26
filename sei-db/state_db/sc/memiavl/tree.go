@@ -2,14 +2,10 @@ package memiavl
 
 import (
 	"crypto/sha256"
-	"errors"
-	"fmt"
-	"math"
 	"sync"
 
 	ics23 "github.com/confio/ics23/go"
 
-	"github.com/sei-protocol/sei-chain/sei-db/common/utils"
 	"github.com/sei-protocol/sei-chain/sei-db/proto"
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/types"
 	dbm "github.com/tendermint/tm-db"
@@ -39,241 +35,79 @@ type Tree struct {
 
 // NewEmptyTree creates an empty tree at an arbitrary version.
 func NewEmptyTree(version uint64, initialVersion uint32) *Tree {
-	if version >= math.MaxUint32 {
-		panic("version overflows uint32")
-	}
-
-	return &Tree{
-		version:        uint32(version),
-		initialVersion: initialVersion,
-		// no need to copy if the tree is not backed by snapshot
-		zeroCopy:  true,
-		mtx:       &sync.RWMutex{},
-		pendingWg: &sync.WaitGroup{},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// no need to copy if the tree is not backed by snapshot
 
 // New creates an empty tree at genesis version
-func New(_ int) *Tree {
-	return NewEmptyTree(0, 0)
-}
+func New(_ int) *Tree { _ = "STUB: not implemented"; return nil }
 
 // NewWithInitialVersion creates an empty tree with initial-version,
 // it happens when a new store created at the middle of the chain.
-func NewWithInitialVersion(initialVersion uint32) *Tree {
-	return NewEmptyTree(0, initialVersion)
-}
+func NewWithInitialVersion(initialVersion uint32) *Tree { _ = "STUB: not implemented"; return nil }
 
 // NewFromSnapshot mmap the blob files and create the root node.
-func NewFromSnapshot(snapshot *Snapshot, opts Options) *Tree {
-	tree := &Tree{
-		version:   snapshot.Version(),
-		snapshot:  snapshot,
-		zeroCopy:  opts.ZeroCopy,
-		mtx:       &sync.RWMutex{},
-		pendingWg: &sync.WaitGroup{},
-	}
+func NewFromSnapshot(snapshot *Snapshot, opts Options) *Tree { _ = "STUB: not implemented"; return nil }
 
-	if !snapshot.IsEmpty() {
-		tree.root = snapshot.RootNode()
-	}
+func (t *Tree) SetZeroCopy(zeroCopy bool) { _ = "STUB: not implemented"; return }
 
-	return tree
-}
+func (t *Tree) IsEmpty() bool { _ = "STUB: not implemented"; return false }
 
-func (t *Tree) SetZeroCopy(zeroCopy bool) {
-	t.zeroCopy = zeroCopy
-}
-
-func (t *Tree) IsEmpty() bool {
-	return t.root == nil
-}
-
-func (t *Tree) SetInitialVersion(initialVersion int64) error {
-	if initialVersion < 0 || initialVersion > math.MaxUint32 {
-		return fmt.Errorf("version overflows uint32: %d", initialVersion)
-	}
-	t.initialVersion = uint32(initialVersion)
-	return nil
-}
+func (t *Tree) SetInitialVersion(initialVersion int64) error { _ = "STUB: not implemented"; return nil }
 
 // Copy returns a concurrent-safe snapshot. Acquires the underlying *Snapshot
 // so background rewrites can't unmap it while the copy is live; callers must
 // call Close on the returned tree to release the ref.
-func (t *Tree) Copy() *Tree {
-	t.mtx.RLock()
-	defer t.mtx.RUnlock()
-	if _, ok := t.root.(*MemNode); ok {
-		// protect the existing `MemNode`s from get modified in-place
-		t.cowVersion = t.version
-	}
-	newTree := *t
-	newTree.mtx = &sync.RWMutex{}
-	if newTree.snapshot != nil {
-		newTree.snapshot.Acquire()
-	}
-	return &newTree
-}
+func (t *Tree) Copy() *Tree { _ = "STUB: not implemented"; return nil }
+
+// protect the existing `MemNode`s from get modified in-place
 
 // ApplyChangeSet apply the change set of a whole version, and update hashes.
-func (t *Tree) ApplyChangeSet(changeSet proto.ChangeSet) {
-	for _, pair := range changeSet.Pairs {
-		if pair.Delete {
-			t.Remove(pair.Key)
-		} else {
-			t.Set(pair.Key, pair.Value)
-		}
-	}
-}
+func (t *Tree) ApplyChangeSet(changeSet proto.ChangeSet) { _ = "STUB: not implemented"; return }
 
-func (t *Tree) ApplyChangeSetAsync(changeSet proto.ChangeSet) {
-	if t.pendingChanges == nil {
-		t.StartBackgroundWrite()
-	}
-	t.pendingChanges <- changeSet
-}
+func (t *Tree) ApplyChangeSetAsync(changeSet proto.ChangeSet) { _ = "STUB: not implemented"; return }
 
-func (t *Tree) StartBackgroundWrite() {
-	t.pendingWg.Add(1)
-	t.pendingChanges = make(chan proto.ChangeSet, 1000)
-	go func() {
-		defer t.pendingWg.Done()
-		for nextChange := range t.pendingChanges {
-			t.ApplyChangeSet(nextChange)
-			_, _, _ = t.SaveVersion(false)
-		}
-	}()
-}
+func (t *Tree) StartBackgroundWrite() { _ = "STUB: not implemented"; return }
 
-func (t *Tree) WaitToCompleteAsyncWrite() {
-	if t.pendingChanges == nil {
-		return
-	}
-	close(t.pendingChanges)
-	t.pendingWg.Wait()
-	t.pendingChanges = nil
-}
+func (t *Tree) WaitToCompleteAsyncWrite() { _ = "STUB: not implemented"; return }
 
-func (t *Tree) Set(key, value []byte) {
-	t.mtx.Lock()
-	defer t.mtx.Unlock()
-	if value == nil {
-		// the value could be nil when replaying changes from write-ahead-log because of protobuf decoding
-		value = []byte{}
-	}
-	t.root, _ = setRecursive(t.root, key, value, t.version+1, t.cowVersion)
-}
+func (t *Tree) Set(key, value []byte) { _ = "STUB: not implemented"; return }
 
-func (t *Tree) Remove(key []byte) {
-	t.mtx.Lock()
-	defer t.mtx.Unlock()
-	_, t.root, _ = removeRecursive(t.root, key, t.version+1, t.cowVersion)
-}
+// the value could be nil when replaying changes from write-ahead-log because of protobuf decoding
+
+func (t *Tree) Remove(key []byte) { _ = "STUB: not implemented"; return }
 
 // SaveVersion increases the version number and optionally updates the hashes
 func (t *Tree) SaveVersion(updateHash bool) ([]byte, int64, error) {
-	if t.version >= uint32(math.MaxUint32) {
-		return nil, 0, errors.New("version overflows uint32")
-	}
-
-	var hash []byte
-	if updateHash {
-		hash = t.RootHash()
-	}
-
-	t.version = nextVersionU32(t.version, t.initialVersion)
-	return hash, int64(t.version), nil
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 // Version returns the current tree version
-func (t *Tree) Version() int64 {
-	return int64(t.version)
-}
+func (t *Tree) Version() int64 { _ = "STUB: not implemented"; return 0 }
 
 // RootHash updates the hashes and return the current root hash,
 // it clones the persisted node's bytes, so the returned bytes is safe to retain.
-func (t *Tree) RootHash() []byte {
-	t.mtx.RLock()
-	defer t.mtx.RUnlock()
-	if t.root == nil {
-		return emptyHash
-	}
-	return t.root.SafeHash()
-}
+func (t *Tree) RootHash() []byte { _ = "STUB: not implemented"; return nil }
 
-func (t *Tree) GetWithIndex(key []byte) (int64, []byte) {
-	t.mtx.RLock()
-	defer t.mtx.RUnlock()
-	if t.root == nil {
-		return 0, nil
-	}
+func (t *Tree) GetWithIndex(key []byte) (int64, []byte) { _ = "STUB: not implemented"; return 0, nil }
 
-	value, index := t.root.Get(key)
-	if !t.zeroCopy {
-		value = utils.Clone(value)
-	}
-	return int64(index), value
-}
+func (t *Tree) GetByIndex(index int64) ([]byte, []byte) { _ = "STUB: not implemented"; return nil, nil }
 
-func (t *Tree) GetByIndex(index int64) ([]byte, []byte) {
-	t.mtx.RLock()
-	defer t.mtx.RUnlock()
-	if t.root == nil {
-		return nil, nil
-	}
-	if index < 0 || index > math.MaxUint32 {
-		return nil, nil
-	}
-	idx := uint32(index)
-	key, value := t.root.GetByIndex(idx)
-	if !t.zeroCopy {
-		key = utils.Clone(key)
-		value = utils.Clone(value)
-	}
-	return key, value
-}
+func (t *Tree) Get(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-func (t *Tree) Get(key []byte) []byte {
-	_, value := t.GetWithIndex(key)
-
-	return value
-}
-
-func (t *Tree) Has(key []byte) bool {
-	return t.Get(key) != nil
-}
+func (t *Tree) Has(key []byte) bool { _ = "STUB: not implemented"; return false }
 
 func (t *Tree) Iterator(start, end []byte, ascending bool) dbm.Iterator {
-	t.mtx.RLock()
-	defer t.mtx.RUnlock()
-	return NewIterator(start, end, ascending, t.root, t.zeroCopy)
+	_ = "STUB: not implemented"
+	return *new(dbm.Iterator)
 }
 
 // ScanPostOrder scans the tree in post-order, and call the callback function on each node.
 // If the callback function returns false, the scan will be stopped.
-func (t *Tree) ScanPostOrder(callback func(node Node) bool) {
-	t.mtx.RLock()
-	defer t.mtx.RUnlock()
-	if t.root == nil {
-		return
-	}
-
-	stack := []*stackEntry{{node: t.root}}
-
-	for len(stack) > 0 {
-		entry := stack[len(stack)-1]
-
-		if entry.node.IsLeaf() || entry.expanded {
-			callback(entry.node)
-			stack = stack[:len(stack)-1]
-			continue
-		}
-
-		entry.expanded = true
-		stack = append(stack, &stackEntry{node: entry.node.Right()})
-		stack = append(stack, &stackEntry{node: entry.node.Left()})
-	}
-}
+func (t *Tree) ScanPostOrder(callback func(node Node) bool) { _ = "STUB: not implemented"; return }
 
 type stackEntry struct {
 	node     Node
@@ -281,97 +115,30 @@ type stackEntry struct {
 }
 
 // Export returns a snapshot of the tree which won't be corrupted by further modifications on the main tree.
-func (t *Tree) Export() *Exporter {
-	if t.snapshot != nil && t.version == t.snapshot.Version() {
-		// snapshot export algorithm is more efficient
-		return t.snapshot.Export()
-	}
+func (t *Tree) Export() *Exporter { _ = "STUB: not implemented"; return nil }
 
-	// do normal post-order traversal export
-	return newExporter(func(callback func(node *types.SnapshotNode) bool) {
-		t.ScanPostOrder(func(node Node) bool {
-			height := node.Height()
-			if height > math.MaxInt8 {
-				panic(fmt.Sprintf("node height %d overflows int8", height))
-			}
-			return callback(&types.SnapshotNode{
-				Key:     node.Key(),
-				Value:   node.Value(),
-				Version: int64(node.Version()),
-				Height:  int8(height),
-			})
-		})
-	})
-}
+// snapshot export algorithm is more efficient
 
-func (t *Tree) Close() error {
-	t.mtx.Lock()
-	defer t.mtx.Unlock()
-	var err error
-	if t.snapshot != nil {
-		err = t.snapshot.Close()
-		t.snapshot = nil
-	}
-	if t.pendingChanges != nil {
-		close(t.pendingChanges)
-	}
-	t.root = nil
-	return err
-}
+// do normal post-order traversal export
+
+func (t *Tree) Close() error { _ = "STUB: not implemented"; return nil }
 
 // ReplaceWith is used during reload to replace the current tree with the newly loaded snapshot
-func (t *Tree) ReplaceWith(other *Tree) error {
-	t.mtx.Lock()
-	defer t.mtx.Unlock()
-	snapshot := t.snapshot
-	t.version = other.version
-	t.root = other.root
-	t.snapshot = other.snapshot
-	t.initialVersion = other.initialVersion
-	t.cowVersion = other.cowVersion
-	t.zeroCopy = other.zeroCopy
-
-	if snapshot != nil {
-		return snapshot.Close()
-	}
-	return nil
-}
+func (t *Tree) ReplaceWith(other *Tree) error { _ = "STUB: not implemented"; return nil }
 
 // nextVersionU32 is compatible with existing golang iavl implementation.
 // see: https://github.com/cosmos/iavl/pull/660
-func nextVersionU32(v uint32, initialVersion uint32) uint32 {
-	if v == 0 && initialVersion > 1 {
-		return initialVersion
-	}
-	return v + 1
-}
+func nextVersionU32(v uint32, initialVersion uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
 // GetProof takes a key for creating existence or absence proof and returns the
 // appropriate merkle.Proof. Since this must be called after querying for the value, this function should never error
 // Thus, it will panic on error rather than returning it
-func (t *Tree) GetProof(key []byte) *ics23.CommitmentProof {
-	var (
-		commitmentProof *ics23.CommitmentProof
-		err             error
-	)
-	exists := t.Has(key)
+func (t *Tree) GetProof(key []byte) *ics23.CommitmentProof { _ = "STUB: not implemented"; return nil }
 
-	if exists {
-		// value was found
-		commitmentProof, err = t.GetMembershipProof(key)
-		if err != nil {
-			// sanity check: If value was found, membership proof must be creatable
-			panic(fmt.Sprintf("unexpected value for empty proof: %s", err.Error()))
-		}
-	} else {
-		// value wasn't found
-		commitmentProof, err = t.GetNonMembershipProof(key)
-		if err != nil {
-			// sanity check: If value wasn't found, nonmembership proof must be creatable
-			panic(fmt.Sprintf("unexpected error for nonexistence proof: %s", err.Error()))
-		}
-	}
+// value was found
 
-	return commitmentProof
+// sanity check: If value was found, membership proof must be creatable
 
-}
+// value wasn't found
+
+// sanity check: If value wasn't found, nonmembership proof must be creatable

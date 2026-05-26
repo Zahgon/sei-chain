@@ -1,21 +1,10 @@
 package legacyabci
 
 import (
-	"fmt"
-	"time"
-
-	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
-	evmante "github.com/sei-protocol/sei-chain/x/evm/ante"
 	evmkeeper "github.com/sei-protocol/sei-chain/x/evm/keeper"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
 
-	gometrics "github.com/armon/go-metrics"
-	"github.com/sei-protocol/sei-chain/app/ante"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/utils/tracing"
 	authkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/keeper"
 	bankkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/keeper"
@@ -24,7 +13,6 @@ import (
 	upgradekeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/keeper"
 	ibckeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/keeper"
 	oraclekeeper "github.com/sei-protocol/sei-chain/x/oracle/keeper"
-	otelmetric "go.opentelemetry.io/otel/metric"
 )
 
 var defaultRecoveryMiddleware = newDefaultRecoveryMiddleware()
@@ -55,70 +43,12 @@ func CheckTx(
 	txCtx sdk.Context,
 	err error,
 ) {
-	label := "check"
-	if ctx.IsReCheckTx() {
-		label = "recheck"
-	}
-	txStart := time.Now()
-	defer func() {
-		legacyAbciMetrics.txDuration.Record(ctx.Context(), time.Since(txStart).Seconds(), otelmetric.WithAttributes(attribute.String("mode", label)))
-		// TODO(PLT-343): remove once tx_duration verified
-		telemetry.MeasureThroughputSinceWithLabels(
-			telemetry.TxCount,
-			[]gometrics.Label{
-				telemetry.NewLabel("mode", label),
-			},
-			txStart,
-		)
-	}()
-	spanCtx, span := tracingInfo.StartWithContext("CheckTx", ctx.TraceSpanContext())
-	defer span.End()
-	ctx = ctx.WithTraceSpanContext(spanCtx)
-	span.SetAttributes(attribute.String("txHash", fmt.Sprintf("%X", checksum)))
-	var gasWanted uint64
-	var gasEstimate uint64
-
-	blockGasMeter := ctx.GasMeter()
-	defer func() {
-		if r := recover(); r != nil {
-			recoveryMW := newOutOfGasRecoveryMiddleware(gasWanted, ctx, defaultRecoveryMiddleware)
-			err, result = processRecovery(r, recoveryMW), nil
-		}
-		if ctx.GasMeter() == blockGasMeter {
-			return
-		}
-		gInfo = sdk.GasInfo{GasWanted: gasWanted, GasUsed: ctx.GasMeter().GasConsumed(), GasEstimate: gasEstimate}
-	}()
-
-	if tx == nil {
-		return sdk.GasInfo{}, nil, ctx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "tx decode error")
-	}
-
-	var anteSpan trace.Span
-	// trace AnteHandler
-	_, anteSpan = tracingInfo.StartWithContext("AnteHandler", ctx.TraceSpanContext())
-	defer anteSpan.End()
-	anteCtx, _ := contextCacher(ctx)
-	anteCtx = anteCtx.WithEventManager(sdk.NewEventManager())
-	var newCtx sdk.Context
-	if isEVM, evmerr := evmante.IsEVMMessage(tx); evmerr != nil {
-		err = evmerr
-	} else if isEVM {
-		newCtx, err = ante.EvmCheckTxAnte(anteCtx, tx, keepers.UpgradeKeeper, keepers.EvmKeeper)
-	} else {
-		newCtx, err = ante.CosmosCheckTxAnte(anteCtx, txConfig, tx, keepers.ParamsKeeper, keepers.OracleKeeper, keepers.EvmKeeper, keepers.AccountKeeper, keepers.BankKeeper, keepers.FeeGrantKeeper, keepers.IBCKeeper)
-	}
-	if !newCtx.IsZero() {
-		ctx = newCtx
-	}
-
-	if err != nil {
-		return gInfo, nil, ctx, err
-	}
-	// GasMeter expected to be set in AnteHandler
-	gasWanted = ctx.GasMeter().Limit()
-	gasEstimate = ctx.GasEstimate()
-	anteSpan.End()
-
-	return gInfo, &sdk.Result{Events: []abci.Event{}}, ctx, err
+	_ = "STUB: not implemented"
+	return *new(sdk.GasInfo), nil, *new(sdk.Context), nil
 }
+
+// TODO(PLT-343): remove once tx_duration verified
+
+// trace AnteHandler
+
+// GasMeter expected to be set in AnteHandler

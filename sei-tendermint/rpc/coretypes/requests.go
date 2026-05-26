@@ -2,10 +2,8 @@ package coretypes
 
 import (
 	"encoding/json"
-	"strconv"
 	"time"
 
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
@@ -98,23 +96,12 @@ type requestBroadcastEvidenceJSON struct {
 }
 
 func (r RequestBroadcastEvidence) MarshalJSON() ([]byte, error) {
-	ev, err := jsontypes.Marshal(r.Evidence)
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(requestBroadcastEvidenceJSON{
-		Evidence: ev,
-	})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (r *RequestBroadcastEvidence) UnmarshalJSON(data []byte) error {
-	var val requestBroadcastEvidenceJSON
-	if err := json.Unmarshal(data, &val); err != nil {
-		return err
-	}
-	if err := jsontypes.Unmarshal(val.Evidence, &r.Evidence); err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -148,41 +135,12 @@ type EventFilter struct {
 // decoded from either a string or a number value.
 type Int64 int64
 
-func (z *Int64) UnmarshalJSON(data []byte) error {
-	var s string
-	if len(data) != 0 && data[0] == '"' {
-		if err := json.Unmarshal(data, &s); err != nil {
-			return err
-		}
-	} else {
-		s = string(data)
-	}
-	v, err := strconv.ParseInt(s, 10, 64)
-	if err != nil {
-		return err
-	}
-	*z = Int64(v)
-	return nil
-}
+func (z *Int64) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (z Int64) MarshalJSON() ([]byte, error) {
-	return []byte(strconv.FormatInt(int64(z), 10)), nil
-}
+func (z Int64) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // IntPtr returns a pointer to the value of *z as an int, or nil if z == nil.
-func (z *Int64) IntPtr() *int {
-	if z == nil {
-		return nil
-	}
-	v := int(*z)
-	return &v
-}
+func (z *Int64) IntPtr() *int { _ = "STUB: not implemented"; return nil }
 
 // Int64Ptr returns an *Int64 that points to the same value as v, or nil.
-func Int64Ptr(v *int) *Int64 {
-	if v == nil {
-		return nil
-	}
-	z := Int64(*v)
-	return &z
-}
+func Int64Ptr(v *int) *Int64 { _ = "STUB: not implemented"; return nil }

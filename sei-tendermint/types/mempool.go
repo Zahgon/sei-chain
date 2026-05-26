@@ -1,8 +1,6 @@
 package types
 
 import (
-	"crypto/sha256"
-	"errors"
 	"fmt"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
@@ -14,50 +12,25 @@ import (
 type TxHash crypto.Hash
 
 func (txHash TxHash) Bytes() tmbytes.HexBytes {
-	return crypto.Hash(txHash).Bytes()
+	_ = "STUB: not implemented"
+	return *new(tmbytes.HexBytes)
 }
 
 // ToProto converts Data to protobuf
-func (txHash *TxHash) ToProto() *tmproto.TxKey {
-	tp := new(tmproto.TxKey)
+func (txHash *TxHash) ToProto() *tmproto.TxKey { _ = "STUB: not implemented"; return nil }
 
-	txBzs := make([]byte, len(txHash))
-	if len(txHash) > 0 {
-		copy(txBzs, txHash[:])
-		tp.TxKey = txBzs
-	}
+func (txHash TxHash) String() string { _ = "STUB: not implemented"; return "" }
 
-	return tp
-}
-
-func (txHash TxHash) String() string {
-	return txHash.Bytes().String()
-}
-
-func (txHash TxHash) Format(s fmt.State, verb rune) {
-	txHash.Bytes().Format(s, verb)
-}
+func (txHash TxHash) Format(s fmt.State, verb rune) { _ = "STUB: not implemented"; return }
 
 // TxHashFromProto takes a protobuf representation of TxHash &
 // returns the native type.
 func TxHashFromProto(dp *tmproto.TxKey) (TxHash, error) {
-	if dp == nil {
-		return TxHash{}, errors.New("nil data")
-	}
-	var txBzs [sha256.Size]byte
-	copy(txBzs[:], dp.TxKey)
-
-	return txBzs, nil
+	_ = "STUB: not implemented"
+	return *new(TxHash), nil
 }
 
 func TxHashesListFromProto(dps []*tmproto.TxKey) ([]TxHash, error) {
-	var txHashes []TxHash
-	for _, txHash := range dps {
-		txHash, err := TxHashFromProto(txHash)
-		if err != nil {
-			return nil, err
-		}
-		txHashes = append(txHashes, txHash)
-	}
-	return txHashes, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

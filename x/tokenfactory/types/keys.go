@@ -1,9 +1,5 @@
 package types
 
-import (
-	"strings"
-)
-
 const (
 	// ModuleName defines the module name
 	ModuleName = "tokenfactory"
@@ -35,17 +31,11 @@ var (
 
 // GetDenomPrefixStore returns the store prefix where all the data associated with a specific denom
 // is stored
-func GetDenomPrefixStore(denom string) []byte {
-	return []byte(strings.Join([]string{DenomsPrefixKey, denom, ""}, KeySeparator))
-}
+func GetDenomPrefixStore(denom string) []byte { _ = "STUB: not implemented"; return nil }
 
 // GetCreatorsPrefix returns the store prefix where the list of the denoms created by a specific
 // creator are stored
-func GetCreatorPrefix(creator string) []byte {
-	return []byte(strings.Join([]string{CreatorPrefixKey, creator, ""}, KeySeparator))
-}
+func GetCreatorPrefix(creator string) []byte { _ = "STUB: not implemented"; return nil }
 
 // GetCreatorsPrefix returns the store prefix where a list of all creator addresses are stored
-func GetCreatorsPrefix() []byte {
-	return []byte(strings.Join([]string{CreatorPrefixKey, ""}, KeySeparator))
-}
+func GetCreatorsPrefix() []byte { _ = "STUB: not implemented"; return nil }

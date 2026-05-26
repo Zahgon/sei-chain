@@ -1,7 +1,6 @@
 package dbcache
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt"
@@ -31,49 +30,23 @@ func NewCachedTable(
 	readCache util.Cache[string, []byte],
 	metrics *metrics.LittDBMetrics,
 ) litt.ManagedTable {
-	return &cachedTable{
-		base:       base,
-		writeCache: writeCache,
-		readCache:  readCache,
-		metrics:    metrics,
-	}
+	_ = "STUB: not implemented"
+	return *new(litt.ManagedTable)
 }
 
-func (c *cachedTable) KeyCount() uint64 {
-	return c.base.KeyCount()
-}
+func (c *cachedTable) KeyCount() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (c *cachedTable) Size() uint64 {
-	return c.base.Size()
-}
+func (c *cachedTable) Size() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (c *cachedTable) Name() string {
-	return c.base.Name()
-}
+func (c *cachedTable) Name() string { _ = "STUB: not implemented"; return "" }
 
-func (c *cachedTable) Put(key []byte, value []byte) error {
-	err := c.base.Put(key, value)
-	if err != nil {
-		return fmt.Errorf("failed to put entry into base table: %w", err)
-	}
-	c.writeCache.Put(string(key), value)
-	return nil
-}
+func (c *cachedTable) Put(key []byte, value []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (c *cachedTable) PutBatch(batch []*types.KVPair) error {
-	err := c.base.PutBatch(batch)
-	if err != nil {
-		return err
-	}
-	for _, kv := range batch {
-		c.writeCache.Put(util.UnsafeBytesToString(kv.Key), kv.Value)
-	}
-	return nil
-}
+func (c *cachedTable) PutBatch(batch []*types.KVPair) error { _ = "STUB: not implemented"; return nil }
 
 func (c *cachedTable) Get(key []byte) (value []byte, exists bool, err error) {
-	value, exists, _, err = c.CacheAwareGet(key, false)
-	return value, exists, err
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
 // In theory, there is a race condition here where call to CacheAwareGet() made concurrently with a call to Put()
@@ -117,96 +90,34 @@ func (c *cachedTable) CacheAwareGet(
 	key []byte,
 	onlyReadFromCache bool,
 ) (value []byte, exists bool, hot bool, err error) {
-
-	if c.metrics != nil {
-		start := time.Now()
-		defer func() {
-			if exists && value != nil {
-				c.metrics.ReportReadOperation(c.Name(), time.Since(start), uint64(len(value)), hot)
-			}
-		}()
-	}
-
-	stringKey := util.UnsafeBytesToString(key)
-
-	value, exists = c.writeCache.Get(stringKey)
-	if exists {
-		// The value was recently written
-		hot = true
-		return value, exists, hot, err
-	} else {
-		value, exists = c.readCache.Get(stringKey)
-		if exists {
-			// The value was recently read
-			hot = true
-			return value, exists, hot, err
-		}
-	}
-
-	value, exists, hot, err = c.base.CacheAwareGet(key, onlyReadFromCache)
-	if err != nil {
-		return value, exists, hot, err
-	}
-
-	if exists && value != nil {
-		c.readCache.Put(stringKey, value)
-	}
-
-	return value, exists, hot, err
+	_ = "STUB: not implemented"
+	return nil, false, false, nil
 }
+
+// The value was recently written
+
+// The value was recently read
 
 func (c *cachedTable) Exists(key []byte) (exists bool, err error) {
-	_, exists = c.writeCache.Get(util.UnsafeBytesToString(key))
-	if exists {
-		return true, nil
-	}
-
-	_, exists = c.readCache.Get(util.UnsafeBytesToString(key))
-	if exists {
-		return true, nil
-	}
-
-	return c.base.Exists(key)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
-func (c *cachedTable) Flush() error {
-	return c.base.Flush()
-}
+func (c *cachedTable) Flush() error { _ = "STUB: not implemented"; return nil }
 
-func (c *cachedTable) SetTTL(ttl time.Duration) error {
-	return c.base.SetTTL(ttl)
-}
+func (c *cachedTable) SetTTL(ttl time.Duration) error { _ = "STUB: not implemented"; return nil }
 
-func (c *cachedTable) SetWriteCacheSize(size uint64) error {
-	c.writeCache.SetMaxWeight(size)
-	err := c.base.SetWriteCacheSize(size)
-	if err != nil {
-		return fmt.Errorf("failed to set base table write cache size: %w", err)
-	}
-	return nil
-}
+func (c *cachedTable) SetWriteCacheSize(size uint64) error { _ = "STUB: not implemented"; return nil }
 
-func (c *cachedTable) SetReadCacheSize(size uint64) error {
-	c.readCache.SetMaxWeight(size)
-	err := c.base.SetReadCacheSize(size)
-	if err != nil {
-		return fmt.Errorf("failed to set base table read cache size: %w", err)
-	}
-	return nil
-}
+func (c *cachedTable) SetReadCacheSize(size uint64) error { _ = "STUB: not implemented"; return nil }
 
-func (c *cachedTable) Close() error {
-	return c.base.Close()
-}
+func (c *cachedTable) Close() error { _ = "STUB: not implemented"; return nil }
 
-func (c *cachedTable) Destroy() error {
-	return c.base.Destroy()
-}
+func (c *cachedTable) Destroy() error { _ = "STUB: not implemented"; return nil }
 
 func (c *cachedTable) SetShardingFactor(shardingFactor uint8) error {
-	return c.base.SetShardingFactor(shardingFactor)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (c *cachedTable) RunGC() error {
-	return c.base.RunGC()
-}
+func (c *cachedTable) RunGC() error { _ = "STUB: not implemented"; return nil }

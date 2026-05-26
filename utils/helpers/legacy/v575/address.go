@@ -1,64 +1,36 @@
 package v575
 
 import (
-	"errors"
 	"math/big"
 
-	"github.com/btcsuite/btcd/btcec/v2"
 	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
 func GetAddresses(V *big.Int, R *big.Int, S *big.Int, data common.Hash) (common.Address, sdk.AccAddress, cryptotypes.PubKey, error) {
-	pubkey, err := RecoverPubkey(data, R, S, V, true)
-	if err != nil {
-		return common.Address{}, sdk.AccAddress{}, nil, err
-	}
-
-	evmAddr, err := PubkeyToEVMAddress(pubkey)
-	if err != nil {
-		return common.Address{}, sdk.AccAddress{}, nil, err
-	}
-	seiPubkey := PubkeyBytesToSeiPubKey(pubkey)
-	seiAddr := sdk.AccAddress(seiPubkey.Address())
-	return evmAddr, seiAddr, &seiPubkey, nil
+	_ = "STUB: not implemented"
+	return *new(common.Address), *new(sdk.AccAddress), *new(cryptotypes.PubKey), nil
 }
 
 // first half of go-ethereum/core/types/transaction_signing.go:recoverPlain
 func RecoverPubkey(sighash common.Hash, R, S, Vb *big.Int, homestead bool) ([]byte, error) {
-	if Vb.BitLen() > 8 {
-		return []byte{}, ethtypes.ErrInvalidSig
-	}
-	V := byte(Vb.Uint64() - 27)
-	if !crypto.ValidateSignatureValues(V, R, S, homestead) {
-		return []byte{}, ethtypes.ErrInvalidSig
-	}
-	// encode the signature in uncompressed format
-	r, s := R.Bytes(), S.Bytes()
-	sig := make([]byte, crypto.SignatureLength)
-	copy(sig[32-len(r):32], r)
-	copy(sig[64-len(s):64], s)
-	sig[64] = V
-
-	// recover the public key from the signature
-	return crypto.Ecrecover(sighash[:], sig)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// encode the signature in uncompressed format
+
+// recover the public key from the signature
 
 // second half of go-ethereum/core/types/transaction_signing.go:recoverPlain
 func PubkeyToEVMAddress(pub []byte) (common.Address, error) {
-	if len(pub) == 0 || pub[0] != 4 {
-		return common.Address{}, errors.New("invalid public key")
-	}
-	var addr common.Address
-	copy(addr[:], crypto.Keccak256(pub[1:])[12:])
-	return addr, nil
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 func PubkeyBytesToSeiPubKey(pub []byte) secp256k1.PubKey {
-	pubkeyObj, _ := btcec.ParsePubKey(pub)
-	return secp256k1.PubKey{Key: pubkeyObj.SerializeCompressed()}
+	_ = "STUB: not implemented"
+	return *new(secp256k1.PubKey)
 }

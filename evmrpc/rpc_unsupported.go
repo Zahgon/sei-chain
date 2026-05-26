@@ -12,10 +12,6 @@ type ErrEVMNotSupported struct {
 	Msg string
 }
 
-func (e *ErrEVMNotSupported) Error() string {
-	return e.Msg
-}
+func (e *ErrEVMNotSupported) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e *ErrEVMNotSupported) ErrorCode() int {
-	return ErrCodeEVMNotSupported
-}
+func (e *ErrEVMNotSupported) ErrorCode() int { _ = "STUB: not implemented"; return 0 }

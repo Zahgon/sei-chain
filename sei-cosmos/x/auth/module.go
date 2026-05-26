@@ -1,9 +1,7 @@
 package auth
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"math/rand"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -18,10 +16,7 @@ import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
 	simtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/client/cli"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/client/rest"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/simulation"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 )
 
@@ -35,66 +30,58 @@ var (
 type AppModuleBasic struct{}
 
 // Name returns the auth module's name.
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterLegacyAminoCodec registers the auth module's types for the given codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterLegacyAminoCodec(cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // DefaultGenesis returns default genesis state as raw bytes for the auth
 // module.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesisState())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the auth module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var data types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &data); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-
-	return types.ValidateGenesis(data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes registers the REST routes for the auth module.
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr, types.StoreKey)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the auth module.
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	if err := types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx)); err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetTxCmd returns the root tx command for the auth module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// GetQueryCmd returns the root query command for the auth module.
 	return nil
 }
 
-// GetQueryCmd returns the root query command for the auth module.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd()
-}
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // RegisterInterfaces registers interfaces and implementations of the auth module.
 func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	types.RegisterInterfaces(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // AppModule implements an application module for the auth module.
@@ -107,100 +94,94 @@ type AppModule struct {
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(cdc codec.Codec, accountKeeper keeper.AccountKeeper, randGenAccountsFn types.RandomGenesisAccountsFn) AppModule {
-	return AppModule{
-		AppModuleBasic:    AppModuleBasic{},
-		accountKeeper:     accountKeeper,
-		randGenAccountsFn: randGenAccountsFn,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // Name returns the auth module's name.
-func (AppModule) Name() string {
-	return types.ModuleName
-}
+func (AppModule) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterInvariants performs a no-op.
-func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 
-// Route returns the message routing key for the auth module.
-func (AppModule) Route() sdk.Route { return sdk.Route{} }
-
-// QuerierRoute returns the auth module's querier route name.
-func (AppModule) QuerierRoute() string {
-	return types.QuerierRoute
+	// Route returns the message routing key for the auth module.
+	return
 }
+
+func (AppModule) Route() sdk.Route {
+	_ = "STUB: not implemented"
+
+	// QuerierRoute returns the auth module's querier route name.
+	return *new(sdk.Route)
+}
+
+func (AppModule) QuerierRoute() string { _ = "STUB: not implemented"; return "" }
 
 // LegacyQuerierHandler returns the auth module sdk.Querier.
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return keeper.NewQuerier(am.accountKeeper, legacyQuerierCdc)
+	_ = "STUB: not implemented"
+	return *new(sdk.Querier)
 }
 
 // RegisterServices registers a GRPC query service to respond to the
 // module-specific GRPC queries.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterQueryServer(cfg.QueryServer(), am.accountKeeper)
-	m := keeper.NewMigrator(am.accountKeeper, cfg.QueryServer())
-	err := cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1to2)
-	if err != nil {
-		panic(err)
-	}
-	err = cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2to3)
-	if err != nil {
-		panic(err)
-	}
-}
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // InitGenesis performs genesis initialization for the auth module. It returns
 // no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
-	var genesisState types.GenesisState
-	cdc.MustUnmarshalJSON(data, &genesisState)
-	InitGenesis(ctx, am.accountKeeper, genesisState)
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the auth
 // module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	gs := ExportGenesis(ctx, am.accountKeeper)
-	return cdc.MustMarshalJSON(gs)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 3 }
+func (AppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
 
-// AppModuleSimulation functions
+	// AppModuleSimulation functions
+	return 0
+}
 
 // GenerateGenesisState creates a randomized GenState of the auth module
 func (am AppModule) GenerateGenesisState(simState *module.SimulationState) {
-	simulation.RandomizedGenState(simState, am.randGenAccountsFn)
+	_ = "STUB: not implemented"
+	return
 }
 
 // ProposalContents doesn't return any content functions for governance proposals.
 func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+	_ = "STUB: not implemented"
+
+	// RandomizedParams creates randomized auth param changes for the simulator.
 	return nil
 }
 
-// RandomizedParams creates randomized auth param changes for the simulator.
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
-	return simulation.ParamChanges(r)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // RegisterStoreDecoder registers a decoder for auth module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-	sdr[types.StoreKey] = simulation.NewDecodeStore(am.accountKeeper)
+	_ = "STUB: not implemented"
+	return
 }
 
 // WeightedOperations doesn't return any auth module operation.
 func (AppModule) WeightedOperations(_ module.SimulationState) []simtypes.WeightedOperation {
+	_ = "STUB: not implemented"
 	return nil
 }

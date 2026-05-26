@@ -8,23 +8,21 @@ type Waker struct {
 }
 
 // NewWaker creates a new Waker.
-func NewWaker() *Waker {
-	return &Waker{
-		wakeCh: make(chan struct{}, 1), // buffer used for debouncing
-	}
-}
+func NewWaker() *Waker { _ = "STUB: not implemented"; return nil }
+
+// buffer used for debouncing
 
 // Sleep returns a channel that blocks until Wake() is called.
 func (w *Waker) Sleep() <-chan struct{} {
-	return w.wakeCh
+	_ = "STUB: not implemented"
+
+	// Wake wakes up the sleeper.
+	return nil
 }
 
-// Wake wakes up the sleeper.
 func (w *Waker) Wake() {
+	_ = "STUB: not implemented"
 	// A non-blocking send with a size 1 buffer ensures that we never block, and
 	// that we queue up at most a single wakeup call between each Sleep().
-	select {
-	case w.wakeCh <- struct{}{}:
-	default:
-	}
+	return
 }

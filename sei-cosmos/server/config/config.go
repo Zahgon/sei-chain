@@ -1,16 +1,9 @@
 package config
 
 import (
-	"fmt"
-	"runtime"
-	"strings"
-
-	storetypes "github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-db/config"
-	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/memiavl"
 	tmcfg "github.com/sei-protocol/sei-chain/sei-tendermint/config"
 	"github.com/spf13/viper"
 )
@@ -42,10 +35,7 @@ var (
 )
 
 // getConcurrencyWorkers returns the default number of concurrency workers
-func getConcurrencyWorkers() int {
-	workers := runtime.NumCPU() * 2
-	return max(10, min(workers, 128))
-}
+func getConcurrencyWorkers() int { _ = "STUB: not implemented"; return 0 }
 
 // BaseConfig defines the server's basic configuration
 type BaseConfig struct {
@@ -222,221 +212,28 @@ type Config struct {
 }
 
 // SetMinGasPrices sets the validator's minimum gas prices.
-func (c *Config) SetMinGasPrices(gasPrices sdk.DecCoins) {
-	c.MinGasPrices = gasPrices.String()
-}
+func (c *Config) SetMinGasPrices(gasPrices sdk.DecCoins) { _ = "STUB: not implemented"; return }
 
 // GetMinGasPrices returns the validator's minimum gas prices based on the set
 // configuration.
 func (c *Config) GetMinGasPrices() sdk.DecCoins {
-	if c.MinGasPrices == "" {
-		return sdk.DecCoins{}
-	}
-
-	gasPricesStr := strings.Split(c.MinGasPrices, ";")
-	gasPrices := make(sdk.DecCoins, len(gasPricesStr))
-
-	for i, s := range gasPricesStr {
-		gasPrice, err := sdk.ParseDecCoin(s)
-		if err != nil {
-			panic(fmt.Errorf("failed to parse minimum gas price coin (%s): %s", s, err))
-		}
-
-		gasPrices[i] = gasPrice
-	}
-
-	return gasPrices
+	_ = "STUB: not implemented"
+	return *new(sdk.DecCoins)
 }
 
 // DefaultConfig returns server's default configuration.
-func DefaultConfig() *Config {
-	return &Config{
-		BaseConfig: BaseConfig{
-			MinGasPrices:       DefaultMinGasPrices,
-			InterBlockCache:    true,
-			Pruning:            storetypes.PruningOptionNothing,
-			PruningKeepRecent:  "0",
-			PruningKeepEvery:   "0",
-			PruningInterval:    "0",
-			MinRetainBlocks:    0,
-			IndexEvents:        nil,
-			CompactionInterval: 0,
-			ConcurrencyWorkers: DefaultConcurrencyWorkers,
-			OccEnabled:         DefaultOccEnabled,
-		},
-		Telemetry: telemetry.Config{
-			Enabled:                 true,
-			PrometheusRetentionTime: 7200,
-			GlobalLabels:            nil,
-		},
-		API: APIConfig{
-			Enable:             false,
-			Swagger:            true,
-			Address:            "tcp://0.0.0.0:1317",
-			MaxOpenConnections: 1000,
-			RPCReadTimeout:     10,
-			RPCWriteTimeout:    0,
-			RPCMaxBodyBytes:    1000000,
-		},
-		GRPC: GRPCConfig{
-			Enable:  true,
-			Address: DefaultGRPCAddress,
-		},
-		Rosetta: RosettaConfig{
-			Enable:     false,
-			Address:    ":8080",
-			Blockchain: "app",
-			Network:    "network",
-			Retries:    3,
-			Offline:    false,
-		},
-		GRPCWeb: GRPCWebConfig{
-			Enable:  true,
-			Address: DefaultGRPCWebAddress,
-		},
-		StateSync: StateSyncConfig{
-			SnapshotInterval:   0,
-			SnapshotKeepRecent: 2,
-			SnapshotDirectory:  "",
-		},
-		StateCommit: config.DefaultStateCommitConfig(),
-		StateStore:  config.DefaultStateStoreConfig(),
-		Genesis: GenesisConfig{
-			StreamImport:      false,
-			GenesisStreamFile: "",
-		},
-	}
-}
+func DefaultConfig() *Config { _ = "STUB: not implemented"; return nil }
 
 // GetConfig returns a fully parsed Config object.
-func GetConfig(v *viper.Viper) (Config, error) {
-	globalLabelsRaw, ok := v.Get("telemetry.global-labels").([]interface{})
-	if !ok {
-		return Config{}, fmt.Errorf("failed to parse global-labels config")
-	}
+func GetConfig(v *viper.Viper) (Config, error) { _ = "STUB: not implemented"; return *new(Config), nil }
 
-	globalLabels := make([][]string, 0, len(globalLabelsRaw))
-	for idx, glr := range globalLabelsRaw {
-		labelsRaw, ok := glr.([]interface{})
-		if !ok {
-			return Config{}, fmt.Errorf("failed to parse global label number %d from config", idx)
-		}
-		if len(labelsRaw) == 2 {
-			globalLabels = append(globalLabels, []string{labelsRaw[0].(string), labelsRaw[1].(string)})
-		}
-	}
-
-	// Resolve sc-write-mode through ParseWriteMode so that misspellings fail
-	// at parse-time with a clear error rather than later from
-	// StateCommitConfig.Validate(). An empty value preserves the in-code
-	// default, matching the behavior of app/seidb.go.
-	scWriteMode := config.DefaultStateCommitConfig().WriteMode
-	if wm := v.GetString("state-commit.sc-write-mode"); wm != "" {
-		parsed, err := config.ParseWriteMode(wm)
-		if err != nil {
-			return Config{}, fmt.Errorf("invalid state-commit.sc-write-mode %q: %w", wm, err)
-		}
-		scWriteMode = parsed
-	}
-
-	return Config{
-		BaseConfig: BaseConfig{
-			MinGasPrices:       v.GetString("minimum-gas-prices"),
-			InterBlockCache:    v.GetBool("inter-block-cache"),
-			Pruning:            v.GetString("pruning"),
-			PruningKeepRecent:  v.GetString("pruning-keep-recent"),
-			PruningInterval:    v.GetString("pruning-interval"),
-			HaltHeight:         v.GetUint64("halt-height"),
-			HaltTime:           v.GetUint64("halt-time"),
-			IndexEvents:        v.GetStringSlice("index-events"),
-			MinRetainBlocks:    v.GetUint64("min-retain-blocks"),
-			CompactionInterval: v.GetUint64("compaction-interval"),
-			ConcurrencyWorkers: v.GetInt("concurrency-workers"),
-			OccEnabled:         v.GetBool("occ-enabled"),
-		},
-		Telemetry: telemetry.Config{
-			ServiceName:             v.GetString("telemetry.service-name"),
-			Enabled:                 v.GetBool("telemetry.enabled"),
-			EnableHostname:          v.GetBool("telemetry.enable-hostname"),
-			EnableHostnameLabel:     v.GetBool("telemetry.enable-hostname-label"),
-			EnableServiceLabel:      v.GetBool("telemetry.enable-service-label"),
-			PrometheusRetentionTime: v.GetInt64("telemetry.prometheus-retention-time"),
-			GlobalLabels:            globalLabels,
-		},
-		API: APIConfig{
-			Enable:             v.GetBool("api.enable"),
-			Swagger:            v.GetBool("api.swagger"),
-			Address:            v.GetString("api.address"),
-			MaxOpenConnections: v.GetUint("api.max-open-connections"),
-			RPCReadTimeout:     v.GetUint("api.rpc-read-timeout"),
-			RPCWriteTimeout:    v.GetUint("api.rpc-write-timeout"),
-			RPCMaxBodyBytes:    v.GetUint("api.rpc-max-body-bytes"),
-			EnableUnsafeCORS:   v.GetBool("api.enabled-unsafe-cors"),
-		},
-		Rosetta: RosettaConfig{
-			Enable:     v.GetBool("rosetta.enable"),
-			Address:    v.GetString("rosetta.address"),
-			Blockchain: v.GetString("rosetta.blockchain"),
-			Network:    v.GetString("rosetta.network"),
-			Retries:    v.GetInt("rosetta.retries"),
-			Offline:    v.GetBool("rosetta.offline"),
-		},
-		GRPC: GRPCConfig{
-			Enable:  v.GetBool("grpc.enable"),
-			Address: v.GetString("grpc.address"),
-		},
-		GRPCWeb: GRPCWebConfig{
-			Enable:           v.GetBool("grpc-web.enable"),
-			Address:          v.GetString("grpc-web.address"),
-			EnableUnsafeCORS: v.GetBool("grpc-web.enable-unsafe-cors"),
-		},
-		StateSync: StateSyncConfig{
-			SnapshotInterval:   v.GetUint64("state-sync.snapshot-interval"),
-			SnapshotKeepRecent: v.GetUint32("state-sync.snapshot-keep-recent"),
-			SnapshotDirectory:  v.GetString("state-sync.snapshot-directory"),
-		},
-		StateCommit: config.StateCommitConfig{
-			Enable:    v.GetBool("state-commit.sc-enable"),
-			Directory: v.GetString("state-commit.sc-directory"),
-			WriteMode: scWriteMode,
-			MemIAVLConfig: memiavl.Config{
-				AsyncCommitBuffer:         v.GetInt("state-commit.sc-async-commit-buffer"),
-				SnapshotKeepRecent:        v.GetUint32("state-commit.sc-keep-recent"),
-				SnapshotInterval:          v.GetUint32("state-commit.sc-snapshot-interval"),
-				SnapshotMinTimeInterval:   v.GetUint32("state-commit.sc-snapshot-min-time-interval"),
-				SnapshotWriterLimit:       v.GetInt("state-commit.sc-snapshot-writer-limit"),
-				SnapshotPrefetchThreshold: v.GetFloat64("state-commit.sc-snapshot-prefetch-threshold"),
-			},
-		},
-		StateStore: config.StateStoreConfig{
-			Enable:               v.GetBool("state-store.ss-enable"),
-			DBDirectory:          v.GetString("state-store.ss-db-directory"),
-			Backend:              v.GetString("state-store.ss-backend"),
-			AsyncWriteBuffer:     v.GetInt("state-store.ss-async-write-buffer"),
-			KeepRecent:           v.GetInt("state-store.ss-keep-recent"),
-			PruneIntervalSeconds: v.GetInt("state-store.ss-prune-interval"),
-			ImportNumWorkers:     v.GetInt("state-store.ss-import-num-workers"),
-			EVMSplit:             v.GetBool("state-store.evm-ss-split"),
-			EVMDBDirectory:       v.GetString("state-store.evm-ss-db-directory"),
-			SeparateEVMSubDBs:    v.GetBool("state-store.evm-ss-separate-dbs"),
-		},
-		Genesis: GenesisConfig{
-			StreamImport:      v.GetBool("genesis.stream-import"),
-			GenesisStreamFile: v.GetString("genesis.genesis-stream-file"),
-		},
-	}, nil
-}
+// Resolve sc-write-mode through ParseWriteMode so that misspellings fail
+// at parse-time with a clear error rather than later from
+// StateCommitConfig.Validate(). An empty value preserves the in-code
+// default, matching the behavior of app/seidb.go.
 
 // ValidateBasic returns an error if min-gas-prices field is empty in BaseConfig. Otherwise, it returns nil.
 func (c Config) ValidateBasic(tendermintConfig *tmcfg.Config) error {
-	if c.MinGasPrices == "" {
-		return sdkerrors.ErrAppConfig.Wrap("set min gas price in app.toml or flag or env variable")
-	}
-	if c.Pruning == storetypes.PruningOptionEverything && c.StateSync.SnapshotInterval > 0 {
-		return sdkerrors.ErrAppConfig.Wrapf(
-			"cannot enable state sync snapshots with '%s' pruning setting", storetypes.PruningOptionEverything,
-		)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }

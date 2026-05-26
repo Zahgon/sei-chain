@@ -15,17 +15,17 @@ type LaneVote struct {
 }
 
 // NewLaneVote creates a new LaneVote.
-func NewLaneVote(header *BlockHeader) *LaneVote {
-	return &LaneVote{header: header}
-}
+func NewLaneVote(header *BlockHeader) *LaneVote { _ = "STUB: not implemented"; return nil }
 
 // Header .
-func (m *LaneVote) Header() *BlockHeader { return m.header }
+func (m *LaneVote) Header() *BlockHeader {
+	_ = "STUB: not implemented"
 
-// Verify verifies that the LaneVote is consistent with the Committee.
-func (m *LaneVote) Verify(c *Committee) error {
-	return m.header.Verify(c)
+	// Verify verifies that the LaneVote is consistent with the Committee.
+	return nil
 }
+
+func (m *LaneVote) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 // LaneVoteConv is the protobuf converter for LaneVote.
 var LaneVoteConv = protoutils.Conv[*LaneVote, *pb.BlockHeader]{

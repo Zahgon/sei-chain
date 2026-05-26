@@ -14,8 +14,6 @@ func InitGenesis(
 	deliverTx deliverTxfn, genesisState types.GenesisState,
 	txEncodingConfig client.TxEncodingConfig,
 ) (validators []abci.ValidatorUpdate, err error) {
-	if len(genesisState.GenTxs) > 0 {
-		validators, err = DeliverGenTxs(ctx, genesisState.GenTxs, stakingKeeper, deliverTx, txEncodingConfig)
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil, nil
 }

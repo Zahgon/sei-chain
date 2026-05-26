@@ -1,7 +1,5 @@
 package state
 
-import "fmt"
-
 type (
 	ErrInvalidBlock error
 	ErrProxyAppConn error
@@ -51,57 +49,22 @@ type (
 	}
 )
 
-func (e ErrUnknownBlock) Error() string {
-	return fmt.Sprintf("could not find block #%d", e.Height)
-}
+func (e ErrUnknownBlock) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrBlockHashMismatch) Error() string {
-	return fmt.Sprintf(
-		"app block hash (%X) does not match core block hash (%X) for height %d",
-		e.AppHash,
-		e.CoreHash,
-		e.Height,
-	)
-}
+func (e ErrBlockHashMismatch) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrAppBlockHeightTooHigh) Error() string {
-	return fmt.Sprintf("app block height (%d) is higher than core (%d)", e.AppHeight, e.CoreHeight)
-}
+func (e ErrAppBlockHeightTooHigh) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrAppBlockHeightTooLow) Error() string {
-	return fmt.Sprintf("app block height (%d) is too far below block store base (%d)", e.AppHeight, e.StoreBase)
-}
+func (e ErrAppBlockHeightTooLow) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrLastStateMismatch) Error() string {
-	return fmt.Sprintf(
-		"latest tendermint block (%d) LastAppHash (%X) does not match app's AppHash (%X)",
-		e.Height,
-		e.Core,
-		e.App,
-	)
-}
+func (e ErrLastStateMismatch) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrStateMismatch) Error() string {
-	return fmt.Sprintf(
-		"state after replay does not match saved state. Got ----\n%v\nExpected ----\n%v\n",
-		e.Got,
-		e.Expected,
-	)
-}
+func (e ErrStateMismatch) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrNoValSetForHeight) Error() string {
-	if e.Err == nil {
-		return fmt.Sprintf("could not find validator set for height #%d", e.Height)
-	}
-	return fmt.Sprintf("could not find validator set for height #%d: %s", e.Height, e.Err.Error())
-}
+func (e ErrNoValSetForHeight) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrNoValSetForHeight) Unwrap() error { return e.Err }
+func (e ErrNoValSetForHeight) Unwrap() error { _ = "STUB: not implemented"; return nil }
 
-func (e ErrNoConsensusParamsForHeight) Error() string {
-	return fmt.Sprintf("could not find consensus params for height #%d", e.Height)
-}
+func (e ErrNoConsensusParamsForHeight) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrNoFinalizeBlockResponsesForHeight) Error() string {
-	return fmt.Sprintf("could not find FinalizeBlock responses for height #%d", e.Height)
-}
+func (e ErrNoFinalizeBlockResponsesForHeight) Error() string { _ = "STUB: not implemented"; return "" }

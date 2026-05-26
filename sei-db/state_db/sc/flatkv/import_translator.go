@@ -2,9 +2,7 @@ package flatkv
 
 import (
 	"errors"
-	"fmt"
 
-	"github.com/sei-protocol/sei-chain/sei-db/common/keys"
 	"github.com/sei-protocol/sei-chain/sei-db/proto"
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/flatkv/vtype"
 )
@@ -50,10 +48,8 @@ type ImportTranslator struct {
 // emitted value. blockHeight should match the memiavl version that the import
 // is sourced from.
 func NewImportTranslator(blockHeight int64) *ImportTranslator {
-	return &ImportTranslator{
-		blockHeight:  blockHeight,
-		pendingAccts: make(map[string]*vtype.PendingAccountWrite),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Translate returns the storage / code / legacy / non-EVM physical pairs
@@ -62,88 +58,21 @@ func NewImportTranslator(blockHeight int64) *ImportTranslator {
 //
 // nil or empty changesets return (nil, nil).
 func (t *ImportTranslator) Translate(cs *proto.NamedChangeSet) ([]PhysicalKVPair, error) {
-	if t.pendingAccts == nil {
-		return nil, ErrImportTranslatorFinalized
-	}
-	if cs == nil || len(cs.Changeset.Pairs) == 0 {
-		return nil, nil
-	}
-
-	// Drop deletes up front: import targets an empty store, so deleting a
-	// non-existent key is a no-op. This also keeps mergeAccountUpdates
-	// from interpreting nil values as "set field to zero".
-	filteredPairs := make([]*proto.KVPair, 0, len(cs.Changeset.Pairs))
-	for _, p := range cs.Changeset.Pairs {
-		if p == nil || p.Delete {
-			continue
-		}
-		filteredPairs = append(filteredPairs, p)
-	}
-	if len(filteredPairs) == 0 {
-		return nil, nil
-	}
-	filteredCS := &proto.NamedChangeSet{
-		Name:      cs.Name,
-		Changeset: proto.ChangeSet{Pairs: filteredPairs},
-	}
-
-	changesByType, err := classifyAndPrefix([]*proto.NamedChangeSet{filteredCS})
-	if err != nil {
-		return nil, err
-	}
-
-	out := make([]PhysicalKVPair, 0, len(filteredPairs))
-
-	storageChanges, err := processStorageChanges(changesByType[keys.EVMKeyStorage], t.blockHeight)
-	if err != nil {
-		return nil, fmt.Errorf("failed to process storage changes: %w", err)
-	}
-	out = appendNonDeletes(out, storageChanges)
-
-	codeChanges, err := processCodeChanges(changesByType[keys.EVMKeyCode], t.blockHeight)
-	if err != nil {
-		return nil, fmt.Errorf("failed to process code changes: %w", err)
-	}
-	out = appendNonDeletes(out, codeChanges)
-
-	legacyChanges, err := processLegacyChanges(changesByType[keys.EVMKeyLegacy], t.blockHeight)
-	if err != nil {
-		return nil, fmt.Errorf("failed to process legacy changes: %w", err)
-	}
-	out = appendNonDeletes(out, legacyChanges)
-
-	// Accumulate nonce + codeHash entries from this batch into the
-	// translator-level pending account map. Multiple Translate calls
-	// naturally fold updates for the same address together: the SetXxx
-	// methods on PendingAccountWrite mutate the pointer in place when the
-	// receiver is non-nil.
-	batchAccts, err := mergeAccountUpdates(
-		changesByType[keys.EVMKeyNonce],
-		changesByType[keys.EVMKeyCodeHash],
-		nil, // TODO: balance, when balance key kind is introduced
-	)
-	if err != nil {
-		return nil, fmt.Errorf("failed to merge account changes: %w", err)
-	}
-	for addr, batchUpdate := range batchAccts {
-		existing, ok := t.pendingAccts[addr]
-		if !ok || existing == nil {
-			t.pendingAccts[addr] = batchUpdate
-			continue
-		}
-		if batchUpdate.IsNonceSet() {
-			existing.SetNonce(batchUpdate.GetNonce())
-		}
-		if batchUpdate.IsCodeHashSet() {
-			existing.SetCodeHash(batchUpdate.GetCodeHash())
-		}
-		if batchUpdate.IsBalanceSet() {
-			existing.SetBalance(batchUpdate.GetBalance())
-		}
-	}
-
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Drop deletes up front: import targets an empty store, so deleting a
+// non-existent key is a no-op. This also keeps mergeAccountUpdates
+// from interpreting nil values as "set field to zero".
+
+// Accumulate nonce + codeHash entries from this batch into the
+// translator-level pending account map. Multiple Translate calls
+// naturally fold updates for the same address together: the SetXxx
+// methods on PendingAccountWrite mutate the pointer in place when the
+// receiver is non-nil.
+
+// TODO: balance, when balance key kind is introduced
 
 // Finalize flushes the buffered account writes as physically-encoded pairs.
 // Each accumulated address is merged into a fresh AccountData (no base, since
@@ -151,14 +80,7 @@ func (t *ImportTranslator) Translate(cs *proto.NamedChangeSet) ([]PhysicalKVPair
 //
 // Call once after all Translate calls. Translate must not be called after
 // Finalize.
-func (t *ImportTranslator) Finalize() []PhysicalKVPair {
-	merged := make(map[string]*vtype.AccountData, len(t.pendingAccts))
-	for addr, pending := range t.pendingAccts {
-		merged[addr] = pending.Merge(nil, t.blockHeight)
-	}
-	t.pendingAccts = nil
-	return appendNonDeletes(make([]PhysicalKVPair, 0, len(merged)), merged)
-}
+func (t *ImportTranslator) Finalize() []PhysicalKVPair { _ = "STUB: not implemented"; return nil }
 
 // appendNonDeletes serializes every non-delete entry in m and appends the
 // resulting (physical_key, serialized_value) pair to out. Hoisted out of
@@ -167,11 +89,6 @@ func (t *ImportTranslator) Finalize() []PhysicalKVPair {
 // contract lives in one place; mirrors gatherLTHashPairs's generic use
 // of vtype.VType in store_apply.go.
 func appendNonDeletes[T vtype.VType](out []PhysicalKVPair, m map[string]T) []PhysicalKVPair {
-	for k, v := range m {
-		if v.IsDelete() {
-			continue
-		}
-		out = append(out, PhysicalKVPair{Key: []byte(k), Value: v.Serialize()})
-	}
-	return out
+	_ = "STUB: not implemented"
+	return nil
 }

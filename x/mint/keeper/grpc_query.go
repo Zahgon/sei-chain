@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/x/mint/types"
 )
 
@@ -16,21 +15,20 @@ type Querier struct {
 }
 
 func NewQuerier(k Keeper) Querier {
-	return Querier{Keeper: k}
+	_ = "STUB: not implemented"
+	return *
+
+	// Params returns params of the mint module.
+	new(Querier)
 }
 
-// Params returns params of the mint module.
 func (q Querier) Params(c context.Context, _ *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	params := q.GetParams(ctx)
-
-	return &types.QueryParamsResponse{Params: params}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Returns the most last mint state
 func (q Querier) Minter(c context.Context, _ *types.QueryMinterRequest) (*types.QueryMinterResponse, error) {
-	ctx := sdk.UnwrapSDKContext(c)
-	minter := q.GetMinter(ctx)
-	response := types.QueryMinterResponse(minter)
-	return &response, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

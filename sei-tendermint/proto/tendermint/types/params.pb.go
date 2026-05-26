@@ -5,14 +5,12 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+	time "time"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_gogo_protobuf_types "github.com/gogo/protobuf/types"
 	_ "github.com/golang/protobuf/ptypes/duration"
-	io "io"
-	math "math"
-	math_bits "math/bits"
-	time "time"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -39,87 +37,39 @@ type ConsensusParams struct {
 	Abci      *ABCIParams      `protobuf:"bytes,7,opt,name=abci,proto3" json:"abci,omitempty"`
 }
 
-func (m *ConsensusParams) Reset()         { *m = ConsensusParams{} }
-func (m *ConsensusParams) String() string { return proto.CompactTextString(m) }
-func (*ConsensusParams) ProtoMessage()    {}
-func (*ConsensusParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{0}
-}
-func (m *ConsensusParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ConsensusParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *ConsensusParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*ConsensusParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ConsensusParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ConsensusParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ConsensusParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ConsensusParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ConsensusParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConsensusParams.Merge(m, src)
-}
-func (m *ConsensusParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *ConsensusParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_ConsensusParams.DiscardUnknown(m)
-}
+
+func (m *ConsensusParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ConsensusParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ConsensusParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ConsensusParams proto.InternalMessageInfo
 
-func (m *ConsensusParams) GetBlock() *BlockParams {
-	if m != nil {
-		return m.Block
-	}
-	return nil
-}
+func (m *ConsensusParams) GetBlock() *BlockParams { _ = "STUB: not implemented"; return nil }
 
-func (m *ConsensusParams) GetEvidence() *EvidenceParams {
-	if m != nil {
-		return m.Evidence
-	}
-	return nil
-}
+func (m *ConsensusParams) GetEvidence() *EvidenceParams { _ = "STUB: not implemented"; return nil }
 
-func (m *ConsensusParams) GetValidator() *ValidatorParams {
-	if m != nil {
-		return m.Validator
-	}
-	return nil
-}
+func (m *ConsensusParams) GetValidator() *ValidatorParams { _ = "STUB: not implemented"; return nil }
 
-func (m *ConsensusParams) GetVersion() *VersionParams {
-	if m != nil {
-		return m.Version
-	}
-	return nil
-}
+func (m *ConsensusParams) GetVersion() *VersionParams { _ = "STUB: not implemented"; return nil }
 
-func (m *ConsensusParams) GetSynchrony() *SynchronyParams {
-	if m != nil {
-		return m.Synchrony
-	}
-	return nil
-}
+func (m *ConsensusParams) GetSynchrony() *SynchronyParams { _ = "STUB: not implemented"; return nil }
 
-func (m *ConsensusParams) GetTimeout() *TimeoutParams {
-	if m != nil {
-		return m.Timeout
-	}
-	return nil
-}
+func (m *ConsensusParams) GetTimeout() *TimeoutParams { _ = "STUB: not implemented"; return nil }
 
-func (m *ConsensusParams) GetAbci() *ABCIParams {
-	if m != nil {
-		return m.Abci
-	}
-	return nil
-}
+func (m *ConsensusParams) GetAbci() *ABCIParams { _ = "STUB: not implemented"; return nil }
 
 // BlockParams contains limits on the block size.
 type BlockParams struct {
@@ -136,66 +86,33 @@ type BlockParams struct {
 	MaxGasWanted int64 `protobuf:"varint,4,opt,name=max_gas_wanted,json=maxGasWanted,proto3" json:"max_gas_wanted,omitempty"`
 }
 
-func (m *BlockParams) Reset()         { *m = BlockParams{} }
-func (m *BlockParams) String() string { return proto.CompactTextString(m) }
-func (*BlockParams) ProtoMessage()    {}
-func (*BlockParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{1}
-}
-func (m *BlockParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *BlockParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *BlockParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*BlockParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*BlockParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *BlockParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *BlockParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_BlockParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *BlockParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BlockParams.Merge(m, src)
-}
-func (m *BlockParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *BlockParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_BlockParams.DiscardUnknown(m)
-}
+
+func (m *BlockParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *BlockParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *BlockParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_BlockParams proto.InternalMessageInfo
 
-func (m *BlockParams) GetMaxBytes() int64 {
-	if m != nil {
-		return m.MaxBytes
-	}
-	return 0
-}
+func (m *BlockParams) GetMaxBytes() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *BlockParams) GetMaxGas() int64 {
-	if m != nil {
-		return m.MaxGas
-	}
-	return 0
-}
+func (m *BlockParams) GetMaxGas() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *BlockParams) GetMinTxsInBlock() int64 {
-	if m != nil {
-		return m.MinTxsInBlock
-	}
-	return 0
-}
+func (m *BlockParams) GetMinTxsInBlock() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *BlockParams) GetMaxGasWanted() int64 {
-	if m != nil {
-		return m.MaxGasWanted
-	}
-	return 0
-}
+func (m *BlockParams) GetMaxGasWanted() int64 { _ = "STUB: not implemented"; return 0 }
 
 // EvidenceParams determine how we handle evidence of malfeasance.
 type EvidenceParams struct {
@@ -216,59 +133,34 @@ type EvidenceParams struct {
 	MaxBytes int64 `protobuf:"varint,3,opt,name=max_bytes,json=maxBytes,proto3" json:"max_bytes,omitempty"`
 }
 
-func (m *EvidenceParams) Reset()         { *m = EvidenceParams{} }
-func (m *EvidenceParams) String() string { return proto.CompactTextString(m) }
-func (*EvidenceParams) ProtoMessage()    {}
-func (*EvidenceParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{2}
-}
-func (m *EvidenceParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *EvidenceParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *EvidenceParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*EvidenceParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*EvidenceParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *EvidenceParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *EvidenceParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_EvidenceParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *EvidenceParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_EvidenceParams.Merge(m, src)
-}
-func (m *EvidenceParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *EvidenceParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_EvidenceParams.DiscardUnknown(m)
-}
+
+func (m *EvidenceParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *EvidenceParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *EvidenceParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_EvidenceParams proto.InternalMessageInfo
 
-func (m *EvidenceParams) GetMaxAgeNumBlocks() int64 {
-	if m != nil {
-		return m.MaxAgeNumBlocks
-	}
-	return 0
-}
+func (m *EvidenceParams) GetMaxAgeNumBlocks() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (m *EvidenceParams) GetMaxAgeDuration() time.Duration {
-	if m != nil {
-		return m.MaxAgeDuration
-	}
-	return 0
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
-func (m *EvidenceParams) GetMaxBytes() int64 {
-	if m != nil {
-		return m.MaxBytes
-	}
-	return 0
-}
+func (m *EvidenceParams) GetMaxBytes() int64 { _ = "STUB: not implemented"; return 0 }
 
 // ValidatorParams restrict the public key types validators can use.
 // NOTE: uses ABCI pubkey naming, not Amino names.
@@ -276,90 +168,54 @@ type ValidatorParams struct {
 	PubKeyTypes []string `protobuf:"bytes,1,rep,name=pub_key_types,json=pubKeyTypes,proto3" json:"pub_key_types,omitempty"`
 }
 
-func (m *ValidatorParams) Reset()         { *m = ValidatorParams{} }
-func (m *ValidatorParams) String() string { return proto.CompactTextString(m) }
-func (*ValidatorParams) ProtoMessage()    {}
-func (*ValidatorParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{3}
-}
-func (m *ValidatorParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ValidatorParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *ValidatorParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*ValidatorParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ValidatorParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ValidatorParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ValidatorParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ValidatorParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ValidatorParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidatorParams.Merge(m, src)
-}
-func (m *ValidatorParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *ValidatorParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidatorParams.DiscardUnknown(m)
-}
+
+func (m *ValidatorParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ValidatorParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ValidatorParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ValidatorParams proto.InternalMessageInfo
 
-func (m *ValidatorParams) GetPubKeyTypes() []string {
-	if m != nil {
-		return m.PubKeyTypes
-	}
-	return nil
-}
+func (m *ValidatorParams) GetPubKeyTypes() []string { _ = "STUB: not implemented"; return nil }
 
 // VersionParams contains the ABCI application version.
 type VersionParams struct {
 	AppVersion uint64 `protobuf:"varint,1,opt,name=app_version,json=appVersion,proto3" json:"app_version,omitempty"`
 }
 
-func (m *VersionParams) Reset()         { *m = VersionParams{} }
-func (m *VersionParams) String() string { return proto.CompactTextString(m) }
-func (*VersionParams) ProtoMessage()    {}
-func (*VersionParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{4}
-}
-func (m *VersionParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *VersionParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *VersionParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*VersionParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*VersionParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *VersionParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *VersionParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_VersionParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *VersionParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VersionParams.Merge(m, src)
-}
-func (m *VersionParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *VersionParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_VersionParams.DiscardUnknown(m)
-}
+
+func (m *VersionParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *VersionParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *VersionParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_VersionParams proto.InternalMessageInfo
 
-func (m *VersionParams) GetAppVersion() uint64 {
-	if m != nil {
-		return m.AppVersion
-	}
-	return 0
-}
+func (m *VersionParams) GetAppVersion() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // HashedParams is a subset of ConsensusParams.
 //
@@ -369,52 +225,29 @@ type HashedParams struct {
 	BlockMaxGas   int64 `protobuf:"varint,2,opt,name=block_max_gas,json=blockMaxGas,proto3" json:"block_max_gas,omitempty"`
 }
 
-func (m *HashedParams) Reset()         { *m = HashedParams{} }
-func (m *HashedParams) String() string { return proto.CompactTextString(m) }
-func (*HashedParams) ProtoMessage()    {}
-func (*HashedParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{5}
-}
-func (m *HashedParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *HashedParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *HashedParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*HashedParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*HashedParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *HashedParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *HashedParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_HashedParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *HashedParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HashedParams.Merge(m, src)
-}
-func (m *HashedParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *HashedParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_HashedParams.DiscardUnknown(m)
-}
+
+func (m *HashedParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *HashedParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *HashedParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_HashedParams proto.InternalMessageInfo
 
-func (m *HashedParams) GetBlockMaxBytes() int64 {
-	if m != nil {
-		return m.BlockMaxBytes
-	}
-	return 0
-}
+func (m *HashedParams) GetBlockMaxBytes() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *HashedParams) GetBlockMaxGas() int64 {
-	if m != nil {
-		return m.BlockMaxGas
-	}
-	return 0
-}
+func (m *HashedParams) GetBlockMaxGas() int64 { _ = "STUB: not implemented"; return 0 }
 
 // SynchronyParams configure the bounds under which a proposed block's timestamp is considered valid.
 // These parameters are part of the proposer-based timestamps algorithm. For more information,
@@ -429,52 +262,29 @@ type SynchronyParams struct {
 	Precision *time.Duration `protobuf:"bytes,2,opt,name=precision,proto3,stdduration" json:"precision,omitempty"`
 }
 
-func (m *SynchronyParams) Reset()         { *m = SynchronyParams{} }
-func (m *SynchronyParams) String() string { return proto.CompactTextString(m) }
-func (*SynchronyParams) ProtoMessage()    {}
-func (*SynchronyParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{6}
-}
-func (m *SynchronyParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *SynchronyParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *SynchronyParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*SynchronyParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*SynchronyParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *SynchronyParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *SynchronyParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SynchronyParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *SynchronyParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SynchronyParams.Merge(m, src)
-}
-func (m *SynchronyParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *SynchronyParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_SynchronyParams.DiscardUnknown(m)
-}
+
+func (m *SynchronyParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *SynchronyParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *SynchronyParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_SynchronyParams proto.InternalMessageInfo
 
-func (m *SynchronyParams) GetMessageDelay() *time.Duration {
-	if m != nil {
-		return m.MessageDelay
-	}
-	return nil
-}
+func (m *SynchronyParams) GetMessageDelay() *time.Duration { _ = "STUB: not implemented"; return nil }
 
-func (m *SynchronyParams) GetPrecision() *time.Duration {
-	if m != nil {
-		return m.Precision
-	}
-	return nil
-}
+func (m *SynchronyParams) GetPrecision() *time.Duration { _ = "STUB: not implemented"; return nil }
 
 // TimeoutParams configure the timeouts for the steps of the Tendermint consensus algorithm.
 type TimeoutParams struct {
@@ -518,80 +328,37 @@ type TimeoutParams struct {
 	BypassCommitTimeout bool `protobuf:"varint,6,opt,name=bypass_commit_timeout,json=bypassCommitTimeout,proto3" json:"bypass_commit_timeout,omitempty"`
 }
 
-func (m *TimeoutParams) Reset()         { *m = TimeoutParams{} }
-func (m *TimeoutParams) String() string { return proto.CompactTextString(m) }
-func (*TimeoutParams) ProtoMessage()    {}
-func (*TimeoutParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{7}
-}
-func (m *TimeoutParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *TimeoutParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *TimeoutParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*TimeoutParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*TimeoutParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *TimeoutParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *TimeoutParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_TimeoutParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *TimeoutParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TimeoutParams.Merge(m, src)
-}
-func (m *TimeoutParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *TimeoutParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_TimeoutParams.DiscardUnknown(m)
-}
+
+func (m *TimeoutParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *TimeoutParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *TimeoutParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_TimeoutParams proto.InternalMessageInfo
 
-func (m *TimeoutParams) GetPropose() *time.Duration {
-	if m != nil {
-		return m.Propose
-	}
-	return nil
-}
+func (m *TimeoutParams) GetPropose() *time.Duration { _ = "STUB: not implemented"; return nil }
 
-func (m *TimeoutParams) GetProposeDelta() *time.Duration {
-	if m != nil {
-		return m.ProposeDelta
-	}
-	return nil
-}
+func (m *TimeoutParams) GetProposeDelta() *time.Duration { _ = "STUB: not implemented"; return nil }
 
-func (m *TimeoutParams) GetVote() *time.Duration {
-	if m != nil {
-		return m.Vote
-	}
-	return nil
-}
+func (m *TimeoutParams) GetVote() *time.Duration { _ = "STUB: not implemented"; return nil }
 
-func (m *TimeoutParams) GetVoteDelta() *time.Duration {
-	if m != nil {
-		return m.VoteDelta
-	}
-	return nil
-}
+func (m *TimeoutParams) GetVoteDelta() *time.Duration { _ = "STUB: not implemented"; return nil }
 
-func (m *TimeoutParams) GetCommit() *time.Duration {
-	if m != nil {
-		return m.Commit
-	}
-	return nil
-}
+func (m *TimeoutParams) GetCommit() *time.Duration { _ = "STUB: not implemented"; return nil }
 
-func (m *TimeoutParams) GetBypassCommitTimeout() bool {
-	if m != nil {
-		return m.BypassCommitTimeout
-	}
-	return false
-}
+func (m *TimeoutParams) GetBypassCommitTimeout() bool { _ = "STUB: not implemented"; return false }
 
 // ABCIParams configure functionality specific to the Application Blockchain Interface.
 type ABCIParams struct {
@@ -610,52 +377,29 @@ type ABCIParams struct {
 	RecheckTx bool `protobuf:"varint,2,opt,name=recheck_tx,json=recheckTx,proto3" json:"recheck_tx,omitempty"`
 }
 
-func (m *ABCIParams) Reset()         { *m = ABCIParams{} }
-func (m *ABCIParams) String() string { return proto.CompactTextString(m) }
-func (*ABCIParams) ProtoMessage()    {}
-func (*ABCIParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_e12598271a686f57, []int{8}
-}
-func (m *ABCIParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ABCIParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *ABCIParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*ABCIParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ABCIParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ABCIParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ABCIParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ABCIParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ABCIParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ABCIParams.Merge(m, src)
-}
-func (m *ABCIParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *ABCIParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_ABCIParams.DiscardUnknown(m)
-}
+
+func (m *ABCIParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ABCIParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ABCIParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ABCIParams proto.InternalMessageInfo
 
-func (m *ABCIParams) GetVoteExtensionsEnableHeight() int64 {
-	if m != nil {
-		return m.VoteExtensionsEnableHeight
-	}
-	return 0
-}
+func (m *ABCIParams) GetVoteExtensionsEnableHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *ABCIParams) GetRecheckTx() bool {
-	if m != nil {
-		return m.RecheckTx
-	}
-	return false
-}
+func (m *ABCIParams) GetRecheckTx() bool { _ = "STUB: not implemented"; return false }
 
 func init() {
 	proto.RegisterType((*ConsensusParams)(nil), "tendermint.types.ConsensusParams")
@@ -727,2299 +471,193 @@ var fileDescriptor_e12598271a686f57 = []byte{
 	0x01, 0x0b, 0x07, 0x00, 0x00,
 }
 
-func (this *ConsensusParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *ConsensusParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*ConsensusParams)
-	if !ok {
-		that2, ok := that.(ConsensusParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Block.Equal(that1.Block) {
-		return false
-	}
-	if !this.Evidence.Equal(that1.Evidence) {
-		return false
-	}
-	if !this.Validator.Equal(that1.Validator) {
-		return false
-	}
-	if !this.Version.Equal(that1.Version) {
-		return false
-	}
-	if !this.Synchrony.Equal(that1.Synchrony) {
-		return false
-	}
-	if !this.Timeout.Equal(that1.Timeout) {
-		return false
-	}
-	if !this.Abci.Equal(that1.Abci) {
-		return false
-	}
-	return true
-}
-func (this *BlockParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *BlockParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*BlockParams)
-	if !ok {
-		that2, ok := that.(BlockParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MaxBytes != that1.MaxBytes {
-		return false
-	}
-	if this.MaxGas != that1.MaxGas {
-		return false
-	}
-	if this.MinTxsInBlock != that1.MinTxsInBlock {
-		return false
-	}
-	if this.MaxGasWanted != that1.MaxGasWanted {
-		return false
-	}
-	return true
-}
-func (this *EvidenceParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *EvidenceParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*EvidenceParams)
-	if !ok {
-		that2, ok := that.(EvidenceParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MaxAgeNumBlocks != that1.MaxAgeNumBlocks {
-		return false
-	}
-	if this.MaxAgeDuration != that1.MaxAgeDuration {
-		return false
-	}
-	if this.MaxBytes != that1.MaxBytes {
-		return false
-	}
-	return true
-}
-func (this *ValidatorParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *ValidatorParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*ValidatorParams)
-	if !ok {
-		that2, ok := that.(ValidatorParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.PubKeyTypes) != len(that1.PubKeyTypes) {
-		return false
-	}
-	for i := range this.PubKeyTypes {
-		if this.PubKeyTypes[i] != that1.PubKeyTypes[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *VersionParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *VersionParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*VersionParams)
-	if !ok {
-		that2, ok := that.(VersionParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.AppVersion != that1.AppVersion {
-		return false
-	}
-	return true
-}
-func (this *HashedParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *HashedParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*HashedParams)
-	if !ok {
-		that2, ok := that.(HashedParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.BlockMaxBytes != that1.BlockMaxBytes {
-		return false
-	}
-	if this.BlockMaxGas != that1.BlockMaxGas {
-		return false
-	}
-	return true
-}
-func (this *SynchronyParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *SynchronyParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*SynchronyParams)
-	if !ok {
-		that2, ok := that.(SynchronyParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.MessageDelay != nil && that1.MessageDelay != nil {
-		if *this.MessageDelay != *that1.MessageDelay {
-			return false
-		}
-	} else if this.MessageDelay != nil {
-		return false
-	} else if that1.MessageDelay != nil {
-		return false
-	}
-	if this.Precision != nil && that1.Precision != nil {
-		if *this.Precision != *that1.Precision {
-			return false
-		}
-	} else if this.Precision != nil {
-		return false
-	} else if that1.Precision != nil {
-		return false
-	}
-	return true
-}
-func (this *TimeoutParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *TimeoutParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*TimeoutParams)
-	if !ok {
-		that2, ok := that.(TimeoutParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Propose != nil && that1.Propose != nil {
-		if *this.Propose != *that1.Propose {
-			return false
-		}
-	} else if this.Propose != nil {
-		return false
-	} else if that1.Propose != nil {
-		return false
-	}
-	if this.ProposeDelta != nil && that1.ProposeDelta != nil {
-		if *this.ProposeDelta != *that1.ProposeDelta {
-			return false
-		}
-	} else if this.ProposeDelta != nil {
-		return false
-	} else if that1.ProposeDelta != nil {
-		return false
-	}
-	if this.Vote != nil && that1.Vote != nil {
-		if *this.Vote != *that1.Vote {
-			return false
-		}
-	} else if this.Vote != nil {
-		return false
-	} else if that1.Vote != nil {
-		return false
-	}
-	if this.VoteDelta != nil && that1.VoteDelta != nil {
-		if *this.VoteDelta != *that1.VoteDelta {
-			return false
-		}
-	} else if this.VoteDelta != nil {
-		return false
-	} else if that1.VoteDelta != nil {
-		return false
-	}
-	if this.Commit != nil && that1.Commit != nil {
-		if *this.Commit != *that1.Commit {
-			return false
-		}
-	} else if this.Commit != nil {
-		return false
-	} else if that1.Commit != nil {
-		return false
-	}
-	if this.BypassCommitTimeout != that1.BypassCommitTimeout {
-		return false
-	}
-	return true
-}
-func (this *ABCIParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *ABCIParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*ABCIParams)
-	if !ok {
-		that2, ok := that.(ABCIParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.VoteExtensionsEnableHeight != that1.VoteExtensionsEnableHeight {
-		return false
-	}
-	if this.RecheckTx != that1.RecheckTx {
-		return false
-	}
-	return true
-}
 func (m *ConsensusParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ConsensusParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ConsensusParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Abci != nil {
-		{
-			size, err := m.Abci.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintParams(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x3a
-	}
-	if m.Timeout != nil {
-		{
-			size, err := m.Timeout.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintParams(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.Synchrony != nil {
-		{
-			size, err := m.Synchrony.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintParams(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Version != nil {
-		{
-			size, err := m.Version.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintParams(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.Validator != nil {
-		{
-			size, err := m.Validator.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintParams(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Evidence != nil {
-		{
-			size, err := m.Evidence.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintParams(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Block != nil {
-		{
-			size, err := m.Block.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintParams(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *BlockParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *BlockParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *BlockParams) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *BlockParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.MaxGasWanted != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MaxGasWanted))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.MinTxsInBlock != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MinTxsInBlock))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.MaxGas != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MaxGas))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.MaxBytes != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MaxBytes))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *EvidenceParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *EvidenceParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *EvidenceParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.MaxBytes != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MaxBytes))
-		i--
-		dAtA[i] = 0x18
-	}
-	n8, err8 := github_com_gogo_protobuf_types.StdDurationMarshalTo(m.MaxAgeDuration, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(m.MaxAgeDuration):])
-	if err8 != nil {
-		return 0, err8
-	}
-	i -= n8
-	i = encodeVarintParams(dAtA, i, uint64(n8))
-	i--
-	dAtA[i] = 0x12
-	if m.MaxAgeNumBlocks != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.MaxAgeNumBlocks))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ValidatorParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.PubKeyTypes) > 0 {
-		for iNdEx := len(m.PubKeyTypes) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.PubKeyTypes[iNdEx])
-			copy(dAtA[i:], m.PubKeyTypes[iNdEx])
-			i = encodeVarintParams(dAtA, i, uint64(len(m.PubKeyTypes[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *VersionParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *VersionParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *VersionParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AppVersion != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.AppVersion))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *HashedParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *HashedParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *HashedParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.BlockMaxGas != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.BlockMaxGas))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.BlockMaxBytes != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.BlockMaxBytes))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SynchronyParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *SynchronyParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SynchronyParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Precision != nil {
-		n9, err9 := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.Precision, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Precision):])
-		if err9 != nil {
-			return 0, err9
-		}
-		i -= n9
-		i = encodeVarintParams(dAtA, i, uint64(n9))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.MessageDelay != nil {
-		n10, err10 := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.MessageDelay, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(*m.MessageDelay):])
-		if err10 != nil {
-			return 0, err10
-		}
-		i -= n10
-		i = encodeVarintParams(dAtA, i, uint64(n10))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *TimeoutParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *TimeoutParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *TimeoutParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.BypassCommitTimeout {
-		i--
-		if m.BypassCommitTimeout {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x30
-	}
-	if m.Commit != nil {
-		n11, err11 := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.Commit, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Commit):])
-		if err11 != nil {
-			return 0, err11
-		}
-		i -= n11
-		i = encodeVarintParams(dAtA, i, uint64(n11))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.VoteDelta != nil {
-		n12, err12 := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.VoteDelta, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(*m.VoteDelta):])
-		if err12 != nil {
-			return 0, err12
-		}
-		i -= n12
-		i = encodeVarintParams(dAtA, i, uint64(n12))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.Vote != nil {
-		n13, err13 := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.Vote, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Vote):])
-		if err13 != nil {
-			return 0, err13
-		}
-		i -= n13
-		i = encodeVarintParams(dAtA, i, uint64(n13))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.ProposeDelta != nil {
-		n14, err14 := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.ProposeDelta, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(*m.ProposeDelta):])
-		if err14 != nil {
-			return 0, err14
-		}
-		i -= n14
-		i = encodeVarintParams(dAtA, i, uint64(n14))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Propose != nil {
-		n15, err15 := github_com_gogo_protobuf_types.StdDurationMarshalTo(*m.Propose, dAtA[i-github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Propose):])
-		if err15 != nil {
-			return 0, err15
-		}
-		i -= n15
-		i = encodeVarintParams(dAtA, i, uint64(n15))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *ABCIParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *ABCIParams) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *ABCIParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *ABCIParams) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *ABCIParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.RecheckTx {
-		i--
-		if m.RecheckTx {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.VoteExtensionsEnableHeight != 0 {
-		i = encodeVarintParams(dAtA, i, uint64(m.VoteExtensionsEnableHeight))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintParams(dAtA []byte, offset int, v uint64) int {
-	offset -= sovParams(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *ConsensusParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Block != nil {
-		l = m.Block.Size()
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Evidence != nil {
-		l = m.Evidence.Size()
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Validator != nil {
-		l = m.Validator.Size()
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Version != nil {
-		l = m.Version.Size()
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Synchrony != nil {
-		l = m.Synchrony.Size()
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Timeout != nil {
-		l = m.Timeout.Size()
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Abci != nil {
-		l = m.Abci.Size()
-		n += 1 + l + sovParams(uint64(l))
-	}
-	return n
-}
+func encodeVarintParams(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *BlockParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MaxBytes != 0 {
-		n += 1 + sovParams(uint64(m.MaxBytes))
-	}
-	if m.MaxGas != 0 {
-		n += 1 + sovParams(uint64(m.MaxGas))
-	}
-	if m.MinTxsInBlock != 0 {
-		n += 1 + sovParams(uint64(m.MinTxsInBlock))
-	}
-	if m.MaxGasWanted != 0 {
-		n += 1 + sovParams(uint64(m.MaxGasWanted))
-	}
-	return n
-}
+func (m *ConsensusParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *EvidenceParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MaxAgeNumBlocks != 0 {
-		n += 1 + sovParams(uint64(m.MaxAgeNumBlocks))
-	}
-	l = github_com_gogo_protobuf_types.SizeOfStdDuration(m.MaxAgeDuration)
-	n += 1 + l + sovParams(uint64(l))
-	if m.MaxBytes != 0 {
-		n += 1 + sovParams(uint64(m.MaxBytes))
-	}
-	return n
-}
+func (m *BlockParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ValidatorParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.PubKeyTypes) > 0 {
-		for _, s := range m.PubKeyTypes {
-			l = len(s)
-			n += 1 + l + sovParams(uint64(l))
-		}
-	}
-	return n
-}
+func (m *EvidenceParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *VersionParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AppVersion != 0 {
-		n += 1 + sovParams(uint64(m.AppVersion))
-	}
-	return n
-}
+func (m *ValidatorParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *HashedParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BlockMaxBytes != 0 {
-		n += 1 + sovParams(uint64(m.BlockMaxBytes))
-	}
-	if m.BlockMaxGas != 0 {
-		n += 1 + sovParams(uint64(m.BlockMaxGas))
-	}
-	return n
-}
+func (m *VersionParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *SynchronyParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MessageDelay != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdDuration(*m.MessageDelay)
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Precision != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Precision)
-		n += 1 + l + sovParams(uint64(l))
-	}
-	return n
-}
+func (m *HashedParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *TimeoutParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Propose != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Propose)
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.ProposeDelta != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdDuration(*m.ProposeDelta)
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Vote != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Vote)
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.VoteDelta != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdDuration(*m.VoteDelta)
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.Commit != nil {
-		l = github_com_gogo_protobuf_types.SizeOfStdDuration(*m.Commit)
-		n += 1 + l + sovParams(uint64(l))
-	}
-	if m.BypassCommitTimeout {
-		n += 2
-	}
-	return n
-}
+func (m *SynchronyParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ABCIParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.VoteExtensionsEnableHeight != 0 {
-		n += 1 + sovParams(uint64(m.VoteExtensionsEnableHeight))
-	}
-	if m.RecheckTx {
-		n += 2
-	}
-	return n
-}
+func (m *TimeoutParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovParams(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozParams(x uint64) (n int) {
-	return sovParams(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *ConsensusParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ConsensusParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ConsensusParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Block", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Block == nil {
-				m.Block = &BlockParams{}
-			}
-			if err := m.Block.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Evidence", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Evidence == nil {
-				m.Evidence = &EvidenceParams{}
-			}
-			if err := m.Evidence.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validator", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Validator == nil {
-				m.Validator = &ValidatorParams{}
-			}
-			if err := m.Validator.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Version == nil {
-				m.Version = &VersionParams{}
-			}
-			if err := m.Version.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Synchrony", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Synchrony == nil {
-				m.Synchrony = &SynchronyParams{}
-			}
-			if err := m.Synchrony.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Timeout", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Timeout == nil {
-				m.Timeout = &TimeoutParams{}
-			}
-			if err := m.Timeout.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Abci", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Abci == nil {
-				m.Abci = &ABCIParams{}
-			}
-			if err := m.Abci.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *ABCIParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *BlockParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: BlockParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BlockParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxBytes", wireType)
-			}
-			m.MaxBytes = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxBytes |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxGas", wireType)
-			}
-			m.MaxGas = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxGas |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MinTxsInBlock", wireType)
-			}
-			m.MinTxsInBlock = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MinTxsInBlock |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxGasWanted", wireType)
-			}
-			m.MaxGasWanted = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxGasWanted |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovParams(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *EvidenceParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: EvidenceParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: EvidenceParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxAgeNumBlocks", wireType)
-			}
-			m.MaxAgeNumBlocks = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxAgeNumBlocks |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxAgeDuration", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(&m.MaxAgeDuration, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxBytes", wireType)
-			}
-			m.MaxBytes = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxBytes |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sozParams(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ValidatorParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ValidatorParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ValidatorParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PubKeyTypes", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PubKeyTypes = append(m.PubKeyTypes, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *ConsensusParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *VersionParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: VersionParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: VersionParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppVersion", wireType)
-			}
-			m.AppVersion = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.AppVersion |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *BlockParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *HashedParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: HashedParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: HashedParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BlockMaxBytes", wireType)
-			}
-			m.BlockMaxBytes = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BlockMaxBytes |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BlockMaxGas", wireType)
-			}
-			m.BlockMaxGas = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BlockMaxGas |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *EvidenceParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SynchronyParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SynchronyParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SynchronyParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MessageDelay", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.MessageDelay == nil {
-				m.MessageDelay = new(time.Duration)
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(m.MessageDelay, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Precision", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Precision == nil {
-				m.Precision = new(time.Duration)
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(m.Precision, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *ValidatorParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *TimeoutParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: TimeoutParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TimeoutParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Propose", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Propose == nil {
-				m.Propose = new(time.Duration)
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(m.Propose, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProposeDelta", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ProposeDelta == nil {
-				m.ProposeDelta = new(time.Duration)
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(m.ProposeDelta, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Vote", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Vote == nil {
-				m.Vote = new(time.Duration)
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(m.Vote, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VoteDelta", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.VoteDelta == nil {
-				m.VoteDelta = new(time.Duration)
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(m.VoteDelta, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Commit", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthParams
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthParams
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Commit == nil {
-				m.Commit = new(time.Duration)
-			}
-			if err := github_com_gogo_protobuf_types.StdDurationUnmarshal(m.Commit, dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BypassCommitTimeout", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.BypassCommitTimeout = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *VersionParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ABCIParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ABCIParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ABCIParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VoteExtensionsEnableHeight", wireType)
-			}
-			m.VoteExtensionsEnableHeight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.VoteExtensionsEnableHeight |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RecheckTx", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.RecheckTx = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipParams(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthParams
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *HashedParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipParams(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowParams
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowParams
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthParams
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupParams
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthParams
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *SynchronyParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *TimeoutParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *ABCIParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipParams(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthParams        = fmt.Errorf("proto: negative length found during unmarshaling")

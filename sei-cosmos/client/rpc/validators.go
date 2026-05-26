@@ -2,73 +2,24 @@ package rpc
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"strconv"
-	"strings"
 
-	"github.com/gorilla/mux"
 	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/spf13/cobra"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
-	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
 )
 
 // TODO these next two functions feel kinda hacky based on their placement
 
 // ValidatorCommand returns the validator set for a given height
-func ValidatorCommand() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "tendermint-validator-set [height]",
-		Short: "Get the full tendermint validator set at given height",
-		Args:  cobra.MaximumNArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-			var height *int64
+func ValidatorCommand() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
-			// optional height
-			if len(args) > 0 {
-				h, err := strconv.Atoi(args[0])
-				if err != nil {
-					return err
-				}
-				if h > 0 {
-					tmp := int64(h)
-					height = &tmp
-				}
-			}
+// optional height
 
-			page, _ := cmd.Flags().GetInt(flags.FlagPage)
-			limit, _ := cmd.Flags().GetInt(flags.FlagLimit)
-			// get the node
-			node, err := clientCtx.GetNode()
-			if err != nil {
-				return err
-			}
-			result, err := GetValidators(cmd.Context(), node, height, &page, &limit)
-			if err != nil {
-				return err
-			}
-
-			return clientCtx.PrintObjectLegacy(result)
-		},
-	}
-
-	cmd.Flags().StringP(flags.FlagNode, "n", "tcp://localhost:26657", "Node to connect to")
-	cmd.Flags().String(flags.FlagKeyringBackend, flags.DefaultKeyringBackend, "Select keyring's backend (os|file|kwallet|pass|test)")
-	cmd.Flags().Int(flags.FlagPage, rest.DefaultPage, "Query a specific page of paginated results")
-	cmd.Flags().Int(flags.FlagLimit, 100, "Query number of results returned per page")
-
-	return cmd
-}
+// get the node
 
 // Validator output
 type ValidatorOutput struct {
@@ -85,124 +36,31 @@ type ResultValidatorsOutput struct {
 	Total       uint64            `json:"total"`
 }
 
-func (rvo ResultValidatorsOutput) String() string {
-	var b strings.Builder
-
-	b.WriteString(fmt.Sprintf("block height: %d\n", rvo.BlockHeight))
-	b.WriteString(fmt.Sprintf("total count: %d\n", rvo.Total))
-
-	for _, val := range rvo.Validators {
-		b.WriteString(
-			fmt.Sprintf(`
-  Address:          %s
-  Pubkey:           %s
-  ProposerPriority: %d
-  VotingPower:      %d
-		`,
-				val.Address, val.PubKey, val.ProposerPriority, val.VotingPower,
-			),
-		)
-	}
-
-	return b.String()
-}
+func (rvo ResultValidatorsOutput) String() string { _ = "STUB: not implemented"; return "" }
 
 func validatorOutput(validator *tmtypes.Validator) (ValidatorOutput, error) {
-	pk, err := cryptocodec.FromTmPubKeyInterface(validator.PubKey)
-	if err != nil {
-		return ValidatorOutput{}, err
-	}
-
-	return ValidatorOutput{
-		Address:          sdk.ConsAddress(validator.Address),
-		PubKey:           pk,
-		ProposerPriority: validator.ProposerPriority,
-		VotingPower:      validator.VotingPower,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(ValidatorOutput), nil
 }
 
 // GetValidators from client
 func GetValidators(ctx context.Context, node client.Client, height *int64, page, limit *int) (ResultValidatorsOutput, error) {
-	validatorsRes, err := node.Validators(ctx, height, page, limit)
-	if err != nil {
-		return ResultValidatorsOutput{}, err
-	}
-
-	total := validatorsRes.Total
-	if validatorsRes.Total < 0 {
-		total = 0
-	}
-	out := ResultValidatorsOutput{
-		BlockHeight: validatorsRes.BlockHeight,
-		Validators:  make([]ValidatorOutput, len(validatorsRes.Validators)),
-		Total:       uint64(total), //nolint:gosec // total is guaranteed non-negative by the check above
-	}
-	for i := 0; i < len(validatorsRes.Validators); i++ {
-		out.Validators[i], err = validatorOutput(validatorsRes.Validators[i])
-		if err != nil {
-			return out, err
-		}
-	}
-
-	return out, nil
+	_ = "STUB: not implemented"
+	return *new(ResultValidatorsOutput), nil
 }
+
+//nolint:gosec // total is guaranteed non-negative by the check above
 
 // REST
 
 // Validator Set at a height REST handler
 func ValidatorSetRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		_, page, limit, err := rest.ParseHTTPArgsWithLimit(r, 100)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse pagination parameters")
-			return
-		}
-
-		vars := mux.Vars(r)
-		height, err := strconv.ParseInt(vars["height"], 10, 64)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse block height")
-			return
-		}
-		node, err := clientCtx.GetNode()
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-		chainHeight, err := GetChainHeight(r.Context(), node)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusInternalServerError, "failed to parse chain height")
-			return
-		}
-		if height > chainHeight {
-			rest.WriteErrorResponse(w, http.StatusNotFound, "requested block height is bigger then the chain length")
-			return
-		}
-
-		output, err := GetValidators(r.Context(), node, &height, &page, &limit)
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-		rest.PostProcessResponse(w, clientCtx, output)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 // Latest Validator Set REST handler
 func LatestValidatorSetRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		_, page, limit, err := rest.ParseHTTPArgsWithLimit(r, 100)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, "failed to parse pagination parameters")
-			return
-		}
-		node, err := clientCtx.GetNode()
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-		output, err := GetValidators(r.Context(), node, nil, &page, &limit)
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-
-		rest.PostProcessResponse(w, clientCtx, output)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }

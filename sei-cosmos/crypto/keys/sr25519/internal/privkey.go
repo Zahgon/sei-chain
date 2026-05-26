@@ -1,10 +1,6 @@
 package internal
 
 import (
-	"crypto/rand"
-	"crypto/sha256"
-	"encoding/json"
-	"fmt"
 	"io"
 
 	"github.com/oasisprotocol/curve25519-voi/primitives/sr25519"
@@ -20,131 +16,45 @@ type PrivKey struct {
 	kp  *sr25519.KeyPair
 }
 
-func (privKey PrivKey) Type() string { return KeyType }
+func (privKey PrivKey) Type() string {
+	_ = "STUB: not implemented"
 
-// Bytes returns the byte-encoded PrivKey.
-func (privKey PrivKey) Bytes() []byte {
-	if privKey.kp == nil {
-		return nil
-	}
-	return privKey.msk[:]
+	// Bytes returns the byte-encoded PrivKey.
+	return ""
 }
+
+func (privKey PrivKey) Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // Sign produces a signature on the provided message.
-func (privKey PrivKey) Sign(msg []byte) ([]byte, error) {
-	if privKey.kp == nil {
-		return nil, fmt.Errorf("sr25519: uninitialized private key")
-	}
-
-	st := signingCtx.NewTranscriptBytes(msg)
-
-	sig, err := privKey.kp.Sign(rand.Reader, st)
-	if err != nil {
-		return nil, fmt.Errorf("sr25519: failed to sign message: %w", err)
-	}
-
-	sigBytes, err := sig.MarshalBinary()
-	if err != nil {
-		return nil, fmt.Errorf("sr25519: failed to serialize signature: %w", err)
-	}
-
-	return sigBytes, nil
-}
+func (privKey PrivKey) Sign(msg []byte) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // PubKey gets the corresponding public key from the private key.
 //
 // Panics if the private key is not initialized.
-func (privKey PrivKey) PubKey() PubKey {
-	if privKey.kp == nil {
-		panic("sr25519: uninitialized private key")
-	}
-
-	b, err := privKey.kp.PublicKey().MarshalBinary()
-	if err != nil {
-		panic("sr25519: failed to serialize public key: " + err.Error())
-	}
-
-	return PubKey(b)
-}
+func (privKey PrivKey) PubKey() PubKey { _ = "STUB: not implemented"; return *new(PubKey) }
 
 // Equals - you probably don't need to use this.
 // Runs in constant time based on length of the keys.
-func (privKey PrivKey) Equals(other PrivKey) bool {
-	return privKey.msk.Equal(&other.msk)
-}
+func (privKey PrivKey) Equals(other PrivKey) bool { _ = "STUB: not implemented"; return false }
 
 func (privKey PrivKey) MarshalJSON() ([]byte, error) {
-	var b []byte
+	_ = "STUB: not implemented"
 
 	// Handle uninitialized private keys gracefully.
-	if privKey.kp != nil {
-		b = privKey.Bytes()
-	}
-
-	return json.Marshal(b)
+	return nil, nil
 }
 
-func (privKey *PrivKey) UnmarshalJSON(data []byte) error {
-	for i := range privKey.msk {
-		privKey.msk[i] = 0
-	}
-	privKey.kp = nil
-
-	var b []byte
-	if err := json.Unmarshal(data, &b); err != nil {
-		return fmt.Errorf("sr25519: failed to deserialize JSON: %w", err)
-	}
-	if len(b) == 0 {
-		return nil
-	}
-
-	msk, err := sr25519.NewMiniSecretKeyFromBytes(b)
-	if err != nil {
-		return err
-	}
-
-	sk := msk.ExpandEd25519()
-
-	privKey.msk = *msk
-	privKey.kp = sk.KeyPair()
-
-	return nil
-}
+func (privKey *PrivKey) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // GenPrivKey generates a new sr25519 private key.
 // It uses OS randomness in conjunction with the current global random seed
 // in tendermint/libs/common to generate the private key.
-func GenPrivKey() PrivKey {
-	return genPrivKey(rand.Reader)
-}
+func GenPrivKey() PrivKey { _ = "STUB: not implemented"; return *new(PrivKey) }
 
-func genPrivKey(rng io.Reader) PrivKey {
-	msk, err := sr25519.GenerateMiniSecretKey(rng)
-	if err != nil {
-		panic("sr25519: failed to generate MiniSecretKey: " + err.Error())
-	}
-
-	sk := msk.ExpandEd25519()
-
-	return PrivKey{
-		msk: *msk,
-		kp:  sk.KeyPair(),
-	}
-}
+func genPrivKey(rng io.Reader) PrivKey { _ = "STUB: not implemented"; return *new(PrivKey) }
 
 // GenPrivKeyFromSecret hashes the secret with SHA2, and uses
 // that 32 byte output to create the private key.
 // NOTE: secret should be the output of a KDF like bcrypt,
 // if it's derived from user input.
-func GenPrivKeyFromSecret(secret []byte) PrivKey {
-	seed := sha256.Sum256(secret)
-	var privKey PrivKey
-	if err := privKey.msk.UnmarshalBinary(seed[:]); err != nil {
-		panic("sr25519: failed to deserialize MiniSecretKey: " + err.Error())
-	}
-
-	sk := privKey.msk.ExpandEd25519()
-	privKey.kp = sk.KeyPair()
-
-	return privKey
-}
+func GenPrivKeyFromSecret(secret []byte) PrivKey { _ = "STUB: not implemented"; return *new(PrivKey) }

@@ -2,7 +2,6 @@ package types
 
 import (
 	"regexp"
-	"strings"
 )
 
 var (
@@ -39,24 +38,24 @@ type Route struct {
 }
 
 // NewRoute returns an instance of Route.
-func NewRoute(p string, h Handler) Route {
-	return Route{path: strings.TrimSpace(p), handler: h}
-}
+func NewRoute(p string, h Handler) Route { _ = "STUB: not implemented"; return *new(Route) }
 
 // Path returns the path the route has assigned.
 func (r Route) Path() string {
-	return r.path
+	_ = "STUB: not implemented"
+
+	// Handler returns the handler that handles the route.
+	return ""
 }
 
-// Handler returns the handler that handles the route.
 func (r Route) Handler() Handler {
-	return r.handler
+	_ = "STUB: not implemented"
+
+	// Empty returns true only if both handler and path are not empty.
+	return *new(Handler)
 }
 
-// Empty returns true only if both handler and path are not empty.
-func (r Route) Empty() bool {
-	return r.handler == nil || r.path == ""
-}
+func (r Route) Empty() bool { _ = "STUB: not implemented"; return false }
 
 // QueryRouter provides queryables for each query path.
 type QueryRouter interface {

@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
@@ -30,63 +28,30 @@ func NewKeeper(
 	cdc codec.BinaryCodec, key sdk.StoreKey, ak types.AccountKeeper, bk types.BankKeeper,
 	ps paramtypes.Subspace,
 ) Keeper {
+	_ = "STUB: not implemented"
 	// set KeyTable if it has not already been set
-	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(types.ParamKeyTable())
-	}
-
-	// ensure bonded and not bonded module accounts are set
-	if addr := ak.GetModuleAddress(types.BondedPoolName); addr == nil {
-		panic(fmt.Sprintf("%s module account has not been set", types.BondedPoolName))
-	}
-
-	if addr := ak.GetModuleAddress(types.NotBondedPoolName); addr == nil {
-		panic(fmt.Sprintf("%s module account has not been set", types.NotBondedPoolName))
-	}
-
-	return Keeper{
-		storeKey:   key,
-		cdc:        cdc,
-		authKeeper: ak,
-		bankKeeper: bk,
-		paramstore: ps,
-		hooks:      nil,
-	}
+	return *new(Keeper)
 }
+
+// ensure bonded and not bonded module accounts are set
 
 func (k Keeper) GetStoreKey() sdk.StoreKey {
-	return k.storeKey
+	_ = "STUB: not implemented"
+
+	// Set the validator hooks
+	return *new(sdk.StoreKey)
 }
 
-// Set the validator hooks
-func (k *Keeper) SetHooks(sh types.StakingHooks) *Keeper {
-	if k.hooks != nil {
-		panic("cannot set validator hooks twice")
-	}
-
-	k.hooks = sh
-
-	return k
-}
+func (k *Keeper) SetHooks(sh types.StakingHooks) *Keeper { _ = "STUB: not implemented"; return nil }
 
 // Load the last total validator power.
 func (k Keeper) GetLastTotalPower(ctx sdk.Context) sdk.Int {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.LastTotalPowerKey)
-
-	if bz == nil {
-		return sdk.ZeroInt()
-	}
-
-	ip := sdk.IntProto{}
-	k.cdc.MustUnmarshal(bz, &ip)
-
-	return ip.Int
+	_ = "STUB: not implemented"
+	return *new(sdk.Int)
 }
 
 // Set the last total validator power.
 func (k Keeper) SetLastTotalPower(ctx sdk.Context, power sdk.Int) {
-	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&sdk.IntProto{Int: power})
-	store.Set(types.LastTotalPowerKey, bz)
+	_ = "STUB: not implemented"
+	return
 }

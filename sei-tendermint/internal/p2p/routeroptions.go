@@ -1,7 +1,6 @@
 package p2p
 
 import (
-	"fmt"
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p/conn"
@@ -15,9 +14,7 @@ type DialFailuresError struct {
 	Address  types.NodeID
 }
 
-func (e DialFailuresError) Error() string {
-	return fmt.Sprintf("dialing failed %d times will not retry for address=%s, deleting peer", e.Failures, e.Address)
-}
+func (e DialFailuresError) Error() string { _ = "STUB: not implemented"; return "" }
 
 // PeerStatus is a peer status.
 //
@@ -118,56 +115,31 @@ type RouterOptions struct {
 	PeerStoreInterval utils.Option[time.Duration]
 }
 
-func (o *RouterOptions) maxAccepts() int  { return o.MaxConcurrentAccepts.Or(10) }
-func (o *RouterOptions) maxOutbound() int { return o.MaxOutbound.Or(20) }
-func (o *RouterOptions) maxInbound() int  { return o.MaxInbound.Or(40) }
+func (o *RouterOptions) maxAccepts() int  { _ = "STUB: not implemented"; return 0 }
+func (o *RouterOptions) maxOutbound() int { _ = "STUB: not implemented"; return 0 }
+func (o *RouterOptions) maxInbound() int  { _ = "STUB: not implemented"; return 0 }
 
 func (o *RouterOptions) peerStoreInterval() time.Duration {
-	return o.PeerStoreInterval.Or(10 * time.Second)
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // Validate validates the options.
-func (o *RouterOptions) Validate() error {
-	for _, addr := range o.BootstrapPeers {
-		if err := addr.Validate(); err != nil {
-			return fmt.Errorf("invalid BoodstrapPeer address %v: %w", addr, err)
-		}
-	}
-	for _, addr := range o.PersistentPeers {
-		if err := addr.Validate(); err != nil {
-			return fmt.Errorf("invalid PersistentPeer address %v: %w", addr, err)
-		}
-	}
-	for _, id := range o.BlockSyncPeers {
-		if err := id.Validate(); err != nil {
-			return fmt.Errorf("invalid block sync peer ID %q: %w", id, err)
-		}
-	}
-	for _, id := range o.UnconditionalPeers {
-		if err := id.Validate(); err != nil {
-			return fmt.Errorf("invalid unconditional peer ID %q: %w", id, err)
-		}
-	}
-	for _, id := range o.PrivatePeers {
-		if err := id.Validate(); err != nil {
-			return fmt.Errorf("invalid private peer ID %q: %w", id, err)
-		}
-	}
-	return nil
-}
+func (o *RouterOptions) Validate() error { _ = "STUB: not implemented"; return nil }
 
 func (o *RouterOptions) maxDialRate() rate.Limit {
-	return o.MaxDialRate.Or(rate.Every(10 * time.Second))
+	_ = "STUB: not implemented"
+	return *new(rate.Limit)
 }
 
 func (o *RouterOptions) maxAcceptRate() rate.Limit {
-	return o.MaxAcceptRate.Or(rate.Every(time.Second))
+	_ = "STUB: not implemented"
+	return *new(rate.Limit)
 }
 
 func (o *RouterOptions) incomingConnectionWindow() time.Duration {
-	return o.IncomingConnectionWindow.Or(100 * time.Millisecond)
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
-func (o *RouterOptions) maxIncomingConnectionAttempts() uint {
-	return o.MaxIncomingConnectionAttempts.Or(100)
-}
+func (o *RouterOptions) maxIncomingConnectionAttempts() uint { _ = "STUB: not implemented"; return 0 }

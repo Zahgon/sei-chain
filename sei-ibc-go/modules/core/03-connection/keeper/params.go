@@ -8,17 +8,15 @@ import (
 
 // GetMaxExpectedTimePerBlock retrieves the maximum expected time per block from the paramstore
 func (k Keeper) GetMaxExpectedTimePerBlock(ctx sdk.Context) uint64 {
-	var res uint64
-	k.paramSpace.Get(ctx, types.KeyMaxExpectedTimePerBlock, &res)
-	return res
+	_ = "STUB: not implemented"
+	return 0
 }
 
 // GetParams returns the total set of ibc-connection parameters.
 func (k Keeper) GetParams(ctx sdk.Context) types.Params {
-	return types.NewParams(k.GetMaxExpectedTimePerBlock(ctx))
+	_ = "STUB: not implemented"
+	return *new(types.Params)
 }
 
 // SetParams sets the total set of ibc-connection parameters.
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramSpace.SetParamSet(ctx, &params)
-}
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) { _ = "STUB: not implemented"; return }

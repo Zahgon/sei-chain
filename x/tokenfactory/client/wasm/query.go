@@ -11,17 +11,16 @@ type TokenFactoryWasmQueryHandler struct {
 }
 
 func NewTokenFactoryWasmQueryHandler(keeper *tokenfactorykeeper.Keeper) *TokenFactoryWasmQueryHandler {
-	return &TokenFactoryWasmQueryHandler{
-		tokenfactoryKeeper: *keeper,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (handler TokenFactoryWasmQueryHandler) GetDenomAuthorityMetadata(ctx sdk.Context, req *types.QueryDenomAuthorityMetadataRequest) (*types.QueryDenomAuthorityMetadataResponse, error) {
-	c := sdk.WrapSDKContext(ctx)
-	return handler.tokenfactoryKeeper.DenomAuthorityMetadata(c, req)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (handler TokenFactoryWasmQueryHandler) GetDenomsFromCreator(ctx sdk.Context, req *types.QueryDenomsFromCreatorRequest) (*types.QueryDenomsFromCreatorResponse, error) {
-	c := sdk.WrapSDKContext(ctx)
-	return handler.tokenfactoryKeeper.DenomsFromCreator(c, req)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

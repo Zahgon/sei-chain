@@ -14,21 +14,20 @@ type Signer struct {
 }
 
 func (sig *Signer) Sender(_ *types.Transaction) (common.Address, error) {
-	return sig.From, nil
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 func (sig *Signer) SignatureValues(_ *types.Transaction, _ []byte) (r, s, v *big.Int, err error) {
-	panic("signer.SignatureValues not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil, nil, nil
 }
 
-func (sig *Signer) ChainID() *big.Int {
-	panic("signer.ChainID not implemented")
-}
+func (sig *Signer) ChainID() *big.Int { _ = "STUB: not implemented"; return nil }
 
 func (sig *Signer) Hash(_ *types.Transaction) common.Hash {
-	panic("signer.Hash not implemented")
+	_ = "STUB: not implemented"
+	return *new(common.Hash)
 }
 
-func (sig *Signer) Equal(_ types.Signer) bool {
-	panic("signer.Equal not implemented")
-}
+func (sig *Signer) Equal(_ types.Signer) bool { _ = "STUB: not implemented"; return false }

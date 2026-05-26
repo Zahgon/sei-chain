@@ -29,32 +29,7 @@ const (
 
 // AllEVMStoreTypes returns all EVM store types that have separate DBs.
 // Note: Balance is not included until migration from tendermint store.
-func AllEVMStoreTypes() []EVMStoreType {
-	return []EVMStoreType{
-		StoreNonce,
-		StoreCodeHash,
-		StoreCode,
-		StoreStorage,
-		StoreLegacy,
-	}
-}
+func AllEVMStoreTypes() []EVMStoreType { _ = "STUB: not implemented"; return nil }
 
 // StoreTypeName returns a human-readable name for the store type (used for DB directories)
-func StoreTypeName(st EVMStoreType) string {
-	switch st {
-	case StoreNonce:
-		return "nonce"
-	case StoreCodeHash:
-		return "codehash"
-	case StoreCode:
-		return "code"
-	case StoreStorage:
-		return "storage"
-	case StoreLegacy:
-		return "legacy"
-	case StoreBalance:
-		return "balance"
-	default:
-		return "unknown"
-	}
-}
+func StoreTypeName(st EVMStoreType) string { _ = "STUB: not implemented"; return "" }

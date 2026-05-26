@@ -4,11 +4,7 @@ import (
 	"context"
 	"time"
 
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
-
-	"github.com/sei-protocol/sei-chain/sei-db/common/metrics"
 )
 
 const cacheMeterName = "seidb_pebblecache"
@@ -46,68 +42,17 @@ func newCacheMetrics(
 	scrapeInterval time.Duration,
 	getSize func() (bytes uint64, entries uint64),
 ) *CacheMetrics {
-	meter := otel.Meter(cacheMeterName)
-
-	sizeBytes, _ := meter.Int64Gauge(
-		"pebblecache_size_bytes",
-		metric.WithDescription("Current cache size in bytes"),
-		metric.WithUnit("By"),
-	)
-	sizeEntries, _ := meter.Int64Gauge(
-		"pebblecache_size_entries",
-		metric.WithDescription("Current number of entries in the cache"),
-		metric.WithUnit("{count}"),
-	)
-	hits, _ := meter.Int64Counter(
-		"pebblecache_hits",
-		metric.WithDescription("Total number of cache hits"),
-		metric.WithUnit("{count}"),
-	)
-	misses, _ := meter.Int64Counter(
-		"pebblecache_misses",
-		metric.WithDescription("Total number of cache misses"),
-		metric.WithUnit("{count}"),
-	)
-	missLatency, _ := meter.Float64Histogram(
-		"pebblecache_miss_latency",
-		metric.WithDescription("Time taken to resolve a cache miss from the backing store"),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(metrics.LatencyBuckets...),
-	)
-
-	cm := &CacheMetrics{
-		attrs:       metric.WithAttributes(attribute.String("cache", cacheName)),
-		sizeBytes:   sizeBytes,
-		sizeEntries: sizeEntries,
-		hits:        hits,
-		misses:      misses,
-		missLatency: missLatency,
-	}
-
-	go cm.collectLoop(ctx, scrapeInterval, getSize)
-
-	return cm
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (cm *CacheMetrics) reportCacheHits(count int64) {
-	if cm == nil {
-		return
-	}
-	cm.hits.Add(context.Background(), count, cm.attrs)
-}
+func (cm *CacheMetrics) reportCacheHits(count int64) { _ = "STUB: not implemented"; return }
 
-func (cm *CacheMetrics) reportCacheMisses(count int64) {
-	if cm == nil {
-		return
-	}
-	cm.misses.Add(context.Background(), count, cm.attrs)
-}
+func (cm *CacheMetrics) reportCacheMisses(count int64) { _ = "STUB: not implemented"; return }
 
 func (cm *CacheMetrics) reportCacheMissLatency(latency time.Duration) {
-	if cm == nil {
-		return
-	}
-	cm.missLatency.Record(context.Background(), latency.Seconds(), cm.attrs)
+	_ = "STUB: not implemented"
+	return
 }
 
 // collectLoop periodically scrapes cache size from the provided function
@@ -117,20 +62,9 @@ func (cm *CacheMetrics) collectLoop(
 	interval time.Duration,
 	getSize func() (bytes uint64, entries uint64),
 ) {
-
-	if cm == nil {
-		return
-	}
-	ticker := time.NewTicker(interval)
-	defer ticker.Stop()
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case <-ticker.C:
-			bytes, entries := getSize()
-			cm.sizeBytes.Record(ctx, int64(bytes), cm.attrs)     //nolint:gosec // G115: safe, cache size fits int64
-			cm.sizeEntries.Record(ctx, int64(entries), cm.attrs) //nolint:gosec // G115: safe, entry count fits int64
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec // G115: safe, cache size fits int64
+//nolint:gosec // G115: safe, entry count fits int64

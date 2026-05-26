@@ -1,7 +1,6 @@
 package module
 
 import (
-	"context"
 	"encoding/json"
 	"math/rand"
 
@@ -15,13 +14,10 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	cdctypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
 	simtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/feegrant"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/feegrant/client/cli"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/feegrant/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/feegrant/simulation"
 )
 
 var (
@@ -40,74 +36,68 @@ type AppModuleBasic struct {
 }
 
 // Name returns the feegrant module's name.
-func (AppModuleBasic) Name() string {
-	return feegrant.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterServices registers a gRPC query service to respond to the
 // module-specific gRPC queries.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	feegrant.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	feegrant.RegisterQueryServer(cfg.QueryServer(), am.keeper)
-}
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // RegisterLegacyAminoCodec registers the feegrant module's types for the given codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	_ = "STUB: not implemented"
+
+	// RegisterInterfaces registers the feegrant module's interface types
+	return
 }
 
-// RegisterInterfaces registers the feegrant module's interface types
 func (AppModuleBasic) RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
-	feegrant.RegisterInterfaces(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // LegacyQuerierHandler returns the feegrant module sdk.Querier.
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return nil
+	_ = "STUB: not implemented"
+
+	// DefaultGenesis returns default genesis state as raw bytes for the feegrant
+	// module.
+	return *new(sdk.Querier)
 }
 
-// DefaultGenesis returns default genesis state as raw bytes for the feegrant
-// module.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(feegrant.DefaultGenesisState())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the feegrant module.
 func (a AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var data feegrant.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &data); err != nil {
-		return sdkerrors.Wrapf(err, "failed to unmarshal %s genesis state", feegrant.ModuleName)
-	}
-
-	return feegrant.ValidateGenesis(data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes registers the REST routes for the feegrant module.
-func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {}
+func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the feegrant module.
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the feegrant module.
+	return
+}
+
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	_ = feegrant.RegisterQueryHandlerClient(context.Background(), mux, feegrant.NewQueryClient(clientCtx))
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetTxCmd returns the root tx command for the feegrant module.
-func (AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
-}
+func (AppModuleBasic) GetTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // GetQueryCmd returns no root query command for the feegrant module.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd()
-}
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // ----------------------------------------------------------------------------
 // AppModule
@@ -124,100 +114,93 @@ type AppModule struct {
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(cdc codec.Codec, ak feegrant.AccountKeeper, bk feegrant.BankKeeper, keeper keeper.Keeper, registry cdctypes.InterfaceRegistry) AppModule {
-	return AppModule{
-		AppModuleBasic: AppModuleBasic{cdc: cdc},
-		keeper:         keeper,
-		accountKeeper:  ak,
-		bankKeeper:     bk,
-		registry:       registry,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // Name returns the feegrant module's name.
-func (AppModule) Name() string {
-	return feegrant.ModuleName
-}
+func (AppModule) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterInvariants registers the feegrant module invariants.
-func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
+func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 
-// Route returns the message routing key for the feegrant module.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(feegrant.RouterKey, nil)
+	// Route returns the message routing key for the feegrant module.
+	return
 }
+
+func (am AppModule) Route() sdk.Route { _ = "STUB: not implemented"; return *new(sdk.Route) }
 
 // NewHandler returns an sdk.Handler for the feegrant module.
 func (am AppModule) NewHandler() sdk.Handler {
-	return nil
+	_ = "STUB: not implemented"
+
+	// QuerierRoute returns the feegrant module's querier route name.
+	return *new(sdk.Handler)
 }
 
-// QuerierRoute returns the feegrant module's querier route name.
 func (AppModule) QuerierRoute() string {
+	_ = "STUB: not implemented"
+
+	// InitGenesis performs genesis initialization for the feegrant module. It returns
+	// no validator updates.
 	return ""
 }
 
-// InitGenesis performs genesis initialization for the feegrant module. It returns
-// no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, bz json.RawMessage) []abci.ValidatorUpdate {
-	var gs feegrant.GenesisState
-	cdc.MustUnmarshalJSON(bz, &gs)
-
-	err := am.keeper.InitGenesis(ctx, &gs)
-	if err != nil {
-		panic(err)
-	}
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the feegrant
 // module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	gs, err := am.keeper.ExportGenesis(ctx)
-	if err != nil {
-		panic(err)
-	}
-
-	return cdc.MustMarshalJSON(gs)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
 
-// AppModuleSimulation functions
+	// AppModuleSimulation functions
+	return 0
+}
 
 // GenerateGenesisState creates a randomized GenState of the feegrant module.
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
-	simulation.RandomizedGenState(simState)
+	_ = "STUB: not implemented"
+	return
 }
 
 // ProposalContents returns all the feegrant content functions used to
 // simulate governance proposals.
 func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+	_ = "STUB: not implemented"
+
+	// RandomizedParams creates randomized feegrant param changes for the simulator.
 	return nil
 }
 
-// RandomizedParams creates randomized feegrant param changes for the simulator.
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	_ = "STUB: not implemented"
+
+	// RegisterStoreDecoder registers a decoder for feegrant module's types
 	return nil
 }
 
-// RegisterStoreDecoder registers a decoder for feegrant module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-	sdr[feegrant.StoreKey] = simulation.NewDecodeStore(am.cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // WeightedOperations returns all the feegrant module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
-	return simulation.WeightedOperations(
-		simState.AppParams, simState.Cdc, am.accountKeeper, am.bankKeeper, am.keeper,
-	)
+	_ = "STUB: not implemented"
+	return nil
 }

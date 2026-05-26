@@ -1,8 +1,6 @@
 package config
 
 import (
-	"fmt"
-
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/flatkv/config"
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/memiavl"
 )
@@ -56,25 +54,9 @@ type StateCommitConfig struct {
 
 // DefaultStateCommitConfig returns the default StateCommitConfig
 func DefaultStateCommitConfig() StateCommitConfig {
-	return StateCommitConfig{
-		Enable:                     true,
-		WriteMode:                  MemiavlOnly,
-		MemIAVLConfig:              memiavl.DefaultConfig(),
-		FlatKVConfig:               *config.DefaultConfig(),
-		HistoricalProofMaxInFlight: DefaultSCHistoricalProofMaxInFlight,
-		HistoricalProofRateLimit:   DefaultSCHistoricalProofRateLimit,
-		HistoricalProofBurst:       DefaultSCHistoricalProofBurst,
-		KeysToMigratePerBlock:      1024,
-	}
+	_ = "STUB: not implemented"
+	return *new(StateCommitConfig)
 }
 
 // Validate checks if the StateCommitConfig is valid
-func (c StateCommitConfig) Validate() error {
-	if !c.WriteMode.IsValid() {
-		return fmt.Errorf("invalid write-mode: %s", c.WriteMode)
-	}
-	if c.KeysToMigratePerBlock <= 0 {
-		return fmt.Errorf("keys-to-migrate-per-block must be greater than 0")
-	}
-	return nil
-}
+func (c StateCommitConfig) Validate() error { _ = "STUB: not implemented"; return nil }

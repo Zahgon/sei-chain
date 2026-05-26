@@ -99,47 +99,32 @@ type NativeTransactorRaw struct {
 
 // NewNative creates a new instance of Native, bound to a specific deployed contract.
 func NewNative(address common.Address, backend bind.ContractBackend) (*Native, error) {
-	contract, err := bindNative(address, backend, backend, backend)
-	if err != nil {
-		return nil, err
-	}
-	return &Native{NativeCaller: NativeCaller{contract: contract}, NativeTransactor: NativeTransactor{contract: contract}, NativeFilterer: NativeFilterer{contract: contract}}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewNativeCaller creates a new read-only instance of Native, bound to a specific deployed contract.
 func NewNativeCaller(address common.Address, caller bind.ContractCaller) (*NativeCaller, error) {
-	contract, err := bindNative(address, caller, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &NativeCaller{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewNativeTransactor creates a new write-only instance of Native, bound to a specific deployed contract.
 func NewNativeTransactor(address common.Address, transactor bind.ContractTransactor) (*NativeTransactor, error) {
-	contract, err := bindNative(address, nil, transactor, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &NativeTransactor{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewNativeFilterer creates a new log filterer instance of Native, bound to a specific deployed contract.
 func NewNativeFilterer(address common.Address, filterer bind.ContractFilterer) (*NativeFilterer, error) {
-	contract, err := bindNative(address, nil, nil, filterer)
-	if err != nil {
-		return nil, err
-	}
-	return &NativeFilterer{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // bindNative binds a generic wrapper to an already deployed contract.
 func bindNative(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := NativeMetaData.GetAbi()
-	if err != nil {
-		return nil, err
-	}
-	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -147,18 +132,21 @@ func bindNative(address common.Address, caller bind.ContractCaller, transactor b
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Native *NativeRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Native.Contract.NativeCaller.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Native *NativeRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Native.Contract.NativeTransactor.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Native *NativeRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Native.Contract.NativeTransactor.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -166,422 +154,336 @@ func (_Native *NativeRaw) Transact(opts *bind.TransactOpts, method string, param
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Native *NativeCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Native.Contract.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Native *NativeTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Native.Contract.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Native *NativeTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Native.Contract.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BankPrecompile is a free data retrieval call binding the contract method 0x566732c1.
 //
 // Solidity: function BankPrecompile() view returns(address)
 func (_Native *NativeCaller) BankPrecompile(opts *bind.CallOpts) (common.Address, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "BankPrecompile")
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // BankPrecompile is a free data retrieval call binding the contract method 0x566732c1.
 //
 // Solidity: function BankPrecompile() view returns(address)
 func (_Native *NativeSession) BankPrecompile() (common.Address, error) {
-	return _Native.Contract.BankPrecompile(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // BankPrecompile is a free data retrieval call binding the contract method 0x566732c1.
 //
 // Solidity: function BankPrecompile() view returns(address)
 func (_Native *NativeCallerSession) BankPrecompile() (common.Address, error) {
-	return _Native.Contract.BankPrecompile(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
 // Solidity: function allowance(address owner, address spender) view returns(uint256)
 func (_Native *NativeCaller) Allowance(opts *bind.CallOpts, owner common.Address, spender common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "allowance", owner, spender)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
 // Solidity: function allowance(address owner, address spender) view returns(uint256)
 func (_Native *NativeSession) Allowance(owner common.Address, spender common.Address) (*big.Int, error) {
-	return _Native.Contract.Allowance(&_Native.CallOpts, owner, spender)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Allowance is a free data retrieval call binding the contract method 0xdd62ed3e.
 //
 // Solidity: function allowance(address owner, address spender) view returns(uint256)
 func (_Native *NativeCallerSession) Allowance(owner common.Address, spender common.Address) (*big.Int, error) {
-	return _Native.Contract.Allowance(&_Native.CallOpts, owner, spender)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address account) view returns(uint256)
 func (_Native *NativeCaller) BalanceOf(opts *bind.CallOpts, account common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "balanceOf", account)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address account) view returns(uint256)
 func (_Native *NativeSession) BalanceOf(account common.Address) (*big.Int, error) {
-	return _Native.Contract.BalanceOf(&_Native.CallOpts, account)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address account) view returns(uint256)
 func (_Native *NativeCallerSession) BalanceOf(account common.Address) (*big.Int, error) {
-	return _Native.Contract.BalanceOf(&_Native.CallOpts, account)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Ddecimals is a free data retrieval call binding the contract method 0xa8ad11e4.
 //
 // Solidity: function ddecimals() view returns(uint8)
 func (_Native *NativeCaller) Ddecimals(opts *bind.CallOpts) (uint8, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "ddecimals")
-
-	if err != nil {
-		return *new(uint8), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(uint8)).(*uint8)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // Ddecimals is a free data retrieval call binding the contract method 0xa8ad11e4.
 //
 // Solidity: function ddecimals() view returns(uint8)
-func (_Native *NativeSession) Ddecimals() (uint8, error) {
-	return _Native.Contract.Ddecimals(&_Native.CallOpts)
-}
+func (_Native *NativeSession) Ddecimals() (uint8, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Ddecimals is a free data retrieval call binding the contract method 0xa8ad11e4.
 //
 // Solidity: function ddecimals() view returns(uint8)
 func (_Native *NativeCallerSession) Ddecimals() (uint8, error) {
-	return _Native.Contract.Ddecimals(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // Decimals is a free data retrieval call binding the contract method 0x313ce567.
 //
 // Solidity: function decimals() view returns(uint8)
 func (_Native *NativeCaller) Decimals(opts *bind.CallOpts) (uint8, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "decimals")
-
-	if err != nil {
-		return *new(uint8), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(uint8)).(*uint8)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // Decimals is a free data retrieval call binding the contract method 0x313ce567.
 //
 // Solidity: function decimals() view returns(uint8)
-func (_Native *NativeSession) Decimals() (uint8, error) {
-	return _Native.Contract.Decimals(&_Native.CallOpts)
-}
+func (_Native *NativeSession) Decimals() (uint8, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Decimals is a free data retrieval call binding the contract method 0x313ce567.
 //
 // Solidity: function decimals() view returns(uint8)
 func (_Native *NativeCallerSession) Decimals() (uint8, error) {
-	return _Native.Contract.Decimals(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // Denom is a free data retrieval call binding the contract method 0xc370b042.
 //
 // Solidity: function denom() view returns(string)
 func (_Native *NativeCaller) Denom(opts *bind.CallOpts) (string, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "denom")
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Denom is a free data retrieval call binding the contract method 0xc370b042.
 //
 // Solidity: function denom() view returns(string)
-func (_Native *NativeSession) Denom() (string, error) {
-	return _Native.Contract.Denom(&_Native.CallOpts)
-}
+func (_Native *NativeSession) Denom() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // Denom is a free data retrieval call binding the contract method 0xc370b042.
 //
 // Solidity: function denom() view returns(string)
 func (_Native *NativeCallerSession) Denom() (string, error) {
-	return _Native.Contract.Denom(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
 // Solidity: function name() view returns(string)
 func (_Native *NativeCaller) Name(opts *bind.CallOpts) (string, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "name")
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
 // Solidity: function name() view returns(string)
-func (_Native *NativeSession) Name() (string, error) {
-	return _Native.Contract.Name(&_Native.CallOpts)
-}
+func (_Native *NativeSession) Name() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // Name is a free data retrieval call binding the contract method 0x06fdde03.
 //
 // Solidity: function name() view returns(string)
 func (_Native *NativeCallerSession) Name() (string, error) {
-	return _Native.Contract.Name(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Nname is a free data retrieval call binding the contract method 0x8a0989f5.
 //
 // Solidity: function nname() view returns(string)
 func (_Native *NativeCaller) Nname(opts *bind.CallOpts) (string, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "nname")
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Nname is a free data retrieval call binding the contract method 0x8a0989f5.
 //
 // Solidity: function nname() view returns(string)
-func (_Native *NativeSession) Nname() (string, error) {
-	return _Native.Contract.Nname(&_Native.CallOpts)
-}
+func (_Native *NativeSession) Nname() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // Nname is a free data retrieval call binding the contract method 0x8a0989f5.
 //
 // Solidity: function nname() view returns(string)
 func (_Native *NativeCallerSession) Nname() (string, error) {
-	return _Native.Contract.Nname(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Ssymbol is a free data retrieval call binding the contract method 0x9e10aa24.
 //
 // Solidity: function ssymbol() view returns(string)
 func (_Native *NativeCaller) Ssymbol(opts *bind.CallOpts) (string, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "ssymbol")
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Ssymbol is a free data retrieval call binding the contract method 0x9e10aa24.
 //
 // Solidity: function ssymbol() view returns(string)
-func (_Native *NativeSession) Ssymbol() (string, error) {
-	return _Native.Contract.Ssymbol(&_Native.CallOpts)
-}
+func (_Native *NativeSession) Ssymbol() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // Ssymbol is a free data retrieval call binding the contract method 0x9e10aa24.
 //
 // Solidity: function ssymbol() view returns(string)
 func (_Native *NativeCallerSession) Ssymbol() (string, error) {
-	return _Native.Contract.Ssymbol(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
 // Solidity: function symbol() view returns(string)
 func (_Native *NativeCaller) Symbol(opts *bind.CallOpts) (string, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "symbol")
-
-	if err != nil {
-		return *new(string), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(string)).(*string)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
 // Solidity: function symbol() view returns(string)
-func (_Native *NativeSession) Symbol() (string, error) {
-	return _Native.Contract.Symbol(&_Native.CallOpts)
-}
+func (_Native *NativeSession) Symbol() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // Symbol is a free data retrieval call binding the contract method 0x95d89b41.
 //
 // Solidity: function symbol() view returns(string)
 func (_Native *NativeCallerSession) Symbol() (string, error) {
-	return _Native.Contract.Symbol(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
 func (_Native *NativeCaller) TotalSupply(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Native.contract.Call(opts, &out, "totalSupply")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
 func (_Native *NativeSession) TotalSupply() (*big.Int, error) {
-	return _Native.Contract.TotalSupply(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TotalSupply is a free data retrieval call binding the contract method 0x18160ddd.
 //
 // Solidity: function totalSupply() view returns(uint256)
 func (_Native *NativeCallerSession) TotalSupply() (*big.Int, error) {
-	return _Native.Contract.TotalSupply(&_Native.CallOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 value) returns(bool)
 func (_Native *NativeTransactor) Approve(opts *bind.TransactOpts, spender common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.contract.Transact(opts, "approve", spender, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 value) returns(bool)
 func (_Native *NativeSession) Approve(spender common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.Contract.Approve(&_Native.TransactOpts, spender, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 value) returns(bool)
 func (_Native *NativeTransactorSession) Approve(spender common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.Contract.Approve(&_Native.TransactOpts, spender, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
 // Solidity: function transfer(address to, uint256 value) returns(bool)
 func (_Native *NativeTransactor) Transfer(opts *bind.TransactOpts, to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.contract.Transact(opts, "transfer", to, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
 // Solidity: function transfer(address to, uint256 value) returns(bool)
 func (_Native *NativeSession) Transfer(to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.Contract.Transfer(&_Native.TransactOpts, to, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transfer is a paid mutator transaction binding the contract method 0xa9059cbb.
 //
 // Solidity: function transfer(address to, uint256 value) returns(bool)
 func (_Native *NativeTransactorSession) Transfer(to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.Contract.Transfer(&_Native.TransactOpts, to, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 value) returns(bool)
 func (_Native *NativeTransactor) TransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.contract.Transact(opts, "transferFrom", from, to, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 value) returns(bool)
 func (_Native *NativeSession) TransferFrom(from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.Contract.TransferFrom(&_Native.TransactOpts, from, to, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 value) returns(bool)
 func (_Native *NativeTransactorSession) TransferFrom(from common.Address, to common.Address, value *big.Int) (*types.Transaction, error) {
-	return _Native.Contract.TransferFrom(&_Native.TransactOpts, from, to, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NativeApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the Native contract.
@@ -601,55 +503,25 @@ type NativeApprovalIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *NativeApprovalIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(NativeApproval)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(NativeApproval)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *NativeApprovalIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *NativeApprovalIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *NativeApprovalIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // NativeApproval represents a Approval event raised by the Native contract.
 type NativeApproval struct {
@@ -663,79 +535,26 @@ type NativeApproval struct {
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
 func (_Native *NativeFilterer) FilterApproval(opts *bind.FilterOpts, owner []common.Address, spender []common.Address) (*NativeApprovalIterator, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var spenderRule []interface{}
-	for _, spenderItem := range spender {
-		spenderRule = append(spenderRule, spenderItem)
-	}
-
-	logs, sub, err := _Native.contract.FilterLogs(opts, "Approval", ownerRule, spenderRule)
-	if err != nil {
-		return nil, err
-	}
-	return &NativeApprovalIterator{contract: _Native.contract, event: "Approval", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchApproval is a free log subscription operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
 func (_Native *NativeFilterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *NativeApproval, owner []common.Address, spender []common.Address) (event.Subscription, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var spenderRule []interface{}
-	for _, spenderItem := range spender {
-		spenderRule = append(spenderRule, spenderItem)
-	}
-
-	logs, sub, err := _Native.contract.WatchLogs(opts, "Approval", ownerRule, spenderRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(NativeApproval)
-				if err := _Native.contract.UnpackLog(event, "Approval", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseApproval is a log parse operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 value)
 func (_Native *NativeFilterer) ParseApproval(log types.Log) (*NativeApproval, error) {
-	event := new(NativeApproval)
-	if err := _Native.contract.UnpackLog(event, "Approval", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NativeTransferIterator is returned from FilterTransfer and is used to iterate over the raw logs and unpacked data for Transfer events raised by the Native contract.
@@ -755,55 +574,25 @@ type NativeTransferIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *NativeTransferIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(NativeTransfer)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(NativeTransfer)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *NativeTransferIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *NativeTransferIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *NativeTransferIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // NativeTransfer represents a Transfer event raised by the Native contract.
 type NativeTransfer struct {
@@ -817,77 +606,24 @@ type NativeTransfer struct {
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
 func (_Native *NativeFilterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address) (*NativeTransferIterator, error) {
-
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
-	}
-
-	logs, sub, err := _Native.contract.FilterLogs(opts, "Transfer", fromRule, toRule)
-	if err != nil {
-		return nil, err
-	}
-	return &NativeTransferIterator{contract: _Native.contract, event: "Transfer", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchTransfer is a free log subscription operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
 func (_Native *NativeFilterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *NativeTransfer, from []common.Address, to []common.Address) (event.Subscription, error) {
-
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
-	}
-
-	logs, sub, err := _Native.contract.WatchLogs(opts, "Transfer", fromRule, toRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(NativeTransfer)
-				if err := _Native.contract.UnpackLog(event, "Transfer", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseTransfer is a log parse operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 value)
 func (_Native *NativeFilterer) ParseTransfer(log types.Log) (*NativeTransfer, error) {
-	event := new(NativeTransfer)
-	if err := _Native.contract.UnpackLog(event, "Transfer", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

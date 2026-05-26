@@ -1,7 +1,6 @@
 package types
 
 import (
-	"errors"
 	"fmt"
 	"sort"
 	"time"
@@ -9,7 +8,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/autobahn/pb"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/protoutils"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/scope"
 )
 
 // LaneRange represents a range [first,next) of blocks of a lane.
@@ -23,41 +21,44 @@ type LaneRange struct {
 
 // NewLaneRange constructs a LaneRange.
 func NewLaneRange(lane LaneID, first BlockNumber, h utils.Option[*BlockHeader]) *LaneRange {
-	if h, ok := h.Get(); ok {
-		return &LaneRange{lane: lane, first: first, next: h.BlockNumber() + 1, lastHash: h.Hash()}
-	}
-	return &LaneRange{lane: lane, first: first, next: first, lastHash: BlockHeaderHash{}}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Lane of this block range.
-func (m *LaneRange) Lane() LaneID { return m.lane }
+func (m *LaneRange) Lane() LaneID {
+	_ = "STUB: not implemented"
 
-// First block of the range.
-func (m *LaneRange) First() BlockNumber { return m.first }
+	// First block of the range.
+	return *new(LaneID)
+}
 
-// Next is the block after the last block of the range.
-func (m *LaneRange) Next() BlockNumber { return m.next }
+func (m *LaneRange) First() BlockNumber {
+	_ = "STUB: not implemented"
 
-// Len returns the number of blocks in the range.
-func (m *LaneRange) Len() uint64 { return uint64(m.next - m.first) }
+	// Next is the block after the last block of the range.
+	return *new(BlockNumber)
+}
+
+func (m *LaneRange) Next() BlockNumber {
+	_ = "STUB: not implemented"
+
+	// Len returns the number of blocks in the range.
+	return *new(BlockNumber)
+}
+
+func (m *LaneRange) Len() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // LastHash is the hash of the last block of the range.
 // Returns a zero hash for an empty range.
-func (m *LaneRange) LastHash() BlockHeaderHash { return m.lastHash }
+func (m *LaneRange) LastHash() BlockHeaderHash {
+	_ = "STUB: not implemented"
 
-// Verify verifies the LaneRange against the committee.
-func (m *LaneRange) Verify(c *Committee) error {
-	if !c.Lanes().Has(m.lane) {
-		return fmt.Errorf("%q is not a lane", m.lane)
-	}
-	if m.first > m.next {
-		return fmt.Errorf("invalid range [%v,%v)", m.first, m.next)
-	}
-	if m.first == m.next && m.lastHash != (BlockHeaderHash{}) {
-		return errors.New("non-zero hash for an empty range")
-	}
-	return nil
+	// Verify verifies the LaneRange against the committee.
+	return *new(BlockHeaderHash)
 }
+
+func (m *LaneRange) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 // GlobalRange represents a [First,Next) range of global blocks.
 type GlobalRange struct {
@@ -66,13 +67,9 @@ type GlobalRange struct {
 }
 
 // Len returns the number of global blocks in the range.
-func (g GlobalRange) Len() uint64 {
-	return uint64(g.Next - g.First)
-}
+func (g GlobalRange) Len() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (g GlobalRange) Has(n GlobalBlockNumber) bool {
-	return g.First <= n && n < g.Next
-}
+func (g GlobalRange) Has(n GlobalBlockNumber) bool { _ = "STUB: not implemented"; return false }
 
 // RoadIndex is the index of the consensus instance.
 type RoadIndex uint64
@@ -81,27 +78,23 @@ type RoadIndex uint64
 type ViewNumber uint64
 
 // Next view number.
-func (n ViewNumber) Next() ViewNumber { return n + 1 }
+func (n ViewNumber) Next() ViewNumber {
+	_ = "STUB: not implemented"
 
-// View represents a consensus view.
+	// View represents a consensus view.
+	return *new(ViewNumber)
+}
+
 type View struct {
 	Index  RoadIndex
 	Number ViewNumber
 }
 
 // Less checks if v is earlier than b.
-func (v View) Less(b View) bool {
-	if v.Index != b.Index {
-		return v.Index < b.Index
-	}
-	return v.Number < b.Number
-}
+func (v View) Less(b View) bool { _ = "STUB: not implemented"; return false }
 
 // Next returns the next view.
-func (v View) Next() View {
-	v.Number = v.Number.Next()
-	return v
-}
+func (v View) Next() View { _ = "STUB: not implemented"; return *new(View) }
 
 // ViewSpec is a justification to start a given view.
 type ViewSpec struct {
@@ -113,19 +106,11 @@ type ViewSpec struct {
 }
 
 // View is the view justified by vs.
-func (vs *ViewSpec) View() View {
-	idx := NextIndexOpt(vs.CommitQC)
-	if view := NextViewOpt(vs.TimeoutQC); view.Index == idx {
-		return view
-	}
-	return View{Index: idx, Number: 0}
-}
+func (vs *ViewSpec) View() View { _ = "STUB: not implemented"; return *new(View) }
 
 func (vs *ViewSpec) NextTimestamp(c *Committee) time.Time {
-	if cQC, ok := vs.CommitQC.Get(); ok {
-		return cQC.Proposal().NextTimestamp()
-	}
-	return c.GenesisTimestamp()
+	_ = "STUB: not implemented"
+	return *new(time.Time)
 }
 
 // Proposal is the road tipcut proposal.
@@ -145,43 +130,45 @@ type Proposal struct {
 }
 
 func newProposal(view View, timestamp time.Time, laneRanges []*LaneRange, app utils.Option[*AppProposal]) *Proposal {
-	laneRangesM := map[LaneID]*LaneRange{}
-	globalRangeWithoutOffset := GlobalRange{}
-	for _, r := range laneRanges {
-		laneRangesM[r.Lane()] = r
-		globalRangeWithoutOffset.First += GlobalBlockNumber(r.First())
-		globalRangeWithoutOffset.Next += GlobalBlockNumber(r.Next())
-	}
-	return &Proposal{
-		view:                     view,
-		timestamp:                timestamp,
-		laneRanges:               laneRangesM,
-		globalRangeWithoutOffset: globalRangeWithoutOffset,
-		app:                      app,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Index of the proposal.
-func (m *Proposal) Index() RoadIndex { return m.view.Index }
+func (m *Proposal) Index() RoadIndex {
+	_ = "STUB: not implemented"
 
-// View of the proposal.
-func (m *Proposal) View() View { return m.view }
+	// View of the proposal.
+	return *new(RoadIndex)
+}
 
-// Timestamp of the proposal.
-func (m *Proposal) Timestamp() time.Time { return m.timestamp }
+func (m *Proposal) View() View {
+	_ = "STUB: not implemented"
 
-// App .
-func (m *Proposal) App() utils.Option[*AppProposal] { return m.app }
+	// Timestamp of the proposal.
+	return *new(View)
+}
 
-// GlobalRange returns the proposed global block range.
-// To compute GlobalRange from lane ranges in proposal,
-// we need to know the global number of the first block
-// of the chain (c.FirstBlock()).
+func (m *Proposal) Timestamp() time.Time {
+	_ = "STUB: not implemented"
+
+	// App .
+	return *new(time.Time)
+}
+
+func (m *Proposal) App() utils.Option[*AppProposal] {
+	_ = "STUB: not implemented"
+
+	// GlobalRange returns the proposed global block range.
+	// To compute GlobalRange from lane ranges in proposal,
+	// we need to know the global number of the first block
+	// of the chain (c.FirstBlock()).
+	return nil
+}
+
 func (m *Proposal) GlobalRange(c *Committee) GlobalRange {
-	gr := m.globalRangeWithoutOffset
-	gr.First += c.FirstBlock()
-	gr.Next += c.FirstBlock()
-	return gr
+	_ = "STUB: not implemented"
+	return *new(GlobalRange)
 }
 
 // Arbitrary deterministic minimal diff between consecutive blocks.
@@ -190,39 +177,26 @@ const minTimestampDiff = time.Microsecond
 // Monotone timestamp assigned to each block of the proposal.
 // Returns None, if n doed not belong to the proposal's global range.
 func (m *Proposal) BlockTimestamp(c *Committee, n GlobalBlockNumber) utils.Option[time.Time] {
-	gr := m.GlobalRange(c)
-	if !gr.Has(n) {
-		return utils.None[time.Time]()
-	}
-	//nolint:gosec // TODO: do stricter timestamp validation before running in prod.
-	return utils.Some(m.Timestamp().Add(time.Duration(n-gr.First) * minTimestampDiff))
+	_ = "STUB: not implemented"
+	return nil
 }
+
+//nolint:gosec // TODO: do stricter timestamp validation before running in prod.
 
 // Lowest allowed timestamp for the next index proposal.
 func (m *Proposal) NextTimestamp() time.Time {
+	_ = "STUB: not implemented"
 	//nolint:gosec // TODO: do stricter timestamp validation before running in prod.
-	return m.Timestamp().Add(time.Duration(m.globalRangeWithoutOffset.Len()) * minTimestampDiff)
+	return *new(time.Time)
 }
 
 // Verify checks that every present lane range belongs to the committee
 // and is internally valid. Lanes may be omitted — omitted lanes are
 // treated as implicit empty ranges by FullProposal.Verify.
-func (m *Proposal) Verify(c *Committee) error {
-	for _, r := range m.laneRanges {
-		if err := r.Verify(c); err != nil {
-			return fmt.Errorf("laneRange[%v]: %w", r.Lane(), err)
-		}
-	}
-	return nil
-}
+func (m *Proposal) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 // LaneRange returns the range of blocks of the given lane.
-func (m *Proposal) LaneRange(lane LaneID) *LaneRange {
-	if r, ok := m.laneRanges[lane]; ok {
-		return r
-	}
-	return NewLaneRange(lane, 0, utils.None[*BlockHeader]())
-}
+func (m *Proposal) LaneRange(lane LaneID) *LaneRange { _ = "STUB: not implemented"; return nil }
 
 // FullProposal is a proposal with justification.
 type FullProposal struct {
@@ -239,18 +213,8 @@ func NewReproposal(
 	key SecretKey,
 	viewSpec ViewSpec,
 ) (*FullProposal, bool) {
-	timeoutQC, ok := viewSpec.TimeoutQC.Get()
-	if !ok {
-		return nil, false
-	}
-	p, ok := timeoutQC.reproposal()
-	if !ok {
-		return nil, false
-	}
-	return &FullProposal{
-		proposal:  Sign(key, p),
-		timeoutQC: utils.Some(timeoutQC),
-	}, true
+	_ = "STUB: not implemented"
+	return nil, false
 }
 
 // NewProposal creates a new FullProposal.
@@ -263,176 +227,71 @@ func NewProposal(
 	laneQCs map[LaneID]*LaneQC,
 	appQC utils.Option[*AppQC],
 ) (*FullProposal, error) {
-	if got, want := key.Public(), committee.Leader(viewSpec.View()); got != want {
-		return nil, fmt.Errorf("key %q is not the leader %q for view %v", got, want, viewSpec.View())
-	}
-	if p, ok := NewReproposal(key, viewSpec); ok {
-		return p, nil
-	}
-	var laneRanges []*LaneRange
-	for lane := range committee.Lanes().All() {
-		first := LaneRangeOpt(viewSpec.CommitQC, lane).Next()
-		if lQC, ok := laneQCs[lane]; ok {
-			if lQC.Header().Lane() != lane {
-				return nil, fmt.Errorf("laneQC %v for lane %v", lQC.Header().Lane(), lane)
-			}
-			laneRanges = append(laneRanges, NewLaneRange(lane, first, utils.Some(lQC.Header())))
-		} else {
-			laneRanges = append(laneRanges, NewLaneRange(lane, first, utils.None[*BlockHeader]()))
-		}
-	}
-	app := ProposalOpt(appQC)
-	// If the new appProposal is not later than the previous one, then clear appQC.
-	if old := AppOpt(ProposalOpt(viewSpec.CommitQC)); NextOpt(app) <= NextOpt(old) {
-		app = old
-		appQC = utils.None[*AppQC]()
-	}
-	// If the new appProposal is from the future (which may happen if this node is behind), then clear appQC.
-	// The proposal will be useless in this case, but at least it will be valid.
-	if a, ok := app.Get(); ok && a.GlobalNumber() >= GlobalRangeOpt(viewSpec.CommitQC, committee).Next {
-		app = utils.None[*AppProposal]()
-		appQC = utils.None[*AppQC]()
-	}
-	// Normalize the creation timestamp.
-	if wantMin := viewSpec.NextTimestamp(committee); timestamp.Before(wantMin) {
-		timestamp = wantMin
-	}
-	proposal := newProposal(viewSpec.View(), timestamp, laneRanges, app)
-
-	return &FullProposal{
-		proposal:  Sign(key, proposal),
-		laneQCs:   laneQCs,
-		appQC:     appQC,
-		timeoutQC: viewSpec.TimeoutQC,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// If the new appProposal is not later than the previous one, then clear appQC.
+
+// If the new appProposal is from the future (which may happen if this node is behind), then clear appQC.
+// The proposal will be useless in this case, but at least it will be valid.
+
+// Normalize the creation timestamp.
 
 // Proposal .
-func (m *FullProposal) Proposal() *Signed[*Proposal] { return m.proposal }
+func (m *FullProposal) Proposal() *Signed[*Proposal] {
+	_ = "STUB: not implemented"
 
-// View .
-func (m *FullProposal) View() View {
-	return m.proposal.Msg().View()
+	// View .
+	return nil
 }
+
+func (m *FullProposal) View() View { _ = "STUB: not implemented"; return *new(View) }
 
 // LaneQC .
 func (m *FullProposal) LaneQC(lane LaneID) (*LaneQC, bool) {
-	qc, ok := m.laneQCs[lane]
-	return qc, ok
+	_ = "STUB: not implemented"
+	return nil, false
 }
 
 // TimeoutQC returns the timeout QC if it exists.
 func (m *FullProposal) TimeoutQC() utils.Option[*TimeoutQC] {
-	return m.timeoutQC
+	_ = "STUB: not implemented"
+
+	// Verify verifies the FullProposal against the current view.
+	return nil
 }
 
-// Verify verifies the FullProposal against the current view.
 func (m *FullProposal) Verify(c *Committee, vs ViewSpec) error {
-	return scope.Parallel(func(s scope.ParallelScope) error {
-		// Does the view match?
-		if got, want := m.proposal.Msg().View(), vs.View(); got != want {
-			return fmt.Errorf("view = %v, want %v", m.View(), vs.View())
-		}
-		if got, want := m.proposal.Msg().GlobalRange(c).First, GlobalRangeOpt(vs.CommitQC, c).Next; got != want {
-			return fmt.Errorf("proposal.GlobalRange().First = %v, want %v", got, want)
-		}
-		// Is the timestamp monotone?
-		if got, wantMin := m.proposal.Msg().Timestamp(), vs.NextTimestamp(c); got.Before(wantMin) {
-			return fmt.Errorf("proposal.Timestamp() = %v, want >= %v", got, wantMin)
-		}
-		// Is proposer valid?
-		if got, want := m.proposal.sig.key, c.Leader(vs.View()); got != want {
-			return fmt.Errorf("proposer %q, want %q", got, want)
-		}
-		// Verify the proposer's signature.
-		if err := m.proposal.VerifySig(c); err != nil {
-			return fmt.Errorf("proposal signature: %w", err)
-		}
-		// Do we have the required timeoutQC?
-		if got, want := NextViewOpt(vs.TimeoutQC), NextViewOpt(m.timeoutQC); got != want {
-			return errors.New("inconsistent timeoutQC")
-		}
-		// Verify timeoutQC.
-		if tQC, ok := m.timeoutQC.Get(); ok {
-			s.Spawn(func() error {
-				if err := tQC.Verify(c, vs.CommitQC); err != nil {
-					return fmt.Errorf("timeoutQC: %w", err)
-				}
-				return nil
-			})
-			// Is this a reproposal?
-			if want, ok := tQC.reproposal(); ok {
-				if len(m.laneQCs) > 0 || m.appQC.IsPresent() {
-					return errors.New("unnecessary data when reproposing")
-				}
-				if NewHashed(want).Hash() != m.proposal.hashed.hash {
-					return fmt.Errorf("want reproposal %v, got %v", want, m.proposal)
-				}
-				// Valid reproposal, no further verification needed.
-				return nil
-			}
-		}
-		// Verify the proposal's lane structure against the committee.
-		proposal := m.proposal.Msg()
-		if err := proposal.Verify(c); err != nil {
-			return fmt.Errorf("proposal: %w", err)
-		}
-		// Verify each lane range against the previous commitQC and its laneQC justification.
-		for lane := range c.Lanes().All() {
-			r := proposal.LaneRange(lane)
-			// Verify that range matches previous commitQC.
-			if got, want := r.First(), LaneRangeOpt(vs.CommitQC, r.Lane()).Next(); got != want {
-				return fmt.Errorf("laneRange[%v].First() = %v, want %v", r.Lane(), got, want)
-			}
-			// Verify that the necessary laneQC is present and valid.
-			if r.First() < r.Next() {
-				qc, ok := m.LaneQC(r.Lane())
-				if !ok {
-					return fmt.Errorf("missing qc for %q", r.Lane())
-				}
-				if got, want := qc.Header().BlockNumber(), r.Next()-1; got != want {
-					return fmt.Errorf("qc[%v].BlockNumber() = %v, want %v", r.Lane(), got, want)
-				}
-				if got, want := qc.Header().Hash(), r.LastHash(); got != want {
-					return fmt.Errorf("qc[%v].Header().Hash() = %v, want %v", r.Lane(), got, want)
-				}
-				s.Spawn(func() error {
-					if err := qc.Verify(c); err != nil {
-						return fmt.Errorf("qc[%v]: %w", r.Lane(), err)
-					}
-					return nil
-				})
-			}
-		}
-		// Verify the appQC.
-		if got, wantMin := NextOpt(m.proposal.Msg().App()), NextOpt(AppOpt(ProposalOpt(vs.CommitQC))); got < wantMin {
-			return errors.New("AppProposal lower than in previous CommitQC")
-		} else if got == wantMin {
-			if m.appQC.IsPresent() {
-				return errors.New("unnecessary appQC")
-			}
-		} else {
-			app, _ := m.proposal.Msg().App().Get()
-			appQC, ok := m.appQC.Get()
-			if !ok {
-				return errors.New("appQC missing")
-			}
-			if appQC.vote.hash != NewHashed(NewAppVote(app)).hash {
-				return errors.New("appQC doesn't match the proposal")
-			}
-			s.Spawn(func() error {
-				if err := appQC.Verify(c); err != nil {
-					return fmt.Errorf("appQC: %w", err)
-				}
-				return nil
-			})
-			if got, want := appQC.Proposal().GlobalNumber(), GlobalRangeOpt(vs.CommitQC, c).Next; got >= want {
-				return fmt.Errorf("appQC for block %v, while only %v blocks were finalized", got, want)
-			}
-		}
-		return nil
-	})
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Does the view match?
+
+// Is the timestamp monotone?
+
+// Is proposer valid?
+
+// Verify the proposer's signature.
+
+// Do we have the required timeoutQC?
+
+// Verify timeoutQC.
+
+// Is this a reproposal?
+
+// Valid reproposal, no further verification needed.
+
+// Verify the proposal's lane structure against the committee.
+
+// Verify each lane range against the previous commitQC and its laneQC justification.
+
+// Verify that range matches previous commitQC.
+
+// Verify that the necessary laneQC is present and valid.
+
+// Verify the appQC.
 
 // LaneRangeConv is the protobuf converter for LaneRange.
 var LaneRangeConv = protoutils.Conv[*LaneRange, *pb.LaneRange]{

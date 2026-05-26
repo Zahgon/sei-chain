@@ -7,17 +7,16 @@ type MockEmptyAcknowledgement struct {
 
 // NewMockEmptyAcknowledgement returns a new instance of MockEmptyAcknowledgement
 func NewMockEmptyAcknowledgement() MockEmptyAcknowledgement {
-	return MockEmptyAcknowledgement{
-		Response: []byte{},
-	}
+	_ = "STUB: not implemented"
+	return *new(MockEmptyAcknowledgement)
 }
 
 // Success implements the Acknowledgement interface
 func (ack MockEmptyAcknowledgement) Success() bool {
-	return true
+	_ = "STUB: not implemented"
+
+	// Acknowledgement implements the Acknowledgement interface
+	return false
 }
 
-// Acknowledgement implements the Acknowledgement interface
-func (ack MockEmptyAcknowledgement) Acknowledgement() []byte {
-	return []byte{}
-}
+func (ack MockEmptyAcknowledgement) Acknowledgement() []byte { _ = "STUB: not implemented"; return nil }

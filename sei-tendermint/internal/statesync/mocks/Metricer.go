@@ -14,99 +14,25 @@ type Metricer struct {
 }
 
 // BackFillBlocksTotal provides a mock function with given fields:
-func (_m *Metricer) BackFillBlocksTotal() int64 {
-	ret := _m.Called()
-
-	var r0 int64
-	if rf, ok := ret.Get(0).(func() int64); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(int64)
-	}
-
-	return r0
-}
+func (_m *Metricer) BackFillBlocksTotal() int64 { _ = "STUB: not implemented"; return 0 }
 
 // BackFilledBlocks provides a mock function with given fields:
-func (_m *Metricer) BackFilledBlocks() int64 {
-	ret := _m.Called()
-
-	var r0 int64
-	if rf, ok := ret.Get(0).(func() int64); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(int64)
-	}
-
-	return r0
-}
+func (_m *Metricer) BackFilledBlocks() int64 { _ = "STUB: not implemented"; return 0 }
 
 // ChunkProcessAvgTime provides a mock function with given fields:
 func (_m *Metricer) ChunkProcessAvgTime() time.Duration {
-	ret := _m.Called()
-
-	var r0 time.Duration
-	if rf, ok := ret.Get(0).(func() time.Duration); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(time.Duration)
-	}
-
-	return r0
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // SnapshotChunksCount provides a mock function with given fields:
-func (_m *Metricer) SnapshotChunksCount() int64 {
-	ret := _m.Called()
-
-	var r0 int64
-	if rf, ok := ret.Get(0).(func() int64); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(int64)
-	}
-
-	return r0
-}
+func (_m *Metricer) SnapshotChunksCount() int64 { _ = "STUB: not implemented"; return 0 }
 
 // SnapshotChunksTotal provides a mock function with given fields:
-func (_m *Metricer) SnapshotChunksTotal() int64 {
-	ret := _m.Called()
-
-	var r0 int64
-	if rf, ok := ret.Get(0).(func() int64); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(int64)
-	}
-
-	return r0
-}
+func (_m *Metricer) SnapshotChunksTotal() int64 { _ = "STUB: not implemented"; return 0 }
 
 // SnapshotHeight provides a mock function with given fields:
-func (_m *Metricer) SnapshotHeight() int64 {
-	ret := _m.Called()
-
-	var r0 int64
-	if rf, ok := ret.Get(0).(func() int64); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(int64)
-	}
-
-	return r0
-}
+func (_m *Metricer) SnapshotHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 // TotalSnapshots provides a mock function with given fields:
-func (_m *Metricer) TotalSnapshots() int64 {
-	ret := _m.Called()
-
-	var r0 int64
-	if rf, ok := ret.Get(0).(func() int64); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(int64)
-	}
-
-	return r0
-}
+func (_m *Metricer) TotalSnapshots() int64 { _ = "STUB: not implemented"; return 0 }

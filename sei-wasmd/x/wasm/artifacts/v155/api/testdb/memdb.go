@@ -1,8 +1,6 @@
 package testdb
 
 import (
-	"bytes"
-	"fmt"
 	"sync"
 
 	"github.com/google/btree"
@@ -21,20 +19,17 @@ type item struct {
 
 // Less implements btree.Item.
 func (i *item) Less(other btree.Item) bool {
+	_ = "STUB: not implemented"
 	// this considers nil == []byte{}, but that's ok since we handle nil endpoints
 	// in iterators specially anyway
-	return bytes.Compare(i.key, other.(*item).key) == -1
+	return false
 }
 
 // newKey creates a new key item.
-func newKey(key []byte) *item {
-	return &item{key: key}
-}
+func newKey(key []byte) *item { _ = "STUB: not implemented"; return nil }
 
 // newPair creates a new pair item.
-func newPair(key, value []byte) *item {
-	return &item{key: key, value: value}
-}
+func newPair(key, value []byte) *item { _ = "STUB: not implemented"; return nil }
 
 // MemDB is an in-memory database backend using a B-tree for storage.
 //
@@ -48,88 +43,35 @@ type MemDB struct {
 }
 
 // NewMemDB creates a new in-memory database.
-func NewMemDB() *MemDB {
-	database := &MemDB{
-		btree: btree.New(bTreeDegree),
-	}
-	return database
-}
+func NewMemDB() *MemDB { _ = "STUB: not implemented"; return nil }
 
 // Get implements DB.
-func (db *MemDB) Get(key []byte) ([]byte, error) {
-	if len(key) == 0 {
-		return nil, errKeyEmpty
-	}
-	db.mtx.RLock()
-	defer db.mtx.RUnlock()
-
-	i := db.btree.Get(newKey(key))
-	if i != nil {
-		return i.(*item).value, nil
-	}
-	return nil, nil
-}
+func (db *MemDB) Get(key []byte) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Has implements DB.
-func (db *MemDB) Has(key []byte) (bool, error) {
-	if len(key) == 0 {
-		return false, errKeyEmpty
-	}
-	db.mtx.RLock()
-	defer db.mtx.RUnlock()
-
-	return db.btree.Has(newKey(key)), nil
-}
+func (db *MemDB) Has(key []byte) (bool, error) { _ = "STUB: not implemented"; return false, nil }
 
 // Set implements DB.
-func (db *MemDB) Set(key []byte, value []byte) error {
-	if len(key) == 0 {
-		return errKeyEmpty
-	}
-	if value == nil {
-		return errValueNil
-	}
-	db.mtx.Lock()
-	defer db.mtx.Unlock()
-
-	db.set(key, value)
-	return nil
-}
+func (db *MemDB) Set(key []byte, value []byte) error { _ = "STUB: not implemented"; return nil }
 
 // set sets a value without locking the mutex.
-func (db *MemDB) set(key []byte, value []byte) {
-	db.btree.ReplaceOrInsert(newPair(key, value))
-}
+func (db *MemDB) set(key []byte, value []byte) { _ = "STUB: not implemented"; return }
 
 // SetSync implements DB.
-func (db *MemDB) SetSync(key []byte, value []byte) error {
-	return db.Set(key, value)
-}
+func (db *MemDB) SetSync(key []byte, value []byte) error { _ = "STUB: not implemented"; return nil }
 
 // Delete implements DB.
-func (db *MemDB) Delete(key []byte) error {
-	if len(key) == 0 {
-		return errKeyEmpty
-	}
-	db.mtx.Lock()
-	defer db.mtx.Unlock()
-
-	db.delete(key)
-	return nil
-}
+func (db *MemDB) Delete(key []byte) error { _ = "STUB: not implemented"; return nil }
 
 // delete deletes a key without locking the mutex.
-func (db *MemDB) delete(key []byte) {
-	db.btree.Delete(newKey(key))
-}
+func (db *MemDB) delete(key []byte) { _ = "STUB: not implemented"; return }
 
 // DeleteSync implements DB.
-func (db *MemDB) DeleteSync(key []byte) error {
-	return db.Delete(key)
-}
+func (db *MemDB) DeleteSync(key []byte) error { _ = "STUB: not implemented"; return nil }
 
 // Close implements DB.
 func (db *MemDB) Close() error {
+	_ = "STUB: not implemented"
 	// Close is a noop since for an in-memory database, we don't have a destination to flush
 	// contents to nor do we want any data loss on invoking Close().
 	// See the discussion in https://github.com/tendermint/tendermint/libs/pull/56
@@ -137,59 +79,33 @@ func (db *MemDB) Close() error {
 }
 
 // Print implements DB.
-func (db *MemDB) Print() error {
-	db.mtx.RLock()
-	defer db.mtx.RUnlock()
-
-	db.btree.Ascend(func(i btree.Item) bool {
-		item := i.(*item)
-		fmt.Printf("[%X]:\t[%X]\n", item.key, item.value)
-		return true
-	})
-	return nil
-}
+func (db *MemDB) Print() error { _ = "STUB: not implemented"; return nil }
 
 // Stats implements DB.
-func (db *MemDB) Stats() map[string]string {
-	db.mtx.RLock()
-	defer db.mtx.RUnlock()
-
-	stats := make(map[string]string)
-	stats["database.type"] = "memDB"
-	stats["database.size"] = fmt.Sprintf("%d", db.btree.Len())
-	return stats
-}
+func (db *MemDB) Stats() map[string]string { _ = "STUB: not implemented"; return nil }
 
 // Iterator implements DB.
 // Takes out a read-lock on the database until the iterator is closed.
 func (db *MemDB) Iterator(start, end []byte) (Iterator, error) {
-	if (start != nil && len(start) == 0) || (end != nil && len(end) == 0) {
-		return nil, errKeyEmpty
-	}
-	return newMemDBIterator(db, start, end, false), nil
+	_ = "STUB: not implemented"
+	return *new(Iterator), nil
 }
 
 // ReverseIterator implements DB.
 // Takes out a read-lock on the database until the iterator is closed.
 func (db *MemDB) ReverseIterator(start, end []byte) (Iterator, error) {
-	if (start != nil && len(start) == 0) || (end != nil && len(end) == 0) {
-		return nil, errKeyEmpty
-	}
-	return newMemDBIterator(db, start, end, true), nil
+	_ = "STUB: not implemented"
+	return *new(Iterator), nil
 }
 
 // IteratorNoMtx makes an iterator with no mutex.
 func (db *MemDB) IteratorNoMtx(start, end []byte) (Iterator, error) {
-	if (start != nil && len(start) == 0) || (end != nil && len(end) == 0) {
-		return nil, errKeyEmpty
-	}
-	return newMemDBIteratorMtxChoice(db, start, end, false, false), nil
+	_ = "STUB: not implemented"
+	return *new(Iterator), nil
 }
 
 // ReverseIteratorNoMtx makes an iterator with no mutex.
 func (db *MemDB) ReverseIteratorNoMtx(start, end []byte) (Iterator, error) {
-	if (start != nil && len(start) == 0) || (end != nil && len(end) == 0) {
-		return nil, errKeyEmpty
-	}
-	return newMemDBIteratorMtxChoice(db, start, end, true, false), nil
+	_ = "STUB: not implemented"
+	return *new(Iterator), nil
 }

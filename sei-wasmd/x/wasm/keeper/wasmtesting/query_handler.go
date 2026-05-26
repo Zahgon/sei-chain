@@ -10,8 +10,6 @@ type MockQueryHandler struct {
 }
 
 func (m *MockQueryHandler) HandleQuery(ctx sdk.Context, caller sdk.AccAddress, request wasmvmtypes.QueryRequest) ([]byte, error) {
-	if m.HandleQueryFn == nil {
-		panic("not expected to be called")
-	}
-	return m.HandleQueryFn(ctx, request, caller)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

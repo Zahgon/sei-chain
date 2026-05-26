@@ -1,9 +1,7 @@
 package ibc
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"math/rand"
 
 	"github.com/gorilla/mux"
@@ -17,15 +15,7 @@ import (
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/spf13/cobra"
 
-	ibcclient "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client"
-	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	connectiontypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/03-connection/types"
-	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/client/cli"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/keeper"
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/simulation"
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/types"
 )
 
 var (
@@ -40,68 +30,56 @@ type AppModuleBasic struct{}
 var _ module.AppModuleBasic = AppModuleBasic{}
 
 // Name returns the ibc module's name.
-func (AppModuleBasic) Name() string {
-	return host.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterLegacyAminoCodec does nothing. IBC does not support amino.
-func (AppModuleBasic) RegisterLegacyAminoCodec(*codec.LegacyAmino) {}
+func (AppModuleBasic) RegisterLegacyAminoCodec(*codec.LegacyAmino) {
+	_ = "STUB: not implemented"
 
-// DefaultGenesis returns default genesis state as raw bytes for the ibc
-// module.
+	// DefaultGenesis returns default genesis state as raw bytes for the ibc
+	// module.
+	return
+}
+
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesisState())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the ibc module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var gs types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &gs); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", host.ModuleName, err)
-	}
-
-	return gs.Validate()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes does nothing. IBC does not support legacy REST routes.
-func (AppModuleBasic) RegisterRESTRoutes(client.Context, *mux.Router) {}
+func (AppModuleBasic) RegisterRESTRoutes(client.Context, *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the ibc module.
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the ibc module.
+	return
+}
+
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	if err := clienttypes.RegisterQueryHandlerClient(context.Background(), mux, clienttypes.NewQueryClient(clientCtx)); err != nil {
-		panic(err)
-	}
-	if err := connectiontypes.RegisterQueryHandlerClient(context.Background(), mux, connectiontypes.NewQueryClient(clientCtx)); err != nil {
-		panic(err)
-	}
-	if err := channeltypes.RegisterQueryHandlerClient(context.Background(), mux, channeltypes.NewQueryClient(clientCtx)); err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetTxCmd returns the root tx command for the ibc module.
-func (AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
-}
+func (AppModuleBasic) GetTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // GetQueryCmd returns no root query command for the ibc module.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd()
-}
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // RegisterInterfaces registers module concrete types into protobuf Any.
 func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	types.RegisterInterfaces(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // AppModule implements an application module for the ibc module.
@@ -114,119 +92,110 @@ type AppModule struct {
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(k *keeper.Keeper) AppModule {
-	return AppModule{
-		keeper: k,
-	}
-}
+func NewAppModule(k *keeper.Keeper) AppModule { _ = "STUB: not implemented"; return *new(AppModule) }
 
 // Name returns the ibc module's name.
-func (AppModule) Name() string {
-	return host.ModuleName
-}
+func (AppModule) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterInvariants registers the ibc module invariants.
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 	// TODO:
+
+	// Route returns the message routing key for the ibc module.
+	return
 }
 
-// Route returns the message routing key for the ibc module.
 func (am AppModule) Route() sdk.Route {
-	return sdk.Route{}
+	_ = "STUB: not implemented"
+
+	// QuerierRoute returns the ibc module's querier route name.
+	return *new(sdk.Route)
 }
 
-// QuerierRoute returns the ibc module's querier route name.
-func (AppModule) QuerierRoute() string {
-	return host.QuerierRoute
-}
+func (AppModule) QuerierRoute() string { _ = "STUB: not implemented"; return "" }
 
 // LegacyQuerierHandler returns nil. IBC does not support the legacy querier.
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return nil
+	_ = "STUB: not implemented"
+
+	// RegisterServices registers module services.
+	return *new(sdk.Querier)
 }
 
-// RegisterServices registers module services.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	clienttypes.RegisterMsgServer(cfg.MsgServer(), am.keeper)
-	connectiontypes.RegisterMsgServer(cfg.MsgServer(), am.keeper)
-	channeltypes.RegisterMsgServer(cfg.MsgServer(), am.keeper)
-	types.RegisterQueryService(cfg.QueryServer(), am.keeper)
-
-	m := keeper.NewMigrator(*am.keeper)
-	if err := cfg.RegisterMigration(host.ModuleName, 1, m.Migrate1to2); err != nil {
-		panic(err)
-	}
-	if err := cfg.RegisterMigration(host.ModuleName, 2, m.Migrate2to3); err != nil {
-		panic(err)
-	}
-}
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // InitGenesis performs genesis initialization for the ibc module. It returns
 // no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, bz json.RawMessage) []abci.ValidatorUpdate {
-	var gs types.GenesisState
-	err := cdc.UnmarshalAsJSON(bz, &gs)
-	if err != nil {
-		panic(fmt.Sprintf("failed to unmarshal %s genesis state: %s", host.ModuleName, err))
-	}
-	InitGenesis(ctx, *am.keeper, am.createLocalhost, &gs)
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the ibc
 // module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(ExportGenesis(ctx, *am.keeper))
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ExportGenesisStream returns the exported genesis state as raw bytes for the ibc
 // module in a streaing fashion
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 3 }
+func (AppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
 
-// BeginBlock returns the begin blocker for the ibc module.
+	// BeginBlock returns the begin blocker for the ibc module.
+	return 0
+}
+
 func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
-	ibcclient.BeginBlocker(ctx, am.keeper.ClientKeeper)
+	_ = "STUB: not implemented"
+	return
 }
 
 // EndBlock returns the end blocker for the ibc module. It returns no validator
 // updates.
 func (am AppModule) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) []abci.ValidatorUpdate {
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // AppModuleSimulation functions
 
 // GenerateGenesisState creates a randomized GenState of the ibc module.
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
-	simulation.RandomizedGenState(simState)
+	_ = "STUB: not implemented"
+	return
 }
 
 // ProposalContents doesn't return any content functions for governance proposals.
 func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {
+	_ = "STUB: not implemented"
+
+	// RandomizedParams returns nil since IBC doesn't register parameter changes.
 	return nil
 }
 
-// RandomizedParams returns nil since IBC doesn't register parameter changes.
 func (AppModule) RandomizedParams(_ *rand.Rand) []simtypes.ParamChange {
+	_ = "STUB: not implemented"
+
+	// RegisterStoreDecoder registers a decoder for ibc module's types
 	return nil
 }
 
-// RegisterStoreDecoder registers a decoder for ibc module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-	sdr[host.StoreKey] = simulation.NewDecodeStore(*am.keeper)
+	_ = "STUB: not implemented"
+	return
 }
 
 // WeightedOperations returns the all the ibc module operations with their respective weights.
 func (am AppModule) WeightedOperations(_ module.SimulationState) []simtypes.WeightedOperation {
+	_ = "STUB: not implemented"
 	return nil
 }

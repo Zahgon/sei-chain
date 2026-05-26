@@ -31,59 +31,41 @@ const (
 // NewCoinSpentEvent constructs a new coin spent sdk.Event
 
 func NewCoinSpentEvent(spender sdk.AccAddress, amount sdk.Coins) sdk.Event {
-	return sdk.NewEvent(
-		EventTypeCoinSpent,
-		sdk.NewAttribute(AttributeKeySpender, spender.String()),
-		sdk.NewAttribute(sdk.AttributeKeyAmount, amount.String()),
-	)
+	_ = "STUB: not implemented"
+	return *new(sdk.Event)
 }
 
 // NewCoinReceivedEvent constructs a new coin received sdk.Event
 
 func NewCoinReceivedEvent(receiver sdk.AccAddress, amount sdk.Coins) sdk.Event {
-	return sdk.NewEvent(
-		EventTypeCoinReceived,
-		sdk.NewAttribute(AttributeKeyReceiver, receiver.String()),
-		sdk.NewAttribute(sdk.AttributeKeyAmount, amount.String()),
-	)
+	_ = "STUB: not implemented"
+	return *new(sdk.Event)
 }
 
 // NewWeiSpentEvent constructs a new wei spent sdk.Event
 
 func NewWeiSpentEvent(spender sdk.AccAddress, amount sdk.Int) sdk.Event {
-	return sdk.NewEvent(
-		EventTypeWeiSpent,
-		sdk.NewAttribute(AttributeKeySpender, spender.String()),
-		sdk.NewAttribute(sdk.AttributeKeyAmount, amount.String()),
-	)
+	_ = "STUB: not implemented"
+	return *new(sdk.Event)
 }
 
 // NewWeiReceivedEvent constructs a new wei received sdk.Event
 
 func NewWeiReceivedEvent(receiver sdk.AccAddress, amount sdk.Int) sdk.Event {
-	return sdk.NewEvent(
-		EventTypeWeiReceived,
-		sdk.NewAttribute(AttributeKeyReceiver, receiver.String()),
-		sdk.NewAttribute(sdk.AttributeKeyAmount, amount.String()),
-	)
+	_ = "STUB: not implemented"
+	return *new(sdk.Event)
 }
 
 // NewCoinMintEvent construct a new coin minted sdk.Event
 
 func NewCoinMintEvent(minter sdk.AccAddress, amount sdk.Coins) sdk.Event {
-	return sdk.NewEvent(
-		EventTypeCoinMint,
-		sdk.NewAttribute(AttributeKeyMinter, minter.String()),
-		sdk.NewAttribute(sdk.AttributeKeyAmount, amount.String()),
-	)
+	_ = "STUB: not implemented"
+	return *new(sdk.Event)
 }
 
 // NewCoinBurnEvent constructs a new coin burned sdk.Event
 
 func NewCoinBurnEvent(burner sdk.AccAddress, amount sdk.Coins) sdk.Event {
-	return sdk.NewEvent(
-		EventTypeCoinBurn,
-		sdk.NewAttribute(AttributeKeyBurner, burner.String()),
-		sdk.NewAttribute(sdk.AttributeKeyAmount, amount.String()),
-	)
+	_ = "STUB: not implemented"
+	return *new(sdk.Event)
 }

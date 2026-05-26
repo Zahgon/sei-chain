@@ -33,17 +33,21 @@ type MockAccountRetriever struct {
 }
 
 func (mar MockAccountRetriever) GetAccount(_ Context, _ sdk.AccAddress) (Account, error) {
-	return nil, nil
+	_ = "STUB: not implemented"
+	return *new(Account), nil
 }
 
 func (mar MockAccountRetriever) GetAccountWithHeight(_ Context, _ sdk.AccAddress) (Account, int64, error) {
-	return nil, 0, nil
+	_ = "STUB: not implemented"
+	return *new(Account), 0, nil
 }
 
 func (mar MockAccountRetriever) EnsureExists(_ Context, _ sdk.AccAddress) error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (mar MockAccountRetriever) GetAccountNumberSequence(_ Context, _ sdk.AccAddress) (uint64, uint64, error) {
-	return mar.ReturnAccNum, mar.ReturnAccSeq, nil
+	_ = "STUB: not implemented"
+	return 0, 0, nil
 }

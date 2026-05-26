@@ -3,10 +3,6 @@ package app
 import (
 	putils "github.com/sei-protocol/sei-chain/precompiles/utils"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	bankkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/keeper"
-	govkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/keeper"
-	stakingkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/keeper"
-	wasmkeeper "github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/keeper"
 )
 
 type PrecompileKeepers struct {
@@ -29,42 +25,73 @@ type PrecompileKeepers struct {
 	txConf client.TxConfig
 }
 
-func NewPrecompileKeepers(a *App) *PrecompileKeepers {
-	return &PrecompileKeepers{
-		BankKeeper:         a.BankKeeper,
-		BankMsgServer:      bankkeeper.NewMsgServerImpl(a.BankKeeper),
-		EVMKeeper:          &a.EvmKeeper,
-		AccountKeeper:      a.AccountKeeper,
-		OracleKeeper:       a.OracleKeeper,
-		WasmdKeeper:        wasmkeeper.NewDefaultPermissionKeeper(a.WasmKeeper),
-		WasmdViewKeeper:    a.WasmKeeper,
-		StakingKeeper:      stakingkeeper.NewMsgServerImpl(a.StakingKeeper),
-		StakingQuerier:     stakingkeeper.Querier{Keeper: a.StakingKeeper},
-		GovKeeper:          a.GovKeeper,
-		GovMsgServer:       govkeeper.NewMsgServerImpl(a.GovKeeper),
-		DistributionKeeper: a.DistrKeeper,
-		TransferKeeper:     a.TransferKeeper,
-		ClientKeeper:       a.IBCKeeper.ClientKeeper,
-		ConnectionKeeper:   a.IBCKeeper.ConnectionKeeper,
-		ChannelKeeper:      a.IBCKeeper.ChannelKeeper,
-		txConf:             a.GetTxConfig(),
-	}
-}
+func NewPrecompileKeepers(a *App) *PrecompileKeepers { _ = "STUB: not implemented"; return nil }
 
-func (pk *PrecompileKeepers) BankK() putils.BankKeeper                 { return pk.BankKeeper }
-func (pk *PrecompileKeepers) BankMS() putils.BankMsgServer             { return pk.BankMsgServer }
-func (pk *PrecompileKeepers) EVMK() putils.EVMKeeper                   { return pk.EVMKeeper }
-func (pk *PrecompileKeepers) AccountK() putils.AccountKeeper           { return pk.AccountKeeper }
-func (pk *PrecompileKeepers) OracleK() putils.OracleKeeper             { return pk.OracleKeeper }
-func (pk *PrecompileKeepers) WasmdK() putils.WasmdKeeper               { return pk.WasmdKeeper }
-func (pk *PrecompileKeepers) WasmdVK() putils.WasmdViewKeeper          { return pk.WasmdViewKeeper }
-func (pk *PrecompileKeepers) StakingK() putils.StakingKeeper           { return pk.StakingKeeper }
-func (pk *PrecompileKeepers) StakingQ() putils.StakingQuerier          { return pk.StakingQuerier }
-func (pk *PrecompileKeepers) GovK() putils.GovKeeper                   { return pk.GovKeeper }
-func (pk *PrecompileKeepers) GovMS() putils.GovMsgServer               { return pk.GovMsgServer }
-func (pk *PrecompileKeepers) DistributionK() putils.DistributionKeeper { return pk.DistributionKeeper }
-func (pk *PrecompileKeepers) TransferK() putils.TransferKeeper         { return pk.TransferKeeper }
-func (pk *PrecompileKeepers) ClientK() putils.ClientKeeper             { return pk.ClientKeeper }
-func (pk *PrecompileKeepers) ConnectionK() putils.ConnectionKeeper     { return pk.ConnectionKeeper }
-func (pk *PrecompileKeepers) ChannelK() putils.ChannelKeeper           { return pk.ChannelKeeper }
-func (pk *PrecompileKeepers) TxConfig() client.TxConfig                { return pk.txConf }
+func (pk *PrecompileKeepers) BankK() putils.BankKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.BankKeeper)
+}
+func (pk *PrecompileKeepers) BankMS() putils.BankMsgServer {
+	_ = "STUB: not implemented"
+	return *new(putils.BankMsgServer)
+}
+func (pk *PrecompileKeepers) EVMK() putils.EVMKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.EVMKeeper)
+}
+func (pk *PrecompileKeepers) AccountK() putils.AccountKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.AccountKeeper)
+}
+func (pk *PrecompileKeepers) OracleK() putils.OracleKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.OracleKeeper)
+}
+func (pk *PrecompileKeepers) WasmdK() putils.WasmdKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.WasmdKeeper)
+}
+func (pk *PrecompileKeepers) WasmdVK() putils.WasmdViewKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.WasmdViewKeeper)
+}
+func (pk *PrecompileKeepers) StakingK() putils.StakingKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.StakingKeeper)
+}
+func (pk *PrecompileKeepers) StakingQ() putils.StakingQuerier {
+	_ = "STUB: not implemented"
+	return *new(putils.StakingQuerier)
+}
+func (pk *PrecompileKeepers) GovK() putils.GovKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.GovKeeper)
+}
+func (pk *PrecompileKeepers) GovMS() putils.GovMsgServer {
+	_ = "STUB: not implemented"
+	return *new(putils.GovMsgServer)
+}
+func (pk *PrecompileKeepers) DistributionK() putils.DistributionKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.DistributionKeeper)
+}
+func (pk *PrecompileKeepers) TransferK() putils.TransferKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.TransferKeeper)
+}
+func (pk *PrecompileKeepers) ClientK() putils.ClientKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.ClientKeeper)
+}
+func (pk *PrecompileKeepers) ConnectionK() putils.ConnectionKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.ConnectionKeeper)
+}
+func (pk *PrecompileKeepers) ChannelK() putils.ChannelKeeper {
+	_ = "STUB: not implemented"
+	return *new(putils.ChannelKeeper)
+}
+func (pk *PrecompileKeepers) TxConfig() client.TxConfig {
+	_ = "STUB: not implemented"
+	return *new(client.TxConfig)
+}

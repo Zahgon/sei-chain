@@ -1,11 +1,7 @@
 package admin
 
 import (
-	"fmt"
-	"net"
-
 	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
-	"github.com/spf13/cast"
 )
 
 const (
@@ -28,38 +24,12 @@ var DefaultConfig = Config{
 
 // ReadConfig reads admin config from app options (Viper-backed).
 func ReadConfig(opts servertypes.AppOptions) (Config, error) {
-	cfg := DefaultConfig
-	if v := opts.Get("admin_server.admin_enabled"); v != nil {
-		cfg.Enabled = cast.ToBool(v)
-	}
-	if v := opts.Get("admin_server.admin_address"); v != nil {
-		if s := cast.ToString(v); s != "" {
-			cfg.Address = s
-		}
-	}
-	if cfg.Enabled {
-		if err := validateLoopback(cfg.Address); err != nil {
-			return cfg, err
-		}
-	}
-	return cfg, nil
+	_ = "STUB: not implemented"
+	return *new(Config), nil
 }
 
 // validateLoopback ensures the address is bound to a loopback interface.
-func validateLoopback(address string) error {
-	host, _, err := net.SplitHostPort(address)
-	if err != nil {
-		return fmt.Errorf("invalid admin address %q: %w", address, err)
-	}
-	ip := net.ParseIP(host)
-	if ip == nil {
-		return fmt.Errorf("admin address %q: host must be an IP, not a hostname", address)
-	}
-	if !ip.IsLoopback() {
-		return fmt.Errorf("admin address %q: must be bound to loopback (127.0.0.1 or ::1), got %s", address, host)
-	}
-	return nil
-}
+func validateLoopback(address string) error { _ = "STUB: not implemented"; return nil }
 
 // ConfigTemplate is the TOML template for the [admin] section of app.toml.
 const ConfigTemplate = `

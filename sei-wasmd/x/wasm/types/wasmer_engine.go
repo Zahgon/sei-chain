@@ -251,29 +251,20 @@ type StoreAdapter struct {
 }
 
 // NewStoreAdapter constructor
-func NewStoreAdapter(s storetypes.KVStore) *StoreAdapter {
-	if s == nil {
-		panic("store must not be nil")
-	}
-	return &StoreAdapter{parent: s}
-}
+func NewStoreAdapter(s storetypes.KVStore) *StoreAdapter { _ = "STUB: not implemented"; return nil }
 
-func (s StoreAdapter) Get(key []byte) []byte {
-	return s.parent.Get(key)
-}
+func (s StoreAdapter) Get(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-func (s StoreAdapter) Set(key, value []byte) {
-	s.parent.Set(key, value)
-}
+func (s StoreAdapter) Set(key, value []byte) { _ = "STUB: not implemented"; return }
 
-func (s StoreAdapter) Delete(key []byte) {
-	s.parent.Delete(key)
-}
+func (s StoreAdapter) Delete(key []byte) { _ = "STUB: not implemented"; return }
 
 func (s StoreAdapter) Iterator(start, end []byte) wasmvmtypes.Iterator {
-	return s.parent.Iterator(start, end)
+	_ = "STUB: not implemented"
+	return *new(wasmvmtypes.Iterator)
 }
 
 func (s StoreAdapter) ReverseIterator(start, end []byte) wasmvmtypes.Iterator {
-	return s.parent.ReverseIterator(start, end)
+	_ = "STUB: not implemented"
+	return *new(wasmvmtypes.Iterator)
 }

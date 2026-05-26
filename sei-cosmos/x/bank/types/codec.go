@@ -4,30 +4,13 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/msgservice"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/authz"
 )
 
 // RegisterLegacyAminoCodec registers the necessary x/bank interfaces and concrete types
 // on the provided LegacyAmino codec. These types are used for Amino JSON serialization.
-func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgSend{}, "cosmos-sdk/MsgSend", nil)
-	cdc.RegisterConcrete(&MsgMultiSend{}, "cosmos-sdk/MsgMultiSend", nil)
-}
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) { _ = "STUB: not implemented"; return }
 
-func RegisterInterfaces(registry types.InterfaceRegistry) {
-	registry.RegisterImplementations((*sdk.Msg)(nil),
-		&MsgSend{},
-		&MsgMultiSend{},
-	)
-	registry.RegisterImplementations(
-		(*authz.Authorization)(nil),
-		&SendAuthorization{},
-	)
-
-	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
-}
+func RegisterInterfaces(registry types.InterfaceRegistry) { _ = "STUB: not implemented"; return }
 
 var (
 	amino = codec.NewLegacyAmino()

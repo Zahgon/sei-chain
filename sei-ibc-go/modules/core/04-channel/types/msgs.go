@@ -1,14 +1,9 @@
 package types
 
 import (
-	"encoding/base64"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
 	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	commitmenttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/23-commitment/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 )
 
 var _ sdk.Msg = &MsgChannelOpenInit{}
@@ -19,44 +14,15 @@ func NewMsgChannelOpenInit(
 	portID, version string, channelOrder Order, connectionHops []string,
 	counterpartyPortID string, signer string,
 ) *MsgChannelOpenInit {
-	counterparty := NewCounterparty(counterpartyPortID, "")
-	channel := NewChannel(INIT, channelOrder, counterparty, connectionHops, version)
-	return &MsgChannelOpenInit{
-		PortId:  portID,
-		Channel: channel,
-		Signer:  signer,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg MsgChannelOpenInit) ValidateBasic() error {
-	if err := host.PortIdentifierValidator(msg.PortId); err != nil {
-		return sdkerrors.Wrap(err, "invalid port ID")
-	}
-	if msg.Channel.State != INIT {
-		return sdkerrors.Wrapf(ErrInvalidChannelState,
-			"channel state must be INIT in MsgChannelOpenInit. expected: %s, got: %s",
-			INIT, msg.Channel.State,
-		)
-	}
-	if msg.Channel.Counterparty.ChannelId != "" {
-		return sdkerrors.Wrap(ErrInvalidCounterparty, "counterparty channel identifier must be empty")
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
-	return msg.Channel.ValidateBasic()
-}
+func (msg MsgChannelOpenInit) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // GetSigners implements sdk.Msg
-func (msg MsgChannelOpenInit) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
-}
+func (msg MsgChannelOpenInit) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgChannelOpenTry{}
 
@@ -68,61 +34,17 @@ func NewMsgChannelOpenTry(
 	counterpartyPortID, counterpartyChannelID, counterpartyVersion string,
 	proofInit []byte, proofHeight clienttypes.Height, signer string,
 ) *MsgChannelOpenTry {
-	counterparty := NewCounterparty(counterpartyPortID, counterpartyChannelID)
-	channel := NewChannel(TRYOPEN, channelOrder, counterparty, connectionHops, version)
-	return &MsgChannelOpenTry{
-		PortId:              portID,
-		PreviousChannelId:   previousChannelID,
-		Channel:             channel,
-		CounterpartyVersion: counterpartyVersion,
-		ProofInit:           proofInit,
-		ProofHeight:         proofHeight,
-		Signer:              signer,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg MsgChannelOpenTry) ValidateBasic() error {
-	if err := host.PortIdentifierValidator(msg.PortId); err != nil {
-		return sdkerrors.Wrap(err, "invalid port ID")
-	}
-	if msg.PreviousChannelId != "" {
-		if !IsValidChannelID(msg.PreviousChannelId) {
-			return sdkerrors.Wrap(ErrInvalidChannelIdentifier, "invalid previous channel ID")
-		}
-	}
-	if len(msg.ProofInit) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty proof init")
-	}
-	if msg.ProofHeight.IsZero() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "proof height must be non-zero")
-	}
-	if msg.Channel.State != TRYOPEN {
-		return sdkerrors.Wrapf(ErrInvalidChannelState,
-			"channel state must be TRYOPEN in MsgChannelOpenTry. expected: %s, got: %s",
-			TRYOPEN, msg.Channel.State,
-		)
-	}
-	// counterparty validate basic allows empty counterparty channel identifiers
-	if err := host.ChannelIdentifierValidator(msg.Channel.Counterparty.ChannelId); err != nil {
-		return sdkerrors.Wrap(err, "invalid counterparty channel ID")
-	}
+func (msg MsgChannelOpenTry) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
-	return msg.Channel.ValidateBasic()
-}
+// counterparty validate basic allows empty counterparty channel identifiers
 
 // GetSigners implements sdk.Msg
-func (msg MsgChannelOpenTry) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
-}
+func (msg MsgChannelOpenTry) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgChannelOpenAck{}
 
@@ -131,49 +53,15 @@ func NewMsgChannelOpenAck(
 	portID, channelID, counterpartyChannelID string, cpv string, proofTry []byte, proofHeight clienttypes.Height,
 	signer string,
 ) *MsgChannelOpenAck {
-	return &MsgChannelOpenAck{
-		PortId:                portID,
-		ChannelId:             channelID,
-		CounterpartyChannelId: counterpartyChannelID,
-		CounterpartyVersion:   cpv,
-		ProofTry:              proofTry,
-		ProofHeight:           proofHeight,
-		Signer:                signer,
-	}
-}
-
-// ValidateBasic implements sdk.Msg
-func (msg MsgChannelOpenAck) ValidateBasic() error {
-	if err := host.PortIdentifierValidator(msg.PortId); err != nil {
-		return sdkerrors.Wrap(err, "invalid port ID")
-	}
-	if !IsValidChannelID(msg.ChannelId) {
-		return ErrInvalidChannelIdentifier
-	}
-	if err := host.ChannelIdentifierValidator(msg.CounterpartyChannelId); err != nil {
-		return sdkerrors.Wrap(err, "invalid counterparty channel ID")
-	}
-	if len(msg.ProofTry) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty proof try")
-	}
-	if msg.ProofHeight.IsZero() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "proof height must be non-zero")
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// ValidateBasic implements sdk.Msg
+func (msg MsgChannelOpenAck) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
 // GetSigners implements sdk.Msg
-func (msg MsgChannelOpenAck) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
-}
+func (msg MsgChannelOpenAck) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgChannelOpenConfirm{}
 
@@ -182,43 +70,17 @@ func NewMsgChannelOpenConfirm(
 	portID, channelID string, proofAck []byte, proofHeight clienttypes.Height,
 	signer string,
 ) *MsgChannelOpenConfirm {
-	return &MsgChannelOpenConfirm{
-		PortId:      portID,
-		ChannelId:   channelID,
-		ProofAck:    proofAck,
-		ProofHeight: proofHeight,
-		Signer:      signer,
-	}
-}
-
-// ValidateBasic implements sdk.Msg
-func (msg MsgChannelOpenConfirm) ValidateBasic() error {
-	if err := host.PortIdentifierValidator(msg.PortId); err != nil {
-		return sdkerrors.Wrap(err, "invalid port ID")
-	}
-	if !IsValidChannelID(msg.ChannelId) {
-		return ErrInvalidChannelIdentifier
-	}
-	if len(msg.ProofAck) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty proof ack")
-	}
-	if msg.ProofHeight.IsZero() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "proof height must be non-zero")
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// ValidateBasic implements sdk.Msg
+func (msg MsgChannelOpenConfirm) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
 // GetSigners implements sdk.Msg
 func (msg MsgChannelOpenConfirm) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 var _ sdk.Msg = &MsgChannelCloseInit{}
@@ -227,36 +89,15 @@ var _ sdk.Msg = &MsgChannelCloseInit{}
 func NewMsgChannelCloseInit(
 	portID string, channelID string, signer string,
 ) *MsgChannelCloseInit {
-	return &MsgChannelCloseInit{
-		PortId:    portID,
-		ChannelId: channelID,
-		Signer:    signer,
-	}
-}
-
-// ValidateBasic implements sdk.Msg
-func (msg MsgChannelCloseInit) ValidateBasic() error {
-	if err := host.PortIdentifierValidator(msg.PortId); err != nil {
-		return sdkerrors.Wrap(err, "invalid port ID")
-	}
-	if !IsValidChannelID(msg.ChannelId) {
-		return ErrInvalidChannelIdentifier
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// ValidateBasic implements sdk.Msg
+func (msg MsgChannelCloseInit) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
 // GetSigners implements sdk.Msg
-func (msg MsgChannelCloseInit) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
-}
+func (msg MsgChannelCloseInit) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgChannelCloseConfirm{}
 
@@ -265,43 +106,17 @@ func NewMsgChannelCloseConfirm(
 	portID, channelID string, proofInit []byte, proofHeight clienttypes.Height,
 	signer string,
 ) *MsgChannelCloseConfirm {
-	return &MsgChannelCloseConfirm{
-		PortId:      portID,
-		ChannelId:   channelID,
-		ProofInit:   proofInit,
-		ProofHeight: proofHeight,
-		Signer:      signer,
-	}
-}
-
-// ValidateBasic implements sdk.Msg
-func (msg MsgChannelCloseConfirm) ValidateBasic() error {
-	if err := host.PortIdentifierValidator(msg.PortId); err != nil {
-		return sdkerrors.Wrap(err, "invalid port ID")
-	}
-	if !IsValidChannelID(msg.ChannelId) {
-		return ErrInvalidChannelIdentifier
-	}
-	if len(msg.ProofInit) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty proof init")
-	}
-	if msg.ProofHeight.IsZero() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "proof height must be non-zero")
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// ValidateBasic implements sdk.Msg
+func (msg MsgChannelCloseConfirm) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
 // GetSigners implements sdk.Msg
 func (msg MsgChannelCloseConfirm) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 var _ sdk.Msg = &MsgRecvPacket{}
@@ -311,44 +126,19 @@ func NewMsgRecvPacket(
 	packet Packet, proofCommitment []byte, proofHeight clienttypes.Height,
 	signer string,
 ) *MsgRecvPacket {
-	return &MsgRecvPacket{
-		Packet:          packet,
-		ProofCommitment: proofCommitment,
-		ProofHeight:     proofHeight,
-		Signer:          signer,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg MsgRecvPacket) ValidateBasic() error {
-	if len(msg.ProofCommitment) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty proof")
-	}
-	if msg.ProofHeight.IsZero() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "proof height must be non-zero")
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
-	return msg.Packet.ValidateBasic()
-}
+func (msg MsgRecvPacket) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // GetDataSignBytes returns the base64-encoded bytes used for the
 // data field when signing the packet.
-func (msg MsgRecvPacket) GetDataSignBytes() []byte {
-	s := "\"" + base64.StdEncoding.EncodeToString(msg.Packet.Data) + "\""
-	return []byte(s)
-}
+func (msg MsgRecvPacket) GetDataSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // GetSigners implements sdk.Msg
-func (msg MsgRecvPacket) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
-}
+func (msg MsgRecvPacket) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgTimeout{}
 
@@ -357,41 +147,15 @@ func NewMsgTimeout(
 	packet Packet, nextSequenceRecv uint64, proofUnreceived []byte,
 	proofHeight clienttypes.Height, signer string,
 ) *MsgTimeout {
-	return &MsgTimeout{
-		Packet:           packet,
-		NextSequenceRecv: nextSequenceRecv,
-		ProofUnreceived:  proofUnreceived,
-		ProofHeight:      proofHeight,
-		Signer:           signer,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg MsgTimeout) ValidateBasic() error {
-	if len(msg.ProofUnreceived) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty unreceived proof")
-	}
-	if msg.ProofHeight.IsZero() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "proof height must be non-zero")
-	}
-	if msg.NextSequenceRecv == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidSequence, "next sequence receive cannot be 0")
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
-	return msg.Packet.ValidateBasic()
-}
+func (msg MsgTimeout) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // GetSigners implements sdk.Msg
-func (msg MsgTimeout) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
-}
+func (msg MsgTimeout) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 // NewMsgTimeoutOnClose constructs new MsgTimeoutOnClose
 func NewMsgTimeoutOnClose(
@@ -399,45 +163,15 @@ func NewMsgTimeoutOnClose(
 	proofUnreceived, proofClose []byte,
 	proofHeight clienttypes.Height, signer string,
 ) *MsgTimeoutOnClose {
-	return &MsgTimeoutOnClose{
-		Packet:           packet,
-		NextSequenceRecv: nextSequenceRecv,
-		ProofUnreceived:  proofUnreceived,
-		ProofClose:       proofClose,
-		ProofHeight:      proofHeight,
-		Signer:           signer,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg MsgTimeoutOnClose) ValidateBasic() error {
-	if msg.NextSequenceRecv == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidSequence, "next sequence receive cannot be 0")
-	}
-	if len(msg.ProofUnreceived) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty proof")
-	}
-	if len(msg.ProofClose) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty proof of closed counterparty channel end")
-	}
-	if msg.ProofHeight.IsZero() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "proof height must be non-zero")
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
-	return msg.Packet.ValidateBasic()
-}
+func (msg MsgTimeoutOnClose) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // GetSigners implements sdk.Msg
-func (msg MsgTimeoutOnClose) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
-}
+func (msg MsgTimeoutOnClose) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgAcknowledgement{}
 
@@ -448,38 +182,12 @@ func NewMsgAcknowledgement(
 	proofHeight clienttypes.Height,
 	signer string,
 ) *MsgAcknowledgement {
-	return &MsgAcknowledgement{
-		Packet:          packet,
-		Acknowledgement: ack,
-		ProofAcked:      proofAcked,
-		ProofHeight:     proofHeight,
-		Signer:          signer,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateBasic implements sdk.Msg
-func (msg MsgAcknowledgement) ValidateBasic() error {
-	if len(msg.ProofAcked) == 0 {
-		return sdkerrors.Wrap(commitmenttypes.ErrInvalidProof, "cannot submit an empty proof")
-	}
-	if msg.ProofHeight.IsZero() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "proof height must be non-zero")
-	}
-	if len(msg.Acknowledgement) == 0 {
-		return sdkerrors.Wrap(ErrInvalidAcknowledgement, "ack bytes cannot be empty")
-	}
-	_, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
-	}
-	return msg.Packet.ValidateBasic()
-}
+func (msg MsgAcknowledgement) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // GetSigners implements sdk.Msg
-func (msg MsgAcknowledgement) GetSigners() []sdk.AccAddress {
-	signer, err := sdk.AccAddressFromBech32(msg.Signer)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{signer}
-}
+func (msg MsgAcknowledgement) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }

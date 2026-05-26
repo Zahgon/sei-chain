@@ -1,12 +1,8 @@
 package keyring
 
 import (
-	"fmt"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/hd"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/multisig"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -44,43 +40,46 @@ type LocalInfo struct {
 }
 
 func newLocalInfo(name string, pub cryptotypes.PubKey, privArmor string, algo hd.PubKeyType) Info {
-	return &LocalInfo{
-		Name:         name,
-		PubKey:       pub,
-		PrivKeyArmor: privArmor,
-		Algo:         algo,
-	}
+	_ = "STUB: not implemented"
+	return *new(Info)
 }
 
 // GetType implements Info interface
 func (i LocalInfo) GetType() KeyType {
-	return TypeLocal
+	_ = "STUB: not implemented"
+
+	// GetType implements Info interface
+	return *new(KeyType)
 }
 
-// GetType implements Info interface
 func (i LocalInfo) GetName() string {
-	return i.Name
+	_ = "STUB: not implemented"
+
+	// GetType implements Info interface
+	return ""
 }
 
-// GetType implements Info interface
 func (i LocalInfo) GetPubKey() cryptotypes.PubKey {
-	return i.PubKey
+	_ = "STUB: not implemented"
+
+	// GetType implements Info interface
+	return *new(cryptotypes.PubKey)
 }
 
-// GetType implements Info interface
 func (i LocalInfo) GetAddress() types.AccAddress {
-	return i.PubKey.Address().Bytes()
+	_ = "STUB: not implemented"
+	return *new(types.AccAddress)
 }
 
 // GetType implements Info interface
 func (i LocalInfo) GetAlgo() hd.PubKeyType {
-	return i.Algo
+	_ = "STUB: not implemented"
+
+	// GetType implements Info interface
+	return *new(hd.PubKeyType)
 }
 
-// GetType implements Info interface
-func (i LocalInfo) GetPath() (*hd.BIP44Params, error) {
-	return nil, fmt.Errorf("BIP44 Paths are not available for this type")
-}
+func (i LocalInfo) GetPath() (*hd.BIP44Params, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // ledgerInfo is the public information about a Ledger key
 // Note: Algo must be last field in struct for backwards amino compatibility
@@ -92,44 +91,46 @@ type ledgerInfo struct {
 }
 
 func newLedgerInfo(name string, pub cryptotypes.PubKey, path hd.BIP44Params, algo hd.PubKeyType) Info {
-	return &ledgerInfo{
-		Name:   name,
-		PubKey: pub,
-		Path:   path,
-		Algo:   algo,
-	}
+	_ = "STUB: not implemented"
+	return *new(Info)
 }
 
 // GetType implements Info interface
 func (i ledgerInfo) GetType() KeyType {
-	return TypeLedger
+	_ = "STUB: not implemented"
+
+	// GetName implements Info interface
+	return *new(KeyType)
 }
 
-// GetName implements Info interface
 func (i ledgerInfo) GetName() string {
-	return i.Name
+	_ = "STUB: not implemented"
+
+	// GetPubKey implements Info interface
+	return ""
 }
 
-// GetPubKey implements Info interface
 func (i ledgerInfo) GetPubKey() cryptotypes.PubKey {
-	return i.PubKey
+	_ = "STUB: not implemented"
+
+	// GetAddress implements Info interface
+	return *new(cryptotypes.PubKey)
 }
 
-// GetAddress implements Info interface
 func (i ledgerInfo) GetAddress() types.AccAddress {
-	return i.PubKey.Address().Bytes()
+	_ = "STUB: not implemented"
+	return *new(types.AccAddress)
 }
 
 // GetPath implements Info interface
 func (i ledgerInfo) GetAlgo() hd.PubKeyType {
-	return i.Algo
+	_ = "STUB: not implemented"
+
+	// GetPath implements Info interface
+	return *new(hd.PubKeyType)
 }
 
-// GetPath implements Info interface
-func (i ledgerInfo) GetPath() (*hd.BIP44Params, error) {
-	tmp := i.Path
-	return &tmp, nil
-}
+func (i ledgerInfo) GetPath() (*hd.BIP44Params, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // offlineInfo is the public information about an offline key
 // Note: Algo must be last field in struct for backwards amino compatibility
@@ -140,42 +141,46 @@ type offlineInfo struct {
 }
 
 func newOfflineInfo(name string, pub cryptotypes.PubKey, algo hd.PubKeyType) Info {
-	return &offlineInfo{
-		Name:   name,
-		PubKey: pub,
-		Algo:   algo,
-	}
+	_ = "STUB: not implemented"
+	return *new(Info)
 }
 
 // GetType implements Info interface
 func (i offlineInfo) GetType() KeyType {
-	return TypeOffline
+	_ = "STUB: not implemented"
+
+	// GetName implements Info interface
+	return *new(KeyType)
 }
 
-// GetName implements Info interface
 func (i offlineInfo) GetName() string {
-	return i.Name
+	_ = "STUB: not implemented"
+
+	// GetPubKey implements Info interface
+	return ""
 }
 
-// GetPubKey implements Info interface
 func (i offlineInfo) GetPubKey() cryptotypes.PubKey {
-	return i.PubKey
+	_ = "STUB: not implemented"
+
+	// GetAlgo returns the signing algorithm for the key
+	return *new(cryptotypes.PubKey)
 }
 
-// GetAlgo returns the signing algorithm for the key
 func (i offlineInfo) GetAlgo() hd.PubKeyType {
-	return i.Algo
+	_ = "STUB: not implemented"
+
+	// GetAddress implements Info interface
+	return *new(hd.PubKeyType)
 }
 
-// GetAddress implements Info interface
 func (i offlineInfo) GetAddress() types.AccAddress {
-	return i.PubKey.Address().Bytes()
+	_ = "STUB: not implemented"
+	return *new(types.AccAddress)
 }
 
 // GetPath implements Info interface
-func (i offlineInfo) GetPath() (*hd.BIP44Params, error) {
-	return nil, fmt.Errorf("BIP44 Paths are not available for this type")
-}
+func (i offlineInfo) GetPath() (*hd.BIP44Params, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Deprecated: this structure is not used anymore and it's here only to allow
 // decoding old multiInfo records from keyring.
@@ -196,78 +201,67 @@ type multiInfo struct {
 
 // NewMultiInfo creates a new multiInfo instance
 func NewMultiInfo(name string, pub cryptotypes.PubKey) (Info, error) {
-	if _, ok := pub.(*multisig.LegacyAminoPubKey); !ok {
-		return nil, fmt.Errorf("MultiInfo supports only multisig.LegacyAminoPubKey, got  %T", pub)
-	}
-	return &multiInfo{
-		Name:   name,
-		PubKey: pub,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(Info), nil
 }
 
 // GetType implements Info interface
 func (i multiInfo) GetType() KeyType {
-	return TypeMulti
+	_ = "STUB: not implemented"
+
+	// GetName implements Info interface
+	return *new(KeyType)
 }
 
-// GetName implements Info interface
 func (i multiInfo) GetName() string {
-	return i.Name
+	_ = "STUB: not implemented"
+
+	// GetPubKey implements Info interface
+	return ""
 }
 
-// GetPubKey implements Info interface
 func (i multiInfo) GetPubKey() cryptotypes.PubKey {
-	return i.PubKey
+	_ = "STUB: not implemented"
+
+	// GetAddress implements Info interface
+	return *new(cryptotypes.PubKey)
 }
 
-// GetAddress implements Info interface
 func (i multiInfo) GetAddress() types.AccAddress {
-	return i.PubKey.Address().Bytes()
+	_ = "STUB: not implemented"
+	return *new(types.AccAddress)
 }
 
 // GetPath implements Info interface
 func (i multiInfo) GetAlgo() hd.PubKeyType {
-	return hd.MultiType
+	_ = "STUB: not implemented"
+	return *
+
+	// GetPath implements Info interface
+	new(hd.PubKeyType)
 }
 
-// GetPath implements Info interface
-func (i multiInfo) GetPath() (*hd.BIP44Params, error) {
-	return nil, fmt.Errorf("BIP44 Paths are not available for this type")
-}
+func (i multiInfo) GetPath() (*hd.BIP44Params, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnpackInterfaces implements UnpackInterfacesMessage.UnpackInterfaces
 func (i multiInfo) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	multiPK := i.PubKey.(*multisig.LegacyAminoPubKey)
-
-	return codectypes.UnpackInterfaces(multiPK, unpacker)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // encoding info
-func marshalInfo(i Info) []byte {
-	return legacy.Cdc.MustMarshalLengthPrefixed(i)
-}
+func marshalInfo(i Info) []byte { _ = "STUB: not implemented"; return nil }
 
 // decoding info
 func unmarshalInfo(bz []byte) (info Info, err error) {
-	err = legacy.Cdc.UnmarshalLengthPrefixed(bz, &info)
-	if err != nil {
-		return nil, err
-	}
-
-	// After unmarshalling into &info, if we notice that the info is a
-	// multiInfo, then we unmarshal again, explicitly in a multiInfo this time.
-	// Since multiInfo implements UnpackInterfacesMessage, this will correctly
-	// unpack the underlying anys inside the multiInfo.
-	//
-	// This is a workaround, as go cannot check that an interface (Info)
-	// implements another interface (UnpackInterfacesMessage).
-	_, ok := info.(multiInfo)
-	if ok {
-		var multi multiInfo
-		err = legacy.Cdc.UnmarshalLengthPrefixed(bz, &multi)
-
-		return multi, err
-	}
-
-	return
+	_ = "STUB: not implemented"
+	return *new(Info), nil
 }
+
+// After unmarshalling into &info, if we notice that the info is a
+// multiInfo, then we unmarshal again, explicitly in a multiInfo this time.
+// Since multiInfo implements UnpackInterfacesMessage, this will correctly
+// unpack the underlying anys inside the multiInfo.
+//
+// This is a workaround, as go cannot check that an interface (Info)
+// implements another interface (UnpackInterfacesMessage).

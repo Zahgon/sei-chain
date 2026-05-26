@@ -1,13 +1,8 @@
 package codec
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
-	"fmt"
 	"io"
 
-	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	amino "github.com/tendermint/go-amino"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
@@ -19,179 +14,113 @@ type LegacyAmino struct {
 	Amino *amino.Codec
 }
 
-func (cdc *LegacyAmino) Seal() {
-	cdc.Amino.Seal()
-}
+func (cdc *LegacyAmino) Seal() { _ = "STUB: not implemented"; return }
 
-func NewLegacyAmino() *LegacyAmino {
-	return &LegacyAmino{amino.NewCodec()}
-}
+func NewLegacyAmino() *LegacyAmino { _ = "STUB: not implemented"; return nil }
 
 // RegisterEvidences registers Tendermint evidence types with the provided Amino
 // codec.
-func RegisterEvidences(cdc *LegacyAmino) {
-	cdc.Amino.RegisterInterface((*tmtypes.Evidence)(nil), nil)
-	cdc.Amino.RegisterConcrete(&tmtypes.DuplicateVoteEvidence{}, "tendermint/DuplicateVoteEvidence", nil)
-}
+func RegisterEvidences(cdc *LegacyAmino) { _ = "STUB: not implemented"; return }
 
 // MarshalJSONIndent provides a utility for indented JSON encoding of an object
 // via an Amino codec. It returns an error if it cannot serialize or indent as
 // JSON.
 func MarshalJSONIndent(cdc *LegacyAmino, obj interface{}) ([]byte, error) {
-	bz, err := cdc.MarshalAsJSON(obj)
-	if err != nil {
-		return nil, err
-	}
-
-	var out bytes.Buffer
-	if err = json.Indent(&out, bz, "", "  "); err != nil {
-		return nil, err
-	}
-
-	return out.Bytes(), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MustMarshalJSONIndent executes MarshalJSONIndent except it panics upon failure.
 func MustMarshalJSONIndent(cdc *LegacyAmino, obj interface{}) []byte {
-	bz, err := MarshalJSONIndent(cdc, obj)
-	if err != nil {
-		panic(fmt.Sprintf("failed to marshal JSON: %s", err))
-	}
-
-	return bz
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (cdc *LegacyAmino) marshalAnys(o interface{}) error {
-	return types.UnpackInterfaces(o, types.AminoPacker{Cdc: cdc.Amino})
-}
+func (cdc *LegacyAmino) marshalAnys(o interface{}) error { _ = "STUB: not implemented"; return nil }
 
-func (cdc *LegacyAmino) unmarshalAnys(o interface{}) error {
-	return types.UnpackInterfaces(o, types.AminoUnpacker{Cdc: cdc.Amino})
-}
+func (cdc *LegacyAmino) unmarshalAnys(o interface{}) error { _ = "STUB: not implemented"; return nil }
 
-func (cdc *LegacyAmino) jsonMarshalAnys(o interface{}) error {
-	return types.UnpackInterfaces(o, types.AminoJSONPacker{Cdc: cdc.Amino})
-}
+func (cdc *LegacyAmino) jsonMarshalAnys(o interface{}) error { _ = "STUB: not implemented"; return nil }
 
 func (cdc *LegacyAmino) jsonUnmarshalAnys(o interface{}) error {
-	return types.UnpackInterfaces(o, types.AminoJSONUnpacker{Cdc: cdc.Amino})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (cdc *LegacyAmino) Marshal(o interface{}) ([]byte, error) {
-	err := cdc.marshalAnys(o)
-	if err != nil {
-		return nil, err
-	}
-	return cdc.Amino.MarshalBinaryBare(o)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (cdc *LegacyAmino) MustMarshal(o interface{}) []byte {
-	bz, err := cdc.Marshal(o)
-	if err != nil {
-		panic(err)
-	}
-	return bz
-}
+func (cdc *LegacyAmino) MustMarshal(o interface{}) []byte { _ = "STUB: not implemented"; return nil }
 
 func (cdc *LegacyAmino) MarshalLengthPrefixed(o interface{}) ([]byte, error) {
-	err := cdc.marshalAnys(o)
-	if err != nil {
-		return nil, err
-	}
-	return cdc.Amino.MarshalBinaryLengthPrefixed(o)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (cdc *LegacyAmino) MustMarshalLengthPrefixed(o interface{}) []byte {
-	bz, err := cdc.MarshalLengthPrefixed(o)
-	if err != nil {
-		panic(err)
-	}
-	return bz
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (cdc *LegacyAmino) Unmarshal(bz []byte, ptr interface{}) error {
-	err := cdc.Amino.UnmarshalBinaryBare(bz, ptr)
-	if err != nil {
-		return err
-	}
-	return cdc.unmarshalAnys(ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (cdc *LegacyAmino) MustUnmarshal(bz []byte, ptr interface{}) {
-	err := cdc.Unmarshal(bz, ptr)
-	if err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func (cdc *LegacyAmino) UnmarshalLengthPrefixed(bz []byte, ptr interface{}) error {
-	err := cdc.Amino.UnmarshalBinaryLengthPrefixed(bz, ptr)
-	if err != nil {
-		return err
-	}
-	return cdc.unmarshalAnys(ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (cdc *LegacyAmino) MustUnmarshalLengthPrefixed(bz []byte, ptr interface{}) {
-	err := cdc.UnmarshalLengthPrefixed(bz, ptr)
-	if err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MarshalAsJSON implements codec.Codec interface
 func (cdc *LegacyAmino) MarshalAsJSON(o interface{}) ([]byte, error) {
-	err := cdc.jsonMarshalAnys(o)
-	if err != nil {
-		return nil, err
-	}
-	return cdc.Amino.MarshalJSON(o)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (cdc *LegacyAmino) MustMarshalJSON(o interface{}) []byte {
-	bz, err := cdc.MarshalAsJSON(o)
-	if err != nil {
-		panic(err)
-	}
-	return bz
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnmarshalAsJSON implements codec.Codec interface
 func (cdc *LegacyAmino) UnmarshalAsJSON(bz []byte, ptr interface{}) error {
-	err := cdc.Amino.UnmarshalJSON(bz, ptr)
-	if err != nil {
-		return err
-	}
-	return cdc.jsonUnmarshalAnys(ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (cdc *LegacyAmino) MustUnmarshalJSON(bz []byte, ptr interface{}) {
-	err := cdc.UnmarshalAsJSON(bz, ptr)
-	if err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (*LegacyAmino) UnpackAny(*types.Any, interface{}) error {
-	return errors.New("AminoCodec can't handle unpack protobuf Any's")
-}
+func (*LegacyAmino) UnpackAny(*types.Any, interface{}) error { _ = "STUB: not implemented"; return nil }
 
 func (cdc *LegacyAmino) RegisterInterface(ptr interface{}, iopts *amino.InterfaceOptions) {
-	cdc.Amino.RegisterInterface(ptr, iopts)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (cdc *LegacyAmino) RegisterConcrete(o interface{}, name string, copts *amino.ConcreteOptions) {
-	cdc.Amino.RegisterConcrete(o, name, copts)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (cdc *LegacyAmino) MarshalJSONIndent(o interface{}, prefix, indent string) ([]byte, error) {
-	err := cdc.jsonMarshalAnys(o)
-	if err != nil {
-		panic(err)
-	}
-	return cdc.Amino.MarshalJSONIndent(o, prefix, indent)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (cdc *LegacyAmino) PrintTypes(out io.Writer) error {
-	return cdc.Amino.PrintTypes(out)
-}
+func (cdc *LegacyAmino) PrintTypes(out io.Writer) error { _ = "STUB: not implemented"; return nil }

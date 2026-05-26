@@ -10,5 +10,6 @@ import (
 // response - in case of an error.
 // More: https://docs.tendermint.com/master/rpc/#/Info/health
 func (env *Environment) Health(ctx context.Context) (*coretypes.ResultHealth, error) {
-	return &coretypes.ResultHealth{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

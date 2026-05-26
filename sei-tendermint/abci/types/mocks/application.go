@@ -20,410 +20,89 @@ type Application struct {
 
 // ApplySnapshotChunk provides a mock function with given fields: _a0, _a1
 func (_m *Application) ApplySnapshotChunk(_a0 context.Context, _a1 *types.RequestApplySnapshotChunk) (*types.ResponseApplySnapshotChunk, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for ApplySnapshotChunk")
-	}
-
-	var r0 *types.ResponseApplySnapshotChunk
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestApplySnapshotChunk) (*types.ResponseApplySnapshotChunk, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestApplySnapshotChunk) *types.ResponseApplySnapshotChunk); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseApplySnapshotChunk)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestApplySnapshotChunk) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // CheckTx provides a mock function with given fields: _a0, _a1
 func (_m *Application) CheckTx(_a0 context.Context, _a1 *types.RequestCheckTxV2) *types.ResponseCheckTxV2 {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for CheckTx")
-	}
-
-	var r0 *types.ResponseCheckTxV2
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestCheckTxV2) *types.ResponseCheckTxV2); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseCheckTxV2)
-		}
-	}
-
-	return r0
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Commit provides a mock function with given fields: _a0
 func (_m *Application) Commit(_a0 context.Context) (*types.ResponseCommit, error) {
-	ret := _m.Called(_a0)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Commit")
-	}
-
-	var r0 *types.ResponseCommit
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context) (*types.ResponseCommit, error)); ok {
-		return rf(_a0)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context) *types.ResponseCommit); ok {
-		r0 = rf(_a0)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseCommit)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context) error); ok {
-		r1 = rf(_a0)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // EvmBalance provides a mock function with given fields: _a0, _a1
 func (_m *Application) EvmBalance(_a0 common.Address, _a1 []byte) *big.Int {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for EvmBalance")
-	}
-
-	var r0 *big.Int
-	if rf, ok := ret.Get(0).(func(common.Address, []byte) *big.Int); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*big.Int)
-		}
-	}
-
-	return r0
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // EvmNonce provides a mock function with given fields: _a0
-func (_m *Application) EvmNonce(_a0 common.Address) uint64 {
-	ret := _m.Called(_a0)
-
-	if len(ret) == 0 {
-		panic("no return value specified for EvmNonce")
-	}
-
-	var r0 uint64
-	if rf, ok := ret.Get(0).(func(common.Address) uint64); ok {
-		r0 = rf(_a0)
-	} else {
-		r0 = ret.Get(0).(uint64)
-	}
-
-	return r0
-}
+func (_m *Application) EvmNonce(_a0 common.Address) uint64 { _ = "STUB: not implemented"; return 0 }
 
 // FinalizeBlock provides a mock function with given fields: _a0, _a1
 func (_m *Application) FinalizeBlock(_a0 context.Context, _a1 *types.RequestFinalizeBlock) (*types.ResponseFinalizeBlock, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for FinalizeBlock")
-	}
-
-	var r0 *types.ResponseFinalizeBlock
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestFinalizeBlock) (*types.ResponseFinalizeBlock, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestFinalizeBlock) *types.ResponseFinalizeBlock); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseFinalizeBlock)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestFinalizeBlock) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetTxPriorityHint provides a mock function with given fields: _a0, _a1
 func (_m *Application) GetTxPriorityHint(_a0 context.Context, _a1 *types.RequestGetTxPriorityHintV2) (*types.ResponseGetTxPriorityHint, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetTxPriorityHint")
-	}
-
-	var r0 *types.ResponseGetTxPriorityHint
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestGetTxPriorityHintV2) (*types.ResponseGetTxPriorityHint, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestGetTxPriorityHintV2) *types.ResponseGetTxPriorityHint); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseGetTxPriorityHint)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestGetTxPriorityHintV2) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetValidators provides a mock function with no fields
 func (_m *Application) GetValidators() []types.ValidatorUpdate {
-	ret := _m.Called()
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetValidators")
-	}
-
-	var r0 []types.ValidatorUpdate
-	if rf, ok := ret.Get(0).(func() []types.ValidatorUpdate); ok {
-		r0 = rf()
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]types.ValidatorUpdate)
-		}
-	}
-
-	return r0
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Info provides a mock function with given fields: _a0, _a1
 func (_m *Application) Info(_a0 context.Context, _a1 *types.RequestInfo) (*types.ResponseInfo, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Info")
-	}
-
-	var r0 *types.ResponseInfo
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestInfo) (*types.ResponseInfo, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestInfo) *types.ResponseInfo); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseInfo)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestInfo) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // InitChain provides a mock function with given fields: _a0, _a1
 func (_m *Application) InitChain(_a0 context.Context, _a1 *types.RequestInitChain) (*types.ResponseInitChain, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for InitChain")
-	}
-
-	var r0 *types.ResponseInitChain
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestInitChain) (*types.ResponseInitChain, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestInitChain) *types.ResponseInitChain); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseInitChain)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestInitChain) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ListSnapshots provides a mock function with given fields: _a0, _a1
 func (_m *Application) ListSnapshots(_a0 context.Context, _a1 *types.RequestListSnapshots) (*types.ResponseListSnapshots, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for ListSnapshots")
-	}
-
-	var r0 *types.ResponseListSnapshots
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestListSnapshots) (*types.ResponseListSnapshots, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestListSnapshots) *types.ResponseListSnapshots); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseListSnapshots)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestListSnapshots) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // LoadSnapshotChunk provides a mock function with given fields: _a0, _a1
 func (_m *Application) LoadSnapshotChunk(_a0 context.Context, _a1 *types.RequestLoadSnapshotChunk) (*types.ResponseLoadSnapshotChunk, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for LoadSnapshotChunk")
-	}
-
-	var r0 *types.ResponseLoadSnapshotChunk
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestLoadSnapshotChunk) (*types.ResponseLoadSnapshotChunk, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestLoadSnapshotChunk) *types.ResponseLoadSnapshotChunk); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseLoadSnapshotChunk)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestLoadSnapshotChunk) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // OfferSnapshot provides a mock function with given fields: _a0, _a1
 func (_m *Application) OfferSnapshot(_a0 context.Context, _a1 *types.RequestOfferSnapshot) (*types.ResponseOfferSnapshot, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for OfferSnapshot")
-	}
-
-	var r0 *types.ResponseOfferSnapshot
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestOfferSnapshot) (*types.ResponseOfferSnapshot, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestOfferSnapshot) *types.ResponseOfferSnapshot); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseOfferSnapshot)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestOfferSnapshot) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ProcessProposal provides a mock function with given fields: _a0, _a1
 func (_m *Application) ProcessProposal(_a0 context.Context, _a1 *types.RequestProcessProposal) (*types.ResponseProcessProposal, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for ProcessProposal")
-	}
-
-	var r0 *types.ResponseProcessProposal
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestProcessProposal) (*types.ResponseProcessProposal, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestProcessProposal) *types.ResponseProcessProposal); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseProcessProposal)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestProcessProposal) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Query provides a mock function with given fields: _a0, _a1
 func (_m *Application) Query(_a0 context.Context, _a1 *types.RequestQuery) (*types.ResponseQuery, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for Query")
-	}
-
-	var r0 *types.ResponseQuery
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestQuery) (*types.ResponseQuery, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *types.RequestQuery) *types.ResponseQuery); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.ResponseQuery)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *types.RequestQuery) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewApplication creates a new instance of Application. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -432,10 +111,6 @@ func NewApplication(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *Application {
-	mock := &Application{}
-	mock.Mock.Test(t)
-
-	t.Cleanup(func() { mock.AssertExpectations(t) })
-
-	return mock
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -48,7 +48,8 @@ type BlockHeaderNotifier struct {
 }
 
 func NewBlockHeaderNotifier(capacity int) *BlockHeaderNotifier {
-	return &BlockHeaderNotifier{ch: make(chan blockHeaderEvent, capacity)}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Stash records FinalizeBlock outputs for publication on the next
@@ -59,12 +60,8 @@ func NewBlockHeaderNotifier(capacity int) *BlockHeaderNotifier {
 //
 // Safe to call on a nil receiver. Callers must pass non-nil req and resp.
 func (n *BlockHeaderNotifier) Stash(req *abci.RequestFinalizeBlock, resp *abci.ResponseFinalizeBlock) {
-	if n == nil {
-		return
-	}
-	n.mu.Lock()
-	defer n.mu.Unlock()
-	n.pending = &blockHeaderEvent{hash: req.Hash, header: req.Header, response: resp}
+	_ = "STUB: not implemented"
+	return
 }
 
 // ClearStash drops any pending stash without publishing. Called at
@@ -73,14 +70,7 @@ func (n *BlockHeaderNotifier) Stash(req *abci.RequestFinalizeBlock, resp *abci.R
 // didn't Stash) cannot be republished by a later Commit.
 //
 // Safe to call on a nil receiver.
-func (n *BlockHeaderNotifier) ClearStash() {
-	if n == nil {
-		return
-	}
-	n.mu.Lock()
-	defer n.mu.Unlock()
-	n.pending = nil
-}
+func (n *BlockHeaderNotifier) ClearStash() { _ = "STUB: not implemented"; return }
 
 // PublishStashed publishes the currently-stashed event (if any) on the
 // fan-out channel and clears the stash. Returns true if an event was
@@ -88,20 +78,7 @@ func (n *BlockHeaderNotifier) ClearStash() {
 // a successful Commit.
 //
 // Safe to call on a nil receiver.
-func (n *BlockHeaderNotifier) PublishStashed() bool {
-	if n == nil {
-		return false
-	}
-	n.mu.Lock()
-	evt := n.pending
-	n.pending = nil
-	n.mu.Unlock()
-	if evt == nil {
-		return false
-	}
-	n.publish(*evt)
-	return true
-}
+func (n *BlockHeaderNotifier) PublishStashed() bool { _ = "STUB: not implemented"; return false }
 
 // OnBlockCommitted publishes a committed-block event directly to the
 // fan-out channel without going through the Stash/Publish pairing. The
@@ -109,37 +86,20 @@ func (n *BlockHeaderNotifier) PublishStashed() bool {
 // producers that already serialize their FinalizeBlock/Commit and want
 // to push without an intermediate stash.
 func (n *BlockHeaderNotifier) OnBlockCommitted(hash []byte, header *tmproto.Header, response *abci.ResponseFinalizeBlock) {
-	if n == nil {
-		return
-	}
-	n.publish(blockHeaderEvent{hash: hash, header: header, response: response})
+	_ = "STUB: not implemented"
+	return
 }
 
 // publish pushes evt onto the fan-out channel with overwrite-on-full
 // semantics. Used by both PublishStashed and OnBlockCommitted so the
 // channel-write code lives in one place.
-func (n *BlockHeaderNotifier) publish(evt blockHeaderEvent) {
-	select {
-	case n.ch <- evt:
-		return
-	default:
-	}
-	// Buffer full: drain one stale event to make room for the new one.
-	// With a single producer, draining one slot is sufficient and the
-	// second send always succeeds. With multiple producers a racing
-	// publisher could refill the slot between the drain and the send,
-	// in which case the default branch drops the new event — that is
-	// still consistent with overwrite-on-full (some recent head wins).
-	select {
-	case <-n.ch:
-	default:
-	}
-	select {
-	case n.ch <- evt:
-	default:
-	}
-}
+func (n *BlockHeaderNotifier) publish(evt blockHeaderEvent) { _ = "STUB: not implemented"; return }
 
-func (n *BlockHeaderNotifier) recv() <-chan blockHeaderEvent {
-	return n.ch
-}
+// Buffer full: drain one stale event to make room for the new one.
+// With a single producer, draining one slot is sufficient and the
+// second send always succeeds. With multiple producers a racing
+// publisher could refill the slot between the drain and the send,
+// in which case the default branch drops the new event — that is
+// still consistent with overwrite-on-full (some recent head wins).
+
+func (n *BlockHeaderNotifier) recv() <-chan blockHeaderEvent { _ = "STUB: not implemented"; return nil }

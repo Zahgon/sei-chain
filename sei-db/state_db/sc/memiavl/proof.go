@@ -1,12 +1,6 @@
 package memiavl
 
 import (
-	"bytes"
-	"encoding/binary"
-	"errors"
-	"fmt"
-	"math"
-
 	ics23 "github.com/confio/ics23/go"
 )
 
@@ -27,23 +21,14 @@ GetMembershipProof will produce a CommitmentProof that the given key (and querie
 If the key doesn't exist in the tree, this will return an error.
 */
 func (t *Tree) GetMembershipProof(key []byte) (*ics23.CommitmentProof, error) {
-	exist, err := t.createExistenceProof(key)
-	if err != nil {
-		return nil, err
-	}
-	proof := &ics23.CommitmentProof{
-		Proof: &ics23.CommitmentProof_Exist{
-			Exist: exist,
-		},
-	}
-	return proof, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // VerifyMembership returns true iff proof is an ExistenceProof for the given key.
 func (t *Tree) VerifyMembership(proof *ics23.CommitmentProof, key []byte) bool {
-	val := t.Get(key)
-	root := t.RootHash()
-	return ics23.VerifyMembership(ics23.IavlSpec, root, proof, key, val)
+	_ = "STUB: not implemented"
+	return false
 }
 
 /*
@@ -51,161 +36,57 @@ GetNonMembershipProof will produce a CommitmentProof that the given key doesn't 
 If the key exists in the tree, this will return an error.
 */
 func (t *Tree) GetNonMembershipProof(key []byte) (*ics23.CommitmentProof, error) {
+	_ = "STUB: not implemented"
 	// idx is one node right of what we want....
-	var err error
-	idx, val := t.GetWithIndex(key)
-	if val != nil {
-		return nil, fmt.Errorf("cannot create NonExistanceProof when Key in State")
-	}
-
-	nonexist := &ics23.NonExistenceProof{
-		Key: key,
-	}
-
-	if idx >= 1 {
-		leftkey, _ := t.GetByIndex(idx - 1)
-		nonexist.Left, err = t.createExistenceProof(leftkey)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	// this will be nil if nothing right of the queried key
-	rightkey, _ := t.GetByIndex(idx)
-	if rightkey != nil {
-		nonexist.Right, err = t.createExistenceProof(rightkey)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	proof := &ics23.CommitmentProof{
-		Proof: &ics23.CommitmentProof_Nonexist{
-			Nonexist: nonexist,
-		},
-	}
-	return proof, nil
+	return nil, nil
 }
+
+// this will be nil if nothing right of the queried key
 
 // VerifyNonMembership returns true iff proof is a NonExistenceProof for the given key.
 func (t *Tree) VerifyNonMembership(proof *ics23.CommitmentProof, key []byte) bool {
-	root := t.RootHash()
-	return ics23.VerifyNonMembership(ics23.IavlSpec, root, proof, key)
+	_ = "STUB: not implemented"
+	return false
 }
 
 // createExistenceProof will get the proof from the tree and convert the proof into a valid
 // existence proof, if that's what it is.
 func (t *Tree) createExistenceProof(key []byte) (*ics23.ExistenceProof, error) {
-	path, node, err := pathToLeaf(t.root, key)
-	return &ics23.ExistenceProof{
-		Key:   node.Key(),
-		Value: node.Value(),
-		Leaf:  convertLeafOp(int64(node.Version())),
-		Path:  convertInnerOps(path),
-	}, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func convertLeafOp(version int64) *ics23.LeafOp {
+	_ = "STUB: not implemented"
 	// this is adapted from iavl/proof.go:proofLeafNode.Hash()
-	prefix := convertVarIntToBytes(0)
-	prefix = append(prefix, convertVarIntToBytes(1)...)
-	prefix = append(prefix, convertVarIntToBytes(version)...)
-
-	return &ics23.LeafOp{
-		Hash:         ics23.HashOp_SHA256,
-		PrehashValue: ics23.HashOp_SHA256,
-		Length:       ics23.LengthOp_VAR_PROTO,
-		Prefix:       prefix,
-	}
+	return nil
 }
 
 // we cannot get the proofInnerNode type, so we need to do the whole path in one function
-func convertInnerOps(path PathToLeaf) []*ics23.InnerOp {
-	steps := make([]*ics23.InnerOp, 0, len(path))
+func convertInnerOps(path PathToLeaf) []*ics23.InnerOp { _ = "STUB: not implemented"; return nil }
 
-	// lengthByte is the length prefix prepended to each of the sha256 sub-hashes
-	var lengthByte byte = 0x20
+// lengthByte is the length prefix prepended to each of the sha256 sub-hashes
 
-	// we need to go in reverse order, iavl starts from root to leaf,
-	// we want to go up from the leaf to the root
-	for i := len(path) - 1; i >= 0; i-- {
-		// this is adapted from iavl/proof.go:proofInnerNode.Hash()
-		prefix := convertVarIntToBytes(int64(path[i].Height))
-		prefix = append(prefix, convertVarIntToBytes(path[i].Size)...)
-		prefix = append(prefix, convertVarIntToBytes(path[i].Version)...)
+// we need to go in reverse order, iavl starts from root to leaf,
+// we want to go up from the leaf to the root
 
-		var suffix []byte
-		if len(path[i].Left) > 0 {
-			// length prefixed left side
-			prefix = append(prefix, lengthByte)
-			prefix = append(prefix, path[i].Left...)
-			// prepend the length prefix for child
-			prefix = append(prefix, lengthByte)
-		} else {
-			// prepend the length prefix for child
-			prefix = append(prefix, lengthByte)
-			// length-prefixed right side
-			suffix = make([]byte, 0, 1+len(path[i].Right))
-			suffix = append(suffix, lengthByte)
-			suffix = append(suffix, path[i].Right...)
-		}
+// this is adapted from iavl/proof.go:proofInnerNode.Hash()
 
-		op := &ics23.InnerOp{
-			Hash:   ics23.HashOp_SHA256,
-			Prefix: prefix,
-			Suffix: suffix,
-		}
-		steps = append(steps, op)
-	}
-	return steps
-}
+// length prefixed left side
 
-func convertVarIntToBytes(orig int64) []byte {
-	var buf [binary.MaxVarintLen64]byte
-	n := binary.PutVarint(buf[:], orig)
-	return buf[:n]
-}
+// prepend the length prefix for child
+
+// prepend the length prefix for child
+
+// length-prefixed right side
+
+func convertVarIntToBytes(orig int64) []byte { _ = "STUB: not implemented"; return nil }
 
 func pathToLeaf(node Node, key []byte) (PathToLeaf, Node, error) {
-	var path PathToLeaf
-
-	for {
-		h := node.Height()
-		if h == 0 {
-			if bytes.Equal(node.Key(), key) {
-				return path, node, nil
-			}
-
-			return path, node, errors.New("key does not exist")
-		}
-		if h > math.MaxInt8 {
-			panic("node height exceeds int8")
-		}
-		height := int8(h)
-
-		if bytes.Compare(key, node.Key()) < 0 {
-			// left side
-			right := node.Right()
-			path = append(path, ProofInnerNode{
-				Height:  height,
-				Size:    node.Size(),
-				Version: int64(node.Version()),
-				Left:    nil,
-				Right:   right.Hash(),
-			})
-			node = node.Left()
-			continue
-		}
-
-		// right side
-		left := node.Left()
-		path = append(path, ProofInnerNode{
-			Height:  height,
-			Size:    node.Size(),
-			Version: int64(node.Version()),
-			Left:    left.Hash(),
-			Right:   nil,
-		})
-		node = node.Right()
-	}
+	_ = "STUB: not implemented"
+	return *new(PathToLeaf), *new(Node), nil
 }
+
+// left side
+
+// right side

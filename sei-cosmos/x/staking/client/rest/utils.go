@@ -2,148 +2,32 @@ package rest
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-
-	"github.com/gorilla/mux"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
-	authtx "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/tx"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 )
 
 // contains checks if the a given query contains one of the tx types
-func contains(stringSlice []string, txType string) bool {
-	for _, word := range stringSlice {
-		if word == txType {
-			return true
-		}
-	}
-
-	return false
-}
+func contains(stringSlice []string, txType string) bool { _ = "STUB: not implemented"; return false }
 
 // queries staking txs
 func queryTxs(ctx context.Context, clientCtx client.Context, action string, delegatorAddr string) (*sdk.SearchTxsResult, error) {
-	page := 1
-	limit := 100
-	events := []string{
-		fmt.Sprintf("%s.%s='%s'", sdk.EventTypeMessage, sdk.AttributeKeyAction, action),
-		fmt.Sprintf("%s.%s='%s'", sdk.EventTypeMessage, sdk.AttributeKeySender, delegatorAddr),
-	}
-
-	node, err := clientCtx.GetNode()
-	if err != nil {
-		return nil, err
-	}
-	return authtx.QueryTxsByEvents(ctx, node, clientCtx.TxConfig, events, page, limit, "")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func queryBonds(clientCtx client.Context, endpoint string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		bech32delegator := vars["delegatorAddr"]
-		bech32validator := vars["validatorAddr"]
-
-		delegatorAddr, err := sdk.AccAddressFromBech32(bech32delegator)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		validatorAddr, err := sdk.ValAddressFromBech32(bech32validator)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		clientCtx, ok := rest.ParseQueryHeightOrReturnBadRequest(w, clientCtx, r)
-		if !ok {
-			return
-		}
-
-		params := types.QueryDelegatorValidatorRequest{DelegatorAddr: delegatorAddr.String(), ValidatorAddr: validatorAddr.String()}
-
-		bz, err := clientCtx.LegacyAmino.MarshalAsJSON(params)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		res, height, err := clientCtx.QueryWithData(endpoint, bz)
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-
-		clientCtx = clientCtx.WithHeight(height)
-		rest.PostProcessResponse(w, clientCtx, res)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 func queryDelegator(clientCtx client.Context, endpoint string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		bech32delegator := vars["delegatorAddr"]
-
-		delegatorAddr, err := sdk.AccAddressFromBech32(bech32delegator)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		clientCtx, ok := rest.ParseQueryHeightOrReturnBadRequest(w, clientCtx, r)
-		if !ok {
-			return
-		}
-
-		params := types.NewQueryDelegatorParams(delegatorAddr)
-
-		bz, err := clientCtx.LegacyAmino.MarshalAsJSON(params)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		res, height, err := clientCtx.QueryWithData(endpoint, bz)
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-
-		clientCtx = clientCtx.WithHeight(height)
-		rest.PostProcessResponse(w, clientCtx, res)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 func queryValidator(clientCtx client.Context, endpoint string) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-		bech32validatorAddr := vars["validatorAddr"]
-
-		_, page, limit, err := rest.ParseHTTPArgsWithLimit(r, 0)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		validatorAddr, err := sdk.ValAddressFromBech32(bech32validatorAddr)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		clientCtx, ok := rest.ParseQueryHeightOrReturnBadRequest(w, clientCtx, r)
-		if !ok {
-			return
-		}
-
-		params := types.NewQueryValidatorParams(validatorAddr, page, limit)
-
-		bz, err := clientCtx.LegacyAmino.MarshalAsJSON(params)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		res, height, err := clientCtx.QueryWithData(endpoint, bz)
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-
-		clientCtx = clientCtx.WithHeight(height)
-		rest.PostProcessResponse(w, clientCtx, res)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }

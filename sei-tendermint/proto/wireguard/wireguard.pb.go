@@ -5,9 +5,10 @@ package wireguard
 
 import (
 	fmt "fmt"
+	math "math"
+
 	proto "github.com/gogo/protobuf/proto"
 	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.

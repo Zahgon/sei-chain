@@ -2,7 +2,6 @@ package cryptosim
 
 import (
 	"context"
-	"log"
 
 	"github.com/sei-protocol/sei-chain/sei-db/common/metrics"
 )
@@ -40,71 +39,17 @@ func NewTransactionExecutor(
 	queueSize int,
 	metrics *CryptosimMetrics,
 ) *TransactionExecutor {
-	e := &TransactionExecutor{
-		ctx:                  ctx,
-		cancel:               cancel,
-		config:               config,
-		database:             database,
-		feeCollectionAddress: feeCollectionAddress,
-		workChan:             make(chan any, queueSize),
-		phaseTimer:           metrics.GetTransactionPhaseTimerInstance(),
-	}
-
-	go e.mainLoop()
-
-	return e
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Schedule a transaction for execution.
 func (e *TransactionExecutor) ScheduleForExecution(txn *transaction) {
-	select {
-	case <-e.ctx.Done():
-	case e.workChan <- txn:
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // Blocks until all currently queued transactions have been executed.
-func (e *TransactionExecutor) Flush() {
+func (e *TransactionExecutor) Flush() { _ = "STUB: not implemented"; return }
 
-	request := flushRequest{doneChan: make(chan struct{}, 1)}
-
-	select {
-	case <-e.ctx.Done():
-	case e.workChan <- request:
-	}
-
-	select {
-	case <-request.doneChan:
-	case <-e.ctx.Done():
-	}
-}
-
-func (e *TransactionExecutor) mainLoop() {
-
-	for {
-		select {
-		case <-e.ctx.Done():
-			return
-		case request := <-e.workChan:
-			switch request := request.(type) {
-			case *transaction:
-
-				if e.config.DisableTransactionExecution {
-					continue
-				}
-
-				var phaseTimer *metrics.PhaseTimer
-				if request.ShouldCaptureMetrics() {
-					phaseTimer = e.phaseTimer
-				}
-
-				if err := request.Execute(e.database, e.feeCollectionAddress, phaseTimer); err != nil {
-					log.Printf("transaction execution error: %v", err)
-					e.cancel()
-				}
-			case flushRequest:
-				request.doneChan <- struct{}{}
-			}
-		}
-	}
-}
+func (e *TransactionExecutor) mainLoop() { _ = "STUB: not implemented"; return }

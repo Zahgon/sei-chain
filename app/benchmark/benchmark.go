@@ -22,11 +22,9 @@ package benchmark
 
 import (
 	"context"
-	"os"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	evmcfg "github.com/sei-protocol/sei-chain/x/evm/config"
 	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
 	"github.com/sei-protocol/seilog"
 )
@@ -42,57 +40,24 @@ type Manager struct {
 
 // NewManager creates a new benchmark manager from configuration.
 func NewManager(ctx context.Context, txConfig client.TxConfig, chainID string, evmChainID int64) (*Manager, error) {
+	_ = "STUB: not implemented"
 	// Defensive check: prevent benchmarking on live chains
-	if evmcfg.IsLiveEVMChainID(evmChainID) {
-		panic("benchmark not allowed on live chains")
-	}
-
-	// Load config from environment variable or use default
-	configPath := os.Getenv("BENCHMARK_CONFIG")
-
-	cfg, err := LoadConfig(configPath, evmChainID, chainID)
-	if err != nil {
-		return nil, err
-	}
-
-	gen, err := NewGenerator(cfg, txConfig)
-	if err != nil {
-		return nil, err
-	}
-
-	benchLogger := NewLogger()
-	go benchLogger.Start(ctx)
-
-	proposalCh := gen.StartProposalChannel(ctx, benchLogger)
-
-	logger.Info("Benchmark manager initialized",
-		"configPath", configPath,
-		"scenarios", len(cfg.Scenarios),
-	)
-
-	return &Manager{
-		Generator:  gen,
-		Logger:     benchLogger,
-		proposalCh: proposalCh,
-	}, nil
+	return nil, nil
 }
+
+// Load config from environment variable or use default
 
 // ProposalChannel returns the channel of prepared proposals.
-func (m *Manager) ProposalChannel() <-chan [][]byte {
-	return m.proposalCh
-}
+func (m *Manager) ProposalChannel() <-chan [][]byte { _ = "STUB: not implemented"; return nil }
 
 // ProcessReceipts forwards receipts to the generator for deployment tracking.
 func (m *Manager) ProcessReceipts(receipts map[common.Hash]*evmtypes.Receipt) {
-	m.Generator.ProcessReceipts(receipts)
+	_ = "STUB: not implemented"
+	return
 }
 
 // IsSetupPhase returns true if the benchmark is still in the setup phase.
-func (m *Manager) IsSetupPhase() bool {
-	return m.Generator.IsSetupPhase()
-}
+func (m *Manager) IsSetupPhase() bool { _ = "STUB: not implemented"; return false }
 
 // GetPendingDeployHashes returns the hashes of pending deployment transactions.
-func (m *Manager) GetPendingDeployHashes() []common.Hash {
-	return m.Generator.GetPendingDeployHashes()
-}
+func (m *Manager) GetPendingDeployHashes() []common.Hash { _ = "STUB: not implemented"; return nil }

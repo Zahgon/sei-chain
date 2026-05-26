@@ -22,192 +22,47 @@ type EventSink struct {
 
 // GetTxByHash provides a mock function with given fields: _a0
 func (_m *EventSink) GetTxByHash(_a0 []byte) (*types.TxResultV2, error) {
-	ret := _m.Called(_a0)
-
-	if len(ret) == 0 {
-		panic("no return value specified for GetTxByHash")
-	}
-
-	var r0 *types.TxResultV2
-	var r1 error
-	if rf, ok := ret.Get(0).(func([]byte) (*types.TxResultV2, error)); ok {
-		return rf(_a0)
-	}
-	if rf, ok := ret.Get(0).(func([]byte) *types.TxResultV2); ok {
-		r0 = rf(_a0)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*types.TxResultV2)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func([]byte) error); ok {
-		r1 = rf(_a0)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // HasBlock provides a mock function with given fields: _a0
 func (_m *EventSink) HasBlock(_a0 int64) (bool, error) {
-	ret := _m.Called(_a0)
-
-	if len(ret) == 0 {
-		panic("no return value specified for HasBlock")
-	}
-
-	var r0 bool
-	var r1 error
-	if rf, ok := ret.Get(0).(func(int64) (bool, error)); ok {
-		return rf(_a0)
-	}
-	if rf, ok := ret.Get(0).(func(int64) bool); ok {
-		r0 = rf(_a0)
-	} else {
-		r0 = ret.Get(0).(bool)
-	}
-
-	if rf, ok := ret.Get(1).(func(int64) error); ok {
-		r1 = rf(_a0)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // IndexBlockEvents provides a mock function with given fields: _a0
 func (_m *EventSink) IndexBlockEvents(_a0 sei_tenderminttypes.EventDataNewBlockHeader) error {
-	ret := _m.Called(_a0)
-
-	if len(ret) == 0 {
-		panic("no return value specified for IndexBlockEvents")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(sei_tenderminttypes.EventDataNewBlockHeader) error); ok {
-		r0 = rf(_a0)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // IndexTxEvents provides a mock function with given fields: _a0
 func (_m *EventSink) IndexTxEvents(_a0 []*types.TxResultV2) error {
-	ret := _m.Called(_a0)
-
-	if len(ret) == 0 {
-		panic("no return value specified for IndexTxEvents")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func([]*types.TxResultV2) error); ok {
-		r0 = rf(_a0)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SearchBlockEvents provides a mock function with given fields: _a0, _a1
 func (_m *EventSink) SearchBlockEvents(_a0 context.Context, _a1 *query.Query) ([]int64, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for SearchBlockEvents")
-	}
-
-	var r0 []int64
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *query.Query) ([]int64, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *query.Query) []int64); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]int64)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *query.Query) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SearchTxEvents provides a mock function with given fields: _a0, _a1
 func (_m *EventSink) SearchTxEvents(_a0 context.Context, _a1 *query.Query) ([]*types.TxResultV2, error) {
-	ret := _m.Called(_a0, _a1)
-
-	if len(ret) == 0 {
-		panic("no return value specified for SearchTxEvents")
-	}
-
-	var r0 []*types.TxResultV2
-	var r1 error
-	if rf, ok := ret.Get(0).(func(context.Context, *query.Query) ([]*types.TxResultV2, error)); ok {
-		return rf(_a0, _a1)
-	}
-	if rf, ok := ret.Get(0).(func(context.Context, *query.Query) []*types.TxResultV2); ok {
-		r0 = rf(_a0, _a1)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]*types.TxResultV2)
-		}
-	}
-
-	if rf, ok := ret.Get(1).(func(context.Context, *query.Query) error); ok {
-		r1 = rf(_a0, _a1)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Stop provides a mock function with no fields
-func (_m *EventSink) Stop() error {
-	ret := _m.Called()
-
-	if len(ret) == 0 {
-		panic("no return value specified for Stop")
-	}
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func() error); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
+func (_m *EventSink) Stop() error { _ = "STUB: not implemented"; return nil }
 
 // Type provides a mock function with no fields
 func (_m *EventSink) Type() indexer.EventSinkType {
-	ret := _m.Called()
-
-	if len(ret) == 0 {
-		panic("no return value specified for Type")
-	}
-
-	var r0 indexer.EventSinkType
-	if rf, ok := ret.Get(0).(func() indexer.EventSinkType); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(indexer.EventSinkType)
-	}
-
-	return r0
+	_ = "STUB: not implemented"
+	return *new(indexer.EventSinkType)
 }
 
 // NewEventSink creates a new instance of EventSink. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
@@ -216,10 +71,6 @@ func NewEventSink(t interface {
 	mock.TestingT
 	Cleanup(func())
 }) *EventSink {
-	mock := &EventSink{}
-	mock.Mock.Test(t)
-
-	t.Cleanup(func() { mock.AssertExpectations(t) })
-
-	return mock
+	_ = "STUB: not implemented"
+	return nil
 }

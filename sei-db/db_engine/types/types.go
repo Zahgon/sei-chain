@@ -29,9 +29,7 @@ type BatchGetResult struct {
 }
 
 // IsFound returns true if the key was found (i.e. Value is not nil).
-func (b BatchGetResult) IsFound() bool {
-	return b.Value != nil
-}
+func (b BatchGetResult) IsFound() bool { _ = "STUB: not implemented"; return false }
 
 // OpenOptions configures opening a DB.
 //

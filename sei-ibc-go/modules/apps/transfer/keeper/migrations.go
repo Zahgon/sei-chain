@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/transfer/types"
@@ -14,45 +12,23 @@ type Migrator struct {
 }
 
 // NewMigrator returns a new Migrator.
-func NewMigrator(keeper Keeper) Migrator {
-	return Migrator{keeper: keeper}
-}
+func NewMigrator(keeper Keeper) Migrator { _ = "STUB: not implemented"; return *new(Migrator) }
 
 // MigrateTraces migrates the DenomTraces to the correct format, accounting for slashes in the BaseDenom.
 func (m Migrator) MigrateTraces(ctx sdk.Context) error {
+	_ = "STUB: not implemented"
 	// list of traces that must replace the old traces in store
-	var newTraces []types.DenomTrace
-	m.keeper.IterateDenomTraces(ctx,
-		func(dt types.DenomTrace) (stop bool) {
-			// check if the new way of splitting FullDenom
-			// is the same as the current DenomTrace.
-			// If it isn't then store the new DenomTrace in the list of new traces.
-			newTrace := types.ParseDenomTrace(dt.GetFullDenomPath())
-			err := newTrace.Validate()
-			if err != nil {
-				panic(err)
-			}
-
-			if dt.IBCDenom() != newTrace.IBCDenom() {
-				// The new form of parsing will result in a token denomination change.
-				// A bank migration is required. A panic should occur to prevent the
-				// chain from using corrupted state.
-				panic(fmt.Sprintf("migration will result in corrupted state. Previous IBC token (%s) requires a bank migration. Expected denom trace (%s)", dt, newTrace))
-			}
-
-			if !equalTraces(newTrace, dt) {
-				newTraces = append(newTraces, newTrace)
-			}
-			return false
-		})
-
-	// replace the outdated traces with the new trace information
-	for _, nt := range newTraces {
-		m.keeper.SetDenomTrace(ctx, nt)
-	}
 	return nil
 }
 
-func equalTraces(dtA, dtB types.DenomTrace) bool {
-	return dtA.BaseDenom == dtB.BaseDenom && dtA.Path == dtB.Path
-}
+// check if the new way of splitting FullDenom
+// is the same as the current DenomTrace.
+// If it isn't then store the new DenomTrace in the list of new traces.
+
+// The new form of parsing will result in a token denomination change.
+// A bank migration is required. A panic should occur to prevent the
+// chain from using corrupted state.
+
+// replace the outdated traces with the new trace information
+
+func equalTraces(dtA, dtB types.DenomTrace) bool { _ = "STUB: not implemented"; return false }

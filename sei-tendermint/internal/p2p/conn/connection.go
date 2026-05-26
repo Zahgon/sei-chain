@@ -2,12 +2,7 @@ package conn
 
 import (
 	"context"
-	"errors"
-	"io"
-	"net"
 	"net/netip"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 )
 
 type Conn interface {
@@ -19,6 +14,4 @@ type Conn interface {
 	Close()
 }
 
-func IsDisconnect(err error) bool {
-	return errors.Is(err, net.ErrClosed) || errors.Is(err, io.EOF) || utils.ErrorAs[*net.OpError](err).IsPresent()
-}
+func IsDisconnect(err error) bool { _ = "STUB: not implemented"; return false }

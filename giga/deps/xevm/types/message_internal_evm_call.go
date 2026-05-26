@@ -9,22 +9,10 @@ var (
 )
 
 func NewMessageInternalEVMCall(from sdk.AccAddress, to string, value *sdk.Int, data []byte) *MsgInternalEVMCall {
-	return &MsgInternalEVMCall{
-		Sender: from.String(),
-		To:     to,
-		Value:  value,
-		Data:   data,
-	}
-}
-
-func (msg *MsgInternalEVMCall) GetSigners() []sdk.AccAddress {
-	senderAddr, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		return []sdk.AccAddress{}
-	}
-	return []sdk.AccAddress{senderAddr}
-}
-
-func (msg *MsgInternalEVMCall) ValidateBasic() error {
+	_ = "STUB: not implemented"
 	return nil
 }
+
+func (msg *MsgInternalEVMCall) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
+
+func (msg *MsgInternalEVMCall) ValidateBasic() error { _ = "STUB: not implemented"; return nil }

@@ -7,5 +7,7 @@ import (
 )
 
 func registerTxRoutes(clientCtx client.Context, r *mux.Router, handlers []EvidenceRESTHandler) {
+	_ = "STUB: not implemented"
 	// TODO: Register tx handlers.
+	return
 }

@@ -5,9 +5,7 @@ import (
 
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/cachekv"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/dbadapter"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/tracekv"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
 
@@ -22,36 +20,48 @@ type Store struct {
 	dbadapter.Store
 }
 
-func NewStore() *Store {
-	return NewStoreWithDB(dbm.NewMemDB())
-}
+func NewStore() *Store { _ = "STUB: not implemented"; return nil }
 
-func NewStoreWithDB(db *dbm.MemDB) *Store {
-	return &Store{Store: dbadapter.Store{DB: db}}
-}
+func NewStoreWithDB(db *dbm.MemDB) *Store { _ = "STUB: not implemented"; return nil }
 
 // GetStoreType returns the Store's type.
 func (s Store) GetStoreType() types.StoreType {
-	return types.StoreTypeMemory
+	_ = "STUB: not implemented"
+	return *new(types.StoreType)
 }
 
 // CacheWrap branches the underlying store.
 func (s Store) CacheWrap(storeKey types.StoreKey) types.CacheWrap {
-	return cachekv.NewStore(s, storeKey, types.DefaultCacheSizeLimit)
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 // CacheWrapWithTrace implements KVStore.
 func (s Store) CacheWrapWithTrace(storeKey types.StoreKey, w io.Writer, tc types.TraceContext) types.CacheWrap {
-	return cachekv.NewStore(tracekv.NewStore(s, w, tc), storeKey, types.DefaultCacheSizeLimit)
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 // Commit performs a no-op as entries are persistent between commitments.
-func (s *Store) Commit(_ bool) (id types.CommitID) { return }
+func (s *Store) Commit(_ bool) (id types.CommitID) {
+	_ = "STUB: not implemented"
+	return *new(types.CommitID)
+}
 
-func (s *Store) SetPruning(pruning types.PruningOptions) {}
+func (s *Store) SetPruning(pruning types.PruningOptions) {
+	_ = "STUB: not implemented"
 
-// GetPruning is a no-op as pruning options cannot be directly set on this store.
-// They must be set on the root commit multi-store.
-func (s *Store) GetPruning() types.PruningOptions { return types.PruningOptions{} }
+	// GetPruning is a no-op as pruning options cannot be directly set on this store.
+	// They must be set on the root commit multi-store.
+	return
+}
 
-func (s Store) LastCommitID() (id types.CommitID) { return }
+func (s *Store) GetPruning() types.PruningOptions {
+	_ = "STUB: not implemented"
+	return *new(types.PruningOptions)
+}
+
+func (s Store) LastCommitID() (id types.CommitID) {
+	_ = "STUB: not implemented"
+	return *new(types.CommitID)
+}

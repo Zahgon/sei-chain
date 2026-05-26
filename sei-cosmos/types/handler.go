@@ -13,8 +13,8 @@ type AnteDecorator interface {
 }
 
 func ChainAnteDecorators(chain ...AnteDecorator) AnteHandler {
-	anteHandlerChainFunc := chainAnteDecoratorHandlers(chain...)
-	return anteHandlerChainFunc
+	_ = "STUB: not implemented"
+	return *new(AnteHandler)
 }
 
 // ChainDecorator chains AnteDecorators together with each AnteDecorator
@@ -32,19 +32,11 @@ func ChainAnteDecorators(chain ...AnteDecorator) AnteHandler {
 // Use `ante.SetUpContextDecorator` or a custom Decorator with similar functionality.
 // Returns nil when no AnteDecorator are supplied.
 func chainAnteDecoratorHandlers(chain ...AnteDecorator) AnteHandler {
-	if len(chain) == 0 {
-		return nil
-	}
-
-	// handle non-terminated decorators chain
-	if (chain[len(chain)-1] != Terminator{}) {
-		chain = append(chain, Terminator{})
-	}
-
-	return func(ctx Context, tx Tx, simulate bool) (Context, error) {
-		return chain[0].AnteHandle(ctx, tx, simulate, chainAnteDecoratorHandlers(chain[1:]...))
-	}
+	_ = "STUB: not implemented"
+	return *new(AnteHandler)
 }
+
+// handle non-terminated decorators chain
 
 // Terminator AnteDecorator will get added to the chain to simplify decorator code
 // Don't need to check if next == nil further up the chain
@@ -68,5 +60,6 @@ type Terminator struct{}
 
 // Simply return provided Context and nil error
 func (t Terminator) AnteHandle(ctx Context, _ Tx, _ bool, _ AnteHandler) (Context, error) {
-	return ctx, nil
+	_ = "STUB: not implemented"
+	return *new(Context), nil
 }

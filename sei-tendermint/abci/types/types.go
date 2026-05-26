@@ -1,15 +1,11 @@
 package types
 
 import (
-	"bytes"
 	"encoding/json"
-	"errors"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/gogo/protobuf/jsonpb"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
 )
 
 const (
@@ -17,59 +13,34 @@ const (
 )
 
 // IsOK returns true if Code is OK.
-func (r ResponseCheckTx) IsOK() bool {
-	return r.Code == CodeTypeOK
-}
+func (r ResponseCheckTx) IsOK() bool { _ = "STUB: not implemented"; return false }
 
-func (r ResponseCheckTx) Err() error {
-	if r.IsOK() {
-		return nil
-	}
-	return errors.New(r.Log)
-}
+func (r ResponseCheckTx) Err() error { _ = "STUB: not implemented"; return nil }
 
 // IsErr returns true if Code is something other than OK.
-func (r ResponseCheckTx) IsErr() bool {
-	return r.Code != CodeTypeOK
-}
+func (r ResponseCheckTx) IsErr() bool { _ = "STUB: not implemented"; return false }
 
 // IsOK returns true if Code is OK.
-func (r ResponseDeliverTx) IsOK() bool {
-	return r.Code == CodeTypeOK
-}
+func (r ResponseDeliverTx) IsOK() bool { _ = "STUB: not implemented"; return false }
 
 // IsErr returns true if Code is something other than OK.
-func (r ResponseDeliverTx) IsErr() bool {
-	return r.Code != CodeTypeOK
-}
+func (r ResponseDeliverTx) IsErr() bool { _ = "STUB: not implemented"; return false }
 
 // IsOK returns true if Code is OK.
-func (r ExecTxResult) IsOK() bool {
-	return r.Code == CodeTypeOK
-}
+func (r ExecTxResult) IsOK() bool { _ = "STUB: not implemented"; return false }
 
 // IsErr returns true if Code is something other than OK.
-func (r ExecTxResult) IsErr() bool {
-	return r.Code != CodeTypeOK
-}
+func (r ExecTxResult) IsErr() bool { _ = "STUB: not implemented"; return false }
 
 // IsOK returns true if Code is OK.
-func (r ResponseQuery) IsOK() bool {
-	return r.Code == CodeTypeOK
-}
+func (r ResponseQuery) IsOK() bool { _ = "STUB: not implemented"; return false }
 
 // IsErr returns true if Code is something other than OK.
-func (r ResponseQuery) IsErr() bool {
-	return r.Code != CodeTypeOK
-}
+func (r ResponseQuery) IsErr() bool { _ = "STUB: not implemented"; return false }
 
-func (r ResponseProcessProposal) IsAccepted() bool {
-	return r.Status == ResponseProcessProposal_ACCEPT
-}
+func (r ResponseProcessProposal) IsAccepted() bool { _ = "STUB: not implemented"; return false }
 
-func (r ResponseProcessProposal) IsStatusUnknown() bool {
-	return r.Status == ResponseProcessProposal_UNKNOWN
-}
+func (r ResponseProcessProposal) IsStatusUnknown() bool { _ = "STUB: not implemented"; return false }
 
 //---------------------------------------------------------------------------
 // override JSON marshaling so we emit defaults (ie. disable omitempty)
@@ -82,55 +53,28 @@ var (
 	jsonpbUnmarshaller = jsonpb.Unmarshaler{}
 )
 
-func (r *ResponseCheckTx) MarshalJSON() ([]byte, error) {
-	s, err := jsonpbMarshaller.MarshalToString(r)
-	return []byte(s), err
-}
+func (r *ResponseCheckTx) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (r *ResponseCheckTx) UnmarshalJSON(b []byte) error {
-	reader := bytes.NewBuffer(b)
-	return jsonpbUnmarshaller.Unmarshal(reader, r)
-}
+func (r *ResponseCheckTx) UnmarshalJSON(b []byte) error { _ = "STUB: not implemented"; return nil }
 
 func (r *ResponseDeliverTx) MarshalJSON() ([]byte, error) {
-	s, err := jsonpbMarshaller.MarshalToString(r)
-	return []byte(s), err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (r *ResponseDeliverTx) UnmarshalJSON(b []byte) error {
-	reader := bytes.NewBuffer(b)
-	return jsonpbUnmarshaller.Unmarshal(reader, r)
-}
+func (r *ResponseDeliverTx) UnmarshalJSON(b []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (r *ResponseQuery) MarshalJSON() ([]byte, error) {
-	s, err := jsonpbMarshaller.MarshalToString(r)
-	return []byte(s), err
-}
+func (r *ResponseQuery) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (r *ResponseQuery) UnmarshalJSON(b []byte) error {
-	reader := bytes.NewBuffer(b)
-	return jsonpbUnmarshaller.Unmarshal(reader, r)
-}
+func (r *ResponseQuery) UnmarshalJSON(b []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (r *ResponseCommit) MarshalJSON() ([]byte, error) {
-	s, err := jsonpbMarshaller.MarshalToString(r)
-	return []byte(s), err
-}
+func (r *ResponseCommit) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (r *ResponseCommit) UnmarshalJSON(b []byte) error {
-	reader := bytes.NewBuffer(b)
-	return jsonpbUnmarshaller.Unmarshal(reader, r)
-}
+func (r *ResponseCommit) UnmarshalJSON(b []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (r *EventAttribute) MarshalJSON() ([]byte, error) {
-	s, err := jsonpbMarshaller.MarshalToString(r)
-	return []byte(s), err
-}
+func (r *EventAttribute) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (r *EventAttribute) UnmarshalJSON(b []byte) error {
-	reader := bytes.NewBuffer(b)
-	return jsonpbUnmarshaller.Unmarshal(reader, r)
-}
+func (r *EventAttribute) UnmarshalJSON(b []byte) error { _ = "STUB: not implemented"; return nil }
 
 // validatorUpdateJSON is the JSON encoding of a validator update.
 //
@@ -141,34 +85,9 @@ type validatorUpdateJSON struct {
 	Power  int64           `json:"power,string"`
 }
 
-func (v *ValidatorUpdate) MarshalJSON() ([]byte, error) {
-	key, err := crypto.PubKeyFromProto(v.PubKey)
-	if err != nil {
-		return nil, err
-	}
-	jkey, err := jsontypes.Marshal(key)
-	if err != nil {
-		return nil, err
-	}
-	return json.Marshal(validatorUpdateJSON{
-		PubKey: jkey,
-		Power:  v.GetPower(),
-	})
-}
+func (v *ValidatorUpdate) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (v *ValidatorUpdate) UnmarshalJSON(data []byte) error {
-	var vu validatorUpdateJSON
-	if err := json.Unmarshal(data, &vu); err != nil {
-		return err
-	}
-	var key crypto.PubKey
-	if err := jsontypes.Unmarshal(vu.PubKey, &key); err != nil {
-		return err
-	}
-	v.PubKey = crypto.PubKeyToProto(key)
-	v.Power = vu.Power
-	return nil
-}
+func (v *ValidatorUpdate) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // Some compile time assertions to ensure we don't
 // have accidental runtime surprises later on.
@@ -193,12 +112,8 @@ var _ jsonRoundTripper = (*EventAttribute)(nil)
 // deterministicExecTxResult constructs a copy of response that omits
 // non-deterministic fields. The input response is not modified.
 func deterministicExecTxResult(response *ExecTxResult) *ExecTxResult {
-	return &ExecTxResult{
-		Code:      response.Code,
-		Data:      response.Data,
-		GasWanted: response.GasWanted,
-		GasUsed:   response.GasUsed,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MarshalTxResults encodes the the TxResults as a list of byte
@@ -206,16 +121,8 @@ func deterministicExecTxResult(response *ExecTxResult) *ExecTxResult {
 // so that the resulting data can be used for hash comparisons and used
 // in Merkle proofs.
 func MarshalTxResults(r []*ExecTxResult) ([][]byte, error) {
-	s := make([][]byte, len(r))
-	for i, e := range r {
-		d := deterministicExecTxResult(e)
-		b, err := d.Marshal()
-		if err != nil {
-			return nil, err
-		}
-		s[i] = b
-	}
-	return s, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 type PendingTxCheckerResponse int

@@ -2,12 +2,9 @@ package controller
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	capabilitytypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/types"
 
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/controller/keeper"
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/controller/types"
-	icatypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/types"
 	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
 	porttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/05-port/types"
 	ibcexported "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
@@ -21,10 +18,8 @@ type IBCModule struct {
 
 // NewIBCModule creates a new IBCModule given the associated keeper and underlying application
 func NewIBCModule(k keeper.Keeper, app porttypes.IBCModule) IBCModule {
-	return IBCModule{
-		keeper: k,
-		app:    app,
-	}
+	_ = "STUB: not implemented"
+	return *new(IBCModule)
 }
 
 // OnChanOpenInit implements the IBCModule interface
@@ -43,18 +38,11 @@ func (im IBCModule) OnChanOpenInit(
 	counterparty channeltypes.Counterparty,
 	version string,
 ) error {
-	if !im.keeper.IsControllerEnabled(ctx) {
-		return types.ErrControllerSubModuleDisabled
-	}
-
-	if err := im.keeper.OnChanOpenInit(ctx, order, connectionHops, portID, channelID, chanCap, counterparty, version); err != nil {
-		return err
-	}
-
-	// call underlying app's OnChanOpenInit callback with the appVersion
-	return im.app.OnChanOpenInit(ctx, order, connectionHops, portID, channelID,
-		chanCap, counterparty, version)
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// call underlying app's OnChanOpenInit callback with the appVersion
 
 // OnChanOpenTry implements the IBCModule interface
 func (im IBCModule) OnChanOpenTry(
@@ -67,7 +55,8 @@ func (im IBCModule) OnChanOpenTry(
 	counterparty channeltypes.Counterparty,
 	counterpartyVersion string,
 ) (string, error) {
-	return "", sdkerrors.Wrap(icatypes.ErrInvalidChannelFlow, "channel handshake must be initiated by controller chain")
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // OnChanOpenAck implements the IBCModule interface
@@ -83,17 +72,11 @@ func (im IBCModule) OnChanOpenAck(
 	counterpartyChannelID string,
 	counterpartyVersion string,
 ) error {
-	if !im.keeper.IsControllerEnabled(ctx) {
-		return types.ErrControllerSubModuleDisabled
-	}
-
-	if err := im.keeper.OnChanOpenAck(ctx, portID, channelID, counterpartyVersion); err != nil {
-		return err
-	}
-
-	// call underlying app's OnChanOpenAck callback with the counterparty app version.
-	return im.app.OnChanOpenAck(ctx, portID, channelID, counterpartyChannelID, counterpartyVersion)
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// call underlying app's OnChanOpenAck callback with the counterparty app version.
 
 // OnChanOpenAck implements the IBCModule interface
 func (im IBCModule) OnChanOpenConfirm(
@@ -101,7 +84,8 @@ func (im IBCModule) OnChanOpenConfirm(
 	portID,
 	channelID string,
 ) error {
-	return sdkerrors.Wrap(icatypes.ErrInvalidChannelFlow, "channel handshake must be initiated by controller chain")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // OnChanCloseInit implements the IBCModule interface
@@ -110,8 +94,9 @@ func (im IBCModule) OnChanCloseInit(
 	portID,
 	channelID string,
 ) error {
+	_ = "STUB: not implemented"
 	// Disallow user-initiated channel closing for interchain account channels
-	return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "user cannot close channel")
+	return nil
 }
 
 // OnChanCloseConfirm implements the IBCModule interface
@@ -120,7 +105,8 @@ func (im IBCModule) OnChanCloseConfirm(
 	portID,
 	channelID string,
 ) error {
-	return im.keeper.OnChanCloseConfirm(ctx, portID, channelID)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // OnRecvPacket implements the IBCModule interface
@@ -129,7 +115,8 @@ func (im IBCModule) OnRecvPacket(
 	packet channeltypes.Packet,
 	_ sdk.AccAddress,
 ) ibcexported.Acknowledgement {
-	return channeltypes.NewErrorAcknowledgement("cannot receive packet on controller chain")
+	_ = "STUB: not implemented"
+	return *new(ibcexported.Acknowledgement)
 }
 
 // OnAcknowledgementPacket implements the IBCModule interface
@@ -139,13 +126,11 @@ func (im IBCModule) OnAcknowledgementPacket(
 	acknowledgement []byte,
 	relayer sdk.AccAddress,
 ) error {
-	if !im.keeper.IsControllerEnabled(ctx) {
-		return types.ErrControllerSubModuleDisabled
-	}
-
-	// call underlying app's OnAcknowledgementPacket callback.
-	return im.app.OnAcknowledgementPacket(ctx, packet, acknowledgement, relayer)
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// call underlying app's OnAcknowledgementPacket callback.
 
 // OnTimeoutPacket implements the IBCModule interface
 func (im IBCModule) OnTimeoutPacket(
@@ -153,13 +138,6 @@ func (im IBCModule) OnTimeoutPacket(
 	packet channeltypes.Packet,
 	relayer sdk.AccAddress,
 ) error {
-	if !im.keeper.IsControllerEnabled(ctx) {
-		return types.ErrControllerSubModuleDisabled
-	}
-
-	if err := im.keeper.OnTimeoutPacket(ctx, packet); err != nil {
-		return err
-	}
-
-	return im.app.OnTimeoutPacket(ctx, packet, relayer)
+	_ = "STUB: not implemented"
+	return nil
 }

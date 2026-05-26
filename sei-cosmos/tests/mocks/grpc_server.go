@@ -5,8 +5,6 @@
 package mocks
 
 import (
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	grpc "google.golang.org/grpc"
 )
@@ -23,25 +21,23 @@ type MockServerMockRecorder struct {
 }
 
 // NewMockServer creates a new mock instance.
-func NewMockServer(ctrl *gomock.Controller) *MockServer {
-	mock := &MockServer{ctrl: ctrl}
-	mock.recorder = &MockServerMockRecorder{mock}
-	return mock
-}
+func NewMockServer(ctrl *gomock.Controller) *MockServer { _ = "STUB: not implemented"; return nil }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockServer) EXPECT() *MockServerMockRecorder {
-	return m.recorder
+	_ = "STUB: not implemented"
+
+	// RegisterService mocks base method.
+	return nil
 }
 
-// RegisterService mocks base method.
 func (m *MockServer) RegisterService(arg0 *grpc.ServiceDesc, arg1 interface{}) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "RegisterService", arg0, arg1)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterService indicates an expected call of RegisterService.
 func (mr *MockServerMockRecorder) RegisterService(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RegisterService", reflect.TypeOf((*MockServer)(nil).RegisterService), arg0, arg1)
+	_ = "STUB: not implemented"
+	return nil
 }

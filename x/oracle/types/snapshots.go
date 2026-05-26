@@ -1,9 +1,5 @@
 package types
 
-import (
-	"gopkg.in/yaml.v2"
-)
-
 // OracleExchangeRates - array of OracleExchangeRate
 type PriceSnapshots []PriceSnapshot
 
@@ -13,27 +9,17 @@ type (
 )
 
 // String implements fmt.Stringer interface
-func (snapshots PriceSnapshots) String() string {
-	out, _ := yaml.Marshal(snapshots)
-	return string(out)
-}
+func (snapshots PriceSnapshots) String() string { _ = "STUB: not implemented"; return "" }
 
 // String implements fmt.Stringer interface
-func (items PriceSnapshotItems) String() string {
-	out, _ := yaml.Marshal(items)
-	return string(out)
-}
+func (items PriceSnapshotItems) String() string { _ = "STUB: not implemented"; return "" }
 
 func NewPriceSnapshotItem(denom string, exchangeRate OracleExchangeRate) PriceSnapshotItem {
-	return PriceSnapshotItem{
-		Denom:              denom,
-		OracleExchangeRate: exchangeRate,
-	}
+	_ = "STUB: not implemented"
+	return *new(PriceSnapshotItem)
 }
 
 func NewPriceSnapshot(priceSnapshotItems PriceSnapshotItems, snapshotTimestamp int64) PriceSnapshot {
-	return PriceSnapshot{
-		SnapshotTimestamp:  snapshotTimestamp,
-		PriceSnapshotItems: priceSnapshotItems,
-	}
+	_ = "STUB: not implemented"
+	return *new(PriceSnapshot)
 }

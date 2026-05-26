@@ -2,7 +2,6 @@ package null
 
 import (
 	"context"
-	"errors"
 
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query"
@@ -16,19 +15,21 @@ type TxIndex struct{}
 
 // Get on a TxIndex is disabled and panics when invoked.
 func (txi *TxIndex) Get(hash []byte) (*abci.TxResultV2, error) {
-	return nil, errors.New(`indexing is disabled (set 'tx_index = "kv"' in config)`)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // AddBatch is a noop and always returns nil.
 func (txi *TxIndex) AddBatch(batch *indexer.Batch) error {
+	_ = "STUB: not implemented"
+
+	// Index is a noop and always returns nil.
 	return nil
 }
 
-// Index is a noop and always returns nil.
-func (txi *TxIndex) Index(results []*abci.TxResultV2) error {
-	return nil
-}
+func (txi *TxIndex) Index(results []*abci.TxResultV2) error { _ = "STUB: not implemented"; return nil }
 
 func (txi *TxIndex) Search(ctx context.Context, q *query.Query) ([]*abci.TxResultV2, error) {
-	return []*abci.TxResultV2{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

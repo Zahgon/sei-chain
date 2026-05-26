@@ -24,14 +24,13 @@ type MockTendermintRPC struct {
 // NewMockTendermintRPC returns a mock TendermintRPC implementation.
 // It is used for CLI testing.
 func NewMockTendermintRPC(respQuery abci.ResponseQuery, client rpcclientmock.Client) MockTendermintRPC {
-	return MockTendermintRPC{
-		Client:        client,
-		responseQuery: respQuery,
-	}
+	_ = "STUB: not implemented"
+	return *new(MockTendermintRPC)
 }
 
 func (MockTendermintRPC) BroadcastTxSync(context.Context, tmtypes.Tx) (*coretypes.ResultBroadcastTx, error) {
-	return &coretypes.ResultBroadcastTx{Code: 0}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m MockTendermintRPC) ABCIQueryWithOptions(
@@ -40,5 +39,6 @@ func (m MockTendermintRPC) ABCIQueryWithOptions(
 	_ tmbytes.HexBytes,
 	_ rpcclient.ABCIQueryOptions,
 ) (*coretypes.ResultABCIQuery, error) {
-	return &coretypes.ResultABCIQuery{Response: m.responseQuery}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

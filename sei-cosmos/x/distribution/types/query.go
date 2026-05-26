@@ -1,9 +1,6 @@
 package types
 
 import (
-	"fmt"
-	"strings"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
@@ -17,23 +14,15 @@ type QueryDelegatorTotalRewardsResponse struct {
 // NewQueryDelegatorTotalRewardsResponse constructs a QueryDelegatorTotalRewardsResponse
 func NewQueryDelegatorTotalRewardsResponse(rewards []DelegationDelegatorReward,
 	total sdk.DecCoins) QueryDelegatorTotalRewardsResponse {
-	return QueryDelegatorTotalRewardsResponse{Rewards: rewards, Total: total}
+	_ = "STUB: not implemented"
+	return *new(QueryDelegatorTotalRewardsResponse)
 }
 
-func (res QueryDelegatorTotalRewardsResponse) String() string {
-	out := "Delegator Total Rewards:\n"
-	out += "  Rewards:"
-	for _, reward := range res.Rewards {
-		out += fmt.Sprintf(`  
-	ValidatorAddress: %s
-	Reward: %s`, reward.ValidatorAddress, reward.Reward)
-	}
-	out += fmt.Sprintf("\n  Total: %s\n", res.Total)
-	return strings.TrimSpace(out)
-}
+func (res QueryDelegatorTotalRewardsResponse) String() string { _ = "STUB: not implemented"; return "" }
 
 // NewDelegationDelegatorReward constructs a DelegationDelegatorReward.
 func NewDelegationDelegatorReward(valAddr sdk.ValAddress,
 	reward sdk.DecCoins) DelegationDelegatorReward {
-	return DelegationDelegatorReward{ValidatorAddress: valAddr.String(), Reward: reward}
+	_ = "STUB: not implemented"
+	return *new(DelegationDelegatorReward)
 }

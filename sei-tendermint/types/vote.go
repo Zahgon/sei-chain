@@ -1,14 +1,10 @@
 package types
 
 import (
-	"bytes"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/protoio"
-	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
@@ -32,15 +28,11 @@ type ErrVoteConflictingVotes struct {
 	VoteB *Vote
 }
 
-func (err *ErrVoteConflictingVotes) Error() string {
-	return fmt.Sprintf("conflicting votes from validator %X", err.VoteA.ValidatorAddress)
-}
+func (err *ErrVoteConflictingVotes) Error() string { _ = "STUB: not implemented"; return "" }
 
 func NewConflictingVoteError(vote1, vote2 *Vote) *ErrVoteConflictingVotes {
-	return &ErrVoteConflictingVotes{
-		VoteA: vote1,
-		VoteB: vote2,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Address is hex bytes.
@@ -63,54 +55,10 @@ type Vote struct {
 // our Vote domain type. No validation is performed on the resulting vote -
 // this is left up to the caller to decide whether to call ValidateBasic or
 // ValidateWithExtension.
-func VoteFromProto(pv *tmproto.Vote) (*Vote, error) {
-	blockID, err := BlockIDFromProto(&pv.BlockID)
-	if err != nil {
-		return nil, err
-	}
-	signature := utils.None[crypto.Sig]()
-	if len(pv.Signature) > 0 {
-		sig, err := crypto.SigFromBytes(pv.Signature)
-		if err != nil {
-			return nil, fmt.Errorf("signature: %w", err)
-		}
-		signature = utils.Some(sig)
-	}
-	return &Vote{
-		Type:             pv.Type,
-		Height:           pv.Height,
-		Round:            pv.Round,
-		BlockID:          *blockID,
-		Timestamp:        pv.Timestamp,
-		ValidatorAddress: pv.ValidatorAddress,
-		ValidatorIndex:   pv.ValidatorIndex,
-		Signature:        signature,
-	}, nil
-}
+func VoteFromProto(pv *tmproto.Vote) (*Vote, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // CommitSig converts the Vote to a CommitSig.
-func (vote *Vote) CommitSig() CommitSig {
-	if vote == nil {
-		return NewCommitSigAbsent()
-	}
-
-	var blockIDFlag BlockIDFlag
-	switch {
-	case vote.BlockID.IsComplete():
-		blockIDFlag = BlockIDFlagCommit
-	case vote.BlockID.IsNil():
-		blockIDFlag = BlockIDFlagNil
-	default:
-		panic(fmt.Sprintf("Invalid vote %v - expected BlockID to be either empty or complete", vote))
-	}
-
-	return CommitSig{
-		BlockIDFlag:      blockIDFlag,
-		ValidatorAddress: vote.ValidatorAddress,
-		Timestamp:        vote.Timestamp,
-		Signature:        vote.Signature,
-	}
-}
+func (vote *Vote) CommitSig() CommitSig { _ = "STUB: not implemented"; return *new(CommitSig) }
 
 // VoteSignBytes returns the proto-encoding of the canonicalized Vote, for
 // signing. Panics if the marshaling fails.
@@ -121,19 +69,11 @@ func (vote *Vote) CommitSig() CommitSig {
 //
 // See CanonicalizeVote
 func VoteSignBytes(chainID string, vote *tmproto.Vote) []byte {
-	pb := CanonicalizeVote(chainID, vote)
-	bz, err := protoio.MarshalDelimited(&pb)
-	if err != nil {
-		panic(err)
-	}
-
-	return bz
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (vote *Vote) Copy() *Vote {
-	voteCopy := *vote
-	return &voteCopy
-}
+func (vote *Vote) Copy() *Vote { _ = "STUB: not implemented"; return nil }
 
 // String returns a string representation of Vote.
 //
@@ -147,138 +87,35 @@ func (vote *Vote) Copy() *Vote {
 // 8. first 6 bytes of signature
 // 9. first 6 bytes of vote extension
 // 10. timestamp
-func (vote *Vote) String() string {
-	if vote == nil {
-		return nilVoteStr
-	}
-
-	var typeString string
-	switch vote.Type {
-	case tmproto.PrevoteType:
-		typeString = "Prevote"
-	case tmproto.PrecommitType:
-		typeString = "Precommit"
-	default:
-		panic("Unknown vote type")
-	}
-
-	var sigBytes []byte
-	if sig, ok := vote.Signature.Get(); ok {
-		sigBytes = sig.Bytes()
-	}
-
-	return fmt.Sprintf("Vote{index=%v:%X %v/%02d/%v(%v) %X %X @ %s}",
-		vote.ValidatorIndex,
-		vote.ValidatorAddress,
-		vote.Height,
-		vote.Round,
-		vote.Type,
-		typeString,
-		tmbytes.Fingerprint(vote.BlockID.Hash),
-		tmbytes.Fingerprint(sigBytes),
-		CanonicalTime(vote.Timestamp),
-	)
-}
+func (vote *Vote) String() string { _ = "STUB: not implemented"; return "" }
 
 func (vote *Vote) verifyAndReturnProto(chainID string, pubKey crypto.PubKey) (*tmproto.Vote, error) {
-	if !bytes.Equal(pubKey.Address(), vote.ValidatorAddress) {
-		return nil, ErrVoteInvalidValidatorAddress
-	}
-	v := vote.ToProto()
-	sig, ok := vote.Signature.Get()
-	if !ok {
-		return nil, ErrVoteInvalidSignature
-	}
-	if err := pubKey.Verify(VoteSignBytes(chainID, v), sig); err != nil {
-		return nil, ErrVoteInvalidSignature
-	}
-	return v, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Verify checks whether the signature associated with this vote corresponds to
 // the given chain ID and public key. This function does not validate vote
 // extension signatures - to do so, use VerifyWithExtension instead.
 func (vote *Vote) Verify(chainID string, pubKey crypto.PubKey) error {
-	_, err := vote.verifyAndReturnProto(chainID, pubKey)
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateBasic checks whether the vote is well-formed. It does not, however,
 // check vote extensions - for vote validation with vote extension validation,
 // use ValidateWithExtension.
-func (vote *Vote) ValidateBasic() error {
-	if !IsVoteTypeValid(vote.Type) {
-		return errors.New("invalid Type")
-	}
+func (vote *Vote) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-	if vote.Height < 0 {
-		return errors.New("negative Height")
-	}
+// NOTE: Timestamp validation is subtle and handled elsewhere.
 
-	if vote.Round < 0 {
-		return errors.New("negative Round")
-	}
-
-	// NOTE: Timestamp validation is subtle and handled elsewhere.
-
-	if err := vote.BlockID.ValidateBasic(); err != nil {
-		return fmt.Errorf("wrong BlockID: %w", err)
-	}
-
-	// BlockID.ValidateBasic would not err if we for instance have an empty hash but a
-	// non-empty PartsSetHeader:
-	if !vote.BlockID.IsNil() && !vote.BlockID.IsComplete() {
-		return fmt.Errorf("blockID must be either empty or complete, got: %v", vote.BlockID)
-	}
-
-	if len(vote.ValidatorAddress) != crypto.AddressSize {
-		return fmt.Errorf("expected ValidatorAddress size to be %d bytes, got %d bytes",
-			crypto.AddressSize,
-			len(vote.ValidatorAddress),
-		)
-	}
-	if vote.ValidatorIndex < 0 {
-		return errors.New("negative ValidatorIndex")
-	}
-	return nil
-}
+// BlockID.ValidateBasic would not err if we for instance have an empty hash but a
+// non-empty PartsSetHeader:
 
 // ToProto converts the handwritten type to proto generated type
 // return type, nil if everything converts safely, otherwise nil, error
-func (vote *Vote) ToProto() *tmproto.Vote {
-	if vote == nil {
-		return nil
-	}
+func (vote *Vote) ToProto() *tmproto.Vote { _ = "STUB: not implemented"; return nil }
 
-	var signature []byte
-	if sig, ok := vote.Signature.Get(); ok {
-		signature = sig.Bytes()
-	}
+func VotesToProto(votes []*Vote) []*tmproto.Vote { _ = "STUB: not implemented"; return nil }
 
-	return &tmproto.Vote{
-		Type:             vote.Type,
-		Height:           vote.Height,
-		Round:            vote.Round,
-		BlockID:          vote.BlockID.ToProto(),
-		Timestamp:        vote.Timestamp,
-		ValidatorAddress: vote.ValidatorAddress,
-		ValidatorIndex:   vote.ValidatorIndex,
-		Signature:        signature,
-	}
-}
-
-func VotesToProto(votes []*Vote) []*tmproto.Vote {
-	if votes == nil {
-		return nil
-	}
-
-	res := make([]*tmproto.Vote, 0, len(votes))
-	for _, vote := range votes {
-		v := vote.ToProto()
-		// protobuf crashes when serializing "repeated" fields with nil elements
-		if v != nil {
-			res = append(res, v)
-		}
-	}
-	return res
-}
+// protobuf crashes when serializing "repeated" fields with nil elements

@@ -2,20 +2,11 @@ package evmrpc
 
 import (
 	"context"
-	"encoding/hex"
-	"errors"
-	"fmt"
-	"math"
-	"strings"
-	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/x/evm/keeper"
-	"github.com/sei-protocol/sei-chain/x/evm/types"
-	"github.com/sei-protocol/sei-chain/x/evm/types/ethtx"
 )
 
 type AssociationAPI struct {
@@ -37,15 +28,8 @@ func NewAssociationAPI(
 	connectionType ConnectionType,
 	watermarks *WatermarkManager,
 ) *AssociationAPI {
-	return &AssociationAPI{
-		tmClient:         tmClient,
-		keeper:           k,
-		ctxProvider:      ctxProvider,
-		txConfigProvider: txConfigProvider,
-		sendAPI:          sendAPI,
-		connectionType:   connectionType,
-		watermarks:       watermarks,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type AssociateRequest struct {
@@ -56,133 +40,30 @@ type AssociateRequest struct {
 }
 
 func (t *AssociationAPI) Associate(ctx context.Context, req *AssociateRequest) (returnErr error) {
-	startTime := time.Now()
-	defer func() {
-		recordMetricsWithError(ctx, "sei_associate", t.connectionType, startTime, returnErr, recover())
-	}()
-	rBytes, err := decodeHexString(req.R)
-	if err != nil {
-		return err
-	}
-	sBytes, err := decodeHexString(req.S)
-	if err != nil {
-		return err
-	}
-	vBytes, err := decodeHexString(req.V)
-	if err != nil {
-		return err
-	}
-
-	associateTx := ethtx.AssociateTx{
-		V:             vBytes,
-		R:             rBytes,
-		S:             sBytes,
-		CustomMessage: req.CustomMessage,
-	}
-
-	msg, err := types.NewMsgEVMTransaction(&associateTx)
-	if err != nil {
-		return err
-	}
-	txBuilder := t.sendAPI.txConfigProvider(LatestCtxHeight).NewTxBuilder()
-	if err = txBuilder.SetMsgs(msg); err != nil {
-		return err
-	}
-	txbz, encodeErr := t.sendAPI.txConfigProvider(LatestCtxHeight).TxEncoder()(txBuilder.GetTx())
-	if encodeErr != nil {
-		return encodeErr
-	}
-
-	res, broadcastError := t.tmClient.BroadcastTx(ctx, txbz)
-	if broadcastError != nil {
-		err = broadcastError
-	} else if res == nil {
-		err = errors.New("missing broadcast response")
-	} else if res.Code != 0 {
-		err = sdkerrors.ABCIError(sdkerrors.RootCodespace, res.Code, "")
-	}
-
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (t *AssociationAPI) GetSeiAddress(ctx context.Context, ethAddress common.Address) (result string, returnErr error) {
-	startTime := time.Now()
-	defer func() {
-		recordMetricsWithError(ctx, "sei_getSeiAddress", t.connectionType, startTime, returnErr, recover())
-	}()
-	seiAddress, found := t.keeper.GetSeiAddress(t.ctxProvider(LatestCtxHeight), ethAddress)
-	if !found {
-		return "", fmt.Errorf("failed to find Sei address for %s", ethAddress.Hex())
-	}
-
-	return seiAddress.String(), nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 func (t *AssociationAPI) GetEVMAddress(ctx context.Context, seiAddress string) (result string, returnErr error) {
-	startTime := time.Now()
-	defer func() {
-		recordMetricsWithError(ctx, "sei_getEVMAddress", t.connectionType, startTime, returnErr, recover())
-	}()
-	seiAddr, err := sdk.AccAddressFromBech32(seiAddress)
-	if err != nil {
-		return "", err
-	}
-	ethAddress, found := t.keeper.GetEVMAddress(t.ctxProvider(LatestCtxHeight), seiAddr)
-	if !found {
-		return "", fmt.Errorf("failed to find EVM address for %s", seiAddress)
-	}
-
-	return ethAddress.Hex(), nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
-func decodeHexString(hexString string) ([]byte, error) {
-	trimmed := strings.TrimPrefix(hexString, "0x")
-	if len(trimmed)%2 != 0 {
-		trimmed = "0" + trimmed
-	}
-	return hex.DecodeString(trimmed)
-}
+func decodeHexString(hexString string) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 func (t *AssociationAPI) GetCosmosTx(ctx context.Context, ethHash common.Hash) (result string, returnErr error) {
-	startTime := time.Now()
-	defer func() {
-		recordMetricsWithError(ctx, "sei_getCosmosTx", t.connectionType, startTime, returnErr, recover())
-	}()
-	receipt, err := t.keeper.GetReceipt(t.ctxProvider(LatestCtxHeight), ethHash)
-	if err != nil {
-		return "", err
-	}
-	if receipt.BlockNumber > math.MaxInt64 {
-		return "", fmt.Errorf("invalid block number: %d", receipt.BlockNumber)
-	}
-	height := int64(receipt.BlockNumber) //nolint:gosec
-	block, err := blockByNumberRespectingWatermarks(ctx, t.tmClient, t.watermarks, &height, 1)
-	if err != nil {
-		return "", err
-	}
-	if int(receipt.TransactionIndex) >= len(block.Block.Txs) {
-		return "", fmt.Errorf("transaction index %d out of range (block has %d txs)", receipt.TransactionIndex, len(block.Block.Txs))
-	}
-	return fmt.Sprintf("%X", block.Block.Txs[receipt.TransactionIndex].Hash()), nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
+//nolint:gosec
+
 func (t *AssociationAPI) GetEvmTx(ctx context.Context, cosmosHash string) (result string, returnErr error) {
-	startTime := time.Now()
-	defer func() {
-		recordMetricsWithError(ctx, "sei_getEvmTx", t.connectionType, startTime, returnErr, recover())
-	}()
-	hashBytes, err := hex.DecodeString(cosmosHash)
-	if err != nil {
-		return "", fmt.Errorf("failed to decode cosmosHash: %w", err)
-	}
-
-	txResponse, err := t.tmClient.Tx(ctx, hashBytes, false)
-	if err != nil {
-		return "", err
-	}
-	if txResponse.TxResult.EvmTxInfo == nil {
-		return "", fmt.Errorf("transaction not found")
-	}
-
-	return txResponse.TxResult.EvmTxInfo.TxHash, nil
+	_ = "STUB: not implemented"
+	return "", nil
 }

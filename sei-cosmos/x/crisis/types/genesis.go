@@ -1,29 +1,14 @@
 package types
 
 import (
-	"fmt"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
 // NewGenesisState creates a new GenesisState object
-func NewGenesisState(constantFee sdk.Coin) *GenesisState {
-	return &GenesisState{
-		ConstantFee: constantFee,
-	}
-}
+func NewGenesisState(constantFee sdk.Coin) *GenesisState { _ = "STUB: not implemented"; return nil }
 
 // DefaultGenesisState creates a default GenesisState object
-func DefaultGenesisState() *GenesisState {
-	return &GenesisState{
-		ConstantFee: sdk.NewCoin(sdk.DefaultBondDenom, sdk.NewInt(1000)),
-	}
-}
+func DefaultGenesisState() *GenesisState { _ = "STUB: not implemented"; return nil }
 
 // ValidateGenesis - validate crisis genesis data
-func ValidateGenesis(data *GenesisState) error {
-	if !data.ConstantFee.IsPositive() {
-		return fmt.Errorf("constant fee must be positive: %s", data.ConstantFee)
-	}
-	return nil
-}
+func ValidateGenesis(data *GenesisState) error { _ = "STUB: not implemented"; return nil }

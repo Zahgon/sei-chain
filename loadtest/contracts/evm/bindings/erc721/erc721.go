@@ -99,47 +99,32 @@ type Erc721TransactorRaw struct {
 
 // NewErc721 creates a new instance of Erc721, bound to a specific deployed contract.
 func NewErc721(address common.Address, backend bind.ContractBackend) (*Erc721, error) {
-	contract, err := bindErc721(address, backend, backend, backend)
-	if err != nil {
-		return nil, err
-	}
-	return &Erc721{Erc721Caller: Erc721Caller{contract: contract}, Erc721Transactor: Erc721Transactor{contract: contract}, Erc721Filterer: Erc721Filterer{contract: contract}}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewErc721Caller creates a new read-only instance of Erc721, bound to a specific deployed contract.
 func NewErc721Caller(address common.Address, caller bind.ContractCaller) (*Erc721Caller, error) {
-	contract, err := bindErc721(address, caller, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &Erc721Caller{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewErc721Transactor creates a new write-only instance of Erc721, bound to a specific deployed contract.
 func NewErc721Transactor(address common.Address, transactor bind.ContractTransactor) (*Erc721Transactor, error) {
-	contract, err := bindErc721(address, nil, transactor, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &Erc721Transactor{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewErc721Filterer creates a new log filterer instance of Erc721, bound to a specific deployed contract.
 func NewErc721Filterer(address common.Address, filterer bind.ContractFilterer) (*Erc721Filterer, error) {
-	contract, err := bindErc721(address, nil, nil, filterer)
-	if err != nil {
-		return nil, err
-	}
-	return &Erc721Filterer{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // bindErc721 binds a generic wrapper to an already deployed contract.
 func bindErc721(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := Erc721MetaData.GetAbi()
-	if err != nil {
-		return nil, err
-	}
-	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -147,18 +132,21 @@ func bindErc721(address common.Address, caller bind.ContractCaller, transactor b
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Erc721 *Erc721Raw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Erc721.Contract.Erc721Caller.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Erc721 *Erc721Raw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Erc721.Contract.Erc721Transactor.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Erc721 *Erc721Raw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Erc721.Contract.Erc721Transactor.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -166,320 +154,309 @@ func (_Erc721 *Erc721Raw) Transact(opts *bind.TransactOpts, method string, param
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Erc721 *Erc721CallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Erc721.Contract.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Erc721 *Erc721TransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Erc721.Contract.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Erc721 *Erc721TransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Erc721.Contract.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address owner) view returns(uint256)
 func (_Erc721 *Erc721Caller) BalanceOf(opts *bind.CallOpts, owner common.Address) (*big.Int, error) {
-	var out []interface{}
-	err := _Erc721.contract.Call(opts, &out, "balanceOf", owner)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address owner) view returns(uint256)
 func (_Erc721 *Erc721Session) BalanceOf(owner common.Address) (*big.Int, error) {
-	return _Erc721.Contract.BalanceOf(&_Erc721.CallOpts, owner)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BalanceOf is a free data retrieval call binding the contract method 0x70a08231.
 //
 // Solidity: function balanceOf(address owner) view returns(uint256)
 func (_Erc721 *Erc721CallerSession) BalanceOf(owner common.Address) (*big.Int, error) {
-	return _Erc721.Contract.BalanceOf(&_Erc721.CallOpts, owner)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetApproved is a free data retrieval call binding the contract method 0x081812fc.
 //
 // Solidity: function getApproved(uint256 id) view returns(address)
 func (_Erc721 *Erc721Caller) GetApproved(opts *bind.CallOpts, id *big.Int) (common.Address, error) {
-	var out []interface{}
-	err := _Erc721.contract.Call(opts, &out, "getApproved", id)
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // GetApproved is a free data retrieval call binding the contract method 0x081812fc.
 //
 // Solidity: function getApproved(uint256 id) view returns(address)
 func (_Erc721 *Erc721Session) GetApproved(id *big.Int) (common.Address, error) {
-	return _Erc721.Contract.GetApproved(&_Erc721.CallOpts, id)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // GetApproved is a free data retrieval call binding the contract method 0x081812fc.
 //
 // Solidity: function getApproved(uint256 id) view returns(address)
 func (_Erc721 *Erc721CallerSession) GetApproved(id *big.Int) (common.Address, error) {
-	return _Erc721.Contract.GetApproved(&_Erc721.CallOpts, id)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address , address ) view returns(bool)
 func (_Erc721 *Erc721Caller) IsApprovedForAll(opts *bind.CallOpts, arg0 common.Address, arg1 common.Address) (bool, error) {
-	var out []interface{}
-	err := _Erc721.contract.Call(opts, &out, "isApprovedForAll", arg0, arg1)
-
-	if err != nil {
-		return *new(bool), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address , address ) view returns(bool)
 func (_Erc721 *Erc721Session) IsApprovedForAll(arg0 common.Address, arg1 common.Address) (bool, error) {
-	return _Erc721.Contract.IsApprovedForAll(&_Erc721.CallOpts, arg0, arg1)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // IsApprovedForAll is a free data retrieval call binding the contract method 0xe985e9c5.
 //
 // Solidity: function isApprovedForAll(address , address ) view returns(bool)
 func (_Erc721 *Erc721CallerSession) IsApprovedForAll(arg0 common.Address, arg1 common.Address) (bool, error) {
-	return _Erc721.Contract.IsApprovedForAll(&_Erc721.CallOpts, arg0, arg1)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // OwnerOf is a free data retrieval call binding the contract method 0x6352211e.
 //
 // Solidity: function ownerOf(uint256 id) view returns(address owner)
 func (_Erc721 *Erc721Caller) OwnerOf(opts *bind.CallOpts, id *big.Int) (common.Address, error) {
-	var out []interface{}
-	err := _Erc721.contract.Call(opts, &out, "ownerOf", id)
-
-	if err != nil {
-		return *new(common.Address), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(common.Address)).(*common.Address)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // OwnerOf is a free data retrieval call binding the contract method 0x6352211e.
 //
 // Solidity: function ownerOf(uint256 id) view returns(address owner)
 func (_Erc721 *Erc721Session) OwnerOf(id *big.Int) (common.Address, error) {
-	return _Erc721.Contract.OwnerOf(&_Erc721.CallOpts, id)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // OwnerOf is a free data retrieval call binding the contract method 0x6352211e.
 //
 // Solidity: function ownerOf(uint256 id) view returns(address owner)
 func (_Erc721 *Erc721CallerSession) OwnerOf(id *big.Int) (common.Address, error) {
-	return _Erc721.Contract.OwnerOf(&_Erc721.CallOpts, id)
+	_ = "STUB: not implemented"
+	return *new(common.Address), nil
 }
 
 // SupportsInterface is a free data retrieval call binding the contract method 0x01ffc9a7.
 //
 // Solidity: function supportsInterface(bytes4 interfaceId) pure returns(bool)
 func (_Erc721 *Erc721Caller) SupportsInterface(opts *bind.CallOpts, interfaceId [4]byte) (bool, error) {
-	var out []interface{}
-	err := _Erc721.contract.Call(opts, &out, "supportsInterface", interfaceId)
-
-	if err != nil {
-		return *new(bool), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(bool)).(*bool)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // SupportsInterface is a free data retrieval call binding the contract method 0x01ffc9a7.
 //
 // Solidity: function supportsInterface(bytes4 interfaceId) pure returns(bool)
 func (_Erc721 *Erc721Session) SupportsInterface(interfaceId [4]byte) (bool, error) {
-	return _Erc721.Contract.SupportsInterface(&_Erc721.CallOpts, interfaceId)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // SupportsInterface is a free data retrieval call binding the contract method 0x01ffc9a7.
 //
 // Solidity: function supportsInterface(bytes4 interfaceId) pure returns(bool)
 func (_Erc721 *Erc721CallerSession) SupportsInterface(interfaceId [4]byte) (bool, error) {
-	return _Erc721.Contract.SupportsInterface(&_Erc721.CallOpts, interfaceId)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 id) returns()
 func (_Erc721 *Erc721Transactor) Approve(opts *bind.TransactOpts, spender common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.contract.Transact(opts, "approve", spender, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 id) returns()
 func (_Erc721 *Erc721Session) Approve(spender common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.Approve(&_Erc721.TransactOpts, spender, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Approve is a paid mutator transaction binding the contract method 0x095ea7b3.
 //
 // Solidity: function approve(address spender, uint256 id) returns()
 func (_Erc721 *Erc721TransactorSession) Approve(spender common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.Approve(&_Erc721.TransactOpts, spender, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Burn is a paid mutator transaction binding the contract method 0x42966c68.
 //
 // Solidity: function burn(uint256 id) returns()
 func (_Erc721 *Erc721Transactor) Burn(opts *bind.TransactOpts, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.contract.Transact(opts, "burn", id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Burn is a paid mutator transaction binding the contract method 0x42966c68.
 //
 // Solidity: function burn(uint256 id) returns()
 func (_Erc721 *Erc721Session) Burn(id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.Burn(&_Erc721.TransactOpts, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Burn is a paid mutator transaction binding the contract method 0x42966c68.
 //
 // Solidity: function burn(uint256 id) returns()
 func (_Erc721 *Erc721TransactorSession) Burn(id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.Burn(&_Erc721.TransactOpts, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Mint is a paid mutator transaction binding the contract method 0x40c10f19.
 //
 // Solidity: function mint(address to, uint256 id) returns()
 func (_Erc721 *Erc721Transactor) Mint(opts *bind.TransactOpts, to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.contract.Transact(opts, "mint", to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Mint is a paid mutator transaction binding the contract method 0x40c10f19.
 //
 // Solidity: function mint(address to, uint256 id) returns()
 func (_Erc721 *Erc721Session) Mint(to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.Mint(&_Erc721.TransactOpts, to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Mint is a paid mutator transaction binding the contract method 0x40c10f19.
 //
 // Solidity: function mint(address to, uint256 id) returns()
 func (_Erc721 *Erc721TransactorSession) Mint(to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.Mint(&_Erc721.TransactOpts, to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0x42842e0e.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id) returns()
 func (_Erc721 *Erc721Transactor) SafeTransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.contract.Transact(opts, "safeTransferFrom", from, to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0x42842e0e.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id) returns()
 func (_Erc721 *Erc721Session) SafeTransferFrom(from common.Address, to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.SafeTransferFrom(&_Erc721.TransactOpts, from, to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom is a paid mutator transaction binding the contract method 0x42842e0e.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id) returns()
 func (_Erc721 *Erc721TransactorSession) SafeTransferFrom(from common.Address, to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.SafeTransferFrom(&_Erc721.TransactOpts, from, to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom0 is a paid mutator transaction binding the contract method 0xb88d4fde.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id, bytes data) returns()
 func (_Erc721 *Erc721Transactor) SafeTransferFrom0(opts *bind.TransactOpts, from common.Address, to common.Address, id *big.Int, data []byte) (*types.Transaction, error) {
-	return _Erc721.contract.Transact(opts, "safeTransferFrom0", from, to, id, data)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom0 is a paid mutator transaction binding the contract method 0xb88d4fde.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id, bytes data) returns()
 func (_Erc721 *Erc721Session) SafeTransferFrom0(from common.Address, to common.Address, id *big.Int, data []byte) (*types.Transaction, error) {
-	return _Erc721.Contract.SafeTransferFrom0(&_Erc721.TransactOpts, from, to, id, data)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SafeTransferFrom0 is a paid mutator transaction binding the contract method 0xb88d4fde.
 //
 // Solidity: function safeTransferFrom(address from, address to, uint256 id, bytes data) returns()
 func (_Erc721 *Erc721TransactorSession) SafeTransferFrom0(from common.Address, to common.Address, id *big.Int, data []byte) (*types.Transaction, error) {
-	return _Erc721.Contract.SafeTransferFrom0(&_Erc721.TransactOpts, from, to, id, data)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
 func (_Erc721 *Erc721Transactor) SetApprovalForAll(opts *bind.TransactOpts, operator common.Address, approved bool) (*types.Transaction, error) {
-	return _Erc721.contract.Transact(opts, "setApprovalForAll", operator, approved)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
 func (_Erc721 *Erc721Session) SetApprovalForAll(operator common.Address, approved bool) (*types.Transaction, error) {
-	return _Erc721.Contract.SetApprovalForAll(&_Erc721.TransactOpts, operator, approved)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetApprovalForAll is a paid mutator transaction binding the contract method 0xa22cb465.
 //
 // Solidity: function setApprovalForAll(address operator, bool approved) returns()
 func (_Erc721 *Erc721TransactorSession) SetApprovalForAll(operator common.Address, approved bool) (*types.Transaction, error) {
-	return _Erc721.Contract.SetApprovalForAll(&_Erc721.TransactOpts, operator, approved)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 id) returns()
 func (_Erc721 *Erc721Transactor) TransferFrom(opts *bind.TransactOpts, from common.Address, to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.contract.Transact(opts, "transferFrom", from, to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 id) returns()
 func (_Erc721 *Erc721Session) TransferFrom(from common.Address, to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.TransferFrom(&_Erc721.TransactOpts, from, to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TransferFrom is a paid mutator transaction binding the contract method 0x23b872dd.
 //
 // Solidity: function transferFrom(address from, address to, uint256 id) returns()
 func (_Erc721 *Erc721TransactorSession) TransferFrom(from common.Address, to common.Address, id *big.Int) (*types.Transaction, error) {
-	return _Erc721.Contract.TransferFrom(&_Erc721.TransactOpts, from, to, id)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Erc721ApprovalIterator is returned from FilterApproval and is used to iterate over the raw logs and unpacked data for Approval events raised by the Erc721 contract.
@@ -499,55 +476,25 @@ type Erc721ApprovalIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *Erc721ApprovalIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(Erc721Approval)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(Erc721Approval)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *Erc721ApprovalIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *Erc721ApprovalIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *Erc721ApprovalIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Erc721Approval represents a Approval event raised by the Erc721 contract.
 type Erc721Approval struct {
@@ -561,87 +508,26 @@ type Erc721Approval struct {
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 indexed id)
 func (_Erc721 *Erc721Filterer) FilterApproval(opts *bind.FilterOpts, owner []common.Address, spender []common.Address, id []*big.Int) (*Erc721ApprovalIterator, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var spenderRule []interface{}
-	for _, spenderItem := range spender {
-		spenderRule = append(spenderRule, spenderItem)
-	}
-	var idRule []interface{}
-	for _, idItem := range id {
-		idRule = append(idRule, idItem)
-	}
-
-	logs, sub, err := _Erc721.contract.FilterLogs(opts, "Approval", ownerRule, spenderRule, idRule)
-	if err != nil {
-		return nil, err
-	}
-	return &Erc721ApprovalIterator{contract: _Erc721.contract, event: "Approval", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchApproval is a free log subscription operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 indexed id)
 func (_Erc721 *Erc721Filterer) WatchApproval(opts *bind.WatchOpts, sink chan<- *Erc721Approval, owner []common.Address, spender []common.Address, id []*big.Int) (event.Subscription, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var spenderRule []interface{}
-	for _, spenderItem := range spender {
-		spenderRule = append(spenderRule, spenderItem)
-	}
-	var idRule []interface{}
-	for _, idItem := range id {
-		idRule = append(idRule, idItem)
-	}
-
-	logs, sub, err := _Erc721.contract.WatchLogs(opts, "Approval", ownerRule, spenderRule, idRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(Erc721Approval)
-				if err := _Erc721.contract.UnpackLog(event, "Approval", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseApproval is a log parse operation binding the contract event 0x8c5be1e5ebec7d5bd14f71427d1e84f3dd0314c0f7b2291e5b200ac8c7c3b925.
 //
 // Solidity: event Approval(address indexed owner, address indexed spender, uint256 indexed id)
 func (_Erc721 *Erc721Filterer) ParseApproval(log types.Log) (*Erc721Approval, error) {
-	event := new(Erc721Approval)
-	if err := _Erc721.contract.UnpackLog(event, "Approval", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Erc721ApprovalForAllIterator is returned from FilterApprovalForAll and is used to iterate over the raw logs and unpacked data for ApprovalForAll events raised by the Erc721 contract.
@@ -661,55 +547,25 @@ type Erc721ApprovalForAllIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *Erc721ApprovalForAllIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(Erc721ApprovalForAll)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(Erc721ApprovalForAll)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *Erc721ApprovalForAllIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *Erc721ApprovalForAllIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *Erc721ApprovalForAllIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Erc721ApprovalForAll represents a ApprovalForAll event raised by the Erc721 contract.
 type Erc721ApprovalForAll struct {
@@ -723,79 +579,26 @@ type Erc721ApprovalForAll struct {
 //
 // Solidity: event ApprovalForAll(address indexed owner, address indexed operator, bool approved)
 func (_Erc721 *Erc721Filterer) FilterApprovalForAll(opts *bind.FilterOpts, owner []common.Address, operator []common.Address) (*Erc721ApprovalForAllIterator, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var operatorRule []interface{}
-	for _, operatorItem := range operator {
-		operatorRule = append(operatorRule, operatorItem)
-	}
-
-	logs, sub, err := _Erc721.contract.FilterLogs(opts, "ApprovalForAll", ownerRule, operatorRule)
-	if err != nil {
-		return nil, err
-	}
-	return &Erc721ApprovalForAllIterator{contract: _Erc721.contract, event: "ApprovalForAll", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchApprovalForAll is a free log subscription operation binding the contract event 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31.
 //
 // Solidity: event ApprovalForAll(address indexed owner, address indexed operator, bool approved)
 func (_Erc721 *Erc721Filterer) WatchApprovalForAll(opts *bind.WatchOpts, sink chan<- *Erc721ApprovalForAll, owner []common.Address, operator []common.Address) (event.Subscription, error) {
-
-	var ownerRule []interface{}
-	for _, ownerItem := range owner {
-		ownerRule = append(ownerRule, ownerItem)
-	}
-	var operatorRule []interface{}
-	for _, operatorItem := range operator {
-		operatorRule = append(operatorRule, operatorItem)
-	}
-
-	logs, sub, err := _Erc721.contract.WatchLogs(opts, "ApprovalForAll", ownerRule, operatorRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(Erc721ApprovalForAll)
-				if err := _Erc721.contract.UnpackLog(event, "ApprovalForAll", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseApprovalForAll is a log parse operation binding the contract event 0x17307eab39ab6107e8899845ad3d59bd9653f200f220920489ca2b5937696c31.
 //
 // Solidity: event ApprovalForAll(address indexed owner, address indexed operator, bool approved)
 func (_Erc721 *Erc721Filterer) ParseApprovalForAll(log types.Log) (*Erc721ApprovalForAll, error) {
-	event := new(Erc721ApprovalForAll)
-	if err := _Erc721.contract.UnpackLog(event, "ApprovalForAll", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Erc721TransferIterator is returned from FilterTransfer and is used to iterate over the raw logs and unpacked data for Transfer events raised by the Erc721 contract.
@@ -815,55 +618,25 @@ type Erc721TransferIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *Erc721TransferIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(Erc721Transfer)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(Erc721Transfer)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *Erc721TransferIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *Erc721TransferIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *Erc721TransferIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Erc721Transfer represents a Transfer event raised by the Erc721 contract.
 type Erc721Transfer struct {
@@ -877,85 +650,24 @@ type Erc721Transfer struct {
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 indexed id)
 func (_Erc721 *Erc721Filterer) FilterTransfer(opts *bind.FilterOpts, from []common.Address, to []common.Address, id []*big.Int) (*Erc721TransferIterator, error) {
-
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
-	}
-	var idRule []interface{}
-	for _, idItem := range id {
-		idRule = append(idRule, idItem)
-	}
-
-	logs, sub, err := _Erc721.contract.FilterLogs(opts, "Transfer", fromRule, toRule, idRule)
-	if err != nil {
-		return nil, err
-	}
-	return &Erc721TransferIterator{contract: _Erc721.contract, event: "Transfer", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchTransfer is a free log subscription operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 indexed id)
 func (_Erc721 *Erc721Filterer) WatchTransfer(opts *bind.WatchOpts, sink chan<- *Erc721Transfer, from []common.Address, to []common.Address, id []*big.Int) (event.Subscription, error) {
-
-	var fromRule []interface{}
-	for _, fromItem := range from {
-		fromRule = append(fromRule, fromItem)
-	}
-	var toRule []interface{}
-	for _, toItem := range to {
-		toRule = append(toRule, toItem)
-	}
-	var idRule []interface{}
-	for _, idItem := range id {
-		idRule = append(idRule, idItem)
-	}
-
-	logs, sub, err := _Erc721.contract.WatchLogs(opts, "Transfer", fromRule, toRule, idRule)
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(Erc721Transfer)
-				if err := _Erc721.contract.UnpackLog(event, "Transfer", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseTransfer is a log parse operation binding the contract event 0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef.
 //
 // Solidity: event Transfer(address indexed from, address indexed to, uint256 indexed id)
 func (_Erc721 *Erc721Filterer) ParseTransfer(log types.Log) (*Erc721Transfer, error) {
-	event := new(Erc721Transfer)
-	if err := _Erc721.contract.UnpackLog(event, "Transfer", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

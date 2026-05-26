@@ -10,10 +10,7 @@ import (
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/types"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
-	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/version"
 )
 
@@ -34,59 +31,9 @@ type resultStatus struct {
 }
 
 // StatusCommand returns the command to return the status of the network.
-func StatusCommand() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "status",
-		Short: "Query remote node for status",
-		RunE: func(cmd *cobra.Command, _ []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-			node, err := clientCtx.GetNode()
-			if err != nil {
-				return err
-			}
-			status, err := node.Status(cmd.Context())
-			if err != nil {
-				return err
-			}
+func StatusCommand() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
-			var addr cryptotypes.Address
-			var pk cryptotypes.PubKey
-			// `status` has TM pubkeys, we need to convert them to our pubkeys.
-			if k, ok := status.ValidatorInfo.PubKey.Get(); ok {
-				addr = k.Address()
-				pk, err = cryptocodec.FromTmPubKeyInterface(k)
-				if err != nil {
-					return err
-				}
-			}
-
-			statusWithPk := resultStatus{
-				NodeInfo: status.NodeInfo,
-				SyncInfo: status.SyncInfo,
-				ValidatorInfo: validatorInfo{
-					Address:     addr,
-					PubKey:      pk,
-					VotingPower: status.ValidatorInfo.VotingPower,
-				},
-			}
-
-			output, err := clientCtx.LegacyAmino.MarshalAsJSON(statusWithPk)
-			if err != nil {
-				return err
-			}
-
-			cmd.Println(string(output))
-			return nil
-		},
-	}
-
-	cmd.Flags().StringP(flags.FlagNode, "n", "tcp://localhost:26657", "Node to connect to")
-
-	return cmd
-}
+// `status` has TM pubkeys, we need to convert them to our pubkeys.
 
 // NodeInfoResponse defines a response type that contains node status and version
 // information.
@@ -98,23 +45,8 @@ type NodeInfoResponse struct {
 
 // REST handler for node info
 func NodeInfoRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		node, err := clientCtx.GetNode()
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-		status, err := node.Status(r.Context())
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-
-		resp := NodeInfoResponse{
-			NodeInfo:           status.NodeInfo,
-			ApplicationVersion: version.NewInfo(),
-		}
-
-		rest.PostProcessResponseBare(w, clientCtx, resp)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 // SyncingResponse defines a response type that contains node syncing information.
@@ -124,15 +56,6 @@ type SyncingResponse struct {
 
 // REST handler for node syncing
 func NodeSyncingRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		node, err := clientCtx.GetNode()
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-		status, err := node.Status(r.Context())
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-		rest.PostProcessResponseBare(w, clientCtx, SyncingResponse{Syncing: status.SyncInfo.CatchingUp})
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }

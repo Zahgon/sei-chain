@@ -5,12 +5,11 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_sei_protocol_sei_chain_sei_cosmos_types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -38,99 +37,53 @@ type Params struct {
 	LookbackDuration  uint64                                                 `protobuf:"varint,9,opt,name=lookback_duration,json=lookbackDuration,proto3" json:"lookback_duration,omitempty" yaml:"lookback_duration"`
 }
 
-func (m *Params) Reset()      { *m = Params{} }
-func (*Params) ProtoMessage() {}
-func (*Params) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{0}
-}
-func (m *Params) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Params) Reset()                    { _ = "STUB: not implemented"; return }
+func (*Params) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Params) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Params) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Params) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Params.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Params) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Params.Merge(m, src)
-}
-func (m *Params) XXX_Size() int {
-	return m.Size()
-}
-func (m *Params) XXX_DiscardUnknown() {
-	xxx_messageInfo_Params.DiscardUnknown(m)
-}
+
+func (m *Params) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Params) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Params) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetVotePeriod() uint64 {
-	if m != nil {
-		return m.VotePeriod
-	}
-	return 0
-}
+func (m *Params) GetVotePeriod() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Params) GetWhitelist() DenomList {
-	if m != nil {
-		return m.Whitelist
-	}
-	return nil
-}
+func (m *Params) GetWhitelist() DenomList { _ = "STUB: not implemented"; return *new(DenomList) }
 
-func (m *Params) GetSlashWindow() uint64 {
-	if m != nil {
-		return m.SlashWindow
-	}
-	return 0
-}
+func (m *Params) GetSlashWindow() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Params) GetLookbackDuration() uint64 {
-	if m != nil {
-		return m.LookbackDuration
-	}
-	return 0
-}
+func (m *Params) GetLookbackDuration() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type Denom struct {
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" yaml:"name"`
 }
 
-func (m *Denom) Reset()      { *m = Denom{} }
-func (*Denom) ProtoMessage() {}
-func (*Denom) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{1}
-}
-func (m *Denom) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Denom) Reset()                    { _ = "STUB: not implemented"; return }
+func (*Denom) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Denom) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Denom) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Denom) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Denom.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Denom) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Denom.Merge(m, src)
-}
-func (m *Denom) XXX_Size() int {
-	return m.Size()
-}
-func (m *Denom) XXX_DiscardUnknown() {
-	xxx_messageInfo_Denom.DiscardUnknown(m)
-}
+
+func (m *Denom) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Denom) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Denom) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Denom proto.InternalMessageInfo
 
@@ -139,35 +92,28 @@ type AggregateExchangeRateVote struct {
 	Voter              string             `protobuf:"bytes,2,opt,name=voter,proto3" json:"voter,omitempty" yaml:"voter"`
 }
 
-func (m *AggregateExchangeRateVote) Reset()      { *m = AggregateExchangeRateVote{} }
-func (*AggregateExchangeRateVote) ProtoMessage() {}
+func (m *AggregateExchangeRateVote) Reset()      { _ = "STUB: not implemented"; return }
+func (*AggregateExchangeRateVote) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*AggregateExchangeRateVote) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *AggregateExchangeRateVote) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *AggregateExchangeRateVote) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AggregateExchangeRateVote.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *AggregateExchangeRateVote) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AggregateExchangeRateVote.Merge(m, src)
-}
-func (m *AggregateExchangeRateVote) XXX_Size() int {
-	return m.Size()
-}
-func (m *AggregateExchangeRateVote) XXX_DiscardUnknown() {
-	xxx_messageInfo_AggregateExchangeRateVote.DiscardUnknown(m)
-}
+
+func (m *AggregateExchangeRateVote) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *AggregateExchangeRateVote) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *AggregateExchangeRateVote) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_AggregateExchangeRateVote proto.InternalMessageInfo
 
@@ -176,35 +122,22 @@ type ExchangeRateTuple struct {
 	ExchangeRate github_com_sei_protocol_sei_chain_sei_cosmos_types.Dec `protobuf:"bytes,2,opt,name=exchange_rate,json=exchangeRate,proto3,customtype=github.com/sei-protocol/sei-chain/sei-cosmos/types.Dec" json:"exchange_rate" yaml:"exchange_rate"`
 }
 
-func (m *ExchangeRateTuple) Reset()      { *m = ExchangeRateTuple{} }
-func (*ExchangeRateTuple) ProtoMessage() {}
-func (*ExchangeRateTuple) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{3}
-}
-func (m *ExchangeRateTuple) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ExchangeRateTuple) Reset()                    { _ = "STUB: not implemented"; return }
+func (*ExchangeRateTuple) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ExchangeRateTuple) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ExchangeRateTuple) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ExchangeRateTuple) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ExchangeRateTuple.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ExchangeRateTuple) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ExchangeRateTuple.Merge(m, src)
-}
-func (m *ExchangeRateTuple) XXX_Size() int {
-	return m.Size()
-}
-func (m *ExchangeRateTuple) XXX_DiscardUnknown() {
-	xxx_messageInfo_ExchangeRateTuple.DiscardUnknown(m)
-}
+
+func (m *ExchangeRateTuple) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ExchangeRateTuple) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ExchangeRateTuple) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ExchangeRateTuple proto.InternalMessageInfo
 
@@ -214,35 +147,22 @@ type OracleExchangeRate struct {
 	LastUpdateTimestamp int64                                                  `protobuf:"varint,3,opt,name=last_update_timestamp,json=lastUpdateTimestamp,proto3" json:"last_update_timestamp,omitempty" yaml:"last_update_timestamp"`
 }
 
-func (m *OracleExchangeRate) Reset()      { *m = OracleExchangeRate{} }
-func (*OracleExchangeRate) ProtoMessage() {}
-func (*OracleExchangeRate) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{4}
-}
-func (m *OracleExchangeRate) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *OracleExchangeRate) Reset()                    { _ = "STUB: not implemented"; return }
+func (*OracleExchangeRate) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*OracleExchangeRate) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *OracleExchangeRate) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *OracleExchangeRate) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OracleExchangeRate.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *OracleExchangeRate) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OracleExchangeRate.Merge(m, src)
-}
-func (m *OracleExchangeRate) XXX_Size() int {
-	return m.Size()
-}
-func (m *OracleExchangeRate) XXX_DiscardUnknown() {
-	xxx_messageInfo_OracleExchangeRate.DiscardUnknown(m)
-}
+
+func (m *OracleExchangeRate) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *OracleExchangeRate) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *OracleExchangeRate) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_OracleExchangeRate proto.InternalMessageInfo
 
@@ -251,51 +171,31 @@ type PriceSnapshotItem struct {
 	OracleExchangeRate OracleExchangeRate `protobuf:"bytes,2,opt,name=oracle_exchange_rate,json=oracleExchangeRate,proto3" json:"oracle_exchange_rate"`
 }
 
-func (m *PriceSnapshotItem) Reset()         { *m = PriceSnapshotItem{} }
-func (m *PriceSnapshotItem) String() string { return proto.CompactTextString(m) }
-func (*PriceSnapshotItem) ProtoMessage()    {}
-func (*PriceSnapshotItem) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{5}
-}
-func (m *PriceSnapshotItem) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *PriceSnapshotItem) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *PriceSnapshotItem) String() string            { _ = "STUB: not implemented"; return "" }
+func (*PriceSnapshotItem) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*PriceSnapshotItem) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *PriceSnapshotItem) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *PriceSnapshotItem) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PriceSnapshotItem.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *PriceSnapshotItem) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PriceSnapshotItem.Merge(m, src)
-}
-func (m *PriceSnapshotItem) XXX_Size() int {
-	return m.Size()
-}
-func (m *PriceSnapshotItem) XXX_DiscardUnknown() {
-	xxx_messageInfo_PriceSnapshotItem.DiscardUnknown(m)
-}
+
+func (m *PriceSnapshotItem) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *PriceSnapshotItem) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *PriceSnapshotItem) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_PriceSnapshotItem proto.InternalMessageInfo
 
-func (m *PriceSnapshotItem) GetDenom() string {
-	if m != nil {
-		return m.Denom
-	}
-	return ""
-}
+func (m *PriceSnapshotItem) GetDenom() string { _ = "STUB: not implemented"; return "" }
 
 func (m *PriceSnapshotItem) GetOracleExchangeRate() OracleExchangeRate {
-	if m != nil {
-		return m.OracleExchangeRate
-	}
-	return OracleExchangeRate{}
+	_ = "STUB: not implemented"
+	return *new(OracleExchangeRate)
 }
 
 type PriceSnapshot struct {
@@ -303,51 +203,31 @@ type PriceSnapshot struct {
 	PriceSnapshotItems PriceSnapshotItems `protobuf:"bytes,2,rep,name=price_snapshot_items,json=priceSnapshotItems,proto3,castrepeated=PriceSnapshotItems" json:"price_snapshot_items" yaml:"price_snapshot_items"`
 }
 
-func (m *PriceSnapshot) Reset()         { *m = PriceSnapshot{} }
-func (m *PriceSnapshot) String() string { return proto.CompactTextString(m) }
-func (*PriceSnapshot) ProtoMessage()    {}
-func (*PriceSnapshot) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{6}
-}
-func (m *PriceSnapshot) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *PriceSnapshot) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *PriceSnapshot) String() string            { _ = "STUB: not implemented"; return "" }
+func (*PriceSnapshot) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*PriceSnapshot) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *PriceSnapshot) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *PriceSnapshot) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PriceSnapshot.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *PriceSnapshot) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PriceSnapshot.Merge(m, src)
-}
-func (m *PriceSnapshot) XXX_Size() int {
-	return m.Size()
-}
-func (m *PriceSnapshot) XXX_DiscardUnknown() {
-	xxx_messageInfo_PriceSnapshot.DiscardUnknown(m)
-}
+
+func (m *PriceSnapshot) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *PriceSnapshot) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *PriceSnapshot) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_PriceSnapshot proto.InternalMessageInfo
 
-func (m *PriceSnapshot) GetSnapshotTimestamp() int64 {
-	if m != nil {
-		return m.SnapshotTimestamp
-	}
-	return 0
-}
+func (m *PriceSnapshot) GetSnapshotTimestamp() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (m *PriceSnapshot) GetPriceSnapshotItems() PriceSnapshotItems {
-	if m != nil {
-		return m.PriceSnapshotItems
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(PriceSnapshotItems)
 }
 
 type OracleTwap struct {
@@ -356,52 +236,29 @@ type OracleTwap struct {
 	LookbackSeconds int64                                                  `protobuf:"varint,3,opt,name=lookback_seconds,json=lookbackSeconds,proto3" json:"lookback_seconds,omitempty"`
 }
 
-func (m *OracleTwap) Reset()         { *m = OracleTwap{} }
-func (m *OracleTwap) String() string { return proto.CompactTextString(m) }
-func (*OracleTwap) ProtoMessage()    {}
-func (*OracleTwap) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{7}
-}
-func (m *OracleTwap) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *OracleTwap) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *OracleTwap) String() string            { _ = "STUB: not implemented"; return "" }
+func (*OracleTwap) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*OracleTwap) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *OracleTwap) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *OracleTwap) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_OracleTwap.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *OracleTwap) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_OracleTwap.Merge(m, src)
-}
-func (m *OracleTwap) XXX_Size() int {
-	return m.Size()
-}
-func (m *OracleTwap) XXX_DiscardUnknown() {
-	xxx_messageInfo_OracleTwap.DiscardUnknown(m)
-}
+
+func (m *OracleTwap) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *OracleTwap) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *OracleTwap) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_OracleTwap proto.InternalMessageInfo
 
-func (m *OracleTwap) GetDenom() string {
-	if m != nil {
-		return m.Denom
-	}
-	return ""
-}
+func (m *OracleTwap) GetDenom() string { _ = "STUB: not implemented"; return "" }
 
-func (m *OracleTwap) GetLookbackSeconds() int64 {
-	if m != nil {
-		return m.LookbackSeconds
-	}
-	return 0
-}
+func (m *OracleTwap) GetLookbackSeconds() int64 { _ = "STUB: not implemented"; return 0 }
 
 type VotePenaltyCounter struct {
 	MissCount    uint64 `protobuf:"varint,1,opt,name=miss_count,json=missCount,proto3" json:"miss_count,omitempty"`
@@ -409,59 +266,31 @@ type VotePenaltyCounter struct {
 	SuccessCount uint64 `protobuf:"varint,3,opt,name=success_count,json=successCount,proto3" json:"success_count,omitempty"`
 }
 
-func (m *VotePenaltyCounter) Reset()         { *m = VotePenaltyCounter{} }
-func (m *VotePenaltyCounter) String() string { return proto.CompactTextString(m) }
-func (*VotePenaltyCounter) ProtoMessage()    {}
-func (*VotePenaltyCounter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dc470b50b143d488, []int{8}
-}
-func (m *VotePenaltyCounter) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *VotePenaltyCounter) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *VotePenaltyCounter) String() string            { _ = "STUB: not implemented"; return "" }
+func (*VotePenaltyCounter) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*VotePenaltyCounter) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *VotePenaltyCounter) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *VotePenaltyCounter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_VotePenaltyCounter.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *VotePenaltyCounter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VotePenaltyCounter.Merge(m, src)
-}
-func (m *VotePenaltyCounter) XXX_Size() int {
-	return m.Size()
-}
-func (m *VotePenaltyCounter) XXX_DiscardUnknown() {
-	xxx_messageInfo_VotePenaltyCounter.DiscardUnknown(m)
-}
+
+func (m *VotePenaltyCounter) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *VotePenaltyCounter) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *VotePenaltyCounter) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_VotePenaltyCounter proto.InternalMessageInfo
 
-func (m *VotePenaltyCounter) GetMissCount() uint64 {
-	if m != nil {
-		return m.MissCount
-	}
-	return 0
-}
+func (m *VotePenaltyCounter) GetMissCount() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *VotePenaltyCounter) GetAbstainCount() uint64 {
-	if m != nil {
-		return m.AbstainCount
-	}
-	return 0
-}
+func (m *VotePenaltyCounter) GetAbstainCount() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *VotePenaltyCounter) GetSuccessCount() uint64 {
-	if m != nil {
-		return m.SuccessCount
-	}
-	return 0
-}
+func (m *VotePenaltyCounter) GetSuccessCount() uint64 { _ = "STUB: not implemented"; return 0 }
 
 func init() {
 	proto.RegisterType((*Params)(nil), "seiprotocol.seichain.oracle.Params")
@@ -542,1922 +371,171 @@ var fileDescriptor_dc470b50b143d488 = []byte{
 	0x00, 0xff, 0xff, 0x10, 0xb7, 0x30, 0xca, 0x0d, 0x0a, 0x00, 0x00,
 }
 
-func (this *Params) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *Params) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*Params)
-	if !ok {
-		that2, ok := that.(Params)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.VotePeriod != that1.VotePeriod {
-		return false
-	}
-	if !this.VoteThreshold.Equal(that1.VoteThreshold) {
-		return false
-	}
-	if !this.RewardBand.Equal(that1.RewardBand) {
-		return false
-	}
-	if len(this.Whitelist) != len(that1.Whitelist) {
-		return false
-	}
-	for i := range this.Whitelist {
-		if !this.Whitelist[i].Equal(&that1.Whitelist[i]) {
-			return false
-		}
-	}
-	if !this.SlashFraction.Equal(that1.SlashFraction) {
-		return false
-	}
-	if this.SlashWindow != that1.SlashWindow {
-		return false
-	}
-	if !this.MinValidPerWindow.Equal(that1.MinValidPerWindow) {
-		return false
-	}
-	if this.LookbackDuration != that1.LookbackDuration {
-		return false
-	}
-	return true
-}
-func (m *Params) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Params) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Params) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Params) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.LookbackDuration != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.LookbackDuration))
-		i--
-		dAtA[i] = 0x48
-	}
-	{
-		size := m.MinValidPerWindow.Size()
-		i -= size
-		if _, err := m.MinValidPerWindow.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x3a
-	if m.SlashWindow != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.SlashWindow))
-		i--
-		dAtA[i] = 0x30
-	}
-	{
-		size := m.SlashFraction.Size()
-		i -= size
-		if _, err := m.SlashFraction.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x2a
-	if len(m.Whitelist) > 0 {
-		for iNdEx := len(m.Whitelist) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Whitelist[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintOracle(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	{
-		size := m.RewardBand.Size()
-		i -= size
-		if _, err := m.RewardBand.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	{
-		size := m.VoteThreshold.Size()
-		i -= size
-		if _, err := m.VoteThreshold.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if m.VotePeriod != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.VotePeriod))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *Denom) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Denom) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Denom) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Denom) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Denom) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintOracle(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *AggregateExchangeRateVote) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *AggregateExchangeRateVote) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *AggregateExchangeRateVote) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Voter) > 0 {
-		i -= len(m.Voter)
-		copy(dAtA[i:], m.Voter)
-		i = encodeVarintOracle(dAtA, i, uint64(len(m.Voter)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ExchangeRateTuples) > 0 {
-		for iNdEx := len(m.ExchangeRateTuples) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ExchangeRateTuples[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintOracle(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ExchangeRateTuple) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ExchangeRateTuple) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ExchangeRateTuple) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size := m.ExchangeRate.Size()
-		i -= size
-		if _, err := m.ExchangeRate.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintOracle(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *OracleExchangeRate) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *OracleExchangeRate) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *OracleExchangeRate) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.LastUpdateTimestamp != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.LastUpdateTimestamp))
-		i--
-		dAtA[i] = 0x18
-	}
-	{
-		size := m.LastUpdate.Size()
-		i -= size
-		if _, err := m.LastUpdate.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size := m.ExchangeRate.Size()
-		i -= size
-		if _, err := m.ExchangeRate.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PriceSnapshotItem) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *PriceSnapshotItem) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PriceSnapshotItem) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.OracleExchangeRate.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintOracle(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PriceSnapshot) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *PriceSnapshot) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PriceSnapshot) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.PriceSnapshotItems) > 0 {
-		for iNdEx := len(m.PriceSnapshotItems) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.PriceSnapshotItems[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintOracle(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.SnapshotTimestamp != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.SnapshotTimestamp))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *OracleTwap) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *OracleTwap) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *OracleTwap) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *OracleTwap) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *OracleTwap) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.LookbackSeconds != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.LookbackSeconds))
-		i--
-		dAtA[i] = 0x18
-	}
-	{
-		size := m.Twap.Size()
-		i -= size
-		if _, err := m.Twap.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintOracle(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintOracle(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *VotePenaltyCounter) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *VotePenaltyCounter) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *VotePenaltyCounter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.SuccessCount != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.SuccessCount))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.AbstainCount != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.AbstainCount))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.MissCount != 0 {
-		i = encodeVarintOracle(dAtA, i, uint64(m.MissCount))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintOracle(dAtA []byte, offset int, v uint64) int {
-	offset -= sovOracle(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *Params) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.VotePeriod != 0 {
-		n += 1 + sovOracle(uint64(m.VotePeriod))
-	}
-	l = m.VoteThreshold.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	l = m.RewardBand.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	if len(m.Whitelist) > 0 {
-		for _, e := range m.Whitelist {
-			l = e.Size()
-			n += 1 + l + sovOracle(uint64(l))
-		}
-	}
-	l = m.SlashFraction.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	if m.SlashWindow != 0 {
-		n += 1 + sovOracle(uint64(m.SlashWindow))
-	}
-	l = m.MinValidPerWindow.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	if m.LookbackDuration != 0 {
-		n += 1 + sovOracle(uint64(m.LookbackDuration))
-	}
-	return n
-}
+func encodeVarintOracle(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *Denom) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovOracle(uint64(l))
-	}
-	return n
-}
+func (m *Params) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *AggregateExchangeRateVote) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ExchangeRateTuples) > 0 {
-		for _, e := range m.ExchangeRateTuples {
-			l = e.Size()
-			n += 1 + l + sovOracle(uint64(l))
-		}
-	}
-	l = len(m.Voter)
-	if l > 0 {
-		n += 1 + l + sovOracle(uint64(l))
-	}
-	return n
-}
+func (m *Denom) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ExchangeRateTuple) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovOracle(uint64(l))
-	}
-	l = m.ExchangeRate.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	return n
-}
+func (m *AggregateExchangeRateVote) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *OracleExchangeRate) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.ExchangeRate.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	l = m.LastUpdate.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	if m.LastUpdateTimestamp != 0 {
-		n += 1 + sovOracle(uint64(m.LastUpdateTimestamp))
-	}
-	return n
-}
+func (m *ExchangeRateTuple) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *PriceSnapshotItem) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovOracle(uint64(l))
-	}
-	l = m.OracleExchangeRate.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	return n
-}
+func (m *OracleExchangeRate) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *PriceSnapshot) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.SnapshotTimestamp != 0 {
-		n += 1 + sovOracle(uint64(m.SnapshotTimestamp))
-	}
-	if len(m.PriceSnapshotItems) > 0 {
-		for _, e := range m.PriceSnapshotItems {
-			l = e.Size()
-			n += 1 + l + sovOracle(uint64(l))
-		}
-	}
-	return n
-}
+func (m *PriceSnapshotItem) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *OracleTwap) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovOracle(uint64(l))
-	}
-	l = m.Twap.Size()
-	n += 1 + l + sovOracle(uint64(l))
-	if m.LookbackSeconds != 0 {
-		n += 1 + sovOracle(uint64(m.LookbackSeconds))
-	}
-	return n
-}
+func (m *PriceSnapshot) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *VotePenaltyCounter) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MissCount != 0 {
-		n += 1 + sovOracle(uint64(m.MissCount))
-	}
-	if m.AbstainCount != 0 {
-		n += 1 + sovOracle(uint64(m.AbstainCount))
-	}
-	if m.SuccessCount != 0 {
-		n += 1 + sovOracle(uint64(m.SuccessCount))
-	}
-	return n
-}
+func (m *OracleTwap) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovOracle(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozOracle(x uint64) (n int) {
-	return sovOracle(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *Params) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Params: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Params: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VotePeriod", wireType)
-			}
-			m.VotePeriod = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.VotePeriod |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VoteThreshold", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.VoteThreshold.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RewardBand", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.RewardBand.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Whitelist", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Whitelist = append(m.Whitelist, Denom{})
-			if err := m.Whitelist[len(m.Whitelist)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SlashFraction", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.SlashFraction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SlashWindow", wireType)
-			}
-			m.SlashWindow = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SlashWindow |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MinValidPerWindow", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.MinValidPerWindow.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 9:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LookbackDuration", wireType)
-			}
-			m.LookbackDuration = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LookbackDuration |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *VotePenaltyCounter) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Denom) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Denom: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Denom: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovOracle(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func sozOracle(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *Params) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *Denom) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *AggregateExchangeRateVote) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AggregateExchangeRateVote: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AggregateExchangeRateVote: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExchangeRateTuples", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ExchangeRateTuples = append(m.ExchangeRateTuples, ExchangeRateTuple{})
-			if err := m.ExchangeRateTuples[len(m.ExchangeRateTuples)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Voter", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Voter = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *ExchangeRateTuple) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ExchangeRateTuple: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ExchangeRateTuple: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExchangeRate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ExchangeRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OracleExchangeRate) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OracleExchangeRate: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OracleExchangeRate: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ExchangeRate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ExchangeRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastUpdate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.LastUpdate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastUpdateTimestamp", wireType)
-			}
-			m.LastUpdateTimestamp = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LastUpdateTimestamp |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *ExchangeRateTuple) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *PriceSnapshotItem) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PriceSnapshotItem: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PriceSnapshotItem: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OracleExchangeRate", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.OracleExchangeRate.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *OracleExchangeRate) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *PriceSnapshot) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PriceSnapshot: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PriceSnapshot: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SnapshotTimestamp", wireType)
-			}
-			m.SnapshotTimestamp = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SnapshotTimestamp |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PriceSnapshotItems", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PriceSnapshotItems = append(m.PriceSnapshotItems, PriceSnapshotItem{})
-			if err := m.PriceSnapshotItems[len(m.PriceSnapshotItems)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *PriceSnapshotItem) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *OracleTwap) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: OracleTwap: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: OracleTwap: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Twap", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthOracle
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Twap.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LookbackSeconds", wireType)
-			}
-			m.LookbackSeconds = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LookbackSeconds |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *PriceSnapshot) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *VotePenaltyCounter) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: VotePenaltyCounter: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: VotePenaltyCounter: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MissCount", wireType)
-			}
-			m.MissCount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MissCount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AbstainCount", wireType)
-			}
-			m.AbstainCount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.AbstainCount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SuccessCount", wireType)
-			}
-			m.SuccessCount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SuccessCount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipOracle(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthOracle
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *OracleTwap) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipOracle(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowOracle
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowOracle
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthOracle
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupOracle
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthOracle
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *VotePenaltyCounter) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipOracle(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthOracle        = fmt.Errorf("proto: negative length found during unmarshaling")

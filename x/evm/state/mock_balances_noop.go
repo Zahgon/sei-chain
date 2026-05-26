@@ -9,7 +9,14 @@ import (
 )
 
 // ensureMinimumBalance is a no-op in production builds.
-func (s *DBImpl) ensureMinimumBalance(evmAddr common.Address) {}
+func (s *DBImpl) ensureMinimumBalance(evmAddr common.Address) {
+	_ = "STUB: not implemented"
 
-// ensureSufficientBalance is a no-op in production builds.
-func (s *DBImpl) ensureSufficientBalance(evmAddr common.Address, amt *big.Int) {}
+	// ensureSufficientBalance is a no-op in production builds.
+	return
+}
+
+func (s *DBImpl) ensureSufficientBalance(evmAddr common.Address, amt *big.Int) {
+	_ = "STUB: not implemented"
+	return
+}

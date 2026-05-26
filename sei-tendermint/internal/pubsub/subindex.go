@@ -23,19 +23,14 @@ type subInfo struct {
 // A subInfoSet is an unordered set of subscription info records.
 type subInfoSet map[*subInfo]struct{}
 
-func (s subInfoSet) contains(si *subInfo) bool { _, ok := s[si]; return ok }
-func (s subInfoSet) add(si *subInfo)           { s[si] = struct{}{} }
-func (s subInfoSet) remove(si *subInfo)        { delete(s, si) }
+func (s subInfoSet) contains(si *subInfo) bool { _ = "STUB: not implemented"; return false }
+func (s subInfoSet) add(si *subInfo)           { _ = "STUB: not implemented"; return }
+func (s subInfoSet) remove(si *subInfo)        { _ = "STUB: not implemented"; return }
 
 // withQuery returns the subset of s whose query string matches qs.
 func (s subInfoSet) withQuery(qs string) subInfoSet {
-	out := make(subInfoSet)
-	for si := range s {
-		if si.query.String() == qs {
-			out.add(si)
-		}
-	}
-	return out
+	_ = "STUB: not implemented"
+	return *new(subInfoSet)
 }
 
 // A subIndex is an indexed collection of subscription info records.
@@ -51,67 +46,32 @@ type subIndex struct {
 }
 
 // newSubIndex constructs a new, empty subscription index.
-func newSubIndex() *subIndex {
-	return &subIndex{
-		all:      make(subInfoSet),
-		byClient: make(map[string]subInfoSet),
-		byQuery:  make(map[string]subInfoSet),
-	}
-}
+func newSubIndex() *subIndex { _ = "STUB: not implemented"; return nil }
 
 // findClients returns the set of subscriptions for the given client ID, or nil.
-func (idx *subIndex) findClientID(id string) subInfoSet { return idx.byClient[id] }
+func (idx *subIndex) findClientID(id string) subInfoSet {
+	_ = "STUB: not implemented"
+	return *
 
-// findQuery returns the set of subscriptions on the given query string, or nil.
-func (idx *subIndex) findQuery(qs string) subInfoSet { return idx.byQuery[qs] }
-
-// contains reports whether idx contains any subscription matching the given
-// client ID and query pair.
-func (idx *subIndex) contains(clientID, query string) bool {
-	csubs, qsubs := idx.byClient[clientID], idx.byQuery[query]
-	if len(csubs) == 0 || len(qsubs) == 0 {
-		return false
-	}
-	for si := range csubs {
-		if qsubs.contains(si) {
-			return true
-		}
-	}
-	return false
+	// findQuery returns the set of subscriptions on the given query string, or nil.
+	new(subInfoSet)
 }
+
+func (idx *subIndex) findQuery(qs string) subInfoSet {
+	_ = "STUB: not implemented"
+	return *
+
+	// contains reports whether idx contains any subscription matching the given
+	// client ID and query pair.
+	new(subInfoSet)
+}
+
+func (idx *subIndex) contains(clientID, query string) bool { _ = "STUB: not implemented"; return false }
 
 // add adds si to the index, replacing any previous entry with the same terms.
 // It is the caller's responsibility to check for duplicates before adding.
 // See also the contains method.
-func (idx *subIndex) add(si *subInfo) {
-	idx.all.add(si)
-	if m := idx.byClient[si.clientID]; m == nil {
-		idx.byClient[si.clientID] = subInfoSet{si: struct{}{}}
-	} else {
-		m.add(si)
-	}
-	qs := si.query.String()
-	if m := idx.byQuery[qs]; m == nil {
-		idx.byQuery[qs] = subInfoSet{si: struct{}{}}
-	} else {
-		m.add(si)
-	}
-}
+func (idx *subIndex) add(si *subInfo) { _ = "STUB: not implemented"; return }
 
 // removeAll removes all the elements of s from the index.
-func (idx *subIndex) removeAll(s subInfoSet) {
-	for si := range s {
-		idx.all.remove(si)
-		idx.byClient[si.clientID].remove(si)
-		if len(idx.byClient[si.clientID]) == 0 {
-			delete(idx.byClient, si.clientID)
-		}
-		if si.query != nil {
-			qs := si.query.String()
-			idx.byQuery[qs].remove(si)
-			if len(idx.byQuery[qs]) == 0 {
-				delete(idx.byQuery, qs)
-			}
-		}
-	}
-}
+func (idx *subIndex) removeAll(s subInfoSet) { _ = "STUB: not implemented"; return }

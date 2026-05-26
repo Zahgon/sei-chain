@@ -1,9 +1,6 @@
 package types
 
 import (
-	"fmt"
-	"strings"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
@@ -22,38 +19,25 @@ type PermissionsForAddress struct {
 
 // NewPermissionsForAddress creates a new PermissionsForAddress object
 func NewPermissionsForAddress(name string, permissions []string) PermissionsForAddress {
-	return PermissionsForAddress{
-		permissions: permissions,
-		address:     NewModuleAddress(name),
-	}
+	_ = "STUB: not implemented"
+	return *new(PermissionsForAddress)
 }
 
 // HasPermission returns whether the PermissionsForAddress contains permission.
 func (pa PermissionsForAddress) HasPermission(permission string) bool {
-	for _, perm := range pa.permissions {
-		if perm == permission {
-			return true
-		}
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
 // GetAddress returns the address of the PermissionsForAddress object
 func (pa PermissionsForAddress) GetAddress() sdk.AccAddress {
-	return pa.address
+	_ = "STUB: not implemented"
+
+	// GetPermissions returns the permissions granted to the address
+	return *new(sdk.AccAddress)
 }
 
-// GetPermissions returns the permissions granted to the address
-func (pa PermissionsForAddress) GetPermissions() []string {
-	return pa.permissions
-}
+func (pa PermissionsForAddress) GetPermissions() []string { _ = "STUB: not implemented"; return nil }
 
 // performs basic permission validation
-func validatePermissions(permissions ...string) error {
-	for _, perm := range permissions {
-		if strings.TrimSpace(perm) == "" {
-			return fmt.Errorf("module permission is empty")
-		}
-	}
-	return nil
-}
+func validatePermissions(permissions ...string) error { _ = "STUB: not implemented"; return nil }

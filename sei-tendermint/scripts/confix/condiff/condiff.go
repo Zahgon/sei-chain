@@ -9,11 +9,8 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"sort"
-	"strings"
 
 	"github.com/creachadair/tomledit"
-	"github.com/creachadair/tomledit/parser"
 	"github.com/creachadair/tomledit/transform"
 )
 
@@ -58,27 +55,9 @@ func main() {
 	diffDocs(os.Stdout, lhs, rhs)
 }
 
-func mustParse(path string) *tomledit.Document {
-	f, err := os.Open(filepath.Clean(path))
-	if err != nil {
-		log.Fatalf("Opening TOML input: %v", err)
-	}
-	defer func() { _ = f.Close() }()
-	doc, err := tomledit.Parse(f)
-	if err != nil {
-		log.Fatalf("Parsing %q: %v", path, err)
-	}
-	return doc
-}
+func mustParse(path string) *tomledit.Document { _ = "STUB: not implemented"; return nil }
 
-func allKeys(s *tomledit.Section) []string {
-	var keys []string
-	s.Scan(func(key parser.Key, _ *tomledit.Entry) bool {
-		keys = append(keys, key.String())
-		return true
-	})
-	return keys
-}
+func allKeys(s *tomledit.Section) []string { _ = "STUB: not implemented"; return nil }
 
 const (
 	delSection = "-S"
@@ -90,63 +69,8 @@ const (
 	addMapSep = "\n" + addMapping + " "
 )
 
-func diffDocs(w io.Writer, lhs, rhs *tomledit.Document) {
-	diffSections(w, lhs.Global, rhs.Global)
-	lsec, rsec := lhs.Sections, rhs.Sections
-	transform.SortSectionsByName(lsec)
-	transform.SortSectionsByName(rsec)
+func diffDocs(w io.Writer, lhs, rhs *tomledit.Document) { _ = "STUB: not implemented"; return }
 
-	i, j := 0, 0
-	for i < len(lsec) && j < len(rsec) {
-		if lsec[i].Name.Before(rsec[j].Name) {
-			_, _ = fmt.Fprintln(w, delSection, lsec[i].Name)
-			_, _ = fmt.Fprintln(w, delMapping, strings.Join(allKeys(lsec[i]), delMapSep))
-			i++
-		} else if rsec[j].Name.Before(lsec[i].Name) {
-			_, _ = fmt.Fprintln(w, addSection, rsec[j].Name)
-			_, _ = fmt.Fprintln(w, addMapping, strings.Join(allKeys(rsec[j]), addMapSep))
-			j++
-		} else {
-			diffSections(w, lsec[i], rsec[j])
-			i++
-			j++
-		}
-	}
-	for ; i < len(lsec); i++ {
-		_, _ = fmt.Fprintln(w, delSection, lsec[i].Name)
-		_, _ = fmt.Fprintln(w, delMapping, strings.Join(allKeys(lsec[i]), delMapSep))
-	}
-	for ; j < len(rsec); j++ {
-		_, _ = fmt.Fprintln(w, addSection, rsec[j].Name)
-		_, _ = fmt.Fprintln(w, addMapping, strings.Join(allKeys(rsec[j]), addMapSep))
-	}
-}
+func diffSections(w io.Writer, lhs, rhs *tomledit.Section) { _ = "STUB: not implemented"; return }
 
-func diffSections(w io.Writer, lhs, rhs *tomledit.Section) {
-	diffKeys(w, allKeys(lhs), allKeys(rhs))
-}
-
-func diffKeys(w io.Writer, lhs, rhs []string) {
-	sort.Strings(lhs)
-	sort.Strings(rhs)
-
-	i, j := 0, 0
-	for i < len(lhs) && j < len(rhs) {
-		if lhs[i] < rhs[j] {
-			_, _ = fmt.Fprintln(w, delMapping, lhs[i])
-			i++
-		} else if lhs[i] > rhs[j] {
-			_, _ = fmt.Fprintln(w, addMapping, rhs[j])
-			j++
-		} else {
-			i++
-			j++
-		}
-	}
-	for ; i < len(lhs); i++ {
-		_, _ = fmt.Fprintln(w, delMapping, lhs[i])
-	}
-	for ; j < len(rhs); j++ {
-		_, _ = fmt.Fprintln(w, addMapping, rhs[j])
-	}
-}
+func diffKeys(w io.Writer, lhs, rhs []string) { _ = "STUB: not implemented"; return }

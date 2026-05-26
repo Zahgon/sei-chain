@@ -2,7 +2,6 @@ package p2p
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/gogo/protobuf/proto"
 
@@ -42,10 +41,14 @@ type PeerError struct {
 	Fatal  bool
 }
 
-func (pe PeerError) Error() string { return fmt.Sprintf("peer=%q: %s", pe.NodeID, pe.Err.Error()) }
-func (pe PeerError) Unwrap() error { return pe.Err }
+func (pe PeerError) Error() string { _ = "STUB: not implemented"; return "" }
+func (pe PeerError) Unwrap() error {
+	_ = "STUB: not implemented"
 
-// channel is a bidirectional channel to exchange Protobuf messages with peers.
+	// channel is a bidirectional channel to exchange Protobuf messages with peers.
+	return nil
+}
+
 type channel struct {
 	desc      conn.ChannelDescriptor
 	recvQueue *Queue[RecvMsg[proto.Message]] // inbound messages (peers to reactors)
@@ -58,65 +61,29 @@ type Channel[T proto.Message] struct {
 
 // NewChannel creates a new channel. It is primarily for internal and test
 // use, reactors should use Router.OpenChannel().
-func newChannel(desc conn.ChannelDescriptor) *channel {
-	return &channel{
-		desc: desc,
-		// TODO(gprusak): get rid of this random cap*cap value once we understand
-		// what the sizes per channel really should be.
-		recvQueue: NewQueue[RecvMsg[proto.Message]](desc.RecvBufferCapacity * desc.RecvBufferCapacity),
-	}
-}
+func newChannel(desc conn.ChannelDescriptor) *channel { _ = "STUB: not implemented"; return nil }
 
-func (ch *Channel[T]) send(msg T, queues ...*Queue[sendMsg]) {
-	ch.router.metrics.ChannelMsgs.With("ch_id", fmt.Sprint(ch.desc.ID), "direction", "out").Add(1.)
-	m := sendMsg{msg, ch.desc.ID}
-	size := proto.Size(msg)
-	for _, q := range queues {
-		if pruned, ok := q.Send(m, size, ch.desc.Priority).Get(); ok {
-			ch.router.metrics.QueueDroppedMsgs.With("ch_id", fmt.Sprint(pruned.ChannelID), "direction", "out").Add(float64(1))
-		}
-	}
-}
+// TODO(gprusak): get rid of this random cap*cap value once we understand
+// what the sizes per channel really should be.
 
-func (ch *Channel[T]) Send(msg T, to types.NodeID) {
-	c, ok := GetAny(ch.router.peerManager.Conns(), to)
-	if !ok {
-		logger.Debug("dropping message for unconnected peer", "peer", to, "channel", ch.desc.ID)
-		return
-	}
-	if _, contains := c.Channels[ch.desc.ID]; !contains {
-		// reactor tried to send a message across a channel that the
-		// peer doesn't have available. This is a known issue due to
-		// how peer subscriptions work:
-		// https://github.com/tendermint/tendermint/issues/6598
-		return
-	}
-	ch.send(msg, c.sendQueue)
-}
+func (ch *Channel[T]) send(msg T, queues ...*Queue[sendMsg]) { _ = "STUB: not implemented"; return }
+
+func (ch *Channel[T]) Send(msg T, to types.NodeID) { _ = "STUB: not implemented"; return }
+
+// reactor tried to send a message across a channel that the
+// peer doesn't have available. This is a known issue due to
+// how peer subscriptions work:
+// https://github.com/tendermint/tendermint/issues/6598
 
 // Broadcasts msg to all peers on the channel.
-func (ch *Channel[T]) Broadcast(msg T) {
-	var queues []*Queue[sendMsg]
-	for _, c := range ch.router.peerManager.Conns().All() {
-		if _, ok := c.Channels[ch.desc.ID]; ok {
-			queues = append(queues, c.sendQueue)
-		}
-	}
-	ch.send(msg, queues...)
-}
+func (ch *Channel[T]) Broadcast(msg T) { _ = "STUB: not implemented"; return }
 
-func (ch *Channel[T]) String() string {
-	return fmt.Sprintf("p2p.Channel<%d:%s>", ch.desc.ID, ch.desc.Name)
-}
+func (ch *Channel[T]) String() string { _ = "STUB: not implemented"; return "" }
 
-func (ch *Channel[T]) ReceiveLen() int { return ch.recvQueue.Len() }
+func (ch *Channel[T]) ReceiveLen() int { _ = "STUB: not implemented"; return 0 }
 
 // Recv Receives the next message from the channel.
 func (ch *Channel[T]) Recv(ctx context.Context) (RecvMsg[T], error) {
-	recv, err := ch.recvQueue.Recv(ctx)
-	if err != nil {
-		return RecvMsg[T]{}, err
-	}
-	ch.router.metrics.ChannelMsgs.With("ch_id", fmt.Sprint(ch.desc.ID), "direction", "in").Add(1.)
-	return RecvMsg[T]{Message: recv.Message.(T), From: recv.From}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

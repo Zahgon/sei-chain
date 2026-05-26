@@ -32,9 +32,8 @@ type QueryProposalParams struct {
 
 // NewQueryProposalParams creates a new instance of QueryProposalParams
 func NewQueryProposalParams(proposalID uint64) QueryProposalParams {
-	return QueryProposalParams{
-		ProposalID: proposalID,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryProposalParams)
 }
 
 // QueryProposalVotesParams used for queries to 'custom/gov/votes'.
@@ -46,11 +45,8 @@ type QueryProposalVotesParams struct {
 
 // NewQueryProposalVotesParams creates new instance of the QueryProposalVotesParams.
 func NewQueryProposalVotesParams(proposalID uint64, page, limit int) QueryProposalVotesParams {
-	return QueryProposalVotesParams{
-		ProposalID: proposalID,
-		Page:       page,
-		Limit:      limit,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryProposalVotesParams)
 }
 
 // QueryDepositParams params for query 'custom/gov/deposit'
@@ -61,10 +57,8 @@ type QueryDepositParams struct {
 
 // NewQueryDepositParams creates a new instance of QueryDepositParams
 func NewQueryDepositParams(proposalID uint64, depositor sdk.AccAddress) QueryDepositParams {
-	return QueryDepositParams{
-		ProposalID: proposalID,
-		Depositor:  depositor,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryDepositParams)
 }
 
 // QueryVoteParams Params for query 'custom/gov/vote'
@@ -75,10 +69,8 @@ type QueryVoteParams struct {
 
 // NewQueryVoteParams creates a new instance of QueryVoteParams
 func NewQueryVoteParams(proposalID uint64, voter sdk.AccAddress) QueryVoteParams {
-	return QueryVoteParams{
-		ProposalID: proposalID,
-		Voter:      voter,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryVoteParams)
 }
 
 // QueryProposalsParams Params for query 'custom/gov/proposals'
@@ -92,11 +84,6 @@ type QueryProposalsParams struct {
 
 // NewQueryProposalsParams creates a new instance of QueryProposalsParams
 func NewQueryProposalsParams(page, limit int, status ProposalStatus, voter, depositor sdk.AccAddress) QueryProposalsParams {
-	return QueryProposalsParams{
-		Page:           page,
-		Limit:          limit,
-		Voter:          voter,
-		Depositor:      depositor,
-		ProposalStatus: status,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryProposalsParams)
 }

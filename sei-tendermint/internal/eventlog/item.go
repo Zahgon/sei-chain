@@ -43,36 +43,17 @@ type Item struct {
 
 // newItem constructs a new item with the specified cursor, type, and data.
 func newItem(cursor cursor.Cursor, etype string, data types.EventData) *Item {
-	return &Item{Cursor: cursor, Type: etype, Data: data, Events: makeEvents(etype, data)}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // makeEvents returns a slice of ABCI events comprising the type tag along with
 // any internal events exported by the data value.
 func makeEvents(etype string, data types.EventData) []abci.Event {
-	base := []abci.Event{{
-		Type: tmTypeTag,
-		Attributes: []abci.EventAttribute{{
-			Key: []byte(tmTypeKey), Value: []byte(etype),
-		}},
-	}}
-	if evt, ok := data.(ABCIEventer); ok {
-		return append(base, evt.ABCIEvents()...)
-	}
-	return base
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // FindType reports whether events contains a tm.event event, and if so returns
 // its value, which is the type of the underlying event item.
-func FindType(events []abci.Event) (string, bool) {
-	for _, evt := range events {
-		if evt.Type != tmTypeTag {
-			continue
-		}
-		for _, attr := range evt.Attributes {
-			if string(attr.Key) == tmTypeKey {
-				return string(attr.Value), true
-			}
-		}
-	}
-	return "", false
-}
+func FindType(events []abci.Event) (string, bool) { _ = "STUB: not implemented"; return "", false }

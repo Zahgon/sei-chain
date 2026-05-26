@@ -15,34 +15,21 @@ type state struct {
 // CacheMultiStore calls and returns a CacheMultiStore on the state's underling
 // CacheMultiStore.
 func (st *state) CacheMultiStore() sdk.CacheMultiStore {
-	st.mtx.RLock()
-	defer st.mtx.RUnlock()
-	return st.ms.CacheMultiStore()
+	_ = "STUB: not implemented"
+	return *new(sdk.CacheMultiStore)
 }
 
 func (st *state) MultiStore() sdk.CacheMultiStore {
-	st.mtx.RLock()
-	defer st.mtx.RUnlock()
-	return st.ms
+	_ = "STUB: not implemented"
+	return *new(sdk.CacheMultiStore)
 }
 
 func (st *state) SetMultiStore(ms sdk.CacheMultiStore) *state {
-	st.mtx.Lock()
-	defer st.mtx.Unlock()
-	st.ms = ms
-	return st
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Context returns the Context of the state.
-func (st *state) Context() sdk.Context {
-	st.mtx.RLock()
-	defer st.mtx.RUnlock()
-	return st.ctx
-}
+func (st *state) Context() sdk.Context { _ = "STUB: not implemented"; return *new(sdk.Context) }
 
-func (st *state) SetContext(ctx sdk.Context) *state {
-	st.mtx.Lock()
-	defer st.mtx.Unlock()
-	st.ctx = ctx
-	return st
-}
+func (st *state) SetContext(ctx sdk.Context) *state { _ = "STUB: not implemented"; return nil }

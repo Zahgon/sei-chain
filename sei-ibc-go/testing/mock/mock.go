@@ -2,7 +2,6 @@ package mock
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -17,7 +16,6 @@ import (
 
 	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
 	porttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/05-port/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 )
 
 const (
@@ -52,53 +50,74 @@ type AppModuleBasic struct{}
 
 // Name implements AppModuleBasic interface.
 func (AppModuleBasic) Name() string {
-	return ModuleName
+	_ = "STUB: not implemented"
+
+	// RegisterLegacyAminoCodec implements AppModuleBasic interface.
+	return ""
 }
 
-// RegisterLegacyAminoCodec implements AppModuleBasic interface.
-func (AppModuleBasic) RegisterLegacyAminoCodec(*codec.LegacyAmino) {}
+func (AppModuleBasic) RegisterLegacyAminoCodec(*codec.LegacyAmino) {
+	_ = "STUB: not implemented"
 
-// RegisterInterfaces implements AppModuleBasic interface.
-func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {}
+	// RegisterInterfaces implements AppModuleBasic interface.
+	return
+}
 
-// DefaultGenesis implements AppModuleBasic interface.
+func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
+	_ = "STUB: not implemented"
+
+	// DefaultGenesis implements AppModuleBasic interface.
+	return
+}
+
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return nil
+	_ = "STUB: not implemented"
+
+	// ValidateGenesis implements the AppModuleBasic interface.
+	return *new(json.RawMessage)
 }
 
-// ValidateGenesis implements the AppModuleBasic interface.
 func (AppModuleBasic) ValidateGenesis(codec.JSONCodec, client.TxEncodingConfig, json.RawMessage) error {
+	_ = "STUB: not implemented"
+
+	// ValidateGenesisStream implements the AppModuleBasic interface.
 	return nil
 }
 
-// ValidateGenesisStream implements the AppModuleBasic interface.
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes implements AppModuleBasic interface.
-func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {}
+func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes implements AppModuleBasic interface.
-func (a AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {}
+	// RegisterGRPCGatewayRoutes implements AppModuleBasic interface.
+	return
+}
 
-// GetTxCmd implements AppModuleBasic interface.
+func (a AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {
+	_ = "STUB: not implemented"
+
+	// GetTxCmd implements AppModuleBasic interface.
+	return
+}
+
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// GetQueryCmd implements AppModuleBasic interface.
 	return nil
 }
 
-// GetQueryCmd implements AppModuleBasic interface.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// AppModule represents the AppModule for the mock module.
 	return nil
 }
 
-// AppModule represents the AppModule for the mock module.
 type AppModule struct {
 	AppModuleBasic
 	ibcApps    []*MockIBCApp
@@ -106,67 +125,77 @@ type AppModule struct {
 }
 
 // NewAppModule returns a mock AppModule instance.
-func NewAppModule(pk PortKeeper) AppModule {
-	return AppModule{
-		portKeeper: pk,
-	}
-}
+func NewAppModule(pk PortKeeper) AppModule { _ = "STUB: not implemented"; return *new(AppModule) }
 
 // RegisterInvariants implements the AppModule interface.
-func (AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
+func (AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 
-// Route implements the AppModule interface.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(ModuleName, nil)
+	// Route implements the AppModule interface.
+	return
 }
+
+func (am AppModule) Route() sdk.Route { _ = "STUB: not implemented"; return *new(sdk.Route) }
 
 // QuerierRoute implements the AppModule interface.
 func (AppModule) QuerierRoute() string {
+	_ = "STUB: not implemented"
+
+	// LegacyQuerierHandler implements the AppModule interface.
 	return ""
 }
 
-// LegacyQuerierHandler implements the AppModule interface.
 func (am AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier {
+	_ = "STUB: not implemented"
+
+	// RegisterServices implements the AppModule interface.
+	return *new(sdk.Querier)
+}
+
+func (am AppModule) RegisterServices(module.Configurator) {
+	_ = "STUB: not implemented"
+
+	// InitGenesis implements the AppModule interface.
+	return
+}
+
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
+	_ = "STUB: not implemented"
 	return nil
 }
 
-// RegisterServices implements the AppModule interface.
-func (am AppModule) RegisterServices(module.Configurator) {}
-
-// InitGenesis implements the AppModule interface.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
-	for _, ibcApp := range am.ibcApps {
-		if ibcApp.PortID != "" && !am.portKeeper.IsBound(ctx, ibcApp.PortID) {
-			// bind mock portID
-			cap := am.portKeeper.BindPort(ctx, ibcApp.PortID)
-			err := ibcApp.ScopedKeeper.ClaimCapability(ctx, cap, host.PortPath(ibcApp.PortID))
-			if err != nil {
-				panic(fmt.Sprintf("failed to claim capability: %v", err))
-			}
-		}
-	}
-
-	return []abci.ValidatorUpdate{}
-}
+// bind mock portID
 
 // ExportGenesis implements the AppModule interface.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	return nil
+	_ = "STUB: not implemented"
+
+	// ExportGenesisStream implements the AppModule interface.
+	return *new(json.RawMessage)
 }
 
-// ExportGenesisStream implements the AppModule interface.
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
+	_ = "STUB: not implemented"
+
+	// ConsensusVersion implements AppModule/ConsensusVersion.
 	return nil
 }
 
-// ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
 
-// BeginBlock implements the AppModule interface
-func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
+	// BeginBlock implements the AppModule interface
+	return 0
 }
 
-// EndBlock implements the AppModule interface
+func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
+	_ = "STUB: not implemented"
+
+	// EndBlock implements the AppModule interface
+	return
+}
+
 func (am AppModule) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) []abci.ValidatorUpdate {
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }

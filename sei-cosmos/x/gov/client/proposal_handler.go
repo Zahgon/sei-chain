@@ -21,8 +21,6 @@ type ProposalHandler struct {
 
 // NewProposalHandler creates a new ProposalHandler object
 func NewProposalHandler(cliHandler CLIHandlerFn, restHandler RESTHandlerFn) ProposalHandler {
-	return ProposalHandler{
-		CLIHandler:  cliHandler,
-		RESTHandler: restHandler,
-	}
+	_ = "STUB: not implemented"
+	return *new(ProposalHandler)
 }

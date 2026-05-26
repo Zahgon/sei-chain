@@ -1,7 +1,6 @@
 package state
 
 import (
-	"encoding/binary"
 	"math/big"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
@@ -15,13 +14,13 @@ var SdkUseiToSweiMultiplier = sdk.NewIntFromBigInt(UseiToSweiMultiplier)
 var CoinbaseAddressPrefix = []byte("evm_coinbase")
 
 func GetCoinbaseAddress(txIdx int) sdk.AccAddress {
-	txIndexBz := make([]byte, 8)
-	binary.BigEndian.PutUint64(txIndexBz, uint64(txIdx)) //nolint:gosec
-	return append(CoinbaseAddressPrefix, txIndexBz...)
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
 
+//nolint:gosec
+
 func SplitUseiWeiAmount(amt *big.Int) (sdk.Int, sdk.Int) {
-	wei := new(big.Int).Mod(amt, UseiToSweiMultiplier)
-	usei := new(big.Int).Quo(amt, UseiToSweiMultiplier)
-	return sdk.NewIntFromBigInt(usei), sdk.NewIntFromBigInt(wei)
+	_ = "STUB: not implemented"
+	return *new(sdk.Int), *new(sdk.Int)
 }

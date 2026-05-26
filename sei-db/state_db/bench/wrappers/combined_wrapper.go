@@ -21,51 +21,34 @@ type combinedWrapper struct {
 }
 
 func NewCombinedWrapper(sc DBWrapper, ss dbTypes.StateStore) DBWrapper {
-	w := &combinedWrapper{sc: sc, ss: ss}
-	w.ssVersion.Store(ss.GetLatestVersion())
-	return w
+	_ = "STUB: not implemented"
+	return *new(DBWrapper)
 }
 
 func (c *combinedWrapper) ApplyChangeSets(entry *proto.ChangelogEntry) error {
-	if err := c.sc.ApplyChangeSets(entry); err != nil {
-		return err
-	}
-	c.ssVersion.Store(entry.Version)
-	return c.ss.ApplyChangesetAsync(entry.Version, entry.Changesets)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (c *combinedWrapper) Read(key []byte) (data []byte, found bool, err error) {
-	return c.sc.Read(key)
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
-func (c *combinedWrapper) Commit() (int64, error) {
-	if _, err := c.sc.Commit(); err != nil {
-		return 0, err
-	}
-	return c.ssVersion.Load(), nil
-}
+func (c *combinedWrapper) Commit() (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
-func (c *combinedWrapper) Close() error {
-	scErr := c.sc.Close()
-	ssErr := c.ss.Close()
-	if scErr != nil {
-		return scErr
-	}
-	return ssErr
-}
+func (c *combinedWrapper) Close() error { _ = "STUB: not implemented"; return nil }
 
-func (c *combinedWrapper) Version() int64 {
-	return c.ssVersion.Load()
-}
+func (c *combinedWrapper) Version() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (c *combinedWrapper) LoadVersion(version int64) error {
-	return c.sc.LoadVersion(version)
-}
+func (c *combinedWrapper) LoadVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
 func (c *combinedWrapper) Importer(version int64) (scTypes.Importer, error) {
-	return c.sc.Importer(version)
+	_ = "STUB: not implemented"
+	return *new(scTypes.Importer), nil
 }
 
 func (c *combinedWrapper) GetPhaseTimer() *metrics.PhaseTimer {
+	_ = "STUB: not implemented"
 	return nil
 }

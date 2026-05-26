@@ -1,16 +1,11 @@
 package types
 
 import (
-	"encoding/json"
 	"regexp"
-	"strings"
 
 	crypto "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkaddress "github.com/sei-protocol/sei-chain/sei-cosmos/types/address"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
-	yaml "gopkg.in/yaml.v2"
 )
 
 var (
@@ -43,120 +38,53 @@ type interchainAccountPretty struct {
 // The sdk.AccAddress returned is a sub-address of the module account, using the host chain connection ID and controller chain's port ID as the derivation key
 // Deprecated: this function is deprecated! Please use GenerateUniqueAddress in favour of GenerateAddress
 func GenerateAddress(moduleAccAddr sdk.AccAddress, connectionID, portID string) sdk.AccAddress {
-	return sdk.AccAddress(sdkaddress.Derive(moduleAccAddr, []byte(connectionID+portID)))
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
 
 // GenerateUniqueAddress returns an sdk.AccAddress derived using a host module account address, host connection ID, the controller portID,
 // the current block app hash, and the current block data hash. The sdk.AccAddress returned is a sub-address of the host module account.
 func GenerateUniqueAddress(ctx sdk.Context, connectionID, portID string) sdk.AccAddress {
-	hostModuleAcc := sdkaddress.Module(ModuleName, []byte(hostAccountsKey))
-	header := ctx.BlockHeader()
-
-	buf := []byte(connectionID + portID)
-	buf = append(buf, header.AppHash...)
-	buf = append(buf, header.DataHash...)
-
-	return sdkaddress.Derive(hostModuleAcc, buf)
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
 
 // ValidateAccountAddress performs basic validation of interchain account addresses, enforcing constraints
 // on address length and character set
-func ValidateAccountAddress(addr string) error {
-	if !isValidAddr(addr) || len(addr) > DefaultMaxAddrLength {
-		return sdkerrors.Wrapf(
-			ErrInvalidAccountAddress,
-			"address must contain strictly alphanumeric characters, not exceeding %d characters in length",
-			DefaultMaxAddrLength,
-		)
-	}
-
-	return nil
-}
+func ValidateAccountAddress(addr string) error { _ = "STUB: not implemented"; return nil }
 
 // NewInterchainAccount creates and returns a new InterchainAccount type
 func NewInterchainAccount(ba *authtypes.BaseAccount, accountOwner string) *InterchainAccount {
-	return &InterchainAccount{
-		BaseAccount:  ba,
-		AccountOwner: accountOwner,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetPubKey implements the authtypes.AccountI interface
 func (ia InterchainAccount) SetPubKey(pubKey crypto.PubKey) error {
-	return sdkerrors.Wrap(ErrUnsupported, "cannot set public key for interchain account")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetSequence implements the authtypes.AccountI interface
-func (ia InterchainAccount) SetSequence(seq uint64) error {
-	return sdkerrors.Wrap(ErrUnsupported, "cannot set sequence number for interchain account")
-}
+func (ia InterchainAccount) SetSequence(seq uint64) error { _ = "STUB: not implemented"; return nil }
 
 // Validate implements basic validation of the InterchainAccount
-func (ia InterchainAccount) Validate() error {
-	if strings.TrimSpace(ia.AccountOwner) == "" {
-		return sdkerrors.Wrap(ErrInvalidAccountAddress, "AccountOwner cannot be empty")
-	}
-
-	return ia.BaseAccount.Validate()
-}
+func (ia InterchainAccount) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // String returns a string representation of the InterchainAccount
-func (ia InterchainAccount) String() string {
-	out, _ := ia.MarshalYAML()
-	return string(out)
-}
+func (ia InterchainAccount) String() string { _ = "STUB: not implemented"; return "" }
 
 // MarshalYAML returns the YAML representation of the InterchainAccount
 func (ia InterchainAccount) MarshalYAML() ([]byte, error) {
-	accAddr, err := sdk.AccAddressFromBech32(ia.Address)
-	if err != nil {
-		return nil, err
-	}
-
-	bz, err := yaml.Marshal(interchainAccountPretty{
-		Address:       accAddr,
-		PubKey:        "",
-		AccountNumber: ia.AccountNumber,
-		Sequence:      ia.Sequence,
-		AccountOwner:  ia.AccountOwner,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return bz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MarshalJSON returns the JSON representation of the InterchainAccount
 func (ia InterchainAccount) MarshalJSON() ([]byte, error) {
-	accAddr, err := sdk.AccAddressFromBech32(ia.Address)
-	if err != nil {
-		return nil, err
-	}
-
-	bz, err := json.Marshal(interchainAccountPretty{
-		Address:       accAddr,
-		PubKey:        "",
-		AccountNumber: ia.AccountNumber,
-		Sequence:      ia.Sequence,
-		AccountOwner:  ia.AccountOwner,
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return bz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UnmarshalJSON unmarshals raw JSON bytes into the InterchainAccount
-func (ia *InterchainAccount) UnmarshalJSON(bz []byte) error {
-	var alias interchainAccountPretty
-	if err := json.Unmarshal(bz, &alias); err != nil {
-		return err
-	}
-
-	ia.BaseAccount = authtypes.NewBaseAccount(alias.Address, nil, alias.AccountNumber, alias.Sequence)
-	ia.AccountOwner = alias.AccountOwner
-
-	return nil
-}
+func (ia *InterchainAccount) UnmarshalJSON(bz []byte) error { _ = "STUB: not implemented"; return nil }

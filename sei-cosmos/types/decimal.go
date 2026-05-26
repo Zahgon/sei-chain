@@ -5,8 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"math/big"
-	"strconv"
-	"strings"
 	"testing"
 )
 
@@ -63,74 +61,43 @@ func init() {
 	}
 }
 
-func precisionInt() *big.Int {
-	return new(big.Int).Set(precisionReuse)
-}
+func precisionInt() *big.Int { _ = "STUB: not implemented"; return nil }
 
-func ZeroDec() Dec     { return Dec{new(big.Int).Set(zeroInt)} }
-func OneDec() Dec      { return Dec{precisionInt()} }
-func SmallestDec() Dec { return Dec{new(big.Int).Set(oneInt)} }
+func ZeroDec() Dec     { _ = "STUB: not implemented"; return *new(Dec) }
+func OneDec() Dec      { _ = "STUB: not implemented"; return *new(Dec) }
+func SmallestDec() Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // calculate the precision multiplier
-func calcPrecisionMultiplier(prec int64) *big.Int {
-	if prec > Precision {
-		panic(fmt.Sprintf("too much precision, maximum %v, provided %v", Precision, prec))
-	}
-	zerosToAdd := Precision - prec
-	multiplier := new(big.Int).Exp(tenInt, big.NewInt(zerosToAdd), nil)
-	return multiplier
-}
+func calcPrecisionMultiplier(prec int64) *big.Int { _ = "STUB: not implemented"; return nil }
 
 // get the precision multiplier, do not mutate result
-func precisionMultiplier(prec int64) *big.Int {
-	if prec > Precision {
-		panic(fmt.Sprintf("too much precision, maximum %v, provided %v", Precision, prec))
-	}
-	return precisionMultipliers[prec]
-}
+func precisionMultiplier(prec int64) *big.Int { _ = "STUB: not implemented"; return nil }
 
 // NewDec creates a new Dec from integer assuming whole number.
-func NewDec(i int64) Dec {
-	return NewDecWithPrec(i, 0)
-}
+func NewDec(i int64) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // NewDecWithPrec creates a new Dec from integer with decimal place at prec.
 // CONTRACT: prec <= Precision
-func NewDecWithPrec(i, prec int64) Dec {
-	return Dec{
-		new(big.Int).Mul(big.NewInt(i), precisionMultiplier(prec)),
-	}
-}
+func NewDecWithPrec(i, prec int64) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // create a new Dec from big integer assuming whole numbers
 // CONTRACT: prec <= Precision
-func NewDecFromBigInt(i *big.Int) Dec {
-	return NewDecFromBigIntWithPrec(i, 0)
-}
+func NewDecFromBigInt(i *big.Int) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // create a new Dec from big integer assuming whole numbers
 // CONTRACT: prec <= Precision
 func NewDecFromBigIntWithPrec(i *big.Int, prec int64) Dec {
-	result := Dec{
-		new(big.Int).Mul(i, precisionMultiplier(prec)),
-	}
-	result.assertInValidRange()
-	return result
+	_ = "STUB: not implemented"
+	return *new(Dec)
 }
 
 // NewDecFromInt creates a new Dec from Int assuming whole numbers.
 // CONTRACT: prec <= Precision
-func NewDecFromInt(i Int) Dec {
-	return NewDecFromIntWithPrec(i, 0)
-}
+func NewDecFromInt(i Int) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // NewDecFromIntWithPrec creates a new Dec from Int with decimal place at prec.
 // CONTRACT: prec <= Precision
-func NewDecFromIntWithPrec(i Int, prec int64) Dec {
-	return Dec{
-		new(big.Int).Mul(i.BigInt(), precisionMultiplier(prec)),
-	}
-}
+func NewDecFromIntWithPrec(i Int, prec int64) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // create a decimal from an input decimal string.
 // valid must come in the form:
@@ -148,192 +115,78 @@ func NewDecFromIntWithPrec(i Int, prec int64) Dec {
 // are provided in the string than the constant Precision.
 //
 // CONTRACT - This function does not mutate the input str.
-func NewDecFromStr(str string) (Dec, error) {
-	if len(str) == 0 {
-		return Dec{}, fmt.Errorf("%s: %w", str, ErrEmptyDecimalStr)
-	}
+func NewDecFromStr(str string) (Dec, error) { _ = "STUB: not implemented"; return *new(Dec), nil }
 
-	// first extract any negative symbol
-	neg := false
-	if str[0] == '-' {
-		neg = true
-		str = str[1:]
-	}
+// first extract any negative symbol
 
-	if len(str) == 0 {
-		return Dec{}, fmt.Errorf("%s: %w", str, ErrEmptyDecimalStr)
-	}
+// has a decimal place
 
-	strs := strings.Split(str, ".")
-	lenDecs := 0
-	combinedStr := strs[0]
+// add some extra zero's to correct to the Precision factor
 
-	if len(strs) == 2 { // has a decimal place
-		lenDecs = len(strs[1])
-		if lenDecs == 0 || len(combinedStr) == 0 {
-			return Dec{}, ErrInvalidDecimalLength
-		}
-		combinedStr += strs[1]
-	} else if len(strs) > 2 {
-		return Dec{}, ErrInvalidDecimalStr
-	}
-
-	if lenDecs > Precision {
-		return Dec{}, fmt.Errorf("value '%s' exceeds max precision by %d decimal places: max precision %d", str, Precision-lenDecs, Precision)
-	}
-
-	// add some extra zero's to correct to the Precision factor
-	zerosToAdd := Precision - lenDecs
-	zeros := fmt.Sprintf(`%0`+strconv.Itoa(zerosToAdd)+`s`, "")
-	combinedStr += zeros
-
-	combined, ok := new(big.Int).SetString(combinedStr, 10) // base 10
-	if !ok {
-		return Dec{}, fmt.Errorf("failed to set decimal string with base 10: %s", combinedStr)
-	}
-	if neg {
-		combined = new(big.Int).Neg(combined)
-	}
-
-	d := Dec{combined}
-	if !d.IsInValidRange() {
-		return Dec{}, fmt.Errorf("decimal '%s' out of range", str)
-	}
-
-	return d, nil
-}
+// base 10
 
 // Decimal from string, panic on error
-func MustNewDecFromStr(s string) Dec {
-	dec, err := NewDecFromStr(s)
-	if err != nil {
-		panic(err)
-	}
-	return dec
-}
+func MustNewDecFromStr(s string) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
-func (d Dec) IsNil() bool       { return d.i == nil }                 // is decimal nil
-func (d Dec) IsZero() bool      { return (d.i).Sign() == 0 }          // is equal to zero
-func (d Dec) IsNegative() bool  { return (d.i).Sign() == -1 }         // is negative
-func (d Dec) IsPositive() bool  { return (d.i).Sign() == 1 }          // is positive
-func (d Dec) Equal(d2 Dec) bool { return (d.i).Cmp(d2.i) == 0 }       // equal decimals
-func (d Dec) GT(d2 Dec) bool    { return (d.i).Cmp(d2.i) > 0 }        // greater than
-func (d Dec) GTE(d2 Dec) bool   { return (d.i).Cmp(d2.i) >= 0 }       // greater than or equal
-func (d Dec) LT(d2 Dec) bool    { return (d.i).Cmp(d2.i) < 0 }        // less than
-func (d Dec) LTE(d2 Dec) bool   { return (d.i).Cmp(d2.i) <= 0 }       // less than or equal
-func (d Dec) Neg() Dec          { return Dec{new(big.Int).Neg(d.i)} } // reverse the decimal sign
-func (d Dec) Abs() Dec          { return Dec{new(big.Int).Abs(d.i)} } // absolute value
+func (d Dec) IsNil() bool       { _ = "STUB: not implemented"; return false }     // is decimal nil
+func (d Dec) IsZero() bool      { _ = "STUB: not implemented"; return false }     // is equal to zero
+func (d Dec) IsNegative() bool  { _ = "STUB: not implemented"; return false }     // is negative
+func (d Dec) IsPositive() bool  { _ = "STUB: not implemented"; return false }     // is positive
+func (d Dec) Equal(d2 Dec) bool { _ = "STUB: not implemented"; return false }     // equal decimals
+func (d Dec) GT(d2 Dec) bool    { _ = "STUB: not implemented"; return false }     // greater than
+func (d Dec) GTE(d2 Dec) bool   { _ = "STUB: not implemented"; return false }     // greater than or equal
+func (d Dec) LT(d2 Dec) bool    { _ = "STUB: not implemented"; return false }     // less than
+func (d Dec) LTE(d2 Dec) bool   { _ = "STUB: not implemented"; return false }     // less than or equal
+func (d Dec) Neg() Dec          { _ = "STUB: not implemented"; return *new(Dec) } // reverse the decimal sign
+func (d Dec) Abs() Dec          { _ = "STUB: not implemented"; return *new(Dec) } // absolute value
 
 // BigInt returns a copy of the underlying big.Int.
-func (d Dec) BigInt() *big.Int {
-	if d.IsNil() {
-		return nil
-	}
-
-	cp := new(big.Int)
-	return cp.Set(d.i)
-}
+func (d Dec) BigInt() *big.Int { _ = "STUB: not implemented"; return nil }
 
 // Add returns the sum of two Dec values.
-func (d Dec) Add(d2 Dec) Dec {
-	res := new(big.Int).Add(d.i, d2.i)
-	result := Dec{res}
-	result.assertInValidRange()
-	return result
-}
+func (d Dec) Add(d2 Dec) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // Sub returns the difference of two Dec values.
-func (d Dec) Sub(d2 Dec) Dec {
-	res := new(big.Int).Sub(d.i, d2.i)
-	result := Dec{res}
-	result.assertInValidRange()
-	return result
-}
+func (d Dec) Sub(d2 Dec) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // Mul returns the product of two Dec values with rounding.
-func (d Dec) Mul(d2 Dec) Dec {
-	mul := new(big.Int).Mul(d.i, d2.i)
-	chopped := chopPrecisionAndRound(mul)
-	result := Dec{chopped}
-	result.assertInValidRange()
-	return result
-}
+func (d Dec) Mul(d2 Dec) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // multiplication truncate
-func (d Dec) MulTruncate(d2 Dec) Dec {
-	mul := new(big.Int).Mul(d.i, d2.i)
-	chopped := chopPrecisionAndTruncate(mul)
-	result := Dec{chopped}
-	result.assertInValidRange()
-	return result
-}
+func (d Dec) MulTruncate(d2 Dec) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // multiplication
-func (d Dec) MulInt(i Int) Dec {
-	mul := new(big.Int).Mul(d.i, i.i)
-	result := Dec{mul}
-	result.assertInValidRange()
-	return result
-}
+func (d Dec) MulInt(i Int) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // MulInt64 - multiplication with int64
-func (d Dec) MulInt64(i int64) Dec {
-	mul := new(big.Int).Mul(d.i, big.NewInt(i))
-	result := Dec{mul}
-	result.assertInValidRange()
-	return result
-}
+func (d Dec) MulInt64(i int64) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // quotient
 func (d Dec) Quo(d2 Dec) Dec {
+	_ = "STUB: not implemented"
 	// multiply precision twice
-	mul := new(big.Int).Mul(d.i, precisionReuse)
-	mul.Mul(mul, precisionReuse)
-
-	quo := new(big.Int).Quo(mul, d2.i)
-	chopped := chopPrecisionAndRound(quo)
-	result := Dec{chopped}
-	result.assertInValidRange()
-	return result
+	return *new(Dec)
 }
 
 // quotient truncate
 func (d Dec) QuoTruncate(d2 Dec) Dec {
+	_ = "STUB: not implemented"
 	// multiply precision twice
-	mul := new(big.Int).Mul(d.i, precisionReuse)
-	mul.Mul(mul, precisionReuse)
-
-	quo := mul.Quo(mul, d2.i)
-	chopped := chopPrecisionAndTruncate(quo)
-	result := Dec{chopped}
-	result.assertInValidRange()
-	return result
+	return *new(Dec)
 }
 
 // quotient, round up
 func (d Dec) QuoRoundUp(d2 Dec) Dec {
+	_ = "STUB: not implemented"
 	// multiply precision twice
-	mul := new(big.Int).Mul(d.i, precisionReuse)
-	mul.Mul(mul, precisionReuse)
-
-	quo := new(big.Int).Quo(mul, d2.i)
-	chopped := chopPrecisionAndRoundUp(quo)
-	result := Dec{chopped}
-	result.assertInValidRange()
-	return result
+	return *new(Dec)
 }
 
 // quotient
-func (d Dec) QuoInt(i Int) Dec {
-	mul := new(big.Int).Quo(d.i, i.i)
-	return Dec{mul}
-}
+func (d Dec) QuoInt(i Int) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // QuoInt64 - quotient with int64
-func (d Dec) QuoInt64(i int64) Dec {
-	mul := new(big.Int).Quo(d.i, big.NewInt(i))
-	return Dec{mul}
-}
+func (d Dec) QuoInt64(i int64) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // ApproxRoot returns an approximate estimation of a Dec's positive real nth root
 // using Newton's method (where n is positive). The algorithm starts with some guess and
@@ -342,151 +195,52 @@ func (d Dec) QuoInt64(i int64) Dec {
 // A maximum number of 100 iterations is used a backup boundary condition for
 // cases where the answer never converges enough to satisfy the main condition.
 func (d Dec) ApproxRoot(root uint64) (guess Dec, err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			var ok bool
-			err, ok = r.(error)
-			if !ok {
-				err = errors.New("out of bounds")
-			}
-		}
-	}()
-
-	if d.IsNegative() {
-		absRoot, err := d.MulInt64(-1).ApproxRoot(root)
-		return absRoot.MulInt64(-1), err
-	}
-
-	if root == 1 || d.IsZero() || d.Equal(OneDec()) {
-		return d, nil
-	}
-
-	if root == 0 {
-		return OneDec(), nil
-	}
-
-	rootInt := NewIntFromUint64(root)
-	guess, delta := OneDec(), OneDec()
-
-	for iter := 0; delta.Abs().GT(SmallestDec()) && iter < maxApproxRootIterations; iter++ {
-		prev := guess.Power(root - 1)
-		if prev.IsZero() {
-			prev = SmallestDec()
-		}
-		delta = d.Quo(prev)
-		delta = delta.Sub(guess)
-		delta = delta.QuoInt(rootInt)
-
-		guess = guess.Add(delta)
-	}
-
-	return guess, nil
+	_ = "STUB: not implemented"
+	return *new(Dec), nil
 }
 
 // Power returns a the result of raising to a positive integer power
-func (d Dec) Power(power uint64) Dec {
-	if power == 0 {
-		return OneDec()
-	}
-	tmp := OneDec()
-
-	for i := power; i > 1; {
-		if i%2 != 0 {
-			tmp = tmp.Mul(d)
-		}
-		i /= 2
-		d = d.Mul(d)
-	}
-
-	return d.Mul(tmp)
-}
+func (d Dec) Power(power uint64) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // ApproxSqrt is a wrapper around ApproxRoot for the common special case
 // of finding the square root of a number. It returns -(sqrt(abs(d)) if input is negative.
 func (d Dec) ApproxSqrt() (Dec, error) {
-	return d.ApproxRoot(2)
+	_ = "STUB: not implemented"
+	return *
+
+	// is integer, e.g. decimals are zero
+	new(Dec), nil
 }
 
-// is integer, e.g. decimals are zero
-func (d Dec) IsInteger() bool {
-	return new(big.Int).Rem(d.i, precisionReuse).Sign() == 0
-}
+func (d Dec) IsInteger() bool { _ = "STUB: not implemented"; return false }
 
 // format decimal state
-func (d Dec) Format(s fmt.State, verb rune) {
-	_, err := s.Write([]byte(d.String()))
-	if err != nil {
-		panic(err)
-	}
-}
+func (d Dec) Format(s fmt.State, verb rune) { _ = "STUB: not implemented"; return }
 
-func (d Dec) String() string {
-	if d.i == nil {
-		return d.i.String()
-	}
+func (d Dec) String() string { _ = "STUB: not implemented"; return "" }
 
-	isNeg := d.IsNegative()
+// TODO: Remove trailing zeros
+// case 1, purely decimal
 
-	if isNeg {
-		d = d.Neg()
-	}
+// 0. prefix
 
-	bzInt, err := d.i.MarshalText()
-	if err != nil {
-		return ""
-	}
-	inputSize := len(bzInt)
+// set relevant digits to 0
 
-	var bzStr []byte
+// set final digits
 
-	// TODO: Remove trailing zeros
-	// case 1, purely decimal
-	if inputSize <= Precision {
-		bzStr = make([]byte, Precision+2)
+// inputSize + 1 to account for the decimal point that is being added
 
-		// 0. prefix
-		bzStr[0] = byte('0')
-		bzStr[1] = byte('.')
-
-		// set relevant digits to 0
-		for i := 0; i < Precision-inputSize; i++ {
-			bzStr[i+2] = byte('0')
-		}
-
-		// set final digits
-		copy(bzStr[2+(Precision-inputSize):], bzInt)
-	} else {
-		// inputSize + 1 to account for the decimal point that is being added
-		bzStr = make([]byte, inputSize+1)
-		decPointPlace := inputSize - Precision
-
-		copy(bzStr, bzInt[:decPointPlace])                   // pre-decimal digits
-		bzStr[decPointPlace] = byte('.')                     // decimal point
-		copy(bzStr[decPointPlace+1:], bzInt[decPointPlace:]) // post-decimal digits
-	}
-
-	if isNeg {
-		return "-" + string(bzStr)
-	}
-
-	return string(bzStr)
-}
+// pre-decimal digits
+// decimal point
+// post-decimal digits
 
 // Float64 returns the float64 representation of a Dec.
 // Will return the error if the conversion failed.
-func (d Dec) Float64() (float64, error) {
-	return strconv.ParseFloat(d.String(), 64)
-}
+func (d Dec) Float64() (float64, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // MustFloat64 returns the float64 representation of a Dec.
 // Would panic if the conversion failed.
-func (d Dec) MustFloat64() float64 {
-	if value, err := strconv.ParseFloat(d.String(), 64); err != nil {
-		panic(err)
-	} else {
-		return value
-	}
-}
+func (d Dec) MustFloat64() float64 { _ = "STUB: not implemented"; return 0 }
 
 //     ____
 //  __|    |__   "chop 'em
@@ -502,124 +256,60 @@ func (d Dec) MustFloat64() float64 {
 //
 // Mutates the input. Use the non-mutative version if that is undesired
 func chopPrecisionAndRound(d *big.Int) *big.Int {
+	_ = "STUB: not implemented"
 	// remove the negative and add it back when returning
-	if d.Sign() == -1 {
-		// make d positive, compute chopped value, and then un-mutate d
-		d = d.Neg(d)
-		d = chopPrecisionAndRound(d)
-		d = d.Neg(d)
-		return d
-	}
-
-	// get the truncated quotient and remainder
-	quo, rem := d, big.NewInt(0)
-	quo, rem = quo.QuoRem(d, precisionReuse, rem)
-
-	if rem.Sign() == 0 { // remainder is zero
-		return quo
-	}
-
-	switch rem.Cmp(fivePrecision) {
-	case -1:
-		return quo
-	case 1:
-		return quo.Add(quo, oneInt)
-	default: // bankers rounding must take place
-		// always round to an even number
-		if quo.Bit(0) == 0 {
-			return quo
-		}
-		return quo.Add(quo, oneInt)
-	}
+	return nil
 }
+
+// make d positive, compute chopped value, and then un-mutate d
+
+// get the truncated quotient and remainder
+
+// remainder is zero
+
+// bankers rounding must take place
+// always round to an even number
 
 func chopPrecisionAndRoundUp(d *big.Int) *big.Int {
+	_ = "STUB: not implemented"
 	// remove the negative and add it back when returning
-	if d.Sign() == -1 {
-		// make d positive, compute chopped value, and then un-mutate d
-		d = d.Neg(d)
-		// truncate since d is negative...
-		d = chopPrecisionAndTruncate(d)
-		d = d.Neg(d)
-		return d
-	}
-
-	// get the truncated quotient and remainder
-	quo, rem := d, big.NewInt(0)
-	quo, rem = quo.QuoRem(d, precisionReuse, rem)
-
-	if rem.Sign() == 0 { // remainder is zero
-		return quo
-	}
-
-	return quo.Add(quo, oneInt)
+	return nil
 }
 
-func chopPrecisionAndRoundNonMutative(d *big.Int) *big.Int {
-	tmp := new(big.Int).Set(d)
-	return chopPrecisionAndRound(tmp)
-}
+// make d positive, compute chopped value, and then un-mutate d
+
+// truncate since d is negative...
+
+// get the truncated quotient and remainder
+
+// remainder is zero
+
+func chopPrecisionAndRoundNonMutative(d *big.Int) *big.Int { _ = "STUB: not implemented"; return nil }
 
 // RoundInt64 rounds the decimal using bankers rounding
-func (d Dec) RoundInt64() int64 {
-	chopped := chopPrecisionAndRoundNonMutative(d.i)
-	if !chopped.IsInt64() {
-		panic("Int64() out of bound")
-	}
-	return chopped.Int64()
-}
+func (d Dec) RoundInt64() int64 { _ = "STUB: not implemented"; return 0 }
 
 // RoundInt round the decimal using bankers rounding
-func (d Dec) RoundInt() Int {
-	return NewIntFromBigInt(chopPrecisionAndRoundNonMutative(d.i))
-}
+func (d Dec) RoundInt() Int { _ = "STUB: not implemented"; return *new(Int) }
 
 // chopPrecisionAndTruncate is similar to chopPrecisionAndRound,
 // but always rounds down. It does not mutate the input.
-func chopPrecisionAndTruncate(d *big.Int) *big.Int {
-	return new(big.Int).Quo(d, precisionReuse)
-}
+func chopPrecisionAndTruncate(d *big.Int) *big.Int { _ = "STUB: not implemented"; return nil }
 
 // TruncateInt64 truncates the decimals from the number and returns an int64
-func (d Dec) TruncateInt64() int64 {
-	chopped := chopPrecisionAndTruncate(d.i)
-	if !chopped.IsInt64() {
-		panic("Int64() out of bound")
-	}
-	return chopped.Int64()
-}
+func (d Dec) TruncateInt64() int64 { _ = "STUB: not implemented"; return 0 }
 
 // TruncateInt truncates the decimals from the number and returns an Int
-func (d Dec) TruncateInt() Int {
-	return NewIntFromBigInt(chopPrecisionAndTruncate(d.i))
-}
+func (d Dec) TruncateInt() Int { _ = "STUB: not implemented"; return *new(Int) }
 
 // TruncateDec truncates the decimals from the number and returns a Dec
-func (d Dec) TruncateDec() Dec {
-	return NewDecFromBigInt(chopPrecisionAndTruncate(d.i))
-}
+func (d Dec) TruncateDec() Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // Ceil returns the smallest interger value (as a decimal) that is greater than
 // or equal to the given decimal.
-func (d Dec) Ceil() Dec {
-	tmp := new(big.Int).Set(d.i)
+func (d Dec) Ceil() Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
-	quo, rem := tmp, big.NewInt(0)
-	quo, rem = quo.QuoRem(tmp, precisionReuse, rem)
-
-	// no need to round with a zero remainder regardless of sign
-	var r Dec
-	switch rem.Sign() {
-	case 0:
-		r = NewDecFromBigInt(quo)
-	case -1:
-		r = NewDecFromBigInt(quo)
-	default:
-		r = NewDecFromBigInt(quo.Add(quo, oneInt))
-	}
-	r.assertInValidRange()
-	return r
-}
+// no need to round with a zero remainder regardless of sign
 
 // MaxSortableDec is the largest Dec that can be passed into SortableDecBytes()
 // Its negative form is the least Dec that can be passed in.
@@ -628,32 +318,19 @@ var MaxSortableDec = OneDec().Quo(SmallestDec())
 // ValidSortableDec ensures that a Dec is within the sortable bounds,
 // a Dec can't have a precision of less than 10^-18.
 // Max sortable decimal was set to the reciprocal of SmallestDec.
-func ValidSortableDec(dec Dec) bool {
-	return dec.Abs().LTE(MaxSortableDec)
-}
+func ValidSortableDec(dec Dec) bool { _ = "STUB: not implemented"; return false }
 
 // SortableDecBytes returns a byte slice representation of a Dec that can be sorted.
 // Left and right pads with 0s so there are 18 digits to left and right of the decimal point.
 // For this reason, there is a maximum and minimum value for this, enforced by ValidSortableDec.
-func SortableDecBytes(dec Dec) []byte {
-	if !ValidSortableDec(dec) {
-		panic("dec must be within bounds")
-	}
-	// Instead of adding an extra byte to all sortable decs in order to handle max sortable, we just
-	// makes its bytes be "max" which comes after all numbers in ASCIIbetical order
-	if dec.Equal(MaxSortableDec) {
-		return []byte("max")
-	}
-	// For the same reason, we make the bytes of minimum sortable dec be --, which comes before all numbers.
-	if dec.Equal(MaxSortableDec.Neg()) {
-		return []byte("--")
-	}
-	// We move the negative sign to the front of all the left padded 0s, to make negative numbers come before positive numbers
-	if dec.IsNegative() {
-		return append([]byte("-"), []byte(fmt.Sprintf(fmt.Sprintf("%%0%ds", Precision*2+1), dec.Abs().String()))...)
-	}
-	return []byte(fmt.Sprintf(fmt.Sprintf("%%0%ds", Precision*2+1), dec.String()))
-}
+func SortableDecBytes(dec Dec) []byte { _ = "STUB: not implemented"; return nil }
+
+// Instead of adding an extra byte to all sortable decs in order to handle max sortable, we just
+// makes its bytes be "max" which comes after all numbers in ASCIIbetical order
+
+// For the same reason, we make the bytes of minimum sortable dec be --, which comes before all numbers.
+
+// We move the negative sign to the front of all the left padded 0s, to make negative numbers come before positive numbers
 
 // reuse nil values
 var nilJSON []byte
@@ -665,161 +342,69 @@ func init() {
 }
 
 // MarshalJSON marshals the decimal
-func (d Dec) MarshalJSON() ([]byte, error) {
-	if d.i == nil {
-		return nilJSON, nil
-	}
-	return json.Marshal(d.String())
-}
+func (d Dec) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON defines custom decoding scheme
-func (d *Dec) UnmarshalJSON(bz []byte) error {
-	if d.i == nil {
-		d.i = new(big.Int)
-	}
+func (d *Dec) UnmarshalJSON(bz []byte) error { _ = "STUB: not implemented"; return nil }
 
-	var text string
-	err := json.Unmarshal(bz, &text)
-	if err != nil {
-		return err
-	}
-
-	// TODO: Reuse dec allocation
-	newDec, err := NewDecFromStr(text)
-	if err != nil {
-		return err
-	}
-
-	d.i = newDec.i
-	return nil
-}
+// TODO: Reuse dec allocation
 
 // MarshalYAML returns the YAML representation.
 func (d Dec) MarshalYAML() (interface{}, error) {
-	return d.String(), nil
+	_ = "STUB: not implemented"
+	return nil,
+
+		// Marshal implements the gogo proto custom type interface.
+		nil
 }
 
-// Marshal implements the gogo proto custom type interface.
-func (d Dec) Marshal() ([]byte, error) {
-	if d.i == nil {
-		d.i = new(big.Int)
-	}
-	return d.i.MarshalText()
-}
+func (d Dec) Marshal() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // MarshalTo implements the gogo proto custom type interface.
-func (d *Dec) MarshalTo(data []byte) (n int, err error) {
-	if d.i == nil {
-		d.i = new(big.Int)
-	}
-
-	if d.i.Cmp(zeroInt) == 0 {
-		copy(data, []byte{0x30})
-		return 1, nil
-	}
-
-	bz, err := d.Marshal()
-	if err != nil {
-		return 0, err
-	}
-
-	copy(data, bz)
-	return len(bz), nil
-}
+func (d *Dec) MarshalTo(data []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Unmarshal implements the gogo proto custom type interface.
 func (d *Dec) Unmarshal(data []byte) error {
+	_ = "STUB: not implemented"
 	// The maximum valid Dec value requires ~95 decimal digits (315 bits), so 100 is
 	// a safe upper bound.
-	if len(data) > 100 {
-		return fmt.Errorf("decimal string too long: got %d, max 100", len(data))
-	}
-	if len(data) == 0 {
-		// Use ZeroDec, not Dec{}: a nil *big.Int breaks Equal, arithmetic, etc.
-		*d = ZeroDec()
-		return nil
-	}
-
-	if d.i == nil {
-		d.i = new(big.Int)
-	}
-
-	if err := d.i.UnmarshalText(data); err != nil {
-		return err
-	}
-
-	if !d.IsInValidRange() {
-		return errors.New("decimal out of range")
-	}
-
 	return nil
 }
 
+// Use ZeroDec, not Dec{}: a nil *big.Int breaks Equal, arithmetic, etc.
+
 // Size implements the gogo proto custom type interface.
-func (d *Dec) Size() int {
-	bz, _ := d.Marshal()
-	return len(bz)
-}
+func (d *Dec) Size() int { _ = "STUB: not implemented"; return 0 }
 
 // Override Amino binary serialization by proxying to protobuf.
-func (d Dec) MarshalAmino() ([]byte, error)   { return d.Marshal() }
-func (d *Dec) UnmarshalAmino(bz []byte) error { return d.Unmarshal(bz) }
+func (d Dec) MarshalAmino() ([]byte, error)   { _ = "STUB: not implemented"; return nil, nil }
+func (d *Dec) UnmarshalAmino(bz []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (dp DecProto) String() string {
-	return dp.Dec.String()
-}
+func (dp DecProto) String() string { _ = "STUB: not implemented"; return "" }
 
 // helpers
 
 // test if two decimal arrays are equal
-func DecsEqual(d1s, d2s []Dec) bool {
-	if len(d1s) != len(d2s) {
-		return false
-	}
-
-	for i, d1 := range d1s {
-		if !d1.Equal(d2s[i]) {
-			return false
-		}
-	}
-	return true
-}
+func DecsEqual(d1s, d2s []Dec) bool { _ = "STUB: not implemented"; return false }
 
 // minimum decimal between two
-func MinDec(d1, d2 Dec) Dec {
-	if d1.LT(d2) {
-		return d1
-	}
-	return d2
-}
+func MinDec(d1, d2 Dec) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // maximum decimal between two
-func MaxDec(d1, d2 Dec) Dec {
-	if d1.LT(d2) {
-		return d2
-	}
-	return d1
-}
+func MaxDec(d1, d2 Dec) Dec { _ = "STUB: not implemented"; return *new(Dec) }
 
 // IsInValidRange returns true if the decimal's underlying big.Int is within the valid range.
-func (d Dec) IsInValidRange() bool {
-	if d.i == nil {
-		return true
-	}
-	// Use maxDecBitLen (315 bits) to align with the official Cosmos SDK implementation.
-	// 315 bits can cover all values within (2^256−1)×10^18 − 1,
-	// so bitLen ≤ maxDecBitLen ensures alignment with the 256-bit boundary of sdk.Int while also supporting 18-decimal-place precision.
-	return d.i.BitLen() <= maxDecBitLen
-}
+func (d Dec) IsInValidRange() bool { _ = "STUB: not implemented"; return false }
+
+// Use maxDecBitLen (315 bits) to align with the official Cosmos SDK implementation.
+// 315 bits can cover all values within (2^256−1)×10^18 − 1,
+// so bitLen ≤ maxDecBitLen ensures alignment with the 256-bit boundary of sdk.Int while also supporting 18-decimal-place precision.
 
 // assertInValidRange panics if the decimal is out of the valid range
-func (d Dec) assertInValidRange() {
-	if !d.IsInValidRange() {
-		panic("decimal out of range")
-	}
-}
+func (d Dec) assertInValidRange() { _ = "STUB: not implemented"; return }
 
 // intended to be used with require/assert:  require.True(DecEq(...))
 func DecEq(t *testing.T, exp, got Dec) (*testing.T, bool, string, string, string) {
-	return t, exp.Equal(got), "expected:\t%v\ngot:\t\t%v", exp.String(), got.String()
+	_ = "STUB: not implemented"
+	return nil, false, "", "", ""
 }

@@ -1,11 +1,6 @@
 package types
 
 import (
-	"bytes"
-	"errors"
-	"fmt"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/merkle"
 	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
@@ -17,77 +12,36 @@ import (
 type Tx []byte
 
 // Hash computes the TMHASH hash of the wire encoded transaction.
-func (tx Tx) Hash() TxHash { return TxHash(crypto.Checksum(tx)) }
+func (tx Tx) Hash() TxHash { _ = "STUB: not implemented"; return *new(TxHash) }
 
 // String returns the hex-encoded transaction as a string.
-func (tx Tx) String() string { return fmt.Sprintf("Tx{%X}", []byte(tx)) }
+func (tx Tx) String() string { _ = "STUB: not implemented"; return "" }
 
 // Txs is a slice of Tx.
 type Txs []Tx
 
 // Hash returns the Merkle root hash of the transaction hashes.
 // i.e. the leaves of the tree are the hashes of the txs.
-func (txs Txs) Hash() []byte {
-	hl := txs.hashList()
-	return merkle.HashFromByteSlices(hl)
-}
+func (txs Txs) Hash() []byte { _ = "STUB: not implemented"; return nil }
 
 // Index returns the index of this transaction in the list, or -1 if not found
-func (txs Txs) Index(tx Tx) int {
-	for i := range txs {
-		if bytes.Equal(txs[i], tx) {
-			return i
-		}
-	}
-	return -1
-}
+func (txs Txs) Index(tx Tx) int { _ = "STUB: not implemented"; return 0 }
 
 // IndexByHash returns the index of this transaction hash in the list, or -1 if not found
-func (txs Txs) IndexByHash(hash TxHash) int {
-	for i := range txs {
-		if txs[i].Hash() == hash {
-			return i
-		}
-	}
-	return -1
-}
+func (txs Txs) IndexByHash(hash TxHash) int { _ = "STUB: not implemented"; return 0 }
 
-func (txs Txs) Proof(i int) TxProof {
-	hl := txs.hashList()
-	root, proofs := merkle.ProofsFromByteSlices(hl)
+func (txs Txs) Proof(i int) TxProof { _ = "STUB: not implemented"; return *new(TxProof) }
 
-	return TxProof{
-		RootHash: root,
-		Data:     txs[i],
-		Proof:    *proofs[i],
-	}
-}
-
-func (txs Txs) hashList() [][]byte {
-	hl := make([][]byte, len(txs))
-	for i := 0; i < len(txs); i++ {
-		h := txs[i].Hash()
-		hl[i] = h[:]
-	}
-	return hl
-}
+func (txs Txs) hashList() [][]byte { _ = "STUB: not implemented"; return nil }
 
 // Txs is a slice of transactions. Sorting a Txs value orders the transactions
 // lexicographically.
-func (txs Txs) Len() int      { return len(txs) }
-func (txs Txs) Swap(i, j int) { txs[i], txs[j] = txs[j], txs[i] }
-func (txs Txs) Less(i, j int) bool {
-	return bytes.Compare(txs[i], txs[j]) == -1
-}
+func (txs Txs) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (txs Txs) Swap(i, j int)      { _ = "STUB: not implemented"; return }
+func (txs Txs) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
 
 // ToSliceOfBytes converts a Txs to slice of byte slices.
-func (txs Txs) ToSliceOfBytes() [][]byte {
-	txBzs := make([][]byte, len(txs))
-	for i := 0; i < len(txs); i++ {
-		txBzs[i] = txs[i]
-	}
-	return txBzs
-}
+func (txs Txs) ToSliceOfBytes() [][]byte { _ = "STUB: not implemented"; return nil }
 
 // TxProof represents a Merkle proof of the presence of a transaction in the Merkle tree.
 type TxProof struct {
@@ -97,62 +51,22 @@ type TxProof struct {
 }
 
 // Leaf returns the hash(tx), which is the leaf in the merkle tree which this proof refers to.
-func (tp TxProof) Leaf() []byte {
-	h := tp.Data.Hash()
-	return h[:]
-}
+func (tp TxProof) Leaf() []byte { _ = "STUB: not implemented"; return nil }
 
 // Validate verifies the proof. It returns nil if the RootHash matches the dataHash argument,
 // and if the proof is internally consistent. Otherwise, it returns a sensible error.
-func (tp TxProof) Validate(dataHash []byte) error {
-	if !bytes.Equal(dataHash, tp.RootHash) {
-		return errors.New("proof matches different data hash")
-	}
-	if tp.Proof.Index < 0 {
-		return errors.New("proof index cannot be negative")
-	}
-	if tp.Proof.Total <= 0 {
-		return errors.New("proof total must be positive")
-	}
-	valid := tp.Proof.Verify(tp.RootHash, tp.Leaf())
-	if valid != nil {
-		return errors.New("proof is not internally consistent")
-	}
-	return nil
-}
+func (tp TxProof) Validate(dataHash []byte) error { _ = "STUB: not implemented"; return nil }
 
 func (tp TxProof) ToProto() tmproto.TxProof {
-
-	pbProof := tp.Proof.ToProto()
-
-	pbtp := tmproto.TxProof{
-		RootHash: tp.RootHash,
-		Data:     tp.Data,
-		Proof:    pbProof,
-	}
-
-	return pbtp
+	_ = "STUB: not implemented"
+	return *new(tmproto.TxProof)
 }
+
 func TxProofFromProto(pb tmproto.TxProof) (TxProof, error) {
-
-	pbProof, err := merkle.ProofFromProto(pb.Proof)
-	if err != nil {
-		return TxProof{}, err
-	}
-
-	pbtp := TxProof{
-		RootHash: pb.RootHash,
-		Data:     pb.Data,
-		Proof:    *pbProof,
-	}
-
-	return pbtp, nil
+	_ = "STUB: not implemented"
+	return *new(TxProof), nil
 }
 
 // ComputeProtoSizeForTxs wraps the transactions in tmproto.Data{} and calculates the size.
 // https://developers.google.com/protocol-buffers/docs/encoding
-func ComputeProtoSizeForTxs(txs []Tx) int64 {
-	data := Data{Txs: txs}
-	pdData := data.ToProto()
-	return int64(pdData.Size())
-}
+func ComputeProtoSizeForTxs(txs []Tx) int64 { _ = "STUB: not implemented"; return 0 }

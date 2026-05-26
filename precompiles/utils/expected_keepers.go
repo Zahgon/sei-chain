@@ -45,23 +45,59 @@ type Keepers interface {
 
 type EmptyKeepers struct{}
 
-func (ek *EmptyKeepers) BankK() BankKeeper                 { return nil }
-func (ek *EmptyKeepers) BankMS() BankMsgServer             { return nil }
-func (ek *EmptyKeepers) EVMK() EVMKeeper                   { return nil }
-func (ek *EmptyKeepers) AccountK() AccountKeeper           { return nil }
-func (ek *EmptyKeepers) OracleK() OracleKeeper             { return nil }
-func (ek *EmptyKeepers) WasmdK() WasmdKeeper               { return nil }
-func (ek *EmptyKeepers) WasmdVK() WasmdViewKeeper          { return nil }
-func (ek *EmptyKeepers) StakingK() StakingKeeper           { return nil }
-func (ek *EmptyKeepers) StakingQ() StakingQuerier          { return nil }
-func (ek *EmptyKeepers) GovK() GovKeeper                   { return nil }
-func (ek *EmptyKeepers) GovMS() GovMsgServer               { return nil }
-func (ek *EmptyKeepers) DistributionK() DistributionKeeper { return nil }
-func (ek *EmptyKeepers) TransferK() TransferKeeper         { return nil }
-func (ek *EmptyKeepers) ClientK() ClientKeeper             { return nil }
-func (ek *EmptyKeepers) ConnectionK() ConnectionKeeper     { return nil }
-func (ek *EmptyKeepers) ChannelK() ChannelKeeper           { return nil }
-func (ek *EmptyKeepers) TxConfig() client.TxConfig         { return nil }
+func (ek *EmptyKeepers) BankK() BankKeeper { _ = "STUB: not implemented"; return *new(BankKeeper) }
+func (ek *EmptyKeepers) BankMS() BankMsgServer {
+	_ = "STUB: not implemented"
+	return *new(BankMsgServer)
+}
+func (ek *EmptyKeepers) EVMK() EVMKeeper { _ = "STUB: not implemented"; return *new(EVMKeeper) }
+func (ek *EmptyKeepers) AccountK() AccountKeeper {
+	_ = "STUB: not implemented"
+	return *new(AccountKeeper)
+}
+func (ek *EmptyKeepers) OracleK() OracleKeeper {
+	_ = "STUB: not implemented"
+	return *new(OracleKeeper)
+}
+func (ek *EmptyKeepers) WasmdK() WasmdKeeper { _ = "STUB: not implemented"; return *new(WasmdKeeper) }
+func (ek *EmptyKeepers) WasmdVK() WasmdViewKeeper {
+	_ = "STUB: not implemented"
+	return *new(WasmdViewKeeper)
+}
+func (ek *EmptyKeepers) StakingK() StakingKeeper {
+	_ = "STUB: not implemented"
+	return *new(StakingKeeper)
+}
+func (ek *EmptyKeepers) StakingQ() StakingQuerier {
+	_ = "STUB: not implemented"
+	return *new(StakingQuerier)
+}
+func (ek *EmptyKeepers) GovK() GovKeeper     { _ = "STUB: not implemented"; return *new(GovKeeper) }
+func (ek *EmptyKeepers) GovMS() GovMsgServer { _ = "STUB: not implemented"; return *new(GovMsgServer) }
+func (ek *EmptyKeepers) DistributionK() DistributionKeeper {
+	_ = "STUB: not implemented"
+	return *new(DistributionKeeper)
+}
+func (ek *EmptyKeepers) TransferK() TransferKeeper {
+	_ = "STUB: not implemented"
+	return *new(TransferKeeper)
+}
+func (ek *EmptyKeepers) ClientK() ClientKeeper {
+	_ = "STUB: not implemented"
+	return *new(ClientKeeper)
+}
+func (ek *EmptyKeepers) ConnectionK() ConnectionKeeper {
+	_ = "STUB: not implemented"
+	return *new(ConnectionKeeper)
+}
+func (ek *EmptyKeepers) ChannelK() ChannelKeeper {
+	_ = "STUB: not implemented"
+	return *new(ChannelKeeper)
+}
+func (ek *EmptyKeepers) TxConfig() client.TxConfig {
+	_ = "STUB: not implemented"
+	return *new(client.TxConfig)
+}
 
 type BankKeeper interface {
 	SendCoins(sdk.Context, sdk.AccAddress, sdk.AccAddress, sdk.Coins) error

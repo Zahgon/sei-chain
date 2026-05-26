@@ -1,14 +1,8 @@
 package app
 
 import (
-	"fmt"
-
-	"github.com/spf13/cast"
-
-	gigaconfig "github.com/sei-protocol/sei-chain/giga/executor/config"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
 	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/storev2/rootmulti"
 	"github.com/sei-protocol/sei-chain/sei-db/config"
 	seidb "github.com/sei-protocol/sei-chain/sei-db/db_engine/types"
 )
@@ -54,100 +48,25 @@ func SetupSeiDB(
 	appOpts servertypes.AppOptions,
 	baseAppOptions []func(*baseapp.BaseApp),
 ) ([]func(*baseapp.BaseApp), seidb.StateStore) {
-	scEnabled := cast.ToBool(appOpts.Get(FlagSCEnable))
-	if !scEnabled {
-		panic("SeiDB state-commit (SC) must be enabled; IAVL backend has been fully deprecated")
-	}
-	scConfig := parseSCConfigs(appOpts)
-	logger.Info("SeiDB SC is enabled now", "sc-config", scConfig)
-	ssConfig := parseSSConfigs(appOpts)
-	if ssConfig.Enable {
-		logger.Info("SeiDB SS is enabled", "backend", ssConfig.Backend)
-	}
-	if ssConfig.EVMSplit {
-		logger.Info("SeiDB EVM StateStore optimization is enabled",
-			"separateDBs", ssConfig.SeparateEVMSubDBs,
-		)
-	}
-	validateConfigs(appOpts)
-	gigaExecutorConfig, err := gigaconfig.ReadConfig(appOpts)
-	if err != nil {
-		panic(fmt.Sprintf("error reading giga executor config due to %s", err))
-	}
-	gigaStoreKeys := []string{}
-	if gigaExecutorConfig.Enabled {
-		gigaStoreKeys = GigaKeys
-	}
-	// cms must be overridden before the other options, because they may use the cms,
-	// make sure the cms aren't be overridden by the other options later on.
-	cms := rootmulti.NewStore(homePath, scConfig, ssConfig, gigaStoreKeys)
-	baseAppOptions = append([]func(*baseapp.BaseApp){
-		func(baseApp *baseapp.BaseApp) {
-			baseApp.SetCMS(cms)
-		},
-	}, baseAppOptions...)
-
-	return baseAppOptions, cms.GetStateStore()
+	_ = "STUB: not implemented"
+	return nil, *new(seidb.StateStore)
 }
 
+// cms must be overridden before the other options, because they may use the cms,
+// make sure the cms aren't be overridden by the other options later on.
+
 func parseSCConfigs(appOpts servertypes.AppOptions) config.StateCommitConfig {
-	scConfig := config.DefaultStateCommitConfig()
-	scConfig.Enable = cast.ToBool(appOpts.Get(FlagSCEnable))
-	scConfig.Directory = cast.ToString(appOpts.Get(FlagSCDirectory))
-	scConfig.MemIAVLConfig.AsyncCommitBuffer = cast.ToInt(appOpts.Get(FlagSCAsyncCommitBuffer))
-	scConfig.MemIAVLConfig.SnapshotKeepRecent = cast.ToUint32(appOpts.Get(FlagSCSnapshotKeepRecent))
-	scConfig.MemIAVLConfig.SnapshotInterval = cast.ToUint32(appOpts.Get(FlagSCSnapshotInterval))
-	scConfig.MemIAVLConfig.SnapshotMinTimeInterval = cast.ToUint32(appOpts.Get(FlagSCSnapshotMinTimeInterval))
-	scConfig.MemIAVLConfig.SnapshotWriterLimit = cast.ToInt(appOpts.Get(FlagSCSnapshotWriterLimit))
-	scConfig.MemIAVLConfig.SnapshotPrefetchThreshold = cast.ToFloat64(appOpts.Get(FlagSCSnapshotPrefetchThreshold))
-	scConfig.MemIAVLConfig.SnapshotWriteRateMBps = cast.ToInt(appOpts.Get(FlagSCSnapshotWriteRateMBps))
-
-	if wm := cast.ToString(appOpts.Get(FlagSCWriteMode)); wm != "" {
-		parsedWM, err := config.ParseWriteMode(wm)
-		if err != nil {
-			panic(fmt.Sprintf("invalid EVM SS write mode %q: %s", wm, err))
-		}
-		scConfig.WriteMode = parsedWM
-	}
-
-	if v := appOpts.Get(FlagSCHistoricalProofMaxInFlight); v != nil {
-		scConfig.HistoricalProofMaxInFlight = cast.ToInt(v)
-	}
-	if v := appOpts.Get(FlagSCHistoricalProofRateLimit); v != nil {
-		scConfig.HistoricalProofRateLimit = cast.ToFloat64(v)
-	}
-	if v := appOpts.Get(FlagSCHistoricalProofBurst); v != nil {
-		scConfig.HistoricalProofBurst = cast.ToInt(v)
-	}
-
-	return scConfig
+	_ = "STUB: not implemented"
+	return *new(config.StateCommitConfig)
 }
 
 func parseSSConfigs(appOpts servertypes.AppOptions) config.StateStoreConfig {
-	ssConfig := config.DefaultStateStoreConfig()
-	ssConfig.Enable = cast.ToBool(appOpts.Get(FlagSSEnable))
-	ssConfig.Backend = cast.ToString(appOpts.Get(FlagSSBackend))
-	ssConfig.AsyncWriteBuffer = cast.ToInt(appOpts.Get(FlagSSAsyncWriterBuffer))
-	ssConfig.KeepRecent = cast.ToInt(appOpts.Get(FlagSSKeepRecent))
-	ssConfig.PruneIntervalSeconds = cast.ToInt(appOpts.Get(FlagSSPruneInterval))
-	ssConfig.ImportNumWorkers = cast.ToInt(appOpts.Get(FlagSSImportNumWorkers))
-	ssConfig.DBDirectory = cast.ToString(appOpts.Get(FlagSSDirectory))
-
-	// EVM optimization fields (embedded in SS config)
-	ssConfig.EVMDBDirectory = cast.ToString(appOpts.Get(FlagEVMSSDirectory))
-	ssConfig.SeparateEVMSubDBs = cast.ToBool(appOpts.Get(FlagEVMSSSeparateDBs))
-	ssConfig.EVMSplit = cast.ToBool(appOpts.Get(FlagEVMSSSplit))
-	return ssConfig
+	_ = "STUB: not implemented"
+	return *new(config.StateStoreConfig)
 }
 
-func validateConfigs(appOpts servertypes.AppOptions) {
-	scEnabled := cast.ToBool(appOpts.Get(FlagSCEnable))
-	ssEnabled := cast.ToBool(appOpts.Get(FlagSSEnable))
-	snapshotExportInterval := cast.ToUint64(appOpts.Get(FlagSnapshotInterval))
-	// Make sure when snapshot is enabled, we should enable SS store
-	if snapshotExportInterval > 0 && scEnabled {
-		if !ssEnabled {
-			panic(fmt.Sprintf("Config validation failed, SeiDB SS store needs to be enabled when snapshot interval %d > 0", snapshotExportInterval))
-		}
-	}
-}
+// EVM optimization fields (embedded in SS config)
+
+func validateConfigs(appOpts servertypes.AppOptions) { _ = "STUB: not implemented"; return }
+
+// Make sure when snapshot is enabled, we should enable SS store

@@ -3,19 +3,20 @@ package store
 import (
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/cache"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/rootmulti"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
 
 func NewCommitMultiStore(db dbm.DB) types.CommitMultiStore {
-	return rootmulti.NewStore(db)
+	_ = "STUB: not implemented"
+	return *new(types.CommitMultiStore)
 }
 
 func NewCommitMultiStoreWithArchival(db dbm.DB, archivalDb dbm.DB, archivalVersion int64) types.CommitMultiStore {
-	return rootmulti.NewStoreWithArchival(db, archivalDb, archivalVersion)
+	_ = "STUB: not implemented"
+	return *new(types.CommitMultiStore)
 }
 
 func NewCommitKVStoreCacheManager() types.MultiStorePersistentCache {
-	return cache.NewCommitKVStoreCacheManager(cache.DefaultCommitKVStoreCacheSize, types.DefaultCacheSizeLimit)
+	_ = "STUB: not implemented"
+	return *new(types.MultiStorePersistentCache)
 }

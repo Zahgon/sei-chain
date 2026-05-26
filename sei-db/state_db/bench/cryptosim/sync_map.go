@@ -11,35 +11,20 @@ type SyncMap[K comparable, V any] struct {
 }
 
 // NewSyncMap returns a new empty SyncMap.
-func NewSyncMap[K comparable, V any]() *SyncMap[K, V] {
-	return &SyncMap[K, V]{}
-}
+func NewSyncMap[K comparable, V any]() *SyncMap[K, V] { _ = "STUB: not implemented"; return nil }
 
 // Put stores the key-value pair in the map.
-func (m *SyncMap[K, V]) Put(key K, value V) {
-	m.base.Store(key, value)
-}
+func (m *SyncMap[K, V]) Put(key K, value V) { _ = "STUB: not implemented"; return }
 
 // Clear removes all key-value pairs from the map.
 func (m *SyncMap[K, V]) Clear() {
-	m.base.Clear()
+	_ = "STUB: not implemented"
+
+	// Get returns the value for key and true if present, or the zero value of V and false otherwise.
+	return
 }
 
-// Get returns the value for key and true if present, or the zero value of V and false otherwise.
-func (m *SyncMap[K, V]) Get(key K) (V, bool) {
-	val, ok := m.base.Load(key)
-	if !ok {
-		var zero V
-		return zero, false
-	}
-	return val.(V), true
-}
+func (m *SyncMap[K, V]) Get(key K) (V, bool) { _ = "STUB: not implemented"; return *new(V), false }
 
 // All returns an iterator over the map's key-value pairs for use with range.
-func (m *SyncMap[K, V]) Iterator() iter.Seq2[K, V] {
-	return func(yield func(K, V) bool) {
-		m.base.Range(func(key, value any) bool {
-			return yield(key.(K), value.(V))
-		})
-	}
-}
+func (m *SyncMap[K, V]) Iterator() iter.Seq2[K, V] { _ = "STUB: not implemented"; return nil }

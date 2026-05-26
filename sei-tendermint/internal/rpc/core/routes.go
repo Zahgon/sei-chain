@@ -22,62 +22,23 @@ type RouteOptions struct {
 // "unsafe" methods will also be added to the map. The caller may also edit the
 // map after construction; each call to NewRoutesMap returns a fresh map.
 func NewRoutesMap(svc RPCService, opts *RouteOptions) RoutesMap {
-	if opts == nil {
-		opts = new(RouteOptions)
-	}
-	out := RoutesMap{
-		// Event subscription. Note that subscribe, unsubscribe, and
-		// unsubscribe_all are only available via the websocket endpoint.
-		"events":          rpc.NewRPCFunc(svc.Events).Timeout(0),
-		"subscribe":       rpc.NewWSRPCFunc(svc.Subscribe),
-		"unsubscribe":     rpc.NewWSRPCFunc(svc.Unsubscribe),
-		"unsubscribe_all": rpc.NewWSRPCFunc(svc.UnsubscribeAll),
-
-		// info API
-		"health":               rpc.NewRPCFunc(svc.Health),
-		"status":               rpc.NewRPCFunc(svc.Status),
-		"lag_status":           rpc.NewRPCFunc(svc.LagStatus),
-		"net_info":             rpc.NewRPCFunc(svc.NetInfo),
-		"blockchain":           rpc.NewRPCFunc(svc.BlockchainInfo),
-		"genesis":              rpc.NewRPCFunc(svc.Genesis),
-		"genesis_chunked":      rpc.NewRPCFunc(svc.GenesisChunked),
-		"header":               rpc.NewRPCFunc(svc.Header),
-		"header_by_hash":       rpc.NewRPCFunc(svc.HeaderByHash),
-		"block":                rpc.NewRPCFunc(svc.Block),
-		"block_by_hash":        rpc.NewRPCFunc(svc.BlockByHash),
-		"block_results":        rpc.NewRPCFunc(svc.BlockResults),
-		"commit":               rpc.NewRPCFunc(svc.Commit),
-		"check_tx":             rpc.NewRPCFunc(svc.CheckTx),
-		"tx":                   rpc.NewRPCFunc(svc.Tx),
-		"tx_search":            rpc.NewRPCFunc(svc.TxSearch),
-		"block_search":         rpc.NewRPCFunc(svc.BlockSearch),
-		"validators":           rpc.NewRPCFunc(svc.Validators),
-		"dump_consensus_state": rpc.NewRPCFunc(svc.DumpConsensusState),
-		"consensus_state":      rpc.NewRPCFunc(svc.GetConsensusState),
-		"consensus_params":     rpc.NewRPCFunc(svc.ConsensusParams),
-		"unconfirmed_txs":      rpc.NewRPCFunc(svc.UnconfirmedTxs),
-		"num_unconfirmed_txs":  rpc.NewRPCFunc(svc.NumUnconfirmedTxs),
-
-		// tx broadcast API
-		"broadcast_tx": rpc.NewRPCFunc(svc.BroadcastTx),
-		// TODO remove after 0.36
-		// deprecated broadcast tx methods:
-		"broadcast_tx_commit": rpc.NewRPCFunc(svc.BroadcastTxCommit),
-		"broadcast_tx_sync":   rpc.NewRPCFunc(svc.BroadcastTx),
-		"broadcast_tx_async":  rpc.NewRPCFunc(svc.BroadcastTxAsync),
-
-		// abci API
-		"abci_query": rpc.NewRPCFunc(svc.ABCIQuery),
-		"abci_info":  rpc.NewRPCFunc(svc.ABCIInfo),
-
-		// evidence API
-		"broadcast_evidence": rpc.NewRPCFunc(svc.BroadcastEvidence),
-	}
-	if u, ok := svc.(RPCUnsafe); ok && opts.Unsafe {
-		out["unsafe_flush_mempool"] = rpc.NewRPCFunc(u.UnsafeFlushMempool)
-	}
-	return out
+	_ = "STUB: not implemented"
+	return *new(RoutesMap)
 }
+
+// Event subscription. Note that subscribe, unsubscribe, and
+// unsubscribe_all are only available via the websocket endpoint.
+
+// info API
+
+// tx broadcast API
+
+// TODO remove after 0.36
+// deprecated broadcast tx methods:
+
+// abci API
+
+// evidence API
 
 // RPCService defines the set of methods exported by the RPC service
 // implementation, for use in constructing a routing table.

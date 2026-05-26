@@ -17,10 +17,4 @@ var payablePrecompiles = map[string]struct{}{
 	wasmd.WasmdAddress:     {},
 }
 
-func IsPayablePrecompile(addr *common.Address) bool {
-	if addr == nil {
-		return false
-	}
-	_, ok := payablePrecompiles[addr.Hex()]
-	return ok
-}
+func IsPayablePrecompile(addr *common.Address) bool { _ = "STUB: not implemented"; return false }

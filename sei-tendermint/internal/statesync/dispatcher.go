@@ -3,12 +3,9 @@ package statesync
 import (
 	"context"
 	"errors"
-	"fmt"
-	"slices"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/light/provider"
 	pb "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/statesync"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
@@ -34,108 +31,57 @@ type Dispatcher struct {
 }
 
 func NewDispatcher(requestChannel *p2p.Channel[*pb.Message]) *Dispatcher {
-	return &Dispatcher{
-		requestCh: requestChannel,
-		calls:     utils.NewMutex(map[types.NodeID]chan *types.LightBlock{}),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // LightBlock uses the request channel to fetch a light block from a given peer
 // tracking, the call and waiting for the reactor to pass back the response. A nil
 // LightBlock response is used to signal that the peer doesn't have the requested LightBlock.
 func (d *Dispatcher) LightBlock(ctx context.Context, height int64, peer types.NodeID) (*types.LightBlock, error) {
+	_ = "STUB: not implemented"
 	// dispatch the request to the peer
-	callCh, err := d.dispatch(ctx, peer, height)
-	if err != nil {
-		return nil, err
-	}
-
-	// clean up the call after a response is returned
-	defer func() {
-		for calls := range d.calls.Lock() {
-			if call, ok := calls[peer]; ok {
-				delete(calls, peer)
-				close(call)
-			}
-		}
-	}()
-
-	// wait for a response, cancel or timeout
-	select {
-	case resp := <-callCh:
-		return resp, nil
-
-	case <-ctx.Done():
-		return nil, ctx.Err()
-	}
+	return nil, nil
 }
+
+// clean up the call after a response is returned
+
+// wait for a response, cancel or timeout
 
 // dispatch takes a peer and allocates it a channel so long as it's not already
 // busy and the receiving channel is still running. It then dispatches the message
 func (d *Dispatcher) dispatch(ctx context.Context, peer types.NodeID, height int64) (chan *types.LightBlock, error) {
-	if height < 0 {
-		return nil, fmt.Errorf("invalid height: %d", height)
-	}
-	for calls := range d.calls.Lock() {
-		if ctx.Err() != nil {
-			return nil, ErrDisconnected
-		}
-		ch := make(chan *types.LightBlock, 1)
-
-		// check if a request for the same peer has already been made
-		if _, ok := calls[peer]; ok {
-			close(ch)
-			return ch, ErrPeerAlreadyBusy
-		}
-		calls[peer] = ch
-
-		// send request
-		d.requestCh.Send(wrap(&pb.LightBlockRequest{Height: uint64(height)}), peer) //nolint:gosec // height is a validated positive block height
-		return ch, nil
-	}
-	panic("unreachable")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// check if a request for the same peer has already been made
+
+// send request
+//nolint:gosec // height is a validated positive block height
 
 // Respond allows the underlying process which receives requests on the
 // requestCh to respond with the respective light block. A nil response is used to
 // represent that the receiver of the request does not have a light block at that height.
 func (d *Dispatcher) Respond(ctx context.Context, lb *tmproto.LightBlock, peer types.NodeID) error {
-	for calls := range d.calls.Lock() {
-		// check that the response came from a request
-		answerCh, ok := calls[peer]
-		if !ok {
-			// this can also happen if the response came in after the timeout
-			return ErrUnsolicitedResponse
-		}
-
-		// If lb is nil we take that to mean that the peer didn't have the requested light
-		// block and thus pass on the nil to the caller.
-		if lb == nil {
-			return utils.Send(ctx, answerCh, nil)
-		}
-
-		block, err := types.LightBlockFromProto(lb)
-		if err != nil {
-			return err
-		}
-
-		return utils.Send(ctx, answerCh, block)
-	}
-	panic("unreachable")
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// check that the response came from a request
+
+// this can also happen if the response came in after the timeout
+
+// If lb is nil we take that to mean that the peer didn't have the requested light
+// block and thus pass on the nil to the caller.
 
 // Close shuts down the dispatcher and cancels any pending calls awaiting responses.
 // Peers awaiting responses that have not arrived are delivered a nil block.
-func (d *Dispatcher) Close() {
-	for calls := range d.calls.Lock() {
-		for peer := range calls {
-			delete(calls, peer)
-			// don't close the channel here as it's closed in
-			// other handlers, and would otherwise get garbage
-			// collected.
-		}
-	}
-}
+func (d *Dispatcher) Close() { _ = "STUB: not implemented"; return }
+
+// don't close the channel here as it's closed in
+// other handlers, and would otherwise get garbage
+// collected.
 
 //----------------------------------------------------------------
 
@@ -156,58 +102,36 @@ type BlockProvider struct {
 
 // Creates a block provider which implements the light client Provider interface.
 func NewBlockProvider(peer types.NodeID, chainID string, dispatcher *Dispatcher) *BlockProvider {
-	return &BlockProvider{
-		peer:       peer,
-		chainID:    chainID,
-		dispatcher: dispatcher,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // LightBlock fetches a light block from the peer at a specified height returning either a
 // light block or an appropriate error.
 func (p *BlockProvider) LightBlock(ctx context.Context, height int64) (*types.LightBlock, error) {
-	lb, err := p.dispatcher.LightBlock(ctx, height, p.peer)
-	switch err {
-	case nil:
-		if lb == nil {
-			return nil, provider.ErrLightBlockNotFound
-		}
-	case context.DeadlineExceeded, context.Canceled:
-		return nil, err
-	case ErrPeerAlreadyBusy:
-		return nil, provider.ErrLightBlockNotFound
-	default:
-		return nil, provider.ErrUnreliableProvider{Reason: err}
-	}
-
-	// check that the height requested is the same one returned
-	if lb.Height != height {
-		return nil, provider.ErrBadLightBlock{
-			Reason: fmt.Errorf("expected height %d, got height %d", height, lb.Height),
-		}
-	}
-
-	// perform basic validation
-	if err := lb.ValidateBasic(p.chainID); err != nil {
-		return nil, provider.ErrBadLightBlock{Reason: err}
-	}
-
-	return lb, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// check that the height requested is the same one returned
+
+// perform basic validation
 
 // ReportEvidence should allow for the light client to report any light client
 // attacks. This is a no op as there currently isn't a way to wire this up to
 // the evidence reactor (we should endeavor to do this in the future but for now
 // it's not critical for backwards verification)
 func (p *BlockProvider) ReportEvidence(ctx context.Context, ev types.Evidence) error {
+	_ = "STUB: not implemented"
+
+	// String implements stringer interface
 	return nil
 }
 
-// String implements stringer interface
-func (p *BlockProvider) String() string { return string(p.peer) }
+func (p *BlockProvider) String() string { _ = "STUB: not implemented"; return "" }
 
 // Returns the ID address of the provider (NodeID of peer)
-func (p *BlockProvider) ID() string { return string(p.peer) }
+func (p *BlockProvider) ID() string { _ = "STUB: not implemented"; return "" }
 
 //----------------------------------------------------------------
 
@@ -221,54 +145,22 @@ type PeerList struct {
 	inner utils.Watch[*peerListInner]
 }
 
-func NewPeerList() *PeerList {
-	return &PeerList{inner: utils.NewWatch(&peerListInner{
-		peers: make([]types.NodeID, 0),
-	})}
-}
+func NewPeerList() *PeerList { _ = "STUB: not implemented"; return nil }
 
-func (l *PeerList) Len() int {
-	for inner := range l.inner.Lock() {
-		return len(inner.peers)
-	}
-	panic("unreachable")
-}
+func (l *PeerList) Len() int { _ = "STUB: not implemented"; return 0 }
 
 func (l *PeerList) Pop(ctx context.Context) types.NodeID {
-	for inner, ctrl := range l.inner.Lock() {
-		if err := ctrl.WaitUntil(ctx, func() bool { return len(inner.peers) > 0 }); err != nil {
-			return ""
-		}
-		peer := inner.peers[0]
-		inner.peers = inner.peers[1:]
-		return peer
-	}
-	panic("unreachable")
+	_ = "STUB: not implemented"
+	return *new(types.NodeID)
 }
 
-func (l *PeerList) Append(peer types.NodeID) {
-	for inner, ctrl := range l.inner.Lock() {
-		inner.peers = append(inner.peers, peer)
-		ctrl.Updated()
-	}
-}
+func (l *PeerList) Append(peer types.NodeID) { _ = "STUB: not implemented"; return }
 
-func (l *PeerList) Remove(peer types.NodeID) {
-	for inner := range l.inner.Lock() {
-		inner.peers = slices.DeleteFunc(inner.peers, func(v types.NodeID) bool { return v == peer })
-	}
-}
+func (l *PeerList) Remove(peer types.NodeID) { _ = "STUB: not implemented"; return }
 
-func (l *PeerList) All() []types.NodeID {
-	for inner := range l.inner.Lock() {
-		return slices.Clone(inner.peers)
-	}
-	panic("unreachable")
-}
+func (l *PeerList) All() []types.NodeID { _ = "STUB: not implemented"; return nil }
 
 func (l *PeerList) WaitUntilContains(ctx context.Context, id types.NodeID) error {
-	for inner, ctrl := range l.inner.Lock() {
-		return ctrl.WaitUntil(ctx, func() bool { return slices.Index(inner.peers, id) != -1 })
-	}
-	panic("unreachable")
+	_ = "STUB: not implemented"
+	return nil
 }

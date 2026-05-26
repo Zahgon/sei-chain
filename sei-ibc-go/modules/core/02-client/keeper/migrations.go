@@ -2,8 +2,6 @@ package keeper
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-
-	v100 "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/legacy/v100"
 )
 
 // Migrator is a struct for handling in-place store migrations.
@@ -12,9 +10,7 @@ type Migrator struct {
 }
 
 // NewMigrator returns a new Migrator.
-func NewMigrator(keeper Keeper) Migrator {
-	return Migrator{keeper: keeper}
-}
+func NewMigrator(keeper Keeper) Migrator { _ = "STUB: not implemented"; return *new(Migrator) }
 
 // Migrate1to2 migrates from version 1 to 2.
 // This migration
@@ -22,6 +18,4 @@ func NewMigrator(keeper Keeper) Migrator {
 // - prunes solo machine consensus states
 // - prunes expired tendermint consensus states
 // - adds iteration and processed height keys for unexpired tendermint consensus states
-func (m Migrator) Migrate1to2(ctx sdk.Context) error {
-	return v100.MigrateStore(ctx, m.keeper.storeKey, m.keeper.cdc)
-}
+func (m Migrator) Migrate1to2(ctx sdk.Context) error { _ = "STUB: not implemented"; return nil }

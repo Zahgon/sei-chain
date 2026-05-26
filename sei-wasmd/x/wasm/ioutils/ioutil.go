@@ -1,47 +1,24 @@
 package ioutils
 
 import (
-	"bytes"
-	"compress/gzip"
 	"io"
-
-	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 )
 
 // Uncompress returns gzip uncompressed content if input was gzip, or original src otherwise
 func Uncompress(src []byte, limit uint64) ([]byte, error) {
-	switch n := uint64(len(src)); {
-	case n < 3:
-		return src, nil
-	case n > limit:
-		return nil, types.ErrLimit
-	}
-	if !bytes.Equal(gzipIdent, src[0:3]) {
-		return src, nil
-	}
-	zr, err := gzip.NewReader(bytes.NewReader(src))
-	if err != nil {
-		return nil, err
-	}
-	zr.Multistream(false)
-	defer func() { _ = zr.Close() }()
-	return io.ReadAll(LimitReader(zr, int64(limit))) // #nosec G115 -- checked above
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// #nosec G115 -- checked above
 
 // LimitReader returns a Reader that reads from r
 // but stops with types.ErrLimit after n bytes.
 // The underlying implementation is a *io.LimitedReader.
-func LimitReader(r io.Reader, n int64) io.Reader {
-	return &LimitedReader{r: &io.LimitedReader{R: r, N: n}}
-}
+func LimitReader(r io.Reader, n int64) io.Reader { _ = "STUB: not implemented"; return *new(io.Reader) }
 
 type LimitedReader struct {
 	r *io.LimitedReader
 }
 
-func (l *LimitedReader) Read(p []byte) (n int, err error) {
-	if l.r.N <= 0 {
-		return 0, types.ErrLimit
-	}
-	return l.r.Read(p)
-}
+func (l *LimitedReader) Read(p []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }

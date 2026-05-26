@@ -2,13 +2,6 @@ package app
 
 import (
 	"embed"
-	"os"
-	"strings"
-
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
-	upgradetypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/types"
-	"golang.org/x/mod/semver"
 )
 
 //go:embed tags
@@ -30,71 +23,26 @@ func init() {
 	LatestUpgrade = upgradesList[len(upgradesList)-1]
 }
 
-func parseUpgradesList(list string) []string {
-	upgrades := strings.FieldsFunc(list, func(r rune) bool {
-		return r == '\n' || r == ','
-	})
-	// Upgrades names must be in alphabetical order
-	// https://github.com/cosmos/cosmos-sdk/issues/11707
-	semver.Sort(upgrades)
-	return upgrades
-}
+func parseUpgradesList(list string) []string { _ = "STUB: not implemented"; return nil }
+
+// Upgrades names must be in alphabetical order
+// https://github.com/cosmos/cosmos-sdk/issues/11707
 
 // if there is an override list, use that instead, for integration tests
 func overrideList() {
+	_ = "STUB: not implemented"
 	// if there is an override list, use that instead, for integration tests
-	envList := os.Getenv("UPGRADE_VERSION_LIST")
-	if envList != "" {
-		upgradesList = parseUpgradesList(envList)
-	}
+	return
 }
 
 func (app *App) RegisterUpgradeHandlers() {
+	_ = "STUB: not implemented"
 	// if there is an override list, use that instead, for integration tests
-	overrideList()
-	for _, upgradeName := range upgradesList {
-		app.UpgradeKeeper.SetUpgradeHandler(upgradeName, func(ctx sdk.Context, plan upgradetypes.Plan, fromVM module.VersionMap) (module.VersionMap, error) {
-			// Set params to Distribution here when migrating
-			if upgradeName == "1.2.3beta" {
-				newVM, err := app.mm.RunMigrations(ctx, app.configurator, fromVM)
-				if err != nil {
-					return newVM, err
-				}
-
-				params := app.DistrKeeper.GetParams(ctx)
-				params.CommunityTax = sdk.NewDec(0)
-				app.DistrKeeper.SetParams(ctx, params)
-
-				return newVM, err
-			}
-
-			if upgradeName == "v6.0.2" {
-				newVM, err := app.mm.RunMigrations(ctx, app.configurator, fromVM)
-				if err != nil {
-					return newVM, err
-				}
-
-				cp := app.GetConsensusParams(ctx)
-				cp.Block.MinTxsInBlock = 10
-				app.StoreConsensusParams(ctx, cp)
-				return newVM, err
-			}
-
-			if upgradeName == "v6.0.5" {
-				newVM, err := app.mm.RunMigrations(ctx, app.configurator, fromVM)
-				if err != nil {
-					return newVM, err
-				}
-
-				cp := app.GetConsensusParams(ctx)
-				cp.Block.MaxGasWanted = 50000000 // 50 mil
-				app.StoreConsensusParams(ctx, cp)
-				return newVM, err
-			}
-
-			return app.mm.RunMigrations(ctx, app.configurator, fromVM)
-		})
-	}
+	return
 }
+
+// Set params to Distribution here when migrating
+
+// 50 mil
 
 const v606UpgradeHeight = 151573570

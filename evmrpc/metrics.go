@@ -2,12 +2,9 @@ package evmrpc
 
 import (
 	"context"
-	"errors"
 	"time"
 
-	"github.com/sei-protocol/sei-chain/x/evm/types"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
 )
 
@@ -72,71 +69,24 @@ type rpcJSONCoder interface {
 }
 
 func classifyRPCMetricError(err error, panicked bool) (errorClass string, jsonrpcCodeBucket string) {
-	if panicked {
-		return errorClassPanic, bucketJSONRPCCode(internalErrorCode)
-	}
-	if err == nil {
-		return "", "" // success: omit both to keep the high-volume happy path cheap
-	}
-	var rev *RevertError
-	if errors.As(err, &rev) {
-		return errorClassExecutionReverted, bucketJSONRPCCode(int64(rev.ErrorCode()))
-	}
-	var notSup *ErrEVMNotSupported
-	if errors.As(err, &notSup) {
-		return errorClassEVMNotSupported, bucketJSONRPCCode(int64(notSup.ErrorCode()))
-	}
-	var legacy *errSeiLegacyNotEnabled
-	if errors.As(err, &legacy) {
-		return errorClassSeiLegacyDisabled, bucketJSONRPCCode(int64(legacy.ErrorCode()))
-	}
-	var assoc types.AssociationMissingErr
-	if errors.As(err, &assoc) {
-		return errorClassAssociationMissing, ""
-	}
-	var coder rpcJSONCoder
-	if errors.As(err, &coder) {
-		return errorClassJSONRPCError, bucketJSONRPCCode(int64(coder.ErrorCode()))
-	}
-	return errorClassUnknown, ""
+	_ = "STUB: not implemented"
+	return "", ""
 }
+
+// success: omit both to keep the high-volume happy path cheap
 
 // bucketJSONRPCCode maps a raw JSON-RPC error code to a low-cardinality string bucket.
 // JSON-RPC 2.0 predefined range: -32700..-32600; server-defined range: -32099..-32000.
-func bucketJSONRPCCode(code int64) string {
-	switch {
-	case code >= -32700 && code <= -32600:
-		return jsonrpcCodeBucketSpec
-	case code >= -32099 && code <= -32000:
-		return jsonrpcCodeBucketServer
-	default:
-		return jsonrpcCodeBucketOther
-	}
-}
+func bucketJSONRPCCode(code int64) string { _ = "STUB: not implemented"; return "" }
 
 func recordRPCLatency(ctx context.Context, endpoint, connection string, success bool, err error, panicked bool, start time.Time) {
-	seconds := time.Since(start).Seconds()
-	errorClass, jsonrpcCodeBucket := classifyRPCMetricError(err, panicked)
-	metrics.requestLatencySeconds.Record(ctx, seconds,
-		metric.WithAttributes(
-			attribute.String(endpointKey, endpoint),
-			attribute.String(connectionKey, connection),
-			attribute.Bool(successKey, success),
-			attribute.String(errorClassKey, errorClass),
-			attribute.String(jsonrpcCodeKey, jsonrpcCodeBucket),
-		),
-	)
+	_ = "STUB: not implemented"
+	return
 }
 
-func recordWebsocketConnect(ctx context.Context) {
-	metrics.wsConnectionCount.Add(ctx, 1)
-}
+func recordWebsocketConnect(ctx context.Context) { _ = "STUB: not implemented"; return }
 
 func recordRedirectedRequest(ctx context.Context, endpoint, connection string) {
-	metrics.redirectedRequestCount.Add(ctx, 1,
-		metric.WithAttributes(
-			attribute.String(endpointKey, endpoint),
-			attribute.String(connectionKey, connection),
-		),
-	)
+	_ = "STUB: not implemented"
+	return
 }

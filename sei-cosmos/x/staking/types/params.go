@@ -1,12 +1,7 @@
 package types
 
 import (
-	"errors"
-	"fmt"
-	"strings"
 	"time"
-
-	yaml "gopkg.in/yaml.v2"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
@@ -53,7 +48,8 @@ var _ paramtypes.ParamSet = (*Params)(nil)
 
 // ParamTable for staking module
 func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
+	_ = "STUB: not implemented"
+	return *new(paramtypes.KeyTable)
 }
 
 // NewParams creates a new Params instance
@@ -65,230 +61,54 @@ func NewParams(
 	maxVotingPowerRatio sdk.Dec,
 	maxVotingPowerEnforcementThreshold sdk.Int,
 ) Params {
-	return Params{
-		UnbondingTime:                      unbondingTime,
-		MaxValidators:                      maxValidators,
-		MaxEntries:                         maxEntries,
-		HistoricalEntries:                  historicalEntries,
-		BondDenom:                          bondDenom,
-		MinCommissionRate:                  minCommissionRate,
-		MaxVotingPowerRatio:                maxVotingPowerRatio,
-		MaxVotingPowerEnforcementThreshold: maxVotingPowerEnforcementThreshold,
-	}
+	_ = "STUB: not implemented"
+	return *new(Params)
 }
 
 // Implements params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeyUnbondingTime, &p.UnbondingTime, validateUnbondingTime),
-		paramtypes.NewParamSetPair(KeyMaxValidators, &p.MaxValidators, validateMaxValidators),
-		paramtypes.NewParamSetPair(KeyMaxEntries, &p.MaxEntries, validateMaxEntries),
-		paramtypes.NewParamSetPair(KeyMaxVotingPower, &p.MaxVotingPowerRatio, validateMaxVotingPowerRatio),
-		paramtypes.NewParamSetPair(KeyMaxVotingPowerEnforcementThreshold, &p.MaxVotingPowerEnforcementThreshold, validateMaxVotingPowerEnforcementThreshold),
-		paramtypes.NewParamSetPair(KeyHistoricalEntries, &p.HistoricalEntries, validateHistoricalEntries),
-		paramtypes.NewParamSetPair(KeyBondDenom, &p.BondDenom, validateBondDenom),
-		paramtypes.NewParamSetPair(KeyMinCommissionRate, &p.MinCommissionRate, validateMinCommissionRate),
-	}
+	_ = "STUB: not implemented"
+	return *new(paramtypes.ParamSetPairs)
 }
 
 // DefaultParams returns a default set of parameters.
-func DefaultParams() Params {
-	return NewParams(
-		DefaultUnbondingTime,
-		DefaultMaxValidators,
-		DefaultMaxEntries,
-		DefaultHistoricalEntries,
-		sdk.DefaultBondDenom,
-		DefaultMinCommissionRate,
-		sdk.MustNewDecFromStr(sdk.DefaultMaxVotingPowerRatio),
-		sdk.NewIntFromUint64(sdk.DefaultMaxVotingPowerEnforcementThreshold),
-	)
-}
+func DefaultParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
 // String returns a human readable string representation of the parameters.
-func (p Params) String() string {
-	out, _ := yaml.Marshal(p)
-	return string(out)
-}
+func (p Params) String() string { _ = "STUB: not implemented"; return "" }
 
 // unmarshal the current staking params value from store key or panic
 func MustUnmarshalParams(cdc *codec.LegacyAmino, value []byte) Params {
-	params, err := UnmarshalParams(cdc, value)
-	if err != nil {
-		panic(err)
-	}
-
-	return params
+	_ = "STUB: not implemented"
+	return *new(Params)
 }
 
 // unmarshal the current staking params value from store key
 func UnmarshalParams(cdc *codec.LegacyAmino, value []byte) (params Params, err error) {
-	err = cdc.Unmarshal(value, &params)
-	if err != nil {
-		return
-	}
-
-	return
+	_ = "STUB: not implemented"
+	return *new(Params), nil
 }
 
 // validate a set of params
-func (p Params) Validate() error {
-	if err := validateUnbondingTime(p.UnbondingTime); err != nil {
-		return err
-	}
+func (p Params) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	if err := validateMaxValidators(p.MaxValidators); err != nil {
-		return err
-	}
+func validateUnbondingTime(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	if err := validateMaxEntries(p.MaxEntries); err != nil {
-		return err
-	}
+func validateMaxValidators(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	if err := validateBondDenom(p.BondDenom); err != nil {
-		return err
-	}
-
-	if err := validateMinCommissionRate(p.MinCommissionRate); err != nil {
-		return err
-	}
-
-	if err := validateMaxVotingPowerEnforcementThreshold(p.MaxVotingPowerEnforcementThreshold); err != nil {
-		return err
-	}
-
-	if err := validateMaxVotingPowerRatio(p.MaxVotingPowerRatio); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func validateUnbondingTime(i interface{}) error {
-	v, ok := i.(time.Duration)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v <= 0 {
-		return fmt.Errorf("unbonding time must be positive: %d", v)
-	}
-
-	return nil
-}
-
-func validateMaxValidators(i interface{}) error {
-	v, ok := i.(uint32)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v == 0 {
-		return fmt.Errorf("max validators must be positive: %d", v)
-	}
-
-	return nil
-}
-
-func validateMaxEntries(i interface{}) error {
-	v, ok := i.(uint32)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v == 0 {
-		return fmt.Errorf("max entries must be positive: %d", v)
-	}
-
-	return nil
-}
+func validateMaxEntries(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
 func validateMaxVotingPowerEnforcementThreshold(i interface{}) error {
-	v, ok := i.(sdk.Int)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v.IsNil() {
-		return fmt.Errorf("max voting power must be not nil")
-	}
-
-	if v.IsNegative() {
-		return fmt.Errorf("max voting power must be positive: %s", v)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func validateMaxVotingPowerRatio(i interface{}) error {
-	v, ok := i.(sdk.Dec)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
+func validateMaxVotingPowerRatio(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	if v.IsNil() {
-		return fmt.Errorf("max voting power must be not nil")
-	}
-	if !v.IsPositive() {
-		return fmt.Errorf("max voting power must be positive: %s", v)
-	}
-	if v.GT(sdk.OneDec()) {
-		return fmt.Errorf("max voting power must be smaller than 1: %s", v)
-	}
+func validateHistoricalEntries(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
+func validateBondDenom(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-func validateHistoricalEntries(i interface{}) error {
-	_, ok := i.(uint32)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
+func ValidatePowerReduction(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
-
-func validateBondDenom(i interface{}) error {
-	v, ok := i.(string)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if strings.TrimSpace(v) == "" {
-		return errors.New("bond denom cannot be blank")
-	}
-
-	if err := sdk.ValidateDenom(v); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func ValidatePowerReduction(i interface{}) error {
-	v, ok := i.(sdk.Int)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v.LT(sdk.NewInt(1)) {
-		return fmt.Errorf("power reduction cannot be lower than 1")
-	}
-
-	return nil
-}
-
-func validateMinCommissionRate(i interface{}) error {
-	v, ok := i.(sdk.Dec)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v.IsNegative() {
-		return fmt.Errorf("minimum commission rate cannot be negative: %s", v)
-	}
-	if v.GT(sdk.OneDec()) {
-		return fmt.Errorf("minimum commission rate cannot be greater than 100%%: %s", v)
-	}
-	return nil
-}
+func validateMinCommissionRate(i interface{}) error { _ = "STUB: not implemented"; return nil }

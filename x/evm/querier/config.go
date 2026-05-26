@@ -2,7 +2,6 @@ package querier
 
 import (
 	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
-	"github.com/spf13/cast"
 )
 
 type Config struct {
@@ -18,12 +17,7 @@ const (
 )
 
 func ReadConfig(opts servertypes.AppOptions) (Config, error) {
-	cfg := DefaultConfig // copy
-	var err error
-	if v := opts.Get(flagGasLimit); v != nil {
-		if cfg.GasLimit, err = cast.ToUint64E(v); err != nil {
-			return cfg, err
-		}
-	}
-	return cfg, nil
+	_ = "STUB: not implemented"
+	// copy
+	return *new(Config), nil
 }

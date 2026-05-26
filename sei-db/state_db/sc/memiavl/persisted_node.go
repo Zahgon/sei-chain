@@ -1,12 +1,7 @@
 package memiavl
 
 import (
-	"bytes"
 	"crypto/sha256"
-	"math"
-	"sort"
-
-	"github.com/sei-protocol/sei-chain/sei-db/common/utils"
 )
 
 const (
@@ -54,167 +49,53 @@ type PersistedNode struct {
 var _ Node = PersistedNode{}
 
 func (node PersistedNode) branchNode() NodeLayout {
-	return node.snapshot.nodesLayout.Node(node.index)
+	_ = "STUB: not implemented"
+	return *new(NodeLayout)
 }
 
-func (node PersistedNode) leafNode() LeafLayout {
-	return node.snapshot.leavesLayout.Leaf(node.index)
-}
+func (node PersistedNode) leafNode() LeafLayout { _ = "STUB: not implemented"; return *new(LeafLayout) }
 
-func (node PersistedNode) Height() uint8 {
-	if node.isLeaf {
-		return 0
-	}
-	return node.branchNode().Height()
-}
+func (node PersistedNode) Height() uint8 { _ = "STUB: not implemented"; return 0 }
 
-func (node PersistedNode) IsLeaf() bool {
-	return node.isLeaf
-}
+func (node PersistedNode) IsLeaf() bool { _ = "STUB: not implemented"; return false }
 
-func (node PersistedNode) Version() uint32 {
-	if node.isLeaf {
-		return node.leafNode().Version()
-	}
-	return node.branchNode().Version()
-}
+func (node PersistedNode) Version() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (node PersistedNode) Size() int64 {
-	if node.isLeaf {
-		return 1
-	}
-	return int64(node.branchNode().Size())
-}
+func (node PersistedNode) Size() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (node PersistedNode) Key() []byte {
-	if node.isLeaf {
-		return node.snapshot.LeafKey(node.index)
-	}
-	index := node.branchNode().KeyLeaf()
-	return node.snapshot.LeafKey(index)
-}
+func (node PersistedNode) Key() []byte { _ = "STUB: not implemented"; return nil }
 
 // Value returns nil for non-leaf node.
-func (node PersistedNode) Value() []byte {
-	if !node.isLeaf {
-		return nil
-	}
-	_, value := node.snapshot.LeafKeyValue(node.index)
-	return value
-}
+func (node PersistedNode) Value() []byte { _ = "STUB: not implemented"; return nil }
 
 // Left result is not defined for leaf nodes.
-func (node PersistedNode) Left() Node {
-	if node.isLeaf {
-		panic("can't call Left on leaf node")
-	}
-
-	data := node.branchNode()
-	preTrees := uint32(data.PreTrees())
-	startLeaf := getStartLeaf(node.index, data.Size(), preTrees)
-	keyLeaf := data.KeyLeaf()
-	if startLeaf+1 == keyLeaf {
-		return PersistedNode{snapshot: node.snapshot, index: startLeaf, isLeaf: true}
-	}
-	return PersistedNode{snapshot: node.snapshot, index: getLeftBranch(keyLeaf, preTrees)}
-}
+func (node PersistedNode) Left() Node { _ = "STUB: not implemented"; return *new(Node) }
 
 // Right result is not defined for leaf nodes.
-func (node PersistedNode) Right() Node {
-	if node.isLeaf {
-		panic("can't call Right on leaf node")
-	}
+func (node PersistedNode) Right() Node { _ = "STUB: not implemented"; return *new(Node) }
 
-	data := node.branchNode()
-	keyLeaf := data.KeyLeaf()
-	preTrees := uint32(data.PreTrees())
-	if keyLeaf == getEndLeaf(node.index, preTrees) {
-		return PersistedNode{snapshot: node.snapshot, index: keyLeaf, isLeaf: true}
-	}
-	return PersistedNode{snapshot: node.snapshot, index: node.index - 1}
-}
+func (node PersistedNode) SafeHash() []byte { _ = "STUB: not implemented"; return nil }
 
-func (node PersistedNode) SafeHash() []byte {
-	return utils.Clone(node.Hash())
-}
+func (node PersistedNode) Hash() []byte { _ = "STUB: not implemented"; return nil }
 
-func (node PersistedNode) Hash() []byte {
-	if node.isLeaf {
-		return node.leafNode().Hash()
-	}
-	return node.branchNode().Hash()
-}
-
-func (node PersistedNode) Mutate(version, _ uint32) *MemNode {
-	if node.isLeaf {
-		key, value := node.snapshot.LeafKeyValue(node.index)
-		leafNode := newLeafNode(key, value, version)
-		IncrementMemNodeSize(leafNode)
-		return leafNode
-	}
-	data := node.branchNode()
-	branchNode := newBranchNode(data.Height(), int64(data.Size()), version, node.Key(), node.Left(), node.Right())
-	IncrementMemNodeSize(branchNode)
-	return branchNode
-}
+func (node PersistedNode) Mutate(version, _ uint32) *MemNode { _ = "STUB: not implemented"; return nil }
 
 func (node PersistedNode) Get(key []byte) ([]byte, uint32) {
-	var start, count uint32
-	if node.isLeaf {
-		start = node.index
-		count = 1
-	} else {
-		data := node.branchNode()
-		preTrees := uint32(data.PreTrees())
-		count = data.Size()
-		start = getStartLeaf(node.index, count, preTrees)
-	}
-
-	if int64(count) > math.MaxInt32 {
-		panic("node size exceeds int32")
-	}
-
-	// binary search in the leaf node array
-	res := sort.Search(int(count), func(i int) bool {
-		leafKey := node.snapshot.LeafKey(start + uint32(i)) //nolint:gosec
-		return bytes.Compare(leafKey, key) >= 0
-	})
-
-	if res < 0 {
-		panic("sort.Search returned negative index")
-	}
-	i := uint32(res) //nolint:gosec
-	leaf := i + start
-	if leaf >= start+count {
-		// return the next index if the key is greater than all keys in the node
-		return nil, i
-	}
-
-	nodeKey, value := node.snapshot.LeafKeyValue(leaf)
-	if !bytes.Equal(nodeKey, key) {
-		return nil, i
-	}
-
-	return value, i
+	_ = "STUB: not implemented"
+	return nil, 0
 }
 
-func (node PersistedNode) GetByIndex(leafIndex uint32) ([]byte, []byte) {
-	if node.isLeaf {
-		if leafIndex != 0 {
-			return nil, nil
-		}
-		return node.snapshot.LeafKeyValue(node.index)
-	}
-	data := node.branchNode()
-	preTrees := uint32(data.PreTrees())
-	startLeaf := getStartLeaf(node.index, data.Size(), preTrees)
-	endLeaf := getEndLeaf(node.index, preTrees)
+// binary search in the leaf node array
 
-	i := startLeaf + leafIndex
-	if i > endLeaf {
-		return nil, nil
-	}
-	return node.snapshot.LeafKeyValue(i)
+//nolint:gosec
+
+//nolint:gosec
+
+// return the next index if the key is greater than all keys in the node
+
+func (node PersistedNode) GetByIndex(leafIndex uint32) ([]byte, []byte) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // getStartLeaf returns the index of the first leaf in the node.
@@ -224,18 +105,14 @@ func (node PersistedNode) GetByIndex(leafIndex uint32) ([]byte, []byte) {
 // >            = total branches - sub branches + pre trees
 // >            = (index + 1) - (size - 1) + preTrees
 // >            = index + 2 - size + preTrees
-func getStartLeaf(index, size, preTrees uint32) uint32 {
-	return index + 2 - size + preTrees
-}
+func getStartLeaf(index, size, preTrees uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
 // getEndLeaf returns the index of the last leaf in the node.
 //
 // > end leaf = start leaf + size - 1
 // >          = (index + 2 - size + preTrees) + size - 1
 // >          = index + 1 + preTrees
-func getEndLeaf(index, preTrees uint32) uint32 {
-	return index + preTrees + 1
-}
+func getEndLeaf(index, preTrees uint32) uint32 { _ = "STUB: not implemented"; return 0 }
 
 // getLeftBranch returns the index of the left branch of the node.
 //
@@ -245,6 +122,4 @@ func getEndLeaf(index, preTrees uint32) uint32 {
 // >             = (index+1 - (size-1)) + (key leaf - (index + 2 - size + preTrees) - 1) - 1
 // >             = (index - size + 2) + key leaf - index - 2 + size - preTrees - 2
 // >             = key leaf - preTrees - 2
-func getLeftBranch(keyLeaf, preTrees uint32) uint32 {
-	return keyLeaf - preTrees - 2
-}
+func getLeftBranch(keyLeaf, preTrees uint32) uint32 { _ = "STUB: not implemented"; return 0 }

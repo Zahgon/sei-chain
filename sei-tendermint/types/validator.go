@@ -1,16 +1,10 @@
 package types
 
 import (
-	"bytes"
-	"context"
 	"encoding/json"
 	"errors"
-	"fmt"
-	"strings"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
-	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
@@ -31,42 +25,14 @@ type validatorJSON struct {
 	ProposerPriority int64           `json:"proposer_priority,string"`
 }
 
-func (v Validator) MarshalJSON() ([]byte, error) {
-	val := validatorJSON{
-		Address:          v.Address,
-		VotingPower:      v.VotingPower,
-		ProposerPriority: v.ProposerPriority,
-	}
-	pk, err := jsontypes.Marshal(v.PubKey)
-	if err != nil {
-		return nil, err
-	}
-	val.PubKey = pk
-	return json.Marshal(val)
-}
+func (v Validator) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (v *Validator) UnmarshalJSON(data []byte) error {
-	var val validatorJSON
-	if err := json.Unmarshal(data, &val); err != nil {
-		return err
-	}
-	if err := jsontypes.Unmarshal(val.PubKey, &v.PubKey); err != nil {
-		return err
-	}
-	v.Address = val.Address
-	v.VotingPower = val.VotingPower
-	v.ProposerPriority = val.ProposerPriority
-	return nil
-}
+func (v *Validator) UnmarshalJSON(data []byte) error { _ = "STUB: not implemented"; return nil }
 
 // NewValidator returns a new validator with the given pubkey and voting power.
 func NewValidator(pubKey crypto.PubKey, votingPower int64) *Validator {
-	return &Validator{
-		Address:          pubKey.Address(),
-		PubKey:           pubKey,
-		VotingPower:      votingPower,
-		ProposerPriority: 0,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 var ErrNilValidator = errors.New("nil validator")
@@ -74,49 +40,16 @@ var ErrNegativeVotingPower = errors.New("validator has negative voting power")
 var ErrBadAddressSize = errors.New("validator address has bad size")
 
 // ValidateBasic performs basic validation.
-func (v *Validator) ValidateBasic() error {
-	if v == nil {
-		return ErrNilValidator
-	}
-	if v.VotingPower < 0 {
-		return ErrNegativeVotingPower
-	}
-
-	if len(v.Address) != crypto.AddressSize {
-		return fmt.Errorf("%w: %v", ErrBadAddressSize, v.Address)
-	}
-
-	return nil
-}
+func (v *Validator) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // Creates a new copy of the validator so we can mutate ProposerPriority.
 // Panics if the validator is nil.
-func (v *Validator) Copy() *Validator {
-	vCopy := *v
-	return &vCopy
-}
+func (v *Validator) Copy() *Validator { _ = "STUB: not implemented"; return nil }
 
 // Returns the one with higher ProposerPriority.
 func (v *Validator) CompareProposerPriority(other *Validator) *Validator {
-	if v == nil {
-		return other
-	}
-	switch {
-	case v.ProposerPriority > other.ProposerPriority:
-		return v
-	case v.ProposerPriority < other.ProposerPriority:
-		return other
-	default:
-		result := bytes.Compare(v.Address, other.Address)
-		switch {
-		case result < 0:
-			return v
-		case result > 0:
-			return other
-		default:
-			panic("Cannot compare identical validators")
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // String returns a string representation of String.
@@ -125,76 +58,28 @@ func (v *Validator) CompareProposerPriority(other *Validator) *Validator {
 // 2. public key
 // 3. voting power
 // 4. proposer priority
-func (v *Validator) String() string {
-	if v == nil {
-		return "nil-Validator"
-	}
-	return fmt.Sprintf("Validator{%v %v VP:%v A:%v}",
-		v.Address,
-		v.PubKey,
-		v.VotingPower,
-		v.ProposerPriority)
-}
+func (v *Validator) String() string { _ = "STUB: not implemented"; return "" }
 
 // ValidatorListString returns a prettified validator list for logging purposes.
-func ValidatorListString(vals []*Validator) string {
-	chunks := make([]string, len(vals))
-	for i, val := range vals {
-		chunks[i] = fmt.Sprintf("%s:%d", val.Address, val.VotingPower)
-	}
-
-	return strings.Join(chunks, ",")
-}
+func ValidatorListString(vals []*Validator) string { _ = "STUB: not implemented"; return "" }
 
 // Bytes computes the unique encoding of a validator with a given voting power.
 // These are the bytes that gets hashed in consensus. It excludes address
 // as its redundant with the pubkey. This also excludes ProposerPriority
 // which changes every round.
-func (v *Validator) Bytes() []byte {
-	pk := crypto.PubKeyToProto(v.PubKey)
-	pbv := tmproto.SimpleValidator{
-		PubKey:      &pk,
-		VotingPower: v.VotingPower,
-	}
-
-	bz, err := pbv.Marshal()
-	if err != nil {
-		panic(err)
-	}
-	return bz
-}
+func (v *Validator) Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // ToProto converts Valiator to protobuf
 func (v *Validator) ToProto() (*tmproto.Validator, error) {
-	if v == nil {
-		return nil, errors.New("nil validator")
-	}
-	return &tmproto.Validator{
-		Address:          v.Address,
-		PubKey:           crypto.PubKeyToProto(v.PubKey),
-		VotingPower:      v.VotingPower,
-		ProposerPriority: v.ProposerPriority,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // FromProto sets a protobuf Validator to the given pointer.
 // It returns an error if the public key is invalid.
 func ValidatorFromProto(vp *tmproto.Validator) (*Validator, error) {
-	if vp == nil {
-		return nil, errors.New("nil validator")
-	}
-
-	pk, err := crypto.PubKeyFromProto(vp.PubKey)
-	if err != nil {
-		return nil, err
-	}
-	v := new(Validator)
-	v.Address = vp.GetAddress()
-	v.PubKey = pk
-	v.VotingPower = vp.GetVotingPower()
-	v.ProposerPriority = vp.GetProposerPriority()
-
-	return v, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 //----------------------------------------
@@ -203,15 +88,6 @@ func ValidatorFromProto(vp *tmproto.Validator) (*Validator, error) {
 // RandValidator returns a randomized validator, useful for testing.
 // UNSTABLE
 func RandValidator(randPower bool, minPower int64) (*Validator, PrivValidator) {
-	privVal := NewMockPV()
-	votePower := minPower
-	if randPower {
-		votePower += int64(tmrand.Uint32())
-	}
-	pubKey, err := privVal.GetPubKey(context.TODO())
-	if err != nil {
-		panic(fmt.Errorf("could not retrieve pubkey %w", err))
-	}
-	val := NewValidator(pubKey, votePower)
-	return val, privVal
+	_ = "STUB: not implemented"
+	return nil, *new(PrivValidator)
 }

@@ -1,7 +1,6 @@
 package types
 
 import (
-	"fmt"
 	"io"
 
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
@@ -9,7 +8,6 @@ import (
 
 	snapshottypes "github.com/sei-protocol/sei-chain/sei-cosmos/snapshots/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/utils"
 )
 
 type Store interface {
@@ -66,40 +64,14 @@ type StoreRename struct {
 }
 
 // IsDeleted returns true if the given key should be added
-func (s *StoreUpgrades) IsAdded(key string) bool {
-	if s == nil {
-		return false
-	}
-	return utils.StringInSlice(key, s.Added)
-}
+func (s *StoreUpgrades) IsAdded(key string) bool { _ = "STUB: not implemented"; return false }
 
 // IsDeleted returns true if the given key should be deleted
-func (s *StoreUpgrades) IsDeleted(key string) bool {
-	if s == nil {
-		return false
-	}
-	for _, d := range s.Deleted {
-		if d == key {
-			return true
-		}
-	}
-	return false
-}
+func (s *StoreUpgrades) IsDeleted(key string) bool { _ = "STUB: not implemented"; return false }
 
 // RenamedFrom returns the oldKey if it was renamed
 // Returns "" if it was not renamed
-func (s *StoreUpgrades) RenamedFrom(key string) string {
-	if s == nil {
-		return ""
-	}
-	for _, re := range s.Renamed {
-		if re.NewKey == key {
-			return re.OldKey
-		}
-	}
-	return ""
-
-}
+func (s *StoreUpgrades) RenamedFrom(key string) string { _ = "STUB: not implemented"; return "" }
 
 type MultiStore interface {
 	Store
@@ -295,13 +267,9 @@ type CacheWrapper interface {
 	CacheWrapWithTrace(storeKey StoreKey, w io.Writer, tc TraceContext) CacheWrap
 }
 
-func (cid CommitID) IsZero() bool {
-	return cid.Version == 0 && len(cid.Hash) == 0
-}
+func (cid CommitID) IsZero() bool { _ = "STUB: not implemented"; return false }
 
-func (cid CommitID) String() string {
-	return fmt.Sprintf("CommitID{%v:%X}", cid.Hash, cid.Version)
-}
+func (cid CommitID) String() string { _ = "STUB: not implemented"; return "" }
 
 //----------------------------------------
 // Store types
@@ -317,27 +285,7 @@ const (
 	StoreTypeMemory
 )
 
-func (st StoreType) String() string {
-	switch st {
-	case StoreTypeMulti:
-		return "StoreTypeMulti"
-
-	case StoreTypeDB:
-		return "StoreTypeDB"
-
-	case StoreTypeIAVL:
-		return "StoreTypeIAVL"
-
-	case StoreTypeTransient:
-		return "StoreTypeTransient"
-
-	case StoreTypeMemory:
-		return "StoreTypeMemory"
-
-	}
-
-	return "unknown store type"
-}
+func (st StoreType) String() string { _ = "STUB: not implemented"; return "" }
 
 //----------------------------------------
 // Keys for accessing substores
@@ -360,22 +308,11 @@ type KVStoreKey struct {
 
 // NewKVStoreKey returns a new pointer to a KVStoreKey.
 // Use a pointer so keys don't collide.
-func NewKVStoreKey(name string) *KVStoreKey {
-	if name == "" {
-		panic("empty key name not allowed")
-	}
-	return &KVStoreKey{
-		name: name,
-	}
-}
+func NewKVStoreKey(name string) *KVStoreKey { _ = "STUB: not implemented"; return nil }
 
-func (key *KVStoreKey) Name() string {
-	return key.name
-}
+func (key *KVStoreKey) Name() string { _ = "STUB: not implemented"; return "" }
 
-func (key *KVStoreKey) String() string {
-	return fmt.Sprintf("KVStoreKey{%p, %s}", key, key.name)
-}
+func (key *KVStoreKey) String() string { _ = "STUB: not implemented"; return "" }
 
 // TransientStoreKey is used for indexing transient stores in a MultiStore
 type TransientStoreKey struct {
@@ -384,40 +321,34 @@ type TransientStoreKey struct {
 
 // Constructs new TransientStoreKey
 // Must return a pointer according to the ocap principle
-func NewTransientStoreKey(name string) *TransientStoreKey {
-	return &TransientStoreKey{
-		name: name,
-	}
-}
+func NewTransientStoreKey(name string) *TransientStoreKey { _ = "STUB: not implemented"; return nil }
 
 // Implements StoreKey
 func (key *TransientStoreKey) Name() string {
-	return key.name
+	_ = "STUB: not implemented"
+
+	// Implements StoreKey
+	return ""
 }
 
-// Implements StoreKey
-func (key *TransientStoreKey) String() string {
-	return fmt.Sprintf("TransientStoreKey{%p, %s}", key, key.name)
-}
+func (key *TransientStoreKey) String() string { _ = "STUB: not implemented"; return "" }
 
 // MemoryStoreKey defines a typed key to be used with an in-memory KVStore.
 type MemoryStoreKey struct {
 	name string
 }
 
-func NewMemoryStoreKey(name string) *MemoryStoreKey {
-	return &MemoryStoreKey{name: name}
-}
+func NewMemoryStoreKey(name string) *MemoryStoreKey { _ = "STUB: not implemented"; return nil }
 
 // Name returns the name of the MemoryStoreKey.
 func (key *MemoryStoreKey) Name() string {
-	return key.name
+	_ = "STUB: not implemented"
+
+	// String returns a stringified representation of the MemoryStoreKey.
+	return ""
 }
 
-// String returns a stringified representation of the MemoryStoreKey.
-func (key *MemoryStoreKey) String() string {
-	return fmt.Sprintf("MemoryStoreKey{%p, %s}", key, key.name)
-}
+func (key *MemoryStoreKey) String() string { _ = "STUB: not implemented"; return "" }
 
 //----------------------------------------
 

@@ -1,14 +1,9 @@
 package memiavl
 
 import (
-	"fmt"
-	"math"
-
 	ics23 "github.com/confio/ics23/go"
 	dbm "github.com/tendermint/tm-db"
 
-	"github.com/sei-protocol/sei-chain/sei-db/common/errors"
-	"github.com/sei-protocol/sei-chain/sei-db/common/utils"
 	"github.com/sei-protocol/sei-chain/sei-db/proto"
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/types"
 )
@@ -22,111 +17,54 @@ type CommitStore struct {
 }
 
 func NewCommitStore(homeDir string, config Config) *CommitStore {
-	commitDBPath := utils.GetCosmosSCStorePath(homeDir)
-	opts := Options{
-		Config:          config, // Embed the config directly
-		Dir:             commitDBPath,
-		CreateIfMissing: true,
-		ZeroCopy:        false, // Disable zero copy to avoid segfault during historical read
-	}
-	commitStore := &CommitStore{
-		opts:    opts,
-		homeDir: homeDir,
-	}
-	return commitStore
+	_ = "STUB: not implemented"
+	return nil
 }
 
+// Embed the config directly
+
+// Disable zero copy to avoid segfault during historical read
+
 func (cs *CommitStore) Initialize(initialStores []string) error {
-	cs.opts.InitialStores = initialStores
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (cs *CommitStore) SetInitialVersion(initialVersion int64) error {
-	return cs.db.SetInitialVersion(initialVersion)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (cs *CommitStore) Rollback(targetVersion int64) error {
+	_ = "STUB: not implemented"
 	// Close existing resources
-	if cs.db != nil {
-		_ = cs.db.Close()
-	}
-
-	options := cs.opts
-	options.LoadForOverwriting = true
-
-	db, err := OpenDB(targetVersion, options)
-	if err != nil {
-		return err
-	}
-	cs.db = db
 	return nil
 }
 
 // LoadVersion loads the specified version of the database.
 // If copyExisting is true, creates a read-only copy for querying.
 func (cs *CommitStore) LoadVersion(targetVersion int64, readOnly bool) (types.Committer, error) {
-	logger.Info("SeiDB loading target memIAVL version", "version", targetVersion, "read-only", readOnly)
-
-	if readOnly {
-		// Create a read-only copy via NewCommitStore.
-		newCS := NewCommitStore(cs.homeDir, cs.opts.Config)
-		newCS.opts = cs.opts
-		newCS.opts.ReadOnly = true
-		newCS.opts.CreateIfMissing = false
-
-		db, err := OpenDB(targetVersion, newCS.opts)
-		if err != nil {
-			return nil, err
-		}
-		newCS.db = db
-		return newCS, nil
-	}
-
-	// Close existing resources
-	if cs.db != nil {
-		_ = cs.db.Close()
-	}
-
-	opts := cs.opts
-	db, err := OpenDB(targetVersion, opts)
-	if err != nil {
-		return nil, err
-	}
-
-	cs.db = db
-	return cs, nil
+	_ = "STUB: not implemented"
+	return *new(types.Committer), nil
 }
+
+// Create a read-only copy via NewCommitStore.
+
+// Close existing resources
 
 // Copy returns an O(1) memiavl snapshot; COW nodes are shared with the live store.
 func (cs *CommitStore) Copy() types.Committer {
-	if cs == nil || cs.db == nil {
-		return nil
-	}
-	return &CommitStore{
-		db:      cs.db.Copy(),
-		opts:    cs.opts,
-		homeDir: cs.homeDir,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.Committer)
 }
 
 // ReleaseSnapshotRefs releases refs held by a copied in-memory snapshot without
 // closing DB-level resources shared with the live store.
-func (cs *CommitStore) ReleaseSnapshotRefs() error {
-	if cs == nil || cs.db == nil {
-		return nil
-	}
-	err := cs.db.ReleaseSnapshotRefs()
-	cs.db = nil
-	return err
-}
+func (cs *CommitStore) ReleaseSnapshotRefs() error { _ = "STUB: not implemented"; return nil }
 
-func (cs *CommitStore) Commit() (int64, error) {
-	return cs.db.Commit()
-}
+func (cs *CommitStore) Commit() (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
-func (cs *CommitStore) Version() int64 {
-	return cs.db.Version()
-}
+func (cs *CommitStore) Version() int64 { _ = "STUB: not implemented"; return 0 }
 
 // GetLatestVersion returns the highest version durably written to the
 // changelog WAL on disk. Note that with AsyncCommitBuffer > 0,
@@ -139,136 +77,65 @@ func (cs *CommitStore) Version() int64 {
 // (rootmulti.NewStore and rootmulti.LastCommitID), which only invoke
 // GetLatestVersion before LoadVersion has opened the DB; in that
 // pre-load state nothing is in memory anyway.
-func (cs *CommitStore) GetLatestVersion() (int64, error) {
-	return GetLatestVersion(cs.opts.Dir)
-}
+func (cs *CommitStore) GetLatestVersion() (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (cs *CommitStore) ApplyChangeSets(changesets []*proto.NamedChangeSet) error {
-	if len(changesets) == 0 {
-		return nil
-	}
-
-	// Apply to tree
-	return cs.db.ApplyChangeSets(changesets)
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Apply to tree
 
 func (cs *CommitStore) ApplyUpgrades(upgrades []*proto.TreeNameUpgrade) error {
-	if len(upgrades) == 0 {
-		return nil
-	}
-
-	// Apply to tree
-	return cs.db.ApplyUpgrades(upgrades)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (cs *CommitStore) WorkingCommitInfo() *proto.CommitInfo {
-	return cs.db.WorkingCommitInfo()
-}
+// Apply to tree
 
-func (cs *CommitStore) LastCommitInfo() *proto.CommitInfo {
-	return cs.db.LastCommitInfo()
-}
+func (cs *CommitStore) WorkingCommitInfo() *proto.CommitInfo { _ = "STUB: not implemented"; return nil }
+
+func (cs *CommitStore) LastCommitInfo() *proto.CommitInfo { _ = "STUB: not implemented"; return nil }
 
 func (cs *CommitStore) GetChildStoreByName(name string) types.CommitKVStore {
-	tree := cs.db.TreeByName(name)
-	if tree == nil {
-		// Return an explicitly nil interface (not a typed-nil *Tree wrapped in an
-		// interface), so callers can compare the result against nil.
-		return nil
-	}
-	return tree
+	_ = "STUB: not implemented"
+	return *new(types.CommitKVStore)
 }
 
+// Return an explicitly nil interface (not a typed-nil *Tree wrapped in an
+// interface), so callers can compare the result against nil.
+
 func (cs *CommitStore) Exporter(version int64) (types.Exporter, error) {
-	if version < 0 || version > math.MaxUint32 {
-		return nil, fmt.Errorf("version %d out of range", version)
-	}
-	return NewMultiTreeExporter(cs.opts.Dir, uint32(version), cs.opts.OnlyAllowExportOnSnapshotVersion)
+	_ = "STUB: not implemented"
+	return *new(types.Exporter), nil
 }
 
 func (cs *CommitStore) Importer(version int64) (types.Importer, error) {
-	if version < 0 || version > math.MaxUint32 {
-		return nil, fmt.Errorf("version %d out of range", version)
-	}
-	return NewMultiTreeImporter(cs.opts.Dir, uint64(version))
+	_ = "STUB: not implemented"
+	return *new(types.Importer), nil
 }
 
-func (cs *CommitStore) Close() error {
-	var errs []error
-
-	if cs.db != nil {
-		errs = append(errs, cs.db.Close())
-		cs.db = nil
-	}
-
-	return errors.Join(errs...)
-}
+func (cs *CommitStore) Close() error { _ = "STUB: not implemented"; return nil }
 
 func (cs *CommitStore) Get(store string, key []byte) (value []byte, ok bool, err error) {
-	if store == "" {
-		return nil, false, fmt.Errorf("store name cannot be empty")
-	}
-	if key == nil {
-		return nil, false, fmt.Errorf("key cannot be nil")
-	}
-
-	childStore := cs.GetChildStoreByName(store)
-	if childStore == nil {
-		return nil, false, nil
-	}
-
-	value = childStore.Get(key)
-	if value == nil {
-		return nil, false, nil
-	}
-	return value, true, nil
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
 func (cs *CommitStore) GetProof(store string, key []byte) (*ics23.CommitmentProof, error) {
-	if store == "" {
-		return nil, fmt.Errorf("store name cannot be empty")
-	}
-	if key == nil {
-		return nil, fmt.Errorf("key cannot be nil")
-	}
-
-	childStore := cs.GetChildStoreByName(store)
-	if childStore == nil {
-		return nil, nil
-	}
-
-	return childStore.GetProof(key), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (cs *CommitStore) Has(store string, key []byte) (bool, error) {
-	_, ok, err := cs.Get(store, key)
-	if err != nil {
-		return false, fmt.Errorf("failed to get value: %w", err)
-	}
-	return ok, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 func (cs *CommitStore) Iterator(store string, start []byte, end []byte, ascending bool) (dbm.Iterator, error) {
-	if store == "" {
-		return nil, fmt.Errorf("store name cannot be empty")
-	}
-	if start == nil {
-		return nil, fmt.Errorf("start cannot be nil")
-	}
-	if end == nil {
-		return nil, fmt.Errorf("end cannot be nil")
-	}
-
-	childStore := cs.GetChildStoreByName(store)
-	if childStore == nil {
-		return nil, nil
-	}
-
-	return childStore.Iterator(start, end, ascending), nil
-
+	_ = "STUB: not implemented"
+	return *new(dbm.Iterator), nil
 }
 
 // Get the underlying memiavl DB.
-func (cs *CommitStore) GetDB() *DB {
-	return cs.db
-}
+func (cs *CommitStore) GetDB() *DB { _ = "STUB: not implemented"; return nil }

@@ -5,13 +5,12 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/regen-network/cosmos-proto"
 	types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -55,12 +54,11 @@ var AuthorizationType_value = map[string]int32{
 	"AUTHORIZATION_TYPE_REDELEGATE":  3,
 }
 
-func (x AuthorizationType) String() string {
-	return proto.EnumName(AuthorizationType_name, int32(x))
-}
+func (x AuthorizationType) String() string { _ = "STUB: not implemented"; return "" }
 
 func (AuthorizationType) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_d6d8cdbc6f4432f0, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // StakeAuthorization defines authorization for delegate/undelegate/redelegate.
@@ -80,36 +78,23 @@ type StakeAuthorization struct {
 	AuthorizationType AuthorizationType `protobuf:"varint,4,opt,name=authorization_type,json=authorizationType,proto3,enum=cosmos.staking.v1beta1.AuthorizationType" json:"authorization_type,omitempty"`
 }
 
-func (m *StakeAuthorization) Reset()         { *m = StakeAuthorization{} }
-func (m *StakeAuthorization) String() string { return proto.CompactTextString(m) }
-func (*StakeAuthorization) ProtoMessage()    {}
-func (*StakeAuthorization) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d6d8cdbc6f4432f0, []int{0}
-}
-func (m *StakeAuthorization) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *StakeAuthorization) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *StakeAuthorization) String() string            { _ = "STUB: not implemented"; return "" }
+func (*StakeAuthorization) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*StakeAuthorization) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *StakeAuthorization) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *StakeAuthorization) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_StakeAuthorization.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *StakeAuthorization) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StakeAuthorization.Merge(m, src)
-}
-func (m *StakeAuthorization) XXX_Size() int {
-	return m.Size()
-}
-func (m *StakeAuthorization) XXX_DiscardUnknown() {
-	xxx_messageInfo_StakeAuthorization.DiscardUnknown(m)
-}
+
+func (m *StakeAuthorization) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *StakeAuthorization) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *StakeAuthorization) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_StakeAuthorization proto.InternalMessageInfo
 
@@ -126,94 +111,76 @@ type StakeAuthorization_DenyList struct {
 	DenyList *StakeAuthorization_Validators `protobuf:"bytes,3,opt,name=deny_list,json=denyList,proto3,oneof" json:"deny_list,omitempty"`
 }
 
-func (*StakeAuthorization_AllowList) isStakeAuthorization_Validators() {}
-func (*StakeAuthorization_DenyList) isStakeAuthorization_Validators()  {}
+func (*StakeAuthorization_AllowList) isStakeAuthorization_Validators() {
+	_ = "STUB: not implemented"
+	return
+}
+func (*StakeAuthorization_DenyList) isStakeAuthorization_Validators() {
+	_ = "STUB: not implemented"
+	return
+}
 
 func (m *StakeAuthorization) GetValidators() isStakeAuthorization_Validators {
-	if m != nil {
-		return m.Validators
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(isStakeAuthorization_Validators)
 }
 
-func (m *StakeAuthorization) GetMaxTokens() *types.Coin {
-	if m != nil {
-		return m.MaxTokens
-	}
-	return nil
-}
+func (m *StakeAuthorization) GetMaxTokens() *types.Coin { _ = "STUB: not implemented"; return nil }
 
 func (m *StakeAuthorization) GetAllowList() *StakeAuthorization_Validators {
-	if x, ok := m.GetValidators().(*StakeAuthorization_AllowList); ok {
-		return x.AllowList
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *StakeAuthorization) GetDenyList() *StakeAuthorization_Validators {
-	if x, ok := m.GetValidators().(*StakeAuthorization_DenyList); ok {
-		return x.DenyList
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *StakeAuthorization) GetAuthorizationType() AuthorizationType {
-	if m != nil {
-		return m.AuthorizationType
-	}
-	return AuthorizationType_AUTHORIZATION_TYPE_UNSPECIFIED
+	_ = "STUB: not implemented"
+	return *new(AuthorizationType)
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*StakeAuthorization) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*StakeAuthorization_AllowList)(nil),
-		(*StakeAuthorization_DenyList)(nil),
-	}
-}
+func (*StakeAuthorization) XXX_OneofWrappers() []interface{} { _ = "STUB: not implemented"; return nil }
 
 // Validators defines list of validator addresses.
 type StakeAuthorization_Validators struct {
 	Address []string `protobuf:"bytes,1,rep,name=address,proto3" json:"address,omitempty"`
 }
 
-func (m *StakeAuthorization_Validators) Reset()         { *m = StakeAuthorization_Validators{} }
-func (m *StakeAuthorization_Validators) String() string { return proto.CompactTextString(m) }
-func (*StakeAuthorization_Validators) ProtoMessage()    {}
+func (m *StakeAuthorization_Validators) Reset()         { _ = "STUB: not implemented"; return }
+func (m *StakeAuthorization_Validators) String() string { _ = "STUB: not implemented"; return "" }
+func (*StakeAuthorization_Validators) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*StakeAuthorization_Validators) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d6d8cdbc6f4432f0, []int{0, 0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *StakeAuthorization_Validators) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *StakeAuthorization_Validators) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_StakeAuthorization_Validators.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *StakeAuthorization_Validators) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_StakeAuthorization_Validators.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *StakeAuthorization_Validators) XXX_Size() int {
-	return m.Size()
-}
-func (m *StakeAuthorization_Validators) XXX_DiscardUnknown() {
-	xxx_messageInfo_StakeAuthorization_Validators.DiscardUnknown(m)
-}
+
+func (m *StakeAuthorization_Validators) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *StakeAuthorization_Validators) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_StakeAuthorization_Validators proto.InternalMessageInfo
 
 func (m *StakeAuthorization_Validators) GetAddress() []string {
-	if m != nil {
-		return m.Address
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -262,538 +229,77 @@ var fileDescriptor_d6d8cdbc6f4432f0 = []byte{
 }
 
 func (m *StakeAuthorization) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *StakeAuthorization) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *StakeAuthorization) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.AuthorizationType != 0 {
-		i = encodeVarintAuthz(dAtA, i, uint64(m.AuthorizationType))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.Validators != nil {
-		{
-			size := m.Validators.Size()
-			i -= size
-			if _, err := m.Validators.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	if m.MaxTokens != nil {
-		{
-			size, err := m.MaxTokens.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAuthz(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *StakeAuthorization_AllowList) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *StakeAuthorization_AllowList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.AllowList != nil {
-		{
-			size, err := m.AllowList.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAuthz(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *StakeAuthorization_DenyList) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *StakeAuthorization_DenyList) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.DenyList != nil {
-		{
-			size, err := m.DenyList.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintAuthz(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *StakeAuthorization_Validators) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *StakeAuthorization_Validators) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *StakeAuthorization_Validators) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Address) > 0 {
-		for iNdEx := len(m.Address) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Address[iNdEx])
-			copy(dAtA[i:], m.Address[iNdEx])
-			i = encodeVarintAuthz(dAtA, i, uint64(len(m.Address[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintAuthz(dAtA []byte, offset int, v uint64) int {
-	offset -= sovAuthz(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *StakeAuthorization) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.MaxTokens != nil {
-		l = m.MaxTokens.Size()
-		n += 1 + l + sovAuthz(uint64(l))
-	}
-	if m.Validators != nil {
-		n += m.Validators.Size()
-	}
-	if m.AuthorizationType != 0 {
-		n += 1 + sovAuthz(uint64(m.AuthorizationType))
-	}
-	return n
-}
+func encodeVarintAuthz(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *StakeAuthorization_AllowList) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.AllowList != nil {
-		l = m.AllowList.Size()
-		n += 1 + l + sovAuthz(uint64(l))
-	}
-	return n
-}
-func (m *StakeAuthorization_DenyList) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DenyList != nil {
-		l = m.DenyList.Size()
-		n += 1 + l + sovAuthz(uint64(l))
-	}
-	return n
-}
-func (m *StakeAuthorization_Validators) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Address) > 0 {
-		for _, s := range m.Address {
-			l = len(s)
-			n += 1 + l + sovAuthz(uint64(l))
-		}
-	}
-	return n
-}
+func (m *StakeAuthorization) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovAuthz(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozAuthz(x uint64) (n int) {
-	return sovAuthz(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *StakeAuthorization) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAuthz
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: StakeAuthorization: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: StakeAuthorization: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxTokens", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuthz
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.MaxTokens == nil {
-				m.MaxTokens = &types.Coin{}
-			}
-			if err := m.MaxTokens.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuthz
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &StakeAuthorization_Validators{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Validators = &StakeAuthorization_AllowList{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DenyList", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuthz
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &StakeAuthorization_Validators{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Validators = &StakeAuthorization_DenyList{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthorizationType", wireType)
-			}
-			m.AuthorizationType = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuthz
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.AuthorizationType |= AuthorizationType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAuthz(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *StakeAuthorization_AllowList) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *StakeAuthorization_DenyList) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *StakeAuthorization_Validators) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sovAuthz(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozAuthz(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *StakeAuthorization) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *StakeAuthorization_Validators) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowAuthz
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Validators: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Validators: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowAuthz
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = append(m.Address, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipAuthz(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthAuthz
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipAuthz(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowAuthz
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowAuthz
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowAuthz
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthAuthz
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupAuthz
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthAuthz
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipAuthz(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthAuthz        = fmt.Errorf("proto: negative length found during unmarshaling")

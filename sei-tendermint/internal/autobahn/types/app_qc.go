@@ -16,29 +16,16 @@ type AppQC struct {
 }
 
 // NewAppQC create a new stateQC.
-func NewAppQC(votes []*Signed[*AppVote]) *AppQC {
-	if len(votes) == 0 {
-		panic("qc cannot be empty")
-	}
-	sigs := make([]*Signature, len(votes))
-	for i, v := range votes {
-		sigs[i] = v.sig
-	}
-	return &AppQC{vote: votes[0].hashed, sigs: sigs}
-}
+func NewAppQC(votes []*Signed[*AppVote]) *AppQC { _ = "STUB: not implemented"; return nil }
 
 // Proposal .
-func (m *AppQC) Proposal() *AppProposal { return m.vote.Msg().Proposal() }
+func (m *AppQC) Proposal() *AppProposal { _ = "STUB: not implemented"; return nil }
 
 // Next is the number of the next global block to finalize AppHash for.
-func (m *AppQC) Next() RoadIndex {
-	return m.Proposal().Next()
-}
+func (m *AppQC) Next() RoadIndex { _ = "STUB: not implemented"; return *new(RoadIndex) }
 
 // Verify verifies the AppQC against the committee.
-func (m *AppQC) Verify(c *Committee) error {
-	return m.vote.verifyQC(c, c.AppQuorum(), m.sigs)
-}
+func (m *AppQC) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 // AppQCConv is a protobuf converter for AppQC.
 var AppQCConv = protoutils.Conv[*AppQC, *pb.AppQC]{

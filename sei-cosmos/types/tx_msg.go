@@ -79,6 +79,4 @@ type TxDecoder func(txBytes []byte) (Tx, error)
 type TxEncoder func(tx Tx) ([]byte, error)
 
 // MsgTypeURL returns the TypeURL of a `sdk.Msg`.
-func MsgTypeURL(msg Msg) string {
-	return "/" + proto.MessageName(msg)
-}
+func MsgTypeURL(msg Msg) string { _ = "STUB: not implemented"; return "" }

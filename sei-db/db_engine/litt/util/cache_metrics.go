@@ -1,14 +1,9 @@
 package util
 
 import (
-	"context"
 	"time"
 
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
-
-	commonmetrics "github.com/sei-protocol/sei-chain/sei-db/common/metrics"
 )
 
 const cacheMeterName = "litt"
@@ -40,77 +35,21 @@ type CacheMetrics struct {
 //
 // The caller must have configured a MeterProvider before calling this (e.g.
 // commonmetrics.SetupOtelPrometheus).
-func NewCacheMetrics(cacheName string) *CacheMetrics {
-	meter := otel.Meter(cacheMeterName)
-
-	keyCount, _ := meter.Int64Gauge(
-		"litt_chunk_cache_key_count",
-		metric.WithDescription("Reports on the number of keys in the cache."),
-		metric.WithUnit("{count}"),
-	)
-
-	weight, _ := meter.Int64Gauge(
-		"litt_chunk_cache_weight_bytes",
-		metric.WithDescription("Reports on the weight of the cache in bytes."),
-		metric.WithUnit("By"),
-	)
-
-	keysAdded, _ := meter.Int64Counter(
-		"litt_chunk_cache_keys_added",
-		metric.WithDescription("Reports on the number of keys added to the cache."),
-		metric.WithUnit("{count}"),
-	)
-
-	weightAdded, _ := meter.Int64Counter(
-		"litt_chunk_cache_weight_added_bytes",
-		metric.WithDescription("Reports on the weight of the entries added to the cache."),
-		metric.WithUnit("By"),
-	)
-
-	evictionLatency, _ := meter.Float64Histogram(
-		"litt_chunk_cache_eviction_latency_seconds",
-		metric.WithDescription("Reports on the eviction latency of the cache."),
-		metric.WithUnit("s"),
-		metric.WithExplicitBucketBoundaries(commonmetrics.LatencyBuckets...),
-	)
-
-	return &CacheMetrics{
-		attrs:           metric.WithAttributes(attribute.String("cache", cacheName)),
-		keyCount:        keyCount,
-		weight:          weight,
-		keysAdded:       keysAdded,
-		weightAdded:     weightAdded,
-		evictionLatency: evictionLatency,
-	}
-}
+func NewCacheMetrics(cacheName string) *CacheMetrics { _ = "STUB: not implemented"; return nil }
 
 // reportInsertion is used to report an entry being inserted into the cache.
-func (m *CacheMetrics) reportInsertion(weight uint64) {
-	if m == nil {
-		return
-	}
+func (m *CacheMetrics) reportInsertion(weight uint64) { _ = "STUB: not implemented"; return }
 
-	ctx := context.Background()
-	m.keysAdded.Add(ctx, 1, m.attrs)
-	m.weightAdded.Add(ctx, int64(weight), m.attrs) //nolint:gosec // weight fits int64
-}
+//nolint:gosec // weight fits int64
 
 // reportEviction is used to report an entry being evicted from the cache.
-func (m *CacheMetrics) reportEviction(age time.Duration) {
-	if m == nil {
-		return
-	}
-
-	m.evictionLatency.Record(context.Background(), age.Seconds(), m.attrs)
-}
+func (m *CacheMetrics) reportEviction(age time.Duration) { _ = "STUB: not implemented"; return }
 
 // reportCurrentSize is used to report the current size/weight of the cache.
 func (m *CacheMetrics) reportCurrentSize(size int, weight uint64) {
-	if m == nil {
-		return
-	}
-
-	ctx := context.Background()
-	m.keyCount.Record(ctx, int64(size), m.attrs) //nolint:gosec // size fits int64
-	m.weight.Record(ctx, int64(weight), m.attrs) //nolint:gosec // weight fits int64
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec // size fits int64
+//nolint:gosec // weight fits int64

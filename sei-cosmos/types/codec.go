@@ -11,12 +11,7 @@ const (
 )
 
 // RegisterLegacyAminoCodec registers the sdk message type.
-func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterInterface((*Msg)(nil), nil)
-	cdc.RegisterInterface((*Tx)(nil), nil)
-}
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) { _ = "STUB: not implemented"; return }
 
 // RegisterInterfaces registers the sdk message type.
-func RegisterInterfaces(registry types.InterfaceRegistry) {
-	registry.RegisterInterface(MsgInterfaceProtoName, (*Msg)(nil))
-}
+func RegisterInterfaces(registry types.InterfaceRegistry) { _ = "STUB: not implemented"; return }

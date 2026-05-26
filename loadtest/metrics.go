@@ -1,14 +1,9 @@
 package main
 
 import (
-	"fmt"
-	"io"
-	"log"
 	"net/http"
-	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/metric"
 )
@@ -39,12 +34,7 @@ var (
 	}
 )
 
-func must[V any](v V, err error) V {
-	if err != nil {
-		panic(err)
-	}
-	return v
-}
+func must[V any](v V, err error) V { _ = "STUB: not implemented"; return *new(V) }
 
 const (
 	defaultListenAddress = "0.0.0.0"
@@ -57,52 +47,13 @@ type MetricsServer struct {
 }
 
 func (s *MetricsServer) metricsHandler(w http.ResponseWriter, _ *http.Request) {
-	gr, err := s.metrics.Gather("prometheus")
-	if err != nil {
-		rest.WriteErrorResponse(w, http.StatusBadRequest, fmt.Sprintf("failed to gather metrics: %s", err))
-		return
-	}
-
-	w.Header().Set("Content-Type", gr.ContentType)
-	_, _ = w.Write(gr.Metrics)
+	_ = "STUB: not implemented"
+	return
 }
 
-func (s *MetricsServer) StartMetricsClient(config Config) {
-	m, err := telemetry.New(telemetry.Config{
-		ServiceName:             "loadtest-client",
-		Enabled:                 true,
-		EnableHostnameLabel:     true,
-		EnableServiceLabel:      true,
-		PrometheusRetentionTime: 600,
-	})
-	if err != nil {
-		panic(err)
-	}
-	s.metrics = m
-	http.HandleFunc("/healthz", s.healthzHandler)
-	http.HandleFunc("/metrics", s.metricsHandler)
-
-	metricsPort := config.MetricsPort
-	if config.MetricsPort == 0 {
-		metricsPort = defaultMetricsPort
-	}
-
-	listenAddr := fmt.Sprintf("%s:%d", defaultListenAddress, metricsPort)
-	log.Printf("Listening for metrics scrapes on %s", listenAddr)
-
-	s.server = &http.Server{
-		Addr:              listenAddr,
-		ReadHeaderTimeout: 3 * time.Second,
-	}
-	err = s.server.ListenAndServe()
-	if err != nil {
-		panic(err)
-	}
-}
+func (s *MetricsServer) StartMetricsClient(config Config) { _ = "STUB: not implemented"; return }
 
 func (s *MetricsServer) healthzHandler(w http.ResponseWriter, _ *http.Request) {
-	_, err := io.WriteString(w, "ok\n")
-	if err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }

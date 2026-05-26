@@ -1,10 +1,7 @@
 package ante
 
 import (
-	"fmt"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/legacy/legacytx"
 )
 
@@ -28,67 +25,38 @@ type SetUpContextDecorator struct {
 }
 
 func NewDefaultSetUpContextDecorator() SetUpContextDecorator {
-	return SetUpContextDecorator{
-		gasMeterSetter: SetGasMeter,
-	}
+	_ = "STUB: not implemented"
+	return *new(SetUpContextDecorator)
 }
 
 func NewSetUpContextDecorator(gasMeterSetter func(bool, sdk.Context, uint64, sdk.Tx) sdk.Context) SetUpContextDecorator {
-	return SetUpContextDecorator{
-		gasMeterSetter: gasMeterSetter,
-	}
+	_ = "STUB: not implemented"
+	return *new(SetUpContextDecorator)
 }
 
 func (sud SetUpContextDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	_ = "STUB: not implemented"
 	// all transactions must implement GasTx
-	gasTx, ok := tx.(GasTx)
-	if !ok {
-		// Set a gas meter with limit 0 as to prevent an infinite gas meter attack
-		// during runTx.
-		newCtx = sud.gasMeterSetter(simulate, ctx, 0, tx)
-		return newCtx, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "Tx must be GasTx")
-	}
-
-	newCtx = sud.gasMeterSetter(simulate, ctx, gasTx.GetGas(), tx)
-
-	if cp := ctx.ConsensusParams(); cp != nil && cp.Block != nil {
-		// If there exists a maximum block gas limit, we must ensure that the tx
-		// does not exceed it.
-		if cp.Block.MaxGas > 0 && gasTx.GetGas() > uint64(cp.Block.MaxGas) { //nolint:gosec // MaxGas is validated positive by the condition
-			return newCtx, sdkerrors.Wrapf(sdkerrors.ErrOutOfGas, "tx gas wanted %d exceeds block max gas limit %d", gasTx.GetGas(), cp.Block.MaxGas)
-		}
-	}
-	// Decorator will catch an OutOfGasPanic caused in the next antehandler
-	// AnteHandlers must have their own defer/recover in order for the BaseApp
-	// to know how much gas was used! This is because the GasMeter is created in
-	// the AnteHandler, but if it panics the context won't be set properly in
-	// runTx's recover call.
-	defer func() {
-		if r := recover(); r != nil {
-			switch rType := r.(type) {
-			case sdk.ErrorOutOfGas:
-				log := fmt.Sprintf(
-					"out of gas in location: %v; gasWanted: %d, gasUsed: %d",
-					rType.Descriptor, gasTx.GetGas(), newCtx.GasMeter().GasConsumed())
-
-				err = sdkerrors.Wrap(sdkerrors.ErrOutOfGas, log)
-			default:
-				panic(r)
-			}
-		}
-	}()
-
-	return next(newCtx, tx, simulate)
+	return *new(sdk.Context), nil
 }
+
+// Set a gas meter with limit 0 as to prevent an infinite gas meter attack
+// during runTx.
+
+// If there exists a maximum block gas limit, we must ensure that the tx
+// does not exceed it.
+//nolint:gosec // MaxGas is validated positive by the condition
+
+// Decorator will catch an OutOfGasPanic caused in the next antehandler
+// AnteHandlers must have their own defer/recover in order for the BaseApp
+// to know how much gas was used! This is because the GasMeter is created in
+// the AnteHandler, but if it panics the context won't be set properly in
+// runTx's recover call.
 
 // SetGasMeter returns a new context with a gas meter set from a given context.
 func SetGasMeter(simulate bool, ctx sdk.Context, gasLimit uint64, _ sdk.Tx) sdk.Context {
+	_ = "STUB: not implemented"
 	// In various cases such as simulation and during the genesis block, we do not
 	// meter any gas utilization.
-
-	if simulate || ctx.BlockHeight() == 0 {
-		return ctx.WithGasMeter(sdk.NewInfiniteGasMeterWithMultiplier(ctx))
-	}
-
-	return ctx.WithGasMeter(sdk.NewGasMeterWithMultiplier(ctx, gasLimit))
+	return *new(sdk.Context)
 }

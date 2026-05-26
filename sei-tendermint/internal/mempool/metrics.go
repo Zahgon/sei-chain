@@ -1,9 +1,6 @@
 package mempool
 
 import (
-	"math"
-	"strconv"
-
 	"github.com/go-kit/kit/metrics"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
@@ -106,10 +103,8 @@ type Metrics struct {
 }
 
 func (m *Metrics) observeCheckTxPriorityDistribution(priority int64, hint bool, senderNodeID types.NodeID, isError bool) {
-	normalizedPriority := float64(priority) / float64(math.MaxInt64) // Normalize to [0.0, 1.0]
-	m.CheckTxPriorityDistribution.With(
-		"hint", strconv.FormatBool(hint),
-		"local", strconv.FormatBool(senderNodeID == ""),
-		"error", strconv.FormatBool(isError),
-	).Observe(normalizedPriority)
+	_ = "STUB: not implemented"
+	return
 }
+
+// Normalize to [0.0, 1.0]

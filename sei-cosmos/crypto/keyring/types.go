@@ -59,9 +59,7 @@ var keyTypes = map[KeyType]string{
 }
 
 // String implements the stringer interface for KeyType.
-func (kt KeyType) String() string {
-	return keyTypes[kt]
-}
+func (kt KeyType) String() string { _ = "STUB: not implemented"; return "" }
 
 type (
 	// DeriveKeyFunc defines the function to derive a new key from a seed and hd path

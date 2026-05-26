@@ -1,19 +1,11 @@
 package internal
 
 import (
-	"errors"
-	"fmt"
-	"math"
 	"sync/atomic"
 
 	"github.com/ethereum/evmc/v12/bindings/go/evmc"
-	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/core/tracing"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/core/vm"
 	"github.com/ethereum/go-ethereum/params"
-	"github.com/holiman/uint256"
-	"github.com/sei-protocol/sei-chain/giga/executor/precompiles"
 )
 
 var _ evmc.HostContext = (*HostContext)(nil)
@@ -34,25 +26,15 @@ type HostContextConfig struct {
 // NewHostContextConfig creates a HostContextConfig from the chain config.
 // This extracts and pre-computes values needed by HostContext.
 func NewHostContextConfig(chainConfig *params.ChainConfig) HostContextConfig {
-	var delta int64
-	if chainConfig != nil && chainConfig.SeiSstoreSetGasEIP2200 != nil {
-		seiSstoreGas := *chainConfig.SeiSstoreSetGasEIP2200
-
-		// Guard against overflow: seiSstoreGas is uint64, and casting to int64 would
-		// overflow if value > math.MaxInt64. This is a critical misconfiguration.
-		if seiSstoreGas > uint64(math.MaxInt64) {
-			panic(fmt.Sprintf("SeiSstoreSetGasEIP2200 (%d) exceeds maximum safe value (%d)",
-				seiSstoreGas, uint64(math.MaxInt64)))
-		}
-
-		// Delta = Sei cost - standard cost (can be positive or negative)
-		// Safe to cast now that we've verified seiSstoreGas <= math.MaxInt64
-		delta = int64(seiSstoreGas) - int64(StandardSstoreSetGasEIP2200)
-	}
-	return HostContextConfig{
-		SstoreGasDelta: delta,
-	}
+	_ = "STUB: not implemented"
+	return *new(HostContextConfig)
 }
+
+// Guard against overflow: seiSstoreGas is uint64, and casting to int64 would
+// overflow if value > math.MaxInt64. This is a critical misconfiguration.
+
+// Delta = Sei cost - standard cost (can be positive or negative)
+// Safe to cast now that we've verified seiSstoreGas <= math.MaxInt64
 
 type HostContext struct {
 	vm     *evmc.VM
@@ -65,312 +47,140 @@ type HostContext struct {
 
 // NewHostContext creates a new HostContext with the given configuration.
 func NewHostContext(vm *evmc.VM, evm *vm.EVM, config HostContextConfig) *HostContext {
-	return &HostContext{
-		vm:     vm,
-		evm:    evm,
-		config: config,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetSstoreGasAdjustment returns the total accumulated SSTORE gas adjustment.
 // This should be called after execution to apply the extra gas charge.
-func (h *HostContext) GetSstoreGasAdjustment() int64 {
-	return h.sstoreGasAdjustment.Load()
-}
+func (h *HostContext) GetSstoreGasAdjustment() int64 { _ = "STUB: not implemented"; return 0 }
 
 // ResetSstoreGasAdjustment resets the accumulated SSTORE gas adjustment to zero.
-func (h *HostContext) ResetSstoreGasAdjustment() {
-	h.sstoreGasAdjustment.Store(0)
-}
+func (h *HostContext) ResetSstoreGasAdjustment() { _ = "STUB: not implemented"; return }
 
 func (h *HostContext) AccountExists(addr evmc.Address) bool {
-	return h.evm.StateDB.Exist(common.Address(addr))
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (h *HostContext) GetStorage(addr evmc.Address, key evmc.Hash) evmc.Hash {
-	return evmc.Hash(h.evm.StateDB.GetState(common.Address(addr), common.Hash(key)))
+	_ = "STUB: not implemented"
+	return *new(evmc.Hash)
 }
 
 func (h *HostContext) SetStorage(addr evmc.Address, key evmc.Hash, value evmc.Hash) evmc.StorageStatus {
-	gethAddr := common.Address(addr)
-	gethKey := common.Hash(key)
-
-	current := h.evm.StateDB.GetState(gethAddr, gethKey)
-	original := h.evm.StateDB.GetCommittedState(gethAddr, gethKey)
-
-	dirty := original.Cmp(current) != 0
-	restored := original.Cmp(common.Hash(value)) == 0
-	currentIsZero := current.Cmp(common.Hash{}) == 0
-	valueIsZero := common.Hash(value).Cmp(common.Hash{}) == 0
-
-	status := evmc.StorageAssigned
-	if !dirty && !restored {
-		if currentIsZero {
-			status = evmc.StorageAdded
-		} else if valueIsZero {
-			status = evmc.StorageDeleted
-		} else {
-			status = evmc.StorageModified
-		}
-	} else if dirty && !restored {
-		if currentIsZero && valueIsZero {
-			status = evmc.StorageDeletedAdded
-		} else if !currentIsZero && valueIsZero {
-			status = evmc.StorageModifiedDeleted
-		}
-	} else if dirty {
-		if currentIsZero {
-			status = evmc.StorageDeletedRestored
-		} else if valueIsZero {
-			status = evmc.StorageAddedDeleted
-		} else {
-			status = evmc.StorageModifiedRestored
-		}
-	}
-
-	// Accumulate SSTORE gas adjustment for StorageAdded operations.
-	// evmone uses standard EIP-2200 gas (20k), but Sei may have a different cost.
-	// We track the delta here and apply it after execution.
-	// Delta can be positive (higher cost) or negative (lower cost).
-	if status == evmc.StorageAdded && h.config.SstoreGasDelta != 0 {
-		h.sstoreGasAdjustment.Add(h.config.SstoreGasDelta)
-	}
-
-	h.evm.StateDB.SetState(gethAddr, gethKey, common.Hash(value))
-	return status
+	_ = "STUB: not implemented"
+	return *new(evmc.StorageStatus)
 }
+
+// Accumulate SSTORE gas adjustment for StorageAdded operations.
+// evmone uses standard EIP-2200 gas (20k), but Sei may have a different cost.
+// We track the delta here and apply it after execution.
+// Delta can be positive (higher cost) or negative (lower cost).
 
 func (h *HostContext) GetBalance(addr evmc.Address) evmc.Hash {
-	return h.evm.StateDB.GetBalance(common.Address(addr)).Bytes32()
+	_ = "STUB: not implemented"
+	return *new(evmc.Hash)
 }
 
-func (h *HostContext) GetCodeSize(addr evmc.Address) int {
-	return h.evm.StateDB.GetCodeSize(common.Address(addr))
-}
+func (h *HostContext) GetCodeSize(addr evmc.Address) int { _ = "STUB: not implemented"; return 0 }
 
 func (h *HostContext) GetCodeHash(addr evmc.Address) evmc.Hash {
-	return evmc.Hash(h.evm.StateDB.GetCodeHash(common.Address(addr)))
+	_ = "STUB: not implemented"
+	return *new(evmc.Hash)
 }
 
-func (h *HostContext) GetCode(addr evmc.Address) []byte {
-	return h.evm.StateDB.GetCode(common.Address(addr))
-}
+func (h *HostContext) GetCode(addr evmc.Address) []byte { _ = "STUB: not implemented"; return nil }
 
 // todo(pdrobnjak): support historical selfdestruct logic as well
 func (h *HostContext) Selfdestruct(addr evmc.Address, beneficiary evmc.Address) bool {
-	addrKey := common.Address(addr)
-	beneficiaryKey := common.Address(beneficiary)
-	amt := h.evm.StateDB.GetBalance(addrKey)
-	h.evm.StateDB.SubBalance(addrKey, amt, tracing.BalanceDecreaseSelfdestruct)
-	h.evm.StateDB.AddBalance(beneficiaryKey, amt, tracing.BalanceIncreaseSelfdestruct)
-	h.evm.StateDB.SelfDestruct6780(common.Address(addr))
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (h *HostContext) GetTxContext() evmc.TxContext {
-	var gasPrice evmc.Hash
-	h.evm.GasPrice.FillBytes(gasPrice[:])
-
-	var prevRandao evmc.Hash
-	if h.evm.Context.Random != nil {
-		prevRandao = evmc.Hash(*h.evm.Context.Random)
-	}
-
-	var chainID evmc.Hash
-	h.evm.ChainConfig().ChainID.FillBytes(chainID[:])
-
-	var baseFee evmc.Hash
-	h.evm.Context.BaseFee.FillBytes(baseFee[:])
-
-	var blobBaseFee evmc.Hash
-	h.evm.Context.BlobBaseFee.FillBytes(blobBaseFee[:])
-
-	//nolint:gosec // G115: safe integer conversions for Time and GasLimit
-	return evmc.TxContext{
-		GasPrice:    gasPrice,
-		Origin:      evmc.Address(h.evm.Origin),
-		Coinbase:    evmc.Address(h.evm.Context.Coinbase),
-		Number:      h.evm.Context.BlockNumber.Int64(),
-		Timestamp:   int64(h.evm.Context.Time),
-		GasLimit:    int64(h.evm.Context.GasLimit),
-		PrevRandao:  prevRandao,
-		ChainID:     chainID,
-		BaseFee:     baseFee,
-		BlobBaseFee: blobBaseFee,
-	}
+	_ = "STUB: not implemented"
+	return *new(evmc.TxContext)
 }
 
+//nolint:gosec // G115: safe integer conversions for Time and GasLimit
+
 func (h *HostContext) GetBlockHash(number int64) evmc.Hash {
+	_ = "STUB: not implemented"
 	//nolint:gosec // G115: safe, block numbers are always positive
-	return evmc.Hash(h.evm.Context.GetHash(uint64(number)))
+	return *new(evmc.Hash)
 }
 
 func (h *HostContext) EmitLog(addr evmc.Address, topics []evmc.Hash, data []byte) {
-	gethTopics := make([]common.Hash, len(topics))
-	for i, topic := range topics {
-		gethTopics[i] = common.Hash(topic)
-	}
-	h.evm.StateDB.AddLog(&ethtypes.Log{Address: common.Address(addr), Topics: gethTopics, Data: data})
+	_ = "STUB: not implemented"
+	return
 }
 
 func (h *HostContext) Execute(kind evmc.CallKind, recipient evmc.Address, sender evmc.Address, value evmc.Hash, input []byte, gas int64,
 	depth int, static bool) ([]byte, int64, int64, evmc.Address, error) {
-	evmRevision := h.getEVMRevision()
-	delegated := kind == evmc.DelegateCall || kind == evmc.CallCode
-
-	// For CREATE/CREATE2, the input contains the initcode (constructor bytecode)
-	// For regular calls, fetch the code from the target address
-	var code []byte
-	if kind == evmc.Create || kind == evmc.Create2 {
-		code = input // initcode is passed as input for contract creation
-	} else {
-		code = h.evm.StateDB.GetCode(common.Address(recipient))
-	}
-
-	executionResult, err := h.vm.Execute(
-		h, evmRevision, kind, static, delegated, depth,
-		gas, recipient, sender, input, value, code,
-	)
-
-	if err != nil {
-		return nil, 0, 0, evmc.Address{}, err
-	}
-
-	// todo(pdrobnjak): calculate/propagate created address
-	var createAddr evmc.Address
-	if kind == evmc.Create || kind == evmc.Create2 {
-		// The created address should be set in the execution result
-		// For now, return empty - this needs to be populated from evmone's result
-		createAddr = evmc.Address{}
-	}
-
-	return executionResult.Output, executionResult.GasLeft, executionResult.GasRefund, createAddr, nil
+	_ = "STUB: not implemented"
+	return nil, 0, 0, *new(evmc.Address), nil
 }
+
+// For CREATE/CREATE2, the input contains the initcode (constructor bytecode)
+// For regular calls, fetch the code from the target address
+
+// initcode is passed as input for contract creation
+
+// todo(pdrobnjak): calculate/propagate created address
+
+// The created address should be set in the execution result
+// For now, return empty - this needs to be populated from evmone's result
 
 func (h *HostContext) Call(
 	kind evmc.CallKind, recipient evmc.Address, sender evmc.Address, value evmc.Hash, input []byte, gas int64,
 	_ int, static bool, salt evmc.Hash, _ evmc.Address,
 ) ([]byte, int64, int64, evmc.Address, error) {
-	recipientAddr := common.Address(recipient)
-	senderAddr := common.Address(sender)
-	valueUint256 := new(uint256.Int).SetBytes(value[:])
-	var ret []byte
-	var leftoverGas uint64
-	var err error
-	var createAddr common.Address
-
-	//nolint:gosec // G115: safe integer conversions for gas values
-	switch kind {
-	case evmc.Call:
-		if static {
-			ret, leftoverGas, err = h.evm.StaticCall(senderAddr, recipientAddr, input, uint64(gas))
-		} else {
-			ret, leftoverGas, err = h.evm.Call(senderAddr, recipientAddr, input, uint64(gas), valueUint256)
-		}
-	case evmc.DelegateCall:
-		// todo(pdrobnjak): sender and recipient might not be correctly propagated in case of DELEGATECALL
-		ret, leftoverGas, err = h.evm.DelegateCall(
-			h.evm.Origin, senderAddr, recipientAddr, input, uint64(gas), valueUint256,
-		)
-	case evmc.CallCode:
-		ret, leftoverGas, err = h.evm.CallCode(senderAddr, recipientAddr, input, uint64(gas), valueUint256)
-	case evmc.Create:
-		ret, createAddr, leftoverGas, err = h.evm.Create(senderAddr, input, uint64(gas), valueUint256)
-		return ret, int64(leftoverGas), 0, evmc.Address(createAddr), toEvmcError(err)
-	case evmc.Create2:
-		saltUint256 := new(uint256.Int).SetBytes(salt[:])
-		ret, createAddr, leftoverGas, err = h.evm.Create2(senderAddr, input, uint64(gas), valueUint256, saltUint256)
-		return ret, int64(leftoverGas), 0, evmc.Address(createAddr), toEvmcError(err)
-	default:
-		panic("EofCreate is not supported")
-	}
-
-	//nolint:gosec // G115: safe, leftoverGas won't exceed int64 max
-	return ret, int64(leftoverGas), 0, evmc.Address{}, toEvmcError(err)
+	_ = "STUB: not implemented"
+	return nil, 0, 0, *new(evmc.Address), nil
 }
+
+//nolint:gosec // G115: safe integer conversions for gas values
+
+// todo(pdrobnjak): sender and recipient might not be correctly propagated in case of DELEGATECALL
+
+//nolint:gosec // G115: safe, leftoverGas won't exceed int64 max
 
 func (h *HostContext) AccessAccount(addr evmc.Address) evmc.AccessStatus {
-	gethAddr := common.Address(addr)
-	addrInAccessList := h.evm.StateDB.AddressInAccessList(gethAddr)
-	if addrInAccessList {
-		return evmc.WarmAccess
-	}
-	// After a cold access, add address to access list so subsequent accesses are warm
-	h.evm.StateDB.AddAddressToAccessList(gethAddr)
-	return evmc.ColdAccess
+	_ = "STUB: not implemented"
+	return *new(evmc.AccessStatus)
 }
+
+// After a cold access, add address to access list so subsequent accesses are warm
 
 func (h *HostContext) AccessStorage(addr evmc.Address, key evmc.Hash) evmc.AccessStatus {
-	gethAddr := common.Address(addr)
-	gethKey := common.Hash(key)
-	addrInAccessList, slotInAccessList := h.evm.StateDB.SlotInAccessList(gethAddr, gethKey)
-	if addrInAccessList && slotInAccessList {
-		return evmc.WarmAccess
-	}
-	// After a cold access, add slot to access list so subsequent accesses are warm
-	h.evm.StateDB.AddSlotToAccessList(gethAddr, gethKey)
-	return evmc.ColdAccess
+	_ = "STUB: not implemented"
+	return *new(evmc.AccessStatus)
 }
 
+// After a cold access, add slot to access list so subsequent accesses are warm
+
 func (h *HostContext) GetTransientStorage(addr evmc.Address, key evmc.Hash) evmc.Hash {
-	return evmc.Hash(h.evm.StateDB.GetTransientState(common.Address(addr), common.Hash(key)))
+	_ = "STUB: not implemented"
+	return *new(evmc.Hash)
 }
 
 func (h *HostContext) SetTransientStorage(addr evmc.Address, key evmc.Hash, value evmc.Hash) {
-	h.evm.StateDB.SetTransientState(common.Address(addr), common.Hash(key), common.Hash(value))
+	_ = "STUB: not implemented"
+	return
 }
 
 // getEVMRevision determines the EVM revision based on the current chain configuration
 func (h *HostContext) getEVMRevision() evmc.Revision {
-	chainConfig := h.evm.ChainConfig()
-	blockNumber := h.evm.Context.BlockNumber
-	time := h.evm.Context.Time
-	isMerge := h.evm.Context.Random != nil
-
-	// Get the rules for the current block
-	rules := chainConfig.Rules(blockNumber, isMerge, time)
-
-	// Check from newest to oldest using rules
-	// NOTE: Prague support in evmone 0.12.0 may have incomplete gas rules,
-	// so we cap at Cancun for now until evmone is updated
-	if rules.IsPrague || rules.IsCancun {
-		return evmc.Cancun
-	}
-	if rules.IsShanghai {
-		return evmc.Shanghai
-	}
-	if rules.IsMerge {
-		return evmc.Paris
-	}
-	if rules.IsLondon {
-		return evmc.London
-	}
-	if rules.IsBerlin {
-		return evmc.Berlin
-	}
-	if rules.IsIstanbul {
-		return evmc.Istanbul
-	}
-	if rules.IsPetersburg {
-		return evmc.Petersburg
-	}
-	if rules.IsConstantinople {
-		return evmc.Constantinople
-	}
-	if rules.IsByzantium {
-		return evmc.Byzantium
-	}
-	if rules.IsEIP158 {
-		return evmc.SpuriousDragon
-	}
-	if rules.IsEIP150 {
-		return evmc.TangerineWhistle
-	}
-	if rules.IsHomestead {
-		return evmc.Homestead
-	}
-	return evmc.Frontier
+	_ = "STUB: not implemented"
+	return *new(evmc.Revision)
 }
+
+// Get the rules for the current block
+
+// Check from newest to oldest using rules
+// NOTE: Prague support in evmone 0.12.0 may have incomplete gas rules,
+// so we cap at Cancun for now until evmone is updated
 
 // toEvmcError converts a Go error to an evmc.Error.
 // The EVMC bindings expect Call() to return evmc.Error type, not standard Go errors.
@@ -380,23 +190,15 @@ func (h *HostContext) getEVMRevision() evmc.Revision {
 // are defined in the C header (evmc/evmc.h) but not exported in the Go bindings.
 // To add proper mapping for vm.ErrOutOfGas -> evmc.OutOfGas, the Go bindings in
 // github.com/ethereum/evmc would need to be extended first.
-func toEvmcError(err error) error {
-	switch {
-	case err == nil:
-		return nil
-	case errors.As(err, new(evmc.Error)):
-		// Already an evmc.Error, return as-is
-		return err
-	case errors.Is(err, vm.ErrExecutionReverted):
-		return evmc.Revert
-	default:
-		// All other errors map to generic failure
-		// TODO: Add evmc.OutOfGas mapping once the Go bindings expose it
-		return evmc.Failure
-	}
-}
+func toEvmcError(err error) error { _ = "STUB: not implemented"; return nil }
+
+// Already an evmc.Error, return as-is
+
+// All other errors map to generic failure
+// TODO: Add evmc.OutOfGas mapping once the Go bindings expose it
 
 // To be called by an exported EVM create function which knows how to instantiate params like statedb.
 func createEVMWithFailFastPrecompile(blockContext vm.BlockContext, statedb vm.StateDB, chainConfig *params.ChainConfig, vmConfig vm.Config) *vm.EVM {
-	return vm.NewEVM(blockContext, statedb, chainConfig, vmConfig, precompiles.AllCustomPrecompilesFailFast)
+	_ = "STUB: not implemented"
+	return nil
 }

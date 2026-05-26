@@ -1,14 +1,9 @@
 package types
 
 import (
-	"fmt"
-	"math/big"
 	"regexp"
-	"strconv"
-	"strings"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
@@ -22,26 +17,22 @@ var IsRevisionFormat = regexp.MustCompile(`^.*[^\n-]-{1}[1-9][0-9]*$`).MatchStri
 
 // ZeroHeight is a helper function which returns an uninitialized height.
 func ZeroHeight() Height {
-	return Height{}
+	_ = "STUB: not implemented"
+
+	// NewHeight is a constructor for the IBC height type
+	return *new(Height)
 }
 
-// NewHeight is a constructor for the IBC height type
 func NewHeight(revisionNumber, revisionHeight uint64) Height {
-	return Height{
-		RevisionNumber: revisionNumber,
-		RevisionHeight: revisionHeight,
-	}
+	_ = "STUB: not implemented"
+	return *new(Height)
 }
 
 // GetRevisionNumber returns the revision-number of the height
-func (h Height) GetRevisionNumber() uint64 {
-	return h.RevisionNumber
-}
+func (h Height) GetRevisionNumber() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // GetRevisionHeight returns the revision-height of the height
-func (h Height) GetRevisionHeight() uint64 {
-	return h.RevisionHeight
-}
+func (h Height) GetRevisionHeight() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // Compare implements a method to compare two heights. When comparing two heights a, b
 // we can call a.Compare(b) which will return
@@ -51,144 +42,75 @@ func (h Height) GetRevisionHeight() uint64 {
 //
 // It first compares based on revision numbers, whichever has the higher revision number is the higher height
 // If revision number is the same, then the revision height is compared
-func (h Height) Compare(other exported.Height) int64 {
-	height, ok := other.(Height)
-	if !ok {
-		panic(fmt.Sprintf("cannot compare against invalid height type: %T. expected height type: %T", other, h))
-	}
-	var a, b big.Int
-	if h.RevisionNumber != height.RevisionNumber {
-		a.SetUint64(h.RevisionNumber)
-		b.SetUint64(height.RevisionNumber)
-	} else {
-		a.SetUint64(h.RevisionHeight)
-		b.SetUint64(height.RevisionHeight)
-	}
-	return int64(a.Cmp(&b))
-}
+func (h Height) Compare(other exported.Height) int64 { _ = "STUB: not implemented"; return 0 }
 
 // LT Helper comparison function returns true if h < other
-func (h Height) LT(other exported.Height) bool {
-	return h.Compare(other) == -1
-}
+func (h Height) LT(other exported.Height) bool { _ = "STUB: not implemented"; return false }
 
 // LTE Helper comparison function returns true if h <= other
-func (h Height) LTE(other exported.Height) bool {
-	cmp := h.Compare(other)
-	return cmp <= 0
-}
+func (h Height) LTE(other exported.Height) bool { _ = "STUB: not implemented"; return false }
 
 // GT Helper comparison function returns true if h > other
-func (h Height) GT(other exported.Height) bool {
-	return h.Compare(other) == 1
-}
+func (h Height) GT(other exported.Height) bool { _ = "STUB: not implemented"; return false }
 
 // GTE Helper comparison function returns true if h >= other
-func (h Height) GTE(other exported.Height) bool {
-	cmp := h.Compare(other)
-	return cmp >= 0
-}
+func (h Height) GTE(other exported.Height) bool { _ = "STUB: not implemented"; return false }
 
 // EQ Helper comparison function returns true if h == other
-func (h Height) EQ(other exported.Height) bool {
-	return h.Compare(other) == 0
-}
+func (h Height) EQ(other exported.Height) bool { _ = "STUB: not implemented"; return false }
 
 // String returns a string representation of Height
-func (h Height) String() string {
-	return fmt.Sprintf("%d-%d", h.RevisionNumber, h.RevisionHeight)
-}
+func (h Height) String() string { _ = "STUB: not implemented"; return "" }
 
 // Decrement will return a new height with the RevisionHeight decremented
 // If the RevisionHeight is already at lowest value (1), then false success flag is returend
 func (h Height) Decrement() (decremented exported.Height, success bool) {
-	if h.RevisionHeight == 0 {
-		return Height{}, false
-	}
-	return NewHeight(h.RevisionNumber, h.RevisionHeight-1), true
+	_ = "STUB: not implemented"
+	return *new(exported.Height), false
 }
 
 // Increment will return a height with the same revision number but an
 // incremented revision height
 func (h Height) Increment() exported.Height {
-	return NewHeight(h.RevisionNumber, h.RevisionHeight+1)
+	_ = "STUB: not implemented"
+	return *new(exported.Height)
 }
 
 // IsZero returns true if height revision and revision-height are both 0
-func (h Height) IsZero() bool {
-	return h.RevisionNumber == 0 && h.RevisionHeight == 0
-}
+func (h Height) IsZero() bool { _ = "STUB: not implemented"; return false }
 
 // MustParseHeight will attempt to parse a string representation of a height and panic if
 // parsing fails.
-func MustParseHeight(heightStr string) Height {
-	height, err := ParseHeight(heightStr)
-	if err != nil {
-		panic(err)
-	}
-
-	return height
-}
+func MustParseHeight(heightStr string) Height { _ = "STUB: not implemented"; return *new(Height) }
 
 // ParseHeight is a utility function that takes a string representation of the height
 // and returns a Height struct
 func ParseHeight(heightStr string) (Height, error) {
-	splitStr := strings.Split(heightStr, "-")
-	if len(splitStr) != 2 {
-		return Height{}, sdkerrors.Wrapf(sdkerrors.ErrInvalidHeight, "expected height string format: {revision}-{height}. Got: %s", heightStr)
-	}
-	revisionNumber, err := strconv.ParseUint(splitStr[0], 10, 64)
-	if err != nil {
-		return Height{}, sdkerrors.Wrapf(sdkerrors.ErrInvalidHeight, "invalid revision number. parse err: %s", err)
-	}
-	revisionHeight, err := strconv.ParseUint(splitStr[1], 10, 64)
-	if err != nil {
-		return Height{}, sdkerrors.Wrapf(sdkerrors.ErrInvalidHeight, "invalid revision height. parse err: %s", err)
-	}
-	return NewHeight(revisionNumber, revisionHeight), nil
+	_ = "STUB: not implemented"
+	return *new(Height), nil
 }
 
 // SetRevisionNumber takes a chainID in valid revision format and swaps the revision number
 // in the chainID with the given revision number.
 func SetRevisionNumber(chainID string, revision uint64) (string, error) {
-	if !IsRevisionFormat(chainID) {
-		return "", sdkerrors.Wrapf(
-			sdkerrors.ErrInvalidChainID, "chainID is not in revision format: %s", chainID,
-		)
-	}
-
-	splitStr := strings.Split(chainID, "-")
-	// swap out revision number with given revision
-	splitStr[len(splitStr)-1] = strconv.FormatUint(revision, 10)
-	return strings.Join(splitStr, "-"), nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
+
+// swap out revision number with given revision
 
 // ParseChainID is a utility function that returns an revision number from the given ChainID.
 // ParseChainID attempts to parse a chain id in the format: `{chainID}-{revision}`
 // and return the revisionnumber as a uint64.
 // If the chainID is not in the expected format, a default revision value of 0 is returned.
-func ParseChainID(chainID string) uint64 {
-	if !IsRevisionFormat(chainID) {
-		// chainID is not in revision format, return 0 as default
-		return 0
-	}
-	splitStr := strings.Split(chainID, "-")
-	revision, err := strconv.ParseUint(splitStr[len(splitStr)-1], 10, 64)
-	// sanity check: error should always be nil since regex only allows numbers in last element
-	if err != nil {
-		panic(fmt.Sprintf("regex allowed non-number value as last split element for chainID: %s", chainID))
-	}
-	return revision
-}
+func ParseChainID(chainID string) uint64 { _ = "STUB: not implemented"; return 0 }
+
+// chainID is not in revision format, return 0 as default
+
+// sanity check: error should always be nil since regex only allows numbers in last element
 
 // GetSelfHeight is a utility function that returns self height given context
 // Revision number is retrieved from ctx.ChainID()
-func GetSelfHeight(ctx sdk.Context) Height {
-	revision := ParseChainID(ctx.ChainID())
-	blockHeight := ctx.BlockHeight()
-	if blockHeight < 0 {
-		panic("block height is negative")
-	}
-	// #nosec G115 -- block height is checked above to be non-negative
-	return NewHeight(revision, uint64(blockHeight))
-}
+func GetSelfHeight(ctx sdk.Context) Height { _ = "STUB: not implemented"; return *new(Height) }
+
+// #nosec G115 -- block height is checked above to be non-negative

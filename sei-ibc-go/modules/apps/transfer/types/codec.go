@@ -1,29 +1,18 @@
 package types
 
 import (
-	"bytes"
-
-	"github.com/gogo/protobuf/jsonpb"
 	"github.com/gogo/protobuf/proto"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/msgservice"
 )
 
 // RegisterLegacyAminoCodec registers the necessary x/ibc transfer interfaces and concrete types
 // on the provided LegacyAmino codec. These types are used for Amino JSON serialization.
-func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgTransfer{}, "cosmos-sdk/MsgTransfer", nil)
-}
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) { _ = "STUB: not implemented"; return }
 
 // RegisterInterfaces register the ibc transfer module interfaces to protobuf
 // Any.
-func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	registry.RegisterImplementations((*sdk.Msg)(nil), &MsgTransfer{})
-
-	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
-}
+func RegisterInterfaces(registry codectypes.InterfaceRegistry) { _ = "STUB: not implemented"; return }
 
 var (
 	amino = codec.NewLegacyAmino()
@@ -49,26 +38,11 @@ func init() {
 // NOTE: Copied from https://github.com/cosmos/cosmos-sdk/blob/971c542453e0972ef1dfc5a80159ad5049c7211c/codec/json.go
 // and modified in order to allow `EmitDefaults` to be set to false for ics20 packet marshalling.
 // This allows for the introduction of the memo field to be backwards compatible.
-func mustProtoMarshalJSON(msg proto.Message) []byte {
-	anyResolver := codectypes.NewInterfaceRegistry()
+func mustProtoMarshalJSON(msg proto.Message) []byte { _ = "STUB: not implemented"; return nil }
 
-	// EmitDefaults is set to false to prevent marshalling of unpopulated fields (memo)
-	// OrigName and the anyResovler match the fields the original SDK function would expect
-	// in order to minimize changes.
+// EmitDefaults is set to false to prevent marshalling of unpopulated fields (memo)
+// OrigName and the anyResovler match the fields the original SDK function would expect
+// in order to minimize changes.
 
-	// OrigName is true since there is no particular reason to use camel case
-	// The any resolver is empty, but provided anyways.
-	jm := &jsonpb.Marshaler{OrigName: true, EmitDefaults: false, AnyResolver: anyResolver}
-
-	err := codectypes.UnpackInterfaces(msg, codectypes.ProtoJSONPacker{JSONPBMarshaler: jm})
-	if err != nil {
-		panic(err)
-	}
-
-	buf := new(bytes.Buffer)
-	if err := jm.Marshal(buf, msg); err != nil {
-		panic(err)
-	}
-
-	return buf.Bytes()
-}
+// OrigName is true since there is no particular reason to use camel case
+// The any resolver is empty, but provided anyways.

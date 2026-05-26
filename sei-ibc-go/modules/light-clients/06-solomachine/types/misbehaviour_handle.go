@@ -3,9 +3,7 @@ package types
 import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
-	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
@@ -21,66 +19,24 @@ func (cs ClientState) CheckMisbehaviourAndUpdateState(
 	clientStore sdk.KVStore,
 	misbehaviour exported.Misbehaviour,
 ) (exported.ClientState, error) {
-	soloMisbehaviour, ok := misbehaviour.(*Misbehaviour)
-	if !ok {
-		return nil, sdkerrors.Wrapf(
-			clienttypes.ErrInvalidClientType,
-			"misbehaviour type %T, expected %T", misbehaviour, &Misbehaviour{},
-		)
-	}
-
-	// NOTE: a check that the misbehaviour message data are not equal is done by
-	// misbehaviour.ValidateBasic which is called by the 02-client keeper.
-
-	// verify first signature
-	if err := verifySignatureAndData(cdc, cs, soloMisbehaviour, soloMisbehaviour.SignatureOne); err != nil {
-		return nil, sdkerrors.Wrap(err, "failed to verify signature one")
-	}
-
-	// verify second signature
-	if err := verifySignatureAndData(cdc, cs, soloMisbehaviour, soloMisbehaviour.SignatureTwo); err != nil {
-		return nil, sdkerrors.Wrap(err, "failed to verify signature two")
-	}
-
-	cs.IsFrozen = true
-	return &cs, nil
+	_ = "STUB: not implemented"
+	return *new(exported.ClientState), nil
 }
+
+// NOTE: a check that the misbehaviour message data are not equal is done by
+// misbehaviour.ValidateBasic which is called by the 02-client keeper.
+
+// verify first signature
+
+// verify second signature
 
 // verifySignatureAndData verifies that the currently registered public key has signed
 // over the provided data and that the data is valid. The data is valid if it can be
 // unmarshaled into the specified data type.
 func verifySignatureAndData(cdc codec.BinaryCodec, clientState ClientState, misbehaviour *Misbehaviour, sigAndData *SignatureAndData) error {
+	_ = "STUB: not implemented"
 	// do not check misbehaviour timestamp since we want to allow processing of past misbehaviour
-
-	// ensure data can be unmarshaled to the specified data type
-	if _, err := UnmarshalDataByType(cdc, sigAndData.DataType, sigAndData.Data); err != nil {
-		return err
-	}
-
-	data, err := MisbehaviourSignBytes(
-		cdc,
-		misbehaviour.Sequence, sigAndData.Timestamp,
-		clientState.ConsensusState.Diversifier,
-		sigAndData.DataType,
-		sigAndData.Data,
-	)
-	if err != nil {
-		return err
-	}
-
-	sigData, err := UnmarshalSignatureData(cdc, sigAndData.Signature)
-	if err != nil {
-		return err
-	}
-
-	publicKey, err := clientState.ConsensusState.GetPubKey()
-	if err != nil {
-		return err
-	}
-
-	if err := VerifySignature(publicKey, data, sigData); err != nil {
-		return err
-	}
-
 	return nil
 }
+
+// ensure data can be unmarshaled to the specified data type

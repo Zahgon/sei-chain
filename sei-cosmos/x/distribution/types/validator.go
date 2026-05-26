@@ -1,48 +1,31 @@
 package types
 
 import (
-	"fmt"
-	"strings"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
 // create a new ValidatorHistoricalRewards
 func NewValidatorHistoricalRewards(cumulativeRewardRatio sdk.DecCoins, referenceCount uint32) ValidatorHistoricalRewards {
-	return ValidatorHistoricalRewards{
-		CumulativeRewardRatio: cumulativeRewardRatio,
-		ReferenceCount:        referenceCount,
-	}
+	_ = "STUB: not implemented"
+	return *new(ValidatorHistoricalRewards)
 }
 
 // create a new ValidatorCurrentRewards
 func NewValidatorCurrentRewards(rewards sdk.DecCoins, period uint64) ValidatorCurrentRewards {
-	return ValidatorCurrentRewards{
-		Rewards: rewards,
-		Period:  period,
-	}
+	_ = "STUB: not implemented"
+	return *new(ValidatorCurrentRewards)
 }
 
 // return the initial accumulated commission (zero)
 func InitialValidatorAccumulatedCommission() ValidatorAccumulatedCommission {
-	return ValidatorAccumulatedCommission{}
+	_ = "STUB: not implemented"
+	return *new(ValidatorAccumulatedCommission)
 }
 
 // create a new ValidatorSlashEvent
 func NewValidatorSlashEvent(validatorPeriod uint64, fraction sdk.Dec) ValidatorSlashEvent {
-	return ValidatorSlashEvent{
-		ValidatorPeriod: validatorPeriod,
-		Fraction:        fraction,
-	}
+	_ = "STUB: not implemented"
+	return *new(ValidatorSlashEvent)
 }
 
-func (vs ValidatorSlashEvents) String() string {
-	out := "Validator Slash Events:\n"
-	for i, sl := range vs.ValidatorSlashEvents {
-		out += fmt.Sprintf(`  Slash %d:
-    Period:   %d
-    Fraction: %s
-`, i, sl.ValidatorPeriod, sl.Fraction)
-	}
-	return strings.TrimSpace(out)
-}
+func (vs ValidatorSlashEvents) String() string { _ = "STUB: not implemented"; return "" }

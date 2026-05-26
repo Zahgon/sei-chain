@@ -7,11 +7,10 @@
 package pb
 
 import (
+	sync "sync"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	reflect "reflect"
-	sync "sync"
-	unsafe "unsafe"
 )
 
 const (
@@ -30,56 +29,25 @@ type StreamKindConfig struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *StreamKindConfig) Reset() {
-	*x = StreamKindConfig{}
-	mi := &file_p2p_mux_mux_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *StreamKindConfig) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *StreamKindConfig) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *StreamKindConfig) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*StreamKindConfig) ProtoMessage() {}
+func (*StreamKindConfig) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *StreamKindConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_mux_mux_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use StreamKindConfig.ProtoReflect.Descriptor instead.
-func (*StreamKindConfig) Descriptor() ([]byte, []int) {
-	return file_p2p_mux_mux_proto_rawDescGZIP(), []int{0}
-}
+func (*StreamKindConfig) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *StreamKindConfig) GetKind() uint64 {
-	if x != nil {
-		return x.Kind
-	}
-	return 0
-}
+func (x *StreamKindConfig) GetKind() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *StreamKindConfig) GetMaxConnects() uint64 {
-	if x != nil {
-		return x.MaxConnects
-	}
-	return 0
-}
+func (x *StreamKindConfig) GetMaxConnects() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *StreamKindConfig) GetMaxAccepts() uint64 {
-	if x != nil {
-		return x.MaxAccepts
-	}
-	return 0
-}
+func (x *StreamKindConfig) GetMaxAccepts() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type Handshake struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -88,42 +56,21 @@ type Handshake struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Handshake) Reset() {
-	*x = Handshake{}
-	mi := &file_p2p_mux_mux_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Handshake) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Handshake) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Handshake) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Handshake) ProtoMessage() {}
+func (*Handshake) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Handshake) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_mux_mux_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Handshake.ProtoReflect.Descriptor instead.
-func (*Handshake) Descriptor() ([]byte, []int) {
-	return file_p2p_mux_mux_proto_rawDescGZIP(), []int{1}
-}
+func (*Handshake) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Handshake) GetKinds() []*StreamKindConfig {
-	if x != nil {
-		return x.Kinds
-	}
-	return nil
-}
+func (x *Handshake) GetKinds() []*StreamKindConfig { _ = "STUB: not implemented"; return nil }
 
 // Flat small message, representing a unit of multiplexer information.
 // The frames for the same id can be sent merged,
@@ -147,84 +94,33 @@ type Header struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Header) Reset() {
-	*x = Header{}
-	mi := &file_p2p_mux_mux_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Header) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Header) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Header) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Header) ProtoMessage() {}
+func (*Header) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Header) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_mux_mux_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Header.ProtoReflect.Descriptor instead.
-func (*Header) Descriptor() ([]byte, []int) {
-	return file_p2p_mux_mux_proto_rawDescGZIP(), []int{2}
-}
+func (*Header) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Header) GetId() uint64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
+func (x *Header) GetId() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Header) GetKind() uint64 {
-	if x != nil && x.Kind != nil {
-		return *x.Kind
-	}
-	return 0
-}
+func (x *Header) GetKind() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Header) GetMaxMsgSize() uint64 {
-	if x != nil && x.MaxMsgSize != nil {
-		return *x.MaxMsgSize
-	}
-	return 0
-}
+func (x *Header) GetMaxMsgSize() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Header) GetWindowEnd() uint64 {
-	if x != nil && x.WindowEnd != nil {
-		return *x.WindowEnd
-	}
-	return 0
-}
+func (x *Header) GetWindowEnd() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Header) GetPayloadSize() uint64 {
-	if x != nil && x.PayloadSize != nil {
-		return *x.PayloadSize
-	}
-	return 0
-}
+func (x *Header) GetPayloadSize() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Header) GetMsgEnd() bool {
-	if x != nil && x.MsgEnd != nil {
-		return *x.MsgEnd
-	}
-	return false
-}
+func (x *Header) GetMsgEnd() bool { _ = "STUB: not implemented"; return false }
 
-func (x *Header) GetClose() bool {
-	if x != nil && x.Close != nil {
-		return *x.Close
-	}
-	return false
-}
+func (x *Header) GetClose() bool { _ = "STUB: not implemented"; return false }
 
 var File_p2p_mux_mux_proto protoreflect.FileDescriptor
 
@@ -261,12 +157,7 @@ var (
 	file_p2p_mux_mux_proto_rawDescData []byte
 )
 
-func file_p2p_mux_mux_proto_rawDescGZIP() []byte {
-	file_p2p_mux_mux_proto_rawDescOnce.Do(func() {
-		file_p2p_mux_mux_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_p2p_mux_mux_proto_rawDesc), len(file_p2p_mux_mux_proto_rawDesc)))
-	})
-	return file_p2p_mux_mux_proto_rawDescData
-}
+func file_p2p_mux_mux_proto_rawDescGZIP() []byte { _ = "STUB: not implemented"; return nil }
 
 var file_p2p_mux_mux_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_p2p_mux_mux_proto_goTypes = []any{
@@ -283,27 +174,5 @@ var file_p2p_mux_mux_proto_depIdxs = []int32{
 	0, // [0:1] is the sub-list for field type_name
 }
 
-func init() { file_p2p_mux_mux_proto_init() }
-func file_p2p_mux_mux_proto_init() {
-	if File_p2p_mux_mux_proto != nil {
-		return
-	}
-	file_p2p_mux_mux_proto_msgTypes[2].OneofWrappers = []any{}
-	type x struct{}
-	out := protoimpl.TypeBuilder{
-		File: protoimpl.DescBuilder{
-			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_p2p_mux_mux_proto_rawDesc), len(file_p2p_mux_mux_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   3,
-			NumExtensions: 0,
-			NumServices:   0,
-		},
-		GoTypes:           file_p2p_mux_mux_proto_goTypes,
-		DependencyIndexes: file_p2p_mux_mux_proto_depIdxs,
-		MessageInfos:      file_p2p_mux_mux_proto_msgTypes,
-	}.Build()
-	File_p2p_mux_mux_proto = out.File
-	file_p2p_mux_mux_proto_goTypes = nil
-	file_p2p_mux_mux_proto_depIdxs = nil
-}
+func init()                        { file_p2p_mux_mux_proto_init() }
+func file_p2p_mux_mux_proto_init() { _ = "STUB: not implemented"; return }

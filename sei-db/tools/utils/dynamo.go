@@ -1,14 +1,7 @@
 package utils
 
 import (
-	"errors"
-	"fmt"
-
-	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
-	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
 )
 
 // DynamoDBClient wraps the DynamoDB service with common operations
@@ -19,18 +12,8 @@ type DynamoDBClient struct {
 
 // NewDynamoDBClient creates a new DynamoDB client
 func NewDynamoDBClient(tableName, awsRegion string) (*DynamoDBClient, error) {
-	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(awsRegion),
-	})
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to create AWS session: %w", err)
-	}
-
-	return &DynamoDBClient{
-		client: dynamodb.New(sess),
-		table:  tableName,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // StateSizeAnalysis represents the analysis data to be stored in DynamoDB
@@ -62,33 +45,16 @@ type PrefixSize struct {
 
 // ExportStateSizeAnalysis exports a single module analysis to DynamoDB
 func (d *DynamoDBClient) ExportStateSizeAnalysis(analysis *StateSizeAnalysis) error {
+	_ = "STUB: not implemented"
 	// Convert to DynamoDB attribute values
-	item, err := dynamodbattribute.MarshalMap(analysis)
-	if err != nil {
-		return fmt.Errorf("failed to marshal analysis for module %s: %w", analysis.ModuleName, err)
-	}
-
-	// Write to DynamoDB
-	input := &dynamodb.PutItemInput{
-		Item:      item,
-		TableName: aws.String(d.table),
-	}
-
-	_, err = d.client.PutItem(input)
-	if err != nil {
-		return fmt.Errorf("failed to write to DynamoDB for module %s: %w", analysis.ModuleName, err)
-	}
-
 	return nil
 }
 
+// Write to DynamoDB
+
 // ExportMultipleAnalyses exports multiple analyses sequentially
 func (d *DynamoDBClient) ExportMultipleAnalyses(analyses []*StateSizeAnalysis) error {
-	for i, analysis := range analyses {
-		if err := d.ExportStateSizeAnalysis(analysis); err != nil {
-			return fmt.Errorf("failed to export analysis %d (module: %s): %w", i, analysis.ModuleName, err)
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -96,27 +62,6 @@ func (d *DynamoDBClient) ExportMultipleAnalyses(analyses []*StateSizeAnalysis) e
 // Partition key: keyname (S). Numeric attribute: height (N) stores the latest height.
 // Upserts the row keyname = "latest_height" and sets height = :h only if missing or lower.
 func (d *DynamoDBClient) UpdateLatestHeightIfGreater(metadataTable string, height int64) (bool, error) {
-	input := &dynamodb.UpdateItemInput{
-		TableName: aws.String(metadataTable),
-		Key: map[string]*dynamodb.AttributeValue{
-			"keyname": {S: aws.String("latest_height")},
-		},
-		UpdateExpression:    aws.String("SET height = :h"),
-		ConditionExpression: aws.String("attribute_not_exists(height) OR height < :h"),
-		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
-			":h": {N: aws.String(fmt.Sprintf("%d", height))},
-		},
-		ReturnValues: aws.String("NONE"),
-	}
-
-	_, err := d.client.UpdateItem(input)
-	if err != nil {
-		var aerr awserr.Error
-		if errors.As(err, &aerr) && aerr.Code() == dynamodb.ErrCodeConditionalCheckFailedException {
-			return false, nil
-		}
-		return false, fmt.Errorf("failed to update latest height: %w", err)
-	}
-	fmt.Printf("Updated Dynamodb with latest height %d\n", height)
-	return true, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }

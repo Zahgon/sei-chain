@@ -11,19 +11,16 @@ type OracleWasmQueryHandler struct {
 }
 
 func NewOracleWasmQueryHandler(keeper *oraclekeeper.Keeper) *OracleWasmQueryHandler {
-	return &OracleWasmQueryHandler{
-		oracleKeeper: *keeper,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (handler OracleWasmQueryHandler) GetExchangeRates(ctx sdk.Context) (*types.QueryExchangeRatesResponse, error) {
-	querier := oraclekeeper.NewQuerier(handler.oracleKeeper)
-	c := sdk.WrapSDKContext(ctx)
-	return querier.ExchangeRates(c, &types.QueryExchangeRatesRequest{})
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (handler OracleWasmQueryHandler) GetOracleTwaps(ctx sdk.Context, req *types.QueryTwapsRequest) (*types.QueryTwapsResponse, error) {
-	querier := oraclekeeper.NewQuerier(handler.oracleKeeper)
-	c := sdk.WrapSDKContext(ctx)
-	return querier.Twaps(c, req)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

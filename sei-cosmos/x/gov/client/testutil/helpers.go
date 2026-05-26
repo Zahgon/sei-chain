@@ -6,9 +6,7 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil"
-	clitestutil "github.com/sei-protocol/sei-chain/sei-cosmos/testutil/cli"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	govcli "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/client/cli"
 )
 
 var commonArgs = []string{
@@ -19,39 +17,17 @@ var commonArgs = []string{
 
 // MsgSubmitProposal creates a tx for submit proposal
 func MsgSubmitProposal(clientCtx client.Context, from, title, description, proposalType string, extraArgs ...string) (testutil.BufferWriter, error) {
-	args := append([]string{
-		fmt.Sprintf("--%s=%s", govcli.FlagTitle, title),
-		fmt.Sprintf("--%s=%s", govcli.FlagDescription, description),
-		fmt.Sprintf("--%s=%s", govcli.FlagProposalType, proposalType),
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, from),
-	}, commonArgs...)
-
-	args = append(args, extraArgs...)
-
-	return clitestutil.ExecTestCLICmd(clientCtx, govcli.NewCmdSubmitProposal(), args)
+	_ = "STUB: not implemented"
+	return *new(testutil.BufferWriter), nil
 }
 
 // MsgVote votes for a proposal
 func MsgVote(clientCtx client.Context, from, id, vote string, extraArgs ...string) (testutil.BufferWriter, error) {
-	args := append([]string{
-		id,
-		vote,
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, from),
-	}, commonArgs...)
-
-	args = append(args, extraArgs...)
-
-	return clitestutil.ExecTestCLICmd(clientCtx, govcli.NewCmdWeightedVote(), args)
+	_ = "STUB: not implemented"
+	return *new(testutil.BufferWriter), nil
 }
 
 func MsgDeposit(clientCtx client.Context, from, id, deposit string, extraArgs ...string) (testutil.BufferWriter, error) {
-	args := append([]string{
-		id,
-		deposit,
-		fmt.Sprintf("--%s=%s", flags.FlagFrom, from),
-	}, commonArgs...)
-
-	args = append(args, extraArgs...)
-
-	return clitestutil.ExecTestCLICmd(clientCtx, govcli.NewCmdDeposit(), args)
+	_ = "STUB: not implemented"
+	return *new(testutil.BufferWriter), nil
 }

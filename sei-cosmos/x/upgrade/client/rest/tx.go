@@ -3,8 +3,6 @@ package rest
 import (
 	"net/http"
 
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
-
 	"github.com/gorilla/mux"
 
 	govrest "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/client/rest"
@@ -12,15 +10,13 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
-	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/types"
 )
 
 func registerTxHandlers(
 	clientCtx client.Context,
 	r *mux.Router) {
-	r.HandleFunc("/upgrade/plan", newPostPlanHandler(clientCtx)).Methods("POST")
-	r.HandleFunc("/upgrade/cancel", newCancelPlanHandler(clientCtx)).Methods("POST")
+	_ = "STUB: not implemented"
+	return
 }
 
 // PlanRequest defines a proposal for a new upgrade plan.
@@ -45,79 +41,21 @@ type CancelRequest struct {
 }
 
 func ProposalRESTHandler(clientCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "upgrade",
-		Handler:  newPostPlanHandler(clientCtx),
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 func ProposalCancelRESTHandler(clientCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "upgrade",
-		Handler:  newCancelPlanHandler(clientCtx),
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 func newPostPlanHandler(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req PlanRequest
-
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		plan := types.Plan{Name: req.UpgradeName, Height: req.UpgradeHeight, Info: req.UpgradeInfo}
-		content := types.NewSoftwareUpgradeProposal(req.Title, req.Description, plan)
-		msg, err := govtypes.NewMsgSubmitProposalWithExpedite(content, req.Deposit, fromAddr, req.IsExpedited)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 func newCancelPlanHandler(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req CancelRequest
-
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		content := types.NewCancelSoftwareUpgradeProposal(req.Title, req.Description)
-
-		msg, err := govtypes.NewMsgSubmitProposalWithExpedite(content, req.Deposit, fromAddr, req.IsExpedited)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }

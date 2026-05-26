@@ -4,8 +4,6 @@ import (
 	"context"
 	"errors"
 
-	"github.com/google/uuid"
-
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/queue"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
@@ -29,17 +27,8 @@ type Subscription struct {
 
 // newSubscription returns a new subscription with the given queue capacity.
 func newSubscription(quota, limit int) (*Subscription, error) {
-	queue, err := queue.New(queue.Options{
-		SoftQuota: quota,
-		HardLimit: limit,
-	})
-	if err != nil {
-		return nil, err
-	}
-	return &Subscription{
-		id:    uuid.NewString(),
-		queue: queue,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Next blocks until a message is available, ctx ends, or the subscription
@@ -47,30 +36,23 @@ func newSubscription(quota, limit int) (*Subscription, error) {
 // s was terminated by the publisher, or a context error if ctx ended without a
 // message being available.
 func (s *Subscription) Next(ctx context.Context) (Message, error) {
-	next, err := s.queue.Wait(ctx)
-	if errors.Is(err, queue.ErrQueueClosed) {
-		return Message{}, s.stopErr
-	} else if err != nil {
-		return Message{}, err
-	}
-	return next.(Message), nil
+	_ = "STUB: not implemented"
+	return *new(Message), nil
 }
 
 // ID returns the unique subscription identifier for s.
-func (s *Subscription) ID() string { return s.id }
+func (s *Subscription) ID() string {
+	_ = "STUB: not implemented"
 
-// publish transmits msg to the subscriber. It reports a queue error if the
-// queue cannot accept any further messages.
-func (s *Subscription) publish(msg Message) error { return s.queue.Add(msg) }
+	// publish transmits msg to the subscriber. It reports a queue error if the
+	// queue cannot accept any further messages.
+	return ""
+}
+
+func (s *Subscription) publish(msg Message) error { _ = "STUB: not implemented"; return nil }
 
 // stop terminates the subscription with the given error reason.
-func (s *Subscription) stop(err error) {
-	if err == nil {
-		panic("nil stop error")
-	}
-	s.stopErr = err
-	_ = s.queue.Close()
-}
+func (s *Subscription) stop(err error) { _ = "STUB: not implemented"; return }
 
 // Message glues data and events together.
 type Message struct {
@@ -81,12 +63,19 @@ type Message struct {
 
 // SubscriptionID returns the unique identifier for the subscription
 // that produced this message.
-func (msg Message) SubscriptionID() string { return msg.subID }
+func (msg Message) SubscriptionID() string {
+	_ = "STUB: not implemented"
 
-// Data returns an original data published.
-func (msg Message) Data() types.EventData { return msg.data }
+	// Data returns an original data published.
+	return ""
+}
 
-func (msg Message) LegacyData() types.LegacyEventData { return msg.data.ToLegacy() }
+func (msg Message) Data() types.EventData { _ = "STUB: not implemented"; return *new(types.EventData) }
+
+func (msg Message) LegacyData() types.LegacyEventData {
+	_ = "STUB: not implemented"
+	return *new(types.LegacyEventData)
+}
 
 // Events returns events, which matched the client's query.
-func (msg Message) Events() []abci.Event { return msg.events }
+func (msg Message) Events() []abci.Event { _ = "STUB: not implemented"; return nil }

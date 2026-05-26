@@ -50,118 +50,44 @@ var ErrRemoved = errors.New("element was removed")
 // Blocking implementation of Next().
 // May return ErrRemoved iff CElement was tail and got removed.
 func (e *CElement[T]) NextWait(ctx context.Context) (*CElement[T], error) {
-	for {
-		e.mtx.RLock()
-		next := e.next
-		removed := e.removed
-		signal := e.nextWaitCh
-		e.mtx.RUnlock()
-
-		if next != nil {
-			return next, nil
-		}
-		if removed {
-			return nil, ErrRemoved
-		}
-
-		select {
-		case <-signal:
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		}
-		// e.next doesn't necessarily exist here.
-		// That's why we need to continue a for-loop.
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// e.next doesn't necessarily exist here.
+// That's why we need to continue a for-loop.
 
 // Nonblocking, may return nil if at the end.
-func (e *CElement[T]) Next() *CElement[T] {
-	e.mtx.RLock()
-	val := e.next
-	e.mtx.RUnlock()
-	return val
-}
+func (e *CElement[T]) Next() *CElement[T] { _ = "STUB: not implemented"; return nil }
 
 // Nonblocking, may return nil if at the end.
-func (e *CElement[T]) Prev() *CElement[T] {
-	e.mtx.RLock()
-	prev := e.prev
-	e.mtx.RUnlock()
-	return prev
-}
+func (e *CElement[T]) Prev() *CElement[T] { _ = "STUB: not implemented"; return nil }
 
-func (e *CElement[T]) Removed() bool {
-	e.mtx.RLock()
-	isRemoved := e.removed
-	e.mtx.RUnlock()
-	return isRemoved
-}
+func (e *CElement[T]) Removed() bool { _ = "STUB: not implemented"; return false }
 
-func (e *CElement[T]) Value() T {
-	return e.value
-}
+func (e *CElement[T]) Value() T { _ = "STUB: not implemented"; return *new(T) }
 
-func (e *CElement[T]) detachNext() {
-	e.mtx.Lock()
-	if !e.removed {
-		e.mtx.Unlock()
-		panic("DetachNext() must be called after Remove(e)")
-	}
-	e.next = nil
-	e.mtx.Unlock()
-}
+func (e *CElement[T]) detachNext() { _ = "STUB: not implemented"; return }
 
-func (e *CElement[T]) DetachPrev() {
-	e.mtx.Lock()
-	if !e.removed {
-		e.mtx.Unlock()
-		panic("DetachPrev() must be called after Remove(e)")
-	}
-	e.prev = nil
-	e.mtx.Unlock()
-}
+func (e *CElement[T]) DetachPrev() { _ = "STUB: not implemented"; return }
 
 // NOTE: This function needs to be safe for
 // concurrent goroutines waiting on nextWg.
-func (e *CElement[T]) setNext(newNext *CElement[T]) {
-	e.mtx.Lock()
+func (e *CElement[T]) setNext(newNext *CElement[T]) { _ = "STUB: not implemented"; return }
 
-	oldNext := e.next
-	e.next = newNext
-	if oldNext != nil && newNext == nil {
-		// See https://golang.org/pkg/sync/:
-		//
-		// If a WaitGroup is reused to wait for several independent sets of
-		// events, new Add calls must happen after all previous Wait calls have
-		// returned.
-		e.nextWaitCh = make(chan struct{})
-	}
-	if oldNext == nil && newNext != nil {
-		close(e.nextWaitCh)
-	}
-	e.mtx.Unlock()
-}
+// See https://golang.org/pkg/sync/:
+//
+// If a WaitGroup is reused to wait for several independent sets of
+// events, new Add calls must happen after all previous Wait calls have
+// returned.
 
 // NOTE: This function needs to be safe for
 // concurrent goroutines waiting on prevWg
-func (e *CElement[T]) setPrev(newPrev *CElement[T]) {
-	e.mtx.Lock()
-	defer e.mtx.Unlock()
+func (e *CElement[T]) setPrev(newPrev *CElement[T]) { _ = "STUB: not implemented"; return }
 
-	e.prev = newPrev
-}
+func (e *CElement[T]) setRemoved() { _ = "STUB: not implemented"; return }
 
-func (e *CElement[T]) setRemoved() {
-	e.mtx.Lock()
-	defer e.mtx.Unlock()
-
-	e.removed = true
-
-	// This wakes up anyone waiting.
-	if e.next == nil {
-		close(e.nextWaitCh)
-	}
-}
+// This wakes up anyone waiting.
 
 //--------------------------------------------------------------------------------
 
@@ -176,127 +102,46 @@ type CList[T any] struct {
 	len    int          // list length
 }
 
-func New[T any]() *CList[T] {
-	return &CList[T]{
-		waitCh: make(chan struct{}),
-		head:   nil,
-		tail:   nil,
-		len:    0,
-	}
-}
+func New[T any]() *CList[T] { _ = "STUB: not implemented"; return nil }
 
-func (l *CList[T]) Len() int {
-	l.mtx.RLock()
-	defer l.mtx.RUnlock()
-	return l.len
-}
+func (l *CList[T]) Len() int { _ = "STUB: not implemented"; return 0 }
 
-func (l *CList[T]) Front() *CElement[T] {
-	l.mtx.RLock()
-	defer l.mtx.RUnlock()
-	return l.head
-}
+func (l *CList[T]) Front() *CElement[T] { _ = "STUB: not implemented"; return nil }
 
 func (l *CList[T]) WaitFront(ctx context.Context) (*CElement[T], error) {
+	_ = "STUB: not implemented"
 	// Loop until the head is non-nil else wait and try again
-	for {
-		l.mtx.RLock()
-		head := l.head
-		signal := l.waitCh
-		l.mtx.RUnlock()
-
-		if head != nil {
-			return head, nil
-		}
-		select {
-		case <-signal:
-		case <-ctx.Done():
-			return nil, ctx.Err()
-		}
-		// NOTE: If you think l.head exists here, think harder.
-	}
+	return nil, nil
 }
 
-func (l *CList[T]) Back() *CElement[T] {
-	l.mtx.RLock()
-	back := l.tail
-	l.mtx.RUnlock()
-	return back
-}
+// NOTE: If you think l.head exists here, think harder.
+
+func (l *CList[T]) Back() *CElement[T] { _ = "STUB: not implemented"; return nil }
 
 // Panics if list grows beyond its max length.
 func (l *CList[T]) PushBack(v T) *CElement[T] {
-	l.mtx.Lock()
+	_ = "STUB: not implemented"
 
 	// Construct a new element
-	e := &CElement[T]{
-		prev:       nil,
-		next:       nil,
-		nextWaitCh: make(chan struct{}),
-		removed:    false,
-		value:      v,
-	}
-
-	// Release waiters on FrontWait/BackWait maybe
-	if l.len == 0 {
-		close(l.waitCh)
-	}
-	l.len++
-
-	// Modify the tail
-	if l.tail == nil {
-		l.head = e
-		l.tail = e
-	} else {
-		e.setPrev(l.tail) // We must init e first.
-		l.tail.setNext(e) // This will make e accessible.
-		l.tail = e        // Update the list.
-	}
-	l.mtx.Unlock()
-	return e
+	return nil
 }
+
+// Release waiters on FrontWait/BackWait maybe
+
+// Modify the tail
+
+// We must init e first.
+// This will make e accessible.
+// Update the list.
 
 // CONTRACT: Caller must call e.DetachPrev() and/or e.DetachNext() to avoid memory leaks.
 // NOTE: As per the contract of CList, removed elements cannot be added back.
-func (l *CList[T]) Remove(e *CElement[T]) T {
-	l.mtx.Lock()
-	defer l.mtx.Unlock()
+func (l *CList[T]) Remove(e *CElement[T]) T { _ = "STUB: not implemented"; return *new(T) }
 
-	prev := e.Prev()
-	next := e.Next()
+// If we're removing the only item, make CList FrontWait/BackWait wait.
 
-	if l.head == nil || l.tail == nil {
-		panic("Remove(e) on empty CList")
-	}
-	if prev == nil && l.head != e {
-		panic("Remove(e) with false head")
-	}
-	if next == nil && l.tail != e {
-		panic("Remove(e) with false tail")
-	}
+// Update l.len
 
-	// If we're removing the only item, make CList FrontWait/BackWait wait.
-	if l.len == 1 {
-		l.waitCh = make(chan struct{})
-	}
+// Connect next/prev and set head/tail
 
-	// Update l.len
-	l.len--
-
-	// Connect next/prev and set head/tail
-	if prev == nil {
-		l.head = next
-	} else {
-		prev.setNext(next)
-	}
-	if next == nil {
-		l.tail = prev
-	} else {
-		next.setPrev(prev)
-	}
-
-	// Set .Done() on e, otherwise waiters will wait forever.
-	e.setRemoved()
-
-	return e.value
-}
+// Set .Done() on e, otherwise waiters will wait forever.

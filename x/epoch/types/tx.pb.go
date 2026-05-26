@@ -6,10 +6,11 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -57,10 +58,13 @@ type msgClient struct {
 }
 
 func NewMsgClient(cc grpc1.ClientConn) MsgClient {
-	return &msgClient{cc}
+	_ = "STUB: not implemented"
+	return *
+
+	// MsgServer is the server API for Msg service.
+	new(MsgClient)
 }
 
-// MsgServer is the server API for Msg service.
 type MsgServer interface {
 }
 
@@ -68,9 +72,7 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
-func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
-	s.RegisterService(&_Msg_serviceDesc, srv)
-}
+func RegisterMsgServer(s grpc1.Server, srv MsgServer) { _ = "STUB: not implemented"; return }
 
 var _Msg_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "seiprotocol.seichain.epoch.Msg",

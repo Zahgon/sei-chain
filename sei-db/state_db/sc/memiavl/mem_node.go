@@ -1,12 +1,8 @@
 package memiavl
 
 import (
-	"bytes"
-	"encoding/binary"
 	"io"
-	"math"
 	"sync/atomic"
-	"unsafe"
 )
 
 type MemNode struct {
@@ -33,109 +29,62 @@ func newBranchNode(
 	key []byte,
 	left Node,
 	right Node) *MemNode {
-	return &MemNode{
-		height:  height,
-		size:    size,
-		version: version,
-		key:     key,
-		left:    left,
-		right:   right,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func newLeafNode(key, value []byte, version uint32) *MemNode {
-	return &MemNode{
-		key: key, value: value, version: version, size: 1,
-	}
-}
+func newLeafNode(key, value []byte, version uint32) *MemNode { _ = "STUB: not implemented"; return nil }
 
 func IncrementMemNodeSize(node *MemNode) {
-	if node != nil {
-		// struct itself (includes slice headers and interface headers)
-		size := int64(unsafe.Sizeof(*node))
+	_ = "STUB: not implemented"
 
-		// backing arrays for the slices (bytes)
-		size += int64(cap(node.key))
-		size += int64(cap(node.value))
-		size += int64(cap(node.hash))
-		TotalMemNodeSize.Add(size)
-		TotalNumOfMemNode.Add(1)
-	}
+	// struct itself (includes slice headers and interface headers)
+	return
 }
 
-func (node *MemNode) Height() uint8 {
-	return node.height
-}
+// backing arrays for the slices (bytes)
 
-func (node *MemNode) IsLeaf() bool {
-	return node.height == 0
-}
+func (node *MemNode) Height() uint8 { _ = "STUB: not implemented"; return 0 }
 
-func (node *MemNode) Size() int64 {
-	return node.size
-}
+func (node *MemNode) IsLeaf() bool { _ = "STUB: not implemented"; return false }
 
-func (node *MemNode) Version() uint32 {
-	return node.version
-}
+func (node *MemNode) Size() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (node *MemNode) Key() []byte {
-	return node.key
-}
+func (node *MemNode) Version() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (node *MemNode) Value() []byte {
-	return node.value
-}
+func (node *MemNode) Key() []byte { _ = "STUB: not implemented"; return nil }
 
-func (node *MemNode) Left() Node {
-	return node.left
-}
+func (node *MemNode) Value() []byte { _ = "STUB: not implemented"; return nil }
+
+func (node *MemNode) Left() Node { _ = "STUB: not implemented"; return *new(Node) }
 
 func (node *MemNode) Right() Node {
-	return node.right
+	_ = "STUB: not implemented"
+
+	// Mutate clones the node if it's version is smaller than or equal to cowVersion, otherwise modify in-place
+	return *new(Node)
 }
 
-// Mutate clones the node if it's version is smaller than or equal to cowVersion, otherwise modify in-place
 func (node *MemNode) Mutate(version, cowVersion uint32) *MemNode {
-	n := node
-	if node.version <= cowVersion {
-		cloned := *node
-		n = &cloned
-	}
-	n.version = version
-	n.hash = nil
-	return n
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (node *MemNode) SafeHash() []byte {
-	return node.Hash()
+	_ = "STUB: not implemented"
+
+	// Computes the hash of the node without computing its descendants. Must be
+	// called on nodes which have descendant node hashes already computed.
+	return nil
 }
 
-// Computes the hash of the node without computing its descendants. Must be
-// called on nodes which have descendant node hashes already computed.
-func (node *MemNode) Hash() []byte {
-	if node == nil {
-		return nil
-	}
-	if node.hash != nil {
-		return node.hash
-	}
-	node.hash = HashNode(node)
-	return node.hash
-}
+func (node *MemNode) Hash() []byte { _ = "STUB: not implemented"; return nil }
 
-func (node *MemNode) updateHeightSize() {
-	node.height = maxUInt8(node.left.Height(), node.right.Height()) + 1
-	node.size = node.left.Size() + node.right.Size()
-}
+func (node *MemNode) updateHeightSize() { _ = "STUB: not implemented"; return }
 
-func (node *MemNode) calcBalance() int {
-	return int(node.left.Height()) - int(node.right.Height())
-}
+func (node *MemNode) calcBalance() int { _ = "STUB: not implemented"; return 0 }
 
-func calcBalance(node Node) int {
-	return int(node.Left().Height()) - int(node.Right().Height())
-}
+func calcBalance(node Node) int { _ = "STUB: not implemented"; return 0 }
 
 // Invariant: node is returned by `Mutate(version)`.
 //
@@ -145,12 +94,8 @@ func calcBalance(node Node) int {
 //	/ \                 / \
 //	  LR               LR
 func (node *MemNode) rotateRight(version, cowVersion uint32) *MemNode {
-	newSelf := node.left.Mutate(version, cowVersion)
-	node.left = node.left.Right()
-	newSelf.right = node
-	node.updateHeightSize()
-	newSelf.updateHeightSize()
-	return newSelf
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Invariant: node is returned by `Mutate(version, cowVersion)`.
@@ -161,103 +106,35 @@ func (node *MemNode) rotateRight(version, cowVersion uint32) *MemNode {
 //	   / \       / \
 //	 RL             RL
 func (node *MemNode) rotateLeft(version, cowVersion uint32) *MemNode {
-	newSelf := node.right.Mutate(version, cowVersion)
-	node.right = node.right.Left()
-	newSelf.left = node
-	node.updateHeightSize()
-	newSelf.updateHeightSize()
-	return newSelf
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Invariant: node is returned by `Mutate(version, cowVersion)`.
 func (node *MemNode) reBalance(version, cowVersion uint32) *MemNode {
-	balance := node.calcBalance()
-	switch {
-	case balance > 1:
-		leftBalance := calcBalance(node.left)
-		if leftBalance >= 0 {
-			// left left
-			return node.rotateRight(version, cowVersion)
-		}
-		// left right
-		node.left = node.left.Mutate(version, cowVersion).rotateLeft(version, cowVersion)
-		return node.rotateRight(version, cowVersion)
-	case balance < -1:
-		rightBalance := calcBalance(node.right)
-		if rightBalance <= 0 {
-			// right right
-			return node.rotateLeft(version, cowVersion)
-		}
-		// right left
-		node.right = node.right.Mutate(version, cowVersion).rotateRight(version, cowVersion)
-		return node.rotateLeft(version, cowVersion)
-	default:
-		// nothing changed
-		return node
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (node *MemNode) Get(key []byte) ([]byte, uint32) {
-	if node.IsLeaf() {
-		switch bytes.Compare(node.key, key) {
-		case -1:
-			return nil, 1
-		case 1:
-			return nil, 0
-		default:
-			return node.value, 0
-		}
-	}
+// left left
 
-	if bytes.Compare(key, node.key) == -1 {
-		return node.Left().Get(key)
-	}
-	right := node.Right()
-	value, index := right.Get(key)
-	size := node.Size() - right.Size()
-	if size < 0 || size > math.MaxUint32 {
-		panic("size under/overflows uint32")
-	}
-	return value, index + uint32(size)
-}
+// left right
+
+// right right
+
+// right left
+
+// nothing changed
+
+func (node *MemNode) Get(key []byte) ([]byte, uint32) { _ = "STUB: not implemented"; return nil, 0 }
 
 func (node *MemNode) GetByIndex(index uint32) ([]byte, []byte) {
-	if node.IsLeaf() {
-		if index == 0 {
-			return node.key, node.value
-		}
-		return nil, nil
-	}
-
-	left := node.Left()
-	leftSizei64 := left.Size()
-	if leftSizei64 < 0 || leftSizei64 > math.MaxUint32 {
-		panic("left size under/overflows uint32")
-	}
-	leftSize := uint32(leftSizei64)
-	if index < leftSize {
-		return left.GetByIndex(index)
-	}
-
-	right := node.Right()
-	return right.GetByIndex(index - leftSize)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // EncodeBytes writes a varint length-prefixed byte slice to the writer,
 // it's used for hash computation, must be compactible with the official IAVL implementation.
-func EncodeBytes(w io.Writer, bz []byte) error {
-	var buf [binary.MaxVarintLen64]byte
-	n := binary.PutUvarint(buf[:], uint64(len(bz)))
-	if _, err := w.Write(buf[0:n]); err != nil {
-		return err
-	}
-	_, err := w.Write(bz)
-	return err
-}
+func EncodeBytes(w io.Writer, bz []byte) error { _ = "STUB: not implemented"; return nil }
 
-func maxUInt8(a, b uint8) uint8 {
-	if a > b {
-		return a
-	}
-	return b
-}
+func maxUInt8(a, b uint8) uint8 { _ = "STUB: not implemented"; return 0 }

@@ -27,7 +27,8 @@ var NotZero = require.NotZero
 var Contains = require.Contains
 
 func ElementsMatch[T any](t TestingT, a []T, b []T, msgAndArgs ...any) {
-	require.ElementsMatch(t, a, b, msgAndArgs...)
+	_ = "STUB: not implemented"
+	return
 }
 
 // Eventually .
@@ -78,36 +79,40 @@ var NoFileExists = require.NoFileExists
 var FileExists = require.FileExists
 
 // Positive .
-func Positive[T cmp.Ordered](t TestingT, e T, msgAndArgs ...any) {
-	require.Positive(t, e, msgAndArgs...)
-}
+func Positive[T cmp.Ordered](t TestingT, e T, msgAndArgs ...any) { _ = "STUB: not implemented"; return }
 
 // Less .
 func Less[T cmp.Ordered](t TestingT, e1, e2 T, msgAndArgs ...any) {
-	require.Less(t, e1, e2, msgAndArgs...)
+	_ = "STUB: not implemented"
+	return
 }
 
 // LessOrEqual .
 func LessOrEqual[T cmp.Ordered](t TestingT, e1, e2 T, msgAndArgs ...any) {
-	require.LessOrEqual(t, e1, e2, msgAndArgs...)
+	_ = "STUB: not implemented"
+	return
 }
 
 // Greater .
 func Greater[T cmp.Ordered](t TestingT, e1, e2 T, msgAndArgs ...any) {
-	require.Greater(t, e1, e2, msgAndArgs...)
+	_ = "STUB: not implemented"
+	return
 }
 
 // GreaterOrEqual .
 func GreaterOrEqual[T cmp.Ordered](t TestingT, e1, e2 T, msgAndArgs ...any) {
-	require.GreaterOrEqual(t, e1, e2, msgAndArgs...)
+	_ = "STUB: not implemented"
+	return
 }
 
 // Equal .
 func Equal[T any](t TestingT, expected, actual T, msgAndArgs ...any) {
-	require.Equal(t, expected, actual, msgAndArgs...)
+	_ = "STUB: not implemented"
+	return
 }
 
 // NotEqual .
 func NotEqual[T any](t TestingT, expected, actual T, msgAndArgs ...any) {
-	require.NotEqual(t, expected, actual, msgAndArgs...)
+	_ = "STUB: not implemented"
+	return
 }

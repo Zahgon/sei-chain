@@ -71,75 +71,22 @@ type persistedInner struct {
 
 // View returns the current view based on CommitQC and TimeoutQC.
 // Delegates to types.ViewSpec.View() for a single source of truth.
-func (p *persistedInner) View() types.View {
-	vs := types.ViewSpec{
-		CommitQC:  p.CommitQC,
-		TimeoutQC: p.TimeoutQC,
-	}
-	return vs.View()
-}
+func (p *persistedInner) View() types.View { _ = "STUB: not implemented"; return *new(types.View) }
 
 // validate checks internal consistency and cryptographic signatures of persisted state.
 // Returns error on corrupt state.
 func (p *persistedInner) validate(committee *types.Committee) error {
-	if cqc, ok := p.CommitQC.Get(); ok {
-		if err := cqc.Verify(committee); err != nil {
-			return fmt.Errorf("corrupt persisted state: CommitQC failed verification: %w", err)
-		}
-	}
-
-	// TimeoutQC index must equal NextIndexOpt(CommitQC) (i.e., CommitQC.Index+1, or 0 if missing).
-	// Since we persist the entire inner state atomically, a mismatched index is always corrupt.
-	if tqc, ok := p.TimeoutQC.Get(); ok {
-		tqcIndex := tqc.View().Index
-		expectedIndex := types.NextIndexOpt(p.CommitQC)
-		if tqcIndex != expectedIndex {
-			return fmt.Errorf("corrupt persisted state: TimeoutQC has index %d but expected %d", tqcIndex, expectedIndex)
-		}
-		if err := tqc.Verify(committee, p.CommitQC); err != nil {
-			return fmt.Errorf("corrupt persisted state: TimeoutQC failed verification: %w", err)
-		}
-	}
-
-	currentView := p.View()
-
-	// checkViewAndSig validates that a persisted field has the current view and a valid signature.
-	// Since inner is persisted atomically, any view mismatch indicates corrupt state.
-	checkViewAndSig := func(name string, view types.View, verifyErr error) error {
-		if view != currentView {
-			return fmt.Errorf("corrupt persisted state: %s has view %v but current view is %v", name, view, currentView)
-		}
-		if verifyErr != nil {
-			return fmt.Errorf("corrupt persisted state: %s failed verification: %w", name, verifyErr)
-		}
-		return nil
-	}
-
-	// PrepareQC is required when CommitVote is present (CommitVote requires PrepareQC justification).
-	if pqc, ok := p.PrepareQC.Get(); ok {
-		if err := checkViewAndSig("PrepareQC", pqc.Proposal().View(), pqc.Verify(committee)); err != nil {
-			return err
-		}
-	} else if p.CommitVote.IsPresent() {
-		return fmt.Errorf("corrupt persisted state: CommitVote present without PrepareQC")
-	}
-	if v, ok := p.CommitVote.Get(); ok {
-		if err := checkViewAndSig("CommitVote", v.Msg().Proposal().View(), v.VerifySig(committee)); err != nil {
-			return err
-		}
-	}
-	if v, ok := p.PrepareVote.Get(); ok {
-		if err := checkViewAndSig("PrepareVote", v.Msg().Proposal().View(), v.VerifySig(committee)); err != nil {
-			return err
-		}
-	}
-	if v, ok := p.TimeoutVote.Get(); ok {
-		if err := checkViewAndSig("TimeoutVote", v.View(), v.Verify(committee)); err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// TimeoutQC index must equal NextIndexOpt(CommitQC) (i.e., CommitQC.Index+1, or 0 if missing).
+// Since we persist the entire inner state atomically, a mismatched index is always corrupt.
+
+// checkViewAndSig validates that a persisted field has the current view and a valid signature.
+// Since inner is persisted atomically, any view mismatch indicates corrupt state.
+
+// PrepareQC is required when CommitVote is present (CommitVote requires PrepareQC justification).
 
 // innerProtoConv is a protobuf converter for persistedInner.
 var innerProtoConv = protoutils.Conv[*persistedInner, *pb.PersistedInner]{

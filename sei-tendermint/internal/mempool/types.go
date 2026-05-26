@@ -1,7 +1,5 @@
 package mempool
 
-import "math"
-
 const (
 	// UnknownPeerID is the peer ID to use when running CheckTx when there is
 	// no peer (e.g. RPC)
@@ -20,8 +18,6 @@ type TxConstraints struct {
 type TxConstraintsFetcher func() (TxConstraints, error)
 
 func NopTxConstraintsFetcher() (TxConstraints, error) {
-	return TxConstraints{
-		MaxDataBytes: math.MaxInt64,
-		MaxGas:       -1,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(TxConstraints), nil
 }

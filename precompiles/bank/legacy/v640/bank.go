@@ -2,8 +2,6 @@ package v640
 
 import (
 	"embed"
-	"errors"
-	"fmt"
 	"math/big"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -13,9 +11,6 @@ import (
 	pcommon "github.com/sei-protocol/sei-chain/precompiles/common/legacy/v640"
 	putils "github.com/sei-protocol/sei-chain/precompiles/utils"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
-	"github.com/sei-protocol/sei-chain/utils"
-	"github.com/sei-protocol/sei-chain/utils/metrics"
 )
 
 const (
@@ -60,327 +55,84 @@ type CoinBalance struct {
 	Denom  string
 }
 
-func GetABI() abi.ABI {
-	return pcommon.MustGetABI(f, "abi.json")
-}
+func GetABI() abi.ABI { _ = "STUB: not implemented"; return *new(abi.ABI) }
 
 func NewPrecompile(keepers putils.Keepers) (*pcommon.DynamicGasPrecompile, error) {
-	newAbi := GetABI()
-	p := &PrecompileExecutor{
-		bankKeeper:    keepers.BankK(),
-		bankMsgServer: keepers.BankMS(),
-		evmKeeper:     keepers.EVMK(),
-		accountKeeper: keepers.AccountK(),
-		address:       common.HexToAddress(BankAddress),
-	}
-
-	for name, m := range newAbi.Methods {
-		switch name {
-		case SendMethod:
-			p.SendID = m.ID
-		case SendNativeMethod:
-			p.SendNativeID = m.ID
-		case BalanceMethod:
-			p.BalanceID = m.ID
-		case AllBalancesMethod:
-			p.AllBalancesID = m.ID
-		case NameMethod:
-			p.NameID = m.ID
-		case SymbolMethod:
-			p.SymbolID = m.ID
-		case DecimalsMethod:
-			p.DecimalsID = m.ID
-		case SupplyMethod:
-			p.SupplyID = m.ID
-		}
-	}
-
-	return pcommon.NewDynamicGasPrecompile(newAbi, p, p.address, "bank"), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // RequiredGas returns the required bare minimum gas to execute the precompile.
 func (p PrecompileExecutor) RequiredGas(input []byte, method *abi.Method) uint64 {
-	return pcommon.DefaultGasCost(input, p.IsTransaction(method.Name))
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func (p PrecompileExecutor) Execute(ctx sdk.Context, method *abi.Method, caller common.Address, callingContract common.Address, args []interface{}, value *big.Int, readOnly bool, evm *vm.EVM, suppliedGas uint64, hooks *tracing.Hooks) (ret []byte, remainingGas uint64, err error) {
+	_ = "STUB: not implemented"
 	// Needed to catch gas meter panics
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("execution reverted: %v", r)
-		}
-	}()
-	switch method.Name {
-	case SendMethod:
-		return p.send(ctx, caller, method, args, value, readOnly)
-	case SendNativeMethod:
-		return p.sendNative(ctx, method, args, caller, callingContract, value, readOnly, hooks, evm)
-	case BalanceMethod:
-		return p.balance(ctx, method, args, value)
-	case AllBalancesMethod:
-		return p.all_balances(ctx, method, args, value)
-	case NameMethod:
-		return p.name(ctx, method, args, value)
-	case SymbolMethod:
-		return p.symbol(ctx, method, args, value)
-	case DecimalsMethod:
-		return p.decimals(ctx, method, args, value)
-	case SupplyMethod:
-		return p.totalSupply(ctx, method, args, value)
-	}
-	return
+	return nil, 0, nil
 }
 
 func (p PrecompileExecutor) send(ctx sdk.Context, caller common.Address, method *abi.Method, args []interface{}, value *big.Int, readOnly bool) ([]byte, uint64, error) {
-	if readOnly {
-		return nil, 0, errors.New("cannot call send from staticcall")
-	}
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 4); err != nil {
-		return nil, 0, err
-	}
-	denom := args[2].(string)
-	if denom == "" {
-		return nil, 0, errors.New("invalid denom")
-	}
-	pointer, _, exists := p.evmKeeper.GetERC20NativePointer(ctx, denom)
-	if !exists || pointer.Cmp(caller) != 0 {
-		return nil, 0, fmt.Errorf("only pointer %s can send %s but got %s", pointer.Hex(), denom, caller.Hex())
-	}
-	amount := args[3].(*big.Int)
-	if amount.Cmp(utils.Big0) == 0 {
-		// short circuit
-		bz, err := method.Outputs.Pack(true)
-		return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
-	}
-	senderSeiAddr, err := p.accAddressFromArg(ctx, args[0])
-	if err != nil {
-		return nil, 0, err
-	}
-	receiverSeiAddr, err := p.accAddressFromArg(ctx, args[1])
-	if err != nil {
-		return nil, 0, err
-	}
-
-	msg := &banktypes.MsgSend{
-		FromAddress: senderSeiAddr.String(),
-		ToAddress:   receiverSeiAddr.String(),
-		Amount:      sdk.NewCoins(sdk.NewCoin(denom, sdk.NewIntFromBigInt(amount))),
-	}
-
-	err = msg.ValidateBasic()
-	if err != nil {
-		return nil, 0, err
-	}
-
-	if _, err = p.bankMsgServer.Send(sdk.WrapSDKContext(ctx), msg); err != nil {
-		return nil, 0, err
-	}
-
-	bz, err := method.Outputs.Pack(true)
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
+// short circuit
+
 func (p PrecompileExecutor) sendNative(ctx sdk.Context, method *abi.Method, args []interface{}, caller common.Address, callingContract common.Address, value *big.Int, readOnly bool, hooks *tracing.Hooks, evm *vm.EVM) ([]byte, uint64, error) {
-	if readOnly {
-		return nil, 0, errors.New("cannot call sendNative from staticcall")
-	}
-	if ctx.EVMPrecompileCalledFromDelegateCall() {
-		return nil, 0, errors.New("cannot delegatecall sendNative")
-	}
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, 0, err
-	}
-	if value == nil || value.Sign() == 0 {
-		return nil, 0, errors.New("set `value` field to non-zero to send")
-	}
-
-	senderSeiAddr, ok := p.evmKeeper.GetSeiAddress(ctx, caller)
-	if !ok {
-		return nil, 0, errors.New("invalid addr")
-	}
-
-	receiverAddr, ok := (args[0]).(string)
-	if !ok || receiverAddr == "" {
-		return nil, 0, errors.New("invalid addr")
-	}
-
-	receiverSeiAddr, err := sdk.AccAddressFromBech32(receiverAddr)
-	if err != nil {
-		return nil, 0, err
-	}
-
-	usei, wei, err := pcommon.HandlePaymentUseiWei(ctx, p.evmKeeper.GetSeiAddressOrDefault(ctx, p.address), senderSeiAddr, value, p.bankKeeper, p.evmKeeper, hooks, evm.GetDepth())
-	if err != nil {
-		return nil, 0, err
-	}
-
-	if err := p.bankKeeper.SendCoinsAndWei(ctx, senderSeiAddr, receiverSeiAddr, usei, wei); err != nil {
-		return nil, 0, err
-	}
-	accExists := p.accountKeeper.HasAccount(ctx, receiverSeiAddr)
-	if !accExists {
-		defer metrics.SafeTelemetryIncrCounter(1, "new", "account")
-		p.accountKeeper.SetAccount(ctx, p.accountKeeper.NewAccountWithAddress(ctx, receiverSeiAddr))
-	}
-
-	if hooks != nil {
-		newCtx := ctx.WithGasMeter(sdk.NewInfiniteGasMeterWithMultiplier(ctx))
-		remainingGas := pcommon.GetRemainingGas(newCtx, p.evmKeeper)
-		if hooks.OnEnter != nil {
-			hooks.OnEnter(evm.GetDepth()+1, byte(vm.CALL), caller, p.evmKeeper.GetEVMAddressOrDefault(newCtx, receiverSeiAddr), []byte{}, remainingGas, value)
-		}
-		defer func() {
-			if hooks.OnExit != nil {
-				hooks.OnExit(evm.GetDepth()+1, []byte{}, 0, nil, false)
-			}
-		}()
-	}
-
-	bz, err := method.Outputs.Pack(true)
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (p PrecompileExecutor) balance(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, uint64, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 2); err != nil {
-		return nil, 0, err
-	}
-
-	addr, err := p.accAddressFromArg(ctx, args[0])
-	if err != nil {
-		return nil, 0, err
-	}
-	denom := args[1].(string)
-	if denom == "" {
-		return nil, 0, errors.New("invalid denom")
-	}
-
-	bz, err := method.Outputs.Pack(p.bankKeeper.GetBalance(ctx, addr, denom).Amount.BigInt())
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (p PrecompileExecutor) all_balances(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, uint64, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, 0, err
-	}
-
-	addr, err := p.accAddressFromArg(ctx, args[0])
-	if err != nil {
-		return nil, 0, err
-	}
-
-	coins := p.bankKeeper.GetAllBalances(ctx, addr)
-
-	// convert to coin balance structs
-	coinBalances := make([]CoinBalance, 0, len(coins))
-
-	for _, coin := range coins {
-		coinBalances = append(coinBalances, CoinBalance{
-			Amount: coin.Amount.BigInt(),
-			Denom:  coin.Denom,
-		})
-	}
-
-	bz, err := method.Outputs.Pack(coinBalances)
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
+// convert to coin balance structs
+
 func (p PrecompileExecutor) name(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, uint64, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, 0, err
-	}
-
-	denom := args[0].(string)
-	metadata, found := p.bankKeeper.GetDenomMetaData(ctx, denom)
-	if !found {
-		return nil, 0, fmt.Errorf("denom %s not found", denom)
-	}
-	bz, err := method.Outputs.Pack(metadata.Name)
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (p PrecompileExecutor) symbol(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, uint64, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, 0, err
-	}
-
-	denom := args[0].(string)
-	metadata, found := p.bankKeeper.GetDenomMetaData(ctx, denom)
-	if !found {
-		return nil, 0, fmt.Errorf("denom %s not found", denom)
-	}
-	bz, err := method.Outputs.Pack(metadata.Symbol)
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (p PrecompileExecutor) decimals(ctx sdk.Context, method *abi.Method, _ []interface{}, value *big.Int) ([]byte, uint64, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	// all native tokens are integer-based, returns decimals for microdenom (usei)
-	bz, err := method.Outputs.Pack(uint8(0))
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
+// all native tokens are integer-based, returns decimals for microdenom (usei)
+
 func (p PrecompileExecutor) totalSupply(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, uint64, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, 0, err
-	}
-
-	denom := args[0].(string)
-	coin := p.bankKeeper.GetSupply(ctx, denom)
-	bz, err := method.Outputs.Pack(coin.Amount.BigInt())
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (p PrecompileExecutor) accAddressFromArg(ctx sdk.Context, arg interface{}) (sdk.AccAddress, error) {
-	addr := arg.(common.Address)
-	if addr == (common.Address{}) {
-		return nil, errors.New("invalid addr")
-	}
-	seiAddr, found := p.evmKeeper.GetSeiAddress(ctx, addr)
-	if !found {
-		// return the casted version instead
-		return sdk.AccAddress(addr[:]), nil
-	}
-	return seiAddr, nil
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), nil
 }
 
+// return the casted version instead
+
 func (PrecompileExecutor) IsTransaction(method string) bool {
-	switch method {
-	case SendMethod:
-		return true
-	case SendNativeMethod:
-		return true
-	default:
-		return false
-	}
+	_ = "STUB: not implemented"
+	return false
 }
 
 func (p PrecompileExecutor) EVMKeeper() putils.EVMKeeper {
-	return p.evmKeeper
+	_ = "STUB: not implemented"
+	return *new(putils.EVMKeeper)
 }

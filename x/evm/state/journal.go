@@ -1,8 +1,6 @@
 package state
 
 import (
-	"encoding/binary"
-
 	"github.com/ethereum/go-ethereum/common"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -48,77 +46,35 @@ type (
 	}
 )
 
-func (e *accessListAddAccountChange) revert(s *DBImpl) {
-	delete(s.tempState.transientAccessLists.Addresses, e.address)
-}
+func (e *accessListAddAccountChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
 func (e *accessListAddSlotChange) revert(s *DBImpl) {
+	_ = "STUB: not implemented"
 	// since slot change always comes after address change, and revert
 	// happens in reverse order, the address access list hasn't been
 	// cleared at this point.
-	idx, ok := s.tempState.transientAccessLists.Addresses[e.address]
-	// If the address was already removed or has no slots (idx == -1),
-	// there is nothing to revert.
-	if !ok || idx == -1 {
-		return
-	}
-	slotsList := s.tempState.transientAccessLists.Slots
-	// Bounds check in case a prior revert already modified the slots slice.
-	if idx >= len(slotsList) {
-		return
-	}
-	slots := slotsList[idx]
-	delete(slots, e.slot)
-	if len(slots) == 0 {
-		s.tempState.transientAccessLists.Slots = append(slotsList[:idx], slotsList[idx+1:]...)
-		s.tempState.transientAccessLists.Addresses[e.address] = -1
-	}
+	return
 }
 
-func (e *surplusChange) revert(s *DBImpl) {
-	s.tempState.surplus = s.tempState.surplus.Sub(e.delta)
-}
+// If the address was already removed or has no slots (idx == -1),
+// there is nothing to revert.
 
-func (e *addLogChange) revert(s *DBImpl) {
-	s.tempState.logs = s.tempState.logs[:len(s.tempState.logs)-1]
-}
+// Bounds check in case a prior revert already modified the slots slice.
 
-func (e *refundChange) revert(s *DBImpl) {
-	bz := make([]byte, 8)
-	binary.BigEndian.PutUint64(bz, e.prev)
-	s.tempState.transientModuleStates[string(GasRefundKey)] = bz
-}
+func (e *surplusChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
-func (e *transientStorageChange) revert(s *DBImpl) {
-	states := s.tempState.transientStates[e.account.Hex()]
-	if e.prevalue.Cmp(common.Hash{}) == 0 {
-		// If the per-account transient map was already removed by a later revert,
-		// there is nothing to delete.
-		if states == nil {
-			return
-		}
-		delete(states, e.key.Hex())
-		if len(states) == 0 {
-			delete(s.tempState.transientStates, e.account.Hex())
-		}
-	} else {
-		// A prior revert may have deleted the per-account map when it became empty.
-		// Re-create it so we can restore a non-zero prevalue.
-		if states == nil {
-			states = make(map[string]common.Hash)
-			s.tempState.transientStates[e.account.Hex()] = states
-		}
-		states[e.key.Hex()] = e.prevalue
-	}
-}
+func (e *addLogChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
-func (e *watermark) revert(s *DBImpl) {}
+func (e *refundChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
-func (e *accountStatusChange) revert(s *DBImpl) {
-	accts := s.tempState.transientAccounts
-	if e.prev == nil {
-		delete(accts, e.account.Hex())
-	} else {
-		accts[e.account.Hex()] = e.prev
-	}
-}
+func (e *transientStorageChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
+
+// If the per-account transient map was already removed by a later revert,
+// there is nothing to delete.
+
+// A prior revert may have deleted the per-account map when it became empty.
+// Re-create it so we can restore a non-zero prevalue.
+
+func (e *watermark) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
+
+func (e *accountStatusChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }

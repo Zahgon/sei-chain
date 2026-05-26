@@ -1,9 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-	"time"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/crisis/types"
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
@@ -28,67 +25,40 @@ func NewKeeper(
 	paramSpace paramtypes.Subspace, invCheckPeriod uint, supplyKeeper types.SupplyKeeper,
 	feeCollectorName string,
 ) Keeper {
+	_ = "STUB: not implemented"
 
 	// set KeyTable if it has not already been set
-	if !paramSpace.HasKeyTable() {
-		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())
-	}
-
-	return Keeper{
-		routes:           make([]types.InvarRoute, 0),
-		paramSpace:       paramSpace,
-		invCheckPeriod:   invCheckPeriod,
-		supplyKeeper:     supplyKeeper,
-		feeCollectorName: feeCollectorName,
-	}
+	return *new(Keeper)
 }
 
 // RegisterRoute register the routes for each of the invariants
 func (k *Keeper) RegisterRoute(moduleName, route string, invar sdk.Invariant) {
-	invarRoute := types.NewInvarRoute(moduleName, route, invar)
-	k.routes = append(k.routes, invarRoute)
+	_ = "STUB: not implemented"
+	return
 }
 
 // Routes - return the keeper's invariant routes
 func (k Keeper) Routes() []types.InvarRoute {
-	return k.routes
+	_ = "STUB: not implemented"
+
+	// Invariants returns a copy of all registered Crisis keeper invariants.
+	return nil
 }
 
-// Invariants returns a copy of all registered Crisis keeper invariants.
-func (k Keeper) Invariants() []sdk.Invariant {
-	invars := make([]sdk.Invariant, len(k.routes))
-	for i, route := range k.routes {
-		invars[i] = route.Invar
-	}
-	return invars
-}
+func (k Keeper) Invariants() []sdk.Invariant { _ = "STUB: not implemented"; return nil }
 
 // AssertInvariants asserts all registered invariants. If any invariant fails,
 // the method panics.
-func (k Keeper) AssertInvariants(ctx sdk.Context) {
+func (k Keeper) AssertInvariants(ctx sdk.Context) { _ = "STUB: not implemented"; return }
 
-	start := time.Now()
-	invarRoutes := k.Routes()
-	n := len(invarRoutes)
-	for i, ir := range invarRoutes {
-		logger.Info("asserting crisis invariants", "inv", fmt.Sprint(i+1, "/", n), "name", ir.FullRoute())
-		if res, stop := ir.Invar(ctx); stop {
-			// TODO: Include app name as part of context to allow for this to be
-			// variable.
-			panic(fmt.Errorf("invariant broken: %s\n"+
-				"\tCRITICAL please submit the following transaction:\n"+
-				"\t\t tx crisis invariant-broken %s %s", res, ir.ModuleName, ir.Route))
-		}
-	}
-
-	diff := time.Since(start)
-	logger.Info("asserted all invariants", "duration", diff, "height", ctx.BlockHeight())
-}
+// TODO: Include app name as part of context to allow for this to be
+// variable.
 
 // InvCheckPeriod returns the invariant checks period.
-func (k Keeper) InvCheckPeriod() uint { return k.invCheckPeriod }
+func (k Keeper) InvCheckPeriod() uint { _ = "STUB: not implemented"; return 0 }
 
 // SendCoinsFromAccountToFeeCollector transfers amt to the fee collector account.
 func (k Keeper) SendCoinsFromAccountToFeeCollector(ctx sdk.Context, senderAddr sdk.AccAddress, amt sdk.Coins) error {
-	return k.supplyKeeper.SendCoinsFromAccountToModule(ctx, senderAddr, k.feeCollectorName, amt)
+	_ = "STUB: not implemented"
+	return nil
 }

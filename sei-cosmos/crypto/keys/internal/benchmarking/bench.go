@@ -1,7 +1,6 @@
 package benchmarking
 
 import (
-	"crypto/rand"
 	"io"
 	"testing"
 
@@ -17,40 +16,21 @@ import (
 // BenchmarkKeyGeneration benchmarks the given key generation algorithm using
 // a dummy reader.
 func BenchmarkKeyGeneration(b *testing.B, generateKey func(reader io.Reader) types.PrivKey) {
-	b.ReportAllocs()
-	for i := 0; i < b.N; i++ {
-		generateKey(rand.Reader)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // BenchmarkSigning benchmarks the given signing algorithm using
 // the provided privkey.
-func BenchmarkSigning(b *testing.B, priv types.PrivKey) {
-	message := []byte("Hello, world!")
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		_, err := priv.Sign(message)
-
-		if err != nil {
-			b.FailNow()
-		}
-	}
-}
+func BenchmarkSigning(b *testing.B, priv types.PrivKey) { _ = "STUB: not implemented"; return }
 
 // BenchmarkVerification benchmarks the given verification algorithm using
 // the provided privkey on a constant message.
 func BenchmarkVerification(b *testing.B, priv types.PrivKey) {
-	pub := priv.PubKey()
+	_ = "STUB: not implemented"
+
 	// use a short message, so this time doesn't get dominated by hashing.
-	message := []byte("Hello, world!")
-	signature, err := priv.Sign(message)
-	if err != nil {
-		b.Fatal(err)
-	}
-	b.ResetTimer()
-	for i := 0; i < b.N; i++ {
-		pub.VerifySignature(message, signature)
-	}
+	return
 }
 
 // Below is the aforementioned license.

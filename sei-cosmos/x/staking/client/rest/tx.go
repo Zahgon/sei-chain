@@ -1,32 +1,16 @@
 package rest
 
 import (
-	"bytes"
 	"net/http"
 
 	"github.com/gorilla/mux"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 )
 
-func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
-	r.HandleFunc(
-		"/staking/delegators/{delegatorAddr}/delegations",
-		newPostDelegationsHandlerFn(clientCtx),
-	).Methods("POST")
-	r.HandleFunc(
-		"/staking/delegators/{delegatorAddr}/unbonding_delegations",
-		newPostUnbondingDelegationsHandlerFn(clientCtx),
-	).Methods("POST")
-	r.HandleFunc(
-		"/staking/delegators/{delegatorAddr}/redelegations",
-		newPostRedelegationsHandlerFn(clientCtx),
-	).Methods("POST")
-}
+func registerTxHandlers(clientCtx client.Context, r *mux.Router) { _ = "STUB: not implemented"; return }
 
 type (
 	// DelegateRequest defines the properties of a delegation request's body.
@@ -56,94 +40,16 @@ type (
 )
 
 func newPostDelegationsHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req DelegateRequest
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		msg := types.NewMsgDelegate(req.DelegatorAddress, req.ValidatorAddress, req.Amount)
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		if !bytes.Equal(fromAddr, req.DelegatorAddress) {
-			rest.WriteErrorResponse(w, http.StatusUnauthorized, "must use own delegator address")
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 func newPostRedelegationsHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req RedelegateRequest
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		msg := types.NewMsgBeginRedelegate(req.DelegatorAddress, req.ValidatorSrcAddress, req.ValidatorDstAddress, req.Amount)
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		if !bytes.Equal(fromAddr, req.DelegatorAddress) {
-			rest.WriteErrorResponse(w, http.StatusUnauthorized, "must use own delegator address")
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 func newPostUnbondingDelegationsHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req UndelegateRequest
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		msg := types.NewMsgUndelegate(req.DelegatorAddress, req.ValidatorAddress, req.Amount)
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		if !bytes.Equal(fromAddr, req.DelegatorAddress) {
-			rest.WriteErrorResponse(w, http.StatusUnauthorized, "must use own delegator address")
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }

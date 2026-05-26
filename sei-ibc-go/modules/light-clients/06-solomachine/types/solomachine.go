@@ -2,11 +2,6 @@ package types
 
 import (
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-
-	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
 // Interface implementation checks.
@@ -17,34 +12,36 @@ type Data interface{}
 
 // UnpackInterfaces implements the UnpackInterfaceMessages.UnpackInterfaces method
 func (cs ClientState) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	if cs.ConsensusState == nil {
-		return sdkerrors.Wrap(clienttypes.ErrInvalidConsensus, "consensus state cannot be nil")
-	}
-
-	return cs.ConsensusState.UnpackInterfaces(unpacker)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnpackInterfaces implements the UnpackInterfaceMessages.UnpackInterfaces method
 func (cs ConsensusState) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(cs.PublicKey, new(cryptotypes.PubKey))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnpackInterfaces implements the UnpackInterfaceMessages.UnpackInterfaces method
 func (h Header) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(h.NewPublicKey, new(cryptotypes.PubKey))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnpackInterfaces implements the UnpackInterfaceMessages.UnpackInterfaces method
 func (hd HeaderData) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(hd.NewPubKey, new(cryptotypes.PubKey))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnpackInterfaces implements the UnpackInterfaceMessages.UnpackInterfaces method
 func (csd ClientStateData) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(csd.ClientState, new(exported.ClientState))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnpackInterfaces implements the UnpackInterfaceMessages.UnpackInterfaces method
 func (csd ConsensusStateData) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(csd.ConsensusState, new(exported.ConsensusState))
+	_ = "STUB: not implemented"
+	return nil
 }

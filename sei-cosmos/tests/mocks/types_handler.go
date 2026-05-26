@@ -7,8 +7,6 @@
 package mocks
 
 import (
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -26,26 +24,27 @@ type MockAnteDecoratorMockRecorder struct {
 
 // NewMockAnteDecorator creates a new mock instance.
 func NewMockAnteDecorator(ctrl *gomock.Controller) *MockAnteDecorator {
-	mock := &MockAnteDecorator{ctrl: ctrl}
-	mock.recorder = &MockAnteDecoratorMockRecorder{mock}
-	return mock
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockAnteDecorator) EXPECT() *MockAnteDecoratorMockRecorder {
-	return m.recorder
+	_ = "STUB: not implemented"
+
+	// AnteHandle mocks base method.
+	return nil
 }
 
-// AnteHandle mocks base method.
 func (m *MockAnteDecorator) AnteHandle(ctx types.Context, tx types.Tx, simulate bool, next types.AnteHandler) (types.Context, error) {
-	m.ctrl.T.Helper()
-	m.ctrl.Call(m, "AnteHandle", ctx, tx, simulate, next)
-	// NOTE: we need to edit a generated code to call the "next handler"
-	return next(ctx, tx, simulate)
+	_ = "STUB: not implemented"
+	return *new(types.Context), nil
 }
+
+// NOTE: we need to edit a generated code to call the "next handler"
 
 // AnteHandle indicates an expected call of AnteHandle.
 func (mr *MockAnteDecoratorMockRecorder) AnteHandle(ctx, tx, simulate, next interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AnteHandle", reflect.TypeOf((*MockAnteDecorator)(nil).AnteHandle), ctx, tx, simulate, next)
+	_ = "STUB: not implemented"
+	return nil
 }

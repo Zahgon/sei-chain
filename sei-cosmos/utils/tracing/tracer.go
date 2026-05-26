@@ -5,9 +5,6 @@ import (
 	"sync"
 	"sync/atomic"
 
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/exporters/jaeger"
-	"go.opentelemetry.io/otel/sdk/resource"
 	"go.opentelemetry.io/otel/sdk/trace"
 	otrace "go.opentelemetry.io/otel/trace"
 )
@@ -16,36 +13,24 @@ const DefaultTracingURL = "http://localhost:14268/api/traces"
 const FlagTracing = "tracing"
 
 func DefaultTracerProvider() (*trace.TracerProvider, error) {
-	return TracerProvider(DefaultTracingURL)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func TracerProvider(url string) (*trace.TracerProvider, error) {
+	_ = "STUB: not implemented"
 	// Create the Jaeger exporter
-	opts, err := GetTracerProviderOptions(url)
-	if err != nil {
-		return nil, err
-	}
-	tp := trace.NewTracerProvider(opts...)
-	return tp, nil
+	return nil, nil
 }
 
 func GetTracerProviderOptions(url string) ([]trace.TracerProviderOption, error) {
-	exp, err := jaeger.New(jaeger.WithCollectorEndpoint(jaeger.WithEndpoint(url)))
-	if err != nil {
-		return nil, err
-	}
-	return []trace.TracerProviderOption{
-		// Always be sure to batch in production.
-		trace.WithBatcher(exp),
-		// Record information about this application in a Resource.
-		trace.WithResource(resource.NewWithAttributes(
-			"https://opentelemetry.io/schemas/1.9.0",
-			attribute.Key("service.name").String("sei-chain"),
-			attribute.String("environment", "production"),
-			attribute.Int64("ID", 1),
-		)),
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Always be sure to batch in production.
+
+// Record information about this application in a Resource.
 
 type Info struct {
 	tracer         otrace.Tracer
@@ -54,34 +39,19 @@ type Info struct {
 }
 
 func NewTracingInfo(tr otrace.Tracer, tracingEnabled bool) *Info {
-	info := &Info{
-		tracer:         tr,
-		tracingEnabled: atomic.Bool{},
-	}
-	info.tracingEnabled.Store(tracingEnabled)
-	return info
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NoOpSpan is a no-op span which does nothing.
 var NoOpSpan = otrace.SpanFromContext(context.TODO())
 
 func (i *Info) Start(name string) (context.Context, otrace.Span) {
-	if !i.tracingEnabled.Load() {
-		return context.Background(), NoOpSpan
-	}
-	i.mtx.Lock()
-	defer i.mtx.Unlock()
-	return i.tracer.Start(context.Background(), name)
+	_ = "STUB: not implemented"
+	return *new(context.Context), *new(otrace.Span)
 }
 
 func (i *Info) StartWithContext(name string, ctx context.Context) (context.Context, otrace.Span) {
-	if !i.tracingEnabled.Load() {
-		return ctx, NoOpSpan
-	}
-	i.mtx.Lock()
-	defer i.mtx.Unlock()
-	if ctx == nil {
-		ctx = context.Background()
-	}
-	return i.tracer.Start(ctx, name)
+	_ = "STUB: not implemented"
+	return *new(context.Context), *new(otrace.Span)
 }

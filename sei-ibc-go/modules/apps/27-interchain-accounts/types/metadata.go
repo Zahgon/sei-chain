@@ -2,9 +2,6 @@ package types
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-
-	connectiontypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/03-connection/types"
 )
 
 const (
@@ -17,136 +14,43 @@ const (
 
 // NewMetadata creates and returns a new ICS27 Metadata instance
 func NewMetadata(version, controllerConnectionID, hostConnectionID, accAddress, encoding, txType string) Metadata {
-	return Metadata{
-		Version:                version,
-		ControllerConnectionId: controllerConnectionID,
-		HostConnectionId:       hostConnectionID,
-		Address:                accAddress,
-		Encoding:               encoding,
-		TxType:                 txType,
-	}
+	_ = "STUB: not implemented"
+	return *new(Metadata)
 }
 
 // IsPreviousMetadataEqual compares a metadata to a previous version string set in a channel struct.
 // It ensures all fields are equal except the Address string
 func IsPreviousMetadataEqual(previousVersion string, metadata Metadata) bool {
-	var previousMetadata Metadata
-	if err := ModuleCdc.UnmarshalAsJSON([]byte(previousVersion), &previousMetadata); err != nil {
-		return false
-	}
-
-	return (previousMetadata.Version == metadata.Version &&
-		previousMetadata.ControllerConnectionId == metadata.ControllerConnectionId &&
-		previousMetadata.HostConnectionId == metadata.HostConnectionId &&
-		previousMetadata.Encoding == metadata.Encoding &&
-		previousMetadata.TxType == metadata.TxType)
+	_ = "STUB: not implemented"
+	return false
 }
 
 // ValidateControllerMetadata performs validation of the provided ICS27 controller metadata parameters
 func ValidateControllerMetadata(ctx sdk.Context, channelKeeper ChannelKeeper, connectionHops []string, metadata Metadata) error {
-	if !isSupportedEncoding(metadata.Encoding) {
-		return sdkerrors.Wrapf(ErrInvalidCodec, "unsupported encoding format %s", metadata.Encoding)
-	}
-
-	if !isSupportedTxType(metadata.TxType) {
-		return sdkerrors.Wrapf(ErrUnknownDataType, "unsupported transaction type %s", metadata.TxType)
-	}
-
-	connection, err := channelKeeper.GetConnection(ctx, connectionHops[0])
-	if err != nil {
-		return err
-	}
-
-	if err := validateConnectionParams(metadata, connectionHops[0], connection.GetCounterparty().GetConnectionID()); err != nil {
-		return err
-	}
-
-	if metadata.Address != "" {
-		if err := ValidateAccountAddress(metadata.Address); err != nil {
-			return err
-		}
-	}
-
-	if metadata.Version != Version {
-		return sdkerrors.Wrapf(ErrInvalidVersion, "expected %s, got %s", Version, metadata.Version)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // ValidateHostMetadata performs validation of the provided ICS27 host metadata parameters
 func ValidateHostMetadata(ctx sdk.Context, channelKeeper ChannelKeeper, connectionHops []string, metadata Metadata) error {
-	if !isSupportedEncoding(metadata.Encoding) {
-		return sdkerrors.Wrapf(ErrInvalidCodec, "unsupported encoding format %s", metadata.Encoding)
-	}
-
-	if !isSupportedTxType(metadata.TxType) {
-		return sdkerrors.Wrapf(ErrUnknownDataType, "unsupported transaction type %s", metadata.TxType)
-	}
-
-	connection, err := channelKeeper.GetConnection(ctx, connectionHops[0])
-	if err != nil {
-		return err
-	}
-
-	if err := validateConnectionParams(metadata, connection.GetCounterparty().GetConnectionID(), connectionHops[0]); err != nil {
-		return err
-	}
-
-	if metadata.Address != "" {
-		if err := ValidateAccountAddress(metadata.Address); err != nil {
-			return err
-		}
-	}
-
-	if metadata.Version != Version {
-		return sdkerrors.Wrapf(ErrInvalidVersion, "expected %s, got %s", Version, metadata.Version)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // isSupportedEncoding returns true if the provided encoding is supported, otherwise false
-func isSupportedEncoding(encoding string) bool {
-	for _, enc := range getSupportedEncoding() {
-		if enc == encoding {
-			return true
-		}
-	}
-
-	return false
-}
+func isSupportedEncoding(encoding string) bool { _ = "STUB: not implemented"; return false }
 
 // getSupportedEncoding returns a string slice of supported encoding formats
-func getSupportedEncoding() []string {
-	return []string{EncodingProtobuf}
-}
+func getSupportedEncoding() []string { _ = "STUB: not implemented"; return nil }
 
 // isSupportedTxType returns true if the provided transaction type is supported, otherwise false
-func isSupportedTxType(txType string) bool {
-	for _, t := range getSupportedTxTypes() {
-		if t == txType {
-			return true
-		}
-	}
-
-	return false
-}
+func isSupportedTxType(txType string) bool { _ = "STUB: not implemented"; return false }
 
 // getSupportedTxTypes returns a string slice of supported transaction types
-func getSupportedTxTypes() []string {
-	return []string{TxTypeSDKMultiMsg}
-}
+func getSupportedTxTypes() []string { _ = "STUB: not implemented"; return nil }
 
 // validateConnectionParams compares the given the controller and host connection IDs to those set in the provided ICS27 Metadata
 func validateConnectionParams(metadata Metadata, controllerConnectionID, hostConnectionID string) error {
-	if metadata.ControllerConnectionId != controllerConnectionID {
-		return sdkerrors.Wrapf(connectiontypes.ErrInvalidConnection, "expected %s, got %s", controllerConnectionID, metadata.ControllerConnectionId)
-	}
-
-	if metadata.HostConnectionId != hostConnectionID {
-		return sdkerrors.Wrapf(connectiontypes.ErrInvalidConnection, "expected %s, got %s", hostConnectionID, metadata.HostConnectionId)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }

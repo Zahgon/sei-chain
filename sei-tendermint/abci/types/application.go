@@ -46,62 +46,70 @@ var _ Application = BaseApplication{}
 type BaseApplication struct{}
 
 func (BaseApplication) Info(_ context.Context, req *RequestInfo) (*ResponseInfo, error) {
-	return &ResponseInfo{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (BaseApplication) GetValidators() []ValidatorUpdate { return nil }
+
+func (BaseApplication) GetValidators() []ValidatorUpdate { _ = "STUB: not implemented"; return nil }
 
 func (BaseApplication) CheckTx(_ context.Context, req *RequestCheckTxV2) *ResponseCheckTxV2 {
-	return &ResponseCheckTxV2{ResponseCheckTx: &ResponseCheckTx{Code: CodeTypeOK}}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (BaseApplication) Commit(_ context.Context) (*ResponseCommit, error) {
-	return &ResponseCommit{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (BaseApplication) Query(_ context.Context, req *RequestQuery) (*ResponseQuery, error) {
-	return &ResponseQuery{Code: CodeTypeOK}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (BaseApplication) InitChain(_ context.Context, req *RequestInitChain) (*ResponseInitChain, error) {
-	return &ResponseInitChain{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (BaseApplication) ListSnapshots(_ context.Context, req *RequestListSnapshots) (*ResponseListSnapshots, error) {
-	return &ResponseListSnapshots{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (BaseApplication) OfferSnapshot(_ context.Context, req *RequestOfferSnapshot) (*ResponseOfferSnapshot, error) {
-	return &ResponseOfferSnapshot{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (BaseApplication) LoadSnapshotChunk(_ context.Context, _ *RequestLoadSnapshotChunk) (*ResponseLoadSnapshotChunk, error) {
-	return &ResponseLoadSnapshotChunk{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (BaseApplication) ApplySnapshotChunk(_ context.Context, req *RequestApplySnapshotChunk) (*ResponseApplySnapshotChunk, error) {
-	return &ResponseApplySnapshotChunk{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (BaseApplication) ProcessProposal(_ context.Context, req *RequestProcessProposal) (*ResponseProcessProposal, error) {
-	return &ResponseProcessProposal{Status: ResponseProcessProposal_ACCEPT}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (BaseApplication) GetTxPriorityHint(context.Context, *RequestGetTxPriorityHintV2) (*ResponseGetTxPriorityHint, error) {
-	return &ResponseGetTxPriorityHint{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (BaseApplication) EvmNonce(common.Address) uint64 {
-	return 0
-}
+func (BaseApplication) EvmNonce(common.Address) uint64 { _ = "STUB: not implemented"; return 0 }
 
 func (BaseApplication) EvmBalance(common.Address, []byte) *big.Int {
-	return big.NewInt(0)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (BaseApplication) FinalizeBlock(_ context.Context, req *RequestFinalizeBlock) (*ResponseFinalizeBlock, error) {
-	txs := make([]*ExecTxResult, len(req.Txs))
-	for i := range req.Txs {
-		txs[i] = &ExecTxResult{Code: CodeTypeOK}
-	}
-	return &ResponseFinalizeBlock{TxResults: txs}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

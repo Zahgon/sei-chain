@@ -18,22 +18,15 @@ package evmrpc
 
 import (
 	"compress/gzip"
-	"context"
-	"errors"
-	"fmt"
 	"io"
 	"net"
 	"net/http"
-	"sort"
 	"strconv"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/ethereum/go-ethereum/rpc"
-	"github.com/gorilla/websocket"
-	"github.com/rs/cors"
 )
 
 // HTTPConfig is the JSON-RPC/HTTP configuration.
@@ -99,330 +92,124 @@ const (
 	metricsPrinterInterval = 5 * time.Second
 )
 
-func NewHTTPServer(timeouts rpc.HTTPTimeouts) *HTTPServer {
-	h := &HTTPServer{timeouts: timeouts, handlerNames: make(map[string]string)}
-
-	h.httpHandler.Store((*rpcHandler)(nil))
-	h.wsHandler.Store((*rpcHandler)(nil))
-	return h
-}
+func NewHTTPServer(timeouts rpc.HTTPTimeouts) *HTTPServer { _ = "STUB: not implemented"; return nil }
 
 // SetListenAddr configures the listening address of the server.
 // The address can only be set while the server isn't running.
 func (h *HTTPServer) SetListenAddr(host string, port int) error {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
-	if h.listener != nil && (host != h.host || port != h.port) {
-		return fmt.Errorf("HTTP server already running on %s", h.endpoint)
-	}
-
-	h.host, h.port = host, port
-	h.endpoint = net.JoinHostPort(host, fmt.Sprintf("%d", port))
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // ListenAddr returns the listening address of the server.
-func (h *HTTPServer) ListenAddr() string {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
-	if h.listener != nil {
-		return h.listener.Addr().String()
-	}
-	return h.endpoint
-}
+func (h *HTTPServer) ListenAddr() string { _ = "STUB: not implemented"; return "" }
 
 // Start starts the HTTP server if it is enabled and not already running.
-func (h *HTTPServer) Start() error {
-	h.mu.Lock()
-	defer h.mu.Unlock()
+func (h *HTTPServer) Start() error { _ = "STUB: not implemented"; return nil }
 
-	if h.endpoint == "" || h.listener != nil {
-		return nil // already running or not configured
-	}
+// already running or not configured
 
-	// Initialize the server.
-	CheckTimeouts(&h.timeouts)
-	h.server = &http.Server{
-		Handler:           h,
-		ReadTimeout:       h.timeouts.ReadTimeout,
-		ReadHeaderTimeout: h.timeouts.ReadHeaderTimeout,
-		WriteTimeout:      h.timeouts.WriteTimeout,
-		IdleTimeout:       h.timeouts.IdleTimeout,
-	}
+// Initialize the server.
 
-	// Start the server.
-	listener, err := net.Listen("tcp", h.endpoint)
-	if err != nil {
-		// If the server fails to start, we need to clear out the RPC and WS
-		// configuration so they can be configured another time.
-		h.disableRPC()
-		h.disableWS()
-		return err
-	}
-	h.listener = listener
-	go func() {
-		if err := h.server.Serve(listener); !errors.Is(err, http.ErrServerClosed) {
-			logger.Error("server stopped erroneously", "err", err)
-		}
-	}()
+// Start the server.
 
-	if h.wsAllowed() {
-		url := fmt.Sprintf("ws://%v", listener.Addr())
-		if h.WsConfig.prefix != "" {
-			url += h.WsConfig.prefix
-		}
-		logger.Info("WebSocket enabled", "url", url)
-	}
-	// if server is websocket only, return after logging
-	if !h.rpcAllowed() {
-		return nil
-	}
-	// Log http endpoint.
-	logger.Info("HTTP server started",
-		"endpoint", listener.Addr(), "auth", (h.HTTPConfig.JwtSecret != nil),
-		"prefix", h.HTTPConfig.prefix,
-		"cors", strings.Join(h.HTTPConfig.CorsAllowedOrigins, ","),
-		"vhosts", strings.Join(h.HTTPConfig.Vhosts, ","),
-	)
+// If the server fails to start, we need to clear out the RPC and WS
+// configuration so they can be configured another time.
 
-	// Start metrics printer
-	// Prometheus metrics are always exported; stdout printing requires EVM_DEBUG_METRICS=true
-	StartMetricsPrinter(metricsPrinterInterval)
+// if server is websocket only, return after logging
 
-	// Log all handlers mounted on server.
-	paths := make([]string, len(h.handlerNames))
-	for path := range h.handlerNames {
-		paths = append(paths, path)
-	}
-	sort.Strings(paths)
-	logged := make(map[string]bool, len(paths))
-	for _, path := range paths {
-		name := h.handlerNames[path]
-		if !logged[name] {
-			logger.Info(name+" enabled", "url", "http://"+listener.Addr().String()+path)
-			logged[name] = true
-		}
-	}
-	return nil
-}
+// Log http endpoint.
+
+// Start metrics printer
+// Prometheus metrics are always exported; stdout printing requires EVM_DEBUG_METRICS=true
+
+// Log all handlers mounted on server.
 
 func (h *HTTPServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	_ = "STUB: not implemented"
 	// check if ws request and serve if ws enabled
-	ws := h.wsHandler.Load().(*rpcHandler)
-	if ws != nil && websocket.IsWebSocketUpgrade(r) {
-		if CheckPath(r, h.WsConfig.prefix) {
-			ws.ServeHTTP(w, r)
-		}
-		return
-	}
-
-	// if http-rpc is enabled, try to serve request
-	rpc := h.httpHandler.Load().(*rpcHandler)
-	if rpc != nil {
-		// First try to route in the mux.
-		// Requests to a path below root are handled by the mux,
-		// which has all the handlers registered via Node.RegisterHandler.
-		// These are made available when RPC is enabled.
-		muxHandler, pattern := h.mux.Handler(r)
-		if pattern != "" {
-			muxHandler.ServeHTTP(w, r)
-			return
-		}
-
-		if CheckPath(r, h.HTTPConfig.prefix) {
-			rpc.ServeHTTP(w, r)
-			return
-		}
-	}
-	w.WriteHeader(http.StatusNotFound)
+	return
 }
+
+// if http-rpc is enabled, try to serve request
+
+// First try to route in the mux.
+// Requests to a path below root are handled by the mux,
+// which has all the handlers registered via Node.RegisterHandler.
+// These are made available when RPC is enabled.
 
 // CheckPath checks whether a given request URL matches a given path prefix.
 func CheckPath(r *http.Request, path string) bool {
+	_ = "STUB: not implemented"
 	// if no prefix has been specified, request URL must be on root
-	if path == "" {
-		return r.URL.Path == "/"
-	}
-	// otherwise, check to make sure prefix matches
-	return len(r.URL.Path) >= len(path) && r.URL.Path[:len(path)] == path
+	return false
 }
+
+// otherwise, check to make sure prefix matches
 
 // Stop shuts down the HTTP server.
-func (h *HTTPServer) Stop() {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-	logger.Info("Stopping EVM HTTP Server")
-	h.doStop()
-	logger.Info("EVM HTTP Server stopped")
-}
+func (h *HTTPServer) Stop() { _ = "STUB: not implemented"; return }
 
-func (h *HTTPServer) doStop() {
-	if h.listener == nil {
-		return // not running
-	}
+func (h *HTTPServer) doStop() { _ = "STUB: not implemented"; return }
 
-	// Stop metrics printer
-	StopMetricsPrinter()
+// not running
 
-	// Shut down the server.
-	httpHandler := h.httpHandler.Load().(*rpcHandler)
-	wsHandler := h.wsHandler.Load().(*rpcHandler)
-	if httpHandler != nil {
-		h.httpHandler.Store((*rpcHandler)(nil))
-		httpHandler.server.Stop()
-	}
-	if wsHandler != nil {
-		h.wsHandler.Store((*rpcHandler)(nil))
-		wsHandler.server.Stop()
-	}
+// Stop metrics printer
 
-	ctx, cancel := context.WithTimeout(context.Background(), shutdownTimeout)
-	defer cancel()
-	err := h.server.Shutdown(ctx)
-	if err != nil && err == ctx.Err() {
-		logger.Error("HTTP server graceful shutdown timed out")
-		_ = h.server.Close()
-	}
+// Shut down the server.
 
-	_ = h.listener.Close()
-	logger.Info("HTTP server stopped", "endpoint", h.listener.Addr())
-
-	// Clear out everything to allow re-configuring it later.
-	h.host, h.port, h.endpoint = "", 0, ""
-	h.server, h.listener = nil, nil
-}
+// Clear out everything to allow re-configuring it later.
 
 // EnableRPC turns on JSON-RPC over HTTP on the server.
 func (h *HTTPServer) EnableRPC(apis []rpc.API, config HTTPConfig) error {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
-	if h.rpcAllowed() {
-		return fmt.Errorf("JSON-RPC over HTTP is already enabled")
-	}
-
-	// Create RPC server and handler.
-	srv := rpc.NewServer()
-	srv.SetBatchLimits(config.batchItemLimit, config.batchResponseSizeLimit)
-	logger.Info("Registering apis for evm rpc")
-	if err := RegisterApis(apis, config.Modules, srv); err != nil {
-		return err
-	}
-	logger.Info("Registering deny list for evm rpc", "deny-list", config.DenyList)
-	for _, method := range config.DenyList {
-		srv.RegisterDenyList(method)
-	}
-	h.HTTPConfig = config
-	base := NewHTTPHandlerStack(srv, config.CorsAllowedOrigins, config.Vhosts, config.JwtSecret)
-	h.httpHandler.Store(&rpcHandler{
-		Handler: wrapSeiLegacyHTTP(base, config.SeiLegacyAllowlist),
-		server:  srv,
-	})
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// Create RPC server and handler.
+
 // disableRPC stops the HTTP RPC handler. This is internal, the caller must hold h.mu.
-func (h *HTTPServer) disableRPC() bool {
-	handler := h.httpHandler.Load().(*rpcHandler)
-	if handler != nil {
-		h.httpHandler.Store((*rpcHandler)(nil))
-		handler.server.Stop()
-	}
-	return handler != nil
-}
+func (h *HTTPServer) disableRPC() bool { _ = "STUB: not implemented"; return false }
 
 // EnableWS turns on JSON-RPC over WebSocket on the server.
 func (h *HTTPServer) EnableWS(apis []rpc.API, config WsConfig) error {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
-	if h.wsAllowed() {
-		return fmt.Errorf("JSON-RPC over WebSocket is already enabled")
-	}
-	// Create RPC server and handler.
-	srv := rpc.NewServer()
-	srv.SetBatchLimits(config.batchItemLimit, config.batchResponseSizeLimit)
-	srv.SetReadLimits(config.readLimit)
-	logger.Info("Registering apis for evm websocket")
-	if err := RegisterApis(apis, config.Modules, srv); err != nil {
-		return err
-	}
-	h.WsConfig = config
-	h.wsHandler.Store(&rpcHandler{
-		Handler: NewWSHandlerStack(srv.WebsocketHandler(config.Origins), config.JwtSecret),
-		server:  srv,
-	})
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Create RPC server and handler.
 
 // stopWS disables JSON-RPC over WebSocket and also stops the server if it only serves WebSocket.
 //
 //lint:ignore U1000 lifecycle method retained for completeness
-func (h *HTTPServer) stopWS() {
-	h.mu.Lock()
-	defer h.mu.Unlock()
-
-	if h.disableWS() {
-		if !h.rpcAllowed() {
-			h.doStop()
-		}
-	}
-}
+func (h *HTTPServer) stopWS() { _ = "STUB: not implemented"; return }
 
 // disableWS disables the WebSocket handler. This is internal, the caller must hold h.mu.
-func (h *HTTPServer) disableWS() bool {
-	ws := h.wsHandler.Load().(*rpcHandler)
-	if ws != nil {
-		h.wsHandler.Store((*rpcHandler)(nil))
-		ws.server.Stop()
-	}
-	return ws != nil
-}
+func (h *HTTPServer) disableWS() bool { _ = "STUB: not implemented"; return false }
 
 // rpcAllowed returns true when JSON-RPC over HTTP is enabled.
-func (h *HTTPServer) rpcAllowed() bool {
-	return h.httpHandler.Load().(*rpcHandler) != nil
-}
+func (h *HTTPServer) rpcAllowed() bool { _ = "STUB: not implemented"; return false }
 
 // wsAllowed returns true when JSON-RPC over WebSocket is enabled.
-func (h *HTTPServer) wsAllowed() bool {
-	return h.wsHandler.Load().(*rpcHandler) != nil
-}
+func (h *HTTPServer) wsAllowed() bool { _ = "STUB: not implemented"; return false }
 
 // NewHTTPHandlerStack returns wrapped http-related handlers.
 func NewHTTPHandlerStack(srv http.Handler, cors []string, vhosts []string, JwtSecret []byte) http.Handler {
+	_ = "STUB: not implemented"
 	// Wrap the CORS-handler within a host-handler
-	handler := newCorsHandler(srv, cors)
-	handler = newVHostHandler(vhosts, handler)
-	if len(JwtSecret) != 0 {
-		handler = newJWTHandler(JwtSecret, handler)
-	}
-	return NewGzipHandler(handler)
+	return *new(http.Handler)
 }
 
 // NewWSHandlerStack returns a wrapped ws-related handler.
 func NewWSHandlerStack(srv http.Handler, JwtSecret []byte) http.Handler {
-	handler := srv
-	if len(JwtSecret) != 0 {
-		handler = newJWTHandler(JwtSecret, handler)
-	}
-	return NewWSConnectionHandler(handler)
+	_ = "STUB: not implemented"
+	return *new(http.Handler)
 }
 
 func newCorsHandler(srv http.Handler, allowedOrigins []string) http.Handler {
+	_ = "STUB: not implemented"
 	// disable CORS support if user has not specified a custom CORS configuration
-	if len(allowedOrigins) == 0 {
-		return srv
-	}
-	c := cors.New(cors.Options{
-		AllowedOrigins: allowedOrigins,
-		AllowedMethods: []string{http.MethodPost, http.MethodGet},
-		AllowedHeaders: []string{"*"},
-		MaxAge:         600,
-	})
-	return c.Handler(srv)
+	return *new(http.Handler)
 }
 
 // virtualHostHandler is a handler which validates the Host-header of incoming requests.
@@ -435,41 +222,22 @@ type virtualHostHandler struct {
 }
 
 func newVHostHandler(vhosts []string, next http.Handler) http.Handler {
-	vhostMap := make(map[string]struct{})
-	for _, allowedHost := range vhosts {
-		vhostMap[strings.ToLower(allowedHost)] = struct{}{}
-	}
-	return &virtualHostHandler{vhostMap, next}
+	_ = "STUB: not implemented"
+	return *new(http.Handler)
 }
 
 // ServeHTTP serves JSON-RPC requests over HTTP, implements http.Handler
 func (h *virtualHostHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	_ = "STUB: not implemented"
 	// if r.Host is not set, we can continue serving since a browser would set the Host header
-	if r.Host == "" {
-		h.next.ServeHTTP(w, r)
-		return
-	}
-	host, _, err := net.SplitHostPort(r.Host)
-	if err != nil {
-		// Either invalid (too many colons) or no port specified
-		host = r.Host
-	}
-	if ipAddr := net.ParseIP(host); ipAddr != nil {
-		// It's an IP address, we can serve that
-		h.next.ServeHTTP(w, r)
-		return
-	}
-	// Not an IP address, but a hostname. Need to validate
-	if _, exist := h.vhosts["*"]; exist {
-		h.next.ServeHTTP(w, r)
-		return
-	}
-	if _, exist := h.vhosts[host]; exist {
-		h.next.ServeHTTP(w, r)
-		return
-	}
-	http.Error(w, "invalid host specified", http.StatusForbidden)
+	return
 }
+
+// Either invalid (too many colons) or no port specified
+
+// It's an IP address, we can serve that
+
+// Not an IP address, but a hostname. Need to validate
 
 var gzPool = sync.Pool{
 	New: func() interface{} {
@@ -524,85 +292,42 @@ func (w *gzipResponseWriter) init() {
 }
 
 func (w *gzipResponseWriter) Header() http.Header {
-	return w.resp.Header()
+	_ = "STUB: not implemented"
+	return *new(http.Header)
 }
 
-func (w *gzipResponseWriter) WriteHeader(status int) {
-	w.init()
-	w.resp.WriteHeader(status)
-}
+func (w *gzipResponseWriter) WriteHeader(status int) { _ = "STUB: not implemented"; return }
 
 func (w *gzipResponseWriter) Write(b []byte) (int, error) {
-	w.init()
+	_ = "STUB: not implemented"
+	return 0,
 
-	if w.gz == nil {
 		// Compression is disabled.
-		return w.resp.Write(b)
-	}
-
-	n, err := w.gz.Write(b)
-	w.written += uint64(n) //nolint:gosec
-	if w.hasLength && w.written >= w.contentLength {
-		// The HTTP handler has finished writing the entire uncompressed response. Close
-		// the gzip stream to ensure the footer will be seen by the client in case the
-		// response is flushed after this call to write.
-		err = w.gz.Close()
-		gzPool.Put(w.gz)
-		w.gz = nil
-	}
-	return n, err
+		nil
 }
 
-func (w *gzipResponseWriter) Flush() {
-	if w.gz != nil {
-		_ = w.gz.Flush()
-	}
-	if f, ok := w.resp.(http.Flusher); ok {
-		f.Flush()
-	}
-}
+//nolint:gosec
 
-func (w *gzipResponseWriter) close() {
-	if w.gz == nil {
-		return
-	}
-	_ = w.gz.Close()
-	gzPool.Put(w.gz)
-	w.gz = nil
-}
+// The HTTP handler has finished writing the entire uncompressed response. Close
+// the gzip stream to ensure the footer will be seen by the client in case the
+// response is flushed after this call to write.
+
+func (w *gzipResponseWriter) Flush() { _ = "STUB: not implemented"; return }
+
+func (w *gzipResponseWriter) close() { _ = "STUB: not implemented"; return }
 
 func NewGzipHandler(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !strings.Contains(r.Header.Get("Accept-Encoding"), "gzip") {
-			next.ServeHTTP(w, r)
-			return
-		}
-
-		wrapper := &gzipResponseWriter{resp: w}
-		defer wrapper.close()
-
-		next.ServeHTTP(wrapper, r)
-	})
+	_ = "STUB: not implemented"
+	return *new(http.Handler)
 }
 
 // RegisterApis checks the given modules' availability, generates an allowlist based on the allowed modules,
 // and then registers all of the APIs exposed by the services.
 func RegisterApis(apis []rpc.API, modules []string, srv *rpc.Server) error {
-	if bad, available := checkModuleAvailability(modules, apis); len(bad) > 0 {
-		logger.Error("Unavailable modules in HTTP API list", "unavailable", bad, "available", available)
-	}
-	// Generate the allow list based on the allowed modules
-	allowList := make(map[string]bool)
-	for _, module := range modules {
-		allowList[module] = true
-	}
-	// Register all the APIs exposed by the services
-	for _, api := range apis {
-		if allowList[api.Namespace] || len(allowList) == 0 {
-			if err := srv.RegisterName(api.Namespace, api.Service); err != nil {
-				return err
-			}
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Generate the allow list based on the allowed modules
+
+// Register all the APIs exposed by the services

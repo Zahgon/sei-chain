@@ -1,9 +1,6 @@
 package types
 
 import (
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
@@ -17,112 +14,65 @@ func NewChannel(
 	state State, ordering Order, counterparty Counterparty,
 	hops []string, version string,
 ) Channel {
-	return Channel{
-		State:          state,
-		Ordering:       ordering,
-		Counterparty:   counterparty,
-		ConnectionHops: hops,
-		Version:        version,
-	}
+	_ = "STUB: not implemented"
+	return *new(Channel)
 }
 
 // GetState implements Channel interface.
-func (ch Channel) GetState() int32 {
-	return int32(ch.State)
-}
+func (ch Channel) GetState() int32 { _ = "STUB: not implemented"; return 0 }
 
 // GetOrdering implements Channel interface.
-func (ch Channel) GetOrdering() int32 {
-	return int32(ch.Ordering)
-}
+func (ch Channel) GetOrdering() int32 { _ = "STUB: not implemented"; return 0 }
 
 // GetCounterparty implements Channel interface.
 func (ch Channel) GetCounterparty() exported.CounterpartyChannelI {
-	return ch.Counterparty
+	_ = "STUB: not implemented"
+	return *
+
+	// GetConnectionHops implements Channel interface.
+	new(exported.CounterpartyChannelI)
 }
 
-// GetConnectionHops implements Channel interface.
-func (ch Channel) GetConnectionHops() []string {
-	return ch.ConnectionHops
-}
+func (ch Channel) GetConnectionHops() []string { _ = "STUB: not implemented"; return nil }
 
 // GetVersion implements Channel interface.
 func (ch Channel) GetVersion() string {
-	return ch.Version
+	_ = "STUB: not implemented"
+
+	// ValidateBasic performs a basic validation of the channel fields
+	return ""
 }
 
-// ValidateBasic performs a basic validation of the channel fields
-func (ch Channel) ValidateBasic() error {
-	if ch.State == UNINITIALIZED {
-		return ErrInvalidChannelState
-	}
-	if ch.Ordering != ORDERED && ch.Ordering != UNORDERED {
-		return sdkerrors.Wrap(ErrInvalidChannelOrdering, ch.Ordering.String())
-	}
-	if len(ch.ConnectionHops) != 1 {
-		return sdkerrors.Wrap(
-			ErrTooManyConnectionHops,
-			"current IBC version only supports one connection hop",
-		)
-	}
-	if err := host.ConnectionIdentifierValidator(ch.ConnectionHops[0]); err != nil {
-		return sdkerrors.Wrap(err, "invalid connection hop ID")
-	}
-	return ch.Counterparty.ValidateBasic()
-}
+func (ch Channel) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // NewCounterparty returns a new Counterparty instance
 func NewCounterparty(portID, channelID string) Counterparty {
-	return Counterparty{
-		PortId:    portID,
-		ChannelId: channelID,
-	}
+	_ = "STUB: not implemented"
+	return *new(Counterparty)
 }
 
 // GetPortID implements CounterpartyChannelI interface
 func (c Counterparty) GetPortID() string {
-	return c.PortId
+	_ = "STUB: not implemented"
+
+	// GetChannelID implements CounterpartyChannelI interface
+	return ""
 }
 
-// GetChannelID implements CounterpartyChannelI interface
 func (c Counterparty) GetChannelID() string {
-	return c.ChannelId
+	_ = "STUB: not implemented"
+
+	// ValidateBasic performs a basic validation check of the identifiers
+	return ""
 }
 
-// ValidateBasic performs a basic validation check of the identifiers
-func (c Counterparty) ValidateBasic() error {
-	if err := host.PortIdentifierValidator(c.PortId); err != nil {
-		return sdkerrors.Wrap(err, "invalid counterparty port ID")
-	}
-	if c.ChannelId != "" {
-		if err := host.ChannelIdentifierValidator(c.ChannelId); err != nil {
-			return sdkerrors.Wrap(err, "invalid counterparty channel ID")
-		}
-	}
-	return nil
-}
+func (c Counterparty) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // NewIdentifiedChannel creates a new IdentifiedChannel instance
 func NewIdentifiedChannel(portID, channelID string, ch Channel) IdentifiedChannel {
-	return IdentifiedChannel{
-		State:          ch.State,
-		Ordering:       ch.Ordering,
-		Counterparty:   ch.Counterparty,
-		ConnectionHops: ch.ConnectionHops,
-		Version:        ch.Version,
-		PortId:         portID,
-		ChannelId:      channelID,
-	}
+	_ = "STUB: not implemented"
+	return *new(IdentifiedChannel)
 }
 
 // ValidateBasic performs a basic validation of the identifiers and channel fields.
-func (ic IdentifiedChannel) ValidateBasic() error {
-	if err := host.ChannelIdentifierValidator(ic.ChannelId); err != nil {
-		return sdkerrors.Wrap(err, "invalid channel ID")
-	}
-	if err := host.PortIdentifierValidator(ic.PortId); err != nil {
-		return sdkerrors.Wrap(err, "invalid port ID")
-	}
-	channel := NewChannel(ic.State, ic.Ordering, ic.Counterparty, ic.ConnectionHops, ic.Version)
-	return channel.ValidateBasic()
-}
+func (ic IdentifiedChannel) ValidateBasic() error { _ = "STUB: not implemented"; return nil }

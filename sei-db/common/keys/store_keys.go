@@ -1,7 +1,5 @@
 package keys
 
-import "fmt"
-
 // Cosmos-SDK module store keys mounted on the memiavl backend in default
 // production deployments. Defined as raw string literals (rather than
 // re-exporting from x/* packages) to keep this package free of the heavy
@@ -71,28 +69,12 @@ func init() {
 }
 
 // IsMemIAVLStoreKey reports whether name is a member of MemIAVLStoreKeys.
-func IsMemIAVLStoreKey(name string) bool {
-	_, ok := memIAVLStoreKeySet[name]
-	return ok
-}
+func IsMemIAVLStoreKey(name string) bool { _ = "STUB: not implemented"; return false }
 
 // AllModulesExcept returns a list of modules excluding the specified modules.
 // Returns an error if an excluded module is not a part of MemIAVLStoreKeys.
 // The returned slice is safe to modify.
 func AllModulesExcept(modulesNotToInclude ...string) ([]string, error) {
-	exclude := make(map[string]bool, len(modulesNotToInclude))
-	for _, m := range modulesNotToInclude {
-		if !IsMemIAVLStoreKey(m) {
-			return nil, fmt.Errorf("module %q is not a member of MemIAVLStoreKeys", m)
-		}
-		exclude[m] = true
-	}
-
-	result := make([]string, 0, len(MemIAVLStoreKeys)-len(exclude))
-	for _, k := range MemIAVLStoreKeys {
-		if !exclude[k] {
-			result = append(result, k)
-		}
-	}
-	return result, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

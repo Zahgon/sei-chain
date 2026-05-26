@@ -6,9 +6,11 @@ import (
 )
 
 func (k Keeper) AfterEpochEnd(ctx sdk.Context, epoch types.Epoch) {
-	k.hooks.AfterEpochEnd(ctx, epoch)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) BeforeEpochStart(ctx sdk.Context, epoch types.Epoch) {
-	k.hooks.BeforeEpochStart(ctx, epoch)
+	_ = "STUB: not implemented"
+	return
 }

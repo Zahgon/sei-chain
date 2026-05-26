@@ -3,8 +3,6 @@ package privval
 import (
 	"context"
 	"time"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/service"
 )
 
 const (
@@ -18,19 +16,22 @@ type SignerServiceEndpointOption func(*SignerDialerEndpoint)
 // SignerDialerEndpointTimeoutReadWrite sets the read and write timeout for
 // connections from client processes.
 func SignerDialerEndpointTimeoutReadWrite(timeout time.Duration) SignerServiceEndpointOption {
-	return func(ss *SignerDialerEndpoint) { ss.timeoutReadWrite = timeout }
+	_ = "STUB: not implemented"
+	return *new(SignerServiceEndpointOption)
 }
 
 // SignerDialerEndpointConnRetries sets the amount of attempted retries to
 // acceptNewConnection.
 func SignerDialerEndpointConnRetries(retries int) SignerServiceEndpointOption {
-	return func(ss *SignerDialerEndpoint) { ss.maxConnRetries = retries }
+	_ = "STUB: not implemented"
+	return *new(SignerServiceEndpointOption)
 }
 
 // SignerDialerEndpointRetryWaitInterval sets the retry wait interval to a
 // custom value.
 func SignerDialerEndpointRetryWaitInterval(interval time.Duration) SignerServiceEndpointOption {
-	return func(ss *SignerDialerEndpoint) { ss.retryWait = interval }
+	_ = "STUB: not implemented"
+	return *new(SignerServiceEndpointOption)
 }
 
 // SignerDialerEndpoint dials using its dialer and responds to any signature
@@ -51,59 +52,19 @@ func NewSignerDialerEndpoint(
 	dialer SocketDialer,
 	options ...SignerServiceEndpointOption,
 ) *SignerDialerEndpoint {
-
-	sd := &SignerDialerEndpoint{
-		dialer:         dialer,
-		retryWait:      defaultRetryWaitMilliseconds * time.Millisecond,
-		maxConnRetries: defaultMaxDialRetries,
-	}
-
-	sd.BaseService = *service.NewBaseService("SignerDialerEndpoint", sd)
-	sd.timeoutReadWrite = defaultTimeoutReadWriteSeconds * time.Second
-
-	for _, optionFunc := range options {
-		optionFunc(sd)
-	}
-
-	return sd
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (sd *SignerDialerEndpoint) OnStart(context.Context) error { return nil }
-func (sd *SignerDialerEndpoint) OnStop()                       {}
+func (sd *SignerDialerEndpoint) OnStart(context.Context) error {
+	_ = "STUB: not implemented"
+	return nil
+}
+func (sd *SignerDialerEndpoint) OnStop() { _ = "STUB: not implemented"; return }
 
 func (sd *SignerDialerEndpoint) ensureConnection(ctx context.Context) error {
-	if sd.IsConnected() {
-		return nil
-	}
-
-	timer := time.NewTimer(0)
-	defer timer.Stop()
-	retries := 0
-	for retries < sd.maxConnRetries {
-		if err := ctx.Err(); err != nil {
-			return err
-		}
-		conn, err := sd.dialer()
-
-		if err != nil {
-			retries++
-			logger.Debug("SignerDialer: Reconnection failed", "retries", retries, "max", sd.maxConnRetries, "err", err)
-
-			// Wait between retries
-			timer.Reset(sd.retryWait)
-			select {
-			case <-ctx.Done():
-				return ctx.Err()
-			case <-timer.C:
-			}
-		} else {
-			sd.SetConnection(conn)
-			logger.Debug("SignerDialer: Connection Ready")
-			return nil
-		}
-	}
-
-	logger.Debug("SignerDialer: Max retries exceeded", "retries", retries, "max", sd.maxConnRetries)
-
-	return ErrNoConnection
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Wait between retries

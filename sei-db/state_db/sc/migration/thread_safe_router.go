@@ -1,7 +1,6 @@
 package migration
 
 import (
-	"fmt"
 	"sync"
 
 	ics23 "github.com/confio/ics23/go"
@@ -39,32 +38,26 @@ type threadSafeRouter struct {
 //
 // Returns an error if router is nil.
 func NewThreadSafeRouter(router Router) (Router, error) {
-	if router == nil {
-		return nil, fmt.Errorf("router must not be nil")
-	}
-	return &threadSafeRouter{inner: router}, nil
+	_ = "STUB: not implemented"
+	return *new(Router), nil
 }
 
 func (r *threadSafeRouter) Read(store string, key []byte) ([]byte, bool, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	return r.inner.Read(store, key)
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
 func (r *threadSafeRouter) ApplyChangeSets(changesets []*proto.NamedChangeSet) error {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	return r.inner.ApplyChangeSets(changesets)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (r *threadSafeRouter) Iterator(store string, start []byte, end []byte, ascending bool) (dbm.Iterator, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	return r.inner.Iterator(store, start, end, ascending)
+	_ = "STUB: not implemented"
+	return *new(dbm.Iterator), nil
 }
 
 func (r *threadSafeRouter) GetProof(store string, key []byte) (*ics23.CommitmentProof, error) {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	return r.inner.GetProof(store, key)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

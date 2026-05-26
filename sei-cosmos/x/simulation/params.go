@@ -2,15 +2,12 @@ package simulation
 
 import (
 	"encoding/json"
-	"fmt"
 	"math/rand"
 
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
-	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 )
 
 const (
@@ -50,41 +47,28 @@ type Params struct {
 	blockSizeTransitionMatrix simulation.TransitionMatrix
 }
 
-func (p Params) PastEvidenceFraction() float64 {
-	return p.pastEvidenceFraction
-}
+func (p Params) PastEvidenceFraction() float64 { _ = "STUB: not implemented"; return 0 }
 
-func (p Params) NumKeys() int {
-	return p.numKeys
-}
+func (p Params) NumKeys() int { _ = "STUB: not implemented"; return 0 }
 
-func (p Params) EvidenceFraction() float64 {
-	return p.evidenceFraction
-}
+func (p Params) EvidenceFraction() float64 { _ = "STUB: not implemented"; return 0 }
 
-func (p Params) InitialLivenessWeightings() []int {
-	return p.initialLivenessWeightings
-}
+func (p Params) InitialLivenessWeightings() []int { _ = "STUB: not implemented"; return nil }
 
 func (p Params) LivenessTransitionMatrix() simulation.TransitionMatrix {
-	return p.livenessTransitionMatrix
+	_ = "STUB: not implemented"
+	return *new(simulation.TransitionMatrix)
 }
 
 func (p Params) BlockSizeTransitionMatrix() simulation.TransitionMatrix {
-	return p.blockSizeTransitionMatrix
+	_ = "STUB: not implemented"
+	return *new(simulation.TransitionMatrix)
 }
 
 // RandomParams returns random simulation parameters
-func RandomParams(r *rand.Rand) Params {
-	return Params{
-		pastEvidenceFraction:      r.Float64(),
-		numKeys:                   simulation.RandIntBetween(r, 2, 2500), // number of accounts created for the simulation
-		evidenceFraction:          r.Float64(),
-		initialLivenessWeightings: []int{simulation.RandIntBetween(r, 1, 80), r.Intn(10), r.Intn(10)},
-		livenessTransitionMatrix:  defaultLivenessTransitionMatrix,
-		blockSizeTransitionMatrix: defaultBlockSizeTransitionMatrix,
-	}
-}
+func RandomParams(r *rand.Rand) Params { _ = "STUB: not implemented"; return *new(Params) }
+
+// number of accounts created for the simulation
 
 // Param change proposals
 
@@ -95,31 +79,25 @@ type ParamChange struct {
 	simValue simulation.SimValFn
 }
 
-func (spc ParamChange) Subspace() string {
-	return spc.subspace
-}
+func (spc ParamChange) Subspace() string { _ = "STUB: not implemented"; return "" }
 
-func (spc ParamChange) Key() string {
-	return spc.key
-}
+func (spc ParamChange) Key() string { _ = "STUB: not implemented"; return "" }
 
 func (spc ParamChange) SimValue() simulation.SimValFn {
-	return spc.simValue
+	_ = "STUB: not implemented"
+	return *
+
+	// NewSimParamChange creates a new ParamChange instance
+	new(simulation.SimValFn)
 }
 
-// NewSimParamChange creates a new ParamChange instance
 func NewSimParamChange(subspace, key string, simVal simulation.SimValFn) simulation.ParamChange {
-	return ParamChange{
-		subspace: subspace,
-		key:      key,
-		simValue: simVal,
-	}
+	_ = "STUB: not implemented"
+	return *new(simulation.ParamChange)
 }
 
 // ComposedKey creates a new composed key for the param change proposal
-func (spc ParamChange) ComposedKey() string {
-	return spc.Subspace() + "/" + spc.Key()
-}
+func (spc ParamChange) ComposedKey() string { _ = "STUB: not implemented"; return "" }
 
 // Proposal Contents
 
@@ -132,51 +110,23 @@ type WeightedProposalContent struct {
 }
 
 func NewWeightedProposalContent(appParamsKey string, defaultWeight int, contentSimulatorFn simulation.ContentSimulatorFn) simulation.WeightedProposalContent {
-	return &WeightedProposalContent{appParamsKey: appParamsKey, defaultWeight: defaultWeight, contentSimulatorFn: contentSimulatorFn}
+	_ = "STUB: not implemented"
+	return *new(simulation.WeightedProposalContent)
 }
 
-func (w WeightedProposalContent) AppParamsKey() string {
-	return w.appParamsKey
-}
+func (w WeightedProposalContent) AppParamsKey() string { _ = "STUB: not implemented"; return "" }
 
-func (w WeightedProposalContent) DefaultWeight() int {
-	return w.defaultWeight
-}
+func (w WeightedProposalContent) DefaultWeight() int { _ = "STUB: not implemented"; return 0 }
 
 func (w WeightedProposalContent) ContentSimulatorFn() simulation.ContentSimulatorFn {
-	return w.contentSimulatorFn
+	_ = "STUB: not implemented"
+	return *new(simulation.ContentSimulatorFn)
 }
 
 // Param change proposals
 
 // randomConsensusParams returns random simulation consensus parameters, it extracts the Evidence from the Staking genesis state.
 func randomConsensusParams(r *rand.Rand, appState json.RawMessage, cdc codec.JSONCodec) *tmproto.ConsensusParams {
-	var genesisState map[string]json.RawMessage
-	err := json.Unmarshal(appState, &genesisState)
-	if err != nil {
-		panic(err)
-	}
-
-	stakingGenesisState := stakingtypes.GetGenesisStateFromAppState(cdc, genesisState)
-	consensusParams := &tmproto.ConsensusParams{
-		Block: &tmproto.BlockParams{
-			MaxBytes: int64(simulation.RandIntBetween(r, 20000000, 30000000)),
-			MaxGas:   -1,
-		},
-		Validator: &tmproto.ValidatorParams{
-			PubKeyTypes: []string{types.ABCIPubKeyTypeEd25519},
-		},
-		Evidence: &tmproto.EvidenceParams{
-			MaxAgeNumBlocks: int64(stakingGenesisState.Params.UnbondingTime / AverageBlockTime),
-			MaxAgeDuration:  stakingGenesisState.Params.UnbondingTime,
-		},
-	}
-
-	bz, err := json.MarshalIndent(&consensusParams, "", " ")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("Selected randomly generated consensus parameters:\n%s\n", bz)
-
-	return consensusParams
+	_ = "STUB: not implemented"
+	return nil
 }

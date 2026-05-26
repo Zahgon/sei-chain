@@ -1,17 +1,11 @@
 package client
 
 import (
-	"bufio"
-	"encoding/json"
-	"fmt"
 	"io"
 	"net/url"
-	"os"
 
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/spf13/viper"
-
-	"gopkg.in/yaml.v2"
 
 	"github.com/gogo/protobuf/proto"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
@@ -68,321 +62,220 @@ type Context struct {
 
 // WithKeyring returns a copy of the context with an updated keyring.
 func (ctx Context) WithKeyring(k keyring.Keyring) Context {
-	ctx.Keyring = k
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithKeyringOptions returns a copy of the context with an updated keyring.
 func (ctx Context) WithKeyringOptions(opts ...keyring.Option) Context {
-	ctx.KeyringOptions = opts
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithInput returns a copy of the context with an updated input.
 func (ctx Context) WithInput(r io.Reader) Context {
+	_ = "STUB: not implemented"
 	// convert to a bufio.Reader to have a shared buffer between the keyring and the
 	// the Commands, ensuring a read from one advance the read pointer for the other.
 	// see https://github.com/cosmos/cosmos-sdk/issues/9566.
-	ctx.Input = bufio.NewReader(r)
-	return ctx
+	return *new(Context)
 }
 
 // Deprecated: WithJSONCodec returns a copy of the Context with an updated JSONCodec.
 func (ctx Context) WithJSONCodec(m codec.JSONCodec) Context {
-	ctx.JSONCodec = m
+	_ = "STUB: not implemented"
+
 	// since we are using ctx.Codec everywhere in the SDK, for backward compatibility
 	// we need to try to set it here as well.
-	if c, ok := m.(codec.Codec); ok {
-		ctx.Codec = c
-	}
-	return ctx
+	return *new(Context)
 }
 
 // WithCodec returns a copy of the Context with an updated Codec.
 func (ctx Context) WithCodec(m codec.Codec) Context {
-	ctx.JSONCodec = m
-	ctx.Codec = m
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithLegacyAmino returns a copy of the context with an updated LegacyAmino codec.
 // TODO: Deprecated (remove).
 func (ctx Context) WithLegacyAmino(cdc *codec.LegacyAmino) Context {
-	ctx.LegacyAmino = cdc
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithOutput returns a copy of the context with an updated output writer (e.g. stdout).
-func (ctx Context) WithOutput(w io.Writer) Context {
-	ctx.Output = w
-	return ctx
-}
+func (ctx Context) WithOutput(w io.Writer) Context { _ = "STUB: not implemented"; return *new(Context) }
 
 // WithFrom returns a copy of the context with an updated from address or name.
-func (ctx Context) WithFrom(from string) Context {
-	ctx.From = from
-	return ctx
-}
+func (ctx Context) WithFrom(from string) Context { _ = "STUB: not implemented"; return *new(Context) }
 
 // WithOutputFormat returns a copy of the context with an updated OutputFormat field.
 func (ctx Context) WithOutputFormat(format string) Context {
-	ctx.OutputFormat = format
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithNodeURI returns a copy of the context with an updated node URI.
 func (ctx Context) WithNodeURI(nodeURI string) Context {
-	ctx.NodeURI = nodeURI
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithHeight returns a copy of the context with an updated height.
 func (ctx Context) WithHeight(height int64) Context {
-	ctx.Height = height
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithClient returns a copy of the context with an updated RPC client
 // instance.
 func (ctx Context) WithClient(client Client) Context {
-	ctx.Client = utils.Some(client)
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithUseLedger returns a copy of the context with an updated UseLedger flag.
 func (ctx Context) WithUseLedger(useLedger bool) Context {
-	ctx.UseLedger = useLedger
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithChainID returns a copy of the context with an updated chain ID.
 func (ctx Context) WithChainID(chainID string) Context {
-	ctx.ChainID = chainID
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithHomeDir returns a copy of the Context with HomeDir set.
-func (ctx Context) WithHomeDir(dir string) Context {
-	if dir != "" {
-		ctx.HomeDir = dir
-	}
-	return ctx
-}
+func (ctx Context) WithHomeDir(dir string) Context { _ = "STUB: not implemented"; return *new(Context) }
 
 // WithKeyringDir returns a copy of the Context with KeyringDir set.
 func (ctx Context) WithKeyringDir(dir string) Context {
-	ctx.KeyringDir = dir
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithGenerateOnly returns a copy of the context with updated GenerateOnly value
 func (ctx Context) WithGenerateOnly(generateOnly bool) Context {
-	ctx.GenerateOnly = generateOnly
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithSimulation returns a copy of the context with updated Simulate value
 func (ctx Context) WithSimulation(simulate bool) Context {
-	ctx.Simulate = simulate
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithOffline returns a copy of the context with updated Offline value.
 func (ctx Context) WithOffline(offline bool) Context {
-	ctx.Offline = offline
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithFromName returns a copy of the context with an updated from account name.
 func (ctx Context) WithFromName(name string) Context {
-	ctx.FromName = name
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithFromAddress returns a copy of the context with an updated from account
 // address.
 func (ctx Context) WithFromAddress(addr sdk.AccAddress) Context {
-	ctx.FromAddress = addr
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithFeeGranterAddress returns a copy of the context with an updated fee granter account
 // address.
 func (ctx Context) WithFeeGranterAddress(addr sdk.AccAddress) Context {
-	ctx.FeeGranter = addr
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithBroadcastMode returns a copy of the context with an updated broadcast
 // mode.
 func (ctx Context) WithBroadcastMode(mode string) Context {
-	ctx.BroadcastMode = mode
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithSignModeStr returns a copy of the context with an updated SignMode
 // value.
 func (ctx Context) WithSignModeStr(signModeStr string) Context {
-	ctx.SignModeStr = signModeStr
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithSkipConfirmation returns a copy of the context with an updated SkipConfirm
 // value.
 func (ctx Context) WithSkipConfirmation(skip bool) Context {
-	ctx.SkipConfirm = skip
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithTxConfig returns the context with an updated TxConfig
 func (ctx Context) WithTxConfig(generator TxConfig) Context {
-	ctx.TxConfig = generator
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithAccountRetriever returns the context with an updated AccountRetriever
 func (ctx Context) WithAccountRetriever(retriever AccountRetriever) Context {
-	ctx.AccountRetriever = retriever
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithInterfaceRegistry returns the context with an updated InterfaceRegistry
 func (ctx Context) WithInterfaceRegistry(interfaceRegistry codectypes.InterfaceRegistry) Context {
-	ctx.InterfaceRegistry = interfaceRegistry
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // WithViper returns the context with Viper field. This Viper instance is used to read
 // client-side config from the config file.
 func (ctx Context) WithViper(prefix string) Context {
-	v := viper.New()
-	v.SetEnvPrefix(prefix)
-	v.AutomaticEnv()
-	ctx.Viper = v
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(Context)
 }
 
 // PrintString prints the raw string to ctx.Output if it's defined, otherwise to os.Stdout
-func (ctx Context) PrintString(str string) error {
-	return ctx.PrintBytes([]byte(str))
-}
+func (ctx Context) PrintString(str string) error { _ = "STUB: not implemented"; return nil }
 
 // PrintBytes prints the raw bytes to ctx.Output if it's defined, otherwise to os.Stdout.
 // NOTE: for printing a complex state object, you should use ctx.PrintOutput
-func (ctx Context) PrintBytes(o []byte) error {
-	writer := ctx.Output
-	if writer == nil {
-		writer = os.Stdout
-	}
-
-	_, err := writer.Write(o)
-	return err
-}
+func (ctx Context) PrintBytes(o []byte) error { _ = "STUB: not implemented"; return nil }
 
 // PrintProto outputs toPrint to the ctx.Output based on ctx.OutputFormat which is
 // either text or json. If text, toPrint will be YAML encoded. Otherwise, toPrint
 // will be JSON encoded using ctx.Codec. An error is returned upon failure.
 func (ctx Context) PrintProto(toPrint proto.Message) error {
+	_ = "STUB: not implemented"
 	// always serialize JSON initially because proto json can't be directly YAML encoded
-	out, err := ctx.Codec.MarshalAsJSON(toPrint)
-	if err != nil {
-		return err
-	}
-	return ctx.printOutput(out)
+	return nil
 }
 
 // PrintObjectLegacy is a variant of PrintProto that doesn't require a proto.Message type
 // and uses amino JSON encoding.
 // Deprecated: It will be removed in the near future!
-func (ctx Context) PrintObjectLegacy(toPrint any) error {
-	out, err := ctx.LegacyAmino.MarshalAsJSON(toPrint)
-	if err != nil {
-		return err
-	}
-	return ctx.printOutput(out)
-}
+func (ctx Context) PrintObjectLegacy(toPrint any) error { _ = "STUB: not implemented"; return nil }
 
-func (ctx Context) printOutput(out []byte) error {
-	if ctx.OutputFormat == "text" {
-		// handle text format by decoding and re-encoding JSON as YAML
-		var j any
+func (ctx Context) printOutput(out []byte) error { _ = "STUB: not implemented"; return nil }
 
-		err := json.Unmarshal(out, &j)
-		if err != nil {
-			return err
-		}
+// handle text format by decoding and re-encoding JSON as YAML
 
-		out, err = yaml.Marshal(j)
-		if err != nil {
-			return err
-		}
-	}
-
-	writer := ctx.Output
-	if writer == nil {
-		writer = os.Stdout
-	}
-
-	_, err := writer.Write(out)
-	if err != nil {
-		return err
-	}
-
-	if ctx.OutputFormat != "text" {
-		// append new-line for formats besides YAML
-		_, err = writer.Write([]byte("\n"))
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
+// append new-line for formats besides YAML
 
 // GetFromFields returns a from account address, account name and keyring type, given either an address or key name.
 // If clientCtx.Simulate is true the keystore is not accessed and a valid address must be provided
 // If clientCtx.GenerateOnly is true the keystore is only accessed if a key name is provided
 func GetFromFields(clientCtx Context, kr keyring.Keyring, from string) (sdk.AccAddress, string, keyring.KeyType, error) {
-	if from == "" {
-		return nil, "", 0, nil
-	}
-
-	addr, err := sdk.AccAddressFromBech32(from)
-	switch {
-	case clientCtx.Simulate:
-		if err != nil {
-			return nil, "", 0, fmt.Errorf("a valid bech32 address must be provided in simulation mode: %w", err)
-		}
-
-		return addr, "", 0, nil
-
-	case clientCtx.GenerateOnly:
-		if err == nil {
-			return addr, "", 0, nil
-		}
-	}
-
-	var info keyring.Info
-	if err == nil {
-		info, err = kr.KeyByAddress(addr)
-		if err != nil {
-			return nil, "", 0, err
-		}
-	} else {
-		info, err = kr.Key(from)
-		if err != nil {
-			return nil, "", 0, err
-		}
-	}
-
-	return info.GetAddress(), info.GetName(), info.GetType(), nil
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), "", *new(keyring.KeyType), nil
 }
 
 // NewKeyringFromBackend gets a Keyring object from a backend
 func NewKeyringFromBackend(ctx Context, backend string) (keyring.Keyring, error) {
-	if ctx.Simulate {
-		return keyring.New(sdk.KeyringServiceName(), keyring.BackendMemory, ctx.KeyringDir, ctx.Input, ctx.KeyringOptions...)
-	}
-
-	return keyring.New(sdk.KeyringServiceName(), backend, ctx.KeyringDir, ctx.Input, ctx.KeyringOptions...)
+	_ = "STUB: not implemented"
+	return *new(keyring.Keyring), nil
 }

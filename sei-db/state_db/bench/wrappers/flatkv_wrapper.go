@@ -1,7 +1,6 @@
 package wrappers
 
 import (
-	"github.com/sei-protocol/sei-chain/sei-db/common/keys"
 	"github.com/sei-protocol/sei-chain/sei-db/common/metrics"
 	"github.com/sei-protocol/sei-chain/sei-db/proto"
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/flatkv"
@@ -20,52 +19,31 @@ type flatKVWrapper struct {
 
 // NewFlatKVWrapper creates a new flatKVWrapper with a given flatkv store.
 func NewFlatKVWrapper(store flatkv.Store) DBWrapper {
-	return &flatKVWrapper{
-		base: store,
-	}
+	_ = "STUB: not implemented"
+	return *new(DBWrapper)
 }
 
 func (f *flatKVWrapper) ApplyChangeSets(entry *proto.ChangelogEntry) error {
-	err := f.base.ApplyChangeSets(entry.Changesets)
-	if err == nil {
-		f.hasPending = true
-	}
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (f *flatKVWrapper) Commit() (int64, error) {
-	version, err := f.base.Commit()
-	if err == nil {
-		f.hasPending = false
-	}
-	return version, err
-}
+func (f *flatKVWrapper) Commit() (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
-func (f *flatKVWrapper) LoadVersion(version int64) error {
-	_, err := f.base.LoadVersion(version, false)
-	return err
-}
+func (f *flatKVWrapper) LoadVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
-func (f *flatKVWrapper) Version() int64 {
-	if f.hasPending {
-		return f.base.Version() + 1
-	}
-	return f.base.Version()
-}
+func (f *flatKVWrapper) Version() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (f *flatKVWrapper) Importer(version int64) (types.Importer, error) {
-	return f.base.Importer(version)
+	_ = "STUB: not implemented"
+	return *new(types.Importer), nil
 }
 
-func (f *flatKVWrapper) Close() error {
-	return f.base.Close()
-}
+func (f *flatKVWrapper) Close() error { _ = "STUB: not implemented"; return nil }
 
 func (f *flatKVWrapper) Read(key []byte) (data []byte, found bool, err error) {
-	val, ok := f.base.Get(keys.EVMStoreKey, key)
-	return val, ok, nil
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
-func (f *flatKVWrapper) GetPhaseTimer() *metrics.PhaseTimer {
-	return f.base.GetPhaseTimer()
-}
+func (f *flatKVWrapper) GetPhaseTimer() *metrics.PhaseTimer { _ = "STUB: not implemented"; return nil }

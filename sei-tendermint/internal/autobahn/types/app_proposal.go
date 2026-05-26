@@ -22,31 +22,43 @@ type AppProposal struct {
 
 // NewAppProposal creates a new AppProposal.
 func NewAppProposal(globalNumber GlobalBlockNumber, roadIndex RoadIndex, appHash AppHash) *AppProposal {
-	return &AppProposal{globalNumber: globalNumber, roadIndex: roadIndex, appHash: appHash}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GlobalNumber .
-func (m *AppProposal) GlobalNumber() GlobalBlockNumber { return m.globalNumber }
+func (m *AppProposal) GlobalNumber() GlobalBlockNumber {
+	_ = "STUB: not implemented"
+	return *
 
-// RoadIndex returns the road index of the proposal.
-func (m *AppProposal) RoadIndex() RoadIndex { return m.roadIndex }
-
-// AppHash .
-func (m *AppProposal) AppHash() AppHash { return m.appHash }
-
-// Next is the next global block number to compute AppHash for.
-func (m *AppProposal) Next() RoadIndex {
-	return m.RoadIndex() + 1
+	// RoadIndex returns the road index of the proposal.
+	new(GlobalBlockNumber)
 }
 
-// Verify verifies that the AppProposal is consistent with the CommitQC.
+func (m *AppProposal) RoadIndex() RoadIndex {
+	_ = "STUB: not implemented"
+
+	// AppHash .
+	return *new(RoadIndex)
+}
+
+func (m *AppProposal) AppHash() AppHash {
+	_ = "STUB: not implemented"
+
+	// Next is the next global block number to compute AppHash for.
+	return *new(AppHash)
+}
+
+func (m *AppProposal) Next() RoadIndex {
+	_ = "STUB: not implemented"
+	return *
+
+	// Verify verifies that the AppProposal is consistent with the CommitQC.
+	new(RoadIndex)
+}
+
 func (m *AppProposal) Verify(c *Committee, qc *CommitQC) error {
-	if got, want := m.RoadIndex(), qc.Proposal().Index(); got != want {
-		return fmt.Errorf("roadIndex() = %v, want %v", got, want)
-	}
-	if got, want := m.GlobalNumber(), qc.GlobalRange(c); got < want.First || got >= want.Next {
-		return fmt.Errorf("globalNumber() = %v, want in range [%v,%v)", got, want.First, want.Next)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 

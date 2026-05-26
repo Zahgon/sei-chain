@@ -17,127 +17,130 @@ type multiStore struct {
 	kv map[sdk.StoreKey]kvStore
 }
 
-func (ms multiStore) RollbackToVersion(version int64) error {
-	panic("not implemented")
-}
+func (ms multiStore) RollbackToVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
 func (ms multiStore) CacheMultiStore() sdk.CacheMultiStore {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CacheMultiStore)
 }
 
 func (ms multiStore) CacheMultiStoreWithVersion(_ int64) (sdk.CacheMultiStore, error) {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CacheMultiStore), nil
 }
 
 func (ms multiStore) CacheMultiStoreForExport(version int64) (store.CacheMultiStore, error) {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(store.CacheMultiStore), nil
 }
 
 func (ms multiStore) CacheWrap(_ store.StoreKey) sdk.CacheWrap {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CacheWrap)
 }
 
 func (ms multiStore) CacheWrapWithTrace(_ store.StoreKey, _ io.Writer, _ sdk.TraceContext) sdk.CacheWrap {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CacheWrap)
 }
 
-func (ms multiStore) TracingEnabled() bool {
-	panic("not implemented")
-}
+func (ms multiStore) TracingEnabled() bool { _ = "STUB: not implemented"; return false }
 
 func (ms multiStore) SetTracingContext(tc sdk.TraceContext) sdk.MultiStore {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.MultiStore)
 }
 
 func (ms multiStore) SetTracer(w io.Writer) sdk.MultiStore {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.MultiStore)
 }
 
 func (ms multiStore) Commit(_ bool) sdk.CommitID {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CommitID)
 }
 
 func (ms multiStore) LastCommitID() sdk.CommitID {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CommitID)
 }
 
-func (ms multiStore) SetPruning(opts sdk.PruningOptions) {
-	panic("not implemented")
-}
+func (ms multiStore) SetPruning(opts sdk.PruningOptions) { _ = "STUB: not implemented"; return }
 
 func (ms multiStore) GetPruning() sdk.PruningOptions {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.PruningOptions)
 }
 
 func (ms multiStore) GetCommitKVStore(key sdk.StoreKey) sdk.CommitKVStore {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CommitKVStore)
 }
 
 func (ms multiStore) GetCommitStore(key sdk.StoreKey) sdk.CommitStore {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CommitStore)
 }
 
 func (ms multiStore) MountStoreWithDB(key sdk.StoreKey, typ sdk.StoreType, db dbm.DB) {
-	ms.kv[key] = kvStore{store: make(map[string][]byte)}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (ms multiStore) LoadLatestVersion() error {
-	return nil
-}
+func (ms multiStore) LoadLatestVersion() error { _ = "STUB: not implemented"; return nil }
 
 func (ms multiStore) LoadLatestVersionAndUpgrade(upgrades *store.StoreUpgrades) error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (ms multiStore) LoadVersionAndUpgrade(ver int64, upgrades *store.StoreUpgrades) error {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (ms multiStore) LoadVersion(ver int64) error {
-	panic("not implemented")
-}
+func (ms multiStore) LoadVersion(ver int64) error { _ = "STUB: not implemented"; return nil }
 
 func (ms multiStore) GetKVStore(key sdk.StoreKey) sdk.KVStore {
-	return ms.kv[key]
+	_ = "STUB: not implemented"
+	return *new(sdk.KVStore)
 }
 
 func (ms multiStore) GetStore(key sdk.StoreKey) sdk.Store {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.Store)
 }
 
-func (ms multiStore) GetEvents() []abci.Event {
-	panic("not implemented")
-}
+func (ms multiStore) GetEvents() []abci.Event { _ = "STUB: not implemented"; return nil }
 
-func (ms multiStore) ResetEvents() {
-	panic("not implemented")
-}
+func (ms multiStore) ResetEvents() { _ = "STUB: not implemented"; return }
 
 func (ms multiStore) GetStoreType() sdk.StoreType {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.StoreType)
 }
 
 func (ms multiStore) SetInterBlockCache(_ sdk.MultiStorePersistentCache) {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return
 }
 
-func (ms multiStore) SetInitialVersion(version int64) error {
-	panic("not implemented")
-}
+func (ms multiStore) SetInitialVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
 func (ms multiStore) Snapshot(height uint64, protoWriter protoio.Writer) error {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (ms multiStore) Restore(
 	height uint64, format uint32, protoReader protoio.Reader,
 ) (snapshottypes.SnapshotItem, error) {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(snapshottypes.SnapshotItem), nil
 }
 
-func (ms multiStore) GetWorkingHash() ([]byte, error) {
-	panic("not implemented")
-}
+func (ms multiStore) GetWorkingHash() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 var _ sdk.KVStore = kvStore{}
 
@@ -146,96 +149,85 @@ type kvStore struct {
 }
 
 func (kv kvStore) CacheWrap(_ store.StoreKey) sdk.CacheWrap {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CacheWrap)
 }
 
 func (kv kvStore) CacheWrapWithTrace(_ store.StoreKey, w io.Writer, tc sdk.TraceContext) sdk.CacheWrap {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.CacheWrap)
 }
 
 func (kv kvStore) GetStoreType() sdk.StoreType {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.StoreType)
 }
 
-func (kv kvStore) GetWorkingHash() ([]byte, error) {
-	panic("not implemented")
-}
+func (kv kvStore) GetWorkingHash() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (kv kvStore) Get(key []byte) []byte {
-	v, ok := kv.store[string(key)]
-	if !ok {
-		return nil
-	}
-	return v
-}
+func (kv kvStore) Get(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
-func (kv kvStore) Has(key []byte) bool {
-	_, ok := kv.store[string(key)]
-	return ok
-}
+func (kv kvStore) Has(key []byte) bool { _ = "STUB: not implemented"; return false }
 
-func (kv kvStore) Set(key, value []byte) {
-	store.AssertValidKey(key)
-	kv.store[string(key)] = value
-}
+func (kv kvStore) Set(key, value []byte) { _ = "STUB: not implemented"; return }
 
-func (kv kvStore) Delete(key []byte) {
-	delete(kv.store, string(key))
-}
+func (kv kvStore) Delete(key []byte) { _ = "STUB: not implemented"; return }
 
 func (kv kvStore) Prefix(prefix []byte) sdk.KVStore {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.KVStore)
 }
 
 func (kv kvStore) Gas(meter sdk.GasMeter, config sdk.GasConfig) sdk.KVStore {
-	panic("not implmeneted")
+	_ = "STUB: not implemented"
+	return *new(sdk.KVStore)
 }
 
 func (kv kvStore) Iterator(start, end []byte) sdk.Iterator {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.Iterator)
 }
 
 func (kv kvStore) ReverseIterator(start, end []byte) sdk.Iterator {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.Iterator)
 }
 
 func (kv kvStore) SubspaceIterator(prefix []byte) sdk.Iterator {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.Iterator)
 }
 
 func (kv kvStore) ReverseSubspaceIterator(prefix []byte) sdk.Iterator {
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	return *new(sdk.Iterator)
 }
 
-func (kv kvStore) VersionExists(version int64) bool {
-	panic("not implemented")
-}
+func (kv kvStore) VersionExists(version int64) bool { _ = "STUB: not implemented"; return false }
 
-func (kv kvStore) DeleteAll(start, end []byte) error {
-	panic("not implemented")
-}
+func (kv kvStore) DeleteAll(start, end []byte) error { _ = "STUB: not implemented"; return nil }
 
 func (kv kvStore) GetAllKeyStrsInRange(start, end []byte) []string {
-	panic("not implemented")
-}
-
-func NewCommitMultiStore() sdk.CommitMultiStore {
-	return multiStore{kv: make(map[sdk.StoreKey]kvStore)}
-}
-
-func (ms multiStore) Close() error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (ms multiStore) SetKVStores(handler func(key store.StoreKey, s sdk.KVStore) store.CacheWrap) store.MultiStore {
-	panic("not implemented")
+func NewCommitMultiStore() sdk.CommitMultiStore {
+	_ = "STUB: not implemented"
+	return *new(sdk.CommitMultiStore)
 }
 
-func (ms multiStore) StoreKeys() []sdk.StoreKey {
-	panic("not implemented")
+func (ms multiStore) Close() error { _ = "STUB: not implemented"; return nil }
+
+func (ms multiStore) SetKVStores(handler func(key store.StoreKey, s sdk.KVStore) store.CacheWrap) store.MultiStore {
+	_ = "STUB: not implemented"
+	return *new(store.MultiStore)
 }
+
+func (ms multiStore) StoreKeys() []sdk.StoreKey { _ = "STUB: not implemented"; return nil }
 
 func (ms multiStore) GetEarliestVersion() int64 {
-	//TODO implement me
-	panic("not implemented")
+	_ = "STUB: not implemented"
+	// TODO implement me
+	return 0
 }

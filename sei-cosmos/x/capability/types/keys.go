@@ -1,11 +1,5 @@
 package types
 
-import (
-	"fmt"
-
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-)
-
 const (
 	// ModuleName defines the module name
 	ModuleName = "capability"
@@ -32,30 +26,21 @@ var (
 
 // RevCapabilityKey returns a reverse lookup key for a given module and capability
 // name.
-func RevCapabilityKey(module, name string) []byte {
-	return []byte(fmt.Sprintf("%s/rev/%s", module, name))
-}
+func RevCapabilityKey(module, name string) []byte { _ = "STUB: not implemented"; return nil }
 
 // FwdCapabilityKey returns a forward lookup key for a given module and capability
 // reference.
 func FwdCapabilityKey(module string, cap *Capability) []byte {
+	_ = "STUB: not implemented"
 	// encode the key to a fixed length to avoid breaking consensus state machine
 	// it's a hacky backport of https://github.com/cosmos/cosmos-sdk/pull/11737
 	// the length 10 is picked so it's backward compatible on common architectures.
-	key := fmt.Sprintf("%#010p", cap)
-	if len(key) > 10 {
-		key = key[len(key)-10:]
-	}
-	return []byte(fmt.Sprintf("%s/fwd/0x%s", module, key))
+	return nil
 }
 
 // IndexToKey returns bytes to be used as a key for a given capability index.
-func IndexToKey(index uint64) []byte {
-	return sdk.Uint64ToBigEndian(index)
-}
+func IndexToKey(index uint64) []byte { _ = "STUB: not implemented"; return nil }
 
 // IndexFromKey returns an index from a call to IndexToKey for a given capability
 // index.
-func IndexFromKey(key []byte) uint64 {
-	return sdk.BigEndianToUint64(key)
-}
+func IndexFromKey(key []byte) uint64 { _ = "STUB: not implemented"; return 0 }

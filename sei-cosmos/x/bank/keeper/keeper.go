@@ -1,16 +1,9 @@
 package keeper
 
 import (
-	"fmt"
-	"sort"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/prefix"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/query"
-	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
-	vestexported "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/vesting/exported"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
@@ -80,31 +73,12 @@ type AddFn func(ctx sdk.Context, moduleName string, amounts sdk.Coins) error
 
 // GetPaginatedTotalSupply queries for the supply, ignoring 0 coins, with a given pagination
 func (k BaseKeeper) GetPaginatedTotalSupply(ctx sdk.Context, pagination *query.PageRequest) (sdk.Coins, *query.PageResponse, error) {
-	store := ctx.KVStore(k.storeKey)
-	supplyStore := prefix.NewStore(store, types.SupplyKey)
-
-	supply := sdk.NewCoins()
-
-	ptr := k.intPool.Get()
-	defer k.intPool.Put(ptr)
-
-	pageRes, err := query.Paginate(supplyStore, pagination, func(key, value []byte) error {
-		if err := ptr.Unmarshal(value); err != nil {
-			return fmt.Errorf("unable to convert amount string to Int %v", err)
-		}
-
-		// Deep copy ptr before storing: ptr is reused across iterations.
-		// `Add` omits the 0 coins addition to the `supply`.
-		supply = supply.Add(sdk.NewCoin(string(key), sdk.NewIntFromBigInt(ptr.BigInt())))
-		return nil
-	})
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	return supply, pageRes, nil
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins), nil, nil
 }
+
+// Deep copy ptr before storing: ptr is reused across iterations.
+// `Add` omits the 0 coins addition to the `supply`.
 
 // NewBaseKeeper returns a new BaseKeeper object with a given codec, dedicated
 // store key, an AccountKeeper implementation, and a parameter Subspace used to
@@ -119,20 +93,10 @@ func NewBaseKeeper(
 	paramSpace paramtypes.Subspace,
 	blockedAddrs map[string]bool,
 ) BaseKeeper {
+	_ = "STUB: not implemented"
 
 	// set KeyTable if it has not already been set
-	if !paramSpace.HasKeyTable() {
-		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())
-	}
-
-	return BaseKeeper{
-		BaseSendKeeper:         NewBaseSendKeeper(cdc, storeKey, ak, paramSpace, blockedAddrs),
-		ak:                     ak,
-		cdc:                    cdc,
-		storeKey:               storeKey,
-		paramSpace:             paramSpace,
-		mintCoinsRestrictionFn: func(ctx sdk.Context, coins sdk.Coins) error { return nil },
-	}
+	return *new(BaseKeeper)
 }
 
 func NewBaseKeeperWithDeferredCache(
@@ -143,21 +107,10 @@ func NewBaseKeeperWithDeferredCache(
 	blockedAddrs map[string]bool,
 	deferredCacheStoreKey sdk.StoreKey,
 ) BaseKeeper {
+	_ = "STUB: not implemented"
 
 	// set KeyTable if it has not already been set
-	if !paramSpace.HasKeyTable() {
-		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())
-	}
-
-	return BaseKeeper{
-		BaseSendKeeper:         NewBaseSendKeeper(cdc, storeKey, ak, paramSpace, blockedAddrs),
-		ak:                     ak,
-		deferredCache:          NewDeferredCache(cdc, deferredCacheStoreKey),
-		cdc:                    cdc,
-		storeKey:               storeKey,
-		paramSpace:             paramSpace,
-		mintCoinsRestrictionFn: func(ctx sdk.Context, coins sdk.Coins) error { return nil },
-	}
+	return *new(BaseKeeper)
 }
 
 // WithMintCoinsRestriction restricts the bank Keeper used within a specific module to
@@ -166,19 +119,8 @@ func NewBaseKeeperWithDeferredCache(
 //
 //	bankKeeper.WithMintCoinsRestriction(restriction1).WithMintCoinsRestriction(restriction2)
 func (k BaseKeeper) WithMintCoinsRestriction(check MintingRestrictionFn) BaseKeeper {
-	oldRestrictionFn := k.mintCoinsRestrictionFn
-	k.mintCoinsRestrictionFn = func(ctx sdk.Context, coins sdk.Coins) error {
-		err := check(ctx, coins)
-		if err != nil {
-			return err
-		}
-		err = oldRestrictionFn(ctx, coins)
-		if err != nil {
-			return err
-		}
-		return nil
-	}
-	return k
+	_ = "STUB: not implemented"
+	return *new(BaseKeeper)
 }
 
 // DelegateCoins performs delegation by deducting amt coins from an account with
@@ -187,47 +129,11 @@ func (k BaseKeeper) WithMintCoinsRestriction(check MintingRestrictionFn) BaseKee
 // address to a ModuleAccount address. If any of the delegation amounts are negative,
 // an error is returned.
 func (k BaseKeeper) DelegateCoins(ctx sdk.Context, delegatorAddr, moduleAccAddr sdk.AccAddress, amt sdk.Coins) error {
-	moduleAcc := k.ak.GetAccount(ctx, moduleAccAddr)
-	if moduleAcc == nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", moduleAccAddr)
-	}
-
-	if !amt.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, amt.String())
-	}
-
-	balances := sdk.NewCoins()
-
-	for _, coin := range amt {
-		balance := k.GetBalance(ctx, delegatorAddr, coin.GetDenom())
-		if balance.IsLT(coin) {
-			return sdkerrors.Wrapf(
-				sdkerrors.ErrInsufficientFunds, "failed to delegate; %s is smaller than %s", balance, amt,
-			)
-		}
-
-		balances = balances.Add(balance)
-		err := k.setBalance(ctx, delegatorAddr, balance.Sub(coin), true)
-		if err != nil {
-			return err
-		}
-	}
-
-	if err := k.trackDelegation(ctx, delegatorAddr, balances, amt); err != nil {
-		return sdkerrors.Wrap(err, "failed to track delegation")
-	}
-	// emit coin spent event
-	ctx.EventManager().EmitEvent(
-		types.NewCoinSpentEvent(delegatorAddr, amt),
-	)
-
-	err := k.AddCoins(ctx, moduleAccAddr, amt, true)
-	if err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// emit coin spent event
 
 // UndelegateCoins performs undelegation by crediting amt coins to an account with
 // address addr. For vesting accounts, undelegation amounts are tracked for both
@@ -235,122 +141,49 @@ func (k BaseKeeper) DelegateCoins(ctx sdk.Context, delegatorAddr, moduleAccAddr 
 // address to the delegator address. If any of the undelegation amounts are
 // negative, an error is returned.
 func (k BaseKeeper) UndelegateCoins(ctx sdk.Context, moduleAccAddr, delegatorAddr sdk.AccAddress, amt sdk.Coins) error {
-	moduleAcc := k.ak.GetAccount(ctx, moduleAccAddr)
-	if moduleAcc == nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", moduleAccAddr)
-	}
-
-	if !amt.IsValid() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, amt.String())
-	}
-
-	err := k.SubUnlockedCoins(ctx, moduleAccAddr, amt, true)
-	if err != nil {
-		return err
-	}
-
-	if err := k.trackUndelegation(ctx, delegatorAddr, amt); err != nil {
-		return sdkerrors.Wrap(err, "failed to track undelegation")
-	}
-
-	err = k.AddCoins(ctx, delegatorAddr, amt, true)
-	if err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // GetSupply retrieves the Supply from store
 func (k BaseKeeper) GetSupply(ctx sdk.Context, denom string) sdk.Coin {
-	store := ctx.KVStore(k.storeKey)
-	supplyStore := prefix.NewStore(store, types.SupplyKey)
-
-	bz := supplyStore.Get([]byte(denom))
-	if bz == nil {
-		return sdk.Coin{
-			Denom:  denom,
-			Amount: sdk.NewInt(0),
-		}
-	}
-
-	ptr := k.intPool.Get()
-	if err := ptr.Unmarshal(bz); err != nil {
-		k.intPool.Put(ptr)
-		panic(fmt.Errorf("unable to unmarshal supply value %v", err))
-	}
-	// Deep copy ptr before returning: BigInt() creates a new *big.Int.
-	amount := sdk.NewIntFromBigInt(ptr.BigInt())
-	k.intPool.Put(ptr)
-
-	return sdk.Coin{
-		Denom:  denom,
-		Amount: amount,
-	}
+	_ = "STUB: not implemented"
+	return *new(sdk.Coin)
 }
+
+// Deep copy ptr before returning: BigInt() creates a new *big.Int.
 
 // HasSupply checks if the supply coin exists in store.
 func (k BaseKeeper) HasSupply(ctx sdk.Context, denom string) bool {
-	store := ctx.KVStore(k.storeKey)
-	supplyStore := prefix.NewStore(store, types.SupplyKey)
-	return supplyStore.Has([]byte(denom))
+	_ = "STUB: not implemented"
+	return false
 }
 
 // GetDenomMetaData retrieves the denomination metadata. returns the metadata and true if the denom exists,
 // false otherwise.
 func (k BaseKeeper) GetDenomMetaData(ctx sdk.Context, denom string) (types.Metadata, bool) {
-	store := ctx.KVStore(k.storeKey)
-	store = prefix.NewStore(store, types.DenomMetadataKey(denom))
-
-	bz := store.Get([]byte(denom))
-	if bz == nil {
-		return types.Metadata{}, false
-	}
-
-	var metadata types.Metadata
-	k.cdc.MustUnmarshal(bz, &metadata)
-
-	return metadata, true
+	_ = "STUB: not implemented"
+	return *new(types.Metadata), false
 }
 
 // GetAllDenomMetaData retrieves all denominations metadata
 func (k BaseKeeper) GetAllDenomMetaData(ctx sdk.Context) []types.Metadata {
-	denomMetaData := make([]types.Metadata, 0)
-	k.IterateAllDenomMetaData(ctx, func(metadata types.Metadata) bool {
-		denomMetaData = append(denomMetaData, metadata)
-		return false
-	})
-
-	return denomMetaData
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // IterateAllDenomMetaData iterates over all the denominations metadata and
 // provides the metadata to a callback. If true is returned from the
 // callback, iteration is halted.
 func (k BaseKeeper) IterateAllDenomMetaData(ctx sdk.Context, cb func(types.Metadata) bool) {
-	store := ctx.KVStore(k.storeKey)
-	denomMetaDataStore := prefix.NewStore(store, types.DenomMetadataPrefix)
-
-	iterator := denomMetaDataStore.Iterator(nil, nil)
-	defer func() { _ = iterator.Close() }()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var metadata types.Metadata
-		k.cdc.MustUnmarshal(iterator.Value(), &metadata)
-
-		if cb(metadata) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // SetDenomMetaData sets the denominations metadata
 func (k BaseKeeper) SetDenomMetaData(ctx sdk.Context, denomMetaData types.Metadata) {
-	store := ctx.KVStore(k.storeKey)
-	denomMetaDataStore := prefix.NewStore(store, types.DenomMetadataKey(denomMetaData.Base))
-
-	m := k.cdc.MustMarshal(&denomMetaData)
-	denomMetaDataStore.Set([]byte(denomMetaData.Base), m)
+	_ = "STUB: not implemented"
+	return
 }
 
 // SendCoinsFromModuleToAccount transfers coins from a ModuleAccount to an AccAddress.
@@ -359,16 +192,8 @@ func (k BaseKeeper) SetDenomMetaData(ctx sdk.Context, denomMetaData types.Metada
 func (k BaseKeeper) SendCoinsFromModuleToAccount(
 	ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins,
 ) error {
-
-	senderAddr := k.ak.GetModuleAddress(senderModule)
-	if senderAddr == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", senderModule))
-	}
-
-	if k.BlockedAddr(recipientAddr) {
-		return sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "%s is not allowed to receive funds", recipientAddr)
-	}
-	return k.SendCoins(ctx, senderAddr, recipientAddr, amt)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SendCoinsFromModuleToModule transfers coins from a ModuleAccount to another.
@@ -376,24 +201,8 @@ func (k BaseKeeper) SendCoinsFromModuleToAccount(
 func (k BaseKeeper) SendCoinsFromModuleToModule(
 	ctx sdk.Context, senderModule, recipientModule string, amt sdk.Coins,
 ) error {
-
-	senderAddr := k.ak.GetModuleAddress(senderModule)
-	if senderAddr == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", senderModule))
-	}
-
-	recipientAcc := k.ak.GetModuleAccount(ctx, recipientModule)
-	if recipientAcc == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", recipientModule))
-	}
-
-	if amt.IsZero() {
-		return nil
-	}
-
-	logger.Debug("Sending coins from module to module", "sender", senderModule, "sender_address", senderAddr.String(), "recipient", recipientModule, "recipient_address", recipientAcc.GetAddress().String(), "amount", amt.String())
-
-	return k.SendCoins(ctx, senderAddr, recipientAcc.GetAddress(), amt)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SendCoinsFromAccountToModule transfers coins from an AccAddress to a ModuleAccount.
@@ -401,12 +210,8 @@ func (k BaseKeeper) SendCoinsFromModuleToModule(
 func (k BaseKeeper) SendCoinsFromAccountToModule(
 	ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins,
 ) error {
-	recipientAcc := k.ak.GetModuleAccount(ctx, recipientModule)
-	if recipientAcc == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", recipientModule))
-	}
-
-	return k.SendCoins(ctx, senderAddr, recipientAcc.GetAddress(), amt)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // DeferredSendCoinsFromAccountToModule transfers coins from an AccAddress to a ModuleAccount.
@@ -416,90 +221,50 @@ func (k BaseKeeper) SendCoinsFromAccountToModule(
 func (k BaseKeeper) DeferredSendCoinsFromAccountToModule(
 	ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amount sdk.Coins,
 ) error {
-	if k.deferredCache == nil {
-		panic("bank keeper created without deferred cache")
-	}
-	// Deducts Fees from the Sender Account
-	err := k.SubUnlockedCoins(ctx, senderAddr, amount, true)
-	if err != nil {
-		return err
-	}
-	// get recipient module address
-	moduleAcc := k.ak.GetModuleAccount(ctx, recipientModule)
-	if moduleAcc == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", recipientModule))
-	}
-	// get txIndex
-	txIndex := ctx.TxIndex()
-	if txIndex < 0 {
-		return fmt.Errorf("negative tx index: %d", txIndex)
-	}
-	err = k.deferredCache.UpsertBalances(ctx, moduleAcc.GetAddress(), uint64(txIndex), amount) //nolint:gosec // bounds checked above
-	if err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// Deducts Fees from the Sender Account
+
+// get recipient module address
+
+// get txIndex
+
+//nolint:gosec // bounds checked above
+
 // WriteDeferredDepositsToModuleAccounts Iterates on all the deferred deposits and deposit them into the store
 func (k BaseKeeper) WriteDeferredBalances(ctx sdk.Context) []abci.Event {
-	if k.deferredCache == nil {
-		panic("bank keeper created without deferred cache")
-	}
-	ctx = ctx.WithEventManager(sdk.NewEventManager())
-
-	// maps between bech32 stringified module account address and balance
-	moduleAddrBalanceMap := make(map[string]sdk.Coins)
-	// slice of modules to be sorted for consistent write order later
-	var moduleList []string
-
-	// iterate over deferred cache and accumulate totals per module
-	k.deferredCache.IterateDeferredBalances(ctx, func(moduleAddr sdk.AccAddress, amount sdk.Coin) bool {
-		currCoins, ok := moduleAddrBalanceMap[moduleAddr.String()]
-		if !ok {
-			// add to list of modules
-			moduleList = append(moduleList, moduleAddr.String())
-			// set the map value
-			moduleAddrBalanceMap[moduleAddr.String()] = sdk.NewCoins(amount)
-			return false
-		}
-		// add to currCoins
-		newCoins := currCoins.Add(amount)
-		// update map
-		moduleAddrBalanceMap[moduleAddr.String()] = newCoins
-		return false
-	})
-	// sort module list
-	sort.Strings(moduleList)
-
-	// iterate through module list and add the balance to module bank balances in sorted order
-	for _, moduleBech32Addr := range moduleList {
-		amount, ok := moduleAddrBalanceMap[moduleBech32Addr]
-		if !ok {
-			err := fmt.Errorf("failed to get module balance for writing deferred balances for address=%s", moduleBech32Addr)
-			logger.Error(err.Error())
-			panic(err)
-		}
-		err := k.AddCoins(ctx, sdk.MustAccAddressFromBech32(moduleBech32Addr), amount, true)
-		if err != nil {
-			logger.Error("Failed to add coin to module address", "coin", amount, "address", moduleBech32Addr, "err", err)
-			panic(err)
-		}
-	}
-
-	// clear deferred cache
-	k.deferredCache.Clear(ctx)
-	return ctx.EventManager().ABCIEvents()
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// maps between bech32 stringified module account address and balance
+
+// slice of modules to be sorted for consistent write order later
+
+// iterate over deferred cache and accumulate totals per module
+
+// add to list of modules
+
+// set the map value
+
+// add to currCoins
+
+// update map
+
+// sort module list
+
+// iterate through module list and add the balance to module bank balances in sorted order
+
+// clear deferred cache
 
 func (k BaseKeeper) IterateDeferredBalances(ctx sdk.Context, cb func(addr sdk.AccAddress, coin sdk.Coin) bool) {
-	if k.deferredCache == nil {
-		panic("bank keeper created without deferred cache")
-	}
-	// pass cb to deferred cache iterator
-	k.deferredCache.IterateDeferredBalances(ctx, cb)
+	_ = "STUB: not implemented"
+	return
 }
+
+// pass cb to deferred cache iterator
 
 // DelegateCoinsFromAccountToModule delegates coins and transfers them from a
 // delegator account to a module account. It will panic if the module account
@@ -507,17 +272,8 @@ func (k BaseKeeper) IterateDeferredBalances(ctx sdk.Context, cb func(addr sdk.Ac
 func (k BaseKeeper) DelegateCoinsFromAccountToModule(
 	ctx sdk.Context, senderAddr sdk.AccAddress, recipientModule string, amt sdk.Coins,
 ) error {
-
-	recipientAcc := k.ak.GetModuleAccount(ctx, recipientModule)
-	if recipientAcc == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", recipientModule))
-	}
-
-	if !recipientAcc.HasPermission(authtypes.Staking) {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "module account %s does not have permissions to receive delegated coins", recipientModule))
-	}
-
-	return k.DelegateCoins(ctx, senderAddr, recipientAcc.GetAddress(), amt)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UndelegateCoinsFromModuleToAccount undelegates the unbonding coins and transfers
@@ -526,205 +282,78 @@ func (k BaseKeeper) DelegateCoinsFromAccountToModule(
 func (k BaseKeeper) UndelegateCoinsFromModuleToAccount(
 	ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins,
 ) error {
-
-	acc := k.ak.GetModuleAccount(ctx, senderModule)
-	if acc == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", senderModule))
-	}
-
-	if !acc.HasPermission(authtypes.Staking) {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "module account %s does not have permissions to undelegate coins", senderModule))
-	}
-
-	return k.UndelegateCoins(ctx, acc.GetAddress(), recipientAddr, amt)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (k BaseKeeper) createCoins(ctx sdk.Context, moduleName string, amounts sdk.Coins, addFn AddFn) error {
-	err := k.mintCoinsRestrictionFn(ctx, amounts)
-	if err != nil {
-		logger.Error("Module attempted to mint coins it doesn't have permission for", "module", moduleName, "coins", amounts, "err", err)
-		return err
-	}
-	acc := k.ak.GetModuleAccount(ctx, moduleName)
-	if acc == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", moduleName))
-	}
-
-	if !acc.HasPermission(authtypes.Minter) {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "module account %s does not have permissions to mint tokens", moduleName))
-	}
-
-	err = addFn(ctx, moduleName, amounts)
-	if err != nil {
-		return err
-	}
-	for _, amount := range amounts {
-		supply := k.GetSupply(ctx, amount.GetDenom())
-		supply = supply.Add(amount)
-		k.SetSupply(ctx, supply)
-	}
-
-	logger.Info("minted coins from module account", "amount", amounts, "from", moduleName)
-
-	// emit mint event
-	ctx.EventManager().EmitEvent(
-		types.NewCoinMintEvent(acc.GetAddress(), amounts),
-	)
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// emit mint event
 
 // MintCoins creates new coins from thin air and adds it to the module account.
 // It will panic if the module account does not exist or is unauthorized.
 func (k BaseKeeper) MintCoins(ctx sdk.Context, moduleName string, amounts sdk.Coins) error {
-	addFn := func(ctx sdk.Context, moduleName string, amounts sdk.Coins) error {
-		acc := k.ak.GetModuleAccount(ctx, moduleName)
-		if acc == nil {
-			return fmt.Errorf("module account for %s not found", moduleName)
-		}
-		return k.AddCoins(ctx, acc.GetAddress(), amounts, true)
-	}
-
-	err := k.createCoins(ctx, moduleName, amounts, addFn)
-	if err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (k BaseKeeper) destroyCoins(ctx sdk.Context, moduleName string, amounts sdk.Coins, subFn SubFn) error {
-	acc := k.ak.GetModuleAccount(ctx, moduleName)
-	if acc == nil {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "module account %s does not exist", moduleName))
-	}
-
-	if !acc.HasPermission(authtypes.Burner) {
-		panic(sdkerrors.Wrapf(sdkerrors.ErrUnauthorized, "module account %s does not have permissions to burn tokens", moduleName))
-	}
-
-	err := subFn(ctx, moduleName, amounts)
-	if err != nil {
-		return err
-	}
-
-	for _, amount := range amounts {
-		supply := k.GetSupply(ctx, amount.GetDenom())
-		supply = supply.Sub(amount)
-		k.SetSupply(ctx, supply)
-	}
-
-	logger.Info("burned tokens from module account", "amount", amounts, "from", moduleName)
-
-	// emit burn event
-	ctx.EventManager().EmitEvent(
-		types.NewCoinBurnEvent(acc.GetAddress(), amounts),
-	)
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// emit burn event
 
 // BurnCoins burns coins deletes coins from the balance of the module account.
 // It will panic if the module account does not exist or is unauthorized.
 func (k BaseKeeper) BurnCoins(ctx sdk.Context, moduleName string, amounts sdk.Coins) error {
-	subFn := func(ctx sdk.Context, moduleName string, amounts sdk.Coins) error {
-		acc := k.ak.GetModuleAccount(ctx, moduleName)
-		return k.SubUnlockedCoins(ctx, acc.GetAddress(), amounts, true)
-	}
-
-	err := k.destroyCoins(ctx, moduleName, amounts, subFn)
-	if err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // SetSupply sets the supply for the given coin
-func (k BaseKeeper) SetSupply(ctx sdk.Context, coin sdk.Coin) {
-	intBytes, err := coin.Amount.Marshal()
-	if err != nil {
-		panic(fmt.Errorf("unable to marshal amount value %v", err))
-	}
+func (k BaseKeeper) SetSupply(ctx sdk.Context, coin sdk.Coin) { _ = "STUB: not implemented"; return }
 
-	store := ctx.KVStore(k.storeKey)
-	supplyStore := prefix.NewStore(store, types.SupplyKey)
-
-	// Bank invariants and IBC requires to remove zero coins.
-	if coin.IsZero() {
-		supplyStore.Delete([]byte(coin.GetDenom()))
-	} else {
-		supplyStore.Set([]byte(coin.GetDenom()), intBytes)
-	}
-}
+// Bank invariants and IBC requires to remove zero coins.
 
 // trackDelegation tracks the delegation of the given account if it is a vesting account
 func (k BaseKeeper) trackDelegation(ctx sdk.Context, addr sdk.AccAddress, balance, amt sdk.Coins) error {
-	acc := k.ak.GetAccount(ctx, addr)
-	if acc == nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "account %s does not exist", addr)
-	}
-
-	vacc, ok := acc.(vestexported.VestingAccount)
-	if ok {
-		// TODO: return error on account.TrackDelegation
-		vacc.TrackDelegation(ctx.BlockHeader().Time, balance, amt)
-		k.ak.SetAccount(ctx, acc)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// TODO: return error on account.TrackDelegation
 
 // trackUndelegation trakcs undelegation of the given account if it is a vesting account
 func (k BaseKeeper) trackUndelegation(ctx sdk.Context, addr sdk.AccAddress, amt sdk.Coins) error {
-	acc := k.ak.GetAccount(ctx, addr)
-	if acc == nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "account %s does not exist", addr)
-	}
-
-	vacc, ok := acc.(vestexported.VestingAccount)
-	if ok {
-		// TODO: return error on account.TrackUndelegation
-		vacc.TrackUndelegation(amt)
-		k.ak.SetAccount(ctx, acc)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// TODO: return error on account.TrackUndelegation
+
 func (k BaseKeeper) GetStoreKey() sdk.StoreKey {
-	return k.storeKey
+	_ = "STUB: not implemented"
+
+	// for testing
+	return *new(sdk.StoreKey)
 }
 
-// for testing
 func (k BaseKeeper) GetCdc() codec.BinaryCodec {
-	return k.cdc
+	_ = "STUB: not implemented"
+
+	// IterateTotalSupply iterates over the total supply calling the given cb (callback) function
+	// with the balance of each coin.
+	// The iteration stops if the callback returns true.
+	return *new(codec.BinaryCodec)
 }
 
-// IterateTotalSupply iterates over the total supply calling the given cb (callback) function
-// with the balance of each coin.
-// The iteration stops if the callback returns true.
 func (k BaseViewKeeper) IterateTotalSupply(ctx sdk.Context, cb func(sdk.Coin) bool) {
-	store := ctx.KVStore(k.storeKey)
-	supplyStore := prefix.NewStore(store, types.SupplyKey)
-
-	iterator := supplyStore.Iterator(nil, nil)
-	defer func() { _ = iterator.Close() }()
-
-	ptr := k.intPool.Get()
-	defer k.intPool.Put(ptr)
-
-	for ; iterator.Valid(); iterator.Next() {
-		if err := ptr.Unmarshal(iterator.Value()); err != nil {
-			panic(fmt.Errorf("unable to unmarshal supply value %v", err))
-		}
-
-		// Deep copy ptr: the pool entry is reused across iterations.
-		balance := sdk.Coin{
-			Denom:  string(iterator.Key()),
-			Amount: sdk.NewIntFromBigInt(ptr.BigInt()),
-		}
-
-		if cb(balance) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+// Deep copy ptr: the pool entry is reused across iterations.

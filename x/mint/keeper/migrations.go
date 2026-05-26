@@ -1,11 +1,7 @@
 package keeper
 
 import (
-	"fmt"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/x/mint/types"
 	"github.com/sei-protocol/seilog"
 )
 
@@ -17,72 +13,16 @@ type Migrator struct {
 }
 
 // NewMigrator returns a v3 Migrator.
-func NewMigrator(keeper Keeper) Migrator {
-	return Migrator{keeper: keeper}
-}
+func NewMigrator(keeper Keeper) Migrator { _ = "STUB: not implemented"; return *new(Migrator) }
 
-func (m Migrator) Migrate1to2(ctx sdk.Context) error {
-	defaultParams := types.DefaultParams()
-	m.keeper.paramSpace.SetParamSet(ctx, &defaultParams)
-	return nil
-}
+func (m Migrator) Migrate1to2(ctx sdk.Context) error { _ = "STUB: not implemented"; return nil }
 
-func (m Migrator) Migrate2to3(ctx sdk.Context) error {
-	store := ctx.KVStore(m.keeper.storeKey)
-	// Migrate Minter First
-	minterBytes := store.Get(types.MinterKey)
-	if minterBytes == nil {
-		panic("stored minter should not have been nil")
-	}
+func (m Migrator) Migrate2to3(ctx sdk.Context) error { _ = "STUB: not implemented"; return nil }
 
-	var v2Minter types.Version2Minter
-	m.keeper.cdc.MustUnmarshal(minterBytes, &v2Minter)
+// Migrate Minter First
 
-	v3Minter := types.Minter{
-		StartDate:           v2Minter.GetLastMintDate(),
-		EndDate:             v2Minter.GetLastMintDate(),
-		Denom:               sdk.DefaultBondDenom,
-		TotalMintAmount:     v2Minter.LastMintAmount.RoundInt().Uint64(),
-		RemainingMintAmount: 0,
-		LastMintDate:        v2Minter.GetLastMintDate(),
-		LastMintHeight:      uint64(v2Minter.GetLastMintHeight()), //nolint:gosec
-		LastMintAmount:      v2Minter.LastMintAmount.RoundInt().Uint64(),
-	}
-	logger.Info("Migrating minter from v2 to v3", "v2Minter", v2Minter, "v3Minter", v3Minter)
-	m.keeper.SetMinter(ctx, v3Minter)
+//nolint:gosec
 
-	// Migrate TokenReleaseSchedule
+// Migrate TokenReleaseSchedule
 
-	var v2TokenReleaseSchedules []types.Version2ScheduledTokenRelease
-	v2TokenReleaseSchedulesBytes := m.keeper.GetParamSpace().GetRaw(ctx, types.KeyTokenReleaseSchedule)
-	err := codec.NewLegacyAmino().UnmarshalAsJSON(v2TokenReleaseSchedulesBytes, &v2TokenReleaseSchedules)
-	if err != nil {
-		panic(fmt.Sprintf("Key not found or error: %s", err))
-	}
-
-	var v2MintDenom string
-	v2MintDenomBytes := m.keeper.GetParamSpace().GetRaw(ctx, types.KeyMintDenom)
-	err = codec.NewLegacyAmino().UnmarshalAsJSON(v2MintDenomBytes, &v2MintDenom)
-	if err != nil {
-		panic(fmt.Sprintf("Key not found or error: %s", err))
-	}
-	logger.Info("Migrating mint params from v2 to v3", "v2TokenReleaseSchedules", v2TokenReleaseSchedules, "v2MintDenom", v2MintDenom)
-
-	v3TokenReleaseSchedule := make([]types.ScheduledTokenRelease, 0, len(v2TokenReleaseSchedules))
-	for _, v2TokenReleaseSchedule := range v2TokenReleaseSchedules {
-		v3Schedule := types.ScheduledTokenRelease{
-			TokenReleaseAmount: uint64(v2TokenReleaseSchedule.GetTokenReleaseAmount()), //nolint:gosec
-			StartDate:          v2TokenReleaseSchedule.GetDate(),
-			EndDate:            v2TokenReleaseSchedule.GetDate(),
-		}
-		v3TokenReleaseSchedule = append(v3TokenReleaseSchedule, v3Schedule)
-	}
-	v3Params := types.Params{
-		MintDenom:            v2MintDenom,
-		TokenReleaseSchedule: v3TokenReleaseSchedule,
-	}
-	m.keeper.SetParams(ctx, v3Params)
-	logger.Info("Migrating mint module from v2 to v3", "v3Params", v3Params)
-
-	return nil
-}
+//nolint:gosec

@@ -17,9 +17,6 @@
 package version
 
 import (
-	"encoding/json"
-	"fmt"
-	"runtime"
 	"runtime/debug"
 )
 
@@ -36,20 +33,7 @@ var (
 	BuildTags = ""
 )
 
-func getSDKVersion() string {
-	deps, ok := debug.ReadBuildInfo()
-	if !ok {
-		return "unable to read deps"
-	}
-	var sdkVersion string
-	for _, dep := range deps.Deps {
-		if dep.Path == "github.com/sei-protocol/sei-chain/sei-cosmos" {
-			sdkVersion = dep.Version
-		}
-	}
-
-	return sdkVersion
-}
+func getSDKVersion() string { _ = "STUB: not implemented"; return "" }
 
 // Info defines the application version information.
 type Info struct {
@@ -63,53 +47,17 @@ type Info struct {
 	CosmosSdkVersion string     `json:"cosmos_sdk_version" yaml:"cosmos_sdk_version"`
 }
 
-func NewInfo() Info {
-	sdkVersion := getSDKVersion()
-	return Info{
-		Name:             Name,
-		AppName:          AppName,
-		Version:          Version,
-		GitCommit:        Commit,
-		BuildTags:        BuildTags,
-		GoVersion:        fmt.Sprintf("go version %s %s/%s", runtime.Version(), runtime.GOOS, runtime.GOARCH),
-		BuildDeps:        depsFromBuildInfo(),
-		CosmosSdkVersion: sdkVersion,
-	}
-}
+func NewInfo() Info { _ = "STUB: not implemented"; return *new(Info) }
 
-func (vi Info) String() string {
-	return fmt.Sprintf(`%s: %s
-git commit: %s
-build tags: %s
-%s`,
-		vi.Name, vi.Version, vi.GitCommit, vi.BuildTags, vi.GoVersion,
-	)
-}
+func (vi Info) String() string { _ = "STUB: not implemented"; return "" }
 
-func depsFromBuildInfo() (deps []buildDep) {
-	buildInfo, ok := debug.ReadBuildInfo()
-	if !ok {
-		return nil
-	}
-
-	for _, dep := range buildInfo.Deps {
-		deps = append(deps, buildDep{dep})
-	}
-
-	return
-}
+func depsFromBuildInfo() (deps []buildDep) { _ = "STUB: not implemented"; return nil }
 
 type buildDep struct {
 	*debug.Module
 }
 
-func (d buildDep) String() string {
-	if d.Replace != nil {
-		return fmt.Sprintf("%s@%s => %s@%s", d.Path, d.Version, d.Replace.Path, d.Replace.Version)
-	}
+func (d buildDep) String() string { _ = "STUB: not implemented"; return "" }
 
-	return fmt.Sprintf("%s@%s", d.Path, d.Version)
-}
-
-func (d buildDep) MarshalJSON() ([]byte, error)      { return json.Marshal(d.String()) }
-func (d buildDep) MarshalYAML() (interface{}, error) { return d.String(), nil }
+func (d buildDep) MarshalJSON() ([]byte, error)      { _ = "STUB: not implemented"; return nil, nil }
+func (d buildDep) MarshalYAML() (interface{}, error) { _ = "STUB: not implemented"; return nil, nil }

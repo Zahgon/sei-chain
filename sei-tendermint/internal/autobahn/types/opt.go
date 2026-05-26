@@ -6,62 +6,48 @@ import (
 
 // NextOpt defaults to 0.
 func NextOpt[I ~uint64, T interface{ Next() I }](mv utils.Option[T]) I {
-	if v, ok := mv.Get(); ok {
-		return v.Next()
-	}
-	return 0
+	_ = "STUB: not implemented"
+	return *new(I)
 }
 
 // ProposalOpt extracts optional proposal from optional value.
 func ProposalOpt[P any, T interface{ Proposal() P }](mv utils.Option[T]) utils.Option[P] {
-	if v, ok := mv.Get(); ok {
-		return utils.Some(v.Proposal())
-	}
-	return utils.None[P]()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NextIndexOpt defaults to 0.
 func NextIndexOpt[T interface{ Index() RoadIndex }](mv utils.Option[T]) RoadIndex {
-	if v, ok := mv.Get(); ok {
-		return v.Index() + 1
-	}
-	return 0
+	_ = "STUB: not implemented"
+	return *new(RoadIndex)
 }
 
 // NextViewOpt defaults to {0,0}.
 func NextViewOpt[T interface{ View() View }](mv utils.Option[T]) View {
-	if v, ok := mv.Get(); ok {
-		return v.View().Next()
-	}
-	return View{Index: 0, Number: 0}
+	_ = "STUB: not implemented"
+	return *new(View)
 }
 
 // LaneRangeOpt defaults to an empty initial range.
 func LaneRangeOpt[T interface {
 	LaneRange(lane LaneID) *LaneRange
 }](mv utils.Option[T], lane LaneID) *LaneRange {
-	if v, ok := mv.Get(); ok {
-		return v.LaneRange(lane)
-	}
-	return NewLaneRange(lane, 0, utils.None[*BlockHeader]())
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GlobalRangeOpt defaults to an empty initial range.
 func GlobalRangeOpt[T interface {
 	GlobalRange(c *Committee) GlobalRange
 }](mv utils.Option[T], c *Committee) GlobalRange {
-	if v, ok := mv.Get(); ok {
-		return v.GlobalRange(c)
-	}
-	return GlobalRange{First: c.FirstBlock(), Next: c.FirstBlock()}
+	_ = "STUB: not implemented"
+	return *new(GlobalRange)
 }
 
 // AppOpt defaults to None.
 func AppOpt[T interface {
 	App() utils.Option[*AppProposal]
 }](mv utils.Option[T]) utils.Option[*AppProposal] {
-	if v, ok := mv.Get(); ok {
-		return v.App()
-	}
-	return utils.None[*AppProposal]()
+	_ = "STUB: not implemented"
+	return nil
 }

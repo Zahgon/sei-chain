@@ -2,7 +2,6 @@ package types
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 )
 
@@ -20,218 +19,88 @@ var _ sdk.Msg = &MsgCreateDenom{}
 
 // NewMsgCreateDenom creates a msg to create a new denom
 func NewMsgCreateDenom(sender, subdenom string) *MsgCreateDenom {
-	return &MsgCreateDenom{
-		Sender:   sender,
-		Subdenom: subdenom,
-	}
-}
-
-func (m MsgCreateDenom) Route() string { return RouterKey }
-func (m MsgCreateDenom) Type() string  { return TypeMsgCreateDenom }
-func (m MsgCreateDenom) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(m.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
-
-	_, err = GetTokenDenom(m.Sender, m.Subdenom)
-	if err != nil {
-		return sdkerrors.Wrap(ErrInvalidDenom, err.Error())
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m MsgCreateDenom) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
+func (m MsgCreateDenom) Route() string        { _ = "STUB: not implemented"; return "" }
+func (m MsgCreateDenom) Type() string         { _ = "STUB: not implemented"; return "" }
+func (m MsgCreateDenom) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-func (m MsgCreateDenom) GetSigners() []sdk.AccAddress {
-	sender, _ := sdk.AccAddressFromBech32(m.Sender)
-	return []sdk.AccAddress{sender}
-}
+func (m MsgCreateDenom) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+func (m MsgCreateDenom) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgUpdateDenom{}
 
 // NewMsgUpdateDenom creates a msg to update denom
 func NewMsgUpdateDenom(sender, denom string, allowList *banktypes.AllowList) *MsgUpdateDenom {
-	return &MsgUpdateDenom{
-		Sender:    sender,
-		Denom:     denom,
-		AllowList: allowList,
-	}
-}
-
-func (m MsgUpdateDenom) Route() string { return RouterKey }
-func (m MsgUpdateDenom) Type() string  { return TypeMsgUpdateDenom }
-func (m MsgUpdateDenom) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(m.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
-
-	_, _, err = DeconstructDenom(m.Denom)
-	if err != nil {
-		return sdkerrors.Wrap(ErrInvalidDenom, err.Error())
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m MsgUpdateDenom) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
+func (m MsgUpdateDenom) Route() string        { _ = "STUB: not implemented"; return "" }
+func (m MsgUpdateDenom) Type() string         { _ = "STUB: not implemented"; return "" }
+func (m MsgUpdateDenom) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-func (m MsgUpdateDenom) GetSigners() []sdk.AccAddress {
-	sender, _ := sdk.AccAddressFromBech32(m.Sender)
-	return []sdk.AccAddress{sender}
-}
+func (m MsgUpdateDenom) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+func (m MsgUpdateDenom) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgMint{}
 
 // NewMsgMint creates a message to mint tokens
-func NewMsgMint(sender string, amount sdk.Coin) *MsgMint {
-	return &MsgMint{
-		Sender: sender,
-		Amount: amount,
-	}
-}
+func NewMsgMint(sender string, amount sdk.Coin) *MsgMint { _ = "STUB: not implemented"; return nil }
 
-func (m MsgMint) Route() string { return RouterKey }
-func (m MsgMint) Type() string  { return TypeMsgMint }
-func (m MsgMint) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(m.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
+func (m MsgMint) Route() string        { _ = "STUB: not implemented"; return "" }
+func (m MsgMint) Type() string         { _ = "STUB: not implemented"; return "" }
+func (m MsgMint) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-	if !m.Amount.IsValid() || m.Amount.Amount.Equal(sdk.ZeroInt()) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, m.Amount.String())
-	}
+func (m MsgMint) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
-
-func (m MsgMint) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
-
-func (m MsgMint) GetSigners() []sdk.AccAddress {
-	sender, _ := sdk.AccAddressFromBech32(m.Sender)
-	return []sdk.AccAddress{sender}
-}
+func (m MsgMint) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgBurn{}
 
 // NewMsgBurn creates a message to burn tokens
-func NewMsgBurn(sender string, amount sdk.Coin) *MsgBurn {
-	return &MsgBurn{
-		Sender: sender,
-		Amount: amount,
-	}
-}
+func NewMsgBurn(sender string, amount sdk.Coin) *MsgBurn { _ = "STUB: not implemented"; return nil }
 
-func (m MsgBurn) Route() string { return RouterKey }
-func (m MsgBurn) Type() string  { return TypeMsgBurn }
-func (m MsgBurn) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(m.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
+func (m MsgBurn) Route() string        { _ = "STUB: not implemented"; return "" }
+func (m MsgBurn) Type() string         { _ = "STUB: not implemented"; return "" }
+func (m MsgBurn) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-	if !m.Amount.IsValid() || m.Amount.Amount.Equal(sdk.ZeroInt()) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, m.Amount.String())
-	}
+func (m MsgBurn) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
-
-func (m MsgBurn) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
-
-func (m MsgBurn) GetSigners() []sdk.AccAddress {
-	sender, _ := sdk.AccAddressFromBech32(m.Sender)
-	return []sdk.AccAddress{sender}
-}
+func (m MsgBurn) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgChangeAdmin{}
 
 // NewMsgChangeAdmin creates a message to change admin for a denom
 func NewMsgChangeAdmin(sender, denom, newAdmin string) *MsgChangeAdmin {
-	return &MsgChangeAdmin{
-		Sender:   sender,
-		Denom:    denom,
-		NewAdmin: newAdmin,
-	}
-}
-
-func (m MsgChangeAdmin) Route() string { return RouterKey }
-func (m MsgChangeAdmin) Type() string  { return TypeMsgChangeAdmin }
-func (m MsgChangeAdmin) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(m.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
-
-	_, err = sdk.AccAddressFromBech32(m.NewAdmin)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid address (%s)", err)
-	}
-
-	_, _, err = DeconstructDenom(m.Denom)
-	if err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m MsgChangeAdmin) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
+func (m MsgChangeAdmin) Route() string        { _ = "STUB: not implemented"; return "" }
+func (m MsgChangeAdmin) Type() string         { _ = "STUB: not implemented"; return "" }
+func (m MsgChangeAdmin) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-func (m MsgChangeAdmin) GetSigners() []sdk.AccAddress {
-	sender, _ := sdk.AccAddressFromBech32(m.Sender)
-	return []sdk.AccAddress{sender}
-}
+func (m MsgChangeAdmin) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+func (m MsgChangeAdmin) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 var _ sdk.Msg = &MsgSetDenomMetadata{}
 
 // NewMsgChangeAdmin creates a message to burn tokens
 func NewMsgSetDenomMetadata(sender string, metadata banktypes.Metadata) *MsgSetDenomMetadata {
-	return &MsgSetDenomMetadata{
-		Sender:   sender,
-		Metadata: metadata,
-	}
-}
-
-func (m MsgSetDenomMetadata) Route() string { return RouterKey }
-func (m MsgSetDenomMetadata) Type() string  { return TypeMsgSetDenomMetadata }
-func (m MsgSetDenomMetadata) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(m.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
-
-	err = m.Metadata.Validate()
-	if err != nil {
-		return err
-	}
-
-	_, _, err = DeconstructDenom(m.Metadata.Base)
-	if err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m MsgSetDenomMetadata) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
+func (m MsgSetDenomMetadata) Route() string        { _ = "STUB: not implemented"; return "" }
+func (m MsgSetDenomMetadata) Type() string         { _ = "STUB: not implemented"; return "" }
+func (m MsgSetDenomMetadata) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-func (m MsgSetDenomMetadata) GetSigners() []sdk.AccAddress {
-	sender, _ := sdk.AccAddressFromBech32(m.Sender)
-	return []sdk.AccAddress{sender}
-}
+func (m MsgSetDenomMetadata) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+func (m MsgSetDenomMetadata) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }

@@ -13,14 +13,9 @@ type InvarRoute struct {
 
 // NewInvarRoute - create an InvarRoute object
 func NewInvarRoute(moduleName, route string, invar sdk.Invariant) InvarRoute {
-	return InvarRoute{
-		ModuleName: moduleName,
-		Route:      route,
-		Invar:      invar,
-	}
+	_ = "STUB: not implemented"
+	return *new(InvarRoute)
 }
 
 // get the full invariance route
-func (i InvarRoute) FullRoute() string {
-	return i.ModuleName + "/" + i.Route
-}
+func (i InvarRoute) FullRoute() string { _ = "STUB: not implemented"; return "" }

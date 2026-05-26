@@ -2,12 +2,7 @@ package segment
 
 import (
 	"bufio"
-	"encoding/binary"
-	"fmt"
 	"log/slog"
-	"os"
-	"path"
-	"strconv"
 
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/types"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
@@ -56,37 +51,11 @@ func createKeyFile(
 	segmentPath *SegmentPath,
 	swap bool,
 ) (*keyFile, error) {
-
-	keys := &keyFile{
-		logger:         logger,
-		index:          index,
-		segmentPath:    segmentPath,
-		segmentVersion: LatestSegmentVersion,
-		swap:           swap,
-	}
-
-	filePath := keys.path()
-
-	exists, _, err := util.ErrIfNotWritableFile(filePath)
-	if err != nil {
-		return nil, fmt.Errorf("can not write to file: %w", err)
-	}
-
-	if exists {
-		return nil, fmt.Errorf("key file %s already exists", filePath)
-	}
-
-	flags := os.O_RDWR | os.O_CREATE
-	file, err := os.OpenFile(filePath, flags, 0600) //nolint:gosec // path validated by segment manager
-	if err != nil {
-		return nil, fmt.Errorf("failed to open key file: %w", err)
-	}
-
-	writer := bufio.NewWriter(file)
-	keys.writer = writer
-
-	return keys, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // path validated by segment manager
 
 // loadKeyFile loads the key file from disk, looking in the given parent directories until it finds the file.
 // If the file is not found, it returns an error.
@@ -96,249 +65,82 @@ func loadKeyFile(
 	segmentPaths []*SegmentPath,
 	segmentVersion SegmentVersion,
 ) (*keyFile, error) {
-
-	keyFileName := fmt.Sprintf("%d%s", index, KeyFileExtension)
-	keysPath, err := lookForFile(segmentPaths, keyFileName)
-	if err != nil {
-		return nil, fmt.Errorf("failed to find key file: %w", err)
-	}
-	if keysPath == nil {
-		return nil, fmt.Errorf("failed to find key file %s", keyFileName)
-	}
-
-	keys := &keyFile{
-		logger:         logger,
-		index:          index,
-		segmentPath:    keysPath,
-		segmentVersion: segmentVersion,
-	}
-
-	filePath := keys.path()
-
-	exists, size, err := util.ErrIfNotWritableFile(filePath)
-	if err != nil {
-		return nil, fmt.Errorf("can not write to file: %w", err)
-	}
-
-	if exists {
-		keys.size = uint64(size) //nolint:gosec // file size is non-negative
-	}
-
-	if !exists {
-		return nil, fmt.Errorf("key file %s does not exist", filePath)
-	}
-
-	return keys, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // file size is non-negative
 
 // Size returns the size of the key file in bytes.
 func (k *keyFile) Size() uint64 {
-	return k.size
+	_ = "STUB: not implemented"
+
+	// name returns the name of the key file.
+	return 0
 }
 
-// name returns the name of the key file.
-func (k *keyFile) name() string {
-	extension := KeyFileExtension
-	if k.swap {
-		extension = KeyFileSwapExtension
-	}
-
-	return fmt.Sprintf("%d%s", k.index, extension)
-}
+func (k *keyFile) name() string { _ = "STUB: not implemented"; return "" }
 
 // path returns the full path to the key file.
-func (k *keyFile) path() string {
-	return path.Join(k.segmentPath.SegmentDirectory(), k.name())
-}
+func (k *keyFile) path() string { _ = "STUB: not implemented"; return "" }
 
 // atomicSwap atomically replaces the key file, replacing the old one.
-func (k *keyFile) atomicSwap(sync bool) error {
-	if !k.swap {
-		return fmt.Errorf("key file is not a swap file")
-	}
-
-	swapPath := k.path()
-	k.swap = false
-	newPath := k.path()
-
-	err := util.AtomicRename(swapPath, newPath, sync)
-	if err != nil {
-		return fmt.Errorf("failed to atomically swap key file %s with %s: %w", swapPath, newPath, err)
-	}
-
-	return nil
-}
+func (k *keyFile) atomicSwap(sync bool) error { _ = "STUB: not implemented"; return nil }
 
 // write writes a key to the key file.
-func (k *keyFile) write(scopedKey *types.ScopedKey) error {
-	if k.writer == nil {
-		return fmt.Errorf("key file is sealed")
-	}
+func (k *keyFile) write(scopedKey *types.ScopedKey) error { _ = "STUB: not implemented"; return nil }
 
-	// Write the length of the key.
-	err := binary.Write(k.writer, binary.BigEndian, uint32(len(scopedKey.Key))) //nolint:gosec // key length fits uint32
-	if err != nil {
-		return fmt.Errorf("failed to write key length to key file: %w", err)
-	}
+// Write the length of the key.
+//nolint:gosec // key length fits uint32
 
-	// Write the key itself.
-	_, err = k.writer.Write(scopedKey.Key)
-	if err != nil {
-		return fmt.Errorf("failed to write key to key file: %w", err)
-	}
+// Write the key itself.
 
-	// Write the serialized address (which includes the shard ID and value size).
-	_, err = k.writer.Write(scopedKey.Address.Serialize())
-	if err != nil {
-		return fmt.Errorf("failed to write address to key file: %w", err)
-	}
+// Write the serialized address (which includes the shard ID and value size).
 
-	k.size += uint64( //nolint:gosec // sizes are non-negative
-		4 /* uint32 size of key */ +
-			len(scopedKey.Key) +
-			types.AddressSerializedSize)
-
-	return nil
-}
+//nolint:gosec // sizes are non-negative
+/* uint32 size of key */
 
 // getKeyFileIndex returns the index of the key file from the file name. Key file names have the form "X.keys",
 // where X is the segment index.
-func getKeyFileIndex(fileName string) (uint32, error) {
-	baseName := path.Base(fileName)
-	indexString := baseName[:len(baseName)-len(KeyFileExtension)]
-	index, err := strconv.Atoi(indexString)
-	if err != nil {
-		return 0, fmt.Errorf("failed to parse index from file name %s: %w", fileName, err)
-	}
+func getKeyFileIndex(fileName string) (uint32, error) { _ = "STUB: not implemented"; return 0, nil }
 
-	return uint32(index), nil //nolint:gosec // segment index fits uint32
-}
+//nolint:gosec // segment index fits uint32
 
 // flush flushes the key file to disk.
-func (k *keyFile) flush() error {
-	if k.writer == nil {
-		return fmt.Errorf("key file is sealed")
-	}
-
-	return k.writer.Flush()
-}
+func (k *keyFile) flush() error { _ = "STUB: not implemented"; return nil }
 
 // seal seals the key file, preventing further writes.
-func (k *keyFile) seal() error {
-	if k.writer == nil {
-		return fmt.Errorf("key file is already sealed")
-	}
-
-	err := k.flush()
-	if err != nil {
-		return fmt.Errorf("failed to flush key file: %w", err)
-	}
-	k.writer = nil
-
-	return nil
-}
+func (k *keyFile) seal() error { _ = "STUB: not implemented"; return nil }
 
 // readKeys reads all keys from the key file. This method returns an error if the key file is not sealed.
 // If there are keys that were only partially written (i.e. keys being written when the process crashed), then
 // those keys may not be returned. If a key is returned, it is guaranteed to be "whole" (i.e. a partial key will
 // never be returned).
 func (k *keyFile) readKeys() ([]*types.ScopedKey, error) {
-	if !k.isSealed() {
-		return nil, fmt.Errorf("key file is not sealed")
-	}
-
-	file, err := os.Open(k.path())
-	if err != nil {
-		return nil, fmt.Errorf("failed to open key file: %w", err)
-	}
-	defer func() {
-		err = file.Close()
-		if err != nil {
-			k.logger.Error("failed to close key file", "error", err)
-		}
-	}()
-
-	// Key files are small as long as key length is sane. Safe to read the whole file into memory.
-	keyBytes, err := os.ReadFile(k.path())
-	if err != nil {
-		return nil, fmt.Errorf("failed to read key file: %w", err)
-	}
-	keys := make([]*types.ScopedKey, 0)
-
-	index := 0
-	for {
-		// We need at least 4 bytes to read the length of the key.
-		if index+4 > len(keyBytes) { //nolint:staticcheck // QF1006
-			// There are fewer than 4 bytes left in the file.
-			break
-		}
-		keyLength := int(binary.BigEndian.Uint32(keyBytes[index : index+4]))
-		index += 4
-
-		// We need to read the key, as well as the serialized address (which embeds the shard ID and value size).
-		if index+keyLength+types.AddressSerializedSize > len(keyBytes) {
-			// There are insufficient bytes left in the file to read the key and address.
-			break
-		}
-
-		key := keyBytes[index : index+keyLength]
-		index += keyLength
-
-		address, err := types.DeserializeAddress(keyBytes[index : index+types.AddressSerializedSize])
-		if err != nil {
-			return nil, fmt.Errorf("failed to deserialize address: %w", err)
-		}
-		index += types.AddressSerializedSize
-
-		keys = append(keys, &types.ScopedKey{
-			Key:     key,
-			Address: address,
-		})
-	}
-
-	if index != len(keyBytes) {
-		// This can happen if there is a crash while we are writing to the key file.
-		// Recoverable, but best to note the event in the logs.
-		k.logger.Warn("key file has partial bytes",
-			"path", k.path(),
-			"bytes", len(keyBytes)-index,
-		)
-	}
-
-	return keys, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Key files are small as long as key length is sane. Safe to read the whole file into memory.
+
+// We need at least 4 bytes to read the length of the key.
+//nolint:staticcheck // QF1006
+// There are fewer than 4 bytes left in the file.
+
+// We need to read the key, as well as the serialized address (which embeds the shard ID and value size).
+
+// There are insufficient bytes left in the file to read the key and address.
+
+// This can happen if there is a crash while we are writing to the key file.
+// Recoverable, but best to note the event in the logs.
 
 // snapshot creates a hard link to the file in the snapshot directory, and a soft link to the hard linked file in the
 // soft link directory. Requires that the file is sealed and that snapshotting is enabled.
-func (k *keyFile) snapshot() error {
-	if !k.isSealed() {
-		return fmt.Errorf("file %s is not sealed, cannot take Snapshot", k.path())
-	}
-
-	err := k.segmentPath.Snapshot(k.name())
-	if err != nil {
-		return fmt.Errorf("failed to create Snapshot: %w", err)
-	}
-
-	return nil
-}
+func (k *keyFile) snapshot() error { _ = "STUB: not implemented"; return nil }
 
 // delete deletes the key file. If this key_file is a snapshot file (i.e. it is backed by a symlink), this method will
 // also delete the file pointed to by the symlink.
-func (k *keyFile) delete() error {
-	if !k.isSealed() {
-		return fmt.Errorf("key file %s is not sealed, cannot delete", k.path())
-	}
-
-	err := util.DeepDelete(k.path())
-	if err != nil {
-		return fmt.Errorf("failed to delete key file %s: %w", k.path(), err)
-	}
-
-	return nil
-}
+func (k *keyFile) delete() error { _ = "STUB: not implemented"; return nil }
 
 // isSealed returns true if the key file is sealed, and false otherwise.
-func (k *keyFile) isSealed() bool {
-	return k.writer == nil
-}
+func (k *keyFile) isSealed() bool { _ = "STUB: not implemented"; return false }

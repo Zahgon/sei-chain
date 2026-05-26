@@ -1,13 +1,8 @@
 package tempfile
 
 import (
-	"fmt"
-	"io"
 	"os"
-	"path/filepath"
-	"strconv"
 	"sync"
-	"time"
 )
 
 const (
@@ -34,6 +29,7 @@ var (
 )
 
 func writeFileRandReseed() uint64 {
+	_ = "STUB: not implemented"
 	// Scale the PID, to minimize the chance that two processes seeded at similar times
 	// don't get the same seed. Note that PID typically ranges in [0, 2**15), but can be
 	// up to 2**22 under certain configurations. We left bit-shift the PID by 20, so that
@@ -41,89 +37,47 @@ func writeFileRandReseed() uint64 {
 	// The important thing here is that now for a seed conflict, they would both have to be on
 	// the correct nanosecond offset, and second-based offset, which is much less likely than
 	// just a conflict with the correct nanosecond offset.
-	return uint64(time.Now().UnixNano() + int64(os.Getpid())<<20) //nolint:gosec // PID shifted left 20 fits in int64; final sum reinterpreted as uint64 for seed
+	return 0
 }
+
+//nolint:gosec // PID shifted left 20 fits in int64; final sum reinterpreted as uint64 for seed
 
 // Use a fast thread safe LCG for atomic write file names.
 // Returns a string corresponding to a 64 bit int.
 // If it was a negative int, the leading number is a 0.
-func randWriteFileSuffix() string {
-	atomicWriteFileRandMu.Lock()
-	r := atomicWriteFileRand
-	if r == 0 {
-		r = writeFileRandReseed()
-	}
+func randWriteFileSuffix() string { _ = "STUB: not implemented"; return "" }
 
-	// Update randomness according to lcg
-	r = r*lcgA + lcgC
+// Update randomness according to lcg
 
-	atomicWriteFileRand = r
-	atomicWriteFileRandMu.Unlock()
-	// Can have a negative name, replace this in the following
-	suffix := strconv.Itoa(int(r)) //nolint:gosec // intentional reinterpretation of random bits; negative values handled below
-	if suffix[0] == '-' {
-		// Replace first "-" with "0". This is purely for UI clarity,
-		// as otherwise there would be two `-` in a row.
-		suffix = "0" + suffix[1:]
-	}
-	return suffix
-}
+// Can have a negative name, replace this in the following
+//nolint:gosec // intentional reinterpretation of random bits; negative values handled below
+
+// Replace first "-" with "0". This is purely for UI clarity,
+// as otherwise there would be two `-` in a row.
 
 // WriteFileAtomic creates a temporary file with data and provided perm and
 // swaps it atomically with filename if successful.
 func WriteFileAtomic(filename string, data []byte, perm os.FileMode) (err error) {
+	_ = "STUB: not implemented"
 	// This implementation is inspired by the golang stdlibs method of creating
 	// tempfiles. Notable differences are that we use different flags, a 64 bit LCG
 	// and handle negatives differently.
 	// The core reason we can't use Golang's TempFile is that we must write
 	// to the file synchronously, as we need this to persist to disk.
 	// We also open it in write-only mode, to avoid concerns that arise with read.
-	var (
-		dir = filepath.Dir(filename)
-		f   *os.File
-	)
-
-	nconflict := 0
-	// Limit the number of attempts to create a file. Something is seriously
-	// wrong if it didn't get created after 1000 attempts, and we don't want
-	// an infinite loop
-	i := 0
-	for ; i < atomicWriteFileMaxNumWriteAttempts; i++ {
-		name := filepath.Join(dir, atomicWriteFilePrefix+randWriteFileSuffix())
-		f, err = os.OpenFile(filepath.Clean(name), atomicWriteFileFlag, perm)
-		// If the file already exists, try a new file
-		if os.IsExist(err) {
-			// If the files exist too many times, start reseeding as we've
-			// likely hit another instances seed.
-			if nconflict++; nconflict > atomicWriteFileMaxNumConflicts {
-				atomicWriteFileRandMu.Lock()
-				atomicWriteFileRand = writeFileRandReseed()
-				atomicWriteFileRandMu.Unlock()
-			}
-			continue
-		} else if err != nil {
-			return err
-		}
-		break
-	}
-	if i == atomicWriteFileMaxNumWriteAttempts {
-		return fmt.Errorf("could not create atomic write file after %d attempts", i)
-	}
-
-	// Clean up in any case. Defer stacking order is last-in-first-out.
-	defer func() {
-		_ = os.Remove(f.Name())
-		_ = f.Close()
-	}()
-
-	if n, err := f.Write(data); err != nil {
-		return err
-	} else if n < len(data) {
-		return io.ErrShortWrite
-	}
-	// Close the file before renaming it, otherwise it will cause "The process
-	// cannot access the file because it is being used by another process." on windows.
-	_ = f.Close()
-
-	return os.Rename(f.Name(), filename)
+	return nil
 }
+
+// Limit the number of attempts to create a file. Something is seriously
+// wrong if it didn't get created after 1000 attempts, and we don't want
+// an infinite loop
+
+// If the file already exists, try a new file
+
+// If the files exist too many times, start reseeding as we've
+// likely hit another instances seed.
+
+// Clean up in any case. Defer stacking order is last-in-first-out.
+
+// Close the file before renaming it, otherwise it will cause "The process
+// cannot access the file because it is being used by another process." on windows.

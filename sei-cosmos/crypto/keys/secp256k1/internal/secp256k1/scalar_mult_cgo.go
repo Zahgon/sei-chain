@@ -9,7 +9,6 @@ package secp256k1
 
 import (
 	"math/big"
-	"unsafe"
 )
 
 /*
@@ -22,36 +21,14 @@ extern int secp256k1_ext_scalar_mul(const secp256k1_context* ctx, const unsigned
 import "C"
 
 func (BitCurve *BitCurve) ScalarMult(Bx, By *big.Int, scalar []byte) (*big.Int, *big.Int) {
+	_ = "STUB: not implemented"
 	// Ensure scalar is exactly 32 bytes. We pad always, even if
 	// scalar is 32 bytes long, to avoid a timing side channel.
-	if len(scalar) > 32 {
-		panic("can't handle scalars > 256 bits")
-	}
-	// NOTE: potential timing issue
-	padded := make([]byte, 32)
-	copy(padded[32-len(scalar):], scalar)
-	scalar = padded
-
-	// Do the multiplication in C, updating point.
-	point := make([]byte, 64)
-	readBits(Bx, point[:32])
-	readBits(By, point[32:])
-
-	pointPtr := (*C.uchar)(unsafe.Pointer(&point[0]))
-	scalarPtr := (*C.uchar)(unsafe.Pointer(&scalar[0]))
-	res := C.secp256k1_ext_scalar_mul(context, pointPtr, scalarPtr)
-
-	// Unpack the result and clear temporaries.
-	x := new(big.Int).SetBytes(point[:32])
-	y := new(big.Int).SetBytes(point[32:])
-	for i := range point {
-		point[i] = 0
-	}
-	for i := range padded {
-		scalar[i] = 0
-	}
-	if res != 1 {
-		return nil, nil
-	}
-	return x, y
+	return nil, nil
 }
+
+// NOTE: potential timing issue
+
+// Do the multiplication in C, updating point.
+
+// Unpack the result and clear temporaries.

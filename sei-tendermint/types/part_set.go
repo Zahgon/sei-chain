@@ -2,16 +2,13 @@ package types
 
 import (
 	"bytes"
-	"encoding/json"
 	"errors"
-	"fmt"
 	"io"
 	"sync"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/merkle"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bits"
 	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
-	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/sei-protocol/seilog"
 )
@@ -30,64 +27,21 @@ type Part struct {
 }
 
 // ValidateBasic performs basic validation.
-func (part *Part) ValidateBasic() error {
-	if len(part.Bytes) > int(BlockPartSizeBytes) {
-		return fmt.Errorf("too big: %d bytes, max: %d", len(part.Bytes), BlockPartSizeBytes)
-	}
-	if err := part.Proof.ValidateBasic(); err != nil {
-		return fmt.Errorf("wrong Proof: %w", err)
-	}
-	if int64(part.Index) != part.Proof.Index {
-		return fmt.Errorf("part index %d does not match proof index %d", part.Index, part.Proof.Index)
-	}
-	return nil
-}
+func (part *Part) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // String returns a string representation of Part.
 //
 // See StringIndented.
-func (part *Part) String() string {
-	return part.StringIndented("")
-}
+func (part *Part) String() string { _ = "STUB: not implemented"; return "" }
 
 // StringIndented returns an indented Part.
 //
 // See merkle.Proof#StringIndented
-func (part *Part) StringIndented(indent string) string {
-	return fmt.Sprintf(`Part{#%v
-%s  Bytes: %X...
-%s  Proof: %v
-%s}`,
-		part.Index,
-		indent, tmbytes.Fingerprint(part.Bytes),
-		indent, part.Proof.StringIndented(indent+"  "),
-		indent)
-}
+func (part *Part) StringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
-func (part *Part) ToProto() *tmproto.Part {
-	return &tmproto.Part{
-		Index: part.Index,
-		Bytes: part.Bytes,
-		Proof: *part.Proof.ToProto(),
-	}
-}
+func (part *Part) ToProto() *tmproto.Part { _ = "STUB: not implemented"; return nil }
 
-func PartFromProto(pb *tmproto.Part) (*Part, error) {
-	if pb == nil {
-		return nil, errors.New("nil part")
-	}
-
-	part := new(Part)
-	proof, err := merkle.ProofFromProto(&pb.Proof)
-	if err != nil {
-		return nil, err
-	}
-	part.Index = pb.Index
-	part.Bytes = pb.Bytes
-	part.Proof = *proof
-
-	return part, part.ValidateBasic()
-}
+func PartFromProto(pb *tmproto.Part) (*Part, error) { _ = "STUB: not implemented"; return nil, nil }
 
 //-------------------------------------
 
@@ -100,59 +54,38 @@ type PartSetHeader struct {
 //
 // 1. total number of parts
 // 2. first 6 bytes of the hash
-func (psh PartSetHeader) String() string {
-	return fmt.Sprintf("%v:%X", psh.Total, tmbytes.Fingerprint(psh.Hash))
-}
+func (psh PartSetHeader) String() string { _ = "STUB: not implemented"; return "" }
 
-func (psh PartSetHeader) IsZero() bool {
-	return psh.Total == 0 && len(psh.Hash) == 0
-}
+func (psh PartSetHeader) IsZero() bool { _ = "STUB: not implemented"; return false }
 
-func (psh PartSetHeader) Equals(other PartSetHeader) bool {
-	return psh.Total == other.Total && bytes.Equal(psh.Hash, other.Hash)
-}
+func (psh PartSetHeader) Equals(other PartSetHeader) bool { _ = "STUB: not implemented"; return false }
 
 // ValidateBasic performs basic validation.
 func (psh PartSetHeader) ValidateBasic() error {
+	_ = "STUB: not implemented"
 	// Hash can be empty in case of POLBlockID.PartSetHeader in Proposal.
-	if err := ValidateHash(psh.Hash); err != nil {
-		return fmt.Errorf("wrong Hash: %w", err)
-	}
-	// Check memory limits before acquiring lock or setting any state
-	if psh.Total > MaxBlockPartsCount {
-		return fmt.Errorf("Total = %v, want <=%v", psh.Total, MaxBlockPartsCount)
-	}
 	return nil
 }
 
+// Check memory limits before acquiring lock or setting any state
+
 // ToProto converts PartSetHeader to protobuf
 func (psh *PartSetHeader) ToProto() tmproto.PartSetHeader {
-	if psh == nil {
-		return tmproto.PartSetHeader{}
-	}
-
-	return tmproto.PartSetHeader{
-		Total: psh.Total,
-		Hash:  psh.Hash,
-	}
+	_ = "STUB: not implemented"
+	return *new(tmproto.PartSetHeader)
 }
 
 // FromProto sets a protobuf PartSetHeader to the given pointer
 func PartSetHeaderFromProto(ppsh *tmproto.PartSetHeader) (*PartSetHeader, error) {
-	if ppsh == nil {
-		return nil, errors.New("nil PartSetHeader")
-	}
-	psh := new(PartSetHeader)
-	psh.Total = ppsh.Total
-	psh.Hash = ppsh.Hash
-
-	return psh, psh.ValidateBasic()
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ProtoPartSetHeaderIsZero is similar to the IsZero function for
 // PartSetHeader, but for the Protobuf representation.
 func ProtoPartSetHeaderIsZero(ppsh *tmproto.PartSetHeader) bool {
-	return ppsh.Total == 0 && len(ppsh.Hash) == 0
+	_ = "STUB: not implemented"
+	return false
 }
 
 //-------------------------------------
@@ -174,166 +107,58 @@ type PartSet struct {
 // The data bytes are split into "partSize" chunks, and merkle tree computed.
 // CONTRACT: partSize is greater than zero.
 func NewPartSetFromData(data []byte, partSize uint32) *PartSet {
+	_ = "STUB: not implemented"
 	// divide data into 4kb parts.
-	total := (uint32(len(data)) + partSize - 1) / partSize //nolint:gosec // data length is bounded by block size limits; no overflow risk
-	parts := make([]*Part, total)
-	partsBytes := make([][]byte, total)
-	partsBitArray := bits.NewBitArray(int(total)) //nolint:gosec // total fits in int since it's derived from block-bounded data
-	for i := range total {
-		part := &Part{
-			Index: i,
-			Bytes: data[i*partSize : tmmath.MinInt(len(data), int((i+1)*partSize))], //nolint:gosec // partSize is small (4KB); product fits in uint32
-		}
-		parts[i] = part
-		partsBytes[i] = part.Bytes
-		partsBitArray.SetIndex(int(i), true) //nolint:gosec // i < total which fits in int
-	}
-	// Compute merkle proofs
-	root, proofs := merkle.ProofsFromByteSlices(partsBytes)
-	for i := uint32(0); i < total; i++ {
-		parts[i].Proof = *proofs[i]
-	}
-	return &PartSet{
-		total:         total,
-		hash:          root,
-		parts:         parts,
-		partsBitArray: partsBitArray,
-		count:         total,
-		byteSize:      int64(len(data)),
-	}
+	return nil
 }
+
+//nolint:gosec // data length is bounded by block size limits; no overflow risk
+
+//nolint:gosec // total fits in int since it's derived from block-bounded data
+
+//nolint:gosec // partSize is small (4KB); product fits in uint32
+
+//nolint:gosec // i < total which fits in int
+
+// Compute merkle proofs
 
 // Returns an empty PartSet ready to be populated.
-func NewPartSetFromHeader(header PartSetHeader) *PartSet {
-	if header.Total > MaxBlockPartsCount {
-		logger.Warn("Attempted to create PartSet with excessive Total. Creating minimal safe PartSet instead.", "total", header.Total, "max", MaxBlockPartsCount)
-		return &PartSet{
-			total:         1,           // Minimal safe size
-			hash:          header.Hash, // Keep original hash for compatibility
-			parts:         make([]*Part, 1),
-			partsBitArray: bits.NewBitArray(1),
-			count:         0,
-			byteSize:      0,
-		}
-	}
+func NewPartSetFromHeader(header PartSetHeader) *PartSet { _ = "STUB: not implemented"; return nil }
 
-	return &PartSet{
-		total:         header.Total,
-		hash:          header.Hash,
-		parts:         make([]*Part, header.Total),
-		partsBitArray: bits.NewBitArray(int(header.Total)),
-		count:         0,
-		byteSize:      0,
-	}
-}
+// Minimal safe size
+// Keep original hash for compatibility
 
-func (ps *PartSet) Header() PartSetHeader {
-	if ps == nil {
-		return PartSetHeader{}
-	}
-	return PartSetHeader{
-		Total: ps.total,
-		Hash:  ps.hash,
-	}
-}
+func (ps *PartSet) Header() PartSetHeader { _ = "STUB: not implemented"; return *new(PartSetHeader) }
 
-func (ps *PartSet) HasHeader(header PartSetHeader) bool {
-	if ps == nil {
-		return false
-	}
-	return ps.Header().Equals(header)
-}
+func (ps *PartSet) HasHeader(header PartSetHeader) bool { _ = "STUB: not implemented"; return false }
 
-func (ps *PartSet) BitArray() *bits.BitArray {
-	ps.mtx.Lock()
-	defer ps.mtx.Unlock()
-	return ps.partsBitArray.Copy()
-}
+func (ps *PartSet) BitArray() *bits.BitArray { _ = "STUB: not implemented"; return nil }
 
-func (ps *PartSet) Hash() []byte {
-	if ps == nil {
-		return merkle.HashFromByteSlices(nil)
-	}
-	return ps.hash
-}
+func (ps *PartSet) Hash() []byte { _ = "STUB: not implemented"; return nil }
 
-func (ps *PartSet) HashesTo(hash []byte) bool {
-	if ps == nil {
-		return false
-	}
-	return bytes.Equal(ps.hash, hash)
-}
+func (ps *PartSet) HashesTo(hash []byte) bool { _ = "STUB: not implemented"; return false }
 
-func (ps *PartSet) Count() uint32 {
-	if ps == nil {
-		return 0
-	}
-	return ps.count
-}
+func (ps *PartSet) Count() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (ps *PartSet) ByteSize() int64 {
-	if ps == nil {
-		return 0
-	}
-	return ps.byteSize
-}
+func (ps *PartSet) ByteSize() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (ps *PartSet) Total() uint32 {
-	if ps == nil {
-		return 0
-	}
-	return ps.total
-}
+func (ps *PartSet) Total() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (ps *PartSet) AddPart(part *Part) (bool, error) {
-	if ps == nil {
-		return false, nil
-	}
-	ps.mtx.Lock()
-	defer ps.mtx.Unlock()
+func (ps *PartSet) AddPart(part *Part) (bool, error) { _ = "STUB: not implemented"; return false, nil }
 
-	// Invalid part index
-	if part.Index >= ps.total {
-		return false, ErrPartSetUnexpectedIndex
-	}
+// Invalid part index
 
-	// If part already exists, return false.
-	if ps.parts[part.Index] != nil {
-		return false, nil
-	}
+// If part already exists, return false.
 
-	// Check hash proof
-	if part.Proof.Verify(ps.Hash(), part.Bytes) != nil {
-		return false, ErrPartSetInvalidProof
-	}
+// Check hash proof
 
-	// Add part
-	ps.parts[part.Index] = part
-	ps.partsBitArray.SetIndex(int(part.Index), true)
-	ps.count++
-	ps.byteSize += int64(len(part.Bytes))
-	return true, nil
-}
+// Add part
 
-func (ps *PartSet) GetPart(index int) *Part {
-	ps.mtx.Lock()
-	defer ps.mtx.Unlock()
-	return ps.parts[index]
-}
+func (ps *PartSet) GetPart(index int) *Part { _ = "STUB: not implemented"; return nil }
 
-func (ps *PartSet) IsComplete() bool {
-	if ps == nil {
-		return false
-	}
-	return ps.count == ps.total
-}
+func (ps *PartSet) IsComplete() bool { _ = "STUB: not implemented"; return false }
 
-func (ps *PartSet) GetReader() io.Reader {
-	if !ps.IsComplete() {
-		panic("Cannot GetReader() on incomplete PartSet")
-	}
-	return NewPartSetReader(ps.parts)
-}
+func (ps *PartSet) GetReader() io.Reader { _ = "STUB: not implemented"; return *new(io.Reader) }
 
 type PartSetReader struct {
 	i      int
@@ -341,60 +166,16 @@ type PartSetReader struct {
 	reader *bytes.Reader
 }
 
-func NewPartSetReader(parts []*Part) *PartSetReader {
-	return &PartSetReader{
-		i:      0,
-		parts:  parts,
-		reader: bytes.NewReader(parts[0].Bytes),
-	}
-}
+func NewPartSetReader(parts []*Part) *PartSetReader { _ = "STUB: not implemented"; return nil }
 
 func (psr *PartSetReader) Read(p []byte) (n int, err error) {
-	readerLen := psr.reader.Len()
-	if readerLen >= len(p) {
-		return psr.reader.Read(p)
-	} else if readerLen > 0 {
-		n1, err := psr.Read(p[:readerLen])
-		if err != nil {
-			return n1, err
-		}
-		n2, err := psr.Read(p[readerLen:])
-		return n1 + n2, err
-	}
-
-	psr.i++
-	if psr.i >= len(psr.parts) {
-		return 0, io.EOF
-	}
-	psr.reader = bytes.NewReader(psr.parts[psr.i].Bytes)
-	return psr.Read(p)
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // StringShort returns a short version of String.
 //
 // (Count of Total)
-func (ps *PartSet) StringShort() string {
-	if ps == nil {
-		return "nil-PartSet"
-	}
-	ps.mtx.Lock()
-	defer ps.mtx.Unlock()
-	return fmt.Sprintf("(%v of %v)", ps.Count(), ps.Total())
-}
+func (ps *PartSet) StringShort() string { _ = "STUB: not implemented"; return "" }
 
-func (ps *PartSet) MarshalJSON() ([]byte, error) {
-	if ps == nil {
-		return []byte("{}"), nil
-	}
-
-	ps.mtx.Lock()
-	defer ps.mtx.Unlock()
-
-	return json.Marshal(struct {
-		CountTotal    string         `json:"count/total"`
-		PartsBitArray *bits.BitArray `json:"parts_bit_array"`
-	}{
-		fmt.Sprintf("%d/%d", ps.Count(), ps.Total()),
-		ps.partsBitArray,
-	})
-}
+func (ps *PartSet) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }

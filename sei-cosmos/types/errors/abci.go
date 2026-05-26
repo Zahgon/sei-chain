@@ -1,10 +1,6 @@
 package errors
 
 import (
-	"fmt"
-	"math"
-	"reflect"
-
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 )
 
@@ -21,12 +17,7 @@ const (
 )
 
 // safeIntFromUint64 converts uint64 to int64, capping at math.MaxInt64 to prevent overflow.
-func safeIntFromUint64(v uint64) int64 {
-	if v > math.MaxInt64 {
-		return math.MaxInt64
-	}
-	return int64(v)
-}
+func safeIntFromUint64(v uint64) int64 { _ = "STUB: not implemented"; return 0 }
 
 // ABCIInfo returns the ABCI error information as consumed by the tendermint
 // client. Returned codespace, code, and log message should be used as a ABCI response.
@@ -36,76 +27,43 @@ func safeIntFromUint64(v uint64) int64 {
 // ABCICode information are replaced with generic "internal error". Errors
 // without an ABCICode information as considered internal.
 func ABCIInfo(err error, debug bool) (codespace string, code uint32, log string) {
-	if errIsNil(err) {
-		return "", SuccessABCICode, ""
-	}
-
-	encode := defaultErrEncoder
-	if debug {
-		encode = debugErrEncoder
-	}
-
-	return abciCodespace(err), abciCode(err), encode(err)
+	_ = "STUB: not implemented"
+	return "", 0, ""
 }
 
 // ResponseDeliverTx returns an ABCI ResponseDeliverTx object with fields filled in
 // from the given error and gas values.
 func ResponseDeliverTx(err error, gw, gu uint64, debug bool) abci.ResponseDeliverTx {
-	space, code, log := ABCIInfo(err, debug)
-	return abci.ResponseDeliverTx{
-		Codespace: space,
-		Code:      code,
-		Log:       log,
-		GasWanted: safeIntFromUint64(gw),
-		GasUsed:   safeIntFromUint64(gu),
-	}
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseDeliverTx)
 }
 
 // ResponseDeliverTxWithEvents returns an ABCI ResponseDeliverTx object with fields filled in
 // from the given error, gas values and events.
 func ResponseDeliverTxWithEvents(err error, gw, gu uint64, events []abci.Event, debug bool) abci.ResponseDeliverTx {
-	space, code, log := ABCIInfo(err, debug)
-	return abci.ResponseDeliverTx{
-		Codespace: space,
-		Code:      code,
-		Log:       log,
-		GasWanted: safeIntFromUint64(gw),
-		GasUsed:   safeIntFromUint64(gu),
-		Events:    events,
-	}
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseDeliverTx)
 }
 
 // QueryResult returns a ResponseQuery from an error. It will try to parse ABCI
 // info from the error.
 func QueryResult(err error) abci.ResponseQuery {
-	space, code, log := ABCIInfo(err, false)
-	return abci.ResponseQuery{
-		Codespace: space,
-		Code:      code,
-		Log:       log,
-	}
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseQuery)
 }
 
 // QueryResultWithDebug returns a ResponseQuery from an error. It will try to parse ABCI
 // info from the error. It will use debugErrEncoder if debug parameter is true.
 // Starting from v0.46, this function will be removed, and be replaced by `QueryResult`.
 func QueryResultWithDebug(err error, debug bool) abci.ResponseQuery {
-	space, code, log := ABCIInfo(err, debug)
-	return abci.ResponseQuery{
-		Codespace: space,
-		Code:      code,
-		Log:       log,
-	}
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseQuery)
 }
 
 // The debugErrEncoder encodes the error with a stacktrace.
-func debugErrEncoder(err error) string {
-	return fmt.Sprintf("%+v", err)
-}
+func debugErrEncoder(err error) string { _ = "STUB: not implemented"; return "" }
 
-func defaultErrEncoder(err error) string {
-	return err.Error()
-}
+func defaultErrEncoder(err error) string { _ = "STUB: not implemented"; return "" }
 
 type coder interface {
 	ABCICode() uint32
@@ -114,23 +72,7 @@ type coder interface {
 // abciCode tests if given error contains an ABCI code and returns the value of
 // it if available. This function is testing for the causer interface as well
 // and unwraps the error.
-func abciCode(err error) uint32 {
-	if errIsNil(err) {
-		return SuccessABCICode
-	}
-
-	for {
-		if c, ok := err.(coder); ok {
-			return c.ABCICode()
-		}
-
-		if c, ok := err.(causer); ok {
-			err = c.Cause()
-		} else {
-			return internalABCICode
-		}
-	}
-}
+func abciCode(err error) uint32 { _ = "STUB: not implemented"; return 0 }
 
 type codespacer interface {
 	Codespace() string
@@ -139,35 +81,11 @@ type codespacer interface {
 // abciCodespace tests if given error contains a codespace and returns the value of
 // it if available. This function is testing for the causer interface as well
 // and unwraps the error.
-func abciCodespace(err error) string {
-	if errIsNil(err) {
-		return ""
-	}
-
-	for {
-		if c, ok := err.(codespacer); ok {
-			return c.Codespace()
-		}
-
-		if c, ok := err.(causer); ok {
-			err = c.Cause()
-		} else {
-			return internalABCICodespace
-		}
-	}
-}
+func abciCodespace(err error) string { _ = "STUB: not implemented"; return "" }
 
 // errIsNil returns true if value represented by the given error is nil.
 //
 // Most of the time a simple == check is enough. There is a very narrowed
 // spectrum of cases (mostly in tests) where a more sophisticated check is
 // required.
-func errIsNil(err error) bool {
-	if err == nil {
-		return true
-	}
-	if val := reflect.ValueOf(err); val.Kind() == reflect.Ptr {
-		return val.IsNil()
-	}
-	return false
-}
+func errIsNil(err error) bool { _ = "STUB: not implemented"; return false }

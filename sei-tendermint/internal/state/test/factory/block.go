@@ -3,53 +3,21 @@ package factory
 import (
 	"context"
 	"testing"
-	"time"
-
-	"github.com/stretchr/testify/require"
 
 	sm "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/test/factory"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
 func MakeBlocks(ctx context.Context, t *testing.T, n int, state *sm.State, privVal types.PrivValidator) []*types.Block {
-	t.Helper()
-
-	blocks := make([]*types.Block, n)
-
-	var (
-		prevBlock     *types.Block
-		prevBlockMeta *types.BlockMeta
-	)
-
-	appHeight := byte(0x01)
-	for i := 0; i < n; i++ {
-		height := int64(i + 1)
-
-		block, parts := makeBlockAndPartSet(ctx, t, *state, prevBlock, prevBlockMeta, privVal, height)
-
-		blocks[i] = block
-
-		prevBlock = block
-		prevBlockMeta = types.NewBlockMeta(block, parts)
-
-		// update state
-		state.AppHash = []byte{appHeight}
-		appHeight++
-		state.LastBlockHeight = height
-	}
-
-	return blocks
+	_ = "STUB: not implemented"
+	return nil
 }
 
+// update state
+
 func MakeBlock(state sm.State, height int64, c *types.Commit) *types.Block {
-	return state.MakeBlock(
-		height,
-		factory.MakeNTxs(state.LastBlockHeight, 10),
-		c,
-		nil,
-		state.Validators.GetProposer().Address,
-	)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func makeBlockAndPartSet(
@@ -61,29 +29,6 @@ func makeBlockAndPartSet(
 	privVal types.PrivValidator,
 	height int64,
 ) (*types.Block, *types.PartSet) {
-	t.Helper()
-
-	lastCommit := &types.Commit{Height: height - 1}
-	if height > 1 {
-		vote, err := factory.MakeVote(
-			ctx,
-			privVal,
-			lastBlock.ChainID,
-			1, lastBlock.Height, 0, 2,
-			lastBlockMeta.BlockID,
-			time.Now())
-		require.NoError(t, err)
-		lastCommit = &types.Commit{
-			Height:     vote.Height,
-			Round:      vote.Round,
-			BlockID:    lastBlock.LastBlockID,
-			Signatures: []types.CommitSig{vote.CommitSig()},
-		}
-	}
-
-	block := state.MakeBlock(height, []types.Tx{}, lastCommit, nil, state.Validators.GetProposer().Address)
-	partSet, err := block.MakePartSet(types.BlockPartSizeBytes)
-	require.NoError(t, err)
-
-	return block, partSet
+	_ = "STUB: not implemented"
+	return nil, nil
 }

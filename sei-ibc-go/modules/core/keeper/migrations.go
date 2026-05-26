@@ -2,9 +2,6 @@ package keeper
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-
-	clientkeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/keeper"
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/types"
 )
 
 // Migrator is a struct for handling in-place store migrations.
@@ -13,9 +10,7 @@ type Migrator struct {
 }
 
 // NewMigrator returns a new Migrator.
-func NewMigrator(keeper Keeper) Migrator {
-	return Migrator{keeper: keeper}
-}
+func NewMigrator(keeper Keeper) Migrator { _ = "STUB: not implemented"; return *new(Migrator) }
 
 // Migrate1to2 migrates from version 1 to 2.
 // This migration prunes:
@@ -23,16 +18,6 @@ func NewMigrator(keeper Keeper) Migrator {
 // - prunes solo machine consensus states
 // - prunes expired tendermint consensus states
 // - adds ProcessedHeight and Iteration keys for unexpired tendermint consensus states
-func (m Migrator) Migrate1to2(ctx sdk.Context) error {
-	clientMigrator := clientkeeper.NewMigrator(m.keeper.ClientKeeper)
-	if err := clientMigrator.Migrate1to2(ctx); err != nil {
-		return err
-	}
+func (m Migrator) Migrate1to2(ctx sdk.Context) error { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
-
-func (m Migrator) Migrate2to3(ctx sdk.Context) error {
-	m.keeper.SetParams(ctx, types.DefaultParams())
-	return nil
-}
+func (m Migrator) Migrate2to3(ctx sdk.Context) error { _ = "STUB: not implemented"; return nil }

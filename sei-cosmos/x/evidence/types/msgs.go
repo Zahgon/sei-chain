@@ -1,13 +1,8 @@
 package types
 
 import (
-	"fmt"
-
-	"github.com/gogo/protobuf/proto"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence/exported"
 )
 
@@ -24,73 +19,41 @@ var (
 
 // NewMsgSubmitEvidence returns a new MsgSubmitEvidence with a signer/submitter.
 func NewMsgSubmitEvidence(s sdk.AccAddress, evi exported.Evidence) (*MsgSubmitEvidence, error) {
-	msg, ok := evi.(proto.Message)
-	if !ok {
-		return nil, fmt.Errorf("cannot proto marshal %T", evi)
-	}
-	any, err := types.NewAnyWithValue(msg)
-	if err != nil {
-		return nil, err
-	}
-	return &MsgSubmitEvidence{Submitter: s.String(), Evidence: any}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Route returns the MsgSubmitEvidence's route.
-func (m MsgSubmitEvidence) Route() string { return RouterKey }
+func (m MsgSubmitEvidence) Route() string {
+	_ = "STUB: not implemented"
 
-// Type returns the MsgSubmitEvidence's type.
-func (m MsgSubmitEvidence) Type() string { return TypeMsgSubmitEvidence }
+	// Type returns the MsgSubmitEvidence's type.
+	return ""
+}
+
+func (m MsgSubmitEvidence) Type() string { _ = "STUB: not implemented"; return "" }
 
 // ValidateBasic performs basic (non-state-dependant) validation on a MsgSubmitEvidence.
-func (m MsgSubmitEvidence) ValidateBasic() error {
-	if m.Submitter == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, m.Submitter)
-	}
-
-	evi := m.GetEvidence()
-	if evi == nil {
-		return sdkerrors.Wrap(ErrInvalidEvidence, "missing evidence")
-	}
-	if err := evi.ValidateBasic(); err != nil {
-		return err
-	}
-
-	return nil
-}
+func (m MsgSubmitEvidence) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // GetSignBytes returns the raw bytes a signer is expected to sign when submitting
 // a MsgSubmitEvidence message.
-func (m MsgSubmitEvidence) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
+func (m MsgSubmitEvidence) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // GetSigners returns the single expected signer for a MsgSubmitEvidence.
-func (m MsgSubmitEvidence) GetSigners() []sdk.AccAddress {
-	accAddr, err := sdk.AccAddressFromBech32(m.Submitter)
-	if err != nil {
-		return nil
-	}
-
-	return []sdk.AccAddress{accAddr}
-}
+func (m MsgSubmitEvidence) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 func (m MsgSubmitEvidence) GetEvidence() exported.Evidence {
-	evi, ok := m.Evidence.GetCachedValue().(exported.Evidence)
-	if !ok {
-		return nil
-	}
-	return evi
+	_ = "STUB: not implemented"
+	return *new(exported.Evidence)
 }
 
 func (m MsgSubmitEvidence) GetSubmitter() sdk.AccAddress {
-	accAddr, err := sdk.AccAddressFromBech32(m.Submitter)
-	if err != nil {
-		return nil
-	}
-	return accAddr
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
 
 func (m MsgSubmitEvidence) UnpackInterfaces(ctx types.AnyUnpacker) error {
-	var evi exported.Evidence
-	return ctx.UnpackAny(m.Evidence, &evi)
+	_ = "STUB: not implemented"
+	return nil
 }

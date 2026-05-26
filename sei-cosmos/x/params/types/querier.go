@@ -20,16 +20,11 @@ type SubspaceParamsResponse struct {
 }
 
 func NewQuerySubspaceParams(ss, key string) QuerySubspaceParams {
-	return QuerySubspaceParams{
-		Subspace: ss,
-		Key:      key,
-	}
+	_ = "STUB: not implemented"
+	return *new(QuerySubspaceParams)
 }
 
 func NewSubspaceParamsResponse(ss, key, value string) SubspaceParamsResponse {
-	return SubspaceParamsResponse{
-		Subspace: ss,
-		Key:      key,
-		Value:    value,
-	}
+	_ = "STUB: not implemented"
+	return *new(SubspaceParamsResponse)
 }

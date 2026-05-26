@@ -1,8 +1,6 @@
 package types
 
 import (
-	"fmt"
-
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
 )
 
@@ -22,44 +20,26 @@ var (
 
 // ParamKeyTable type declaration for parameters
 func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
+	_ = "STUB: not implemented"
+	return *new(paramtypes.KeyTable)
 }
 
 // NewParams creates a new parameter configuration for the ibc transfer module
 func NewParams(enableSend, enableReceive bool) Params {
-	return Params{
-		SendEnabled:    enableSend,
-		ReceiveEnabled: enableReceive,
-	}
+	_ = "STUB: not implemented"
+	return *new(Params)
 }
 
 // DefaultParams is the default parameter configuration for the ibc-transfer module
-func DefaultParams() Params {
-	return NewParams(DefaultSendEnabled, DefaultReceiveEnabled)
-}
+func DefaultParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
 // Validate all ibc-transfer module parameters
-func (p Params) Validate() error {
-	if err := validateEnabled(p.SendEnabled); err != nil {
-		return err
-	}
-
-	return validateEnabled(p.ReceiveEnabled)
-}
+func (p Params) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // ParamSetPairs implements params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeySendEnabled, p.SendEnabled, validateEnabled),
-		paramtypes.NewParamSetPair(KeyReceiveEnabled, p.ReceiveEnabled, validateEnabled),
-	}
+	_ = "STUB: not implemented"
+	return *new(paramtypes.ParamSetPairs)
 }
 
-func validateEnabled(i interface{}) error {
-	_, ok := i.(bool)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	return nil
-}
+func validateEnabled(i interface{}) error { _ = "STUB: not implemented"; return nil }

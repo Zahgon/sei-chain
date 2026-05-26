@@ -1,9 +1,6 @@
 package config
 
 import (
-	"fmt"
-
-	"github.com/sei-protocol/sei-chain/sei-db/common/unit"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/dbcache"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/pebbledb"
 )
@@ -97,94 +94,14 @@ type Config struct {
 }
 
 // DefaultConfig returns Config with safe default values.
-func DefaultConfig() *Config {
-	cfg := &Config{
-		Fsync:                     false,
-		AsyncWriteBuffer:          0,
-		SnapshotInterval:          DefaultSnapshotInterval,
-		SnapshotKeepRecent:        DefaultSnapshotKeepRecent,
-		EnablePebbleMetrics:       true,
-		AccountDBConfig:           pebbledb.DefaultConfig(),
-		AccountCacheConfig:        dbcache.DefaultCacheConfig(),
-		CodeDBConfig:              pebbledb.DefaultConfig(),
-		CodeCacheConfig:           dbcache.DefaultCacheConfig(),
-		StorageDBConfig:           pebbledb.DefaultConfig(),
-		StorageCacheConfig:        dbcache.DefaultCacheConfig(),
-		LegacyDBConfig:            pebbledb.DefaultConfig(),
-		LegacyCacheConfig:         dbcache.DefaultCacheConfig(),
-		MetadataDBConfig:          pebbledb.DefaultConfig(),
-		MetadataCacheConfig:       dbcache.DefaultCacheConfig(),
-		ReaderThreadsPerCore:      2.0,
-		ReaderConstantThreadCount: 0,
-		ReaderPoolQueueSize:       1024,
-		MiscPoolThreadsPerCore:    4.0,
-		MiscConstantThreadCount:   0,
-	}
-
-	cfg.AccountCacheConfig.MaxSize = unit.GB
-	cfg.StorageCacheConfig.MaxSize = unit.GB * 4
-
-	return cfg
-}
+func DefaultConfig() *Config { _ = "STUB: not implemented"; return nil }
 
 // Copy returns a deep copy of the Config.
 func (c *Config) Copy() *Config {
-	//  The nested PebbleDB configs are value types, so a shallow struct copy is sufficient.
-	cp := *c
-	return &cp
+	_ = "STUB: not implemented"
+	// The nested PebbleDB configs are value types, so a shallow struct copy is sufficient.
+	return nil
 }
 
 // Validate checks that the configuration is sane and returns an error if it is not.
-func (c *Config) Validate() error {
-	if err := c.AccountCacheConfig.Validate(); err != nil {
-		return fmt.Errorf("account cache config is invalid: %w", err)
-	}
-	if err := c.CodeCacheConfig.Validate(); err != nil {
-		return fmt.Errorf("code cache config is invalid: %w", err)
-	}
-	if err := c.StorageCacheConfig.Validate(); err != nil {
-		return fmt.Errorf("storage cache config is invalid: %w", err)
-	}
-	if err := c.LegacyCacheConfig.Validate(); err != nil {
-		return fmt.Errorf("legacy cache config is invalid: %w", err)
-	}
-	if err := c.MetadataCacheConfig.Validate(); err != nil {
-		return fmt.Errorf("metadata cache config is invalid: %w", err)
-	}
-	if c.DataDir == "" {
-		return fmt.Errorf("data dir is required")
-	}
-	if err := c.AccountDBConfig.Validate(); err != nil {
-		return fmt.Errorf("account db config is invalid: %w", err)
-	}
-	if err := c.CodeDBConfig.Validate(); err != nil {
-		return fmt.Errorf("code db config is invalid: %w", err)
-	}
-	if err := c.StorageDBConfig.Validate(); err != nil {
-		return fmt.Errorf("storage db config is invalid: %w", err)
-	}
-	if err := c.LegacyDBConfig.Validate(); err != nil {
-		return fmt.Errorf("legacy db config is invalid: %w", err)
-	}
-	if err := c.MetadataDBConfig.Validate(); err != nil {
-		return fmt.Errorf("metadata db config is invalid: %w", err)
-	}
-
-	if c.ReaderThreadsPerCore <= 0 {
-		return fmt.Errorf("reader threads per core must be greater than 0")
-	}
-	if c.ReaderConstantThreadCount < 0 {
-		return fmt.Errorf("reader constant thread count must not be negative")
-	}
-	if c.ReaderPoolQueueSize < 0 {
-		return fmt.Errorf("reader pool queue size must not be negative")
-	}
-	if c.MiscPoolThreadsPerCore < 0 {
-		return fmt.Errorf("misc threads per core must not be negative")
-	}
-	if c.MiscConstantThreadCount < 0 {
-		return fmt.Errorf("misc constant thread count must not be negative")
-	}
-
-	return nil
-}
+func (c *Config) Validate() error { _ = "STUB: not implemented"; return nil }

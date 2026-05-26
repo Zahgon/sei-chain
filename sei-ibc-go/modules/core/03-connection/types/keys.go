@@ -1,12 +1,7 @@
 package types
 
 import (
-	"fmt"
 	"regexp"
-
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 )
 
 const (
@@ -32,9 +27,7 @@ const (
 
 // FormatConnectionIdentifier returns the connection identifier with the sequence appended.
 // This is a SDK specific format not enforced by IBC protocol.
-func FormatConnectionIdentifier(sequence uint64) string {
-	return fmt.Sprintf("%s%d", ConnectionPrefix, sequence)
-}
+func FormatConnectionIdentifier(sequence uint64) string { _ = "STUB: not implemented"; return "" }
 
 // IsConnectionIDFormat checks if a connectionID is in the format required on the SDK for
 // parsing connection identifiers. The connection identifier must be in the form: `connection-{N}
@@ -42,21 +35,10 @@ var IsConnectionIDFormat = regexp.MustCompile(`^connection-[0-9]{1,20}$`).MatchS
 
 // IsValidConnectionID checks if the connection identifier is valid and can be parsed to
 // the connection identifier format.
-func IsValidConnectionID(connectionID string) bool {
-	_, err := ParseConnectionSequence(connectionID)
-	return err == nil
-}
+func IsValidConnectionID(connectionID string) bool { _ = "STUB: not implemented"; return false }
 
 // ParseConnectionSequence parses the connection sequence from the connection identifier.
 func ParseConnectionSequence(connectionID string) (uint64, error) {
-	if !IsConnectionIDFormat(connectionID) {
-		return 0, sdkerrors.Wrap(host.ErrInvalidID, "connection identifier is not in the format: `connection-{N}`")
-	}
-
-	sequence, err := host.ParseIdentifier(connectionID, ConnectionPrefix)
-	if err != nil {
-		return 0, sdkerrors.Wrap(err, "invalid connection identifier")
-	}
-
-	return sequence, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }

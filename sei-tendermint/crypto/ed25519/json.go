@@ -1,9 +1,6 @@
 package ed25519
 
 import (
-	"encoding/json"
-	"runtime"
-
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/jsontypes"
 )
 
@@ -16,63 +13,27 @@ func init() {
 	jsontypes.MustRegister(SecretKey{})
 }
 
-func (k SecretKey) TypeTag() string { return SecretKeyName }
-func (k SecretKey) Type() string    { return KeyType }
+func (k SecretKey) TypeTag() string { _ = "STUB: not implemented"; return "" }
+func (k SecretKey) Type() string    { _ = "STUB: not implemented"; return "" }
 
-func (k PublicKey) TypeTag() string { return PublicKeyName }
-func (k PublicKey) Type() string    { return KeyType }
+func (k PublicKey) TypeTag() string { _ = "STUB: not implemented"; return "" }
+func (k PublicKey) Type() string {
+	_ = "STUB: not implemented"
 
-// WARNING: this is very BAD that one can leak a secret by embedding
-// a private key in some struct and then calling json.Marshal on it.
-// TODO(gprusak): get rid of it.
-func (k SecretKey) MarshalJSON() ([]byte, error) {
-	defer runtime.KeepAlive(k)
-	return json.Marshal((*k.key())[:])
+	// WARNING: this is very BAD that one can leak a secret by embedding
+	// a private key in some struct and then calling json.Marshal on it.
+	// TODO(gprusak): get rid of it.
+	return ""
 }
 
-func (k *SecretKey) UnmarshalJSON(j []byte) error {
-	var raw []byte
-	if err := json.Unmarshal(j, &raw); err != nil {
-		return err
-	}
-	x, err := SecretKeyFromSecretBytes(raw)
-	if err != nil {
-		return err
-	}
-	*k = x
-	return nil
-}
+func (k SecretKey) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (k PublicKey) MarshalJSON() ([]byte, error) {
-	return json.Marshal(k.Bytes())
-}
+func (k *SecretKey) UnmarshalJSON(j []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (k *PublicKey) UnmarshalJSON(j []byte) error {
-	var raw []byte
-	if err := json.Unmarshal(j, &raw); err != nil {
-		return err
-	}
-	x, err := PublicKeyFromBytes(raw)
-	if err != nil {
-		return err
-	}
-	*k = x
-	return nil
-}
+func (k PublicKey) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (s Signature) MarshalJSON() ([]byte, error) {
-	return json.Marshal(s.Bytes())
-}
+func (k *PublicKey) UnmarshalJSON(j []byte) error { _ = "STUB: not implemented"; return nil }
 
-func (s *Signature) UnmarshalJSON(j []byte) error {
-	var raw []byte
-	if err := json.Unmarshal(j, &raw); err != nil {
-		return err
-	}
-	x, err := SignatureFromBytes(raw)
-	if err != nil {
-		return err
-	}
-	*s = x
-	return nil
-}
+func (s Signature) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
+
+func (s *Signature) UnmarshalJSON(j []byte) error { _ = "STUB: not implemented"; return nil }

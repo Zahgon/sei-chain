@@ -17,22 +17,11 @@ type resourceLatencyMetric struct {
 	Prune   prometheusextension.WeightedObserver
 }
 
-func newLatencyMetric() latencyMetric {
-	return latencyMetric{
-		prometheusextension.NewWeightedHistogramVec(prometheus.HistogramOpts{
-			Name:    "sei_data__latency",
-			Help:    "latency of resource processing up from production to the given stage",
-			Buckets: prometheus.ExponentialBuckets(0.001, 1.5, 30),
-		}, "resource", "stage"),
-	}
-}
+func newLatencyMetric() latencyMetric { _ = "STUB: not implemented"; return *new(latencyMetric) }
 
 func (m latencyMetric) resource(resource string) resourceLatencyMetric {
-	return resourceLatencyMetric{
-		Receive: m.WithLabelValues(resource, "receive"),
-		Execute: m.WithLabelValues(resource, "execute"),
-		Prune:   m.WithLabelValues(resource, "prune"),
-	}
+	_ = "STUB: not implemented"
+	return *new(resourceLatencyMetric)
 }
 
 type dataMetrics struct {
@@ -41,19 +30,14 @@ type dataMetrics struct {
 	Txs    resourceLatencyMetric
 }
 
-func newDataMetrics() *dataMetrics {
-	base := newLatencyMetric()
-	return &dataMetrics{
-		Base:   base,
-		Blocks: base.resource("blocks"),
-		Txs:    base.resource("txs"),
-	}
-}
+func newDataMetrics() *dataMetrics { _ = "STUB: not implemented"; return nil }
 
 // Describe from prometheus.Collector.
-func (s *State) Describe(chan<- *prometheus.Desc) {}
+func (s *State) Describe(chan<- *prometheus.Desc) {
+	_ = "STUB: not implemented"
 
-// Collect from prometheus.Collector.
-func (s *State) Collect(m chan<- prometheus.Metric) {
-	s.metrics.Base.Collect(m)
+	// Collect from prometheus.Collector.
+	return
 }
+
+func (s *State) Collect(m chan<- prometheus.Metric) { _ = "STUB: not implemented"; return }

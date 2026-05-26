@@ -1,11 +1,6 @@
 package types
 
 import (
-	"math"
-	"math/rand"
-	"time"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
@@ -19,29 +14,8 @@ const OracleDecPrecision = 8
 // GenerateRandomTestCase nolint
 // nolint:staticcheck
 func GenerateRandomTestCase() (rates []float64, valValAddrs []sdk.ValAddress, stakingKeeper DummyStakingKeeper) {
-	valValAddrs = []sdk.ValAddress{}
-	mockValidators := []MockValidator{}
-
-	base := math.Pow10(OracleDecPrecision)
-
-	r := rand.New(rand.NewSource(int64(time.Now().Nanosecond())))
-	numInputs := 10 + (r.Int() % 100)
-	for i := 0; i < numInputs; i++ {
-		rate := float64(int64(r.Float64()*base)) / base
-		rates = append(rates, rate)
-
-		pubKey := secp256k1.GenPrivKey().PubKey()
-		valValAddr := sdk.ValAddress(pubKey.Address())
-		valValAddrs = append(valValAddrs, valValAddr)
-
-		power := r.Int63()%1000 + 1
-		mockValidator := NewMockValidator(valValAddr, power)
-		mockValidators = append(mockValidators, mockValidator)
-	}
-
-	stakingKeeper = NewDummyStakingKeeper(mockValidators)
-
-	return
+	_ = "STUB: not implemented"
+	return nil, nil, *new(DummyStakingKeeper)
 }
 
 var _ StakingKeeper = DummyStakingKeeper{}
@@ -53,58 +27,64 @@ type DummyStakingKeeper struct {
 
 // NewDummyStakingKeeper returns new DummyStakingKeeper instance
 func NewDummyStakingKeeper(validators []MockValidator) DummyStakingKeeper {
-	return DummyStakingKeeper{
-		validators: validators,
-	}
+	_ = "STUB: not implemented"
+	return *new(DummyStakingKeeper)
 }
 
 // Validators nolint
-func (sk DummyStakingKeeper) Validators() []MockValidator {
-	return sk.validators
-}
+func (sk DummyStakingKeeper) Validators() []MockValidator { _ = "STUB: not implemented"; return nil }
 
 // Validator nolint
 func (sk DummyStakingKeeper) Validator(_ sdk.Context, address sdk.ValAddress) stakingtypes.ValidatorI {
-	for _, validator := range sk.validators {
-		if validator.GetOperator().Equals(address) {
-			return validator
-		}
-	}
-
-	return nil
+	_ = "STUB: not implemented"
+	return *new(stakingtypes.ValidatorI)
 }
 
 // TotalBondedTokens nolint
 func (DummyStakingKeeper) TotalBondedTokens(_ sdk.Context) sdk.Int {
-	return sdk.ZeroInt()
+	_ = "STUB: not implemented"
+	return *
+
+	// Slash nolint
+	new(sdk.Int)
 }
 
-// Slash nolint
-func (DummyStakingKeeper) Slash(sdk.Context, sdk.ConsAddress, int64, int64, sdk.Dec) {}
+func (DummyStakingKeeper) Slash(sdk.Context, sdk.ConsAddress, int64, int64, sdk.Dec) {
+	_ = "STUB: not implemented"
 
-// ValidatorsPowerStoreIterator
+	// ValidatorsPowerStoreIterator
+	return
+}
+
 func (DummyStakingKeeper) ValidatorsPowerStoreIterator(_ sdk.Context) sdk.Iterator {
-	return sdk.KVStoreReversePrefixIterator(nil, nil)
+	_ = "STUB: not implemented"
+	return *new(sdk.Iterator)
 }
 
 // Jail
 func (DummyStakingKeeper) Jail(sdk.Context, sdk.ConsAddress) {
+	_ = "STUB: not implemented"
+
+	// GetLastValidatorPower
+	return
 }
 
-// GetLastValidatorPower
 func (sk DummyStakingKeeper) GetLastValidatorPower(ctx sdk.Context, operator sdk.ValAddress) (power int64) {
-	return sk.Validator(ctx, operator).GetConsensusPower(sdk.DefaultPowerReduction)
+	_ = "STUB: not implemented"
+	return 0
 }
 
 // MaxValidators returns the maximum amount of bonded validators
 func (DummyStakingKeeper) MaxValidators(sdk.Context) uint32 {
-	return 100
+	_ = "STUB: not implemented"
+
+	// PowerReduction - is the amount of staking tokens required for 1 unit of consensus-engine power
+	return 0
 }
 
-// PowerReduction - is the amount of staking tokens required for 1 unit of consensus-engine power
 func (DummyStakingKeeper) PowerReduction(_ sdk.Context) (res sdk.Int) {
-	res = sdk.DefaultPowerReduction
-	return
+	_ = "STUB: not implemented"
+	return *new(sdk.Int)
 }
 
 // MockValidator
@@ -115,41 +95,69 @@ type MockValidator struct {
 
 var _ stakingtypes.ValidatorI = MockValidator{}
 
-func (MockValidator) IsJailed() bool                          { return false }
-func (MockValidator) GetMoniker() string                      { return "" }
-func (MockValidator) GetStatus() stakingtypes.BondStatus      { return stakingtypes.Bonded }
-func (MockValidator) IsBonded() bool                          { return true }
-func (MockValidator) IsUnbonded() bool                        { return false }
-func (MockValidator) IsUnbonding() bool                       { return false }
-func (v MockValidator) GetOperator() sdk.ValAddress           { return v.operator }
-func (MockValidator) ConsPubKey() (cryptotypes.PubKey, error) { return nil, nil }
-func (MockValidator) TmConsPublicKey() (tmprotocrypto.PublicKey, error) {
-	return tmprotocrypto.PublicKey{}, nil
+func (MockValidator) IsJailed() bool     { _ = "STUB: not implemented"; return false }
+func (MockValidator) GetMoniker() string { _ = "STUB: not implemented"; return "" }
+func (MockValidator) GetStatus() stakingtypes.BondStatus {
+	_ = "STUB: not implemented"
+	return *new(stakingtypes.BondStatus)
 }
-func (MockValidator) GetConsAddr() (sdk.ConsAddress, error) { return nil, nil }
-func (v MockValidator) GetTokens() sdk.Int {
-	return sdk.TokensFromConsensusPower(v.power, sdk.DefaultPowerReduction)
+func (MockValidator) IsBonded() bool    { _ = "STUB: not implemented"; return false }
+func (MockValidator) IsUnbonded() bool  { _ = "STUB: not implemented"; return false }
+func (MockValidator) IsUnbonding() bool { _ = "STUB: not implemented"; return false }
+func (v MockValidator) GetOperator() sdk.ValAddress {
+	_ = "STUB: not implemented"
+	return *new(sdk.ValAddress)
+}
+func (MockValidator) ConsPubKey() (cryptotypes.PubKey, error) {
+	_ = "STUB: not implemented"
+	return *new(cryptotypes.PubKey), nil
+}
+func (MockValidator) TmConsPublicKey() (tmprotocrypto.PublicKey, error) {
+	_ = "STUB: not implemented"
+	return *new(tmprotocrypto.PublicKey), nil
 }
 
-func (v MockValidator) GetBondedTokens() sdk.Int {
-	return sdk.TokensFromConsensusPower(v.power, sdk.DefaultPowerReduction)
+func (MockValidator) GetConsAddr() (sdk.ConsAddress, error) {
+	_ = "STUB: not implemented"
+	return *new(sdk.ConsAddress), nil
 }
-func (v MockValidator) GetConsensusPower(_ sdk.Int) int64           { return v.power }
-func (v *MockValidator) SetConsensusPower(power int64)              { v.power = power }
-func (v MockValidator) GetCommission() sdk.Dec                      { return sdk.ZeroDec() }
-func (v MockValidator) GetMinSelfDelegation() sdk.Int               { return sdk.OneInt() }
-func (v MockValidator) GetDelegatorShares() sdk.Dec                 { return sdk.NewDec(v.power) }
-func (v MockValidator) TokensFromShares(sdk.Dec) sdk.Dec            { return sdk.ZeroDec() }
-func (v MockValidator) TokensFromSharesTruncated(sdk.Dec) sdk.Dec   { return sdk.ZeroDec() }
-func (v MockValidator) TokensFromSharesRoundUp(sdk.Dec) sdk.Dec     { return sdk.ZeroDec() }
-func (v MockValidator) SharesFromTokens(_ sdk.Int) (sdk.Dec, error) { return sdk.ZeroDec(), nil }
+func (v MockValidator) GetTokens() sdk.Int { _ = "STUB: not implemented"; return *new(sdk.Int) }
+
+func (v MockValidator) GetBondedTokens() sdk.Int { _ = "STUB: not implemented"; return *new(sdk.Int) }
+
+func (v MockValidator) GetConsensusPower(_ sdk.Int) int64 { _ = "STUB: not implemented"; return 0 }
+func (v *MockValidator) SetConsensusPower(power int64)    { _ = "STUB: not implemented"; return }
+func (v MockValidator) GetCommission() sdk.Dec            { _ = "STUB: not implemented"; return *new(sdk.Dec) }
+func (v MockValidator) GetMinSelfDelegation() sdk.Int {
+	_ = "STUB: not implemented"
+	return *new(sdk.Int)
+}
+func (v MockValidator) GetDelegatorShares() sdk.Dec {
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
+}
+func (v MockValidator) TokensFromShares(sdk.Dec) sdk.Dec {
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
+}
+func (v MockValidator) TokensFromSharesTruncated(sdk.Dec) sdk.Dec {
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
+}
+func (v MockValidator) TokensFromSharesRoundUp(sdk.Dec) sdk.Dec {
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
+}
+func (v MockValidator) SharesFromTokens(_ sdk.Int) (sdk.Dec, error) {
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec), nil
+}
 func (v MockValidator) SharesFromTokensTruncated(_ sdk.Int) (sdk.Dec, error) {
-	return sdk.ZeroDec(), nil
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec), nil
 }
 
 func NewMockValidator(valAddr sdk.ValAddress, power int64) MockValidator {
-	return MockValidator{
-		power:    power,
-		operator: valAddr,
-	}
+	_ = "STUB: not implemented"
+	return *new(MockValidator)
 }

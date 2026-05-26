@@ -12,8 +12,8 @@ type MockCommitMultiStore struct {
 }
 
 func (m *MockCommitMultiStore) CacheMultiStore() storetypes.CacheMultiStore {
-	m.Committed = append(m.Committed, false)
-	return &mockCMS{m, &m.Committed[len(m.Committed)-1]}
+	_ = "STUB: not implemented"
+	return *new(storetypes.CacheMultiStore)
 }
 
 type mockCMS struct {
@@ -21,9 +21,6 @@ type mockCMS struct {
 	committed *bool
 }
 
-func (m *mockCMS) Close() {
-}
+func (m *mockCMS) Close() { _ = "STUB: not implemented"; return }
 
-func (m *mockCMS) Write() {
-	*m.committed = true
-}
+func (m *mockCMS) Write() { _ = "STUB: not implemented"; return }

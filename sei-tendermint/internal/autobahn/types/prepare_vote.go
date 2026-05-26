@@ -15,14 +15,16 @@ type PrepareVote struct {
 }
 
 // NewPrepareVote creates a new PrepareVote.
-func NewPrepareVote(proposal *Proposal) *PrepareVote {
-	return &PrepareVote{proposal: proposal}
-}
+func NewPrepareVote(proposal *Proposal) *PrepareVote { _ = "STUB: not implemented"; return nil }
 
 // Proposal .
-func (m *PrepareVote) Proposal() *Proposal { return m.proposal }
+func (m *PrepareVote) Proposal() *Proposal {
+	_ = "STUB: not implemented"
 
-// PrepareVoteConv is the protobuf converter for PrepareVote.
+	// PrepareVoteConv is the protobuf converter for PrepareVote.
+	return nil
+}
+
 var PrepareVoteConv = protoutils.Conv[*PrepareVote, *pb.Proposal]{
 	Encode: func(m *PrepareVote) *pb.Proposal {
 		return ProposalConv.Encode(m.proposal)

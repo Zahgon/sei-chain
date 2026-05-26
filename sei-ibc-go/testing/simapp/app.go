@@ -1,69 +1,46 @@
 package simapp
 
 import (
-	"crypto/sha256"
-	"encoding/json"
 	"io"
-	"net/http"
 	"os"
 	"path/filepath"
 
 	"github.com/gorilla/mux"
-	"github.com/rakyll/statik/fs"
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	tmcfg "github.com/sei-protocol/sei-chain/sei-tendermint/config"
-	tmos "github.com/sei-protocol/sei-chain/sei-tendermint/libs/os"
-	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
-	"github.com/spf13/cast"
 	dbm "github.com/tendermint/tm-db"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/grpc/tmservice"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/rpc"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/server/api"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/server/config"
 	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/testdata"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/genesis"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/legacytm"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/utils"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/version"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/ante"
-	authrest "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/client/rest"
 	authkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/keeper"
-	authtx "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/tx"
 	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/vesting"
-	vestingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/vesting/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/bank"
 	bankkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/keeper"
 	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/capability"
 	capabilitykeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/keeper"
-	capabilitytypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/types"
 	simappparams "github.com/sei-protocol/sei-chain/sei-ibc-go/testing/simapp/params"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/crisis"
 	crisiskeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/crisis/keeper"
-	crisistypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/crisis/types"
 	distr "github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution"
 	distrclient "github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/client"
 	distrkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/keeper"
 	distrtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence"
 	evidencekeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence/keeper"
-	evidencetypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/feegrant"
 	feegrantkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/feegrant/keeper"
 	feegrantmodule "github.com/sei-protocol/sei-chain/sei-cosmos/x/feegrant/module"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil"
-	genutiltypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/genutil/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/gov"
 	govkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/keeper"
 	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
@@ -71,38 +48,26 @@ import (
 	paramsclient "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/client"
 	paramskeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/keeper"
 	paramstypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
-	paramproposal "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types/proposal"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/slashing"
 	slashingkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/slashing/keeper"
-	slashingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/slashing/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/staking"
 	stakingkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/keeper"
 	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade"
 	upgradeclient "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/client"
 	upgradekeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/keeper"
-	upgradetypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/types"
 	ica "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts"
-	icacontroller "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/controller"
 	icacontrollerkeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/controller/keeper"
-	icacontrollertypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/controller/types"
-	icahost "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/host"
 	icahostkeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/host/keeper"
-	icahosttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/host/types"
 	icatypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/types"
 	transfer "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/transfer"
 	ibctransferkeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/transfer/keeper"
 	ibctransfertypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/transfer/types"
 	ibc "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core"
-	ibcclient "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client"
 	ibcclientclient "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/client"
-	ibcclienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	porttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/05-port/types"
-	ibchost "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 	ibckeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/keeper"
 	ibcmock "github.com/sei-protocol/sei-chain/sei-ibc-go/testing/mock"
 
-	authz "github.com/sei-protocol/sei-chain/sei-cosmos/x/authz"
 	authzkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/authz/keeper"
 	authzmodule "github.com/sei-protocol/sei-chain/sei-cosmos/x/authz/module"
 
@@ -233,517 +198,221 @@ func NewSimApp(
 	homePath string, invCheckPeriod uint, tmConfig *tmcfg.Config, encodingConfig simappparams.EncodingConfig,
 	appOpts servertypes.AppOptions, baseAppOptions ...func(*baseapp.BaseApp),
 ) *SimApp {
-	appCodec := encodingConfig.Marshaler
-	legacyAmino := encodingConfig.Amino
-	interfaceRegistry := encodingConfig.InterfaceRegistry
-
-	bApp := baseapp.NewBaseApp(appName, db, encodingConfig.TxConfig.TxDecoder(), tmConfig, appOpts, baseAppOptions...)
-	bApp.SetCommitMultiStoreTracer(traceStore)
-	bApp.SetVersion(version.Version)
-	bApp.SetInterfaceRegistry(interfaceRegistry)
-
-	keys := sdk.NewKVStoreKeys(
-		authtypes.StoreKey, banktypes.StoreKey, stakingtypes.StoreKey,
-		distrtypes.StoreKey, slashingtypes.StoreKey,
-		govtypes.StoreKey, paramstypes.StoreKey, ibchost.StoreKey, upgradetypes.StoreKey, feegrant.StoreKey,
-		evidencetypes.StoreKey, ibctransfertypes.StoreKey, icacontrollertypes.StoreKey, icahosttypes.StoreKey, capabilitytypes.StoreKey,
-		authzkeeper.StoreKey,
-	)
-	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
-	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey, banktypes.DeferredCacheStoreKey)
-
-	app := &SimApp{
-		BaseApp:           bApp,
-		legacyAmino:       legacyAmino,
-		appCodec:          appCodec,
-		interfaceRegistry: interfaceRegistry,
-		invCheckPeriod:    invCheckPeriod,
-		keys:              keys,
-		tkeys:             tkeys,
-		memKeys:           memKeys,
-		txDecoder:         encodingConfig.TxConfig.TxDecoder(),
-	}
-
-	app.ParamsKeeper = initParamsKeeper(appCodec, legacyAmino, keys[paramstypes.StoreKey], tkeys[paramstypes.TStoreKey])
-
-	// set the BaseApp's parameter store
-	bApp.SetParamStore(app.ParamsKeeper.Subspace(baseapp.Paramspace).WithKeyTable(paramskeeper.ConsensusParamsKeyTable()))
-
-	// add capability keeper and ScopeToModule for ibc module
-	app.CapabilityKeeper = capabilitykeeper.NewKeeper(appCodec, keys[capabilitytypes.StoreKey], memKeys[capabilitytypes.MemStoreKey])
-	scopedIBCKeeper := app.CapabilityKeeper.ScopeToModule(ibchost.ModuleName)
-	scopedTransferKeeper := app.CapabilityKeeper.ScopeToModule(ibctransfertypes.ModuleName)
-	scopedICAControllerKeeper := app.CapabilityKeeper.ScopeToModule(icacontrollertypes.SubModuleName)
-	scopedICAHostKeeper := app.CapabilityKeeper.ScopeToModule(icahosttypes.SubModuleName)
-
-	// NOTE: the IBC mock keeper and application module is used only for testing core IBC. Do
-	// not replicate if you do not need to test core IBC or light clients.
-	scopedIBCMockKeeper := app.CapabilityKeeper.ScopeToModule(ibcmock.ModuleName)
-	scopedICAMockKeeper := app.CapabilityKeeper.ScopeToModule(ibcmock.ModuleName + icacontrollertypes.SubModuleName)
-
-	// seal capability keeper after scoping modules
-	app.CapabilityKeeper.Seal()
-
-	// add keepers
-	app.AccountKeeper = authkeeper.NewAccountKeeper(
-		appCodec, keys[authtypes.StoreKey], app.GetSubspace(authtypes.ModuleName), authtypes.ProtoBaseAccount, maccPerms,
-	)
-	app.BankKeeper = bankkeeper.NewBaseKeeperWithDeferredCache(
-		appCodec, keys[banktypes.StoreKey], app.AccountKeeper, app.GetSubspace(banktypes.ModuleName), app.ModuleAccountAddrs(), memKeys[banktypes.DeferredCacheStoreKey],
-	)
-	stakingKeeper := stakingkeeper.NewKeeper(
-		appCodec, keys[stakingtypes.StoreKey], app.AccountKeeper, app.BankKeeper, app.GetSubspace(stakingtypes.ModuleName),
-	)
-	app.DistrKeeper = distrkeeper.NewKeeper(
-		appCodec, keys[distrtypes.StoreKey], app.GetSubspace(distrtypes.ModuleName), app.AccountKeeper, app.BankKeeper,
-		&stakingKeeper, authtypes.FeeCollectorName, app.ModuleAccountAddrs(),
-	)
-	app.SlashingKeeper = slashingkeeper.NewKeeper(
-		appCodec, keys[slashingtypes.StoreKey], &stakingKeeper, app.GetSubspace(slashingtypes.ModuleName),
-	)
-	app.CrisisKeeper = crisiskeeper.NewKeeper(
-		app.GetSubspace(crisistypes.ModuleName), invCheckPeriod, app.BankKeeper, authtypes.FeeCollectorName,
-	)
-
-	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
-	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp)
-
-	// register the staking hooks
-	// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
-	app.StakingKeeper = *stakingKeeper.SetHooks(
-		stakingtypes.NewMultiStakingHooks(app.DistrKeeper.Hooks(), app.SlashingKeeper.Hooks()),
-	)
-
-	// Create IBC Keeper
-	app.IBCKeeper = ibckeeper.NewKeeper(
-		appCodec, keys[ibchost.StoreKey], app.GetSubspace(ibchost.ModuleName), app.StakingKeeper, app.UpgradeKeeper, scopedIBCKeeper,
-	)
-
-	app.AuthzKeeper = authzkeeper.NewKeeper(keys[authzkeeper.StoreKey], appCodec, app.MsgServiceRouter())
-
-	// register the proposal types
-	govRouter := govtypes.NewRouter()
-	govRouter.AddRoute(govtypes.RouterKey, govtypes.ProposalHandler).
-		AddRoute(paramproposal.RouterKey, params.NewParamChangeProposalHandler(app.ParamsKeeper)).
-		AddRoute(distrtypes.RouterKey, distr.NewCommunityPoolSpendProposalHandler(app.DistrKeeper)).
-		AddRoute(upgradetypes.RouterKey, upgrade.NewSoftwareUpgradeProposalHandler(app.UpgradeKeeper)).
-		AddRoute(ibcclienttypes.RouterKey, ibcclient.NewClientProposalHandler(app.IBCKeeper.ClientKeeper))
-	app.GovKeeper = govkeeper.NewKeeper(
-		appCodec, keys[govtypes.StoreKey], app.GetSubspace(govtypes.ModuleName), app.AccountKeeper, app.BankKeeper,
-		&stakingKeeper, app.ParamsKeeper, govRouter,
-	)
-
-	// Create Transfer Keepers
-	app.TransferKeeper = ibctransferkeeper.NewKeeper(
-		appCodec, keys[ibctransfertypes.StoreKey], app.GetSubspace(ibctransfertypes.ModuleName),
-		app.IBCKeeper.ChannelKeeper, app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
-		app.AccountKeeper, app.BankKeeper, scopedTransferKeeper,
-	)
-	transferModule := transfer.NewAppModule(app.TransferKeeper)
-	transferIBCModule := transfer.NewIBCModule(app.TransferKeeper)
-
-	// NOTE: the IBC mock keeper and application module is used only for testing core IBC. Do
-	// not replicate if you do not need to test core IBC or light clients.
-	mockModule := ibcmock.NewAppModule(&app.IBCKeeper.PortKeeper)
-	mockIBCModule := ibcmock.NewIBCModule(&mockModule, ibcmock.NewMockIBCApp(ibcmock.ModuleName, scopedIBCMockKeeper))
-
-	app.ICAControllerKeeper = icacontrollerkeeper.NewKeeper(
-		appCodec, keys[icacontrollertypes.StoreKey], app.GetSubspace(icacontrollertypes.SubModuleName),
-		app.IBCKeeper.ChannelKeeper, // may be replaced with middleware such as ics29 fee
-		app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
-		scopedICAControllerKeeper, app.MsgServiceRouter(),
-	)
-
-	app.ICAHostKeeper = icahostkeeper.NewKeeper(
-		appCodec, keys[icahosttypes.StoreKey], app.GetSubspace(icahosttypes.SubModuleName),
-		app.IBCKeeper.ChannelKeeper, &app.IBCKeeper.PortKeeper,
-		app.AccountKeeper, scopedICAHostKeeper, app.MsgServiceRouter(),
-	)
-
-	icaModule := ica.NewAppModule(&app.ICAControllerKeeper, &app.ICAHostKeeper)
-
-	// initialize ICA module with mock module as the authentication module on the controller side
-	icaAuthModule := ibcmock.NewIBCModule(&mockModule, ibcmock.NewMockIBCApp("", scopedICAMockKeeper))
-	app.ICAAuthModule = icaAuthModule
-
-	icaControllerIBCModule := icacontroller.NewIBCModule(app.ICAControllerKeeper, icaAuthModule)
-	icaHostIBCModule := icahost.NewIBCModule(app.ICAHostKeeper)
-
-	// Create static IBC router, add app routes, then set and seal it
-	ibcRouter := porttypes.NewRouter()
-	ibcRouter.AddRoute(icacontrollertypes.SubModuleName, icaControllerIBCModule).
-		AddRoute(icahosttypes.SubModuleName, icaHostIBCModule).
-		AddRoute(ibcmock.ModuleName+icacontrollertypes.SubModuleName, icaControllerIBCModule). // ica with mock auth module stack route to ica (top level of middleware stack)
-		AddRoute(ibctransfertypes.ModuleName, transferIBCModule).
-		AddRoute(ibcmock.ModuleName, mockIBCModule)
-	app.IBCKeeper.SetRouter(ibcRouter)
-
-	// create evidence keeper with router
-	evidenceKeeper := evidencekeeper.NewKeeper(
-		appCodec, keys[evidencetypes.StoreKey], &app.StakingKeeper, app.SlashingKeeper,
-	)
-	// If evidence needs to be handled for the app, set routes in router here and seal
-	app.EvidenceKeeper = *evidenceKeeper
-
-	/****  Module Options ****/
-
-	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
-	// we prefer to be more strict in what arguments the modules expect.
-	skipGenesisInvariants := cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
-
-	// NOTE: Any module instantiated in the module manager that is later modified
-	// must be passed by reference here.
-	app.mm = module.NewManager(
-		genutil.NewAppModule(
-			app.AccountKeeper, app.StakingKeeper, app.DeliverTx,
-			encodingConfig.TxConfig,
-		),
-		auth.NewAppModule(appCodec, app.AccountKeeper, nil),
-		vesting.NewAppModule(app.AccountKeeper, app.BankKeeper),
-		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
-		capability.NewAppModule(appCodec, *app.CapabilityKeeper),
-		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
-		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
-		gov.NewAppModule(appCodec, app.GovKeeper, app.AccountKeeper, app.BankKeeper),
-		slashing.NewAppModule(appCodec, app.SlashingKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
-		distr.NewAppModule(appCodec, app.DistrKeeper, app.AccountKeeper, app.BankKeeper, app.StakingKeeper),
-		staking.NewAppModule(appCodec, app.StakingKeeper, app.AccountKeeper, app.BankKeeper),
-		upgrade.NewAppModule(app.UpgradeKeeper),
-		evidence.NewAppModule(app.EvidenceKeeper),
-		ibc.NewAppModule(app.IBCKeeper),
-		params.NewAppModule(app.ParamsKeeper),
-		authzmodule.NewAppModule(appCodec, app.AuthzKeeper, app.AccountKeeper, app.BankKeeper, app.interfaceRegistry),
-		transferModule,
-		icaModule,
-		mockModule,
-	)
-
-	// NOTE: The genutils module must occur after staking so that pools are
-	// properly initialized with tokens from genesis accounts.
-	// NOTE: Capability module must occur first so that it can initialize any capabilities
-	// so that other modules that want to create or claim capabilities afterwards in InitChain
-	// can do so safely.
-	app.mm.SetOrderInitGenesis(
-		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, distrtypes.ModuleName, stakingtypes.ModuleName,
-		slashingtypes.ModuleName, govtypes.ModuleName, crisistypes.ModuleName,
-		ibchost.ModuleName, genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName, ibctransfertypes.ModuleName,
-		icatypes.ModuleName, ibcmock.ModuleName, feegrant.ModuleName, paramstypes.ModuleName, upgradetypes.ModuleName, vestingtypes.ModuleName,
-	)
-
-	app.mm.RegisterInvariants(&app.CrisisKeeper)
-	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
-	app.mm.RegisterServices(app.configurator)
-
-	// add test gRPC service for testing gRPC queries in isolation
-	testdata.RegisterQueryServer(app.GRPCQueryRouter(), testdata.QueryImpl{})
-
-	// initialize stores
-	app.MountKVStores(keys)
-	app.MountTransientStores(tkeys)
-	app.MountMemoryStores(memKeys)
-
-	// initialize BaseApp
-	app.SetInitChainer(app.InitChainer)
-	anteHandler, err := NewAnteHandler(
-		HandlerOptions{
-			HandlerOptions: ante.HandlerOptions{
-				AccountKeeper:   app.AccountKeeper,
-				BankKeeper:      app.BankKeeper,
-				SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
-				FeegrantKeeper:  app.FeeGrantKeeper,
-				SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
-				ParamsKeeper:    app.ParamsKeeper,
-				TxFeeChecker:    ante.CheckTxFeeWithValidatorMinGasPrices,
-			},
-			IBCKeeper: app.IBCKeeper,
-		},
-	)
-	if err != nil {
-		panic(err)
-	}
-
-	app.SetAnteHandler(anteHandler)
-
-	app.SetFinalizeBlocker(app.FinalizeBlocker)
-
-	if loadLatest {
-		if err := app.LoadLatestVersion(); err != nil {
-			tmos.Exit(err.Error())
-		}
-	}
-
-	app.ScopedIBCKeeper = scopedIBCKeeper
-	app.ScopedTransferKeeper = scopedTransferKeeper
-	app.ScopedICAControllerKeeper = scopedICAControllerKeeper
-	app.ScopedICAHostKeeper = scopedICAHostKeeper
-
-	// NOTE: the IBC mock keeper and application module is used only for testing core IBC. Do
-	// note replicate if you do not need to test core IBC or light clients.
-	app.ScopedIBCMockKeeper = scopedIBCMockKeeper
-	app.ScopedICAMockKeeper = scopedICAMockKeeper
-
-	return app
+	_ = "STUB: not implemented"
+	return nil
 }
 
+// set the BaseApp's parameter store
+
+// add capability keeper and ScopeToModule for ibc module
+
+// NOTE: the IBC mock keeper and application module is used only for testing core IBC. Do
+// not replicate if you do not need to test core IBC or light clients.
+
+// seal capability keeper after scoping modules
+
+// add keepers
+
+// register the staking hooks
+// NOTE: stakingKeeper above is passed by reference, so that it will contain these hooks
+
+// Create IBC Keeper
+
+// register the proposal types
+
+// Create Transfer Keepers
+
+// NOTE: the IBC mock keeper and application module is used only for testing core IBC. Do
+// not replicate if you do not need to test core IBC or light clients.
+
+// may be replaced with middleware such as ics29 fee
+
+// initialize ICA module with mock module as the authentication module on the controller side
+
+// Create static IBC router, add app routes, then set and seal it
+
+// ica with mock auth module stack route to ica (top level of middleware stack)
+
+// create evidence keeper with router
+
+// If evidence needs to be handled for the app, set routes in router here and seal
+
+/****  Module Options ****/
+
+// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
+// we prefer to be more strict in what arguments the modules expect.
+
+// NOTE: Any module instantiated in the module manager that is later modified
+// must be passed by reference here.
+
+// NOTE: The genutils module must occur after staking so that pools are
+// properly initialized with tokens from genesis accounts.
+// NOTE: Capability module must occur first so that it can initialize any capabilities
+// so that other modules that want to create or claim capabilities afterwards in InitChain
+// can do so safely.
+
+// add test gRPC service for testing gRPC queries in isolation
+
+// initialize stores
+
+// initialize BaseApp
+
+// NOTE: the IBC mock keeper and application module is used only for testing core IBC. Do
+// note replicate if you do not need to test core IBC or light clients.
+
 // Name returns the name of the App
-func (app *SimApp) Name() string { return app.BaseApp.Name() }
+func (app *SimApp) Name() string { _ = "STUB: not implemented"; return "" }
 
 func (app *SimApp) FinalizeBlocker(ctx sdk.Context, req *abci.RequestFinalizeBlock) (*abci.ResponseFinalizeBlock, error) {
-	app.BeginBlocker(ctx)
-
-	typedTxs := make([]sdk.Tx, 0, len(req.Txs))
-	for _, tx := range req.Txs {
-		typedTx, err := app.txDecoder(tx)
-		if err != nil {
-			typedTxs = append(typedTxs, nil)
-		} else {
-			typedTxs = append(typedTxs, typedTx)
-		}
-	}
-
-	txResults := make([]*abci.ExecTxResult, 0, len(req.Txs))
-	for i, tx := range req.Txs {
-		ctx = ctx.WithTxIndex(i)
-		deliverTxResp := app.DeliverTx(ctx, abci.RequestDeliverTxV2{
-			Tx: tx,
-		}, typedTxs[i], sha256.Sum256(tx))
-		txResults = append(txResults, &abci.ExecTxResult{
-			Code:      deliverTxResp.Code,
-			Data:      deliverTxResp.Data,
-			Log:       deliverTxResp.Log,
-			Info:      deliverTxResp.Info,
-			GasWanted: deliverTxResp.GasWanted,
-			GasUsed:   deliverTxResp.GasUsed,
-			Events:    deliverTxResp.Events,
-			Codespace: deliverTxResp.Codespace,
-		})
-	}
-	vals := app.EndBlocker(ctx)
-	events := sdk.MarkEventsToIndex(ctx.EventManager().ABCIEvents(), app.IndexEvents)
-	cpUpdates := legacytm.ABCIToLegacyConsensusParams(app.GetConsensusParams(ctx))
-
-	app.SetDeliverStateToCommit()
-	app.WriteState()
-	appHash := app.GetWorkingHash()
-	return &abci.ResponseFinalizeBlock{
-		Events:    events,
-		TxResults: txResults,
-		ValidatorUpdates: utils.Map(vals, func(v abci.ValidatorUpdate) abci.ValidatorUpdate {
-			return abci.ValidatorUpdate{
-				PubKey: v.PubKey,
-				Power:  v.Power,
-			}
-		}),
-		ConsensusParamUpdates: &tmproto.ConsensusParams{
-			Block: &tmproto.BlockParams{
-				MaxBytes: cpUpdates.Block.MaxBytes,
-				MaxGas:   cpUpdates.Block.MaxGas,
-			},
-			Evidence: &tmproto.EvidenceParams{
-				MaxAgeNumBlocks: cpUpdates.Evidence.MaxAgeNumBlocks,
-				MaxAgeDuration:  cpUpdates.Evidence.MaxAgeDuration,
-				MaxBytes:        cpUpdates.Evidence.MaxBytes,
-			},
-			Validator: &tmproto.ValidatorParams{
-				PubKeyTypes: cpUpdates.Validator.PubKeyTypes,
-			},
-			Version: &tmproto.VersionParams{
-				AppVersion: cpUpdates.Version.AppVersion,
-			},
-		},
-		AppHash: appHash,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BeginBlocker application updates every begin block
-func (app *SimApp) BeginBlocker(ctx sdk.Context) {
-	capability.BeginBlocker(ctx, *app.CapabilityKeeper)
-	distr.BeginBlocker(ctx, []abci.VoteInfo{}, app.DistrKeeper)
-	slashing.BeginBlocker(ctx, []abci.VoteInfo{}, app.SlashingKeeper)
-	evidence.BeginBlocker(ctx, []abci.Misbehavior{}, app.EvidenceKeeper)
-	staking.BeginBlocker(ctx, app.StakingKeeper)
-	ibcclient.BeginBlocker(ctx, app.IBCKeeper.ClientKeeper)
-}
+func (app *SimApp) BeginBlocker(ctx sdk.Context) { _ = "STUB: not implemented"; return }
 
 // EndBlocker application updates every end block
 func (app *SimApp) EndBlocker(ctx sdk.Context) []abci.ValidatorUpdate {
-	crisis.EndBlocker(ctx, app.CrisisKeeper)
-	gov.EndBlocker(ctx, app.GovKeeper)
-	return staking.EndBlocker(ctx, app.StakingKeeper)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // InitChainer application update at chain initialization
 func (app *SimApp) InitChainer(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
-	var genesisState GenesisState
-	if err := json.Unmarshal(req.AppStateBytes, &genesisState); err != nil {
-		panic(err)
-	}
-	app.UpgradeKeeper.SetModuleVersionMap(ctx, app.mm.GetVersionMap())
-	return app.mm.InitGenesis(ctx, app.appCodec, genesisState, genesis.GenesisImportConfig{})
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseInitChain)
 }
 
 // LoadHeight loads a particular height
-func (app *SimApp) LoadHeight(height int64) error {
-	return app.LoadVersion(height)
-}
+func (app *SimApp) LoadHeight(height int64) error { _ = "STUB: not implemented"; return nil }
 
 // ModuleAccountAddrs returns all the app's module account addresses.
-func (app *SimApp) ModuleAccountAddrs() map[string]bool {
-	modAccAddrs := make(map[string]bool)
-	for acc := range maccPerms {
-		modAccAddrs[authtypes.NewModuleAddress(acc).String()] = true
-	}
-
-	return modAccAddrs
-}
+func (app *SimApp) ModuleAccountAddrs() map[string]bool { _ = "STUB: not implemented"; return nil }
 
 // GetModuleManager returns the app module manager
 // NOTE: used for testing purposes
 func (app *SimApp) GetModuleManager() *module.Manager {
-	return app.mm
+	_ = "STUB: not implemented"
+
+	// LegacyAmino returns SimApp's amino codec.
+	//
+	// NOTE: This is solely to be used for testing purposes as it may be desirable
+	// for modules to register their own custom testing types.
+	return nil
 }
 
-// LegacyAmino returns SimApp's amino codec.
-//
-// NOTE: This is solely to be used for testing purposes as it may be desirable
-// for modules to register their own custom testing types.
-func (app *SimApp) LegacyAmino() *codec.LegacyAmino {
-	return app.legacyAmino
-}
+func (app *SimApp) LegacyAmino() *codec.LegacyAmino { _ = "STUB: not implemented"; return nil }
 
 // AppCodec returns SimApp's app codec.
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
 func (app *SimApp) AppCodec() codec.Codec {
-	return app.appCodec
+	_ = "STUB: not implemented"
+	return *
+
+	// InterfaceRegistry returns SimApp's InterfaceRegistry
+	new(codec.Codec)
 }
 
-// InterfaceRegistry returns SimApp's InterfaceRegistry
 func (app *SimApp) InterfaceRegistry() types.InterfaceRegistry {
-	return app.interfaceRegistry
+	_ = "STUB: not implemented"
+	return *new(types.InterfaceRegistry)
 }
 
 // GetKey returns the KVStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *SimApp) GetKey(storeKey string) *sdk.KVStoreKey {
-	return app.keys[storeKey]
-}
+func (app *SimApp) GetKey(storeKey string) *sdk.KVStoreKey { _ = "STUB: not implemented"; return nil }
 
 // GetTKey returns the TransientStoreKey for the provided store key.
 //
 // NOTE: This is solely to be used for testing purposes.
 func (app *SimApp) GetTKey(storeKey string) *sdk.TransientStoreKey {
-	return app.tkeys[storeKey]
+	_ = "STUB: not implemented"
+	return nil
+
+	// GetMemKey returns the MemStoreKey for the provided mem key.
+	//
+	// NOTE: This is solely used for testing purposes.
 }
 
-// GetMemKey returns the MemStoreKey for the provided mem key.
-//
-// NOTE: This is solely used for testing purposes.
 func (app *SimApp) GetMemKey(storeKey string) *sdk.MemoryStoreKey {
-	return app.memKeys[storeKey]
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetSubspace returns a param subspace for a given module name.
 //
 // NOTE: This is solely to be used for testing purposes.
 func (app *SimApp) GetSubspace(moduleName string) paramstypes.Subspace {
-	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
-	return subspace
+	_ = "STUB: not implemented"
+	return *new(paramstypes.Subspace)
 }
 
 // TestingApp functions
 
 // GetBaseApp implements the TestingApp interface.
 func (app *SimApp) GetBaseApp() *baseapp.BaseApp {
-	return app.BaseApp
+	_ = "STUB: not implemented"
+
+	// GetStakingKeeper implements the TestingApp interface.
+	return nil
 }
 
-// GetStakingKeeper implements the TestingApp interface.
 func (app *SimApp) GetStakingKeeper() stakingkeeper.Keeper {
-	return app.StakingKeeper
+	_ = "STUB: not implemented"
+	return *
+
+	// GetIBCKeeper implements the TestingApp interface.
+	new(stakingkeeper.Keeper)
 }
 
-// GetIBCKeeper implements the TestingApp interface.
-func (app *SimApp) GetIBCKeeper() *ibckeeper.Keeper {
-	return app.IBCKeeper
-}
+func (app *SimApp) GetIBCKeeper() *ibckeeper.Keeper { _ = "STUB: not implemented"; return nil }
 
 // GetScopedIBCKeeper implements the TestingApp interface.
 func (app *SimApp) GetScopedIBCKeeper() capabilitykeeper.ScopedKeeper {
-	return app.ScopedIBCKeeper
+	_ = "STUB: not implemented"
+	return *new(capabilitykeeper.ScopedKeeper)
 }
 
 // GetTxConfig implements the TestingApp interface.
 func (app *SimApp) GetTxConfig() client.TxConfig {
-	return MakeTestEncodingConfig().TxConfig
+	_ = "STUB: not implemented"
+	return *new(client.TxConfig)
 }
 
 // RegisterAPIRoutes registers all application module routes with the provided
 // API server.
 func (app *SimApp) RegisterAPIRoutes(apiSvr *api.Server, apiConfig config.APIConfig) {
-	clientCtx := apiSvr.ClientCtx
-	rpc.RegisterRoutes(clientCtx, apiSvr.Router)
-	// Register legacy tx routes.
-	authrest.RegisterTxRoutes(clientCtx, apiSvr.Router)
-	// Register new tx routes from grpc-gateway.
-	authtx.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
-	// Register new tendermint queries routes from grpc-gateway.
-	tmservice.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
-
-	// Register legacy and grpc-gateway routes for all modules.
-	ModuleBasics.RegisterRESTRoutes(clientCtx, apiSvr.Router)
-	ModuleBasics.RegisterGRPCGatewayRoutes(clientCtx, apiSvr.GRPCGatewayRouter)
-
-	// register swagger API from root so that other applications can override easily
-	if apiConfig.Swagger {
-		RegisterSwaggerAPI(clientCtx, apiSvr.Router)
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+// Register legacy tx routes.
+
+// Register new tx routes from grpc-gateway.
+
+// Register new tendermint queries routes from grpc-gateway.
+
+// Register legacy and grpc-gateway routes for all modules.
+
+// register swagger API from root so that other applications can override easily
 
 // RegisterTxService implements the Application.RegisterLocalServices method.
 func (app *SimApp) RegisterLocalServices(node client.LocalClient, txConfig client.TxConfig) {
-	authtx.RegisterTxService(app.GRPCQueryRouter(), node, txConfig, app.Simulate, app.interfaceRegistry)
-	tmservice.RegisterTendermintService(app.GRPCQueryRouter(), node, app.interfaceRegistry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterSwaggerAPI registers swagger route with API Server
-func RegisterSwaggerAPI(ctx client.Context, rtr *mux.Router) {
-	statikFS, err := fs.New()
-	if err != nil {
-		panic(err)
-	}
-
-	staticServer := http.FileServer(statikFS)
-	rtr.PathPrefix("/swagger/").Handler(http.StripPrefix("/swagger/", staticServer))
-}
+func RegisterSwaggerAPI(ctx client.Context, rtr *mux.Router) { _ = "STUB: not implemented"; return }
 
 // GetMaccPerms returns a copy of the module account permissions
-func GetMaccPerms() map[string][]string {
-	dupMaccPerms := make(map[string][]string)
-	for k, v := range maccPerms {
-		dupMaccPerms[k] = v
-	}
-	return dupMaccPerms
-}
+func GetMaccPerms() map[string][]string { _ = "STUB: not implemented"; return nil }
 
 // initParamsKeeper init params keeper and its subspaces
 func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino, key, tkey sdk.StoreKey) paramskeeper.Keeper {
-	paramsKeeper := paramskeeper.NewKeeper(appCodec, legacyAmino, key, tkey)
-
-	paramsKeeper.Subspace(authtypes.ModuleName)
-	paramsKeeper.Subspace(banktypes.ModuleName)
-	paramsKeeper.Subspace(stakingtypes.ModuleName)
-	paramsKeeper.Subspace(distrtypes.ModuleName)
-	paramsKeeper.Subspace(slashingtypes.ModuleName)
-	paramsKeeper.Subspace(govtypes.ModuleName).WithKeyTable(govtypes.ParamKeyTable())
-	paramsKeeper.Subspace(crisistypes.ModuleName)
-	paramsKeeper.Subspace(ibctransfertypes.ModuleName)
-	paramsKeeper.Subspace(ibchost.ModuleName)
-	paramsKeeper.Subspace(icacontrollertypes.SubModuleName)
-	paramsKeeper.Subspace(icahosttypes.SubModuleName)
-
-	return paramsKeeper
+	_ = "STUB: not implemented"
+	return *new(paramskeeper.Keeper)
 }

@@ -12,45 +12,28 @@ type trackedIterator struct {
 }
 
 func NewTrackedIterator(iter types.Iterator, iterationTracker *iterationTracker) *trackedIterator {
-	return &trackedIterator{
-		Iterator:   iter,
-		iterateset: iterationTracker,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (ti *trackedIterator) Valid() bool {
-	valid := ti.Iterator.Valid()
-	// if no longer valid, remove the early stop key since we reached end of range
-	if !valid {
-		ti.iterateset.SetEarlyStopKey(nil)
-	} else {
-		key := ti.Iterator.Key()
-		ti.iterateset.AddKey(key)
-	}
-	return valid
-}
+func (ti *trackedIterator) Valid() bool { _ = "STUB: not implemented"; return false }
+
+// if no longer valid, remove the early stop key since we reached end of range
 
 // Key calls the iterator.Key() and adds the key to the iterateset, then returns the key from the iterator
-func (ti *trackedIterator) Key() []byte {
-	key := ti.Iterator.Key()
-	// add key to the tracker
-	ti.iterateset.AddKey(key)
-	return key
-}
+func (ti *trackedIterator) Key() []byte { _ = "STUB: not implemented"; return nil }
+
+// add key to the tracker
 
 // Value calls the iterator.Key() and adds the key to the iterateset, then returns the value from the iterator
-func (ti *trackedIterator) Value() []byte {
-	key := ti.Iterator.Key()
-	val := ti.Iterator.Value()
-	// add key to the tracker
-	ti.iterateset.AddKey(key)
-	return val
-}
+func (ti *trackedIterator) Value() []byte { _ = "STUB: not implemented"; return nil }
+
+// add key to the tracker
 
 func (ti *trackedIterator) Next() {
+	_ = "STUB: not implemented"
 	// add current key to the tracker
-	key := ti.Iterator.Key()
-	ti.iterateset.AddKey(key)
-	// call next
-	ti.Iterator.Next()
+	return
 }
+
+// call next

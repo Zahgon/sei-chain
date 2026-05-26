@@ -1,13 +1,9 @@
 package keeper
 
 import (
-	"fmt"
-
-	gogotypes "github.com/gogo/protobuf/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
 )
@@ -69,177 +65,106 @@ func NewAccountKeeper(
 	cdc codec.BinaryCodec, key sdk.StoreKey, paramstore paramtypes.Subspace, proto func() types.AccountI,
 	maccPerms map[string][]string,
 ) AccountKeeper {
+	_ = "STUB: not implemented"
 
 	// set KeyTable if it has not already been set
-	if !paramstore.HasKeyTable() {
-		paramstore = paramstore.WithKeyTable(types.ParamKeyTable())
-	}
-
-	permAddrs := make(map[string]types.PermissionsForAddress)
-	for name, perms := range maccPerms {
-		permAddrs[name] = types.NewPermissionsForAddress(name, perms)
-	}
-
-	return AccountKeeper{
-		key:           key,
-		proto:         proto,
-		cdc:           cdc,
-		paramSubspace: paramstore,
-		permAddrs:     permAddrs,
-	}
+	return *new(AccountKeeper)
 }
 
 // GetPubKey Returns the PubKey of the account at address
 func (ak AccountKeeper) GetPubKey(ctx sdk.Context, addr sdk.AccAddress) (cryptotypes.PubKey, error) {
-	acc := ak.GetAccount(ctx, addr)
-	if acc == nil {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "account %s does not exist", addr)
-	}
-
-	return acc.GetPubKey(), nil
+	_ = "STUB: not implemented"
+	return *new(cryptotypes.PubKey), nil
 }
 
 // GetSequence Returns the Sequence of the account at address
 func (ak AccountKeeper) GetSequence(ctx sdk.Context, addr sdk.AccAddress) (uint64, error) {
-	acc := ak.GetAccount(ctx, addr)
-	if acc == nil {
-		return 0, sdkerrors.Wrapf(sdkerrors.ErrUnknownAddress, "account %s does not exist", addr)
-	}
-
-	return acc.GetSequence(), nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // GetNextAccountNumber returns and increments the global account number counter.
 // If the global account number is not set, it initializes it with value 0.
 func (ak AccountKeeper) GetNextAccountNumber(ctx sdk.Context) uint64 {
-	var accNumber uint64
-	store := ctx.KVStore(ak.key)
-
-	bz := store.Get(types.GlobalAccountNumberKey)
-	if bz == nil {
-		// initialize the account numbers
-		accNumber = 0
-	} else {
-		val := gogotypes.UInt64Value{}
-
-		err := ak.cdc.Unmarshal(bz, &val)
-		if err != nil {
-			panic(err)
-		}
-
-		accNumber = val.GetValue()
-	}
-
-	bz = ak.cdc.MustMarshal(&gogotypes.UInt64Value{Value: accNumber + 1})
-	store.Set(types.GlobalAccountNumberKey, bz)
-
-	return accNumber
+	_ = "STUB: not implemented"
+	return 0
 }
 
+// initialize the account numbers
+
 func (ak AccountKeeper) GetGlobalAccountNumberBytes(ctx sdk.Context) []byte {
-	bz := ctx.KVStore(ak.key).Get(types.GlobalAccountNumberKey)
-	return append([]byte(nil), bz...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (ak AccountKeeper) SetGlobalAccountNumberBytes(ctx sdk.Context, bz []byte) {
-	store := ctx.KVStore(ak.key)
-	if bz == nil {
-		store.Delete(types.GlobalAccountNumberKey)
-		return
-	}
-	store.Set(types.GlobalAccountNumberKey, bz)
+	_ = "STUB: not implemented"
+	return
 }
 
 // ValidatePermissions validates that the module account has been granted
 // permissions within its set of allowed permissions.
 func (ak AccountKeeper) ValidatePermissions(macc types.ModuleAccountI) error {
-	permAddr := ak.permAddrs[macc.GetName()]
-	for _, perm := range macc.GetPermissions() {
-		if !permAddr.HasPermission(perm) {
-			return fmt.Errorf("invalid module permission %s", perm)
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // GetModuleAddress returns an address based on the module name
 func (ak AccountKeeper) GetModuleAddress(moduleName string) sdk.AccAddress {
-	permAddr, ok := ak.permAddrs[moduleName]
-	if !ok {
-		return nil
-	}
-
-	return permAddr.GetAddress()
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
 
 // GetModuleAddressAndPermissions returns an address and permissions based on the module name
 func (ak AccountKeeper) GetModuleAddressAndPermissions(moduleName string) (addr sdk.AccAddress, permissions []string) {
-	permAddr, ok := ak.permAddrs[moduleName]
-	if !ok {
-		return addr, permissions
-	}
-
-	return permAddr.GetAddress(), permAddr.GetPermissions()
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), nil
 }
 
 // GetModuleAccountAndPermissions gets the module account from the auth account store and its
 // registered permissions
 func (ak AccountKeeper) GetModuleAccountAndPermissions(ctx sdk.Context, moduleName string) (types.ModuleAccountI, []string) {
-	addr, perms := ak.GetModuleAddressAndPermissions(moduleName)
-	if addr == nil {
-		return nil, []string{}
-	}
-
-	acc := ak.GetAccount(ctx, addr)
-	if acc != nil {
-		macc, ok := acc.(types.ModuleAccountI)
-		if !ok {
-			panic("account is not a module account")
-		}
-		return macc, perms
-	}
-
-	// create a new module account
-	macc := types.NewEmptyModuleAccount(moduleName, perms...)
-	maccI := (ak.NewAccount(ctx, macc)).(types.ModuleAccountI) // set the account number
-	ak.SetModuleAccount(ctx, maccI)
-
-	return maccI, perms
+	_ = "STUB: not implemented"
+	return *new(types.ModuleAccountI), nil
 }
+
+// create a new module account
+
+// set the account number
 
 // GetModuleAccount gets the module account from the auth account store, if the account does not
 // exist in the AccountKeeper, then it is created.
 func (ak AccountKeeper) GetModuleAccount(ctx sdk.Context, moduleName string) types.ModuleAccountI {
-	acc, _ := ak.GetModuleAccountAndPermissions(ctx, moduleName)
-	return acc
+	_ = "STUB: not implemented"
+	return *new(types.ModuleAccountI)
 }
 
 // SetModuleAccount sets the module account to the auth account store
 func (ak AccountKeeper) SetModuleAccount(ctx sdk.Context, macc types.ModuleAccountI) {
-	ak.SetAccount(ctx, macc)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (ak AccountKeeper) decodeAccount(bz []byte) types.AccountI {
-	acc, err := ak.UnmarshalAccount(bz)
-	if err != nil {
-		panic(err)
-	}
-
-	return acc
+	_ = "STUB: not implemented"
+	return *new(types.AccountI)
 }
 
 // MarshalAccount protobuf serializes an Account interface
 func (ak AccountKeeper) MarshalAccount(accountI types.AccountI) ([]byte, error) {
-	return ak.cdc.MarshalInterface(accountI)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UnmarshalAccount returns an Account interface from raw encoded account
 // bytes of a Proto-based Account type
 func (ak AccountKeeper) UnmarshalAccount(bz []byte) (types.AccountI, error) {
-	var acc types.AccountI
-	return acc, ak.cdc.UnmarshalInterface(bz, &acc)
+	_ = "STUB: not implemented"
+	return *new(types.AccountI), nil
 }
 
 // GetCodec return codec.Codec object used by the keeper
-func (ak AccountKeeper) GetCodec() codec.BinaryCodec { return ak.cdc }
+func (ak AccountKeeper) GetCodec() codec.BinaryCodec {
+	_ = "STUB: not implemented"
+	return *new(codec.BinaryCodec)
+}

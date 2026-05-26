@@ -13,15 +13,15 @@ type pebbleIterator struct {
 
 var _ types.KeyValueDBIterator = (*pebbleIterator)(nil)
 
-func (pi *pebbleIterator) First() bool          { return pi.it.First() }
-func (pi *pebbleIterator) Last() bool           { return pi.it.Last() }
-func (pi *pebbleIterator) Valid() bool          { return pi.it.Valid() }
-func (pi *pebbleIterator) SeekGE(k []byte) bool { return pi.it.SeekGE(k) }
-func (pi *pebbleIterator) SeekLT(k []byte) bool { return pi.it.SeekLT(k) }
-func (pi *pebbleIterator) Next() bool           { return pi.it.Next() }
-func (pi *pebbleIterator) NextPrefix() bool     { return pi.it.NextPrefix() }
-func (pi *pebbleIterator) Prev() bool           { return pi.it.Prev() }
-func (pi *pebbleIterator) Key() []byte          { return pi.it.Key() }
-func (pi *pebbleIterator) Value() []byte        { return pi.it.Value() }
-func (pi *pebbleIterator) Error() error         { return pi.it.Error() }
-func (pi *pebbleIterator) Close() error         { return pi.it.Close() }
+func (pi *pebbleIterator) First() bool          { _ = "STUB: not implemented"; return false }
+func (pi *pebbleIterator) Last() bool           { _ = "STUB: not implemented"; return false }
+func (pi *pebbleIterator) Valid() bool          { _ = "STUB: not implemented"; return false }
+func (pi *pebbleIterator) SeekGE(k []byte) bool { _ = "STUB: not implemented"; return false }
+func (pi *pebbleIterator) SeekLT(k []byte) bool { _ = "STUB: not implemented"; return false }
+func (pi *pebbleIterator) Next() bool           { _ = "STUB: not implemented"; return false }
+func (pi *pebbleIterator) NextPrefix() bool     { _ = "STUB: not implemented"; return false }
+func (pi *pebbleIterator) Prev() bool           { _ = "STUB: not implemented"; return false }
+func (pi *pebbleIterator) Key() []byte          { _ = "STUB: not implemented"; return nil }
+func (pi *pebbleIterator) Value() []byte        { _ = "STUB: not implemented"; return nil }
+func (pi *pebbleIterator) Error() error         { _ = "STUB: not implemented"; return nil }
+func (pi *pebbleIterator) Close() error         { _ = "STUB: not implemented"; return nil }

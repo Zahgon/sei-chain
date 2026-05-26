@@ -2,7 +2,6 @@ package types
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 const TypeMsgAssociate = "evm_associate"
@@ -12,46 +11,18 @@ var (
 )
 
 func NewMsgAssociate(sender sdk.AccAddress, customMsg string) *MsgAssociate {
-	return &MsgAssociate{Sender: sender.String(), CustomMessage: customMsg}
-}
-
-func (msg *MsgAssociate) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgAssociate) Type() string {
-	return TypeMsgAssociate
-}
-
-func (msg *MsgAssociate) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{from}
-}
-
-func (msg *MsgAssociate) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
-}
-
-func (msg *MsgAssociate) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
-	if len(msg.CustomMessage) > MaxAssociateCustomMessageLength {
-		return sdkerrors.Wrapf(sdkerrors.ErrTxTooLarge, "custom message can have at most 64 characters")
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func IsTxMsgAssociate(tx sdk.Tx) bool {
-	msgs := tx.GetMsgs()
-	if len(msgs) != 1 {
-		return false
-	}
-	_, ok := msgs[0].(*MsgAssociate)
-	return ok
-}
+func (msg *MsgAssociate) Route() string { _ = "STUB: not implemented"; return "" }
+
+func (msg *MsgAssociate) Type() string { _ = "STUB: not implemented"; return "" }
+
+func (msg *MsgAssociate) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
+
+func (msg *MsgAssociate) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+func (msg *MsgAssociate) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
+
+func IsTxMsgAssociate(tx sdk.Tx) bool { _ = "STUB: not implemented"; return false }

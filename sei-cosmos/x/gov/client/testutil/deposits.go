@@ -1,15 +1,8 @@
 package testutil
 
 import (
-	"fmt"
-	"time"
-
-	clitestutil "github.com/sei-protocol/sei-chain/sei-cosmos/testutil/cli"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/testutil/network"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/client/cli"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
-	tmcli "github.com/sei-protocol/sei-chain/sei-tendermint/libs/cli"
 	"github.com/stretchr/testify/suite"
 )
 
@@ -22,172 +15,75 @@ type DepositTestSuite struct {
 }
 
 func NewDepositTestSuite(cfg network.Config) *DepositTestSuite {
-	return &DepositTestSuite{cfg: cfg}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (s *DepositTestSuite) SetupSuite() {
-	s.T().Log("setting up test suite")
+func (s *DepositTestSuite) SetupSuite() { _ = "STUB: not implemented"; return }
 
-	s.network = network.New(s.T(), s.cfg)
+func (s *DepositTestSuite) TearDownSuite() { _ = "STUB: not implemented"; return }
 
-	_, err := s.network.WaitForHeight(1)
-	s.Require().NoError(err)
-	s.fees = sdk.NewCoins(sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(20))).String()
+func (s *DepositTestSuite) TestQueryDepositsInitialDeposit() { _ = "STUB: not implemented"; return }
 
-}
+// create a proposal with deposit
 
-func (s *DepositTestSuite) TearDownSuite() {
-	s.T().Log("tearing down test suite")
-	s.network.Cleanup()
-}
+// deposit more amount
 
-func (s *DepositTestSuite) TestQueryDepositsInitialDeposit() {
-	val := s.network.Validators[0]
-	clientCtx := val.ClientCtx
-	initialDeposit := sdk.NewCoin(s.cfg.BondDenom, types.DefaultMinDepositTokens.Sub(sdk.NewInt(20))).String()
+// waiting for voting period to end
 
-	// create a proposal with deposit
-	_, err := MsgSubmitProposal(val.ClientCtx, val.Address.String(),
-		"Text Proposal 1", "Where is the title!?", types.ProposalTypeText,
-		fmt.Sprintf("--%s=%s", cli.FlagDeposit, initialDeposit))
-	s.Require().NoError(err)
+// query deposit & verify initial deposit
 
-	// deposit more amount
-	_, err = MsgDeposit(clientCtx, val.Address.String(), "1", sdk.NewCoin(s.cfg.BondDenom, sdk.NewInt(50)).String())
-	s.Require().NoError(err)
+// query deposits
 
-	// waiting for voting period to end
-	time.Sleep(20 * time.Second)
-
-	// query deposit & verify initial deposit
-	deposit := s.queryDeposit(val, "1", false)
-	s.Require().Equal(deposit.Amount.String(), initialDeposit)
-
-	// query deposits
-	deposits := s.queryDeposits(val, "1", false)
-	s.Require().Equal(len(deposits), 2)
-	// verify initial deposit
-	s.Require().Equal(deposits[0].Amount.String(), initialDeposit)
-}
+// verify initial deposit
 
 func (s *DepositTestSuite) TestQueryDepositsWithoutInitialDeposit() {
-	val := s.network.Validators[0]
-	clientCtx := val.ClientCtx
-
-	// create a proposal without deposit
-	_, err := MsgSubmitProposal(val.ClientCtx, val.Address.String(),
-		"Text Proposal 2", "Where is the title!?", types.ProposalTypeText)
-	s.Require().NoError(err)
-
-	// deposit amount
-	_, err = MsgDeposit(clientCtx, val.Address.String(), "2", sdk.NewCoin(s.cfg.BondDenom, types.DefaultMinDepositTokens.Add(sdk.NewInt(50))).String())
-	s.Require().NoError(err)
-
-	// waiting for voting period to end
-	time.Sleep(20 * time.Second)
-
-	// query deposit
-	deposit := s.queryDeposit(val, "2", false)
-	s.Require().Equal(deposit.Amount.String(), sdk.NewCoin(s.cfg.BondDenom, types.DefaultMinDepositTokens.Add(sdk.NewInt(50))).String())
-
-	// query deposits
-	deposits := s.queryDeposits(val, "2", false)
-	s.Require().Equal(len(deposits), 1)
-	// verify initial deposit
-	s.Require().Equal(deposits[0].Amount.String(), sdk.NewCoin(s.cfg.BondDenom, types.DefaultMinDepositTokens.Add(sdk.NewInt(50))).String())
+	_ = "STUB: not implemented"
+	return
 }
 
-func (s *DepositTestSuite) TestQueryProposalNotEnoughDeposits() {
-	val := s.network.Validators[0]
-	clientCtx := val.ClientCtx
-	initialDeposit := sdk.NewCoin(s.cfg.BondDenom, types.DefaultMinDepositTokens.Sub(sdk.NewInt(2000))).String()
+// create a proposal without deposit
 
-	// create a proposal with deposit
-	_, err := MsgSubmitProposal(val.ClientCtx, val.Address.String(),
-		"Text Proposal 3", "Where is the title!?", types.ProposalTypeText,
-		fmt.Sprintf("--%s=%s", cli.FlagDeposit, initialDeposit))
-	s.Require().NoError(err)
+// deposit amount
 
-	// query proposal
-	args := []string{"3", fmt.Sprintf("--%s=json", tmcli.OutputFlag)}
-	cmd := cli.GetCmdQueryProposal()
-	_, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, args)
-	s.Require().NoError(err)
+// waiting for voting period to end
 
-	// waiting for deposit period to end
-	time.Sleep(20 * time.Second)
+// query deposit
 
-	// query proposal
-	_, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, args)
-	s.Require().Error(err)
-	s.Require().Contains(err.Error(), "proposal 3 doesn't exist")
-}
+// query deposits
 
-func (s *DepositTestSuite) TestRejectedProposalDeposits() {
-	val := s.network.Validators[0]
-	clientCtx := val.ClientCtx
-	initialDeposit := sdk.NewCoin(s.cfg.BondDenom, types.DefaultMinDepositTokens)
+// verify initial deposit
 
-	// create a proposal with deposit
-	_, err := MsgSubmitProposal(clientCtx, val.Address.String(),
-		"Text Proposal 4", "Where is the title!?", types.ProposalTypeText,
-		fmt.Sprintf("--%s=%s", cli.FlagDeposit, initialDeposit))
-	s.Require().NoError(err)
+func (s *DepositTestSuite) TestQueryProposalNotEnoughDeposits() { _ = "STUB: not implemented"; return }
 
-	// query deposits
-	var deposits types.QueryDepositsResponse
-	args := []string{"4", fmt.Sprintf("--%s=json", tmcli.OutputFlag)}
-	cmd := cli.GetCmdQueryDeposits()
-	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, cmd, args)
-	s.Require().NoError(err)
-	s.Require().NoError(val.ClientCtx.LegacyAmino.UnmarshalAsJSON(out.Bytes(), &deposits))
-	s.Require().Equal(len(deposits.Deposits), 1)
-	// verify initial deposit
-	s.Require().Equal(deposits.Deposits[0].Amount.String(), sdk.NewCoin(s.cfg.BondDenom, types.DefaultMinDepositTokens).String())
+// create a proposal with deposit
 
-	// vote
-	_, err = MsgVote(clientCtx, val.Address.String(), "4", "no")
-	s.Require().NoError(err)
+// query proposal
 
-	time.Sleep(20 * time.Second)
+// waiting for deposit period to end
 
-	args = []string{"4", fmt.Sprintf("--%s=json", tmcli.OutputFlag)}
-	cmd = cli.GetCmdQueryProposal()
-	_, err = clitestutil.ExecTestCLICmd(clientCtx, cmd, args)
-	s.Require().NoError(err)
+// query proposal
 
-	// query deposits
-	depositsRes := s.queryDeposits(val, "4", false)
-	s.Require().Equal(len(depositsRes), 1)
-	// verify initial deposit
-	s.Require().Equal(depositsRes[0].Amount.String(), initialDeposit.String())
+func (s *DepositTestSuite) TestRejectedProposalDeposits() { _ = "STUB: not implemented"; return }
 
-}
+// create a proposal with deposit
+
+// query deposits
+
+// verify initial deposit
+
+// vote
+
+// query deposits
+
+// verify initial deposit
 
 func (s *DepositTestSuite) queryDeposits(val *network.Validator, proposalID string, exceptErr bool) types.Deposits {
-	args := []string{proposalID, fmt.Sprintf("--%s=json", tmcli.OutputFlag)}
-	var depositsRes types.Deposits
-	cmd := cli.GetCmdQueryDeposits()
-	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, cmd, args)
-	if exceptErr {
-		s.Require().Error(err)
-		return nil
-	}
-	s.Require().NoError(err)
-	s.Require().NoError(val.ClientCtx.LegacyAmino.UnmarshalAsJSON(out.Bytes(), &depositsRes))
-	return depositsRes
+	_ = "STUB: not implemented"
+	return *new(types.Deposits)
 }
 
 func (s *DepositTestSuite) queryDeposit(val *network.Validator, proposalID string, exceptErr bool) *types.Deposit {
-	args := []string{proposalID, val.Address.String(), fmt.Sprintf("--%s=json", tmcli.OutputFlag)}
-	var depositRes types.Deposit
-	cmd := cli.GetCmdQueryDeposit()
-	out, err := clitestutil.ExecTestCLICmd(val.ClientCtx, cmd, args)
-	if exceptErr {
-		s.Require().Error(err)
-		return nil
-	}
-	s.Require().NoError(err)
-	s.Require().NoError(val.ClientCtx.LegacyAmino.UnmarshalAsJSON(out.Bytes(), &depositRes))
-	return &depositRes
+	_ = "STUB: not implemented"
+	return nil
 }

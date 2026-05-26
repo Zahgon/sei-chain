@@ -1,10 +1,6 @@
 package types
 
 import (
-	fmt "fmt"
-	"sort"
-	"strings"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
 )
@@ -33,30 +29,35 @@ type StoreDecoderRegistry map[string]func(kvA, kvB kv.Pair) string
 
 // Iterator over all the keys with a certain prefix in ascending order
 func KVStorePrefixIterator(kvs KVStore, prefix []byte) Iterator {
-	return types.KVStorePrefixIterator(kvs, prefix)
+	_ = "STUB: not implemented"
+	return *new(Iterator)
 }
 
 // Iterator over all the keys with a certain prefix in descending order.
 func KVStoreReversePrefixIterator(kvs KVStore, prefix []byte) Iterator {
-	return types.KVStoreReversePrefixIterator(kvs, prefix)
+	_ = "STUB: not implemented"
+	return *new(Iterator)
 }
 
 // KVStorePrefixIteratorPaginated returns iterator over items in the selected page.
 // Items iterated and skipped in ascending order.
 func KVStorePrefixIteratorPaginated(kvs KVStore, prefix []byte, page, limit uint) Iterator {
-	return types.KVStorePrefixIteratorPaginated(kvs, prefix, page, limit)
+	_ = "STUB: not implemented"
+	return *new(Iterator)
 }
 
 // KVStoreReversePrefixIteratorPaginated returns iterator over items in the selected page.
 // Items iterated and skipped in descending order.
 func KVStoreReversePrefixIteratorPaginated(kvs KVStore, prefix []byte, page, limit uint) Iterator {
-	return types.KVStoreReversePrefixIteratorPaginated(kvs, prefix, page, limit)
+	_ = "STUB: not implemented"
+	return *new(Iterator)
 }
 
 // DiffKVStores compares two KVstores and returns all the key/value pairs
 // that differ from one another. It also skips value comparison for a set of provided prefixes
 func DiffKVStores(a KVStore, b KVStore, prefixesToSkip [][]byte) (kvAs, kvBs []kv.Pair) {
-	return types.DiffKVStores(a, b, prefixesToSkip)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 type (
@@ -87,53 +88,27 @@ type (
 
 // assertNoCommonPrefix will panic if there are two keys: k1 and k2 in keys, such that
 // k1 is a prefix of k2
-func assertNoPrefix(keys []string) {
-	sorted := make([]string, len(keys))
-	copy(sorted, keys)
-	sort.Strings(sorted)
-	for i := 1; i < len(sorted); i++ {
-		if strings.HasPrefix(sorted[i], sorted[i-1]) {
-			panic(fmt.Sprint("Potential key collision between KVStores:", sorted[i], " - ", sorted[i-1]))
-		}
-	}
-}
+func assertNoPrefix(keys []string) { _ = "STUB: not implemented"; return }
 
 // NewKVStoreKey returns a new pointer to a KVStoreKey.
-func NewKVStoreKey(name string) *KVStoreKey {
-	return types.NewKVStoreKey(name)
-}
+func NewKVStoreKey(name string) *KVStoreKey { _ = "STUB: not implemented"; return nil }
 
 // NewKVStoreKeys returns a map of new  pointers to KVStoreKey's.
 // The function will panic if there is a potential conflict in names (see `assertNoPrefix`
 // function for more details).
-func NewKVStoreKeys(names ...string) map[string]*KVStoreKey {
-	assertNoPrefix(names)
-	keys := make(map[string]*KVStoreKey, len(names))
-	for _, n := range names {
-		keys[n] = NewKVStoreKey(n)
-	}
-
-	return keys
-}
+func NewKVStoreKeys(names ...string) map[string]*KVStoreKey { _ = "STUB: not implemented"; return nil }
 
 // Constructs new TransientStoreKey
 // Must return a pointer according to the ocap principle
-func NewTransientStoreKey(name string) *TransientStoreKey {
-	return types.NewTransientStoreKey(name)
-}
+func NewTransientStoreKey(name string) *TransientStoreKey { _ = "STUB: not implemented"; return nil }
 
 // NewTransientStoreKeys constructs a new map of TransientStoreKey's
 // Must return pointers according to the ocap principle
 // The function will panic if there is a potential conflict in names (see `assertNoPrefix`
 // function for more details).
 func NewTransientStoreKeys(names ...string) map[string]*TransientStoreKey {
-	assertNoPrefix(names)
-	keys := make(map[string]*TransientStoreKey)
-	for _, n := range names {
-		keys[n] = NewTransientStoreKey(n)
-	}
-
-	return keys
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewMemoryStoreKeys constructs a new map matching store key names to their
@@ -141,26 +116,20 @@ func NewTransientStoreKeys(names ...string) map[string]*TransientStoreKey {
 // The function will panic if there is a potential conflict in names (see `assertNoPrefix`
 // function for more details).
 func NewMemoryStoreKeys(names ...string) map[string]*MemoryStoreKey {
-	assertNoPrefix(names)
-	keys := make(map[string]*MemoryStoreKey)
-	for _, n := range names {
-		keys[n] = types.NewMemoryStoreKey(n)
-	}
-
-	return keys
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // PrefixEndBytes returns the []byte that would end a
 // range query for all []byte with a certain prefix
 // Deals with last byte of prefix being FF without overflowing
-func PrefixEndBytes(prefix []byte) []byte {
-	return types.PrefixEndBytes(prefix)
-}
+func PrefixEndBytes(prefix []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // InclusiveEndBytes returns the []byte that would end a
 // range query such that the input would be included
 func InclusiveEndBytes(inclusiveBytes []byte) (exclusiveBytes []byte) {
-	return types.InclusiveEndBytes(inclusiveBytes)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 //----------------------------------------
@@ -183,7 +152,8 @@ type (
 )
 
 func NewGasMeter(limit Gas, multiplierNumerator uint64, multiplierDenominator uint64) GasMeter {
-	return types.NewMultiplierGasMeter(limit, multiplierNumerator, multiplierDenominator)
+	_ = "STUB: not implemented"
+	return *new(GasMeter)
 }
 
 type (
@@ -192,22 +162,17 @@ type (
 )
 
 func NewInfiniteGasMeter(multiplierNumerator uint64, multiplierDenominator uint64) GasMeter {
-	return types.NewInfiniteMultiplierGasMeter(multiplierNumerator, multiplierDenominator)
+	_ = "STUB: not implemented"
+	return *new(GasMeter)
 }
 
 // Helpers for setting gas meter with parent ctx multiplier
 func NewGasMeterWithMultiplier(ctx Context, limit uint64) GasMeter {
-	if ctx.GasMeter() == nil {
-		return NewGasMeter(limit, 1, 1)
-	}
-	n, d := ctx.GasMeter().Multiplier()
-	return types.NewMultiplierGasMeter(limit, n, d)
+	_ = "STUB: not implemented"
+	return *new(GasMeter)
 }
 
 func NewInfiniteGasMeterWithMultiplier(ctx Context) GasMeter {
-	if ctx.GasMeter() == nil {
-		return NewInfiniteGasMeter(1, 1)
-	}
-	n, d := ctx.GasMeter().Multiplier()
-	return types.NewInfiniteMultiplierGasMeter(n, d)
+	_ = "STUB: not implemented"
+	return *new(GasMeter)
 }

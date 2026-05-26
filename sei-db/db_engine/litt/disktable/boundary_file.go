@@ -1,15 +1,5 @@
 package disktable
 
-import (
-	"fmt"
-	"os"
-	"path"
-	"strconv"
-	"strings"
-
-	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
-)
-
 // The name of the file that defines the lower bound of a LittDB snapshot directory.
 const LowerBoundFileName = "lower-bound.txt"
 
@@ -48,124 +38,37 @@ type BoundaryFile struct {
 // then this method returns an object that can be used to create a new boundary file at the specified path (i.e. by
 // calling Write() or Update()).
 func LoadBoundaryFile(boundaryType BoundaryType, parentDirectory string) (*BoundaryFile, error) {
-	boundary := &BoundaryFile{
-		boundaryType:    boundaryType,
-		parentDirectory: parentDirectory,
-	}
-
-	exists, err := util.Exists(boundary.Path())
-	if err != nil {
-		return nil, fmt.Errorf("failed to check if boundary file %s exists: %v", boundary.Path(), err)
-	}
-
-	if exists {
-		data, err := os.ReadFile(boundary.Path())
-		if err != nil {
-			return nil, fmt.Errorf("failed to read boundary file %s: %v", boundary.Path(), err)
-		}
-
-		data = []byte(strings.TrimSpace(string(data)))
-
-		err = boundary.deserialize(data)
-		if err != nil {
-			return nil, fmt.Errorf("failed to deserialize boundary file %s: %v", boundary.Path(), err)
-		}
-		boundary.defined = true
-	}
-
-	return boundary, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Atomically update the value of the boundary file.
-func (b *BoundaryFile) Update(newBoundary uint32) error {
-	if b == nil {
-		return nil
-	}
-
-	if newBoundary < b.boundaryIndex {
-		return fmt.Errorf("boundary index may only increase, cannot set to %d (current: %d)",
-			newBoundary, b.boundaryIndex)
-	}
-
-	b.defined = true
-	b.boundaryIndex = newBoundary
-	err := b.Write()
-	if err != nil {
-		return fmt.Errorf("failed to update boundary file %s: %v", b.Path(), err)
-	}
-	return nil
-}
+func (b *BoundaryFile) Update(newBoundary uint32) error { _ = "STUB: not implemented"; return nil }
 
 // Get the file name of the boundary file.
-func (b *BoundaryFile) Name() string {
-	if b == nil {
-		return ""
-	}
-
-	if b.boundaryType == LowerBound {
-		return LowerBoundFileName
-	}
-	return UpperBoundFileName
-}
+func (b *BoundaryFile) Name() string { _ = "STUB: not implemented"; return "" }
 
 // Get the full path where the boundary file is stored.
-func (b *BoundaryFile) Path() string {
-	if b == nil {
-		return ""
-	}
-
-	return path.Join(b.parentDirectory, b.Name())
-}
+func (b *BoundaryFile) Path() string { _ = "STUB: not implemented"; return "" }
 
 // Serialize the boundary file to a byte slice.
-func (b *BoundaryFile) serialize() []byte {
-	if b == nil {
-		return nil
-	}
+func (b *BoundaryFile) serialize() []byte { _ = "STUB: not implemented"; return nil }
 
-	// Serialize the boundary file to a byte slice. Since end users may interact with this file,
-	// serialize in a human-readable format.
-	return []byte(fmt.Sprintf("%d\n", b.boundaryIndex))
-}
+// Serialize the boundary file to a byte slice. Since end users may interact with this file,
+// serialize in a human-readable format.
 
-func (b *BoundaryFile) deserialize(data []byte) error {
-	if b == nil {
-		return nil
-	}
+func (b *BoundaryFile) deserialize(data []byte) error { _ = "STUB: not implemented"; return nil }
 
-	boundaryIndex, err := strconv.Atoi(string(data))
-	if err != nil {
-		return fmt.Errorf("failed to parse boundary index from data: %v", err)
-	}
-	b.boundaryIndex = uint32(boundaryIndex) //nolint:gosec // boundary index fits uint32
-	return nil
-}
+//nolint:gosec // boundary index fits uint32
 
 // Write the boundary file to disk.
-func (b *BoundaryFile) Write() error {
-	if b == nil {
-		return nil
-	}
+func (b *BoundaryFile) Write() error { _ = "STUB: not implemented"; return nil }
 
-	data := b.serialize()
-	// fsync is not necessary, in an advent of a crash the boundary files get repaired
-	err := util.AtomicWrite(b.Path(), data, false)
-	if err != nil {
-		return fmt.Errorf("failed to write boundary file %s: %v", b.Path(), err)
-	}
-
-	return nil
-}
+// fsync is not necessary, in an advent of a crash the boundary files get repaired
 
 // Returns true if this boundary file is defined. If undefined, it means that the boundary index is invalid
 // and should not be used.
-func (b *BoundaryFile) IsDefined() bool {
-	if b == nil {
-		return false
-	}
-
-	return b.defined
-}
+func (b *BoundaryFile) IsDefined() bool { _ = "STUB: not implemented"; return false }
 
 // Get the boundary index described by this file.
 //
@@ -174,10 +77,4 @@ func (b *BoundaryFile) IsDefined() bool {
 //
 // If this is an upper bound, then it describes the highest segment index that LittDB has fully taken a snapshot of.
 // External processes using the snapshot should ignore any segment with an index greater than this.
-func (b *BoundaryFile) BoundaryIndex() uint32 {
-	if b == nil {
-		return 0
-	}
-
-	return b.boundaryIndex
-}
+func (b *BoundaryFile) BoundaryIndex() uint32 { _ = "STUB: not implemented"; return 0 }

@@ -25,16 +25,12 @@ package mux
 
 import (
 	"context"
-	"encoding/binary"
 	"errors"
-	"fmt"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p/conn"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p/mux/pb"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/protoutils"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/scope"
-	"google.golang.org/protobuf/proto"
 )
 
 const handshakeMaxSize = 10 * 1024 // 10kB
@@ -113,77 +109,29 @@ type runner struct {
 	inner utils.RWMutex[*runnerInner]
 }
 
-func newRunner(mux *Mux) *runner {
-	return &runner{
-		mux: mux,
-		inner: utils.NewRWMutex(&runnerInner{
-			nextID:     0,
-			streams:    map[streamID]*streamState{},
-			acceptsSem: map[StreamKind]uint64{},
-		}),
-	}
-}
+func newRunner(mux *Mux) *runner { _ = "STUB: not implemented"; return nil }
 
 // getOrAccept() gets the current state of the stream for the given header message.
 // If the stream does not exist yet, it tries to create it as an accept (inbound) stream.
 // In that case the inbound stream limit for the given kind is checked.
 func (r *runner) getOrAccept(h *pb.Header) (*streamState, error) {
-	id := streamIDFromRemote(h.Id)
-	kind := StreamKind(h.GetKind())
-	for inner := range r.inner.RLock() {
-		s, ok := inner.streams[id]
-		if ok {
-			if h.Kind != nil && s.kind != kind {
-				return nil, errStreamKindMismatch
-			}
-			return s, nil
-		}
-	}
-	if id.isConnect() || h.Kind == nil {
-		return nil, errUnknownStream
-	}
-	for inner := range r.inner.Lock() {
-		if inner.acceptsSem[kind] == 0 {
-			return nil, errTooManyAccepts
-		}
-		inner.acceptsSem[kind] -= 1
-		s := newStreamState(id, kind)
-		inner.streams[id] = s
-		return s, nil
-	}
-	panic("unreachable")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (i *runnerInner) newConnectStream(kind StreamKind) *streamState {
+	_ = "STUB: not implemented"
 	// Non-blocking since we just closed a connect Stream.
-	s := newStreamState(i.nextID, kind)
-	i.streams[s.id] = s
-	i.nextID += 2
-	return s
+	return nil
 }
 
-func (r *runner) tryPrune(id streamID) {
-	for inner := range r.inner.Lock() {
-		// Check if the stream is fully closed.
-		s, ok := inner.streams[id]
-		if !ok {
-			return
-		}
-		for sInner := range s.inner.Lock() {
-			if !sInner.closed.remote || !sInner.closed.local {
-				return
-			}
-		}
-		// Delete stream state.
-		delete(inner.streams, id)
-		// Free the stream capacity.
-		if id.isConnect() {
-			r.mux.kinds[s.kind].connectsQueue <- inner.newConnectStream(s.kind)
-		} else {
-			inner.acceptsSem[s.kind] += 1
-		}
-	}
-}
+func (r *runner) tryPrune(id streamID) { _ = "STUB: not implemented"; return }
+
+// Check if the stream is fully closed.
+
+// Delete stream state.
+
+// Free the stream capacity.
 
 // runSend handles the frame queue.
 // The frames from all streams are interleaved in a round robin fashion.
@@ -191,230 +139,65 @@ func (r *runner) tryPrune(id streamID) {
 // Stream priorities are not implemented (not needed).
 // WARNING: it respects ctx only partially, because conn does not.
 func (r *runner) runSend(ctx context.Context, conn conn.Conn) error {
-	for {
-		// Collect frames in round robin over streams.
-		var frames []*frame
-		flush := false
-		for queue, ctrl := range r.mux.queue.Lock() {
-			if err := ctrl.WaitUntil(ctx, func() bool { return len(queue) > 0 }); err != nil {
-				return err
-			}
-			frames = make([]*frame, 0, len(queue))
-			for id := range queue {
-				frames = append(frames, queue.Pop(id, r.mux.cfg.FrameSize))
-			}
-			flush = len(queue) == 0
-		}
-		// Send the frames
-		for _, f := range frames {
-			id := streamID(f.Header.Id)
-			if f.Header.GetMsgEnd() {
-				// Notify sender about local buffer capacity.
-				for inner := range r.inner.RLock() {
-					if s, ok := inner.streams[id]; ok {
-						for sInner, ctrl := range s.inner.Lock() {
-							sInner.send.bufBegin += 1
-							ctrl.Updated()
-						}
-					}
-				}
-			}
-			// TODO(gprusak): this is counterintuitive asymmetric behavior:
-			// * tryPrune in runRecv follows immediately remote close
-			// * tryPrune in runSend happens with a delay (local close happens in Stream.close() call).
-			// As a result runRecv might still be sending frames on behalf of a pruned stream.
-			// Ownership of r.inner.streams should be clearer.
-			if f.Header.GetClose() {
-				r.tryPrune(id)
-			}
-			headerRaw, err := proto.Marshal(f.Header)
-			if err != nil {
-				panic(err)
-			}
-			if err := conn.Write(ctx, []byte{byte(len(headerRaw))}); err != nil {
-				return err
-			}
-			if err := conn.Write(ctx, headerRaw); err != nil {
-				return err
-			}
-			if err := conn.Write(ctx, f.Payload); err != nil {
-				return err
-			}
-		}
-		if flush {
-			if err := conn.Flush(ctx); err != nil {
-				return err
-			}
-		}
-	}
+	_ = "STUB: not implemented"
+
+	// Collect frames in round robin over streams.
+	return nil
 }
+
+// Send the frames
+
+// Notify sender about local buffer capacity.
+
+// TODO(gprusak): this is counterintuitive asymmetric behavior:
+// * tryPrune in runRecv follows immediately remote close
+// * tryPrune in runSend happens with a delay (local close happens in Stream.close() call).
+// As a result runRecv might still be sending frames on behalf of a pruned stream.
+// Ownership of r.inner.streams should be clearer.
 
 // runRecv receives and processes the incoming frames sequentially.
 func (r *runner) runRecv(ctx context.Context, conn conn.Conn) error {
-	for {
-		// frame size is hard capped here at 255B.
-		// Currently we have 7 varint fields (up to 77B)
-		var headerSize [1]byte
-		if err := conn.Read(ctx, headerSize[:]); err != nil {
-			return err
-		}
-		headerRaw := make([]byte, headerSize[0])
-		if err := conn.Read(ctx, headerRaw[:]); err != nil {
-			return err
-		}
-		var h pb.Header
-		if err := proto.Unmarshal(headerRaw, &h); err != nil {
-			return err
-		}
-		s, err := r.getOrAccept(&h)
-		if err != nil {
-			return err
-		}
-		for sInner := range s.inner.Lock() {
-			if sInner.closed.remote {
-				return errFrameAfterClose
-			}
-		}
-		// Process the frame content in order: OPEN, RESIZE, MSG, CLOSE
-		if h.Kind != nil {
-			if err := s.RemoteOpen(h.GetMaxMsgSize()); err != nil {
-				return err
-			}
-			if !s.id.isConnect() {
-				r.mux.kinds[s.kind].acceptsQueue <- s
-			}
-		}
-		if we := h.GetWindowEnd(); we > 0 {
-			s.RemoteWindowEnd(we)
-		}
-		if ps := h.GetPayloadSize(); ps > 0 {
-			if err := s.RemotePayloadSize(ps); err != nil {
-				return err
-			}
-			// Read the payload.
-			payload := make([]byte, ps)
-			if err := conn.Read(ctx, payload[:]); err != nil {
-				return err
-			}
-			s.RemotePayload(payload)
-		}
-		if h.GetMsgEnd() {
-			if err := s.RemoteMsgEnd(); err != nil {
-				return err
-			}
-		}
-		if h.GetClose() {
-			if err := s.RemoteClose(); err != nil {
-				return err
-			}
-			r.tryPrune(s.id)
-		}
-	}
+	_ = "STUB: not implemented"
+
+	// frame size is hard capped here at 255B.
+	// Currently we have 7 varint fields (up to 77B)
+	return nil
 }
+
+// Process the frame content in order: OPEN, RESIZE, MSG, CLOSE
+
+// Read the payload.
 
 // Run runs the multiplexer for the given connection.
 // It closes the connection before return.
-func (m *Mux) Run(ctx context.Context, conn conn.Conn) error {
-	return utils.IgnoreCancel(scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		// Handshake exchange.
-		handshake, err := scope.Run1(ctx, func(ctx context.Context, s scope.Scope) (*handshake, error) {
-			s.Spawn(func() error {
-				handshakeRaw := handshakeConv.Marshal(&handshake{Kinds: m.cfg.Kinds})
-				sizeRaw := binary.LittleEndian.AppendUint32(nil, uint32(len(handshakeRaw))) //nolint:gosec // handshake size bounded by handshakeMaxSize
-				if err := conn.Write(ctx, sizeRaw); err != nil {
-					return err
-				}
-				if err := conn.Write(ctx, handshakeRaw); err != nil {
-					return err
-				}
-				return conn.Flush(ctx)
-			})
-			var sizeRaw [4]byte
-			if err := conn.Read(ctx, sizeRaw[:]); err != nil {
-				return nil, err
-			}
-			size := binary.LittleEndian.Uint32(sizeRaw[:])
-			if size > handshakeMaxSize {
-				return nil, fmt.Errorf("handshake too large")
-			}
-			handshakeRaw := make([]byte, size)
-			if err := conn.Read(ctx, handshakeRaw); err != nil {
-				return nil, err
-			}
-			return handshakeConv.Unmarshal(handshakeRaw)
-		})
-		if err != nil {
-			return err
-		}
+func (m *Mux) Run(ctx context.Context, conn conn.Conn) error { _ = "STUB: not implemented"; return nil }
 
-		// Initialize runner with handshake data.
-		r := newRunner(m)
-		for inner := range r.inner.Lock() {
-			for kind, cfg := range m.cfg.Kinds {
-				remCfg, ok := handshake.Kinds[kind]
-				if !ok {
-					remCfg = &StreamKindConfig{}
-				}
-				inner.acceptsSem[kind] = min(cfg.MaxAccepts, remCfg.MaxConnects)
-				for range min(cfg.MaxConnects, remCfg.MaxAccepts) {
-					m.kinds[kind].connectsQueue <- inner.newConnectStream(kind)
-				}
-			}
-		}
-		// Run the tasks.
-		s.Spawn(func() error { return r.runSend(ctx, conn) })
-		s.Spawn(func() error { return r.runRecv(ctx, conn) })
-		return nil
-	}))
-}
+// Handshake exchange.
+
+//nolint:gosec // handshake size bounded by handshakeMaxSize
+
+// Initialize runner with handshake data.
+
+// Run the tasks.
 
 // queue is a queue of frames to send, consumed by runSend.
 type queue map[streamID]*frame
 
 // Get returns the frame corresponding to the given stream id.
 // If it doesn't exist, it initializes the frame first.
-func (q queue) Get(id streamID) *frame {
-	f, ok := q[id]
-	if ok {
-		return f
-	}
-	q[id] = &frame{Header: &pb.Header{Id: uint64(id)}}
-	return q[id]
-}
+func (q queue) Get(id streamID) *frame { _ = "STUB: not implemented"; return nil }
 
 // Pop removes a frame of the given stream from the queue.
 // Panics if there is no frame for this id.
 // If a frame is too large (payload larger than maxPayload) it splits
 // the frame into 2 smaller ones and returns the first one.
-func (q queue) Pop(id streamID, maxPayload uint64) *frame {
-	f, ok := q[id]
-	if !ok {
-		panic(fmt.Errorf("missing frame"))
-	}
-	if uint64(len(f.Payload)) <= maxPayload {
-		delete(q, id)
-		return f
-	}
-	// Split the frame into first and second.
-	first := &frame{
-		Header: &pb.Header{
-			Id:          f.Header.Id,
-			Kind:        f.Header.Kind,
-			MaxMsgSize:  f.Header.MaxMsgSize,
-			WindowEnd:   f.Header.WindowEnd,
-			PayloadSize: &maxPayload,
-			// Close and MsgEnd fields are left in the second frame.
-		},
-		Payload: f.Payload[:maxPayload],
-	}
-	// Clear the fields from the first frame.
-	f.Header.Kind = nil
-	f.Header.MaxMsgSize = nil
-	f.Header.WindowEnd = nil
-	f.Payload = f.Payload[maxPayload:]
-	f.Header.PayloadSize = utils.Alloc(uint64(len(f.Payload)))
-	return first
-}
+func (q queue) Pop(id streamID, maxPayload uint64) *frame { _ = "STUB: not implemented"; return nil }
+
+// Split the frame into first and second.
+
+// Close and MsgEnd fields are left in the second frame.
+
+// Clear the fields from the first frame.
 
 type Mux struct {
 	cfg   *Config
@@ -424,53 +207,21 @@ type Mux struct {
 
 // NewMux constructs a new multipexer.
 // Remember to spawn Mux.Run() afterwards.
-func NewMux(cfg *Config) *Mux {
-	kinds := map[StreamKind]*kindState{}
-	for kind, c := range cfg.Kinds {
-		kinds[kind] = &kindState{
-			acceptsQueue:  make(chan *streamState, c.MaxAccepts),
-			connectsQueue: make(chan *streamState, c.MaxConnects),
-		}
-	}
-	queue := utils.NewWatch(queue{})
-	return &Mux{cfg: cfg, kinds: kinds, queue: &queue}
-}
+func NewMux(cfg *Config) *Mux { _ = "STUB: not implemented"; return nil }
 
 // Connect establishes a new stream of the given kind.
 // Blocks until the number of concurrent connects falls below the allowed limit.
 // Then it waits until peer accepts the connection.
 // Remember to Close() the stream after use.
 func (m *Mux) Connect(ctx context.Context, kind StreamKind, maxMsgSize uint64, window uint64) (*Stream, error) {
-	ks, ok := m.kinds[kind]
-	if !ok {
-		return nil, fmt.Errorf("%w %v", errUnknownKind, kind)
-	}
-	state, err := utils.Recv(ctx, ks.connectsQueue)
-	if err != nil {
-		return nil, err
-	}
-	s := &Stream{state, m.queue}
-	if err := s.open(ctx, maxMsgSize, window); err != nil {
-		return nil, err
-	}
-	return s, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Accept accepts an incoming stream of the given kind.
 // Blocks until peer opens a connect stream.
 // Remember to Close() the stream after use.
 func (m *Mux) Accept(ctx context.Context, kind StreamKind, maxMsgSize uint64, window uint64) (*Stream, error) {
-	ks, ok := m.kinds[kind]
-	if !ok {
-		return nil, fmt.Errorf("%w %v", errUnknownKind, kind)
-	}
-	state, err := utils.Recv(ctx, ks.acceptsQueue)
-	if err != nil {
-		return nil, err
-	}
-	s := &Stream{state, m.queue}
-	if err := s.open(ctx, maxMsgSize, window); err != nil {
-		return nil, err
-	}
-	return s, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

@@ -1,11 +1,7 @@
 package types
 
 import (
-	"fmt"
-	"strings"
 	"time"
-
-	yaml "gopkg.in/yaml.v2"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -14,47 +10,22 @@ import (
 type Periods []Period
 
 // Duration is converts the period Length from seconds to a time.Duration
-func (p Period) Duration() time.Duration {
-	return time.Duration(p.Length) * time.Second
-}
+func (p Period) Duration() time.Duration { _ = "STUB: not implemented"; return *new(time.Duration) }
 
 // String implements the fmt.Stringer interface
-func (p Period) String() string {
-	out, _ := yaml.Marshal(p)
-	return string(out)
-}
+func (p Period) String() string { _ = "STUB: not implemented"; return "" }
 
 // TotalLength return the total length in seconds for a period
-func (p Periods) TotalLength() int64 {
-	var total int64
-	for _, period := range p {
-		total += period.Length
-	}
-	return total
-}
+func (p Periods) TotalLength() int64 { _ = "STUB: not implemented"; return 0 }
 
 // TotalDuration returns the total duration of the period
 func (p Periods) TotalDuration() time.Duration {
-	len := p.TotalLength()
-	return time.Duration(len) * time.Second
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // TotalDuration returns the sum of coins for the period
-func (p Periods) TotalAmount() sdk.Coins {
-	total := sdk.Coins{}
-	for _, period := range p {
-		total = total.Add(period.Amount...)
-	}
-	return total
-}
+func (p Periods) TotalAmount() sdk.Coins { _ = "STUB: not implemented"; return *new(sdk.Coins) }
 
 // String implements the fmt.Stringer interface
-func (p Periods) String() string {
-	periodsListString := make([]string, 0, len(p))
-	for _, period := range p {
-		periodsListString = append(periodsListString, period.String())
-	}
-
-	return strings.TrimSpace(fmt.Sprintf(`Vesting Periods:
-		%s`, strings.Join(periodsListString, ", ")))
-}
+func (p Periods) String() string { _ = "STUB: not implemented"; return "" }

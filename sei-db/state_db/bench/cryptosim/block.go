@@ -39,46 +39,21 @@ func NewBlock(
 	blockNumber int64,
 	capacity int,
 ) *block {
-
-	var reciepts []*evmtypes.Receipt
-	if config.GenerateReceipts {
-		reciepts = make([]*evmtypes.Receipt, 0, capacity)
-	}
-
-	return &block{
-		config:       config,
-		blockNumber:  blockNumber,
-		transactions: make([]*transaction, 0, capacity),
-		metrics:      metrics,
-		reciepts:     reciepts,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Returns an iterator over the transactions in the block.
-func (b *block) Iterator() iter.Seq[*transaction] {
-	return func(yield func(*transaction) bool) {
-		for _, txn := range b.transactions {
-			if !yield(txn) {
-				return
-			}
-		}
-	}
-}
+func (b *block) Iterator() iter.Seq[*transaction] { _ = "STUB: not implemented"; return nil }
 
 // Adds a transaction to the block.
-func (b *block) AddTransaction(txn *transaction) {
-	b.transactions = append(b.transactions, txn)
-}
+func (b *block) AddTransaction(txn *transaction) { _ = "STUB: not implemented"; return }
 
 // Adds a receipt to the block.
-func (b *block) AddReceipt(receipt *evmtypes.Receipt) {
-	b.reciepts = append(b.reciepts, receipt)
-}
+func (b *block) AddReceipt(receipt *evmtypes.Receipt) { _ = "STUB: not implemented"; return }
 
 // Returns the block number.
-func (b *block) BlockNumber() int64 {
-	return b.blockNumber
-}
+func (b *block) BlockNumber() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Sets information about account state as of the end of this block.
 func (b *block) SetBlockAccountStats(
@@ -86,28 +61,19 @@ func (b *block) SetBlockAccountStats(
 	numberOfColdAccounts int64,
 	nextErc20ContractID int64,
 ) {
-	b.nextAccountID = nextAccountID
-	b.numberOfColdAccounts = numberOfColdAccounts
-	b.nextErc20ContractID = nextErc20ContractID
+	_ = "STUB: not implemented"
+	return
 }
 
 // This method should be called after a block is finished executing and finalized.
 // Reports metrics about the block.
-func (b *block) ReportBlockMetrics() {
-	b.metrics.SetTotalNumberOfAccounts(b.nextAccountID, int64(b.config.NumberOfHotAccounts), b.numberOfColdAccounts)
-}
+func (b *block) ReportBlockMetrics() { _ = "STUB: not implemented"; return }
 
 // Returns the next account ID to be used when creating a new account, as of the end of this block.
-func (b *block) NextAccountID() int64 {
-	return b.nextAccountID
-}
+func (b *block) NextAccountID() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Returns the next ERC20 contract ID to be used when creating a new ERC20 contract, as of the end of this block.
-func (b *block) NextErc20ContractID() int64 {
-	return b.nextErc20ContractID
-}
+func (b *block) NextErc20ContractID() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Returns the number of transactions in the block.
-func (b *block) TransactionCount() int64 {
-	return int64(len(b.transactions))
-}
+func (b *block) TransactionCount() int64 { _ = "STUB: not implemented"; return 0 }

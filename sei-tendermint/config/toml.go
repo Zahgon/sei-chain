@@ -1,17 +1,9 @@
 package config
 
 import (
-	"bytes"
-	"fmt"
 	"os"
-	"path/filepath"
 	"strings"
 	"text/template"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/tcp"
-
-	tmos "github.com/sei-protocol/sei-chain/sei-tendermint/libs/os"
-	tmrand "github.com/sei-protocol/sei-chain/sei-tendermint/libs/rand"
 )
 
 // defaultDirPerm is the default permissions used when creating directories.
@@ -33,44 +25,18 @@ func init() {
 
 // EnsureRoot creates the root, config, and data directories if they don't exist,
 // and panics if it fails.
-func EnsureRoot(rootDir string) {
-	if err := tmos.EnsureDir(rootDir, defaultDirPerm); err != nil {
-		panic(err.Error())
-	}
-	if err := tmos.EnsureDir(filepath.Join(rootDir, defaultConfigDir), defaultDirPerm); err != nil {
-		panic(err.Error())
-	}
-	if err := tmos.EnsureDir(filepath.Join(rootDir, defaultDataDir), defaultDirPerm); err != nil {
-		panic(err.Error())
-	}
-}
+func EnsureRoot(rootDir string) { _ = "STUB: not implemented"; return }
 
 // WriteConfigFile renders config using the template and writes it to configFilePath.
 // This function is called by cmd/tendermint/commands/init.go
-func WriteConfigFile(rootDir string, config *Config) error {
-	return config.WriteToTemplate(filepath.Join(rootDir, defaultConfigFilePath))
-}
+func WriteConfigFile(rootDir string, config *Config) error { _ = "STUB: not implemented"; return nil }
 
 // WriteToTemplate writes the config to the exact file specified by
 // the path, in the default toml template and does not mangle the path
 // or filename at all.
-func (cfg *Config) WriteToTemplate(path string) error {
-	var buffer bytes.Buffer
+func (cfg *Config) WriteToTemplate(path string) error { _ = "STUB: not implemented"; return nil }
 
-	if err := configTemplate.Execute(&buffer, cfg); err != nil {
-		return err
-	}
-
-	return writeFile(path, buffer.Bytes(), 0644)
-}
-
-func writeDefaultConfigFileIfNone(rootDir string) error {
-	configFilePath := filepath.Join(rootDir, defaultConfigFilePath)
-	if !tmos.FileExists(configFilePath) {
-		return WriteConfigFile(rootDir, DefaultConfig())
-	}
-	return nil
-}
+func writeDefaultConfigFileIfNone(rootDir string) error { _ = "STUB: not implemented"; return nil }
 
 // Note: any changes to the comments/variables/mapstructure
 // must be reflected in the appropriate struct in config/config.go
@@ -640,60 +606,24 @@ const defaultConfigTemplate = manualConfigTemplate + autoManagedConfigTemplate
 /****** these are for test settings ***********/
 
 func ResetTestRoot(dir, testName string) (*Config, error) {
-	return ResetTestRootWithChainID(dir, testName, "")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func ResetTestRootWithChainID(dir, testName string, chainID string) (*Config, error) {
+	_ = "STUB: not implemented"
 	// create a unique, concurrency-safe test directory under os.TempDir()
-	rootDir, err := os.MkdirTemp(dir, fmt.Sprintf("%s-%s_", chainID, testName))
-	if err != nil {
-		return nil, err
-	}
-	// ensure config and data subdirs are created
-	if err := tmos.EnsureDir(filepath.Join(rootDir, defaultConfigDir), defaultDirPerm); err != nil {
-		return nil, err
-	}
-	if err := tmos.EnsureDir(filepath.Join(rootDir, defaultDataDir), defaultDirPerm); err != nil {
-		return nil, err
-	}
-
-	conf := DefaultConfig()
-	genesisFilePath := filepath.Join(rootDir, conf.Genesis)
-	privKeyFilePath := filepath.Join(rootDir, conf.PrivValidator.Key)
-	privStateFilePath := filepath.Join(rootDir, conf.PrivValidator.State)
-
-	// Write default config file if missing.
-	if err := writeDefaultConfigFileIfNone(rootDir); err != nil {
-		return nil, err
-	}
-
-	if !tmos.FileExists(genesisFilePath) {
-		if chainID == "" {
-			chainID = "tendermint_test"
-		}
-		testGenesis := fmt.Sprintf(testGenesisFmt, chainID)
-		if err := writeFile(genesisFilePath, []byte(testGenesis), 0644); err != nil {
-			return nil, err
-		}
-	}
-	// we always overwrite the priv val
-	if err := writeFile(privKeyFilePath, []byte(testPrivValidatorKey), 0644); err != nil {
-		return nil, err
-	}
-	if err := writeFile(privStateFilePath, []byte(testPrivValidatorState), 0644); err != nil {
-		return nil, err
-	}
-
-	config := TestConfig().SetRoot(rootDir)
-	config.P2P.ListenAddress = tcp.TestReserveAddr().String()
-	config.Instrumentation.Namespace = fmt.Sprintf("%s_%s_%s", testName, chainID, tmrand.Str(16))
-	return config, nil
+	return nil, nil
 }
 
+// ensure config and data subdirs are created
+
+// Write default config file if missing.
+
+// we always overwrite the priv val
+
 func writeFile(filePath string, contents []byte, mode os.FileMode) error {
-	if err := os.WriteFile(filePath, contents, mode); err != nil {
-		return fmt.Errorf("failed to write file: %w", err)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 

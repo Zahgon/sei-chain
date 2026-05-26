@@ -2,10 +2,6 @@ package blocksync
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"runtime/debug"
-	"sync/atomic"
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
@@ -40,33 +36,13 @@ const (
 
 // TODO(gprusak): that's not sufficient - parsing proto requires checking nils everywhere.
 func wrap[T *pb.BlockRequest | *pb.NoBlockResponse | *pb.BlockResponse | *pb.StatusRequest | *pb.StatusResponse](msg T) *pb.Message {
-	switch msg := any(msg).(type) {
-	case *pb.BlockRequest:
-		return &pb.Message{Sum: &pb.Message_BlockRequest{BlockRequest: msg}}
-	case *pb.NoBlockResponse:
-		return &pb.Message{Sum: &pb.Message_NoBlockResponse{NoBlockResponse: msg}}
-	case *pb.BlockResponse:
-		return &pb.Message{Sum: &pb.Message_BlockResponse{BlockResponse: msg}}
-	case *pb.StatusRequest:
-		return &pb.Message{Sum: &pb.Message_StatusRequest{StatusRequest: msg}}
-	case *pb.StatusResponse:
-		return &pb.Message{Sum: &pb.Message_StatusResponse{StatusResponse: msg}}
-	default:
-		panic("unreachable")
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func GetChannelDescriptor() p2p.ChannelDescriptor[*pb.Message] {
-	return p2p.ChannelDescriptor[*pb.Message]{
-		ID:                  BlockSyncChannel,
-		MessageType:         new(pb.Message),
-		PreDecode:           utils.Some[func([]byte) error](pb.SchemaForMessage.Scan),
-		Priority:            5,
-		SendQueueCapacity:   1000,
-		RecvBufferCapacity:  1024,
-		RecvMessageCapacity: MaxMsgSize,
-		Name:                "blockSync",
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type consensusReactor interface {
@@ -80,9 +56,7 @@ type peerError struct {
 	peerID types.NodeID
 }
 
-func (e peerError) Error() string {
-	return fmt.Sprintf("error with peer %v: %s", e.peerID, e.err.Error())
-}
+func (e peerError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type blocksyncResult struct{ stateSynced bool }
 
@@ -143,31 +117,11 @@ func NewReactor(
 	restartEvent func(), // should be idempotent and non-blocking
 	selfRemediationConfig *config.SelfRemediationConfig,
 ) (*Reactor, error) {
-	channel, err := p2p.OpenChannel(router, GetChannelDescriptor())
-	if err != nil {
-		return nil, fmt.Errorf("router.AddChannel(): %w", err)
-	}
-	r := &Reactor{
-		stateStore:                stateStore,
-		blockExec:                 blockExec,
-		store:                     store,
-		consReactor:               consReactor,
-		blockSync:                 newAtomicBool(blockSync),
-		router:                    router,
-		channel:                   channel,
-		metrics:                   metrics,
-		eventBus:                  eventBus,
-		restartEvent:              restartEvent,
-		lastRestartTime:           time.Now(),
-		blocksBehindThreshold:     selfRemediationConfig.BlocksBehindThreshold,
-		blocksBehindCheckInterval: time.Duration(selfRemediationConfig.BlocksBehindCheckIntervalSeconds) * time.Second, //nolint:gosec // validated in config.ValidateBasic against MaxInt64
-		restartCooldownSeconds:    selfRemediationConfig.RestartCooldownSeconds,
-		blocksyncReady:            utils.NewAtomicSend(utils.None[blocksyncResult]()),
-		consensusReady:            utils.NewAtomicSend(false),
-	}
-	r.BaseService = *service.NewBaseService("BlockSync", r)
-	return r, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // validated in config.ValidateBasic against MaxInt64
 
 // OnStart starts separate go routines for each p2p Channel and listens for
 // envelopes on each. In addition, it also listens for peer updates and handles
@@ -176,105 +130,25 @@ func NewReactor(
 //
 // If blockSync is enabled, we also start the pool and the pool processing
 // goroutine. If the pool fails to start, an error is returned.
-func (r *Reactor) OnStart(ctx context.Context) error {
-	state, err := r.stateStore.Load()
-	if err != nil {
-		return err
-	}
-	r.initialState = state
-	r.lastRestartTime = time.Now()
+func (r *Reactor) OnStart(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-	if state.LastBlockHeight != r.store.Height() {
-		return fmt.Errorf("state (%v) and store (%v) height mismatch", state.LastBlockHeight, r.store.Height())
-	}
+// NOTE: The capacity should be larger than the peer count.
 
-	startHeight := r.store.Height() + 1
-	if startHeight == 1 {
-		startHeight = state.InitialHeight
-	}
-
-	requestsCh := make(chan BlockRequest, maxTotalRequesters)
-	errorsCh := make(chan peerError, maxPeerErrBuffer) // NOTE: The capacity should be larger than the peer count.
-	r.pool = NewBlockPool(startHeight, requestsCh, errorsCh, r.router)
-	r.requestsCh = requestsCh
-	r.errorsCh = errorsCh
-
-	// Pre-spawn all long-running routines so their lifetime is bound to the
-	// BaseService WaitGroup. Conditional routines gate on AtomicSend[bool]
-	// signals so SwitchToBlockSync (and the in-poolRoutine consensus handoff
-	// for autoRestartIfBehind) can wake them later without spawning fresh
-	// goroutines from outside OnStart.
-	r.Spawn("requestRoutine", func(ctx context.Context) error {
-		_, err := r.blocksyncReady.Wait(ctx, func(o utils.Option[blocksyncResult]) bool {
-			return o.IsPresent()
-		})
-		if err != nil {
-			return err
-		}
-		r.requestRoutine(ctx)
-		return nil
-	})
-	r.Spawn("poolRoutine", func(ctx context.Context) error {
-		result, err := r.blocksyncReady.Wait(ctx, func(o utils.Option[blocksyncResult]) bool {
-			return o.IsPresent()
-		})
-		if err != nil {
-			return err
-		}
-		res := result.OrPanic("no blocksync result")
-		r.poolRoutine(ctx, res.stateSynced)
-		return nil
-	})
-	r.SpawnCritical("processBlockSyncCh", func(ctx context.Context) error {
-		r.processBlockSyncCh(ctx)
-		return nil
-	})
-	r.SpawnCritical("processPeerUpdates", func(ctx context.Context) error {
-		r.processPeerUpdates(ctx)
-		return nil
-	})
-	r.SpawnCritical("autoRestartIfBehind", func(ctx context.Context) error {
-		if _, err := r.consensusReady.Wait(ctx, func(ready bool) bool { return ready }); err != nil {
-			return err
-		}
-		r.autoRestartIfBehind(ctx)
-		return nil
-	})
-
-	if r.blockSync.IsSet() {
-		if err := r.pool.Start(ctx); err != nil {
-			return err
-		}
-		r.blocksyncReady.Store(utils.Some(blocksyncResult{false}))
-	}
-	return nil
-}
+// Pre-spawn all long-running routines so their lifetime is bound to the
+// BaseService WaitGroup. Conditional routines gate on AtomicSend[bool]
+// signals so SwitchToBlockSync (and the in-poolRoutine consensus handoff
+// for autoRestartIfBehind) can wake them later without spawning fresh
+// goroutines from outside OnStart.
 
 // OnStop stops the BlockPool. The reactor's own long-running goroutines were
 // registered with the BaseService WaitGroup via Spawn in OnStart, so the
 // BaseService blocks Stop() on their exit before this method returns.
-func (r *Reactor) OnStop() {
-	if r.blockSync.IsSet() {
-		r.pool.Stop()
-	}
-}
+func (r *Reactor) OnStop() { _ = "STUB: not implemented"; return }
 
 // respondToPeer loads a block and sends it to the requesting peer, if we have it.
 // Otherwise, we'll respond saying we do not have it.
 func (r *Reactor) respondToPeer(msg *pb.BlockRequest, peerID types.NodeID) error {
-	block := r.store.LoadBlock(msg.GetHeight())
-	if block == nil {
-		logger.Info("peer requesting a block we do not have", "peer", peerID, "height", msg.GetHeight())
-		r.channel.Send(wrap(&pb.NoBlockResponse{Height: msg.GetHeight()}), peerID)
-		return nil
-	}
-
-	blockProto, err := block.ToProto()
-	if err != nil {
-		return fmt.Errorf("failed to convert block to protobuf: %w", err)
-	}
-
-	r.channel.Send(wrap(&pb.BlockResponse{Block: blockProto}), peerID)
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -282,49 +156,8 @@ func (r *Reactor) respondToPeer(msg *pb.BlockRequest, peerID types.NodeID) error
 // It will handle errors and any possible panics gracefully. A caller can handle
 // any error returned by sending a PeerError on the respective channel.
 func (r *Reactor) handleMessage(m p2p.RecvMsg[*pb.Message]) (err error) {
-	defer func() {
-		if e := recover(); e != nil {
-			err = fmt.Errorf("panic in processing message: %v", e)
-			logger.Error(
-				"recovering from processing message panic",
-				"err", err,
-				"stack", string(debug.Stack()),
-			)
-		}
-	}()
-
-	logger.Debug("received message", "message", m.Message, "peer", m.From)
-
-	switch msg := m.Message.Sum.(type) {
-	case *pb.Message_BlockRequest:
-		return r.respondToPeer(msg.BlockRequest, m.From)
-	case *pb.Message_BlockResponse:
-		block, err := types.BlockFromProto(msg.BlockResponse.GetBlock())
-		if err != nil {
-			return fmt.Errorf("types.BlockFromProto(): %w", err)
-		}
-		logger.Info("received block response from peer", "peer", m.From, "height", block.Height)
-		if err := r.pool.AddBlock(m.From, block, block.Size()); err != nil {
-			logger.Error("failed to add block", "err", err)
-		}
-		return nil
-	case *pb.Message_StatusRequest:
-		r.channel.Send(wrap(&pb.StatusResponse{
-			Height: r.store.Height(),
-			Base:   r.store.Base(),
-		}), m.From)
-		return nil
-	case *pb.Message_StatusResponse:
-		r.pool.SetPeerRange(m.From, msg.StatusResponse.GetBase(), msg.StatusResponse.GetHeight())
-		return nil
-	case *pb.Message_NoBlockResponse:
-		logger.Debug("peer does not have the requested block",
-			"peer", m.From,
-			"height", msg.NoBlockResponse.GetHeight())
-		return nil
-	default:
-		return fmt.Errorf("received unknown message: %T", msg)
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // processBlockSyncCh initiates a blocking process where we listen for and handle
@@ -332,350 +165,107 @@ func (r *Reactor) handleMessage(m p2p.RecvMsg[*pb.Message]) (err error) {
 // message execution will result in a PeerError being sent on the BlockSyncChannel.
 // When the reactor is stopped, we will catch the signal and close the p2p Channel
 // gracefully.
-func (r *Reactor) processBlockSyncCh(ctx context.Context) {
-	for ctx.Err() == nil {
-		m, err := r.channel.Recv(ctx)
-		if err != nil {
-			return
-		}
-		if err := r.handleMessage(m); err != nil && ctx.Err() == nil {
-			r.router.Evict(m.From, fmt.Errorf("blocksync: %w", err))
-		}
-	}
-}
+func (r *Reactor) processBlockSyncCh(ctx context.Context) { _ = "STUB: not implemented"; return }
 
 // autoRestartIfBehind will check if the node is behind the max peer height by
 // a certain threshold. If it is, the node will attempt to restart itself
 // TODO(gprusak): this should be a sub task of the consensus reactor instead.
-func (r *Reactor) autoRestartIfBehind(ctx context.Context) {
-	if r.blocksBehindThreshold == 0 || r.blocksBehindCheckInterval <= 0 {
-		logger.Info("Auto remediation is disabled")
-		return
-	}
+func (r *Reactor) autoRestartIfBehind(ctx context.Context) { _ = "STUB: not implemented"; return }
 
-	logger.Info("checking if node is behind threshold, auto restarting if its behind", "threshold", r.blocksBehindThreshold, "interval", r.blocksBehindCheckInterval)
-	for {
-		select {
-		case <-time.After(r.blocksBehindCheckInterval):
-			selfHeight := r.store.Height()
-			maxPeerHeight := r.pool.MaxPeerHeight()
-			threshold := int64(r.blocksBehindThreshold) //nolint:gosec // validated in config.ValidateBasic against MaxInt64
-			behindHeight := maxPeerHeight - selfHeight
-			blockSyncIsSet := r.blockSync.IsSet()
-			if maxPeerHeight > r.previousMaxPeerHeight {
-				r.previousMaxPeerHeight = maxPeerHeight
-			}
+//nolint:gosec // validated in config.ValidateBasic against MaxInt64
 
-			// We do not restart if we are not lagging behind, or we are already in block sync mode
-			if maxPeerHeight == 0 || behindHeight < threshold || blockSyncIsSet {
-				logger.Debug("does not exceed threshold or is already in block sync mode", "threshold", threshold, "behindHeight", behindHeight, "maxPeerHeight", maxPeerHeight, "selfHeight", selfHeight, "blockSyncIsSet", blockSyncIsSet)
-				continue
-			}
-			// Check if we have met cooldown time
-			if time.Since(r.lastRestartTime).Seconds() < float64(r.restartCooldownSeconds) {
-				logger.Debug("we are lagging behind, going to trigger a restart after cooldown time passes")
-				continue
-			}
-			logger.Info("Blocks behind threshold, restarting node", "threshold", threshold, "behindHeight", behindHeight, "maxPeerHeight", maxPeerHeight, "selfHeight", selfHeight)
+// We do not restart if we are not lagging behind, or we are already in block sync mode
 
-			// Send signal to restart the node
-			r.blockSync.Set()
-			r.restartEvent()
-			return
-		case <-ctx.Done():
-			return
-		}
-	}
-}
+// Check if we have met cooldown time
+
+// Send signal to restart the node
 
 // processPeerUpdate processes a PeerUpdate.
-func (r *Reactor) processPeerUpdate(peerUpdate p2p.PeerUpdate) {
-	logger.Debug("received peer update", "peer", peerUpdate.NodeID, "status", peerUpdate.Status)
+func (r *Reactor) processPeerUpdate(peerUpdate p2p.PeerUpdate) { _ = "STUB: not implemented"; return }
 
-	switch peerUpdate.Status {
-	case p2p.PeerStatusUp:
-		// send a status update the newly added peer
-		r.channel.Send(wrap(&pb.StatusResponse{
-			Base:   r.store.Base(),
-			Height: r.store.Height(),
-		}), peerUpdate.NodeID)
-	case p2p.PeerStatusDown:
-		r.pool.RemovePeer(peerUpdate.NodeID)
-	}
-}
+// send a status update the newly added peer
 
 // processPeerUpdates initiates a blocking process where we listen for and handle
 // PeerUpdate messages. When the reactor is stopped, we will catch the signal and
 // close the p2p PeerUpdatesCh gracefully.
-func (r *Reactor) processPeerUpdates(ctx context.Context) {
-	recv := r.router.Subscribe()
-	for {
-		update, err := recv.Recv(ctx)
-		if err != nil {
-			return
-		}
-		r.processPeerUpdate(update)
-	}
-}
+func (r *Reactor) processPeerUpdates(ctx context.Context) { _ = "STUB: not implemented"; return }
 
 // SwitchToBlockSync is called by the state sync reactor when switching to fast
 // sync.
 func (r *Reactor) SwitchToBlockSync(ctx context.Context, state sm.State) error {
-	r.blockSync.Set()
-	r.initialState = state
-	r.pool.height = state.LastBlockHeight + 1
-
-	if err := r.pool.Start(ctx); err != nil {
-		return err
-	}
-
-	r.syncStartTime = time.Now()
-	r.blocksyncReady.Store(utils.Some(blocksyncResult{true}))
-
-	if err := r.PublishStatus(types.EventDataBlockSyncStatus{
-		Complete: false,
-		Height:   state.LastBlockHeight,
-	}); err != nil {
-		return err
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (r *Reactor) requestRoutine(ctx context.Context) {
-	statusUpdateTicker := time.NewTicker(statusUpdateInterval)
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case request := <-r.requestsCh:
-			r.channel.Send(wrap(&pb.BlockRequest{Height: request.Height}), request.PeerID)
-		case pErr := <-r.errorsCh:
-			r.router.Evict(pErr.peerID, fmt.Errorf("blocksync.request: %w", pErr.err))
-		case <-statusUpdateTicker.C:
-			r.channel.Broadcast(wrap(&pb.StatusRequest{}))
-		}
-	}
-}
+func (r *Reactor) requestRoutine(ctx context.Context) { _ = "STUB: not implemented"; return }
 
 // poolRoutine handles messages from the poolReactor telling the reactor what to
 // do.
 //
 // NOTE: Don't sleep in the FOR_LOOP or otherwise slow it down!
 func (r *Reactor) poolRoutine(ctx context.Context, stateSynced bool) {
-	var (
-		trySyncTicker           = time.NewTicker(trySyncIntervalMS * time.Millisecond)
-		switchToConsensusTicker = time.NewTicker(switchToConsensusIntervalSeconds * time.Second)
-		lastApplyBlockTime      = time.Now()
-
-		blocksSynced = uint64(0)
-
-		chainID = r.initialState.ChainID
-		state   = r.initialState
-
-		lastHundred = time.Now()
-		lastRate    = 0.0
-
-		didProcessCh = make(chan struct{}, 1)
-	)
-
-	defer trySyncTicker.Stop()
-	defer switchToConsensusTicker.Stop()
-
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case <-switchToConsensusTicker.C:
-			var (
-				height, numPending, lenRequesters = r.pool.GetStatus()
-				lastAdvance                       = r.pool.LastAdvance()
-			)
-
-			logger.Debug(
-				"consensus ticker",
-				"num_pending", numPending,
-				"total", lenRequesters,
-				"height", height,
-			)
-
-			switch {
-			case r.pool.IsCaughtUp() && r.previousMaxPeerHeight <= r.pool.MaxPeerHeight():
-				logger.Info("switching to consensus reactor after caught up", "height", height)
-
-			case time.Since(lastAdvance) > syncTimeout:
-				logger.Error("no progress since last advance", "last_advance", lastAdvance)
-				continue
-
-			default:
-				logger.Info(
-					"not caught up yet",
-					"height", height,
-					"max_peer_height", r.pool.MaxPeerHeight(),
-					"timeout_in", syncTimeout-time.Since(lastAdvance),
-				)
-				continue
-			}
-
-			r.pool.Stop()
-
-			r.blockSync.UnSet()
-
-			if r.consReactor != nil {
-				logger.Info("switching to consensus reactor", "height", height, "blocks_synced", blocksSynced, "state_synced", stateSynced, "max_peer_height", r.pool.MaxPeerHeight())
-				// Use the node-scoped context: SwitchToConsensus is a handoff
-				// to a peer reactor whose lifecycle is not tied to blocksync.
-				r.consReactor.SwitchToConsensus(state, blocksSynced > 0 || stateSynced)
-				// Wake the pre-spawned auto-restart monitor.
-				r.consensusReady.Store(true)
-			}
-
-			return
-
-		case <-trySyncTicker.C:
-			select {
-			case didProcessCh <- struct{}{}:
-			default:
-			}
-		case <-didProcessCh:
-			// NOTE: It is a subtle mistake to process more than a single block at a
-			// time (e.g. 10) here, because we only send one BlockRequest per loop
-			// iteration. The ratio mismatch can result in starving of blocks, i.e. a
-			// sudden burst of requests and responses, and repeat. Consequently, it is
-			// better to split these routines rather than coupling them as it is
-			// written here.
-			//
-			// TODO: Uncouple from request routine.
-
-			// see if there are any blocks to sync
-			first, second := r.pool.PeekTwoBlocks()
-			if first == nil || second == nil {
-				// we need to have fetched two consecutive blocks in order to perform blocksync verification
-				continue
-			}
-
-			// try again quickly next loop
-			didProcessCh <- struct{}{}
-
-			firstParts, err := first.MakePartSet(types.BlockPartSizeBytes)
-			if err != nil {
-				logger.Error("failed to make ",
-					"height", first.Height,
-					"err", err)
-				return
-			}
-
-			var (
-				firstPartSetHeader = firstParts.Header()
-				firstID            = types.BlockID{Hash: first.Hash(), PartSetHeader: firstPartSetHeader}
-			)
-
-			// Finally, verify the first block using the second's commit.
-			//
-			// NOTE: We can probably make this more efficient, but note that calling
-			// first.Hash() doesn't verify the tx contents, so MakePartSet() is
-			// currently necessary.
-			// TODO(sergio): Should we also validate against the extended commit?
-			err = state.Validators.VerifyCommitLight(chainID, firstID, first.Height, second.LastCommit)
-
-			if err == nil {
-				// validate the block before we persist it
-				err = r.blockExec.ValidateBlock(ctx, state, first)
-			}
-			// If either of the checks failed we log the error and request for a new block
-			// at that height
-			if err != nil {
-				logger.Error(
-					"Failed to validate block or verify commit",
-					"last_commit", second.LastCommit,
-					"block_id", firstID,
-					"height", first.Height,
-					"err", err,
-				)
-
-				// NOTE: We've already removed the peer's request, but we still need
-				// to clean up the rest.
-				peerID := r.pool.RedoRequest(first.Height)
-				r.router.Evict(peerID, fmt.Errorf("blocksync: %w", err))
-
-				peerID2 := r.pool.RedoRequest(second.Height)
-				if peerID2 != peerID {
-					r.router.Evict(peerID2, fmt.Errorf("blocksync: %w", err))
-				}
-				return
-			}
-
-			r.pool.PopRequest()
-
-			// We use LastCommit here instead of extCommit. extCommit is not
-			// guaranteed to be populated by the peer if extensions are not enabled.
-			// Currently, the peer should provide an extCommit even if the vote extension data are absent
-			// but this may change so using second.LastCommit is safer.
-			r.store.SaveBlock(first, firstParts, second.LastCommit)
-
-			// TODO: Same thing for app - but we would need a way to get the hash
-			// without persisting the state.
-			logger.Info("Requesting block from peer", "block", first.Height, "took", time.Since(lastApplyBlockTime))
-			startTime := time.Now()
-			state, err = r.blockExec.ApplyBlock(ctx, state, firstID, first, nil)
-			logger.Info("ApplyBlock", "block", first.Height, "took", time.Since(startTime))
-			lastApplyBlockTime = time.Now()
-			if err != nil {
-				panic(fmt.Sprintf("failed to process committed block (%d:%X): %v", first.Height, first.Hash(), err))
-			}
-
-			r.metrics.RecordConsMetrics(first)
-
-			blocksSynced++
-
-			if blocksSynced%100 == 0 {
-				lastRate = 0.9*lastRate + 0.1*(100/time.Since(lastHundred).Seconds())
-				logger.Info(
-					"block sync rate",
-					"height", r.pool.height,
-					"max_peer_height", r.pool.MaxPeerHeight(),
-					"blocks/s", lastRate,
-				)
-
-				lastHundred = time.Now()
-			}
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (r *Reactor) GetMaxPeerBlockHeight() int64 {
-	return r.pool.MaxPeerHeight()
-}
+// Use the node-scoped context: SwitchToConsensus is a handoff
+// to a peer reactor whose lifecycle is not tied to blocksync.
+
+// Wake the pre-spawned auto-restart monitor.
+
+// NOTE: It is a subtle mistake to process more than a single block at a
+// time (e.g. 10) here, because we only send one BlockRequest per loop
+// iteration. The ratio mismatch can result in starving of blocks, i.e. a
+// sudden burst of requests and responses, and repeat. Consequently, it is
+// better to split these routines rather than coupling them as it is
+// written here.
+//
+// TODO: Uncouple from request routine.
+
+// see if there are any blocks to sync
+
+// we need to have fetched two consecutive blocks in order to perform blocksync verification
+
+// try again quickly next loop
+
+// Finally, verify the first block using the second's commit.
+//
+// NOTE: We can probably make this more efficient, but note that calling
+// first.Hash() doesn't verify the tx contents, so MakePartSet() is
+// currently necessary.
+// TODO(sergio): Should we also validate against the extended commit?
+
+// validate the block before we persist it
+
+// If either of the checks failed we log the error and request for a new block
+// at that height
+
+// NOTE: We've already removed the peer's request, but we still need
+// to clean up the rest.
+
+// We use LastCommit here instead of extCommit. extCommit is not
+// guaranteed to be populated by the peer if extensions are not enabled.
+// Currently, the peer should provide an extCommit even if the vote extension data are absent
+// but this may change so using second.LastCommit is safer.
+
+// TODO: Same thing for app - but we would need a way to get the hash
+// without persisting the state.
+
+func (r *Reactor) GetMaxPeerBlockHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (r *Reactor) GetTotalSyncedTime() time.Duration {
-	if !r.blockSync.IsSet() || r.syncStartTime.IsZero() {
-		return time.Duration(0)
-	}
-	return time.Since(r.syncStartTime)
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 func (r *Reactor) GetRemainingSyncTime() time.Duration {
-	if !r.blockSync.IsSet() {
-		return time.Duration(0)
-	}
-
-	targetSyncs := r.pool.targetSyncBlocks()
-	currentSyncs := r.store.Height() - r.pool.startHeight + 1
-	lastSyncRate := r.pool.getLastSyncRate()
-	if currentSyncs < 0 || lastSyncRate < 0.001 {
-		return time.Duration(0)
-	}
-
-	remain := float64(targetSyncs-currentSyncs) / lastSyncRate
-
-	return time.Duration(int64(remain * float64(time.Second)))
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 func (r *Reactor) PublishStatus(event types.EventDataBlockSyncStatus) error {
-	if r.eventBus == nil {
-		return errors.New("event bus is not configured")
-	}
-	return r.eventBus.PublishEventBlockSyncStatus(event)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // atomicBool is an atomic Boolean, safe for concurrent use by multiple
@@ -683,19 +273,13 @@ func (r *Reactor) PublishStatus(event types.EventDataBlockSyncStatus) error {
 type atomicBool int32
 
 // newAtomicBool creates an atomicBool with given initial value.
-func newAtomicBool(ok bool) *atomicBool {
-	ab := new(atomicBool)
-	if ok {
-		ab.Set()
-	}
-	return ab
-}
+func newAtomicBool(ok bool) *atomicBool { _ = "STUB: not implemented"; return nil }
 
 // Set sets the Boolean to true.
-func (ab *atomicBool) Set() { atomic.StoreInt32((*int32)(ab), 1) }
+func (ab *atomicBool) Set() { _ = "STUB: not implemented"; return }
 
 // UnSet sets the Boolean to false.
-func (ab *atomicBool) UnSet() { atomic.StoreInt32((*int32)(ab), 0) }
+func (ab *atomicBool) UnSet() { _ = "STUB: not implemented"; return }
 
 // IsSet returns whether the Boolean is true.
-func (ab *atomicBool) IsSet() bool { return atomic.LoadInt32((*int32)(ab))&1 == 1 }
+func (ab *atomicBool) IsSet() bool { _ = "STUB: not implemented"; return false }

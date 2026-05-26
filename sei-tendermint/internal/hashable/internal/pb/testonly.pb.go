@@ -7,12 +7,11 @@
 package pb
 
 import (
+	sync "sync"
+
 	_ "github.com/sei-protocol/sei-chain/sei-tendermint/internal/hashable/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	reflect "reflect"
-	sync "sync"
-	unsafe "unsafe"
 )
 
 const (
@@ -44,32 +43,27 @@ var (
 	}
 )
 
-func (x TestonlyEnum) Enum() *TestonlyEnum {
-	p := new(TestonlyEnum)
-	*p = x
-	return p
-}
+func (x TestonlyEnum) Enum() *TestonlyEnum { _ = "STUB: not implemented"; return nil }
 
-func (x TestonlyEnum) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
+func (x TestonlyEnum) String() string { _ = "STUB: not implemented"; return "" }
 
 func (TestonlyEnum) Descriptor() protoreflect.EnumDescriptor {
-	return file_hashable_internal_testonly_proto_enumTypes[0].Descriptor()
+	_ = "STUB: not implemented"
+	return *new(protoreflect.EnumDescriptor)
 }
 
 func (TestonlyEnum) Type() protoreflect.EnumType {
-	return &file_hashable_internal_testonly_proto_enumTypes[0]
+	_ = "STUB: not implemented"
+	return *new(protoreflect.EnumType)
 }
 
 func (x TestonlyEnum) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.EnumNumber)
 }
 
 // Deprecated: Use TestonlyEnum.Descriptor instead.
-func (TestonlyEnum) EnumDescriptor() ([]byte, []int) {
-	return file_hashable_internal_testonly_proto_rawDescGZIP(), []int{0}
-}
+func (TestonlyEnum) EnumDescriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 type TestonlyNested struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -86,67 +80,30 @@ type TestonlyNested struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TestonlyNested) Reset() {
-	*x = TestonlyNested{}
-	mi := &file_hashable_internal_testonly_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *TestonlyNested) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *TestonlyNested) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *TestonlyNested) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*TestonlyNested) ProtoMessage() {}
+func (*TestonlyNested) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *TestonlyNested) ProtoReflect() protoreflect.Message {
-	mi := &file_hashable_internal_testonly_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use TestonlyNested.ProtoReflect.Descriptor instead.
-func (*TestonlyNested) Descriptor() ([]byte, []int) {
-	return file_hashable_internal_testonly_proto_rawDescGZIP(), []int{0}
-}
+func (*TestonlyNested) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 func (x *TestonlyNested) GetT() isTestonlyNested_T {
-	if x != nil {
-		return x.T
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(isTestonlyNested_T)
 }
 
-func (x *TestonlyNested) GetNote() string {
-	if x != nil {
-		if x, ok := x.T.(*TestonlyNested_Note); ok {
-			return x.Note
-		}
-	}
-	return ""
-}
+func (x *TestonlyNested) GetNote() string { _ = "STUB: not implemented"; return "" }
 
-func (x *TestonlyNested) GetValue() uint32 {
-	if x != nil {
-		if x, ok := x.T.(*TestonlyNested_Value); ok {
-			return x.Value
-		}
-	}
-	return 0
-}
+func (x *TestonlyNested) GetValue() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyNested) GetRecursive() *TestonlyNested {
-	if x != nil {
-		return x.Recursive
-	}
-	return nil
-}
+func (x *TestonlyNested) GetRecursive() *TestonlyNested { _ = "STUB: not implemented"; return nil }
 
 type isTestonlyNested_T interface {
 	isTestonlyNested_T()
@@ -160,9 +117,9 @@ type TestonlyNested_Value struct {
 	Value uint32 `protobuf:"varint,2,opt,name=value,proto3,oneof"`
 }
 
-func (*TestonlyNested_Note) isTestonlyNested_T() {}
+func (*TestonlyNested_Note) isTestonlyNested_T() { _ = "STUB: not implemented"; return }
 
-func (*TestonlyNested_Value) isTestonlyNested_T() {}
+func (*TestonlyNested_Value) isTestonlyNested_T() { _ = "STUB: not implemented"; return }
 
 type TestonlyMsg struct {
 	state                     protoimpl.MessageState `protogen:"open.v1"`
@@ -192,189 +149,69 @@ type TestonlyMsg struct {
 	sizeCache                 protoimpl.SizeCache
 }
 
-func (x *TestonlyMsg) Reset() {
-	*x = TestonlyMsg{}
-	mi := &file_hashable_internal_testonly_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *TestonlyMsg) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *TestonlyMsg) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *TestonlyMsg) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*TestonlyMsg) ProtoMessage() {}
+func (*TestonlyMsg) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *TestonlyMsg) ProtoReflect() protoreflect.Message {
-	mi := &file_hashable_internal_testonly_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use TestonlyMsg.ProtoReflect.Descriptor instead.
-func (*TestonlyMsg) Descriptor() ([]byte, []int) {
-	return file_hashable_internal_testonly_proto_rawDescGZIP(), []int{1}
-}
+func (*TestonlyMsg) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *TestonlyMsg) GetBoolValue() bool {
-	if x != nil && x.BoolValue != nil {
-		return *x.BoolValue
-	}
-	return false
-}
+func (x *TestonlyMsg) GetBoolValue() bool { _ = "STUB: not implemented"; return false }
 
 func (x *TestonlyMsg) GetEnumValue() TestonlyEnum {
-	if x != nil && x.EnumValue != nil {
-		return *x.EnumValue
-	}
-	return TestonlyEnum_TESTONLY_ENUM_UNSPECIFIED
+	_ = "STUB: not implemented"
+	return *new(TestonlyEnum)
 }
 
-func (x *TestonlyMsg) GetInt32Value() int32 {
-	if x != nil && x.Int32Value != nil {
-		return *x.Int32Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetInt32Value() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetInt64Value() int64 {
-	if x != nil && x.Int64Value != nil {
-		return *x.Int64Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetInt64Value() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetSint32Value() int32 {
-	if x != nil && x.Sint32Value != nil {
-		return *x.Sint32Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetSint32Value() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetSint64Value() int64 {
-	if x != nil && x.Sint64Value != nil {
-		return *x.Sint64Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetSint64Value() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetUint32Value() uint32 {
-	if x != nil && x.Uint32Value != nil {
-		return *x.Uint32Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetUint32Value() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetUint64Value() uint64 {
-	if x != nil && x.Uint64Value != nil {
-		return *x.Uint64Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetUint64Value() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetFixed32Value() uint32 {
-	if x != nil && x.Fixed32Value != nil {
-		return *x.Fixed32Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetFixed32Value() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetFixed64Value() uint64 {
-	if x != nil && x.Fixed64Value != nil {
-		return *x.Fixed64Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetFixed64Value() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetSfixed32Value() int32 {
-	if x != nil && x.Sfixed32Value != nil {
-		return *x.Sfixed32Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetSfixed32Value() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetSfixed64Value() int64 {
-	if x != nil && x.Sfixed64Value != nil {
-		return *x.Sfixed64Value
-	}
-	return 0
-}
+func (x *TestonlyMsg) GetSfixed64Value() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TestonlyMsg) GetBytesValue() []byte {
-	if x != nil {
-		return x.BytesValue
-	}
-	return nil
-}
+func (x *TestonlyMsg) GetBytesValue() []byte { _ = "STUB: not implemented"; return nil }
 
-func (x *TestonlyMsg) GetStringValue() string {
-	if x != nil && x.StringValue != nil {
-		return *x.StringValue
-	}
-	return ""
-}
+func (x *TestonlyMsg) GetStringValue() string { _ = "STUB: not implemented"; return "" }
 
-func (x *TestonlyMsg) GetMessageValue() *TestonlyNested {
-	if x != nil {
-		return x.MessageValue
-	}
-	return nil
-}
+func (x *TestonlyMsg) GetMessageValue() *TestonlyNested { _ = "STUB: not implemented"; return nil }
 
-func (x *TestonlyMsg) GetRepeatedPackable() []int64 {
-	if x != nil {
-		return x.RepeatedPackable
-	}
-	return nil
-}
+func (x *TestonlyMsg) GetRepeatedPackable() []int64 { _ = "STUB: not implemented"; return nil }
 
-func (x *TestonlyMsg) GetRepeatedString() []string {
-	if x != nil {
-		return x.RepeatedString
-	}
-	return nil
-}
+func (x *TestonlyMsg) GetRepeatedString() []string { _ = "STUB: not implemented"; return nil }
 
-func (x *TestonlyMsg) GetRepeatedMessage() []*TestonlyNested {
-	if x != nil {
-		return x.RepeatedMessage
-	}
-	return nil
-}
+func (x *TestonlyMsg) GetRepeatedMessage() []*TestonlyNested { _ = "STUB: not implemented"; return nil }
 
-func (x *TestonlyMsg) GetOptionalMessage() *TestonlyNested {
-	if x != nil {
-		return x.OptionalMessage
-	}
-	return nil
-}
+func (x *TestonlyMsg) GetOptionalMessage() *TestonlyNested { _ = "STUB: not implemented"; return nil }
 
 func (x *TestonlyMsg) GetRepeatedPackableSingleton() []uint32 {
-	if x != nil {
-		return x.RepeatedPackableSingleton
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (x *TestonlyMsg) GetRepeatedBytes() [][]byte {
-	if x != nil {
-		return x.RepeatedBytes
-	}
-	return nil
-}
+func (x *TestonlyMsg) GetRepeatedBytes() [][]byte { _ = "STUB: not implemented"; return nil }
 
-func (x *TestonlyMsg) GetRepeatedPackableEmpty() []uint64 {
-	if x != nil {
-		return x.RepeatedPackableEmpty
-	}
-	return nil
-}
+func (x *TestonlyMsg) GetRepeatedPackableEmpty() []uint64 { _ = "STUB: not implemented"; return nil }
 
 var File_hashable_internal_testonly_proto protoreflect.FileDescriptor
 
@@ -444,10 +281,8 @@ var (
 )
 
 func file_hashable_internal_testonly_proto_rawDescGZIP() []byte {
-	file_hashable_internal_testonly_proto_rawDescOnce.Do(func() {
-		file_hashable_internal_testonly_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_hashable_internal_testonly_proto_rawDesc), len(file_hashable_internal_testonly_proto_rawDesc)))
-	})
-	return file_hashable_internal_testonly_proto_rawDescData
+	_ = "STUB: not implemented"
+	return nil
 }
 
 var file_hashable_internal_testonly_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
@@ -470,32 +305,5 @@ var file_hashable_internal_testonly_proto_depIdxs = []int32{
 	0, // [0:5] is the sub-list for field type_name
 }
 
-func init() { file_hashable_internal_testonly_proto_init() }
-func file_hashable_internal_testonly_proto_init() {
-	if File_hashable_internal_testonly_proto != nil {
-		return
-	}
-	file_hashable_internal_testonly_proto_msgTypes[0].OneofWrappers = []any{
-		(*TestonlyNested_Note)(nil),
-		(*TestonlyNested_Value)(nil),
-	}
-	file_hashable_internal_testonly_proto_msgTypes[1].OneofWrappers = []any{}
-	type x struct{}
-	out := protoimpl.TypeBuilder{
-		File: protoimpl.DescBuilder{
-			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_hashable_internal_testonly_proto_rawDesc), len(file_hashable_internal_testonly_proto_rawDesc)),
-			NumEnums:      1,
-			NumMessages:   2,
-			NumExtensions: 0,
-			NumServices:   0,
-		},
-		GoTypes:           file_hashable_internal_testonly_proto_goTypes,
-		DependencyIndexes: file_hashable_internal_testonly_proto_depIdxs,
-		EnumInfos:         file_hashable_internal_testonly_proto_enumTypes,
-		MessageInfos:      file_hashable_internal_testonly_proto_msgTypes,
-	}.Build()
-	File_hashable_internal_testonly_proto = out.File
-	file_hashable_internal_testonly_proto_goTypes = nil
-	file_hashable_internal_testonly_proto_depIdxs = nil
-}
+func init()                                       { file_hashable_internal_testonly_proto_init() }
+func file_hashable_internal_testonly_proto_init() { _ = "STUB: not implemented"; return }

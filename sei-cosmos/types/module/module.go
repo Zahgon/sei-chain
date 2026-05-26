@@ -30,13 +30,9 @@ package module
 
 import (
 	"encoding/json"
-	"fmt"
-	"sort"
-	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/sei-protocol/seilog"
 	"github.com/spf13/cobra"
@@ -45,7 +41,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	genesistypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/genesis"
 )
 
@@ -73,110 +68,65 @@ type BasicManager map[string]AppModuleBasic
 
 // NewBasicManager creates a new BasicManager object
 func NewBasicManager(modules ...AppModuleBasic) BasicManager {
-	moduleMap := make(map[string]AppModuleBasic)
-	for _, module := range modules {
-		moduleMap[module.Name()] = module
-	}
-	return moduleMap
+	_ = "STUB: not implemented"
+	return *new(BasicManager)
 }
 
 // RegisterLegacyAminoCodec registers all module codecs
 func (bm BasicManager) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	for _, b := range bm {
-		b.RegisterLegacyAminoCodec(cdc)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterInterfaces registers all module interface types
 func (bm BasicManager) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	for _, m := range bm {
-		m.RegisterInterfaces(registry)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // DefaultGenesis provides default genesis information for all modules
 func (bm BasicManager) DefaultGenesis(cdc codec.JSONCodec) map[string]json.RawMessage {
-	genesis := make(map[string]json.RawMessage)
-	for _, b := range bm {
-		genesis[b.Name()] = b.DefaultGenesis(cdc)
-	}
-
-	return genesis
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateGenesis performs genesis state validation for all modules
 func (bm BasicManager) ValidateGenesis(cdc codec.JSONCodec, txEncCfg client.TxEncodingConfig, genesis map[string]json.RawMessage) error {
-	for _, b := range bm {
-		if err := b.ValidateGenesis(cdc, txEncCfg, genesis[b.Name()]); err != nil {
-			return err
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // ValidateGenesisStream performs genesis state validation on all modules in a streaming fashion.
 func (bm BasicManager) ValidateGenesisStream(cdc codec.JSONCodec, txEncCfg client.TxEncodingConfig, moduleName string, genesisCh <-chan json.RawMessage, doneCh <-chan struct{}, errCh chan<- error) {
-	moduleGenesisCh := make(chan json.RawMessage)
-	moduleDoneCh := make(chan struct{})
-
-	var err error
-
-	go func() {
-		err = bm[moduleName].ValidateGenesisStream(cdc, txEncCfg, moduleGenesisCh)
-		if err != nil {
-			errCh <- err
-		}
-		moduleDoneCh <- struct{}{}
-	}()
-
-	for {
-		select {
-		case <-doneCh:
-			close(moduleGenesisCh)
-			return
-		case genesisChunk := <-genesisCh:
-			moduleGenesisCh <- genesisChunk
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterRESTRoutes registers all module rest routes
 func (bm BasicManager) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	for _, b := range bm {
-		b.RegisterRESTRoutes(clientCtx, rtr)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterGRPCGatewayRoutes registers all module rest routes
 func (bm BasicManager) RegisterGRPCGatewayRoutes(clientCtx client.Context, rtr *runtime.ServeMux) {
-	for _, b := range bm {
-		b.RegisterGRPCGatewayRoutes(clientCtx, rtr)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // AddTxCommands adds all tx commands to the rootTxCmd.
 //
 // TODO: Remove clientCtx argument.
 // REF: https://github.com/cosmos/cosmos-sdk/issues/6571
-func (bm BasicManager) AddTxCommands(rootTxCmd *cobra.Command) {
-	for _, b := range bm {
-		if cmd := b.GetTxCmd(); cmd != nil {
-			rootTxCmd.AddCommand(cmd)
-		}
-	}
-}
+func (bm BasicManager) AddTxCommands(rootTxCmd *cobra.Command) { _ = "STUB: not implemented"; return }
 
 // AddQueryCommands adds all query commands to the rootQueryCmd.
 //
 // TODO: Remove clientCtx argument.
 // REF: https://github.com/cosmos/cosmos-sdk/issues/6571
 func (bm BasicManager) AddQueryCommands(rootQueryCmd *cobra.Command) {
-	for _, b := range bm {
-		if cmd := b.GetQueryCmd(); cmd != nil {
-			rootQueryCmd.AddCommand(cmd)
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // AppModuleGenesis is the standard form for an application module genesis functions
@@ -238,31 +188,54 @@ type GenesisOnlyAppModule struct {
 
 // NewGenesisOnlyAppModule creates a new GenesisOnlyAppModule object
 func NewGenesisOnlyAppModule(amg AppModuleGenesis) AppModule {
-	return GenesisOnlyAppModule{
-		AppModuleGenesis: amg,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // RegisterInvariants is a placeholder function register no invariants
-func (GenesisOnlyAppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (GenesisOnlyAppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 
-// Route empty module message route
-func (GenesisOnlyAppModule) Route() sdk.Route { return sdk.Route{} }
+	// Route empty module message route
+	return
+}
 
-// QuerierRoute returns an empty module querier route
-func (GenesisOnlyAppModule) QuerierRoute() string { return "" }
+func (GenesisOnlyAppModule) Route() sdk.Route {
+	_ = "STUB: not implemented"
 
-// LegacyQuerierHandler returns an empty module querier
-func (gam GenesisOnlyAppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier { return nil }
+	// QuerierRoute returns an empty module querier route
+	return *new(sdk.Route)
+}
 
-// RegisterServices registers all services.
-func (gam GenesisOnlyAppModule) RegisterServices(Configurator) {}
+func (GenesisOnlyAppModule) QuerierRoute() string {
+	_ = "STUB: not implemented"
 
-// ConsensusVersion implements AppModule/ConsensusVersion.
-func (gam GenesisOnlyAppModule) ConsensusVersion() uint64 { return 1 }
+	// LegacyQuerierHandler returns an empty module querier
+	return ""
+}
 
-// Manager defines a module manager that provides the high level utility for managing and executing
-// operations for a group of modules
+func (gam GenesisOnlyAppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier {
+	_ = "STUB: not implemented"
+
+	// RegisterServices registers all services.
+	return *new(sdk.Querier)
+}
+
+func (gam GenesisOnlyAppModule) RegisterServices(Configurator) {
+	_ = "STUB: not implemented"
+
+	// ConsensusVersion implements AppModule/ConsensusVersion.
+	return
+}
+
+func (gam GenesisOnlyAppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
+
+	// Manager defines a module manager that provides the high level utility for managing and executing
+	// operations for a group of modules
+	return 0
+}
+
 type Manager struct {
 	Modules            map[string]AppModule
 	OrderInitGenesis   []string
@@ -272,71 +245,32 @@ type Manager struct {
 }
 
 // NewManager creates a new Manager object
-func NewManager(modules ...AppModule) *Manager {
-
-	moduleMap := make(map[string]AppModule)
-	modulesStr := make([]string, 0, len(modules))
-	for _, module := range modules {
-		moduleMap[module.Name()] = module
-		modulesStr = append(modulesStr, module.Name())
-	}
-
-	return &Manager{
-		Modules:            moduleMap,
-		OrderInitGenesis:   modulesStr,
-		OrderExportGenesis: modulesStr,
-	}
-}
+func NewManager(modules ...AppModule) *Manager { _ = "STUB: not implemented"; return nil }
 
 // SetOrderInitGenesis sets the order of init genesis calls
-func (m *Manager) SetOrderInitGenesis(moduleNames ...string) {
-	m.assertNoForgottenModules("SetOrderInitGenesis", moduleNames)
-	m.OrderInitGenesis = moduleNames
-}
+func (m *Manager) SetOrderInitGenesis(moduleNames ...string) { _ = "STUB: not implemented"; return }
 
 // SetOrderExportGenesis sets the order of export genesis calls
-func (m *Manager) SetOrderExportGenesis(moduleNames ...string) {
-	m.assertNoForgottenModules("SetOrderExportGenesis", moduleNames)
-	m.OrderExportGenesis = moduleNames
-}
+func (m *Manager) SetOrderExportGenesis(moduleNames ...string) { _ = "STUB: not implemented"; return }
 
 // SetOrderMidBlockers sets the order of set mid-blocker calls
-func (m *Manager) SetOrderMidBlockers(moduleNames ...string) {
-	m.OrderMidBlockers = moduleNames
-}
+func (m *Manager) SetOrderMidBlockers(moduleNames ...string) { _ = "STUB: not implemented"; return }
 
 // SetOrderMigrations sets the order of migrations to be run. If not set
 // then migrations will be run with an order defined in `DefaultMigrationsOrder`.
-func (m *Manager) SetOrderMigrations(moduleNames ...string) {
-	m.assertNoForgottenModules("SetOrderMigrations", moduleNames)
-	m.OrderMigrations = moduleNames
-}
+func (m *Manager) SetOrderMigrations(moduleNames ...string) { _ = "STUB: not implemented"; return }
 
 // RegisterInvariants registers all module invariants
-func (m *Manager) RegisterInvariants(ir sdk.InvariantRegistry) {
-	for _, module := range m.Modules {
-		module.RegisterInvariants(ir)
-	}
-}
+func (m *Manager) RegisterInvariants(ir sdk.InvariantRegistry) { _ = "STUB: not implemented"; return }
 
 // RegisterRoutes registers all module routes and module querier routes
 func (m *Manager) RegisterRoutes(router sdk.Router, queryRouter sdk.QueryRouter, legacyQuerierCdc *codec.LegacyAmino) {
-	for _, module := range m.Modules {
-		if r := module.Route(); !r.Empty() {
-			router.AddRoute(r)
-		}
-		if r := module.QuerierRoute(); r != "" {
-			queryRouter.AddRoute(r, module.LegacyQuerierHandler(legacyQuerierCdc))
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterServices registers all module services
-func (m *Manager) RegisterServices(cfg Configurator) {
-	for _, module := range m.Modules {
-		module.RegisterServices(cfg)
-	}
-}
+func (m *Manager) RegisterServices(cfg Configurator) { _ = "STUB: not implemented"; return }
 
 type AppState struct {
 	Module string          `json:"module"`
@@ -347,122 +281,36 @@ type ModuleState struct {
 	AppState AppState `json:"app_state"`
 }
 
-func parseModule(jsonStr string) (*ModuleState, error) {
-	var module ModuleState
-	err := json.Unmarshal([]byte(jsonStr), &module)
-	if err != nil {
-		return nil, err
-	}
-	if module.AppState.Module == "" {
-		return nil, fmt.Errorf("module name is empty")
-	}
-	return &module, nil
-}
+func parseModule(jsonStr string) (*ModuleState, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // InitGenesis performs init genesis functionality for modules
 func (m *Manager) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, genesisData map[string]json.RawMessage, genesisImportConfig genesistypes.GenesisImportConfig) abci.ResponseInitChain {
-	var validatorUpdates []abci.ValidatorUpdate
-	if genesisImportConfig.StreamGenesisImport {
-		lines := genesistypes.IngestGenesisFileLineByLine(genesisImportConfig.GenesisStreamFile)
-		errCh := make(chan error, 1)
-		seenModules := make(map[string]bool)
-		var moduleName string
-		go func() {
-			for line := range lines {
-				moduleState, err := parseModule(line)
-				if err != nil {
-					moduleName = "genesisDoc"
-				} else {
-					moduleName = moduleState.AppState.Module
-				}
-				if moduleName == "genesisDoc" {
-					continue
-				}
-				if seenModules[moduleName] {
-					errCh <- fmt.Errorf("module %s seen twice in genesis file", moduleName)
-					return
-				}
-				moduleValUpdates := m.Modules[moduleName].InitGenesis(ctx, cdc, moduleState.AppState.Data)
-				if len(moduleValUpdates) > 0 {
-					if len(validatorUpdates) > 0 {
-						panic("validator InitGenesis updates already set by a previous module")
-					}
-					validatorUpdates = moduleValUpdates
-				}
-			}
-			errCh <- nil
-		}()
-		err := <-errCh
-		if err != nil {
-			panic(err)
-		}
-	} else {
-		for _, moduleName := range m.OrderInitGenesis {
-			if genesisData[moduleName] == nil {
-				continue
-			}
-
-			moduleValUpdates := m.Modules[moduleName].InitGenesis(ctx, cdc, genesisData[moduleName])
-
-			// use these validator updates if provided, the module manager assumes
-			// only one module will update the validator set
-			if len(moduleValUpdates) > 0 {
-				if len(validatorUpdates) > 0 {
-					panic("validator InitGenesis updates already set by a previous module")
-				}
-				validatorUpdates = moduleValUpdates
-			}
-		}
-	}
-
-	return abci.ResponseInitChain{
-		Validators: validatorUpdates,
-	}
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseInitChain)
 }
+
+// use these validator updates if provided, the module manager assumes
+// only one module will update the validator set
 
 // ExportGenesis performs export genesis functionality for modules
 func (m *Manager) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) map[string]json.RawMessage {
-	genesisData := make(map[string]json.RawMessage)
-	for _, moduleName := range m.OrderExportGenesis {
-		genesisData[moduleName] = m.Modules[moduleName].ExportGenesis(ctx, cdc)
-	}
-
-	return genesisData
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (m *Manager) ProcessGenesisPerModule(ctx sdk.Context, cdc codec.JSONCodec, process func(string, json.RawMessage) error) error {
+	_ = "STUB: not implemented"
 	// It's important that we use OrderInitGenesis here instead of OrderExportGenesis because the order of exporting
 	// doesn't matter much but the order of importing does due to invariant checks and how we are streaming the genesis
 	// file here
-	for _, moduleName := range m.OrderInitGenesis {
-		ch := m.Modules[moduleName].ExportGenesisStream(ctx, cdc)
-		for msg := range ch {
-			err := process(moduleName, msg)
-			if err != nil {
-				return err
-			}
-		}
-	}
 	return nil
 }
 
 // assertNoForgottenModules checks that we didn't forget any modules in the
 // SetOrder* functions.
 func (m *Manager) assertNoForgottenModules(setOrderFnName string, moduleNames []string) {
-	ms := make(map[string]bool)
-	for _, m := range moduleNames {
-		ms[m] = true
-	}
-	var missing []string
-	for m := range m.Modules {
-		if !ms[m] {
-			missing = append(missing, m)
-		}
-	}
-	if len(missing) != 0 {
-		panic(fmt.Sprintf(
-			"%s: all modules must be defined when setting %s, missing: %v", setOrderFnName, setOrderFnName, missing))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MigrationHandler is the migration function that each module registers.
@@ -523,117 +371,40 @@ type VersionMap map[string]uint64
 //
 // Please also refer to docs/core/upgrade.md for more information.
 func (m Manager) RunMigrations(ctx sdk.Context, cfg Configurator, fromVM VersionMap) (VersionMap, error) {
-	c, ok := cfg.(configurator)
-	if !ok {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "expected %T, got %T", configurator{}, cfg)
-	}
-	var modules = m.OrderMigrations
-	if modules == nil {
-		modules = DefaultMigrationsOrder(m.ModuleNames())
-	}
-
-	updatedVM := VersionMap{}
-	for _, moduleName := range modules {
-		module := m.Modules[moduleName]
-		fromVersion, exists := fromVM[moduleName]
-		toVersion := module.ConsensusVersion()
-
-		// Only run migrations when the module exists in the fromVM.
-		// Run InitGenesis otherwise.
-		//
-		// the module won't exist in the fromVM in two cases:
-		// 1. A new module is added. In this case we run InitGenesis with an
-		// empty genesis state.
-		// 2. An existing chain is upgrading to v043 for the first time. In this case,
-		// all modules have yet to be added to x/upgrade's VersionMap store.
-		if exists {
-			err := c.runModuleMigrations(ctx, moduleName, fromVersion, toVersion)
-			if err != nil {
-				return nil, err
-			}
-		} else {
-			cfgtor, ok := cfg.(configurator)
-			if !ok {
-				// Currently, the only implementator of Configurator (the interface)
-				// is configurator (the struct).
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "expected %T, got %T", configurator{}, cfg)
-			}
-
-			moduleValUpdates := module.InitGenesis(ctx, cfgtor.cdc, module.DefaultGenesis(cfgtor.cdc))
-			logger.Info("adding a new module", "module", moduleName)
-			// The module manager assumes only one module will update the
-			// validator set, and that it will not be by a new module.
-			if len(moduleValUpdates) > 0 {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrLogic, "validator InitGenesis updates already set by a previous module")
-			}
-		}
-
-		updatedVM[moduleName] = toVersion
-	}
-
-	return updatedVM, nil
+	_ = "STUB: not implemented"
+	return *new(VersionMap), nil
 }
+
+// Only run migrations when the module exists in the fromVM.
+// Run InitGenesis otherwise.
+//
+// the module won't exist in the fromVM in two cases:
+// 1. A new module is added. In this case we run InitGenesis with an
+// empty genesis state.
+// 2. An existing chain is upgrading to v043 for the first time. In this case,
+// all modules have yet to be added to x/upgrade's VersionMap store.
+
+// Currently, the only implementator of Configurator (the interface)
+// is configurator (the struct).
+
+// The module manager assumes only one module will update the
+// validator set, and that it will not be by a new module.
 
 // EndBlock performs end block functionality for all modules. It creates a
 // child context with an event manager to aggregate events emitted from all
 // modules.
 func (m *Manager) MidBlock(ctx sdk.Context, height int64) []abci.Event {
-	ctx = ctx.WithEventManager(sdk.NewEventManager())
-
-	defer telemetry.MeasureSince(time.Now(), "module", "total_mid_block")
-	for _, moduleName := range m.OrderMidBlockers {
-		module, ok := m.Modules[moduleName].(MidBlockAppModule)
-		if !ok {
-			continue
-		}
-		moduleStartTime := time.Now()
-		module.MidBlock(ctx, height)
-		telemetry.ModuleMeasureSince(moduleName, moduleStartTime, "module", "mid_block")
-	}
-
-	return ctx.EventManager().ABCIEvents()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetVersionMap gets consensus version from all modules
-func (m *Manager) GetVersionMap() VersionMap {
-	vermap := make(VersionMap)
-	for _, v := range m.Modules {
-		version := v.ConsensusVersion()
-		name := v.Name()
-		vermap[name] = version
-	}
-
-	return vermap
-}
+func (m *Manager) GetVersionMap() VersionMap { _ = "STUB: not implemented"; return *new(VersionMap) }
 
 // ModuleNames returns list of all module names, without any particular order.
-func (m *Manager) ModuleNames() []string {
-	ms := make([]string, len(m.Modules))
-	i := 0
-	for m := range m.Modules {
-		ms[i] = m
-		i++
-	}
-	return ms
-}
+func (m *Manager) ModuleNames() []string { _ = "STUB: not implemented"; return nil }
 
 // DefaultMigrationsOrder returns a default migrations order: ascending alphabetical by module name,
 // except x/auth which will run last, see:
 // https://github.com/cosmos/cosmos-sdk/issues/10591
-func DefaultMigrationsOrder(modules []string) []string {
-	const authName = "auth"
-	out := make([]string, 0, len(modules))
-	hasAuth := false
-	for _, m := range modules {
-		if m == authName {
-			hasAuth = true
-		} else {
-			out = append(out, m)
-		}
-	}
-	sort.Strings(out)
-	if hasAuth {
-		out = append(out, authName)
-	}
-	return out
-}
+func DefaultMigrationsOrder(modules []string) []string { _ = "STUB: not implemented"; return nil }

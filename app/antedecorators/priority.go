@@ -4,7 +4,6 @@ import (
 	"math"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	oracletypes "github.com/sei-protocol/sei-chain/x/oracle/types"
 )
 
 const (
@@ -17,43 +16,20 @@ const (
 type PriorityDecorator struct{}
 
 func NewPriorityDecorator() PriorityDecorator {
-	return PriorityDecorator{}
+	_ = "STUB: not implemented"
+	return *new(PriorityDecorator)
 }
 
-func intMin(a, b int64) int64 {
-	if a < b {
-		return a
-	}
-	return b
-}
+func intMin(a, b int64) int64 { _ = "STUB: not implemented"; return 0 }
 
 // Assigns higher priority to certain types of transactions including oracle
 func (pd PriorityDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (sdk.Context, error) {
+	_ = "STUB: not implemented"
 	// Cap priority
 	// Use higher priorities for tiers including oracle tx's
-	priority := intMin(ctx.Priority(), MaxPriority)
-
-	if isOracleTx(tx) {
-		priority = OraclePriority
-	}
-
-	newCtx := ctx.WithPriority(priority)
-
-	return next(newCtx, tx, simulate)
+	return *new(sdk.Context), nil
 }
 
-func isOracleTx(tx sdk.Tx) bool {
-	if len(tx.GetMsgs()) == 0 {
-		// empty TX isn't oracle
-		return false
-	}
-	for _, msg := range tx.GetMsgs() {
-		switch msg.(type) {
-		case *oracletypes.MsgAggregateExchangeRateVote:
-			continue
-		default:
-			return false
-		}
-	}
-	return true
-}
+func isOracleTx(tx sdk.Tx) bool { _ = "STUB: not implemented"; return false }
+
+// empty TX isn't oracle

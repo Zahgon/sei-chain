@@ -1,8 +1,6 @@
 package types
 
 import (
-	"fmt"
-
 	gov "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 )
 
@@ -12,7 +10,8 @@ const (
 )
 
 func NewSoftwareUpgradeProposal(title, description string, plan Plan) gov.Content {
-	return &SoftwareUpgradeProposal{title, description, plan}
+	_ = "STUB: not implemented"
+	return *new(gov.Content)
 }
 
 // Implements Proposal Interface
@@ -25,44 +24,39 @@ func init() {
 	gov.RegisterProposalTypeCodec(&CancelSoftwareUpgradeProposal{}, "cosmos-sdk/CancelSoftwareUpgradeProposal")
 }
 
-func (sup *SoftwareUpgradeProposal) GetTitle() string       { return sup.Title }
-func (sup *SoftwareUpgradeProposal) GetDescription() string { return sup.Description }
-func (sup *SoftwareUpgradeProposal) ProposalRoute() string  { return RouterKey }
-func (sup *SoftwareUpgradeProposal) ProposalType() string   { return ProposalTypeSoftwareUpgrade }
-func (sup *SoftwareUpgradeProposal) ValidateBasic() error {
-	if err := sup.Plan.ValidateBasic(); err != nil {
-		return err
-	}
-	return gov.ValidateAbstract(sup)
-}
+func (sup *SoftwareUpgradeProposal) GetTitle() string       { _ = "STUB: not implemented"; return "" }
+func (sup *SoftwareUpgradeProposal) GetDescription() string { _ = "STUB: not implemented"; return "" }
+func (sup *SoftwareUpgradeProposal) ProposalRoute() string  { _ = "STUB: not implemented"; return "" }
+func (sup *SoftwareUpgradeProposal) ProposalType() string   { _ = "STUB: not implemented"; return "" }
+func (sup *SoftwareUpgradeProposal) ValidateBasic() error   { _ = "STUB: not implemented"; return nil }
 
-func (sup SoftwareUpgradeProposal) String() string {
-	return fmt.Sprintf(`Software Upgrade Proposal:
-  Title:       %s
-  Description: %s
-`, sup.Title, sup.Description)
-}
+func (sup SoftwareUpgradeProposal) String() string { _ = "STUB: not implemented"; return "" }
 
 func NewCancelSoftwareUpgradeProposal(title, description string) gov.Content {
-	return &CancelSoftwareUpgradeProposal{title, description}
+	_ = "STUB: not implemented"
+	return *new(gov.Content)
 }
 
 // Implements Proposal Interface
 var _ gov.Content = &CancelSoftwareUpgradeProposal{}
 
-func (csup *CancelSoftwareUpgradeProposal) GetTitle() string       { return csup.Title }
-func (csup *CancelSoftwareUpgradeProposal) GetDescription() string { return csup.Description }
-func (csup *CancelSoftwareUpgradeProposal) ProposalRoute() string  { return RouterKey }
-func (csup *CancelSoftwareUpgradeProposal) ProposalType() string {
-	return ProposalTypeCancelSoftwareUpgrade
+func (csup *CancelSoftwareUpgradeProposal) GetTitle() string { _ = "STUB: not implemented"; return "" }
+func (csup *CancelSoftwareUpgradeProposal) GetDescription() string {
+	_ = "STUB: not implemented"
+	return ""
 }
-func (csup *CancelSoftwareUpgradeProposal) ValidateBasic() error {
-	return gov.ValidateAbstract(csup)
+func (csup *CancelSoftwareUpgradeProposal) ProposalRoute() string {
+	_ = "STUB: not implemented"
+	return ""
+}
+func (csup *CancelSoftwareUpgradeProposal) ProposalType() string {
+	_ = "STUB: not implemented"
+	return ""
 }
 
-func (csup CancelSoftwareUpgradeProposal) String() string {
-	return fmt.Sprintf(`Cancel Software Upgrade Proposal:
-  Title:       %s
-  Description: %s
-`, csup.Title, csup.Description)
+func (csup *CancelSoftwareUpgradeProposal) ValidateBasic() error {
+	_ = "STUB: not implemented"
+	return nil
 }
+
+func (csup CancelSoftwareUpgradeProposal) String() string { _ = "STUB: not implemented"; return "" }

@@ -1,12 +1,9 @@
 package tracekv
 
 import (
-	"encoding/base64"
-	"encoding/json"
 	"io"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 const (
@@ -45,67 +42,47 @@ type (
 // NewStore returns a reference to a new traceKVStore given a parent
 // KVStore implementation and a buffered writer.
 func NewStore(parent types.KVStore, writer io.Writer, tc types.TraceContext) *Store {
-	return &Store{parent: parent, writer: writer, context: tc}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (tkv *Store) GetWorkingHash() ([]byte, error) {
-	return tkv.parent.GetWorkingHash()
-}
+func (tkv *Store) GetWorkingHash() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Get implements the KVStore interface. It traces a read operation and
 // delegates a Get call to the parent KVStore.
-func (tkv *Store) Get(key []byte) []byte {
-	value := tkv.parent.Get(key)
-
-	writeOperation(tkv.writer, readOp, tkv.context, key, value)
-	return value
-}
+func (tkv *Store) Get(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // Set implements the KVStore interface. It traces a write operation and
 // delegates the Set call to the parent KVStore.
-func (tkv *Store) Set(key []byte, value []byte) {
-	types.AssertValidKey(key)
-	writeOperation(tkv.writer, writeOp, tkv.context, key, value)
-	tkv.parent.Set(key, value)
-}
+func (tkv *Store) Set(key []byte, value []byte) { _ = "STUB: not implemented"; return }
 
 // Delete implements the KVStore interface. It traces a write operation and
 // delegates the Delete call to the parent KVStore.
-func (tkv *Store) Delete(key []byte) {
-	writeOperation(tkv.writer, deleteOp, tkv.context, key, nil)
-	tkv.parent.Delete(key)
-}
+func (tkv *Store) Delete(key []byte) { _ = "STUB: not implemented"; return }
 
 // Has implements the KVStore interface. It delegates the Has call to the
 // parent KVStore.
-func (tkv *Store) Has(key []byte) bool {
-	return tkv.parent.Has(key)
-}
+func (tkv *Store) Has(key []byte) bool { _ = "STUB: not implemented"; return false }
 
 // Iterator implements the KVStore interface. It delegates the Iterator call
 // the to the parent KVStore.
 func (tkv *Store) Iterator(start, end []byte) types.Iterator {
-	return tkv.iterator(start, end, true)
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // ReverseIterator implements the KVStore interface. It delegates the
 // ReverseIterator call the to the parent KVStore.
 func (tkv *Store) ReverseIterator(start, end []byte) types.Iterator {
-	return tkv.iterator(start, end, false)
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // iterator facilitates iteration over a KVStore. It delegates the necessary
 // calls to it's parent KVStore.
 func (tkv *Store) iterator(start, end []byte, ascending bool) types.Iterator {
-	var parent types.Iterator
-
-	if ascending {
-		parent = tkv.parent.Iterator(start, end)
-	} else {
-		parent = tkv.parent.ReverseIterator(start, end)
-	}
-
-	return newTraceIterator(tkv.writer, parent, tkv.context)
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 type traceIterator struct {
@@ -115,106 +92,80 @@ type traceIterator struct {
 }
 
 func newTraceIterator(w io.Writer, parent types.Iterator, tc types.TraceContext) types.Iterator {
-	return &traceIterator{writer: w, parent: parent, context: tc}
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // Domain implements the Iterator interface.
 func (ti *traceIterator) Domain() (start []byte, end []byte) {
-	return ti.parent.Domain()
+	_ = "STUB: not implemented"
+	return nil,
+
+		// Valid implements the Iterator interface.
+		nil
 }
 
-// Valid implements the Iterator interface.
-func (ti *traceIterator) Valid() bool {
-	return ti.parent.Valid()
-}
+func (ti *traceIterator) Valid() bool { _ = "STUB: not implemented"; return false }
 
 // Next implements the Iterator interface.
 func (ti *traceIterator) Next() {
-	ti.parent.Next()
+	_ = "STUB: not implemented"
+
+	// Key implements the Iterator interface.
+	return
 }
 
-// Key implements the Iterator interface.
-func (ti *traceIterator) Key() []byte {
-	key := ti.parent.Key()
-
-	writeOperation(ti.writer, iterKeyOp, ti.context, key, nil)
-	return key
-}
+func (ti *traceIterator) Key() []byte { _ = "STUB: not implemented"; return nil }
 
 // Value implements the Iterator interface.
-func (ti *traceIterator) Value() []byte {
-	value := ti.parent.Value()
-
-	writeOperation(ti.writer, iterValueOp, ti.context, nil, value)
-	return value
-}
+func (ti *traceIterator) Value() []byte { _ = "STUB: not implemented"; return nil }
 
 // Close implements the Iterator interface.
-func (ti *traceIterator) Close() error {
-	return ti.parent.Close()
-}
+func (ti *traceIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Error delegates the Error call to the parent iterator.
-func (ti *traceIterator) Error() error {
-	return ti.parent.Error()
-}
+func (ti *traceIterator) Error() error { _ = "STUB: not implemented"; return nil }
 
 // GetStoreType implements the KVStore interface. It returns the underlying
 // KVStore type.
 func (tkv *Store) GetStoreType() types.StoreType {
-	return tkv.parent.GetStoreType()
+	_ = "STUB: not implemented"
+	return *new(types.StoreType)
 }
 
 // Parent returns the wrapped KVStore (without tracing). Used to reach proof-capable stores.
 func (tkv *Store) Parent() types.KVStore {
-	return tkv.parent
+	_ = "STUB: not implemented"
+
+	// CacheWrap implements the KVStore interface. It panics because a Store
+	// cannot be branched.
+	return *new(types.KVStore)
 }
 
-// CacheWrap implements the KVStore interface. It panics because a Store
-// cannot be branched.
 func (tkv *Store) CacheWrap(_ types.StoreKey) types.CacheWrap {
-	panic("cannot CacheWrap a TraceKVStore")
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 // CacheWrapWithTrace implements the KVStore interface. It panics as a
 // Store cannot be branched.
 func (tkv *Store) CacheWrapWithTrace(_ types.StoreKey, _ io.Writer, _ types.TraceContext) types.CacheWrap {
-	panic("cannot CacheWrapWithTrace a TraceKVStore")
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
-func (tkv *Store) VersionExists(version int64) bool {
-	return tkv.parent.VersionExists(version)
-}
+func (tkv *Store) VersionExists(version int64) bool { _ = "STUB: not implemented"; return false }
 
-func (tkv *Store) DeleteAll(start, end []byte) error {
-	return tkv.parent.DeleteAll(start, end)
-}
+func (tkv *Store) DeleteAll(start, end []byte) error { _ = "STUB: not implemented"; return nil }
 
 func (tkv *Store) GetAllKeyStrsInRange(start, end []byte) []string {
-	return tkv.parent.GetAllKeyStrsInRange(start, end)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // writeOperation writes a KVStore operation to the underlying io.Writer as
 // JSON-encoded data where the key/value pair is base64 encoded.
 func writeOperation(w io.Writer, op operation, tc types.TraceContext, key, value []byte) {
-	traceOp := traceOperation{
-		Operation: op,
-		Key:       base64.StdEncoding.EncodeToString(key),
-		Value:     base64.StdEncoding.EncodeToString(value),
-	}
-
-	if tc != nil {
-		traceOp.Metadata = tc
-	}
-
-	raw, err := json.Marshal(traceOp)
-	if err != nil {
-		panic(errors.Wrap(err, "failed to serialize trace operation"))
-	}
-
-	if _, err := w.Write(raw); err != nil {
-		panic(errors.Wrap(err, "failed to write trace operation"))
-	}
-
-	_, _ = io.WriteString(w, "\n")
+	_ = "STUB: not implemented"
+	return
 }

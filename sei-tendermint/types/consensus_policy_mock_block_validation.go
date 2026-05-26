@@ -6,5 +6,5 @@ package types
 // method returns true unconditionally — running this binary IS the bypass.
 type ConsensusPolicy struct{}
 
-func (ConsensusPolicy) SkipAppHashValidation() bool  { return true }
-func (ConsensusPolicy) SkipDataHashValidation() bool { return true }
+func (ConsensusPolicy) SkipAppHashValidation() bool  { _ = "STUB: not implemented"; return false }
+func (ConsensusPolicy) SkipDataHashValidation() bool { _ = "STUB: not implemented"; return false }

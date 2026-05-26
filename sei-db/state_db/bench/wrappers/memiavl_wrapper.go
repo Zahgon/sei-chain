@@ -16,46 +16,32 @@ type memIAVLWrapper struct {
 
 // NewMemIAVLWrapper creates a new memIAVLWrapper with a given memiavl commit store.
 func NewMemIAVLWrapper(commitStore *memiavl.CommitStore) DBWrapper {
-	return &memIAVLWrapper{
-		base: commitStore,
-	}
+	_ = "STUB: not implemented"
+	return *new(DBWrapper)
 }
 
-func (m *memIAVLWrapper) Commit() (int64, error) {
-	return m.base.Commit()
-}
+func (m *memIAVLWrapper) Commit() (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
-func (m *memIAVLWrapper) LoadVersion(version int64) error {
-	_, err := m.base.LoadVersion(version, false)
-	return err
-}
+func (m *memIAVLWrapper) LoadVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
-func (m *memIAVLWrapper) Version() int64 {
-	return m.base.Version()
-}
+func (m *memIAVLWrapper) Version() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (m *memIAVLWrapper) ApplyChangeSets(entry *proto.ChangelogEntry) error {
-	return m.base.ApplyChangeSets(entry.Changesets)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (m *memIAVLWrapper) Importer(version int64) (types.Importer, error) {
+	_ = "STUB: not implemented"
 	// Close DB first to release lock
-	if err := m.Close(); err != nil {
-		return nil, err
-	}
-	return m.base.Importer(version)
+	return *new(types.Importer), nil
 }
 
-func (m *memIAVLWrapper) Close() error {
-	return m.base.Close()
-}
+func (m *memIAVLWrapper) Close() error { _ = "STUB: not implemented"; return nil }
 
 func (m *memIAVLWrapper) Read(key []byte) (data []byte, found bool, err error) {
-	store := m.base.GetChildStoreByName(EVMStoreName)
-	data = store.Get(key)
-	return data, data != nil, nil
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
-func (m *memIAVLWrapper) GetPhaseTimer() *metrics.PhaseTimer {
-	return nil
-}
+func (m *memIAVLWrapper) GetPhaseTimer() *metrics.PhaseTimer { _ = "STUB: not implemented"; return nil }

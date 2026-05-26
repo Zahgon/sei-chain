@@ -1,29 +1,16 @@
 package rootmulti
 
 import (
-	"encoding/binary"
-	"fmt"
 	"io"
-	"sort"
-	"strings"
 	"sync"
 
 	protoio "github.com/gogo/protobuf/io"
-	gogotypes "github.com/gogo/protobuf/types"
-	"github.com/pkg/errors"
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/crypto"
 	"github.com/sei-protocol/seilog"
 	dbm "github.com/tendermint/tm-db"
 
 	snapshottypes "github.com/sei-protocol/sei-chain/sei-cosmos/snapshots/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/cachemulti"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/dbadapter"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/mem"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/tracekv"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/transient"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 var logger = seilog.NewLogger("cosmos", "store", "rootmulti")
@@ -70,278 +57,158 @@ var (
 // store will be created with a PruneNothing pruning strategy by default. After
 // a store is created, KVStores must be mounted and finally LoadLatestVersion or
 // LoadVersion must be called.
-func NewStore(db dbm.DB) *Store {
-	return &Store{
-		db:           db,
-		pruningOpts:  types.PruneNothing,
-		storesParams: make(map[types.StoreKey]storeParams),
-		stores:       make(map[types.StoreKey]types.CommitKVStore),
-		keysByName:   make(map[string]types.StoreKey),
-		pruneHeights: make([]int64, 0),
-	}
-}
+func NewStore(db dbm.DB) *Store { _ = "STUB: not implemented"; return nil }
 
 func NewStoreWithArchival(db, archivalDb dbm.DB, archivalVersion int64) *Store {
-	store := NewStore(db)
-	store.archivalDb = archivalDb
-	store.archivalVersion = archivalVersion
-	return store
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (rs *Store) shouldUseArchivalDb(ver int64) bool {
-	return rs.archivalDb != nil && rs.archivalVersion > ver
-}
+func (rs *Store) shouldUseArchivalDb(ver int64) bool { _ = "STUB: not implemented"; return false }
 
 // GetPruning fetches the pruning strategy from the root store.
 func (rs *Store) GetPruning() types.PruningOptions {
-	return rs.pruningOpts
+	_ = "STUB: not implemented"
+	return *
+
+	// SetPruning sets the pruning strategy on the root store and all the sub-stores.
+	// Note, calling SetPruning on the root store prior to LoadVersion or
+	// LoadLatestVersion performs a no-op as the stores aren't mounted yet.
+	new(types.PruningOptions)
 }
 
-// SetPruning sets the pruning strategy on the root store and all the sub-stores.
-// Note, calling SetPruning on the root store prior to LoadVersion or
-// LoadLatestVersion performs a no-op as the stores aren't mounted yet.
-func (rs *Store) SetPruning(pruningOpts types.PruningOptions) {
-	rs.pruningOpts = pruningOpts
-}
+func (rs *Store) SetPruning(pruningOpts types.PruningOptions) { _ = "STUB: not implemented"; return }
 
 // SetLazyLoading sets if the iavl store should be loaded lazily or not
-func (rs *Store) SetLazyLoading(lazyLoading bool) {
-	rs.lazyLoading = lazyLoading
-}
+func (rs *Store) SetLazyLoading(lazyLoading bool) { _ = "STUB: not implemented"; return }
 
 // GetStoreType implements Store.
 func (rs *Store) GetStoreType() types.StoreType {
-	return types.StoreTypeMulti
+	_ = "STUB: not implemented"
+	return *new(types.StoreType)
 }
 
 // MountStoreWithDB implements CommitMultiStore.
 func (rs *Store) MountStoreWithDB(key types.StoreKey, typ types.StoreType, db dbm.DB) {
-	if key == nil {
-		panic("MountIAVLStore() key cannot be nil")
-	}
-	if _, ok := rs.storesParams[key]; ok {
-		panic(fmt.Sprintf("store duplicate store key %v", key))
-	}
-	if _, ok := rs.keysByName[key.Name()]; ok {
-		panic(fmt.Sprintf("store duplicate store key name %v", key))
-	}
-	rs.storesParams[key] = storeParams{
-		key: key,
-		typ: typ,
-		db:  db,
-	}
-	rs.keysByName[key.Name()] = key
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetCommitStore returns a mounted CommitStore for a given StoreKey. If the
 // store is wrapped in an inter-block cache, it will be unwrapped before returning.
 func (rs *Store) GetCommitStore(key types.StoreKey) types.CommitStore {
-	return rs.GetCommitKVStore(key)
+	_ = "STUB: not implemented"
+	return *new(types.CommitStore)
 }
 
 // GetCommitKVStore returns a mounted CommitKVStore for a given StoreKey. If the
 // store is wrapped in an inter-block cache, it will be unwrapped before returning.
 func (rs *Store) GetCommitKVStore(key types.StoreKey) types.CommitKVStore {
+	_ = "STUB: not implemented"
 	// If the Store has an inter-block cache, first attempt to lookup and unwrap
 	// the underlying CommitKVStore by StoreKey. If it does not exist, fallback to
 	// the main mapping of CommitKVStores.
-	if rs.interBlockCache != nil {
-		if store := rs.interBlockCache.Unwrap(key); store != nil {
-			return store
-		}
-	}
-
-	return rs.stores[key]
+	return *new(types.CommitKVStore)
 }
 
 // GetStores returns mounted stores
 func (rs *Store) GetStores() map[types.StoreKey]types.CommitKVStore {
-	return rs.stores
+	_ = "STUB: not implemented"
+
+	// GetStores returns mounted stores
+	return nil
 }
 
-// GetStores returns mounted stores
-func (rs *Store) GetEvents() []abci.Event {
-	panic("getevents should not be called on the root multi store")
-}
+func (rs *Store) GetEvents() []abci.Event { _ = "STUB: not implemented"; return nil }
 
-func (rs *Store) ResetEvents() {
-	panic("reset events should not be called on the root multi store")
-}
+func (rs *Store) ResetEvents() { _ = "STUB: not implemented"; return }
 
 // LoadLatestVersionAndUpgrade implements CommitMultiStore
 func (rs *Store) LoadLatestVersionAndUpgrade(upgrades *types.StoreUpgrades) error {
-	ver := GetLatestVersion(rs.db)
-	return rs.loadVersion(ver, upgrades)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // LoadVersionAndUpgrade allows us to rename substores while loading an older version
 func (rs *Store) LoadVersionAndUpgrade(ver int64, upgrades *types.StoreUpgrades) error {
-	return rs.loadVersion(ver, upgrades)
-}
-
-// LoadLatestVersion implements CommitMultiStore.
-func (rs *Store) LoadLatestVersion() error {
-	ver := GetLatestVersion(rs.db)
-	err := rs.loadVersion(ver, nil)
-	return err
-}
-
-// LoadVersion implements CommitMultiStore.
-func (rs *Store) LoadVersion(ver int64) error {
-	return rs.loadVersion(ver, nil)
-}
-
-func (rs *Store) loadVersion(ver int64, upgrades *types.StoreUpgrades) error {
-	infos := make(map[string]types.StoreInfo)
-
-	cInfo := &types.CommitInfo{}
-
-	// load old data if we are not version 0
-	if ver != 0 {
-		var err error
-		cInfo, err = getCommitInfo(rs.db, ver)
-		if err != nil {
-			return err
-		}
-
-		// convert StoreInfos slice to map
-		for _, storeInfo := range cInfo.StoreInfos {
-			infos[storeInfo.Name] = storeInfo
-		}
-	}
-
-	// load each Store (note this doesn't panic on unmounted keys now)
-	var newStores = make(map[types.StoreKey]types.CommitKVStore)
-
-	storesKeys := make([]types.StoreKey, 0, len(rs.storesParams))
-
-	for key := range rs.storesParams {
-		storesKeys = append(storesKeys, key)
-	}
-	if upgrades != nil {
-		for _, upgrade := range upgrades.Deleted {
-			deletionStoreKey := types.NewKVStoreKey(upgrade)
-			storesKeys = append(storesKeys, deletionStoreKey)
-			rs.storesParams[deletionStoreKey] = storeParams{
-				key: deletionStoreKey,
-				typ: types.StoreTypeIAVL, // TODO: is this safe
-			}
-			rs.keysByName[upgrade] = deletionStoreKey
-		}
-		// deterministic iteration order for upgrades
-		// (as the underlying store may change and
-		// upgrades make store changes where the execution order may matter)
-		sort.Slice(storesKeys, func(i, j int) bool {
-			return storesKeys[i].Name() < storesKeys[j].Name()
-		})
-	}
-
-	for _, key := range storesKeys {
-		storeParams := rs.storesParams[key]
-		commitID := rs.getCommitID(infos, key.Name())
-
-		// If it has been added, set the initial version
-		if upgrades.IsAdded(key.Name()) {
-			if ver < 0 {
-				return fmt.Errorf("negative version not allowed: %d", ver)
-			}
-			storeParams.initialVersion = uint64(ver) + 1 //nolint:gosec // bounds checked above
-		}
-
-		store, err := rs.loadCommitStoreFromParams(key, commitID, storeParams)
-		if err != nil {
-			return errors.Wrap(err, "failed to load store")
-		}
-
-		newStores[key] = store
-
-		// If it was deleted, remove all data
-		if upgrades.IsDeleted(key.Name()) {
-			deleteKVStore(store.(types.KVStore))
-			// drop deleted KV store from stores
-			delete(newStores, key)
-			delete(rs.keysByName, key.Name())
-			delete(rs.storesParams, key)
-		} else if oldName := upgrades.RenamedFrom(key.Name()); oldName != "" {
-			// handle renames specially
-			// make an unregistered key to satify loadCommitStore params
-			oldKey := types.NewKVStoreKey(oldName)
-			oldParams := storeParams
-			oldParams.key = oldKey
-
-			// load from the old name
-			oldStore, err := rs.loadCommitStoreFromParams(oldKey, rs.getCommitID(infos, oldName), oldParams)
-			if err != nil {
-				return errors.Wrapf(err, "failed to load old store %s", oldName)
-			}
-
-			// move all data
-			moveKVStoreData(oldStore.(types.KVStore), store.(types.KVStore))
-		}
-	}
-
-	rs.SetLastCommitInfo(cInfo)
-	rs.stores = newStores
-
-	// load any pruned heights we missed from disk to be pruned on the next run
-	ph, err := getPruningHeights(rs.db)
-	if err == nil && len(ph) > 0 {
-		rs.pruneHeights = ph
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (rs *Store) getCommitID(infos map[string]types.StoreInfo, name string) types.CommitID {
-	info, ok := infos[name]
-	if !ok {
-		return types.CommitID{}
-	}
+// LoadLatestVersion implements CommitMultiStore.
+func (rs *Store) LoadLatestVersion() error { _ = "STUB: not implemented"; return nil }
 
-	return info.CommitId
+// LoadVersion implements CommitMultiStore.
+func (rs *Store) LoadVersion(ver int64) error { _ = "STUB: not implemented"; return nil }
+
+func (rs *Store) loadVersion(ver int64, upgrades *types.StoreUpgrades) error {
+	_ = "STUB: not implemented"
+	return nil
+}
+
+// load old data if we are not version 0
+
+// convert StoreInfos slice to map
+
+// load each Store (note this doesn't panic on unmounted keys now)
+
+// TODO: is this safe
+
+// deterministic iteration order for upgrades
+// (as the underlying store may change and
+// upgrades make store changes where the execution order may matter)
+
+// If it has been added, set the initial version
+
+//nolint:gosec // bounds checked above
+
+// If it was deleted, remove all data
+
+// drop deleted KV store from stores
+
+// handle renames specially
+// make an unregistered key to satify loadCommitStore params
+
+// load from the old name
+
+// move all data
+
+// load any pruned heights we missed from disk to be pruned on the next run
+
+func (rs *Store) getCommitID(infos map[string]types.StoreInfo, name string) types.CommitID {
+	_ = "STUB: not implemented"
+	return *new(types.CommitID)
 }
 
 func deleteKVStore(kv types.KVStore) {
+	_ = "STUB: not implemented"
 	// Note that we cannot write while iterating, so load all keys here, delete below
-	var keys [][]byte
-	itr := kv.Iterator(nil, nil)
-	defer func() { _ = itr.Close() }()
-	for itr.Valid() {
-		keys = append(keys, itr.Key())
-		itr.Next()
-	}
-
-	for _, k := range keys {
-		kv.Delete(k)
-	}
+	return
 }
 
 // we simulate move by a copy and delete
 func moveKVStoreData(oldDB types.KVStore, newDB types.KVStore) {
+	_ = "STUB: not implemented"
 	// we read from one and write to another
-	itr := oldDB.Iterator(nil, nil)
-	defer func() { _ = itr.Close() }()
-	for itr.Valid() {
-		newDB.Set(itr.Key(), itr.Value())
-		itr.Next()
-	}
-
-	// then delete the old store
-	deleteKVStore(oldDB)
+	return
 }
+
+// then delete the old store
 
 // SetInterBlockCache sets the Store's internal inter-block (persistent) cache.
 // When this is defined, all CommitKVStores will be wrapped with their respective
 // inter-block cache.
 func (rs *Store) SetInterBlockCache(c types.MultiStorePersistentCache) {
-	rs.interBlockCache = c
+	_ = "STUB: not implemented"
+	return
+
+	// SetTracer sets the tracer for the MultiStore that the underlying
+	// stores will utilize to trace operations. A MultiStore is returned.
 }
 
-// SetTracer sets the tracer for the MultiStore that the underlying
-// stores will utilize to trace operations. A MultiStore is returned.
 func (rs *Store) SetTracer(w io.Writer) types.MultiStore {
-	rs.traceWriter = w
-	return rs
+	_ = "STUB: not implemented"
+	return *new(types.MultiStore)
 }
 
 // SetTracingContext updates the tracing context for the MultiStore by merging
@@ -349,154 +216,72 @@ func (rs *Store) SetTracer(w io.Writer) types.MultiStore {
 // be overwritten. It is implied that the caller should update the context when
 // necessary between tracing operations. It returns a modified MultiStore.
 func (rs *Store) SetTracingContext(tc types.TraceContext) types.MultiStore {
-	rs.traceContextMutex.Lock()
-	defer rs.traceContextMutex.Unlock()
-	if rs.traceContext != nil {
-		for k, v := range tc {
-			rs.traceContext[k] = v
-		}
-	} else {
-		rs.traceContext = tc
-	}
-
-	return rs
+	_ = "STUB: not implemented"
+	return *new(types.MultiStore)
 }
 
 func (rs *Store) getTracingContext() types.TraceContext {
-	rs.traceContextMutex.Lock()
-	defer rs.traceContextMutex.Unlock()
-
-	if rs.traceContext == nil {
-		return nil
-	}
-
-	ctx := types.TraceContext{}
-	for k, v := range rs.traceContext {
-		ctx[k] = v
-	}
-
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(types.TraceContext)
 }
 
 // TracingEnabled returns if tracing is enabled for the MultiStore.
-func (rs *Store) TracingEnabled() bool {
-	return rs.traceWriter != nil
-}
+func (rs *Store) TracingEnabled() bool { _ = "STUB: not implemented"; return false }
 
 // LastCommitID implements Committer/CommitStore.
 func (rs *Store) LastCommitID() types.CommitID {
-	c := rs.LastCommitInfo()
-	if c == nil {
-		return types.CommitID{
-			Version: GetLatestVersion(rs.db),
-		}
-	}
-	return c.CommitID()
+	_ = "STUB: not implemented"
+	return *new(types.CommitID)
 }
 
-func (rs *Store) GetWorkingHash() ([]byte, error) {
-	var storeInfos []types.StoreInfo
-	for key, store := range rs.stores {
-		if store.GetStoreType() == types.StoreTypeTransient {
-			continue
-		}
-		hash, err := store.GetWorkingHash()
-		if err != nil {
-			return nil, err
-		}
-		storeInfos = append(storeInfos, types.StoreInfo{
-			Name: key.Name(),
-			CommitId: types.CommitID{
-				Hash: hash,
-			},
-		})
-	}
-	commitInfo := types.CommitInfo{StoreInfos: storeInfos}
-	return commitInfo.Hash(), nil
-}
+func (rs *Store) GetWorkingHash() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Commit implements Committer/CommitStore.
 func (rs *Store) Commit(bumpVersion bool) types.CommitID {
-	logger.Warn("IAVL will be deprecated soon, please migrate to SeiDB to avoid data corruption or panic")
-	var previousHeight, version int64
-	c := rs.LastCommitInfo()
-	if c.GetVersion() == 0 && rs.initialVersion > 1 {
-		// This case means that no commit has been made in the store, we
-		// start from initialVersion.
-		version = rs.initialVersion
-
-	} else if bumpVersion {
-		// This case can means two things:
-		// - either there was already a previous commit in the store, in which
-		// case we increment the version from there,
-		// - or there was no previous commit, and initial version was not set,
-		// in which case we start at version 1.
-		previousHeight = c.GetVersion()
-		version = previousHeight + 1
-	} else {
-		version = c.GetVersion()
-	}
-
-	rs.SetLastCommitInfo(commitStores(version, rs.stores, bumpVersion))
-	defer rs.flushMetadata(rs.db, version, rs.LastCommitInfo())
-
-	keepRecent := int64(rs.pruningOpts.KeepRecent) //nolint:gosec // pruning config values are small, won't overflow int64
-	keepEvery := int64(rs.pruningOpts.KeepEvery)   //nolint:gosec // pruning config values are small, won't overflow int64
-	interval := int64(rs.pruningOpts.Interval)     //nolint:gosec // pruning config values are small, won't overflow int64
-
-	if interval > 0 && keepRecent < previousHeight {
-		pruneHeight := previousHeight - keepRecent
-		if keepEvery == 0 || pruneHeight%keepEvery != 0 {
-			rs.pruneHeights = append(rs.pruneHeights, pruneHeight)
-		}
-	}
-
-	// batch prune if the current height is a pruning interval height
-	if interval > 0 && version%interval == 0 {
-		rs.PruneStores(true, nil)
-	}
-
-	return types.CommitID{
-		Version: version,
-		Hash:    rs.LastCommitInfo().Hash(),
-	}
+	_ = "STUB: not implemented"
+	return *new(types.CommitID)
 }
+
+// This case means that no commit has been made in the store, we
+// start from initialVersion.
+
+// This case can means two things:
+// - either there was already a previous commit in the store, in which
+// case we increment the version from there,
+// - or there was no previous commit, and initial version was not set,
+// in which case we start at version 1.
+
+//nolint:gosec // pruning config values are small, won't overflow int64
+//nolint:gosec // pruning config values are small, won't overflow int64
+//nolint:gosec // pruning config values are small, won't overflow int64
+
+// batch prune if the current height is a pruning interval height
 
 // PruneStores will batch delete a list of heights from each mounted sub-store.
 // If clearStorePruningHeihgts is true, store's pruneHeights is appended to the
 // pruningHeights and reset after finishing pruning.
 func (rs *Store) PruneStores(clearStorePruningHeights bool, pruningHeights []int64) {
-	if clearStorePruningHeights {
-		pruningHeights = append(pruningHeights, rs.pruneHeights...)
-	}
-
-	if len(pruningHeights) > 0 {
-		rs.earliestVersion = pruningHeights[len(pruningHeights)-1]
-	}
-
-	if clearStorePruningHeights {
-		rs.pruneHeights = make([]int64, 0)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // CacheWrap implements CacheWrapper/Store/CommitStore.
 func (rs *Store) CacheWrap(storeKey types.StoreKey) types.CacheWrap {
-	return rs.CacheMultiStore().(types.CacheWrap)
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 // CacheWrapWithTrace implements the CacheWrapper interface.
 func (rs *Store) CacheWrapWithTrace(storeKey types.StoreKey, _ io.Writer, _ types.TraceContext) types.CacheWrap {
-	return rs.CacheWrap(storeKey)
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 // CacheMultiStore creates ephemeral branch of the multi-store and returns a CacheMultiStore.
 // It implements the MultiStore interface.
 func (rs *Store) CacheMultiStore() types.CacheMultiStore {
-	stores := make(map[types.StoreKey]types.CacheWrapper)
-	for k, v := range rs.stores {
-		stores[k] = v
-	}
-	return cachemulti.NewStore(rs.db, stores, rs.keysByName, nil, rs.traceWriter, rs.getTracingContext())
+	_ = "STUB: not implemented"
+	return *new(types.CacheMultiStore)
 }
 
 // CacheMultiStoreWithVersion is analogous to CacheMultiStore except that it
@@ -504,16 +289,13 @@ func (rs *Store) CacheMultiStore() types.CacheMultiStore {
 // any store cannot be loaded. This should only be used for querying and
 // iterating at past heights.
 func (rs *Store) CacheMultiStoreWithVersion(version int64) (types.CacheMultiStore, error) {
-	cachedStores := make(map[types.StoreKey]types.CacheWrapper)
-	for key, store := range rs.stores {
-		cachedStores[key] = store
-	}
-
-	return cachemulti.NewStore(rs.db, cachedStores, rs.keysByName, nil, rs.traceWriter, rs.getTracingContext()), nil
+	_ = "STUB: not implemented"
+	return *new(types.CacheMultiStore), nil
 }
 
 func (rs *Store) CacheMultiStoreForExport(version int64) (types.CacheMultiStore, error) {
-	return rs.CacheMultiStoreWithVersion(version)
+	_ = "STUB: not implemented"
+	return *new(types.CacheMultiStore), nil
 }
 
 // GetStore returns a mounted Store for a given StoreKey. If the StoreKey does
@@ -523,12 +305,8 @@ func (rs *Store) CacheMultiStoreForExport(version int64) (types.CacheMultiStore,
 // TODO: This isn't used directly upstream. Consider returning the Store as-is
 // instead of unwrapping.
 func (rs *Store) GetStore(key types.StoreKey) types.Store {
-	store := rs.GetCommitKVStore(key)
-	if store == nil {
-		panic(fmt.Sprintf("store does not exist for key: %s", key.Name()))
-	}
-
-	return store
+	_ = "STUB: not implemented"
+	return *new(types.Store)
 }
 
 // GetKVStore returns a mounted KVStore for a given StoreKey. If tracing is
@@ -538,17 +316,8 @@ func (rs *Store) GetStore(key types.StoreKey) types.Store {
 // NOTE: The returned KVStore may be wrapped in an inter-block cache if it is
 // set on the root store.
 func (rs *Store) GetKVStore(key types.StoreKey) types.KVStore {
-	s := rs.stores[key]
-	if s == nil {
-		panic(fmt.Sprintf("store does not exist for key: %s", key.Name()))
-	}
-	store := s.(types.KVStore)
-
-	if rs.TracingEnabled() {
-		store = tracekv.NewStore(store, rs.traceWriter, rs.getTracingContext())
-	}
-
-	return store
+	_ = "STUB: not implemented"
+	return *new(types.KVStore)
 }
 
 // GetStoreByName performs a lookup of a StoreKey given a store name typically
@@ -556,12 +325,8 @@ func (rs *Store) GetKVStore(key types.StoreKey) types.KVStore {
 // a Store. If the Store is wrapped in an inter-block cache, it will be unwrapped
 // prior to being returned. If the StoreKey does not exist, nil is returned.
 func (rs *Store) GetStoreByName(name string) types.Store {
-	key := rs.keysByName[name]
-	if key == nil {
-		return nil
-	}
-
-	return rs.GetCommitKVStore(key)
+	_ = "STUB: not implemented"
+	return *new(types.Store)
 }
 
 // Query calls substore.Query with the same `req` where `req.Path` is
@@ -571,83 +336,29 @@ func (rs *Store) GetStoreByName(name string) types.Store {
 // as response value. In addition, proofs of every store are appended to the response for
 // the requested height
 func (rs *Store) Query(req abci.RequestQuery) abci.ResponseQuery {
-	path := req.Path
-	firstPath, subpath, err := parsePath(path)
-	if err != nil {
-		return sdkerrors.QueryResult(err)
-	}
-
-	if firstPath == proofsPath {
-		return rs.doProofsQuery(req)
-	}
-
-	store := rs.GetStoreByName(firstPath)
-	if store == nil {
-		return sdkerrors.QueryResult(sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "no such store: %s", firstPath))
-	}
-
-	queryable, ok := store.(types.Queryable)
-	if !ok {
-		return sdkerrors.QueryResult(sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "store %s (type %T) doesn't support queries", firstPath, store))
-	}
-
-	// trim the path and make the query
-	req.Path = subpath
-	res := queryable.Query(req)
-
-	if !req.Prove || !RequireProof(subpath) {
-		return res
-	}
-
-	if res.ProofOps == nil || len(res.ProofOps.Ops) == 0 {
-		return sdkerrors.QueryResult(sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "proof is unexpectedly empty; ensure height has not been pruned"))
-	}
-
-	// If the request's height is the latest height we've committed, then utilize
-	// the store's lastCommitInfo as this commit info may not be flushed to disk.
-	// Otherwise, we query for the commit info from disk.
-	var commitInfo *types.CommitInfo
-
-	c := rs.LastCommitInfo()
-	if res.Height == c.Version {
-		commitInfo = c
-	} else {
-		commitInfo, err = getCommitInfo(rs.db, res.Height)
-		if err != nil {
-			return sdkerrors.QueryResult(err)
-		}
-	}
-
-	// Restore origin path and append proof op.
-	res.ProofOps.Ops = append(res.ProofOps.Ops, commitInfo.ProofOp(firstPath))
-
-	return res
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseQuery)
 }
+
+// trim the path and make the query
+
+// If the request's height is the latest height we've committed, then utilize
+// the store's lastCommitInfo as this commit info may not be flushed to disk.
+// Otherwise, we query for the commit info from disk.
+
+// Restore origin path and append proof op.
 
 // SetInitialVersion sets the initial version of the IAVL tree. It is used when
 // starting a new chain at an arbitrary height.
 // NOTE: this never errors. Can we fix the function signature ?
-func (rs *Store) SetInitialVersion(version int64) error {
-	rs.initialVersion = version
-	return nil
-}
+func (rs *Store) SetInitialVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
 // parsePath expects a format like /<storeName>[/<subpath>]
 // Must start with /, subpath may be empty
 // Returns error if it doesn't start with /
 func parsePath(path string) (storeName string, subpath string, err error) {
-	if !strings.HasPrefix(path, "/") {
-		return storeName, subpath, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "invalid path: %s", path)
-	}
-
-	paths := strings.SplitN(path[1:], "/", 2)
-	storeName = paths[0]
-
-	if len(paths) == 2 {
-		subpath = "/" + paths[1]
-	}
-
-	return storeName, subpath, nil
+	_ = "STUB: not implemented"
+	return "", "", nil
 }
 
 //---------------------- Snapshotting ------------------
@@ -657,7 +368,8 @@ func parsePath(path string) (storeName string, subpath string, err error) {
 // given format changes (at the byte level), the snapshot format must be bumped - see
 // TestMultistoreSnapshot_Checksum test.
 func (rs *Store) Snapshot(height uint64, protoWriter protoio.Writer) error {
-	return sdkerrors.Wrap(sdkerrors.ErrLogic, "legacy IAVL snapshots are no longer supported")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Restore implements snapshottypes.Snapshotter.
@@ -665,100 +377,28 @@ func (rs *Store) Snapshot(height uint64, protoWriter protoio.Writer) error {
 func (rs *Store) Restore(
 	height uint64, format uint32, protoReader protoio.Reader,
 ) (snapshottypes.SnapshotItem, error) {
-	return snapshottypes.SnapshotItem{}, sdkerrors.Wrap(sdkerrors.ErrLogic, "legacy IAVL restore is no longer supported")
+	_ = "STUB: not implemented"
+	return *new(snapshottypes.SnapshotItem), nil
 }
 
 func (rs *Store) loadCommitStoreFromParams(key types.StoreKey, id types.CommitID, params storeParams) (_ types.CommitKVStore, _err error) {
-	var db dbm.DB
-
-	defer func() {
-		if db != nil && _err != nil {
-			_ = db.Close()
-		}
-	}()
-
-	if params.db != nil {
-		db = dbm.NewPrefixDB(params.db, []byte("s/k:"+params.key.Name()+"/"))
-	} else if rs.shouldUseArchivalDb(id.Version) {
-		tag := []byte("s/k:" + params.key.Name() + "/")
-		prefix := make([]byte, 8, 8+len(tag))
-		if id.Version < 0 {
-			return nil, fmt.Errorf("negative version not allowed: %d", id.Version)
-		}
-		binary.BigEndian.PutUint64(prefix, uint64(id.Version)) //nolint:gosec // bounds checked above
-		prefix = append(prefix, tag...)
-		db = dbm.NewPrefixDB(rs.archivalDb, prefix)
-		params.typ = types.StoreTypeDB
-	} else {
-		prefix := "s/k:" + params.key.Name() + "/"
-		db = dbm.NewPrefixDB(rs.db, []byte(prefix))
-	}
-
-	switch params.typ {
-	case types.StoreTypeMulti:
-		panic("recursive MultiStores not yet supported")
-
-	case types.StoreTypeIAVL, types.StoreTypeDB:
-		return commitDBStoreAdapter{Store: dbadapter.Store{DB: db}}, nil
-
-	case types.StoreTypeTransient:
-		_, ok := key.(*types.TransientStoreKey)
-		if !ok {
-			return nil, fmt.Errorf("invalid StoreKey for StoreTypeTransient: %s", key.String())
-		}
-
-		return transient.NewStore(), nil
-
-	case types.StoreTypeMemory:
-		if _, ok := key.(*types.MemoryStoreKey); !ok {
-			return nil, fmt.Errorf("unexpected key type for a MemoryStoreKey; got: %s", key.String())
-		}
-
-		return mem.NewStore(), nil
-
-	default:
-		panic(fmt.Sprintf("unrecognized store type %v", params.typ))
-	}
+	_ = "STUB: not implemented"
+	return *new(types.CommitKVStore), nil
 }
+
+//nolint:gosec // bounds checked above
 
 // RollbackToVersion delete the versions after `target` and update the latest version.
-func (rs *Store) RollbackToVersion(target int64) error {
-	if target <= 0 {
-		return fmt.Errorf("invalid rollback height target: %d", target)
-	}
-
-	rs.SetLastCommitInfo(commitStores(target, rs.stores, false))
-	rs.flushMetadata(rs.db, target, rs.LastCommitInfo())
-	return rs.LoadLatestVersion()
-}
+func (rs *Store) RollbackToVersion(target int64) error { _ = "STUB: not implemented"; return nil }
 
 func (rs *Store) flushMetadata(db dbm.DB, version int64, cInfo *types.CommitInfo) {
-	batch := db.NewBatch()
-	defer func() { _ = batch.Close() }()
-	if cInfo != nil {
-		flushCommitInfo(batch, version, cInfo)
-	}
-	flushLatestVersion(batch, version)
-	flushPruningHeights(batch, rs.pruneHeights)
-	if err := batch.WriteSync(); err != nil {
-		panic(fmt.Errorf("error on batch write %w", err))
-	}
-	if cInfo != nil {
-		logger.Info("App State Saved", "height", cInfo.CommitID().Version, "hash", cInfo.CommitID().Hash)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (rs *Store) LastCommitInfo() *types.CommitInfo {
-	rs.lastCommitInfoMtx.RLock()
-	defer rs.lastCommitInfoMtx.RUnlock()
-	return rs.lastCommitInfo
-}
+func (rs *Store) LastCommitInfo() *types.CommitInfo { _ = "STUB: not implemented"; return nil }
 
-func (rs *Store) SetLastCommitInfo(c *types.CommitInfo) {
-	rs.lastCommitInfoMtx.Lock()
-	defer rs.lastCommitInfoMtx.Unlock()
-	rs.lastCommitInfo = c
-}
+func (rs *Store) SetLastCommitInfo(c *types.CommitInfo) { _ = "STUB: not implemented"; return }
 
 type storeParams struct {
 	key            types.StoreKey
@@ -767,149 +407,47 @@ type storeParams struct {
 	initialVersion uint64
 }
 
-func GetLatestVersion(db dbm.DB) int64 {
-	bz, err := db.Get([]byte(latestVersionKey))
-	if err != nil {
-		panic(err)
-	} else if bz == nil {
-		return 0
-	}
-
-	var latestVersion int64
-
-	if err := gogotypes.StdInt64Unmarshal(&latestVersion, bz); err != nil {
-		panic(err)
-	}
-
-	return latestVersion
-}
+func GetLatestVersion(db dbm.DB) int64 { _ = "STUB: not implemented"; return 0 }
 
 // Commits each store and returns a new commitInfo.
 func commitStores(version int64, storeMap map[types.StoreKey]types.CommitKVStore, bumpVersion bool) *types.CommitInfo {
-	storeInfos := make([]types.StoreInfo, 0, len(storeMap))
-
-	for key, store := range storeMap {
-		commitID := store.Commit(bumpVersion)
-
-		if store.GetStoreType() == types.StoreTypeTransient {
-			continue
-		}
-
-		si := types.StoreInfo{}
-		si.Name = key.Name()
-		si.CommitId = commitID
-		storeInfos = append(storeInfos, si)
-	}
-
-	return &types.CommitInfo{
-		Version:    version,
-		StoreInfos: storeInfos,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (rs *Store) doProofsQuery(req abci.RequestQuery) abci.ResponseQuery {
-	commitInfo, err := getCommitInfo(rs.db, req.Height)
-	if err != nil {
-		return sdkerrors.QueryResult(err)
-	}
-	res := abci.ResponseQuery{
-		Height:   req.Height,
-		Key:      []byte(proofsPath),
-		Value:    commitInfo.CommitID().Hash,
-		ProofOps: &crypto.ProofOps{Ops: make([]crypto.ProofOp, 0, len(commitInfo.StoreInfos))},
-	}
-
-	for _, storeInfo := range commitInfo.StoreInfos {
-		res.ProofOps.Ops = append(res.ProofOps.Ops, commitInfo.ProofOp(storeInfo.Name))
-	}
-	return res
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseQuery)
 }
 
 // Gets commitInfo from disk.
 func getCommitInfo(db dbm.DB, ver int64) (*types.CommitInfo, error) {
-	cInfoKey := fmt.Sprintf(commitInfoKeyFmt, ver)
-
-	bz, err := db.Get([]byte(cInfoKey))
-	if err != nil {
-		return nil, errors.Wrap(err, "failed to get commit info")
-	} else if bz == nil {
-		return nil, errors.New("no commit info found")
-	}
-
-	cInfo := &types.CommitInfo{}
-	if err = cInfo.Unmarshal(bz); err != nil {
-		return nil, errors.Wrap(err, "failed unmarshal commit info")
-	}
-
-	return cInfo, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func getPruningHeights(db dbm.DB) ([]int64, error) {
-	bz, err := db.Get([]byte(pruneHeightsKey))
-	if err != nil {
-		return nil, fmt.Errorf("failed to get pruned heights: %w", err)
-	}
-	if len(bz) == 0 {
-		return nil, errors.New("no pruned heights found")
-	}
+func getPruningHeights(db dbm.DB) ([]int64, error) { _ = "STUB: not implemented"; return nil, nil }
 
-	prunedHeights := make([]int64, len(bz)/8)
-	i, offset := 0, 0
-	for offset < len(bz) {
-		prunedHeights[i] = int64(binary.BigEndian.Uint64(bz[offset : offset+8])) //nolint:gosec // deserialized block heights stored by flushPruningHeights, always non-negative
-		i++
-		offset += 8
-	}
-
-	return prunedHeights, nil
-}
+//nolint:gosec // deserialized block heights stored by flushPruningHeights, always non-negative
 
 func flushCommitInfo(batch dbm.Batch, version int64, cInfo *types.CommitInfo) {
-	bz, err := cInfo.Marshal()
-	if err != nil {
-		panic(err)
-	}
-
-	cInfoKey := fmt.Sprintf(commitInfoKeyFmt, version)
-	_ = batch.Set([]byte(cInfoKey), bz)
+	_ = "STUB: not implemented"
+	return
 }
 
-func flushLatestVersion(batch dbm.Batch, version int64) {
-	bz, err := gogotypes.StdInt64Marshal(version)
-	if err != nil {
-		panic(err)
-	}
+func flushLatestVersion(batch dbm.Batch, version int64) { _ = "STUB: not implemented"; return }
 
-	_ = batch.Set([]byte(latestVersionKey), bz)
-}
+func flushPruningHeights(batch dbm.Batch, pruneHeights []int64) { _ = "STUB: not implemented"; return }
 
-func flushPruningHeights(batch dbm.Batch, pruneHeights []int64) {
-	bz := make([]byte, 0, len(pruneHeights)*8)
-	for _, ph := range pruneHeights {
-		buf := make([]byte, 8)
-		binary.BigEndian.PutUint64(buf, uint64(ph)) //nolint:gosec // pruning heights are always non-negative block heights
-		bz = append(bz, buf...)
-	}
+//nolint:gosec // pruning heights are always non-negative block heights
 
-	_ = batch.Set([]byte(pruneHeightsKey), bz)
-}
-
-func (rs *Store) Close() error {
-	return rs.db.Close()
-}
+func (rs *Store) Close() error { _ = "STUB: not implemented"; return nil }
 
 func (rs *Store) SetKVStores(handler func(key types.StoreKey, s types.KVStore) types.CacheWrap) types.MultiStore {
-	panic("SetKVStores is not implemented for rootmulti")
+	_ = "STUB: not implemented"
+	return *new(types.MultiStore)
 }
 
-func (rs *Store) StoreKeys() []types.StoreKey {
-	res := make([]types.StoreKey, 0, len(rs.keysByName))
-	for _, sk := range rs.keysByName {
-		res = append(res, sk)
-	}
-	return res
-}
+func (rs *Store) StoreKeys() []types.StoreKey { _ = "STUB: not implemented"; return nil }
 
-func (rs *Store) GetEarliestVersion() int64 {
-	return rs.earliestVersion
-}
+func (rs *Store) GetEarliestVersion() int64 { _ = "STUB: not implemented"; return 0 }

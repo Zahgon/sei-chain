@@ -3,13 +3,8 @@ package types
 import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types/multisig"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/tx/signing"
 
-	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	connectiontypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/03-connection/types"
-	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
 	commitmenttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/23-commitment/types"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
@@ -20,34 +15,12 @@ import (
 // returned if signature verification fails or an invalid SignatureData type is
 // provided.
 func VerifySignature(pubKey cryptotypes.PubKey, signBytes []byte, sigData signing.SignatureData) error {
-	switch pubKey := pubKey.(type) {
-	case multisig.PubKey:
-		data, ok := sigData.(*signing.MultiSignatureData)
-		if !ok {
-			return sdkerrors.Wrapf(ErrSignatureVerificationFailed, "invalid signature data type, expected %T, got %T", (*signing.MultiSignatureData)(nil), data)
-		}
-
-		// The function supplied fulfills the VerifyMultisignature interface. No special
-		// adjustments need to be made to the sign bytes based on the sign mode.
-		if err := pubKey.VerifyMultisignature(func(signing.SignMode) ([]byte, error) {
-			return signBytes, nil
-		}, data); err != nil {
-			return err
-		}
-
-	default:
-		data, ok := sigData.(*signing.SingleSignatureData)
-		if !ok {
-			return sdkerrors.Wrapf(ErrSignatureVerificationFailed, "invalid signature data type, expected %T, got %T", (*signing.SingleSignatureData)(nil), data)
-		}
-
-		if !pubKey.VerifySignature(signBytes, data.Signature) {
-			return ErrSignatureVerificationFailed
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// The function supplied fulfills the VerifyMultisignature interface. No special
+// adjustments need to be made to the sign bytes based on the sign mode.
 
 // MisbehaviourSignBytes returns the sign bytes for verification of misbehaviour.
 func MisbehaviourSignBytes(
@@ -57,15 +30,8 @@ func MisbehaviourSignBytes(
 	dataType DataType,
 	data []byte,
 ) ([]byte, error) {
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    dataType,
-		Data:        data,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // HeaderSignBytes returns the sign bytes for verification of misbehaviour.
@@ -73,25 +39,8 @@ func HeaderSignBytes(
 	cdc codec.BinaryCodec,
 	header *Header,
 ) ([]byte, error) {
-	data := &HeaderData{
-		NewPubKey:      header.NewPublicKey,
-		NewDiversifier: header.NewDiversifier,
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    header.Sequence,
-		Timestamp:   header.Timestamp,
-		Diversifier: header.NewDiversifier,
-		DataType:    HEADER,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ClientStateSignBytes returns the sign bytes for verification of the
@@ -103,20 +52,8 @@ func ClientStateSignBytes(
 	path commitmenttypes.MerklePath,
 	clientState exported.ClientState,
 ) ([]byte, error) {
-	dataBz, err := ClientStateDataBytes(cdc, path, clientState)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    CLIENT,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ClientStateDataBytes returns the client state data bytes used in constructing
@@ -126,22 +63,8 @@ func ClientStateDataBytes(
 	path commitmenttypes.MerklePath,
 	clientState exported.ClientState,
 ) ([]byte, error) {
-	any, err := clienttypes.PackClientState(clientState)
-	if err != nil {
-		return nil, err
-	}
-
-	data := &ClientStateData{
-		Path:        []byte(path.String()),
-		ClientState: any,
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return dataBz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ConsensusStateSignBytes returns the sign bytes for verification of the
@@ -153,20 +76,8 @@ func ConsensusStateSignBytes(
 	path commitmenttypes.MerklePath,
 	consensusState exported.ConsensusState,
 ) ([]byte, error) {
-	dataBz, err := ConsensusStateDataBytes(cdc, path, consensusState)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    CONSENSUS,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ConsensusStateDataBytes returns the consensus state data bytes used in constructing
@@ -176,22 +87,8 @@ func ConsensusStateDataBytes(
 	path commitmenttypes.MerklePath,
 	consensusState exported.ConsensusState,
 ) ([]byte, error) {
-	any, err := clienttypes.PackConsensusState(consensusState)
-	if err != nil {
-		return nil, err
-	}
-
-	data := &ConsensusStateData{
-		Path:           []byte(path.String()),
-		ConsensusState: any,
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return dataBz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ConnectionStateSignBytes returns the sign bytes for verification of the
@@ -203,20 +100,8 @@ func ConnectionStateSignBytes(
 	path commitmenttypes.MerklePath,
 	connectionEnd exported.ConnectionI,
 ) ([]byte, error) {
-	dataBz, err := ConnectionStateDataBytes(cdc, path, connectionEnd)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    CONNECTION,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ConnectionStateDataBytes returns the connection state data bytes used in constructing
@@ -226,25 +111,8 @@ func ConnectionStateDataBytes(
 	path commitmenttypes.MerklePath,
 	connectionEnd exported.ConnectionI,
 ) ([]byte, error) {
-	connection, ok := connectionEnd.(connectiontypes.ConnectionEnd)
-	if !ok {
-		return nil, sdkerrors.Wrapf(
-			connectiontypes.ErrInvalidConnection,
-			"expected type %T, got %T", connectiontypes.ConnectionEnd{}, connectionEnd,
-		)
-	}
-
-	data := &ConnectionStateData{
-		Path:       []byte(path.String()),
-		Connection: &connection,
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return dataBz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ChannelStateSignBytes returns the sign bytes for verification of the
@@ -256,20 +124,8 @@ func ChannelStateSignBytes(
 	path commitmenttypes.MerklePath,
 	channelEnd exported.ChannelI,
 ) ([]byte, error) {
-	dataBz, err := ChannelStateDataBytes(cdc, path, channelEnd)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    CHANNEL,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ChannelStateDataBytes returns the channel state data bytes used in constructing
@@ -279,24 +135,8 @@ func ChannelStateDataBytes(
 	path commitmenttypes.MerklePath,
 	channelEnd exported.ChannelI,
 ) ([]byte, error) {
-	channel, ok := channelEnd.(channeltypes.Channel)
-	if !ok {
-		return nil, sdkerrors.Wrapf(
-			channeltypes.ErrInvalidChannel,
-			"expected channel type %T, got %T", channeltypes.Channel{}, channelEnd)
-	}
-
-	data := &ChannelStateData{
-		Path:    []byte(path.String()),
-		Channel: &channel,
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return dataBz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PacketCommitmentSignBytes returns the sign bytes for verification of the
@@ -308,20 +148,8 @@ func PacketCommitmentSignBytes(
 	path commitmenttypes.MerklePath,
 	commitmentBytes []byte,
 ) ([]byte, error) {
-	dataBz, err := PacketCommitmentDataBytes(cdc, path, commitmentBytes)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    PACKETCOMMITMENT,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PacketCommitmentDataBytes returns the packet commitment data bytes used in constructing
@@ -331,17 +159,8 @@ func PacketCommitmentDataBytes(
 	path commitmenttypes.MerklePath,
 	commitmentBytes []byte,
 ) ([]byte, error) {
-	data := &PacketCommitmentData{
-		Path:       []byte(path.String()),
-		Commitment: commitmentBytes,
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return dataBz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PacketAcknowledgementSignBytes returns the sign bytes for verification of
@@ -353,20 +172,8 @@ func PacketAcknowledgementSignBytes(
 	path commitmenttypes.MerklePath,
 	acknowledgement []byte,
 ) ([]byte, error) {
-	dataBz, err := PacketAcknowledgementDataBytes(cdc, path, acknowledgement)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    PACKETACKNOWLEDGEMENT,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PacketAcknowledgementDataBytes returns the packet acknowledgement data bytes used in constructing
@@ -376,17 +183,8 @@ func PacketAcknowledgementDataBytes(
 	path commitmenttypes.MerklePath,
 	acknowledgement []byte,
 ) ([]byte, error) {
-	data := &PacketAcknowledgementData{
-		Path:            []byte(path.String()),
-		Acknowledgement: acknowledgement,
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return dataBz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PacketReceiptAbsenceSignBytes returns the sign bytes for verification
@@ -397,20 +195,8 @@ func PacketReceiptAbsenceSignBytes(
 	diversifier string,
 	path commitmenttypes.MerklePath,
 ) ([]byte, error) {
-	dataBz, err := PacketReceiptAbsenceDataBytes(cdc, path)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    PACKETRECEIPTABSENCE,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PacketReceiptAbsenceDataBytes returns the packet receipt absence data bytes
@@ -419,16 +205,8 @@ func PacketReceiptAbsenceDataBytes(
 	cdc codec.BinaryCodec,
 	path commitmenttypes.MerklePath,
 ) ([]byte, error) {
-	data := &PacketReceiptAbsenceData{
-		Path: []byte(path.String()),
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return dataBz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NextSequenceRecvSignBytes returns the sign bytes for verification of the next
@@ -440,20 +218,8 @@ func NextSequenceRecvSignBytes(
 	path commitmenttypes.MerklePath,
 	nextSequenceRecv uint64,
 ) ([]byte, error) {
-	dataBz, err := NextSequenceRecvDataBytes(cdc, path, nextSequenceRecv)
-	if err != nil {
-		return nil, err
-	}
-
-	signBytes := &SignBytes{
-		Sequence:    sequence,
-		Timestamp:   timestamp,
-		Diversifier: diversifier,
-		DataType:    NEXTSEQUENCERECV,
-		Data:        dataBz,
-	}
-
-	return cdc.Marshal(signBytes)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NextSequenceRecvDataBytes returns the next sequence recv data bytes used in constructing
@@ -463,15 +229,6 @@ func NextSequenceRecvDataBytes(
 	path commitmenttypes.MerklePath,
 	nextSequenceRecv uint64,
 ) ([]byte, error) {
-	data := &NextSequenceRecvData{
-		Path:        []byte(path.String()),
-		NextSeqRecv: nextSequenceRecv,
-	}
-
-	dataBz, err := cdc.Marshal(data)
-	if err != nil {
-		return nil, err
-	}
-
-	return dataBz, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

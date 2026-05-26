@@ -2,14 +2,10 @@ package litt
 
 import (
 	"context"
-	"fmt"
 	"log/slog"
-	"math"
 	"time"
 
-	"github.com/sei-protocol/sei-chain/sei-db/common/unit"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/disktable/keymap"
-	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
 )
 
 // MaxShardingFactor is the largest legal value for Config.ShardingFactor. Both the shard ID (in the on-disk
@@ -159,101 +155,15 @@ type Config struct {
 }
 
 // DefaultConfig returns a Config with default values.
-func DefaultConfig(paths ...string) (*Config, error) {
-	if len(paths) == 0 {
-		return nil, fmt.Errorf("at least one path must be provided")
-	}
-
-	config := DefaultConfigNoPaths()
-	config.Paths = paths
-
-	return config, nil
-}
+func DefaultConfig(paths ...string) (*Config, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // DefaultConfigNoPaths returns a Config with default values, and does not require any paths to be provided.
 // If paths are not set prior to use, then the DB will return an error at startup.
-func DefaultConfigNoPaths() *Config {
-	return &Config{
-		CTX:                      context.Background(),
-		Logger:                   slog.Default(),
-		Clock:                    time.Now,
-		GCPeriod:                 5 * time.Minute,
-		GCBatchSize:              10_000,
-		ShardingFactor:           8,
-		KeymapType:               keymap.PebbleDBKeymapType,
-		ControlChannelSize:       64,
-		TargetSegmentFileSize:    math.MaxUint32,
-		MaxSegmentKeyCount:       50_000,
-		TargetSegmentKeyFileSize: 2 * unit.MB,
-		Fsync:                    true,
-		DoubleWriteProtection:    false,
-		MetricsEnabled:           false,
-		MetricsPort:              9101,
-		MetricsUpdateInterval:    time.Second,
-		PurgeLocks:               false,
-	}
-}
+func DefaultConfigNoPaths() *Config { _ = "STUB: not implemented"; return nil }
 
 // SanitizePaths replaces any paths that start with '~' with the user's home directory.
-func (c *Config) SanitizePaths() error {
-	for i, path := range c.Paths {
-		var err error
-		c.Paths[i], err = util.SanitizePath(path)
-		if err != nil {
-			return fmt.Errorf("error sanitizing path %s: %w", path, err)
-		}
-	}
-
-	if c.SnapshotDirectory != "" {
-		var err error
-		c.SnapshotDirectory, err = util.SanitizePath(c.SnapshotDirectory)
-		if err != nil {
-			return fmt.Errorf("error sanitizing snapshot directory %s: %w", c.SnapshotDirectory, err)
-		}
-	}
-
-	return nil
-}
+func (c *Config) SanitizePaths() error { _ = "STUB: not implemented"; return nil }
 
 // SanityCheck performs a sanity check on the configuration, returning an error if any of the configuration
 // settings are invalid. The config returned by DefaultConfig() is guaranteed to pass this check if unmodified.
-func (c *Config) SanityCheck() error {
-	if c.CTX == nil {
-		return fmt.Errorf("context cannot be nil")
-	}
-	if len(c.Paths) == 0 {
-		return fmt.Errorf("at least one path must be provided")
-	}
-	if c.Logger == nil {
-		return fmt.Errorf("logger must be provided")
-	}
-	if c.Clock == nil {
-		return fmt.Errorf("time source cannot be nil")
-	}
-	if c.GCBatchSize == 0 {
-		return fmt.Errorf("gc batch size must be at least 1")
-	}
-	if c.ShardingFactor == 0 {
-		return fmt.Errorf("sharding factor must be at least 1")
-	}
-	if c.ControlChannelSize == 0 {
-		return fmt.Errorf("control channel size must be at least 1")
-	}
-	if c.TargetSegmentFileSize == 0 {
-		return fmt.Errorf("target segment file size must be at least 1")
-	}
-	if c.MaxSegmentKeyCount == 0 {
-		return fmt.Errorf("max segment key count must be at least 1")
-	}
-	if c.TargetSegmentKeyFileSize == 0 {
-		return fmt.Errorf("target segment key file size must be at least 1")
-	}
-	if c.GCPeriod == 0 {
-		return fmt.Errorf("gc period must be at least 1")
-	}
-	if c.MetricsEnabled && c.MetricsUpdateInterval == 0 {
-		return fmt.Errorf("metrics update interval must be at least 1 if metrics are enabled")
-	}
-
-	return nil
-}
+func (c *Config) SanityCheck() error { _ = "STUB: not implemented"; return nil }

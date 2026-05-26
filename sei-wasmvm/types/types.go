@@ -1,10 +1,5 @@
 package types
 
-import (
-	"encoding/json"
-	"strconv"
-)
-
 // HumanAddress is a printable (typically bech32 encoded) address string. Just use it as a label for developers.
 type HumanAddress = string
 
@@ -17,42 +12,22 @@ type Coin struct {
 	Amount string `json:"amount"` // string encoing of decimal value, eg. "12.3456"
 }
 
-func NewCoin(amount uint64, denom string) Coin {
-	return Coin{
-		Denom:  denom,
-		Amount: strconv.FormatUint(amount, 10),
-	}
-}
+func NewCoin(amount uint64, denom string) Coin { _ = "STUB: not implemented"; return *new(Coin) }
 
 // Coins handles properly serializing empty amounts
 type Coins []Coin
 
 // MarshalJSON ensures that we get [] for empty arrays
-func (c Coins) MarshalJSON() ([]byte, error) {
-	if len(c) == 0 {
-		return []byte("[]"), nil
-	}
-	var d []Coin = c
-	return json.Marshal(d)
-}
+func (c Coins) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON ensures that we get [] for empty arrays
 func (c *Coins) UnmarshalJSON(data []byte) error {
+	_ = "STUB: not implemented"
 	// make sure we deserialize [] back to null
-	if isEmptyOrNull(data) {
-		return nil
-	}
-	var d []Coin
-	if err := json.Unmarshal(data, &d); err != nil {
-		return err
-	}
-	*c = d
 	return nil
 }
 
-func isEmptyOrNull(data []byte) bool {
-	return string(data) == "[]" || string(data) == "null"
-}
+func isEmptyOrNull(data []byte) bool { _ = "STUB: not implemented"; return false }
 
 // Replicating the cosmos-sdk bank module Metadata type
 type DenomMetadata struct {
@@ -132,9 +107,7 @@ type OutOfGasError struct{}
 
 var _ error = OutOfGasError{}
 
-func (o OutOfGasError) Error() string {
-	return "Out of gas"
-}
+func (o OutOfGasError) Error() string { _ = "STUB: not implemented"; return "" }
 
 type GasReport struct {
 	Limit          uint64
@@ -143,14 +116,7 @@ type GasReport struct {
 	UsedInternally uint64
 }
 
-func EmptyGasReport(limit uint64) GasReport {
-	return GasReport{
-		Limit:          limit,
-		Remaining:      limit,
-		UsedExternally: 0,
-		UsedInternally: 0,
-	}
-}
+func EmptyGasReport(limit uint64) GasReport { _ = "STUB: not implemented"; return *new(GasReport) }
 
 // Contains static analysis info of the contract (the Wasm code to be precise).
 // This type is returned by VM.AnalyzeCode().

@@ -3,22 +3,14 @@ package receipt
 import (
 	"errors"
 	"fmt"
-	"math/rand"
-	"strings"
 	"sync"
-	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/eth/filters"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	dbutils "github.com/sei-protocol/sei-chain/sei-db/common/utils"
 	dbconfig "github.com/sei-protocol/sei-chain/sei-db/config"
-	"github.com/sei-protocol/sei-chain/sei-db/db_engine/pebbledb/mvcc"
 	seidbtypes "github.com/sei-protocol/sei-chain/sei-db/db_engine/types"
-	"github.com/sei-protocol/sei-chain/sei-db/proto"
-	"github.com/sei-protocol/sei-chain/sei-db/wal"
-	"github.com/sei-protocol/sei-chain/utils"
 	"github.com/sei-protocol/sei-chain/x/evm/types"
 	"github.com/sei-protocol/seilog"
 )
@@ -84,19 +76,11 @@ const (
 	receiptBackendParquet = "parquet"
 )
 
-func normalizeReceiptBackend(backend string) string {
-	switch strings.ToLower(strings.TrimSpace(backend)) {
-	case "", "pebbledb", receiptBackendPebble:
-		return receiptBackendPebble
-	case receiptBackendParquet:
-		return receiptBackendParquet
-	default:
-		return strings.ToLower(strings.TrimSpace(backend))
-	}
-}
+func normalizeReceiptBackend(backend string) string { _ = "STUB: not implemented"; return "" }
 
 func NewReceiptStore(config dbconfig.ReceiptStoreConfig, storeKey sdk.StoreKey) (ReceiptStore, error) {
-	return NewReceiptStoreWithReadMetrics(config, storeKey, nil)
+	_ = "STUB: not implemented"
+	return *new(ReceiptStore), nil
 }
 
 // NewReceiptStoreWithReadMetrics constructs a receipt store and optionally
@@ -106,301 +90,100 @@ func NewReceiptStoreWithReadMetrics(
 	storeKey sdk.StoreKey,
 	metrics ReceiptReadMetrics,
 ) (ReceiptStore, error) {
-	backend, err := newReceiptBackend(config, storeKey)
-	if err != nil {
-		return nil, err
-	}
-	return newCachedReceiptStore(backend, metrics), nil
+	_ = "STUB: not implemented"
+	return *new(ReceiptStore), nil
 }
 
 // BackendTypeName returns the backend implementation name ("parquet" or "pebble") for testing.
 // Returns "" if store is nil or the backend type is unknown.
-func BackendTypeName(store ReceiptStore) string {
-	if store == nil {
-		return ""
-	}
-	if c, ok := store.(*cachedReceiptStore); ok {
-		store = c.backend
-	}
-	switch store.(type) {
-	case *parquetReceiptStore:
-		return receiptBackendParquet
-	case *receiptStore:
-		return receiptBackendPebble
-	default:
-		return "unknown"
-	}
-}
+func BackendTypeName(store ReceiptStore) string { _ = "STUB: not implemented"; return "" }
 
 func newReceiptBackend(config dbconfig.ReceiptStoreConfig, storeKey sdk.StoreKey) (ReceiptStore, error) {
-	if config.DBDirectory == "" {
-		return nil, errors.New("receipt store db directory not configured")
-	}
-
-	backend := normalizeReceiptBackend(config.Backend)
-	switch backend {
-	case receiptBackendParquet:
-		return newParquetReceiptStore(config, storeKey)
-	case receiptBackendPebble:
-		ssConfig := dbconfig.DefaultStateStoreConfig()
-		ssConfig.DBDirectory = config.DBDirectory
-		ssConfig.AsyncWriteBuffer = config.AsyncWriteBuffer
-		ssConfig.KeepRecent = config.KeepRecent
-		if config.PruneIntervalSeconds > 0 {
-			ssConfig.PruneIntervalSeconds = config.PruneIntervalSeconds
-		}
-		ssConfig.KeepLastVersion = false
-		ssConfig.Backend = "pebbledb"
-
-		db, err := mvcc.OpenDB(ssConfig.DBDirectory, ssConfig)
-		if err != nil {
-			return nil, err
-		}
-		if err := recoverReceiptStore(dbutils.GetChangelogPath(ssConfig.DBDirectory), db); err != nil {
-			_ = db.Close()
-			return nil, err
-		}
-		rs := &receiptStore{
-			db:          db,
-			storeKey:    storeKey,
-			stopPruning: make(chan struct{}),
-		}
-		startReceiptPruning(db, int64(ssConfig.KeepRecent), int64(ssConfig.PruneIntervalSeconds), rs.stopPruning, &rs.pruneWg)
-		return rs, nil
-	default:
-		return nil, fmt.Errorf("unsupported receipt store backend: %s", config.Backend)
-	}
+	_ = "STUB: not implemented"
+	return *new(ReceiptStore), nil
 }
 
-func (s *receiptStore) LatestVersion() int64 {
-	return s.db.GetLatestVersion()
-}
+func (s *receiptStore) LatestVersion() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (s *receiptStore) SetLatestVersion(version int64) error {
-	return s.db.SetLatestVersion(version)
-}
+func (s *receiptStore) SetLatestVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
 func (s *receiptStore) SetEarliestVersion(version int64) error {
-	return s.db.SetEarliestVersion(version, true)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (s *receiptStore) GetReceipt(ctx sdk.Context, txHash common.Hash) (*types.Receipt, error) {
+	_ = "STUB: not implemented"
 	// receipts are immutable, use latest version
-	lv := s.db.GetLatestVersion()
-
-	// try persistent store
-	bz, err := s.db.Get(types.ReceiptStoreKey, lv, types.ReceiptKey(txHash))
-	if err != nil {
-		return nil, err
-	}
-
-	if bz == nil {
-		// try legacy store for older receipts
-		store := ctx.KVStore(s.storeKey)
-		bz = store.Get(types.ReceiptKey(txHash))
-		if bz == nil {
-			return nil, ErrNotFound
-		}
-	}
-
-	var r types.Receipt
-	if err := r.Unmarshal(bz); err != nil {
-		return nil, err
-	}
-	return &r, nil
+	return nil, nil
 }
+
+// try persistent store
+
+// try legacy store for older receipts
 
 // Only used for testing.
 func (s *receiptStore) GetReceiptFromStore(_ sdk.Context, txHash common.Hash) (*types.Receipt, error) {
+	_ = "STUB: not implemented"
 	// receipts are immutable, use latest version
-	lv := s.db.GetLatestVersion()
-
-	// try persistent store
-	bz, err := s.db.Get(types.ReceiptStoreKey, lv, types.ReceiptKey(txHash))
-	if err != nil {
-		return nil, err
-	}
-	if bz == nil {
-		return nil, ErrNotFound
-	}
-
-	var r types.Receipt
-	if err := r.Unmarshal(bz); err != nil {
-		return nil, err
-	}
-	return &r, nil
+	return nil, nil
 }
+
+// try persistent store
 
 func (s *receiptStore) SetReceipts(ctx sdk.Context, receipts []ReceiptRecord) error {
-	pairs := make([]*proto.KVPair, 0, len(receipts))
-	for _, record := range receipts {
-		if record.Receipt == nil {
-			continue
-		}
-		marshalledReceipt := record.ReceiptBytes
-		if len(marshalledReceipt) == 0 {
-			var err error
-			marshalledReceipt, err = record.Receipt.Marshal()
-			if err != nil {
-				return err
-			}
-		}
-		kvPair := &proto.KVPair{
-			Key:   types.ReceiptKey(record.TxHash),
-			Value: marshalledReceipt,
-		}
-		pairs = append(pairs, kvPair)
-	}
-
-	ncs := &proto.NamedChangeSet{
-		Name:      types.ReceiptStoreKey,
-		Changeset: proto.ChangeSet{Pairs: pairs},
-	}
-
-	// Genesis and some unit tests execute at block height 0. Async writes
-	// rely on a positive version to avoid regressions in the underlying
-	// state store metadata, so fall back to a synchronous apply in that case.
-	if ctx.BlockHeight() == 0 {
-		return s.db.ApplyChangesetSync(ctx.BlockHeight(), []*proto.NamedChangeSet{ncs})
-	}
-
-	err := s.db.ApplyChangesetAsync(ctx.BlockHeight(), []*proto.NamedChangeSet{ncs})
-	if err != nil {
-		if !strings.Contains(err.Error(), "not implemented") { // for tests
-			return err
-		}
-		// fallback to synchronous apply for stores that do not support async writes
-		return s.db.ApplyChangesetSync(ctx.BlockHeight(), []*proto.NamedChangeSet{ncs})
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Genesis and some unit tests execute at block height 0. Async writes
+// rely on a positive version to avoid regressions in the underlying
+// state store metadata, so fall back to a synchronous apply in that case.
+
+// for tests
+
+// fallback to synchronous apply for stores that do not support async writes
 
 // FilterLogs is not efficiently supported by the pebble backend since receipts
 // are indexed by tx hash, not by block number. Returns ErrRangeQueryNotSupported.
 // Callers should fall back to fetching receipts individually via GetReceipt.
 func (s *receiptStore) FilterLogs(_ sdk.Context, _, _ uint64, _ filters.FilterCriteria) ([]*ethtypes.Log, error) {
-	return nil, ErrRangeQueryNotSupported
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (s *receiptStore) Close() error {
-	var err error
-	s.closeOnce.Do(func() {
-		if s.stopPruning != nil {
-			close(s.stopPruning)
-		}
-		s.pruneWg.Wait()
-		err = s.db.Close()
-	})
-	return err
-}
+func (s *receiptStore) Close() error { _ = "STUB: not implemented"; return nil }
 
 func recoverReceiptStore(changelogPath string, db seidbtypes.StateStore) error {
-	ssLatestVersion := db.GetLatestVersion()
-	logger.Info("Recovering from changelog with latest receipt version", "changelog-path", changelogPath, "version", ssLatestVersion)
-	streamHandler, err := wal.NewChangelogWAL(changelogPath, wal.Config{})
-	if err != nil {
-		return err
-	}
-	firstOffset, errFirst := streamHandler.FirstOffset()
-	if firstOffset <= 0 || errFirst != nil {
-		return nil
-	}
-	lastOffset, errLast := streamHandler.LastOffset()
-	if lastOffset <= 0 || errLast != nil {
-		return nil
-	}
-	lastEntry, errRead := streamHandler.ReadAt(lastOffset)
-	if errRead != nil {
-		return errRead
-	}
-	// Look backward to find where we should start replay from
-	curVersion := lastEntry.Version
-	curOffset := lastOffset
-	if ssLatestVersion > 0 {
-		for curVersion > ssLatestVersion && curOffset > firstOffset {
-			curOffset--
-			curEntry, errRead := streamHandler.ReadAt(curOffset)
-			if errRead != nil {
-				return errRead
-			}
-			curVersion = curEntry.Version
-		}
-	} else {
-		// Fresh store (or no applied versions) - start from the first offset
-		curOffset = firstOffset
-	}
-	// Replay from the offset where the version is larger than SS store latest version
-	targetStartOffset := curOffset
-	logger.Info("Start replaying changelog to recover ReceiptStore", "from-offset", targetStartOffset, "to-offset", lastOffset)
-	if targetStartOffset < lastOffset {
-		return streamHandler.Replay(targetStartOffset, lastOffset, func(index uint64, entry proto.ChangelogEntry) error {
-			// commit to state store
-			if err := db.ApplyChangesetSync(entry.Version, entry.Changesets); err != nil {
-				return err
-			}
-			if err := db.SetLatestVersion(entry.Version); err != nil {
-				return err
-			}
-			return nil
-		})
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// Look backward to find where we should start replay from
+
+// Fresh store (or no applied versions) - start from the first offset
+
+// Replay from the offset where the version is larger than SS store latest version
+
+// commit to state store
+
 func startReceiptPruning(db seidbtypes.StateStore, keepRecent int64, pruneInterval int64, stopCh <-chan struct{}, wg *sync.WaitGroup) {
-	if keepRecent <= 0 || pruneInterval <= 0 {
-		return
-	}
-	wg.Add(1)
-	go func() {
-		defer wg.Done()
-		for {
-			select {
-			case <-stopCh:
-				logger.Info("Receipt store pruning goroutine stopped")
-				return
-			default:
-			}
-
-			pruneStartTime := time.Now()
-			latestVersion := db.GetLatestVersion()
-			pruneVersion := latestVersion - keepRecent
-			if pruneVersion > 0 {
-				// prune all versions up to and including the pruneVersion
-				if err := db.Prune(pruneVersion); err != nil {
-					logger.Error("failed to prune receipt store till", "version", pruneVersion, "err", err)
-				}
-				logger.Info("Pruned receipt store till version", "version", pruneVersion, "took", time.Since(pruneStartTime))
-			}
-
-			// Generate a random percentage (between 0% and 100%) of the fixed interval as a delay
-			randomPercentage := rand.Float64()
-			randomDelay := int64(float64(pruneInterval) * randomPercentage)
-			sleepDuration := time.Duration(pruneInterval+randomDelay) * time.Second
-
-			select {
-			case <-stopCh:
-				logger.Info("Receipt store pruning goroutine stopped")
-				return
-			case <-time.After(sleepDuration):
-				// Continue to next iteration
-			}
-		}
-	}()
+	_ = "STUB: not implemented"
+	return
 }
 
+// prune all versions up to and including the pruneVersion
+
+// Generate a random percentage (between 0% and 100%) of the fixed interval as a delay
+
+// Continue to next iteration
+
 func getLogsForTx(receipt *types.Receipt, logStartIndex uint) []*ethtypes.Log {
-	return utils.Map(receipt.Logs, func(l *types.Log) *ethtypes.Log { return convertLog(l, receipt, logStartIndex) })
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func convertLog(l *types.Log, receipt *types.Receipt, logStartIndex uint) *ethtypes.Log {
-	return &ethtypes.Log{
-		Address:     common.HexToAddress(l.Address),
-		Topics:      utils.Map(l.Topics, common.HexToHash),
-		Data:        l.Data,
-		BlockNumber: receipt.BlockNumber,
-		TxHash:      common.HexToHash(receipt.TxHashHex),
-		TxIndex:     uint(receipt.TransactionIndex),
-		Index:       uint(l.Index) + logStartIndex,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -1,21 +1,11 @@
 package crypto
 
 import (
-	"crypto/rand"
 	"io"
 )
 
 // This only uses the OS's randomness
-func CRandBytes(numBytes int) []byte {
-	b := make([]byte, numBytes)
-	_, err := rand.Read(b)
-	if err != nil {
-		panic(err)
-	}
-	return b
-}
+func CRandBytes(numBytes int) []byte { _ = "STUB: not implemented"; return nil }
 
 // Returns a crand.Reader.
-func CReader() io.Reader {
-	return rand.Reader
-}
+func CReader() io.Reader { _ = "STUB: not implemented"; return *new(io.Reader) }

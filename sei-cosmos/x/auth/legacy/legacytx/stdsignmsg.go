@@ -20,17 +20,9 @@ type StdSignMsg struct {
 }
 
 // get message bytes
-func (msg StdSignMsg) Bytes() []byte {
-	return StdSignBytes(msg.ChainID, msg.AccountNumber, msg.Sequence, msg.TimeoutHeight, msg.Fee, msg.Msgs, msg.Memo)
-}
+func (msg StdSignMsg) Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
 func (msg StdSignMsg) UnpackInterfaces(unpacker types.AnyUnpacker) error {
-	for _, m := range msg.Msgs {
-		err := types.UnpackInterfaces(m, unpacker)
-		if err != nil {
-			return err
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }

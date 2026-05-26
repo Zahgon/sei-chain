@@ -16,42 +16,34 @@ type compositeWrapper struct {
 
 // NewCompositeWrapper creates a new compositeWrapper with a given composite commit store.
 func NewCompositeWrapper(store *composite.CompositeCommitStore) DBWrapper {
-	return &compositeWrapper{
-		base: store,
-	}
+	_ = "STUB: not implemented"
+	return *new(DBWrapper)
 }
 
 func (c *compositeWrapper) ApplyChangeSets(entry *proto.ChangelogEntry) error {
-	return c.base.ApplyChangeSets(entry.Changesets)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (c *compositeWrapper) Commit() (int64, error) {
-	return c.base.Commit()
-}
+func (c *compositeWrapper) Commit() (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
-func (c *compositeWrapper) LoadVersion(version int64) error {
-	_, err := c.base.LoadVersion(version, false)
-	return err
-}
+func (c *compositeWrapper) LoadVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
-func (c *compositeWrapper) Version() int64 {
-	return c.base.Version()
-}
+func (c *compositeWrapper) Version() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (c *compositeWrapper) Importer(version int64) (types.Importer, error) {
-	return c.base.Importer(version)
+	_ = "STUB: not implemented"
+	return *new(types.Importer), nil
 }
 
-func (c *compositeWrapper) Close() error {
-	return c.base.Close()
-}
+func (c *compositeWrapper) Close() error { _ = "STUB: not implemented"; return nil }
 
 func (c *compositeWrapper) Read(key []byte) (data []byte, found bool, err error) {
-	store := c.base.GetChildStoreByName(EVMStoreName)
-	data = store.Get(key)
-	return data, data != nil, nil
+	_ = "STUB: not implemented"
+	return nil, false, nil
 }
 
 func (c *compositeWrapper) GetPhaseTimer() *metrics.PhaseTimer {
+	_ = "STUB: not implemented"
 	return nil
 }

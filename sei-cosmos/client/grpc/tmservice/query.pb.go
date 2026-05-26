@@ -6,6 +6,8 @@ package tmservice
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
@@ -14,11 +16,6 @@ import (
 	types1 "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -39,50 +36,39 @@ type GetValidatorSetByHeightRequest struct {
 	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *GetValidatorSetByHeightRequest) Reset()         { *m = GetValidatorSetByHeightRequest{} }
-func (m *GetValidatorSetByHeightRequest) String() string { return proto.CompactTextString(m) }
-func (*GetValidatorSetByHeightRequest) ProtoMessage()    {}
+func (m *GetValidatorSetByHeightRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetValidatorSetByHeightRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetValidatorSetByHeightRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetValidatorSetByHeightRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetValidatorSetByHeightRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetValidatorSetByHeightRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetValidatorSetByHeightRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetValidatorSetByHeightRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetValidatorSetByHeightRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetValidatorSetByHeightRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetValidatorSetByHeightRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetValidatorSetByHeightRequest.DiscardUnknown(m)
-}
+
+func (m *GetValidatorSetByHeightRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetValidatorSetByHeightRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetValidatorSetByHeightRequest proto.InternalMessageInfo
 
-func (m *GetValidatorSetByHeightRequest) GetHeight() int64 {
-	if m != nil {
-		return m.Height
-	}
-	return 0
-}
+func (m *GetValidatorSetByHeightRequest) GetHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (m *GetValidatorSetByHeightRequest) GetPagination() *query.PageRequest {
-	if m != nil {
-		return m.Pagination
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -94,57 +80,47 @@ type GetValidatorSetByHeightResponse struct {
 	Pagination *query.PageResponse `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *GetValidatorSetByHeightResponse) Reset()         { *m = GetValidatorSetByHeightResponse{} }
-func (m *GetValidatorSetByHeightResponse) String() string { return proto.CompactTextString(m) }
-func (*GetValidatorSetByHeightResponse) ProtoMessage()    {}
+func (m *GetValidatorSetByHeightResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetValidatorSetByHeightResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetValidatorSetByHeightResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetValidatorSetByHeightResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetValidatorSetByHeightResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetValidatorSetByHeightResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetValidatorSetByHeightResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetValidatorSetByHeightResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetValidatorSetByHeightResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetValidatorSetByHeightResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetValidatorSetByHeightResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetValidatorSetByHeightResponse.DiscardUnknown(m)
-}
+
+func (m *GetValidatorSetByHeightResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetValidatorSetByHeightResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetValidatorSetByHeightResponse proto.InternalMessageInfo
 
 func (m *GetValidatorSetByHeightResponse) GetBlockHeight() int64 {
-	if m != nil {
-		return m.BlockHeight
-	}
+	_ = "STUB: not implemented"
 	return 0
 }
 
 func (m *GetValidatorSetByHeightResponse) GetValidators() []*Validator {
-	if m != nil {
-		return m.Validators
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *GetValidatorSetByHeightResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -154,43 +130,37 @@ type GetLatestValidatorSetRequest struct {
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *GetLatestValidatorSetRequest) Reset()         { *m = GetLatestValidatorSetRequest{} }
-func (m *GetLatestValidatorSetRequest) String() string { return proto.CompactTextString(m) }
-func (*GetLatestValidatorSetRequest) ProtoMessage()    {}
+func (m *GetLatestValidatorSetRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetLatestValidatorSetRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetLatestValidatorSetRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetLatestValidatorSetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetLatestValidatorSetRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetLatestValidatorSetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetLatestValidatorSetRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetLatestValidatorSetRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetLatestValidatorSetRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetLatestValidatorSetRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetLatestValidatorSetRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetLatestValidatorSetRequest.DiscardUnknown(m)
-}
+
+func (m *GetLatestValidatorSetRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetLatestValidatorSetRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetLatestValidatorSetRequest proto.InternalMessageInfo
 
 func (m *GetLatestValidatorSetRequest) GetPagination() *query.PageRequest {
-	if m != nil {
-		return m.Pagination
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -202,57 +172,44 @@ type GetLatestValidatorSetResponse struct {
 	Pagination *query.PageResponse `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *GetLatestValidatorSetResponse) Reset()         { *m = GetLatestValidatorSetResponse{} }
-func (m *GetLatestValidatorSetResponse) String() string { return proto.CompactTextString(m) }
-func (*GetLatestValidatorSetResponse) ProtoMessage()    {}
+func (m *GetLatestValidatorSetResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetLatestValidatorSetResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetLatestValidatorSetResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetLatestValidatorSetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetLatestValidatorSetResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetLatestValidatorSetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetLatestValidatorSetResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetLatestValidatorSetResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetLatestValidatorSetResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetLatestValidatorSetResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetLatestValidatorSetResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetLatestValidatorSetResponse.DiscardUnknown(m)
-}
+
+func (m *GetLatestValidatorSetResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetLatestValidatorSetResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetLatestValidatorSetResponse proto.InternalMessageInfo
 
-func (m *GetLatestValidatorSetResponse) GetBlockHeight() int64 {
-	if m != nil {
-		return m.BlockHeight
-	}
-	return 0
-}
+func (m *GetLatestValidatorSetResponse) GetBlockHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (m *GetLatestValidatorSetResponse) GetValidators() []*Validator {
-	if m != nil {
-		return m.Validators
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *GetLatestValidatorSetResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -264,111 +221,66 @@ type Validator struct {
 	ProposerPriority int64      `protobuf:"varint,4,opt,name=proposer_priority,json=proposerPriority,proto3" json:"proposer_priority,omitempty"`
 }
 
-func (m *Validator) Reset()         { *m = Validator{} }
-func (m *Validator) String() string { return proto.CompactTextString(m) }
-func (*Validator) ProtoMessage()    {}
-func (*Validator) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{4}
-}
-func (m *Validator) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Validator) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *Validator) String() string            { _ = "STUB: not implemented"; return "" }
+func (*Validator) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Validator) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Validator) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Validator) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Validator.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Validator) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Validator.Merge(m, src)
-}
-func (m *Validator) XXX_Size() int {
-	return m.Size()
-}
-func (m *Validator) XXX_DiscardUnknown() {
-	xxx_messageInfo_Validator.DiscardUnknown(m)
-}
+
+func (m *Validator) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Validator) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Validator) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Validator proto.InternalMessageInfo
 
-func (m *Validator) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
+func (m *Validator) GetAddress() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Validator) GetPubKey() *types.Any {
-	if m != nil {
-		return m.PubKey
-	}
-	return nil
-}
+func (m *Validator) GetPubKey() *types.Any { _ = "STUB: not implemented"; return nil }
 
-func (m *Validator) GetVotingPower() int64 {
-	if m != nil {
-		return m.VotingPower
-	}
-	return 0
-}
+func (m *Validator) GetVotingPower() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Validator) GetProposerPriority() int64 {
-	if m != nil {
-		return m.ProposerPriority
-	}
-	return 0
-}
+func (m *Validator) GetProposerPriority() int64 { _ = "STUB: not implemented"; return 0 }
 
 // GetBlockByHeightRequest is the request type for the Query/GetBlockByHeight RPC method.
 type GetBlockByHeightRequest struct {
 	Height int64 `protobuf:"varint,1,opt,name=height,proto3" json:"height,omitempty"`
 }
 
-func (m *GetBlockByHeightRequest) Reset()         { *m = GetBlockByHeightRequest{} }
-func (m *GetBlockByHeightRequest) String() string { return proto.CompactTextString(m) }
-func (*GetBlockByHeightRequest) ProtoMessage()    {}
+func (m *GetBlockByHeightRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetBlockByHeightRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetBlockByHeightRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetBlockByHeightRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetBlockByHeightRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetBlockByHeightRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetBlockByHeightRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetBlockByHeightRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetBlockByHeightRequest.Merge(m, src)
-}
-func (m *GetBlockByHeightRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetBlockByHeightRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetBlockByHeightRequest.DiscardUnknown(m)
-}
+
+func (m *GetBlockByHeightRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetBlockByHeightRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetBlockByHeightRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetBlockByHeightRequest proto.InternalMessageInfo
 
-func (m *GetBlockByHeightRequest) GetHeight() int64 {
-	if m != nil {
-		return m.Height
-	}
-	return 0
-}
+func (m *GetBlockByHeightRequest) GetHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 // GetBlockByHeightResponse is the response type for the Query/GetBlockByHeight RPC method.
 type GetBlockByHeightResponse struct {
@@ -376,87 +288,66 @@ type GetBlockByHeightResponse struct {
 	Block   *types1.Block   `protobuf:"bytes,2,opt,name=block,proto3" json:"block,omitempty"`
 }
 
-func (m *GetBlockByHeightResponse) Reset()         { *m = GetBlockByHeightResponse{} }
-func (m *GetBlockByHeightResponse) String() string { return proto.CompactTextString(m) }
-func (*GetBlockByHeightResponse) ProtoMessage()    {}
+func (m *GetBlockByHeightResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetBlockByHeightResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetBlockByHeightResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetBlockByHeightResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{6}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetBlockByHeightResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetBlockByHeightResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetBlockByHeightResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetBlockByHeightResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetBlockByHeightResponse.Merge(m, src)
-}
-func (m *GetBlockByHeightResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetBlockByHeightResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetBlockByHeightResponse.DiscardUnknown(m)
-}
+
+func (m *GetBlockByHeightResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetBlockByHeightResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetBlockByHeightResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetBlockByHeightResponse proto.InternalMessageInfo
 
 func (m *GetBlockByHeightResponse) GetBlockId() *types1.BlockID {
-	if m != nil {
-		return m.BlockId
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *GetBlockByHeightResponse) GetBlock() *types1.Block {
-	if m != nil {
-		return m.Block
-	}
-	return nil
-}
+func (m *GetBlockByHeightResponse) GetBlock() *types1.Block { _ = "STUB: not implemented"; return nil }
 
 // GetLatestBlockRequest is the request type for the Query/GetLatestBlock RPC method.
 type GetLatestBlockRequest struct {
 }
 
-func (m *GetLatestBlockRequest) Reset()         { *m = GetLatestBlockRequest{} }
-func (m *GetLatestBlockRequest) String() string { return proto.CompactTextString(m) }
-func (*GetLatestBlockRequest) ProtoMessage()    {}
+func (m *GetLatestBlockRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetLatestBlockRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetLatestBlockRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetLatestBlockRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{7}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetLatestBlockRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetLatestBlockRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetLatestBlockRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetLatestBlockRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetLatestBlockRequest.Merge(m, src)
-}
-func (m *GetLatestBlockRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetLatestBlockRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetLatestBlockRequest.DiscardUnknown(m)
-}
+
+func (m *GetLatestBlockRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetLatestBlockRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetLatestBlockRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetLatestBlockRequest proto.InternalMessageInfo
 
@@ -466,87 +357,60 @@ type GetLatestBlockResponse struct {
 	Block   *types1.Block   `protobuf:"bytes,2,opt,name=block,proto3" json:"block,omitempty"`
 }
 
-func (m *GetLatestBlockResponse) Reset()         { *m = GetLatestBlockResponse{} }
-func (m *GetLatestBlockResponse) String() string { return proto.CompactTextString(m) }
-func (*GetLatestBlockResponse) ProtoMessage()    {}
+func (m *GetLatestBlockResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetLatestBlockResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetLatestBlockResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetLatestBlockResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{8}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetLatestBlockResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetLatestBlockResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetLatestBlockResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetLatestBlockResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetLatestBlockResponse.Merge(m, src)
-}
-func (m *GetLatestBlockResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetLatestBlockResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetLatestBlockResponse.DiscardUnknown(m)
-}
+
+func (m *GetLatestBlockResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetLatestBlockResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetLatestBlockResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetLatestBlockResponse proto.InternalMessageInfo
 
 func (m *GetLatestBlockResponse) GetBlockId() *types1.BlockID {
-	if m != nil {
-		return m.BlockId
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *GetLatestBlockResponse) GetBlock() *types1.Block {
-	if m != nil {
-		return m.Block
-	}
-	return nil
-}
+func (m *GetLatestBlockResponse) GetBlock() *types1.Block { _ = "STUB: not implemented"; return nil }
 
 // GetSyncingRequest is the request type for the Query/GetSyncing RPC method.
 type GetSyncingRequest struct {
 }
 
-func (m *GetSyncingRequest) Reset()         { *m = GetSyncingRequest{} }
-func (m *GetSyncingRequest) String() string { return proto.CompactTextString(m) }
-func (*GetSyncingRequest) ProtoMessage()    {}
-func (*GetSyncingRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{9}
-}
-func (m *GetSyncingRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *GetSyncingRequest) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *GetSyncingRequest) String() string            { _ = "STUB: not implemented"; return "" }
+func (*GetSyncingRequest) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*GetSyncingRequest) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *GetSyncingRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetSyncingRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetSyncingRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetSyncingRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetSyncingRequest.Merge(m, src)
-}
-func (m *GetSyncingRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetSyncingRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetSyncingRequest.DiscardUnknown(m)
-}
+
+func (m *GetSyncingRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetSyncingRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetSyncingRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetSyncingRequest proto.InternalMessageInfo
 
@@ -555,80 +419,49 @@ type GetSyncingResponse struct {
 	Syncing bool `protobuf:"varint,1,opt,name=syncing,proto3" json:"syncing,omitempty"`
 }
 
-func (m *GetSyncingResponse) Reset()         { *m = GetSyncingResponse{} }
-func (m *GetSyncingResponse) String() string { return proto.CompactTextString(m) }
-func (*GetSyncingResponse) ProtoMessage()    {}
-func (*GetSyncingResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{10}
-}
-func (m *GetSyncingResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *GetSyncingResponse) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *GetSyncingResponse) String() string            { _ = "STUB: not implemented"; return "" }
+func (*GetSyncingResponse) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*GetSyncingResponse) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *GetSyncingResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetSyncingResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetSyncingResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetSyncingResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetSyncingResponse.Merge(m, src)
-}
-func (m *GetSyncingResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetSyncingResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetSyncingResponse.DiscardUnknown(m)
-}
+
+func (m *GetSyncingResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetSyncingResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetSyncingResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetSyncingResponse proto.InternalMessageInfo
 
-func (m *GetSyncingResponse) GetSyncing() bool {
-	if m != nil {
-		return m.Syncing
-	}
-	return false
-}
+func (m *GetSyncingResponse) GetSyncing() bool { _ = "STUB: not implemented"; return false }
 
 // GetNodeInfoRequest is the request type for the Query/GetNodeInfo RPC method.
 type GetNodeInfoRequest struct {
 }
 
-func (m *GetNodeInfoRequest) Reset()         { *m = GetNodeInfoRequest{} }
-func (m *GetNodeInfoRequest) String() string { return proto.CompactTextString(m) }
-func (*GetNodeInfoRequest) ProtoMessage()    {}
-func (*GetNodeInfoRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{11}
-}
-func (m *GetNodeInfoRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *GetNodeInfoRequest) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *GetNodeInfoRequest) String() string            { _ = "STUB: not implemented"; return "" }
+func (*GetNodeInfoRequest) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*GetNodeInfoRequest) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *GetNodeInfoRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetNodeInfoRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetNodeInfoRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetNodeInfoRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetNodeInfoRequest.Merge(m, src)
-}
-func (m *GetNodeInfoRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetNodeInfoRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetNodeInfoRequest.DiscardUnknown(m)
-}
+
+func (m *GetNodeInfoRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetNodeInfoRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetNodeInfoRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetNodeInfoRequest proto.InternalMessageInfo
 
@@ -638,50 +471,36 @@ type GetNodeInfoResponse struct {
 	ApplicationVersion *VersionInfo  `protobuf:"bytes,2,opt,name=application_version,json=applicationVersion,proto3" json:"application_version,omitempty"`
 }
 
-func (m *GetNodeInfoResponse) Reset()         { *m = GetNodeInfoResponse{} }
-func (m *GetNodeInfoResponse) String() string { return proto.CompactTextString(m) }
-func (*GetNodeInfoResponse) ProtoMessage()    {}
+func (m *GetNodeInfoResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetNodeInfoResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetNodeInfoResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetNodeInfoResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{12}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetNodeInfoResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *GetNodeInfoResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetNodeInfoResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetNodeInfoResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetNodeInfoResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetNodeInfoResponse.Merge(m, src)
-}
-func (m *GetNodeInfoResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetNodeInfoResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetNodeInfoResponse.DiscardUnknown(m)
-}
+
+func (m *GetNodeInfoResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetNodeInfoResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetNodeInfoResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetNodeInfoResponse proto.InternalMessageInfo
 
 func (m *GetNodeInfoResponse) GetDefaultNodeInfo() *p2p.NodeInfo {
-	if m != nil {
-		return m.DefaultNodeInfo
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *GetNodeInfoResponse) GetApplicationVersion() *VersionInfo {
-	if m != nil {
-		return m.ApplicationVersion
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -698,94 +517,41 @@ type VersionInfo struct {
 	CosmosSdkVersion string `protobuf:"bytes,8,opt,name=cosmos_sdk_version,json=cosmosSdkVersion,proto3" json:"cosmos_sdk_version,omitempty"`
 }
 
-func (m *VersionInfo) Reset()         { *m = VersionInfo{} }
-func (m *VersionInfo) String() string { return proto.CompactTextString(m) }
-func (*VersionInfo) ProtoMessage()    {}
-func (*VersionInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{13}
-}
-func (m *VersionInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *VersionInfo) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *VersionInfo) String() string            { _ = "STUB: not implemented"; return "" }
+func (*VersionInfo) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*VersionInfo) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *VersionInfo) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *VersionInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_VersionInfo.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *VersionInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VersionInfo.Merge(m, src)
-}
-func (m *VersionInfo) XXX_Size() int {
-	return m.Size()
-}
-func (m *VersionInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_VersionInfo.DiscardUnknown(m)
-}
+
+func (m *VersionInfo) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *VersionInfo) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *VersionInfo) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_VersionInfo proto.InternalMessageInfo
 
-func (m *VersionInfo) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
+func (m *VersionInfo) GetName() string { _ = "STUB: not implemented"; return "" }
 
-func (m *VersionInfo) GetAppName() string {
-	if m != nil {
-		return m.AppName
-	}
-	return ""
-}
+func (m *VersionInfo) GetAppName() string { _ = "STUB: not implemented"; return "" }
 
-func (m *VersionInfo) GetVersion() string {
-	if m != nil {
-		return m.Version
-	}
-	return ""
-}
+func (m *VersionInfo) GetVersion() string { _ = "STUB: not implemented"; return "" }
 
-func (m *VersionInfo) GetGitCommit() string {
-	if m != nil {
-		return m.GitCommit
-	}
-	return ""
-}
+func (m *VersionInfo) GetGitCommit() string { _ = "STUB: not implemented"; return "" }
 
-func (m *VersionInfo) GetBuildTags() string {
-	if m != nil {
-		return m.BuildTags
-	}
-	return ""
-}
+func (m *VersionInfo) GetBuildTags() string { _ = "STUB: not implemented"; return "" }
 
-func (m *VersionInfo) GetGoVersion() string {
-	if m != nil {
-		return m.GoVersion
-	}
-	return ""
-}
+func (m *VersionInfo) GetGoVersion() string { _ = "STUB: not implemented"; return "" }
 
-func (m *VersionInfo) GetBuildDeps() []*Module {
-	if m != nil {
-		return m.BuildDeps
-	}
-	return nil
-}
+func (m *VersionInfo) GetBuildDeps() []*Module { _ = "STUB: not implemented"; return nil }
 
-func (m *VersionInfo) GetCosmosSdkVersion() string {
-	if m != nil {
-		return m.CosmosSdkVersion
-	}
-	return ""
-}
+func (m *VersionInfo) GetCosmosSdkVersion() string { _ = "STUB: not implemented"; return "" }
 
 // Module is the type for VersionInfo
 type Module struct {
@@ -797,59 +563,31 @@ type Module struct {
 	Sum string `protobuf:"bytes,3,opt,name=sum,proto3" json:"sum,omitempty"`
 }
 
-func (m *Module) Reset()         { *m = Module{} }
-func (m *Module) String() string { return proto.CompactTextString(m) }
-func (*Module) ProtoMessage()    {}
-func (*Module) Descriptor() ([]byte, []int) {
-	return fileDescriptor_40c93fb3ef485c5d, []int{14}
-}
-func (m *Module) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Module) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *Module) String() string            { _ = "STUB: not implemented"; return "" }
+func (*Module) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Module) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Module) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Module) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Module.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Module) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Module.Merge(m, src)
-}
-func (m *Module) XXX_Size() int {
-	return m.Size()
-}
-func (m *Module) XXX_DiscardUnknown() {
-	xxx_messageInfo_Module.DiscardUnknown(m)
-}
+
+func (m *Module) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Module) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Module) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Module proto.InternalMessageInfo
 
-func (m *Module) GetPath() string {
-	if m != nil {
-		return m.Path
-	}
-	return ""
-}
+func (m *Module) GetPath() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Module) GetVersion() string {
-	if m != nil {
-		return m.Version
-	}
-	return ""
-}
+func (m *Module) GetVersion() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Module) GetSum() string {
-	if m != nil {
-		return m.Sum
-	}
-	return ""
-}
+func (m *Module) GetSum() string { _ = "STUB: not implemented"; return "" }
 
 func init() {
 	proto.RegisterType((*GetValidatorSetByHeightRequest)(nil), "cosmos.base.tendermint.v1beta1.GetValidatorSetByHeightRequest")
@@ -976,61 +714,38 @@ type serviceClient struct {
 }
 
 func NewServiceClient(cc grpc1.ClientConn) ServiceClient {
-	return &serviceClient{cc}
+	_ = "STUB: not implemented"
+	return *new(ServiceClient)
 }
 
 func (c *serviceClient) GetNodeInfo(ctx context.Context, in *GetNodeInfoRequest, opts ...grpc.CallOption) (*GetNodeInfoResponse, error) {
-	out := new(GetNodeInfoResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.tendermint.v1beta1.Service/GetNodeInfo", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *serviceClient) GetSyncing(ctx context.Context, in *GetSyncingRequest, opts ...grpc.CallOption) (*GetSyncingResponse, error) {
-	out := new(GetSyncingResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.tendermint.v1beta1.Service/GetSyncing", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *serviceClient) GetLatestBlock(ctx context.Context, in *GetLatestBlockRequest, opts ...grpc.CallOption) (*GetLatestBlockResponse, error) {
-	out := new(GetLatestBlockResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.tendermint.v1beta1.Service/GetLatestBlock", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *serviceClient) GetBlockByHeight(ctx context.Context, in *GetBlockByHeightRequest, opts ...grpc.CallOption) (*GetBlockByHeightResponse, error) {
-	out := new(GetBlockByHeightResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.tendermint.v1beta1.Service/GetBlockByHeight", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *serviceClient) GetLatestValidatorSet(ctx context.Context, in *GetLatestValidatorSetRequest, opts ...grpc.CallOption) (*GetLatestValidatorSetResponse, error) {
-	out := new(GetLatestValidatorSetResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.tendermint.v1beta1.Service/GetLatestValidatorSet", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *serviceClient) GetValidatorSetByHeight(ctx context.Context, in *GetValidatorSetByHeightRequest, opts ...grpc.CallOption) (*GetValidatorSetByHeightResponse, error) {
-	out := new(GetValidatorSetByHeightResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.tendermint.v1beta1.Service/GetValidatorSetByHeight", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ServiceServer is the server API for Service service.
@@ -1054,134 +769,65 @@ type UnimplementedServiceServer struct {
 }
 
 func (*UnimplementedServiceServer) GetNodeInfo(ctx context.Context, req *GetNodeInfoRequest) (*GetNodeInfoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetNodeInfo not implemented")
-}
-func (*UnimplementedServiceServer) GetSyncing(ctx context.Context, req *GetSyncingRequest) (*GetSyncingResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetSyncing not implemented")
-}
-func (*UnimplementedServiceServer) GetLatestBlock(ctx context.Context, req *GetLatestBlockRequest) (*GetLatestBlockResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLatestBlock not implemented")
-}
-func (*UnimplementedServiceServer) GetBlockByHeight(ctx context.Context, req *GetBlockByHeightRequest) (*GetBlockByHeightResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetBlockByHeight not implemented")
-}
-func (*UnimplementedServiceServer) GetLatestValidatorSet(ctx context.Context, req *GetLatestValidatorSetRequest) (*GetLatestValidatorSetResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetLatestValidatorSet not implemented")
-}
-func (*UnimplementedServiceServer) GetValidatorSetByHeight(ctx context.Context, req *GetValidatorSetByHeightRequest) (*GetValidatorSetByHeightResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetValidatorSetByHeight not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterServiceServer(s grpc1.Server, srv ServiceServer) {
-	s.RegisterService(&_Service_serviceDesc, srv)
+func (*UnimplementedServiceServer) GetSyncing(ctx context.Context, req *GetSyncingRequest) (*GetSyncingResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func (*UnimplementedServiceServer) GetLatestBlock(ctx context.Context, req *GetLatestBlockRequest) (*GetLatestBlockResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedServiceServer) GetBlockByHeight(ctx context.Context, req *GetBlockByHeightRequest) (*GetBlockByHeightResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedServiceServer) GetLatestValidatorSet(ctx context.Context, req *GetLatestValidatorSetRequest) (*GetLatestValidatorSetResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedServiceServer) GetValidatorSetByHeight(ctx context.Context, req *GetValidatorSetByHeightRequest) (*GetValidatorSetByHeightResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func RegisterServiceServer(s grpc1.Server, srv ServiceServer) { _ = "STUB: not implemented"; return }
 
 func _Service_GetNodeInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetNodeInfoRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).GetNodeInfo(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.tendermint.v1beta1.Service/GetNodeInfo",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GetNodeInfo(ctx, req.(*GetNodeInfoRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Service_GetSyncing_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetSyncingRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).GetSyncing(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.tendermint.v1beta1.Service/GetSyncing",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GetSyncing(ctx, req.(*GetSyncingRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Service_GetLatestBlock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLatestBlockRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).GetLatestBlock(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.tendermint.v1beta1.Service/GetLatestBlock",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GetLatestBlock(ctx, req.(*GetLatestBlockRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Service_GetBlockByHeight_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetBlockByHeightRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).GetBlockByHeight(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.tendermint.v1beta1.Service/GetBlockByHeight",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GetBlockByHeight(ctx, req.(*GetBlockByHeightRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Service_GetLatestValidatorSet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetLatestValidatorSetRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).GetLatestValidatorSet(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.tendermint.v1beta1.Service/GetLatestValidatorSet",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GetLatestValidatorSet(ctx, req.(*GetLatestValidatorSetRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Service_GetValidatorSetByHeight_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetValidatorSetByHeightRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ServiceServer).GetValidatorSetByHeight(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.tendermint.v1beta1.Service/GetValidatorSetByHeight",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ServiceServer).GetValidatorSetByHeight(ctx, req.(*GetValidatorSetByHeightRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Service_serviceDesc = grpc.ServiceDesc{
@@ -1218,2732 +864,303 @@ var _Service_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *GetValidatorSetByHeightRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetValidatorSetByHeightRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetValidatorSetByHeightRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Height != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Height))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetValidatorSetByHeightResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetValidatorSetByHeightResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetValidatorSetByHeightResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Validators) > 0 {
-		for iNdEx := len(m.Validators) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Validators[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.BlockHeight != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.BlockHeight))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLatestValidatorSetRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetLatestValidatorSetRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLatestValidatorSetRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLatestValidatorSetResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetLatestValidatorSetResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLatestValidatorSetResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Validators) > 0 {
-		for iNdEx := len(m.Validators) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Validators[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.BlockHeight != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.BlockHeight))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *Validator) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Validator) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Validator) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Validator) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Validator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ProposerPriority != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.ProposerPriority))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.VotingPower != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.VotingPower))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.PubKey != nil {
-		{
-			size, err := m.PubKey.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetBlockByHeightRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetBlockByHeightRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetBlockByHeightRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Height != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Height))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetBlockByHeightResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetBlockByHeightResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetBlockByHeightResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Block != nil {
-		{
-			size, err := m.Block.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.BlockId != nil {
-		{
-			size, err := m.BlockId.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLatestBlockRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetLatestBlockRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLatestBlockRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLatestBlockResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetLatestBlockResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetLatestBlockResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Block != nil {
-		{
-			size, err := m.Block.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.BlockId != nil {
-		{
-			size, err := m.BlockId.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetSyncingRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetSyncingRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetSyncingRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetSyncingResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetSyncingResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetSyncingResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Syncing {
-		i--
-		if m.Syncing {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetNodeInfoRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetNodeInfoRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetNodeInfoRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetNodeInfoResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetNodeInfoResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetNodeInfoResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ApplicationVersion != nil {
-		{
-			size, err := m.ApplicationVersion.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.DefaultNodeInfo != nil {
-		{
-			size, err := m.DefaultNodeInfo.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *VersionInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *VersionInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *VersionInfo) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *VersionInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.CosmosSdkVersion) > 0 {
-		i -= len(m.CosmosSdkVersion)
-		copy(dAtA[i:], m.CosmosSdkVersion)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.CosmosSdkVersion)))
-		i--
-		dAtA[i] = 0x42
-	}
-	if len(m.BuildDeps) > 0 {
-		for iNdEx := len(m.BuildDeps) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.BuildDeps[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x3a
-		}
-	}
-	if len(m.GoVersion) > 0 {
-		i -= len(m.GoVersion)
-		copy(dAtA[i:], m.GoVersion)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.GoVersion)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if len(m.BuildTags) > 0 {
-		i -= len(m.BuildTags)
-		copy(dAtA[i:], m.BuildTags)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.BuildTags)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.GitCommit) > 0 {
-		i -= len(m.GitCommit)
-		copy(dAtA[i:], m.GitCommit)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.GitCommit)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Version) > 0 {
-		i -= len(m.Version)
-		copy(dAtA[i:], m.Version)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Version)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.AppName) > 0 {
-		i -= len(m.AppName)
-		copy(dAtA[i:], m.AppName)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.AppName)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *Module) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Module) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Module) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Module) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Module) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Sum) > 0 {
-		i -= len(m.Sum)
-		copy(dAtA[i:], m.Sum)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Sum)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Version) > 0 {
-		i -= len(m.Version)
-		copy(dAtA[i:], m.Version)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Version)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Path) > 0 {
-		i -= len(m.Path)
-		copy(dAtA[i:], m.Path)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Path)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
-	offset -= sovQuery(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *GetValidatorSetByHeightRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Height != 0 {
-		n += 1 + sovQuery(uint64(m.Height))
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func encodeVarintQuery(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetValidatorSetByHeightResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BlockHeight != 0 {
-		n += 1 + sovQuery(uint64(m.BlockHeight))
-	}
-	if len(m.Validators) > 0 {
-		for _, e := range m.Validators {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *GetValidatorSetByHeightRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetLatestValidatorSetRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *GetValidatorSetByHeightResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetLatestValidatorSetResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BlockHeight != 0 {
-		n += 1 + sovQuery(uint64(m.BlockHeight))
-	}
-	if len(m.Validators) > 0 {
-		for _, e := range m.Validators {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *GetLatestValidatorSetRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *Validator) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.PubKey != nil {
-		l = m.PubKey.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.VotingPower != 0 {
-		n += 1 + sovQuery(uint64(m.VotingPower))
-	}
-	if m.ProposerPriority != 0 {
-		n += 1 + sovQuery(uint64(m.ProposerPriority))
-	}
-	return n
-}
+func (m *GetLatestValidatorSetResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetBlockByHeightRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Height != 0 {
-		n += 1 + sovQuery(uint64(m.Height))
-	}
-	return n
-}
+func (m *Validator) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetBlockByHeightResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BlockId != nil {
-		l = m.BlockId.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.Block != nil {
-		l = m.Block.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *GetBlockByHeightRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetLatestBlockRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *GetBlockByHeightResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetLatestBlockResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BlockId != nil {
-		l = m.BlockId.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.Block != nil {
-		l = m.Block.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *GetLatestBlockRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetSyncingRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *GetLatestBlockResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetSyncingResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Syncing {
-		n += 2
-	}
-	return n
-}
+func (m *GetSyncingRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetNodeInfoRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *GetSyncingResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetNodeInfoResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.DefaultNodeInfo != nil {
-		l = m.DefaultNodeInfo.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.ApplicationVersion != nil {
-		l = m.ApplicationVersion.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *GetNodeInfoRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *VersionInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.AppName)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.Version)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.GitCommit)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.BuildTags)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.GoVersion)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if len(m.BuildDeps) > 0 {
-		for _, e := range m.BuildDeps {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	l = len(m.CosmosSdkVersion)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *GetNodeInfoResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *Module) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Path)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.Version)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.Sum)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *VersionInfo) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovQuery(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozQuery(x uint64) (n int) {
-	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
+func (m *Module) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sovQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
 func (m *GetValidatorSetByHeightRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetValidatorSetByHeightRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetValidatorSetByHeightRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
-			}
-			m.Height = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Height |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageRequest{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetValidatorSetByHeightResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetValidatorSetByHeightResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetValidatorSetByHeightResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BlockHeight", wireType)
-			}
-			m.BlockHeight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BlockHeight |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validators", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Validators = append(m.Validators, &Validator{})
-			if err := m.Validators[len(m.Validators)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageResponse{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetLatestValidatorSetRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetLatestValidatorSetRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetLatestValidatorSetRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageRequest{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetLatestValidatorSetResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetLatestValidatorSetResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetLatestValidatorSetResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BlockHeight", wireType)
-			}
-			m.BlockHeight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BlockHeight |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Validators", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Validators = append(m.Validators, &Validator{})
-			if err := m.Validators[len(m.Validators)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageResponse{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *Validator) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Validator: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Validator: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PubKey", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.PubKey == nil {
-				m.PubKey = &types.Any{}
-			}
-			if err := m.PubKey.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VotingPower", wireType)
-			}
-			m.VotingPower = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.VotingPower |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProposerPriority", wireType)
-			}
-			m.ProposerPriority = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ProposerPriority |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *Validator) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetBlockByHeightRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetBlockByHeightRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetBlockByHeightRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
-			}
-			m.Height = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Height |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetBlockByHeightResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetBlockByHeightResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetBlockByHeightResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BlockId", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BlockId == nil {
-				m.BlockId = &types1.BlockID{}
-			}
-			if err := m.BlockId.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Block", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Block == nil {
-				m.Block = &types1.Block{}
-			}
-			if err := m.Block.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *GetLatestBlockRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetLatestBlockRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetLatestBlockRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *GetLatestBlockRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetLatestBlockResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetLatestBlockResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetLatestBlockResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BlockId", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BlockId == nil {
-				m.BlockId = &types1.BlockID{}
-			}
-			if err := m.BlockId.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Block", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Block == nil {
-				m.Block = &types1.Block{}
-			}
-			if err := m.Block.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *GetSyncingRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetSyncingRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetSyncingRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetSyncingResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetSyncingResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetSyncingResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Syncing", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Syncing = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *GetSyncingRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetNodeInfoRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetNodeInfoRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetNodeInfoRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *GetSyncingResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GetNodeInfoResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetNodeInfoResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetNodeInfoResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DefaultNodeInfo", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.DefaultNodeInfo == nil {
-				m.DefaultNodeInfo = &p2p.NodeInfo{}
-			}
-			if err := m.DefaultNodeInfo.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ApplicationVersion", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ApplicationVersion == nil {
-				m.ApplicationVersion = &VersionInfo{}
-			}
-			if err := m.ApplicationVersion.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *GetNodeInfoRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *VersionInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: VersionInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: VersionInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AppName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AppName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Version = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GitCommit", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GitCommit = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BuildTags", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BuildTags = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GoVersion", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GoVersion = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BuildDeps", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.BuildDeps = append(m.BuildDeps, &Module{})
-			if err := m.BuildDeps[len(m.BuildDeps)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 8:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CosmosSdkVersion", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CosmosSdkVersion = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *GetNodeInfoResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Module) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Module: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Module: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Path = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Version = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Sum", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Sum = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *VersionInfo) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipQuery(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthQuery
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupQuery
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthQuery
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *Module) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipQuery(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthQuery        = fmt.Errorf("proto: negative length found during unmarshaling")

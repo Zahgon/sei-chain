@@ -3,8 +3,6 @@ package conn
 import (
 	"context"
 	"errors"
-	"fmt"
-	"math"
 	"net/netip"
 	"sync/atomic"
 	"time"
@@ -14,9 +12,7 @@ import (
 	"golang.org/x/time/rate"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p/pb"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/protoutils"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/scope"
 )
 
 var logger = seilog.NewLogger("tendermint", "internal", "p2p", "conn")
@@ -52,33 +48,16 @@ type ChannelDescriptorT[T gogoproto.Message] struct {
 }
 
 func (chDesc ChannelDescriptorT[T]) ToGeneric() ChannelDescriptor {
-	return ChannelDescriptor{
-		ID:                  chDesc.ID,
-		Priority:            chDesc.Priority,
-		MessageType:         chDesc.MessageType,
-		PreDecode:           chDesc.PreDecode,
-		SendQueueCapacity:   chDesc.SendQueueCapacity,
-		RecvMessageCapacity: chDesc.RecvMessageCapacity,
-		RecvBufferCapacity:  chDesc.RecvBufferCapacity,
-		Name:                chDesc.Name,
-	}
+	_ = "STUB: not implemented"
+	return *new(ChannelDescriptor)
 }
 
 func (chDesc ChannelDescriptorT[T]) withDefaults() ChannelDescriptorT[T] {
-	if chDesc.Priority <= 0 {
-		chDesc.Priority = 1
-	}
-	if chDesc.SendQueueCapacity == 0 {
-		chDesc.SendQueueCapacity = 1
-	}
-	if chDesc.RecvBufferCapacity == 0 {
-		chDesc.RecvBufferCapacity = 4096
-	}
-	if chDesc.RecvMessageCapacity == 0 {
-		chDesc.RecvMessageCapacity = 22020096 // 21MB
-	}
-	return chDesc
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// 21MB
 
 var errPongTimeout = errors.New("pong timeout")
 
@@ -121,32 +100,27 @@ type MConnConfig struct {
 }
 
 func (c *MConnConfig) getSendRateLimit() rate.Limit {
-	if c.SendRate <= 0 {
-		return rate.Inf
-	}
-	return rate.Limit(c.SendRate)
+	_ = "STUB: not implemented"
+	return *new(rate.Limit)
 }
 
 func (c *MConnConfig) getRecvRateLimit() rate.Limit {
-	if c.RecvRate <= 0 {
-		return rate.Inf
-	}
-	return rate.Limit(c.RecvRate)
+	_ = "STUB: not implemented"
+	return *new(rate.Limit)
 }
 
 // DefaultMConnConfig returns the default config.
 func DefaultMConnConfig() MConnConfig {
-	return MConnConfig{
-		// TODO(gprusak): RecvRate should be strictly larger than SendRate,
-		// so that under maximal load the backpressure is at the sender.
-		SendRate:                512000, // 500KB/s
-		RecvRate:                512000, // 500KB/s
-		MaxPacketMsgPayloadSize: 1400,   // mirrors MaxPacketMsgPayloadSize from config/config.go
-		FlushThrottle:           100 * time.Millisecond,
-		PingInterval:            10 * time.Second,
-		PongTimeout:             10 * time.Second,
-	}
+	_ = "STUB: not implemented"
+
+	// TODO(gprusak): RecvRate should be strictly larger than SendRate,
+	// so that under maximal load the backpressure is at the sender.
+	return *new(MConnConfig)
 }
+
+// 500KB/s
+// 500KB/s
+// mirrors MaxPacketMsgPayloadSize from config/config.go
 
 type sendQueue struct {
 	ping  bool
@@ -156,26 +130,9 @@ type sendQueue struct {
 	channels map[ChannelID]*sendChannel
 }
 
-func newSendQueue(chDescs []*ChannelDescriptor) *sendQueue {
-	q := &sendQueue{
-		channels: map[ChannelID]*sendChannel{},
-	}
-	for _, desc := range chDescs {
-		desc := desc.withDefaults()
-		q.channels[desc.ID] = &sendChannel{
-			desc:  desc,
-			queue: utils.NewRingBuf[*[]byte](desc.SendQueueCapacity),
-		}
-	}
-	return q
-}
+func newSendQueue(chDescs []*ChannelDescriptor) *sendQueue { _ = "STUB: not implemented"; return nil }
 
-func (q *sendQueue) setFlush(t time.Time) {
-	if old, ok := q.flush.Get(); ok && old.Before(t) {
-		return
-	}
-	q.flush = utils.Some(t)
-}
+func (q *sendQueue) setFlush(t time.Time) { _ = "STUB: not implemented"; return }
 
 // NewMConnection wraps net.Conn and creates multiplex connection with a config
 func NewMConnection(
@@ -183,273 +140,100 @@ func NewMConnection(
 	chDescs []*ChannelDescriptor,
 	config MConnConfig,
 ) *MConnection {
-	return &MConnection{
-		conn:      conn,
-		sendQueue: utils.NewWatch(newSendQueue(chDescs)),
-		recvCh:    make(chan mConnMessage),
-		recvPong:  utils.NewMutex(utils.Alloc(utils.NewAtomicSend(false))),
-		config:    config,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (c *MConnection) Run(ctx context.Context) error {
-	return scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		s.SpawnNamed("pingRoutine", func() error { return c.pingRoutine(ctx) })
-		s.SpawnNamed("sendRoutine", func() error { return c.sendRoutine(ctx) })
-		s.SpawnNamed("recvRoutine", func() error { return c.recvRoutine(ctx) })
-		s.SpawnNamed("statsRoutine", func() error { return c.statsRoutine(ctx) })
-		return nil
-	})
-}
+func (c *MConnection) Run(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-func (c *MConnection) LocalAddr() netip.AddrPort  { return c.conn.LocalAddr() }
-func (c *MConnection) RemoteAddr() netip.AddrPort { return c.conn.RemoteAddr() }
-func (c *MConnection) Close()                     { c.conn.Close() }
+func (c *MConnection) LocalAddr() netip.AddrPort {
+	_ = "STUB: not implemented"
+	return *new(netip.AddrPort)
+}
+func (c *MConnection) RemoteAddr() netip.AddrPort {
+	_ = "STUB: not implemented"
+	return *new(netip.AddrPort)
+}
+func (c *MConnection) Close() { _ = "STUB: not implemented"; return }
 
 // String returns a safe, concise representation of the connection.
 // This prevents the race caused by slog/fmt reflecting over mutable fields
 // (such as recvPong) when MConnection is passed as a log value.
-func (c *MConnection) String() string {
-	return fmt.Sprintf("MConnection{%s->%s}", c.conn.LocalAddr(), c.conn.RemoteAddr())
-}
+func (c *MConnection) String() string { _ = "STUB: not implemented"; return "" }
 
 // Queues a message to be sent.
 // WARNING: takes ownership of msgBytes
 // TODO(gprusak): fix the ownership
 func (c *MConnection) Send(ctx context.Context, chID ChannelID, msgBytes []byte) error {
-	logger.Debug("Send", "channel", chID, "conn", c, "msgBytes", msgBytes)
-	for q, ctrl := range c.sendQueue.Lock() {
-		ch, ok := q.channels[chID]
-		if !ok {
-			return errBadChannel{fmt.Errorf("unknown channel %X", chID)}
-		}
-		if err := ctrl.WaitUntil(ctx, func() bool { return !ch.queue.Full() }); err != nil {
-			return err
-		}
-		ch.queue.PushBack(&msgBytes)
-		ctrl.Updated()
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Recv .
 func (c *MConnection) Recv(ctx context.Context) (ChannelID, []byte, error) {
-	m, err := utils.Recv(ctx, c.recvCh)
-	return m.channelID, m.payload, err
+	_ = "STUB: not implemented"
+	return *new(ChannelID), nil, nil
 }
 
 func (c *MConnection) recvPongSubscribe() utils.AtomicRecv[bool] {
-	for recvPong := range c.recvPong.Lock() {
-		return recvPong.Subscribe()
-	}
-	panic("unreachable")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (c *MConnection) pingRoutine(ctx context.Context) error {
-	for {
-		// Send ping.
-		for q, ctrl := range c.sendQueue.Lock() {
-			q.ping = true
-			ctrl.Updated()
-		}
-		// Wait for pong.
-		if err := utils.WithTimeout(ctx, c.config.PongTimeout, func(ctx context.Context) error {
-			_, err := c.recvPongSubscribe().Wait(ctx, func(gotPong bool) bool { return gotPong })
-			return err
-		}); err != nil {
-			if ctx.Err() != nil {
-				return ctx.Err()
-			}
-			return errPongTimeout
-		}
-		for recvPong := range c.recvPong.Lock() {
-			recvPong.Store(false)
-		}
-		// Sleep.
-		if err := utils.Sleep(ctx, c.config.PingInterval); err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
+
+	// Send ping.
+	return nil
 }
 
+// Wait for pong.
+
+// Sleep.
+
 func (c *MConnection) statsRoutine(ctx context.Context) error {
-	const updateStats = 2 * time.Second
-	for {
-		if err := utils.Sleep(ctx, updateStats); err != nil {
-			return err
-		}
-		for q := range c.sendQueue.Lock() {
-			for _, ch := range q.channels {
-				// Exponential decay of stats.
-				// TODO(gprusak): This is not atomic at all.
-				ch.recentlySent.Store(uint64(float64(ch.recentlySent.Load()) * 0.8))
-			}
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Exponential decay of stats.
+// TODO(gprusak): This is not atomic at all.
 
 // popSendQueue pops a message from the send queue.
 // Returns nil,nil if the connection should be flushed.
 func (c *MConnection) popSendQueue(ctx context.Context) (*pb.Packet, error) {
-	for q, ctrl := range c.sendQueue.Lock() {
-		for {
-			if q.ping {
-				q.ping = false
-				q.setFlush(time.Now())
-				return &pb.Packet{
-					Sum: &pb.Packet_PacketPing{
-						PacketPing: &pb.PacketPing{},
-					},
-				}, nil
-			}
-			if q.pong {
-				q.pong = false
-				q.setFlush(time.Now())
-				return &pb.Packet{
-					Sum: &pb.Packet_PacketPong{
-						PacketPong: &pb.PacketPong{},
-					},
-				}, nil
-			}
-			// Choose a channel to create a PacketMsg from.
-			// The chosen channel will be the one whose recentlySent/priority is the least.
-			leastRatio := float32(math.Inf(1))
-			var leastChannel *sendChannel
-			for _, channel := range q.channels {
-				if channel.queue.Len() == 0 {
-					continue
-				}
-				if ratio := channel.ratio(); ratio < leastRatio {
-					leastRatio = ratio
-					leastChannel = channel
-				}
-			}
-			if leastChannel != nil {
-				q.setFlush(time.Now().Add(c.config.FlushThrottle))
-				msg := leastChannel.popMsg(c.config.MaxPacketMsgPayloadSize)
-				ctrl.Updated()
-				leastChannel.recentlySent.Add(uint64(len(msg.Data)))
-				return &pb.Packet{
-					Sum: &pb.Packet_PacketMsg{
-						PacketMsg: msg,
-					},
-				}, nil
-			}
-			if err := utils.WithDeadline(ctx, q.flush, func(ctx context.Context) error {
-				return ctrl.Wait(ctx)
-			}); err != nil {
-				if ctx.Err() != nil {
-					return nil, ctx.Err()
-				}
-				// It is flush time!
-				q.flush = utils.None[time.Time]()
-				return nil, nil
-			}
-		}
-	}
-	panic("unreachable")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Choose a channel to create a PacketMsg from.
+// The chosen channel will be the one whose recentlySent/priority is the least.
+
+// It is flush time!
 
 // sendRoutine polls for packets to send from channels.
 func (c *MConnection) sendRoutine(ctx context.Context) (err error) {
-	maxPacketMsgSize := c.maxPacketMsgSize()
-	limiter := rate.NewLimiter(c.config.getSendRateLimit(), int(max(maxPacketMsgSize, uint64(c.config.SendRate)))) //nolint:gosec // burst size is bounded by config values; no overflow risk
-	for {
-		msg, err := c.popSendQueue(ctx)
-		if err != nil {
-			return fmt.Errorf("popSendQueue(): %w", err)
-		}
-		if msg != nil {
-			// Marshalling is expected to always succeed.
-			msgBytes := protoutils.Marshal(msg)
-			if err := WriteSizedMsg(ctx, c.conn, msgBytes); err != nil {
-				return fmt.Errorf("protoWriter.WriteMsg(): %w", err)
-			}
-			// Here we ignore the fact that writing sized msg actually writes extra bytes to express size.
-			if err := limiter.WaitN(ctx, len(msgBytes)); err != nil {
-				return err
-			}
-		} else {
-			logger.Debug("Flush", "conn", c)
-			if err := c.conn.Flush(ctx); err != nil {
-				return fmt.Errorf("bufWriter.Flush(): %w", err)
-			}
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+//nolint:gosec // burst size is bounded by config values; no overflow risk
+
+// Marshalling is expected to always succeed.
+
+// Here we ignore the fact that writing sized msg actually writes extra bytes to express size.
 
 // recvRoutine receives messages and pushes them to recvCh.
 // It also handles ping/pong messages.
 func (c *MConnection) recvRoutine(ctx context.Context) (err error) {
-	maxPacketMsgSize := c.maxPacketMsgSize()
-	limiter := rate.NewLimiter(c.config.getRecvRateLimit(), int(max(maxPacketMsgSize, uint64(c.config.RecvRate)))) //nolint:gosec // burst size is bounded by config values; no overflow risk
-	channels := map[ChannelID]*recvChannel{}
-	for q := range c.sendQueue.Lock() {
-		for _, ch := range q.channels {
-			channels[ch.desc.ID] = newRecvChannel(ch.desc)
-		}
-	}
-
-	for {
-		msg, err := ReadSizedMsg(ctx, c.conn, maxPacketMsgSize)
-		if err != nil {
-			return fmt.Errorf("ReadSizedMsg(): %w", err)
-		}
-		if err := limiter.WaitN(ctx, len(msg)); err != nil {
-			return err
-		}
-		packet, err := protoutils.Unmarshal[*pb.Packet](msg)
-		if err != nil {
-			return errBadEncoding{fmt.Errorf("protoutils.Unmarshal(): %w", err)}
-		}
-		switch p := packet.Sum.(type) {
-		case *pb.Packet_PacketPing:
-			for q, ctrl := range c.sendQueue.Lock() {
-				q.pong = true
-				ctrl.Updated()
-			}
-		case *pb.Packet_PacketPong:
-			for recvPong := range c.recvPong.Lock() {
-				recvPong.Store(true)
-			}
-		case *pb.Packet_PacketMsg:
-			channelID, castOk := utils.SafeCast[ChannelID](p.PacketMsg.ChannelId)
-			ch, ok := channels[channelID]
-			if !castOk || !ok {
-				return errBadChannel{fmt.Errorf("unknown channel %X", p.PacketMsg.ChannelId)}
-			}
-			logger.Debug("Read PacketMsg", "conn", c, "packet", packet)
-			msgBytes, err := ch.pushMsg(p.PacketMsg)
-			if err != nil {
-				return fmt.Errorf("recvPacketMsg(): %v", err)
-			}
-			if msgBytes != nil {
-				logger.Debug("Received bytes", "chID", channelID, "msgBytes", msgBytes)
-				if err := utils.Send(ctx, c.recvCh, mConnMessage{
-					channelID: channelID,
-					payload:   msgBytes,
-				}); err != nil {
-					return err
-				}
-			}
-		default:
-			return fmt.Errorf("unknown message type")
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+//nolint:gosec // burst size is bounded by config values; no overflow risk
 
 // maxPacketMsgSize returns a maximum size of PacketMsg
-func (c *MConnection) maxPacketMsgSize() uint64 {
-	return uint64(len(protoutils.Marshal(&pb.Packet{
-		Sum: &pb.Packet_PacketMsg{
-			PacketMsg: &pb.PacketMsg{
-				ChannelId: 0x01,
-				Eof:       true,
-				Data:      make([]byte, c.config.MaxPacketMsgPayloadSize),
-			},
-		},
-	})))
-}
+func (c *MConnection) maxPacketMsgSize() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type sendChannel struct {
 	desc         ChannelDescriptor
@@ -457,50 +241,23 @@ type sendChannel struct {
 	queue        utils.RingBuf[*[]byte]
 }
 
-func (ch *sendChannel) ratio() float32 {
-	return float32(ch.recentlySent.Load()) / float32(ch.desc.Priority)
-}
+func (ch *sendChannel) ratio() float32 { _ = "STUB: not implemented"; return 0 }
 
 // Creates a new PacketMsg to send.
 // Not goroutine-safe
-func (ch *sendChannel) popMsg(maxPayload int) *pb.PacketMsg {
-	payload := ch.queue.Get(0)
-	packet := &pb.PacketMsg{ChannelId: int32(ch.desc.ID)}
-	if len(*payload) <= maxPayload {
-		packet.Eof = true
-		packet.Data = *ch.queue.PopFront()
-	} else {
-		packet.Eof = false
-		packet.Data = (*payload)[:maxPayload]
-		*payload = (*payload)[maxPayload:]
-	}
-	return packet
-}
+func (ch *sendChannel) popMsg(maxPayload int) *pb.PacketMsg { _ = "STUB: not implemented"; return nil }
 
 type recvChannel struct {
 	desc ChannelDescriptor
 	buf  []byte
 }
 
-func newRecvChannel(desc ChannelDescriptor) *recvChannel {
-	return &recvChannel{
-		desc: desc.withDefaults(),
-		buf:  make([]byte, 0, desc.RecvBufferCapacity),
-	}
-}
+func newRecvChannel(desc ChannelDescriptor) *recvChannel { _ = "STUB: not implemented"; return nil }
 
 // Handles incoming PacketMsgs. It returns a message bytes if message is
 // complete, which is owned by the caller and will not be modified.
 // Not goroutine-safe
 func (ch *recvChannel) pushMsg(packet *pb.PacketMsg) ([]byte, error) {
-	if got, wantMax := len(ch.buf)+len(packet.Data), ch.desc.RecvMessageCapacity; got > wantMax {
-		return nil, fmt.Errorf("received message exceeds available capacity: %v < %v", wantMax, got)
-	}
-	ch.buf = append(ch.buf, packet.Data...)
-	if packet.Eof {
-		msgBytes := ch.buf
-		ch.buf = make([]byte, 0, ch.desc.RecvBufferCapacity)
-		return msgBytes, nil
-	}
+	_ = "STUB: not implemented"
 	return nil, nil
 }

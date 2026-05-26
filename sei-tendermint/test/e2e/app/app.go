@@ -1,22 +1,10 @@
 package app
 
 import (
-	"bytes"
 	"context"
-	"encoding/base64"
-	"errors"
-	"fmt"
-	"path/filepath"
-	"sort"
-	"strconv"
 	"sync"
-	"time"
 
-	"github.com/sei-protocol/sei-chain/sei-tendermint/abci/example/code"
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
 	"github.com/sei-protocol/seilog"
 )
 
@@ -83,315 +71,111 @@ type Config struct {
 	FinalizeBlockDelayMS   uint64 `toml:"finalize_block_delay_ms"`
 }
 
-func DefaultConfig(dir string) *Config {
-	return &Config{
-		PersistInterval:  1,
-		SnapshotInterval: 100,
-		Dir:              dir,
-	}
-}
+func DefaultConfig(dir string) *Config { _ = "STUB: not implemented"; return nil }
 
 // NewApplication creates the application.
-func NewApplication(cfg *Config) (*Application, error) {
-	state, err := NewState(cfg.Dir, cfg.PersistInterval)
-	if err != nil {
-		return nil, err
-	}
-	snapshots, err := NewSnapshotStore(filepath.Join(cfg.Dir, "snapshots"))
-	if err != nil {
-		return nil, err
-	}
-
-	return &Application{
-		state:     state,
-		snapshots: snapshots,
-		cfg:       cfg,
-	}, nil
-}
+func NewApplication(cfg *Config) (*Application, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Info implements ABCI.
 func (app *Application) Info(_ context.Context, req *abci.RequestInfo) (*abci.ResponseInfo, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	return &abci.ResponseInfo{
-		Version:          version.ABCIVersion,
-		AppVersion:       1,
-		LastBlockHeight:  int64(app.state.Height), //nolint:gosec // Height is a non-negative block height
-		LastBlockAppHash: app.state.Hash,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // Height is a non-negative block height
 
 // Info implements ABCI.
 func (app *Application) InitChain(_ context.Context, req *abci.RequestInitChain) (*abci.ResponseInitChain, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	var err error
-	app.state.initialHeight = uint64(req.InitialHeight) //nolint:gosec // InitialHeight is a validated non-negative value
-	if len(req.AppStateBytes) > 0 {
-		err = app.state.Import(0, req.AppStateBytes)
-		if err != nil {
-			panic(err)
-		}
-	}
-	resp := &abci.ResponseInitChain{
-		AppHash: app.state.Hash,
-	}
-	if resp.Validators, err = app.validatorUpdates(0); err != nil {
-		panic(err)
-	}
-	return resp, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // InitialHeight is a validated non-negative value
 
 // CheckTx implements ABCI.
 func (app *Application) CheckTx(_ context.Context, req *abci.RequestCheckTxV2) *abci.ResponseCheckTxV2 {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	_, _, err := parseTx(req.Tx)
-	if err != nil {
-		return &abci.ResponseCheckTxV2{
-			ResponseCheckTx: &abci.ResponseCheckTx{Code: code.CodeTypeEncodingError},
-		}
-	}
-
-	if app.cfg.CheckTxDelayMS != 0 {
-		time.Sleep(time.Duration(app.cfg.CheckTxDelayMS) * time.Millisecond) //nolint:gosec // CheckTxDelayMS is a small test config value
-	}
-
-	return &abci.ResponseCheckTxV2{
-		ResponseCheckTx: &abci.ResponseCheckTx{Code: code.CodeTypeOK, GasWanted: 1},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+//nolint:gosec // CheckTxDelayMS is a small test config value
 
 // FinalizeBlock implements ABCI.
 func (app *Application) FinalizeBlock(_ context.Context, req *abci.RequestFinalizeBlock) (*abci.ResponseFinalizeBlock, error) {
-	var txs = make([]*abci.ExecTxResult, len(req.Txs))
-
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	for i, tx := range req.Txs {
-		key, value, err := parseTx(tx)
-		if err != nil {
-			panic(err) // shouldn't happen since we verified it in CheckTx
-		}
-		app.state.Set(key, value)
-
-		txs[i] = &abci.ExecTxResult{Code: code.CodeTypeOK}
-	}
-
-	valUpdates, err := app.validatorUpdates(uint64(req.Header.Height)) //nolint:gosec // Height is a non-negative block height
-	if err != nil {
-		panic(err)
-	}
-
-	if app.cfg.FinalizeBlockDelayMS != 0 {
-		time.Sleep(time.Duration(app.cfg.FinalizeBlockDelayMS) * time.Millisecond) //nolint:gosec // FinalizeBlockDelayMS is a small config value
-	}
-
-	return &abci.ResponseFinalizeBlock{
-		TxResults:        txs,
-		ValidatorUpdates: valUpdates,
-		AppHash:          app.state.Finalize(),
-		Events: []abci.Event{
-			{
-				Type: "val_updates",
-				Attributes: []abci.EventAttribute{
-					{
-						Key:   []byte("size"),
-						Value: []byte(strconv.Itoa(valUpdates.Len())),
-					},
-					{
-						Key:   []byte("height"),
-						Value: []byte(strconv.FormatInt(req.Header.Height, 10)),
-					},
-				},
-			},
-		},
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// shouldn't happen since we verified it in CheckTx
+
+//nolint:gosec // Height is a non-negative block height
+
+//nolint:gosec // FinalizeBlockDelayMS is a small config value
 
 // Commit implements ABCI.
 func (app *Application) Commit(_ context.Context) (*abci.ResponseCommit, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	height, err := app.state.Commit()
-	if err != nil {
-		panic(err)
-	}
-	if app.cfg.SnapshotInterval > 0 && height%app.cfg.SnapshotInterval == 0 {
-		snapshot, err := app.snapshots.Create(app.state)
-		if err != nil {
-			panic(err)
-		}
-		logger.Info("created state sync snapshot", "height", snapshot.Height)
-		err = app.snapshots.Prune(maxSnapshotCount)
-		if err != nil {
-			logger.Error("failed to prune snapshots", "err", err)
-		}
-	}
-	retainHeight := int64(0)
-	if app.cfg.RetainBlocks > 0 {
-		retainHeight = int64(height - app.cfg.RetainBlocks + 1) //nolint:gosec // height > RetainBlocks when RetainBlocks > 0 in steady state
-	}
-	return &abci.ResponseCommit{
-		RetainHeight: retainHeight,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // height > RetainBlocks when RetainBlocks > 0 in steady state
 
 // Query implements ABCI.
 func (app *Application) Query(_ context.Context, req *abci.RequestQuery) (*abci.ResponseQuery, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	return &abci.ResponseQuery{
-		Height: int64(app.state.Height), //nolint:gosec // Height is a non-negative block height
-		Key:    req.Data,
-		Value:  []byte(app.state.Get(string(req.Data))),
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // Height is a non-negative block height
 
 // ListSnapshots implements ABCI.
 func (app *Application) ListSnapshots(_ context.Context, req *abci.RequestListSnapshots) (*abci.ResponseListSnapshots, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	snapshots, err := app.snapshots.List()
-	if err != nil {
-		panic(err)
-	}
-	return &abci.ResponseListSnapshots{Snapshots: snapshots}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // LoadSnapshotChunk implements ABCI.
 func (app *Application) LoadSnapshotChunk(_ context.Context, req *abci.RequestLoadSnapshotChunk) (*abci.ResponseLoadSnapshotChunk, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	chunk, err := app.snapshots.LoadChunk(req.Height, req.Format, req.Chunk)
-	if err != nil {
-		panic(err)
-	}
-	return &abci.ResponseLoadSnapshotChunk{Chunk: chunk}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // OfferSnapshot implements ABCI.
 func (app *Application) OfferSnapshot(_ context.Context, req *abci.RequestOfferSnapshot) (*abci.ResponseOfferSnapshot, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	if app.restoreSnapshot != nil {
-		panic("A snapshot is already being restored")
-	}
-	app.restoreSnapshot = req.Snapshot
-	app.restoreChunks = [][]byte{}
-	return &abci.ResponseOfferSnapshot{Result: abci.ResponseOfferSnapshot_ACCEPT}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ApplySnapshotChunk implements ABCI.
 func (app *Application) ApplySnapshotChunk(_ context.Context, req *abci.RequestApplySnapshotChunk) (*abci.ResponseApplySnapshotChunk, error) {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-
-	if app.restoreSnapshot == nil {
-		panic("No restore in progress")
-	}
-	app.restoreChunks = append(app.restoreChunks, req.Chunk)
-	if len(app.restoreChunks) == int(app.restoreSnapshot.Chunks) { //nolint:gosec // Chunks is a small snapshot chunk count
-		var totalSize int
-		for _, chunk := range app.restoreChunks {
-			totalSize += len(chunk)
-		}
-		bz := make([]byte, 0, totalSize)
-		for _, chunk := range app.restoreChunks {
-			bz = append(bz, chunk...)
-		}
-		err := app.state.Import(app.restoreSnapshot.Height, bz)
-		if err != nil {
-			panic(err)
-		}
-		app.restoreSnapshot = nil
-		app.restoreChunks = nil
-	}
-	return &abci.ResponseApplySnapshotChunk{Result: abci.ResponseApplySnapshotChunk_ACCEPT}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // Chunks is a small snapshot chunk count
 
 // ProcessProposal implements part of the Application interface.
 // It accepts any proposal that does not contain a malformed transaction.
 func (app *Application) ProcessProposal(_ context.Context, req *abci.RequestProcessProposal) (*abci.ResponseProcessProposal, error) {
-	for _, tx := range req.Txs {
-		_, _, err := parseTx(tx)
-		if err != nil {
-			logger.Error("malformed transaction in ProcessProposal", "len-bytes", len(tx), "err", err)
-			logger.Debug("malformed transaction in ProcessProposal", "tx", tx, "err", err)
-			return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_REJECT}, nil
-		}
-	}
-
-	if app.cfg.ProcessProposalDelayMS != 0 {
-		time.Sleep(time.Duration(app.cfg.ProcessProposalDelayMS) * time.Millisecond) //nolint:gosec // ProcessProposalDelayMS is a small test config value
-	}
-
-	return &abci.ResponseProcessProposal{Status: abci.ResponseProcessProposal_ACCEPT}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (app *Application) CanRollback() bool {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	return app.state.CanRollback()
-}
+//nolint:gosec // ProcessProposalDelayMS is a small test config value
 
-func (app *Application) Rollback() error {
-	app.mu.Lock()
-	defer app.mu.Unlock()
-	return app.state.Rollback()
-}
+func (app *Application) CanRollback() bool { _ = "STUB: not implemented"; return false }
+
+func (app *Application) Rollback() error { _ = "STUB: not implemented"; return nil }
 
 // validatorUpdates generates a validator set update.
 func (app *Application) validatorUpdates(height uint64) (abci.ValidatorUpdates, error) {
-	updates := app.cfg.ValidatorUpdates[fmt.Sprintf("%v", height)]
-	if len(updates) == 0 {
-		return nil, nil
-	}
-
-	valUpdates := abci.ValidatorUpdates{}
-	for keyString, power := range updates {
-
-		keyBytes, err := base64.StdEncoding.DecodeString(keyString)
-		if err != nil {
-			return nil, fmt.Errorf("invalid base64 pubkey value %q: %w", keyString, err)
-		}
-		pubKey, err := ed25519.PublicKeyFromBytes(keyBytes)
-		if err != nil {
-			return nil, fmt.Errorf("invalid ed25519 pubkey value %q: %w", keyString, err)
-		}
-		valUpdates = append(valUpdates, abci.ValidatorUpdate{
-			PubKey: crypto.PubKeyToProto(pubKey),
-			Power:  int64(power),
-		})
-	}
-
-	// the validator updates could be returned in arbitrary order,
-	// and that seems potentially bad. This orders the validator
-	// set.
-	sort.Slice(valUpdates, func(i, j int) bool {
-		return valUpdates[i].PubKey.Compare(valUpdates[j].PubKey) < 0
-	})
-
-	return valUpdates, nil
+	_ = "STUB: not implemented"
+	return *new(abci.ValidatorUpdates), nil
 }
+
+// the validator updates could be returned in arbitrary order,
+// and that seems potentially bad. This orders the validator
+// set.
 
 // parseTx parses a tx in 'key=value' format into a key and value.
-func parseTx(tx []byte) (string, string, error) {
-	parts := bytes.Split(tx, []byte("="))
-	if len(parts) != 2 {
-		return "", "", fmt.Errorf("invalid tx format: %q", string(tx))
-	}
-	if len(parts[0]) == 0 {
-		return "", "", errors.New("key cannot be empty")
-	}
-	return string(parts[0]), string(parts[1]), nil
-}
+func parseTx(tx []byte) (string, string, error) { _ = "STUB: not implemented"; return "", "", nil }

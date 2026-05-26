@@ -6,6 +6,8 @@ package types
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
@@ -14,11 +16,6 @@ import (
 	types "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -39,45 +36,33 @@ type QueryConnectionRequest struct {
 	ConnectionId string `protobuf:"bytes,1,opt,name=connection_id,json=connectionId,proto3" json:"connection_id,omitempty"`
 }
 
-func (m *QueryConnectionRequest) Reset()         { *m = QueryConnectionRequest{} }
-func (m *QueryConnectionRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryConnectionRequest) ProtoMessage()    {}
+func (m *QueryConnectionRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryConnectionRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryConnectionRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryConnectionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryConnectionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryConnectionRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryConnectionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryConnectionRequest.Merge(m, src)
-}
-func (m *QueryConnectionRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryConnectionRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryConnectionRequest.DiscardUnknown(m)
-}
+
+func (m *QueryConnectionRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryConnectionRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryConnectionRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryConnectionRequest proto.InternalMessageInfo
 
-func (m *QueryConnectionRequest) GetConnectionId() string {
-	if m != nil {
-		return m.ConnectionId
-	}
-	return ""
-}
+func (m *QueryConnectionRequest) GetConnectionId() string { _ = "STUB: not implemented"; return "" }
 
 // QueryConnectionResponse is the response type for the Query/Connection RPC
 // method. Besides the connection end, it includes a proof and the height from
@@ -91,58 +76,42 @@ type QueryConnectionResponse struct {
 	ProofHeight types.Height `protobuf:"bytes,3,opt,name=proof_height,json=proofHeight,proto3" json:"proof_height"`
 }
 
-func (m *QueryConnectionResponse) Reset()         { *m = QueryConnectionResponse{} }
-func (m *QueryConnectionResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryConnectionResponse) ProtoMessage()    {}
+func (m *QueryConnectionResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryConnectionResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryConnectionResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryConnectionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryConnectionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryConnectionResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryConnectionResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryConnectionResponse.Merge(m, src)
-}
-func (m *QueryConnectionResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryConnectionResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryConnectionResponse.DiscardUnknown(m)
-}
+
+func (m *QueryConnectionResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryConnectionResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryConnectionResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryConnectionResponse proto.InternalMessageInfo
 
 func (m *QueryConnectionResponse) GetConnection() *ConnectionEnd {
-	if m != nil {
-		return m.Connection
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *QueryConnectionResponse) GetProof() []byte {
-	if m != nil {
-		return m.Proof
-	}
-	return nil
-}
+func (m *QueryConnectionResponse) GetProof() []byte { _ = "STUB: not implemented"; return nil }
 
 func (m *QueryConnectionResponse) GetProofHeight() types.Height {
-	if m != nil {
-		return m.ProofHeight
-	}
-	return types.Height{}
+	_ = "STUB: not implemented"
+	return *new(types.Height)
 }
 
 // QueryConnectionsRequest is the request type for the Query/Connections RPC
@@ -151,43 +120,34 @@ type QueryConnectionsRequest struct {
 	Pagination *query.PageRequest `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
-func (m *QueryConnectionsRequest) Reset()         { *m = QueryConnectionsRequest{} }
-func (m *QueryConnectionsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryConnectionsRequest) ProtoMessage()    {}
+func (m *QueryConnectionsRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryConnectionsRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryConnectionsRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryConnectionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionsRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryConnectionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryConnectionsRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryConnectionsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryConnectionsRequest.Merge(m, src)
-}
-func (m *QueryConnectionsRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryConnectionsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryConnectionsRequest.DiscardUnknown(m)
-}
+
+func (m *QueryConnectionsRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryConnectionsRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryConnectionsRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryConnectionsRequest proto.InternalMessageInfo
 
 func (m *QueryConnectionsRequest) GetPagination() *query.PageRequest {
-	if m != nil {
-		return m.Pagination
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -202,58 +162,45 @@ type QueryConnectionsResponse struct {
 	Height types.Height `protobuf:"bytes,3,opt,name=height,proto3" json:"height"`
 }
 
-func (m *QueryConnectionsResponse) Reset()         { *m = QueryConnectionsResponse{} }
-func (m *QueryConnectionsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryConnectionsResponse) ProtoMessage()    {}
+func (m *QueryConnectionsResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryConnectionsResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryConnectionsResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryConnectionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionsResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryConnectionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryConnectionsResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryConnectionsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryConnectionsResponse.Merge(m, src)
-}
-func (m *QueryConnectionsResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryConnectionsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryConnectionsResponse.DiscardUnknown(m)
-}
+
+func (m *QueryConnectionsResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryConnectionsResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryConnectionsResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryConnectionsResponse proto.InternalMessageInfo
 
 func (m *QueryConnectionsResponse) GetConnections() []*IdentifiedConnection {
-	if m != nil {
-		return m.Connections
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *QueryConnectionsResponse) GetPagination() *query.PageResponse {
-	if m != nil {
-		return m.Pagination
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *QueryConnectionsResponse) GetHeight() types.Height {
-	if m != nil {
-		return m.Height
-	}
-	return types.Height{}
+	_ = "STUB: not implemented"
+	return *new(types.Height)
 }
 
 // QueryClientConnectionsRequest is the request type for the
@@ -263,45 +210,36 @@ type QueryClientConnectionsRequest struct {
 	ClientId string `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
 }
 
-func (m *QueryClientConnectionsRequest) Reset()         { *m = QueryClientConnectionsRequest{} }
-func (m *QueryClientConnectionsRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryClientConnectionsRequest) ProtoMessage()    {}
+func (m *QueryClientConnectionsRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryClientConnectionsRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryClientConnectionsRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryClientConnectionsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryClientConnectionsRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryClientConnectionsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryClientConnectionsRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryClientConnectionsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryClientConnectionsRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryClientConnectionsRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryClientConnectionsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryClientConnectionsRequest.DiscardUnknown(m)
-}
+
+func (m *QueryClientConnectionsRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryClientConnectionsRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryClientConnectionsRequest proto.InternalMessageInfo
 
-func (m *QueryClientConnectionsRequest) GetClientId() string {
-	if m != nil {
-		return m.ClientId
-	}
-	return ""
-}
+func (m *QueryClientConnectionsRequest) GetClientId() string { _ = "STUB: not implemented"; return "" }
 
 // QueryClientConnectionsResponse is the response type for the
 // Query/ClientConnections RPC method
@@ -314,58 +252,45 @@ type QueryClientConnectionsResponse struct {
 	ProofHeight types.Height `protobuf:"bytes,3,opt,name=proof_height,json=proofHeight,proto3" json:"proof_height"`
 }
 
-func (m *QueryClientConnectionsResponse) Reset()         { *m = QueryClientConnectionsResponse{} }
-func (m *QueryClientConnectionsResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryClientConnectionsResponse) ProtoMessage()    {}
+func (m *QueryClientConnectionsResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryClientConnectionsResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryClientConnectionsResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryClientConnectionsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryClientConnectionsResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryClientConnectionsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryClientConnectionsResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryClientConnectionsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryClientConnectionsResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryClientConnectionsResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryClientConnectionsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryClientConnectionsResponse.DiscardUnknown(m)
-}
+
+func (m *QueryClientConnectionsResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryClientConnectionsResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryClientConnectionsResponse proto.InternalMessageInfo
 
 func (m *QueryClientConnectionsResponse) GetConnectionPaths() []string {
-	if m != nil {
-		return m.ConnectionPaths
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *QueryClientConnectionsResponse) GetProof() []byte {
-	if m != nil {
-		return m.Proof
-	}
-	return nil
-}
+func (m *QueryClientConnectionsResponse) GetProof() []byte { _ = "STUB: not implemented"; return nil }
 
 func (m *QueryClientConnectionsResponse) GetProofHeight() types.Height {
-	if m != nil {
-		return m.ProofHeight
-	}
-	return types.Height{}
+	_ = "STUB: not implemented"
+	return *new(types.Height)
 }
 
 // QueryConnectionClientStateRequest is the request type for the
@@ -375,43 +300,37 @@ type QueryConnectionClientStateRequest struct {
 	ConnectionId string `protobuf:"bytes,1,opt,name=connection_id,json=connectionId,proto3" json:"connection_id,omitempty" yaml:"connection_id"`
 }
 
-func (m *QueryConnectionClientStateRequest) Reset()         { *m = QueryConnectionClientStateRequest{} }
-func (m *QueryConnectionClientStateRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryConnectionClientStateRequest) ProtoMessage()    {}
+func (m *QueryConnectionClientStateRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryConnectionClientStateRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryConnectionClientStateRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryConnectionClientStateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{6}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionClientStateRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryConnectionClientStateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryConnectionClientStateRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionClientStateRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryConnectionClientStateRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryConnectionClientStateRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryConnectionClientStateRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryConnectionClientStateRequest.DiscardUnknown(m)
-}
+
+func (m *QueryConnectionClientStateRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryConnectionClientStateRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryConnectionClientStateRequest proto.InternalMessageInfo
 
 func (m *QueryConnectionClientStateRequest) GetConnectionId() string {
-	if m != nil {
-		return m.ConnectionId
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
@@ -426,58 +345,51 @@ type QueryConnectionClientStateResponse struct {
 	ProofHeight types.Height `protobuf:"bytes,3,opt,name=proof_height,json=proofHeight,proto3" json:"proof_height"`
 }
 
-func (m *QueryConnectionClientStateResponse) Reset()         { *m = QueryConnectionClientStateResponse{} }
-func (m *QueryConnectionClientStateResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryConnectionClientStateResponse) ProtoMessage()    {}
+func (m *QueryConnectionClientStateResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryConnectionClientStateResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryConnectionClientStateResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryConnectionClientStateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{7}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionClientStateResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryConnectionClientStateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryConnectionClientStateResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionClientStateResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryConnectionClientStateResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryConnectionClientStateResponse) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *QueryConnectionClientStateResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *QueryConnectionClientStateResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryConnectionClientStateResponse.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_QueryConnectionClientStateResponse proto.InternalMessageInfo
 
 func (m *QueryConnectionClientStateResponse) GetIdentifiedClientState() *types.IdentifiedClientState {
-	if m != nil {
-		return m.IdentifiedClientState
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *QueryConnectionClientStateResponse) GetProof() []byte {
-	if m != nil {
-		return m.Proof
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *QueryConnectionClientStateResponse) GetProofHeight() types.Height {
-	if m != nil {
-		return m.ProofHeight
-	}
-	return types.Height{}
+	_ = "STUB: not implemented"
+	return *new(types.Height)
 }
 
 // QueryConnectionConsensusStateRequest is the request type for the
@@ -489,57 +401,53 @@ type QueryConnectionConsensusStateRequest struct {
 	RevisionHeight uint64 `protobuf:"varint,3,opt,name=revision_height,json=revisionHeight,proto3" json:"revision_height,omitempty"`
 }
 
-func (m *QueryConnectionConsensusStateRequest) Reset()         { *m = QueryConnectionConsensusStateRequest{} }
-func (m *QueryConnectionConsensusStateRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryConnectionConsensusStateRequest) ProtoMessage()    {}
+func (m *QueryConnectionConsensusStateRequest) Reset() { _ = "STUB: not implemented"; return }
+func (m *QueryConnectionConsensusStateRequest) String() string {
+	_ = "STUB: not implemented"
+	return ""
+}
+func (*QueryConnectionConsensusStateRequest) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*QueryConnectionConsensusStateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{8}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionConsensusStateRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryConnectionConsensusStateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryConnectionConsensusStateRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionConsensusStateRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryConnectionConsensusStateRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryConnectionConsensusStateRequest) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *QueryConnectionConsensusStateRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *QueryConnectionConsensusStateRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryConnectionConsensusStateRequest.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_QueryConnectionConsensusStateRequest proto.InternalMessageInfo
 
 func (m *QueryConnectionConsensusStateRequest) GetConnectionId() string {
-	if m != nil {
-		return m.ConnectionId
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
 func (m *QueryConnectionConsensusStateRequest) GetRevisionNumber() uint64 {
-	if m != nil {
-		return m.RevisionNumber
-	}
+	_ = "STUB: not implemented"
 	return 0
 }
 
 func (m *QueryConnectionConsensusStateRequest) GetRevisionHeight() uint64 {
-	if m != nil {
-		return m.RevisionHeight
-	}
+	_ = "STUB: not implemented"
 	return 0
 }
 
@@ -556,65 +464,59 @@ type QueryConnectionConsensusStateResponse struct {
 	ProofHeight types.Height `protobuf:"bytes,4,opt,name=proof_height,json=proofHeight,proto3" json:"proof_height"`
 }
 
-func (m *QueryConnectionConsensusStateResponse) Reset()         { *m = QueryConnectionConsensusStateResponse{} }
-func (m *QueryConnectionConsensusStateResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryConnectionConsensusStateResponse) ProtoMessage()    {}
+func (m *QueryConnectionConsensusStateResponse) Reset() { _ = "STUB: not implemented"; return }
+func (m *QueryConnectionConsensusStateResponse) String() string {
+	_ = "STUB: not implemented"
+	return ""
+}
+func (*QueryConnectionConsensusStateResponse) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*QueryConnectionConsensusStateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd8d529f8c7cd06b, []int{9}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionConsensusStateResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryConnectionConsensusStateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryConnectionConsensusStateResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryConnectionConsensusStateResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryConnectionConsensusStateResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryConnectionConsensusStateResponse) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *QueryConnectionConsensusStateResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *QueryConnectionConsensusStateResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryConnectionConsensusStateResponse.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_QueryConnectionConsensusStateResponse proto.InternalMessageInfo
 
 func (m *QueryConnectionConsensusStateResponse) GetConsensusState() *types1.Any {
-	if m != nil {
-		return m.ConsensusState
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *QueryConnectionConsensusStateResponse) GetClientId() string {
-	if m != nil {
-		return m.ClientId
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
 func (m *QueryConnectionConsensusStateResponse) GetProof() []byte {
-	if m != nil {
-		return m.Proof
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *QueryConnectionConsensusStateResponse) GetProofHeight() types.Height {
-	if m != nil {
-		return m.ProofHeight
-	}
-	return types.Height{}
+	_ = "STUB: not implemented"
+	return *new(types.Height)
 }
 
 func init() {
@@ -727,52 +629,33 @@ type queryClient struct {
 }
 
 func NewQueryClient(cc grpc1.ClientConn) QueryClient {
-	return &queryClient{cc}
+	_ = "STUB: not implemented"
+	return *new(QueryClient)
 }
 
 func (c *queryClient) Connection(ctx context.Context, in *QueryConnectionRequest, opts ...grpc.CallOption) (*QueryConnectionResponse, error) {
-	out := new(QueryConnectionResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.connection.v1.Query/Connection", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) Connections(ctx context.Context, in *QueryConnectionsRequest, opts ...grpc.CallOption) (*QueryConnectionsResponse, error) {
-	out := new(QueryConnectionsResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.connection.v1.Query/Connections", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) ClientConnections(ctx context.Context, in *QueryClientConnectionsRequest, opts ...grpc.CallOption) (*QueryClientConnectionsResponse, error) {
-	out := new(QueryClientConnectionsResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.connection.v1.Query/ClientConnections", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) ConnectionClientState(ctx context.Context, in *QueryConnectionClientStateRequest, opts ...grpc.CallOption) (*QueryConnectionClientStateResponse, error) {
-	out := new(QueryConnectionClientStateResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.connection.v1.Query/ConnectionClientState", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) ConnectionConsensusState(ctx context.Context, in *QueryConnectionConsensusStateRequest, opts ...grpc.CallOption) (*QueryConnectionConsensusStateResponse, error) {
-	out := new(QueryConnectionConsensusStateResponse)
-	err := c.cc.Invoke(ctx, "/ibc.core.connection.v1.Query/ConnectionConsensusState", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // QueryServer is the server API for Query service.
@@ -797,113 +680,55 @@ type UnimplementedQueryServer struct {
 }
 
 func (*UnimplementedQueryServer) Connection(ctx context.Context, req *QueryConnectionRequest) (*QueryConnectionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Connection not implemented")
-}
-func (*UnimplementedQueryServer) Connections(ctx context.Context, req *QueryConnectionsRequest) (*QueryConnectionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Connections not implemented")
-}
-func (*UnimplementedQueryServer) ClientConnections(ctx context.Context, req *QueryClientConnectionsRequest) (*QueryClientConnectionsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ClientConnections not implemented")
-}
-func (*UnimplementedQueryServer) ConnectionClientState(ctx context.Context, req *QueryConnectionClientStateRequest) (*QueryConnectionClientStateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ConnectionClientState not implemented")
-}
-func (*UnimplementedQueryServer) ConnectionConsensusState(ctx context.Context, req *QueryConnectionConsensusStateRequest) (*QueryConnectionConsensusStateResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ConnectionConsensusState not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
-	s.RegisterService(&_Query_serviceDesc, srv)
+func (*UnimplementedQueryServer) Connections(ctx context.Context, req *QueryConnectionsRequest) (*QueryConnectionsResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func (*UnimplementedQueryServer) ClientConnections(ctx context.Context, req *QueryClientConnectionsRequest) (*QueryClientConnectionsResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) ConnectionClientState(ctx context.Context, req *QueryConnectionClientStateRequest) (*QueryConnectionClientStateResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) ConnectionConsensusState(ctx context.Context, req *QueryConnectionConsensusStateRequest) (*QueryConnectionConsensusStateResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func RegisterQueryServer(s grpc1.Server, srv QueryServer) { _ = "STUB: not implemented"; return }
 
 func _Query_Connection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryConnectionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Connection(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.connection.v1.Query/Connection",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Connection(ctx, req.(*QueryConnectionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_Connections_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryConnectionsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Connections(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.connection.v1.Query/Connections",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Connections(ctx, req.(*QueryConnectionsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_ClientConnections_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryClientConnectionsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).ClientConnections(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.connection.v1.Query/ClientConnections",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ClientConnections(ctx, req.(*QueryClientConnectionsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_ConnectionClientState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryConnectionClientStateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).ConnectionClientState(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.connection.v1.Query/ConnectionClientState",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ConnectionClientState(ctx, req.(*QueryConnectionClientStateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_ConnectionConsensusState_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryConnectionConsensusStateRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).ConnectionConsensusState(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/ibc.core.connection.v1.Query/ConnectionConsensusState",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).ConnectionConsensusState(ctx, req.(*QueryConnectionConsensusStateRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Query_serviceDesc = grpc.ServiceDesc{
@@ -936,1955 +761,232 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *QueryConnectionRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryConnectionRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ConnectionId) > 0 {
-		i -= len(m.ConnectionId)
-		copy(dAtA[i:], m.ConnectionId)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ConnectionId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryConnectionResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if len(m.Proof) > 0 {
-		i -= len(m.Proof)
-		copy(dAtA[i:], m.Proof)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Proof)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Connection != nil {
-		{
-			size, err := m.Connection.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryConnectionsRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryConnectionsResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.Height.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Connections) > 0 {
-		for iNdEx := len(m.Connections) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Connections[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintQuery(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryClientConnectionsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryClientConnectionsRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryClientConnectionsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ClientId) > 0 {
-		i -= len(m.ClientId)
-		copy(dAtA[i:], m.ClientId)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ClientId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryClientConnectionsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryClientConnectionsResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryClientConnectionsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if len(m.Proof) > 0 {
-		i -= len(m.Proof)
-		copy(dAtA[i:], m.Proof)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Proof)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.ConnectionPaths) > 0 {
-		for iNdEx := len(m.ConnectionPaths) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.ConnectionPaths[iNdEx])
-			copy(dAtA[i:], m.ConnectionPaths[iNdEx])
-			i = encodeVarintQuery(dAtA, i, uint64(len(m.ConnectionPaths[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionClientStateRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryConnectionClientStateRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionClientStateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ConnectionId) > 0 {
-		i -= len(m.ConnectionId)
-		copy(dAtA[i:], m.ConnectionId)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ConnectionId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionClientStateResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryConnectionClientStateResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionClientStateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	if len(m.Proof) > 0 {
-		i -= len(m.Proof)
-		copy(dAtA[i:], m.Proof)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Proof)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.IdentifiedClientState != nil {
-		{
-			size, err := m.IdentifiedClientState.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionConsensusStateRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryConnectionConsensusStateRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionConsensusStateRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.RevisionHeight != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.RevisionHeight))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.RevisionNumber != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.RevisionNumber))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.ConnectionId) > 0 {
-		i -= len(m.ConnectionId)
-		copy(dAtA[i:], m.ConnectionId)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ConnectionId)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionConsensusStateResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryConnectionConsensusStateResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryConnectionConsensusStateResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.ProofHeight.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintQuery(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x22
-	if len(m.Proof) > 0 {
-		i -= len(m.Proof)
-		copy(dAtA[i:], m.Proof)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Proof)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.ClientId) > 0 {
-		i -= len(m.ClientId)
-		copy(dAtA[i:], m.ClientId)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ClientId)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.ConsensusState != nil {
-		{
-			size, err := m.ConsensusState.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
-	offset -= sovQuery(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *QueryConnectionRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ConnectionId)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func encodeVarintQuery(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryConnectionResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Connection != nil {
-		l = m.Connection.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.Proof)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
+func (m *QueryConnectionRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryConnectionsRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryConnectionResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryConnectionsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Connections) > 0 {
-		for _, e := range m.Connections {
-			l = e.Size()
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = m.Height.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
+func (m *QueryConnectionsRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryClientConnectionsRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryConnectionsResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryClientConnectionsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ConnectionPaths) > 0 {
-		for _, s := range m.ConnectionPaths {
-			l = len(s)
-			n += 1 + l + sovQuery(uint64(l))
-		}
-	}
-	l = len(m.Proof)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
+func (m *QueryClientConnectionsRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryConnectionClientStateRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ConnectionId)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryClientConnectionsResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryConnectionClientStateResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.IdentifiedClientState != nil {
-		l = m.IdentifiedClientState.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.Proof)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
+func (m *QueryConnectionClientStateRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryConnectionConsensusStateRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ConnectionId)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.RevisionNumber != 0 {
-		n += 1 + sovQuery(uint64(m.RevisionNumber))
-	}
-	if m.RevisionHeight != 0 {
-		n += 1 + sovQuery(uint64(m.RevisionHeight))
-	}
-	return n
-}
+func (m *QueryConnectionClientStateResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryConnectionConsensusStateResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ConsensusState != nil {
-		l = m.ConsensusState.Size()
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.ClientId)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.Proof)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = m.ProofHeight.Size()
-	n += 1 + l + sovQuery(uint64(l))
-	return n
-}
+func (m *QueryConnectionConsensusStateRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovQuery(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozQuery(x uint64) (n int) {
-	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
+func (m *QueryConnectionConsensusStateResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sovQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
 func (m *QueryConnectionRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryConnectionRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryConnectionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ConnectionId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryConnectionResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryConnectionResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryConnectionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Connection", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Connection == nil {
-				m.Connection = &ConnectionEnd{}
-			}
-			if err := m.Connection.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Proof", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Proof = append(m.Proof[:0], dAtA[iNdEx:postIndex]...)
-			if m.Proof == nil {
-				m.Proof = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryConnectionsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryConnectionsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryConnectionsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageRequest{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryConnectionsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryConnectionsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryConnectionsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Connections", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Connections = append(m.Connections, &IdentifiedConnection{})
-			if err := m.Connections[len(m.Connections)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageResponse{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Height.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryClientConnectionsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryClientConnectionsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryClientConnectionsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ClientId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryClientConnectionsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryClientConnectionsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryClientConnectionsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionPaths", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ConnectionPaths = append(m.ConnectionPaths, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Proof", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Proof = append(m.Proof[:0], dAtA[iNdEx:postIndex]...)
-			if m.Proof == nil {
-				m.Proof = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryConnectionClientStateRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryConnectionClientStateRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryConnectionClientStateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ConnectionId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryConnectionClientStateResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryConnectionClientStateResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryConnectionClientStateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IdentifiedClientState", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.IdentifiedClientState == nil {
-				m.IdentifiedClientState = &types.IdentifiedClientState{}
-			}
-			if err := m.IdentifiedClientState.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Proof", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Proof = append(m.Proof[:0], dAtA[iNdEx:postIndex]...)
-			if m.Proof == nil {
-				m.Proof = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryConnectionConsensusStateRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryConnectionConsensusStateRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryConnectionConsensusStateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConnectionId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ConnectionId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RevisionNumber", wireType)
-			}
-			m.RevisionNumber = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RevisionNumber |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RevisionHeight", wireType)
-			}
-			m.RevisionHeight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RevisionHeight |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryConnectionConsensusStateResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryConnectionConsensusStateResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryConnectionConsensusStateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ConsensusState", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.ConsensusState == nil {
-				m.ConsensusState = &types1.Any{}
-			}
-			if err := m.ConsensusState.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClientId", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ClientId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Proof", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Proof = append(m.Proof[:0], dAtA[iNdEx:postIndex]...)
-			if m.Proof == nil {
-				m.Proof = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ProofHeight", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.ProofHeight.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipQuery(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthQuery
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupQuery
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthQuery
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipQuery(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthQuery        = fmt.Errorf("proto: negative length found during unmarshaling")

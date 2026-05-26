@@ -2,7 +2,6 @@ package feegrant
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 var _ FeeAllowanceI = (*BasicAllowance)(nil)
@@ -18,37 +17,9 @@ var _ FeeAllowanceI = (*BasicAllowance)(nil)
 // If remove is true (regardless of the error), the FeeAllowance will be deleted from storage
 // (eg. when it is used up). (See call to RevokeAllowance in Keeper.UseGrantedFees)
 func (a *BasicAllowance) Accept(ctx sdk.Context, fee sdk.Coins, _ []sdk.Msg) (bool, error) {
-	if a.Expiration != nil && a.Expiration.Before(ctx.BlockTime()) {
-		return true, sdkerrors.Wrap(ErrFeeLimitExpired, "basic allowance")
-	}
-
-	if a.SpendLimit != nil {
-		left, invalid := a.SpendLimit.SafeSub(fee)
-		if invalid {
-			return false, sdkerrors.Wrap(ErrFeeLimitExceeded, "basic allowance")
-		}
-
-		a.SpendLimit = left
-		return left.IsZero(), nil
-	}
-
+	_ = "STUB: not implemented"
 	return false, nil
 }
 
 // ValidateBasic implements FeeAllowance and enforces basic sanity checks
-func (a BasicAllowance) ValidateBasic() error {
-	if a.SpendLimit != nil {
-		if !a.SpendLimit.IsValid() {
-			return sdkerrors.Wrapf(sdkerrors.ErrInvalidCoins, "send amount is invalid: %s", a.SpendLimit)
-		}
-		if !a.SpendLimit.IsAllPositive() {
-			return sdkerrors.Wrap(sdkerrors.ErrInvalidCoins, "spend limit must be positive")
-		}
-	}
-
-	if a.Expiration != nil && a.Expiration.Unix() < 0 {
-		return sdkerrors.Wrap(ErrInvalidDuration, "expiration time cannot be negative")
-	}
-
-	return nil
-}
+func (a BasicAllowance) ValidateBasic() error { _ = "STUB: not implemented"; return nil }

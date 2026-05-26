@@ -5,8 +5,6 @@
 package mocks
 
 import (
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	db "github.com/tendermint/tm-db"
 )
@@ -23,185 +21,113 @@ type MockDBMockRecorder struct {
 }
 
 // NewMockDB creates a new mock instance.
-func NewMockDB(ctrl *gomock.Controller) *MockDB {
-	mock := &MockDB{ctrl: ctrl}
-	mock.recorder = &MockDBMockRecorder{mock}
-	return mock
-}
+func NewMockDB(ctrl *gomock.Controller) *MockDB { _ = "STUB: not implemented"; return nil }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockDB) EXPECT() *MockDBMockRecorder {
-	return m.recorder
+	_ = "STUB: not implemented"
+
+	// Close mocks base method.
+	return nil
 }
 
-// Close mocks base method.
-func (m *MockDB) Close() error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Close")
-	ret0, _ := ret[0].(error)
-	return ret0
-}
+func (m *MockDB) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Close indicates an expected call of Close.
-func (mr *MockDBMockRecorder) Close() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Close", reflect.TypeOf((*MockDB)(nil).Close))
-}
+func (mr *MockDBMockRecorder) Close() *gomock.Call { _ = "STUB: not implemented"; return nil }
 
 // Delete mocks base method.
-func (m *MockDB) Delete(arg0 []byte) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
+func (m *MockDB) Delete(arg0 []byte) error { _ = "STUB: not implemented"; return nil }
 
 // Delete indicates an expected call of Delete.
 func (mr *MockDBMockRecorder) Delete(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockDB)(nil).Delete), arg0)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // DeleteSync mocks base method.
-func (m *MockDB) DeleteSync(arg0 []byte) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteSync", arg0)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
+func (m *MockDB) DeleteSync(arg0 []byte) error { _ = "STUB: not implemented"; return nil }
 
 // DeleteSync indicates an expected call of DeleteSync.
 func (mr *MockDBMockRecorder) DeleteSync(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteSync", reflect.TypeOf((*MockDB)(nil).DeleteSync), arg0)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Get mocks base method.
-func (m *MockDB) Get(arg0 []byte) ([]byte, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Get", arg0)
-	ret0, _ := ret[0].([]byte)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
+func (m *MockDB) Get(arg0 []byte) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Get indicates an expected call of Get.
 func (mr *MockDBMockRecorder) Get(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Get", reflect.TypeOf((*MockDB)(nil).Get), arg0)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Has mocks base method.
-func (m *MockDB) Has(arg0 []byte) (bool, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Has", arg0)
-	ret0, _ := ret[0].(bool)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
+func (m *MockDB) Has(arg0 []byte) (bool, error) { _ = "STUB: not implemented"; return false, nil }
 
 // Has indicates an expected call of Has.
 func (mr *MockDBMockRecorder) Has(arg0 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Has", reflect.TypeOf((*MockDB)(nil).Has), arg0)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Iterator mocks base method.
 func (m *MockDB) Iterator(arg0, arg1 []byte) (db.Iterator, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Iterator", arg0, arg1)
-	ret0, _ := ret[0].(db.Iterator)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	_ = "STUB: not implemented"
+	return *new(db.Iterator), nil
 }
 
 // Iterator indicates an expected call of Iterator.
 func (mr *MockDBMockRecorder) Iterator(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Iterator", reflect.TypeOf((*MockDB)(nil).Iterator), arg0, arg1)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewBatch mocks base method.
-func (m *MockDB) NewBatch() db.Batch {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "NewBatch")
-	ret0, _ := ret[0].(db.Batch)
-	return ret0
-}
+func (m *MockDB) NewBatch() db.Batch { _ = "STUB: not implemented"; return *new(db.Batch) }
 
 // NewBatch indicates an expected call of NewBatch.
-func (mr *MockDBMockRecorder) NewBatch() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "NewBatch", reflect.TypeOf((*MockDB)(nil).NewBatch))
-}
+func (mr *MockDBMockRecorder) NewBatch() *gomock.Call { _ = "STUB: not implemented"; return nil }
 
 // Print mocks base method.
-func (m *MockDB) Print() error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Print")
-	ret0, _ := ret[0].(error)
-	return ret0
-}
+func (m *MockDB) Print() error { _ = "STUB: not implemented"; return nil }
 
 // Print indicates an expected call of Print.
-func (mr *MockDBMockRecorder) Print() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Print", reflect.TypeOf((*MockDB)(nil).Print))
-}
+func (mr *MockDBMockRecorder) Print() *gomock.Call { _ = "STUB: not implemented"; return nil }
 
 // ReverseIterator mocks base method.
 func (m *MockDB) ReverseIterator(arg0, arg1 []byte) (db.Iterator, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "ReverseIterator", arg0, arg1)
-	ret0, _ := ret[0].(db.Iterator)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
+	_ = "STUB: not implemented"
+	return *new(db.Iterator), nil
 }
 
 // ReverseIterator indicates an expected call of ReverseIterator.
 func (mr *MockDBMockRecorder) ReverseIterator(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "ReverseIterator", reflect.TypeOf((*MockDB)(nil).ReverseIterator), arg0, arg1)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Set mocks base method.
-func (m *MockDB) Set(arg0, arg1 []byte) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Set", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
+func (m *MockDB) Set(arg0, arg1 []byte) error { _ = "STUB: not implemented"; return nil }
 
 // Set indicates an expected call of Set.
 func (mr *MockDBMockRecorder) Set(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Set", reflect.TypeOf((*MockDB)(nil).Set), arg0, arg1)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetSync mocks base method.
-func (m *MockDB) SetSync(arg0, arg1 []byte) error {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "SetSync", arg0, arg1)
-	ret0, _ := ret[0].(error)
-	return ret0
-}
+func (m *MockDB) SetSync(arg0, arg1 []byte) error { _ = "STUB: not implemented"; return nil }
 
 // SetSync indicates an expected call of SetSync.
 func (mr *MockDBMockRecorder) SetSync(arg0, arg1 interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SetSync", reflect.TypeOf((*MockDB)(nil).SetSync), arg0, arg1)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Stats mocks base method.
-func (m *MockDB) Stats() map[string]string {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Stats")
-	ret0, _ := ret[0].(map[string]string)
-	return ret0
-}
+func (m *MockDB) Stats() map[string]string { _ = "STUB: not implemented"; return nil }
 
 // Stats indicates an expected call of Stats.
-func (mr *MockDBMockRecorder) Stats() *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Stats", reflect.TypeOf((*MockDB)(nil).Stats))
-}
+func (mr *MockDBMockRecorder) Stats() *gomock.Call { _ = "STUB: not implemented"; return nil }

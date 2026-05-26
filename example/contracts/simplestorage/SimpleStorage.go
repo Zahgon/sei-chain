@@ -99,47 +99,32 @@ type SimplestorageTransactorRaw struct {
 
 // NewSimplestorage creates a new instance of Simplestorage, bound to a specific deployed contract.
 func NewSimplestorage(address common.Address, backend bind.ContractBackend) (*Simplestorage, error) {
-	contract, err := bindSimplestorage(address, backend, backend, backend)
-	if err != nil {
-		return nil, err
-	}
-	return &Simplestorage{SimplestorageCaller: SimplestorageCaller{contract: contract}, SimplestorageTransactor: SimplestorageTransactor{contract: contract}, SimplestorageFilterer: SimplestorageFilterer{contract: contract}}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewSimplestorageCaller creates a new read-only instance of Simplestorage, bound to a specific deployed contract.
 func NewSimplestorageCaller(address common.Address, caller bind.ContractCaller) (*SimplestorageCaller, error) {
-	contract, err := bindSimplestorage(address, caller, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &SimplestorageCaller{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewSimplestorageTransactor creates a new write-only instance of Simplestorage, bound to a specific deployed contract.
 func NewSimplestorageTransactor(address common.Address, transactor bind.ContractTransactor) (*SimplestorageTransactor, error) {
-	contract, err := bindSimplestorage(address, nil, transactor, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &SimplestorageTransactor{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewSimplestorageFilterer creates a new log filterer instance of Simplestorage, bound to a specific deployed contract.
 func NewSimplestorageFilterer(address common.Address, filterer bind.ContractFilterer) (*SimplestorageFilterer, error) {
-	contract, err := bindSimplestorage(address, nil, nil, filterer)
-	if err != nil {
-		return nil, err
-	}
-	return &SimplestorageFilterer{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // bindSimplestorage binds a generic wrapper to an already deployed contract.
 func bindSimplestorage(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := SimplestorageMetaData.GetAbi()
-	if err != nil {
-		return nil, err
-	}
-	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -147,18 +132,21 @@ func bindSimplestorage(address common.Address, caller bind.ContractCaller, trans
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Simplestorage *SimplestorageRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Simplestorage.Contract.SimplestorageCaller.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Simplestorage *SimplestorageRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Simplestorage.Contract.SimplestorageTransactor.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Simplestorage *SimplestorageRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Simplestorage.Contract.SimplestorageTransactor.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -166,99 +154,90 @@ func (_Simplestorage *SimplestorageRaw) Transact(opts *bind.TransactOpts, method
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Simplestorage *SimplestorageCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Simplestorage.Contract.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Simplestorage *SimplestorageTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Simplestorage.Contract.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Simplestorage *SimplestorageTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Simplestorage.Contract.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Bad is a free data retrieval call binding the contract method 0x9c3674fc.
 //
 // Solidity: function bad() pure returns()
 func (_Simplestorage *SimplestorageCaller) Bad(opts *bind.CallOpts) error {
-	var out []interface{}
-	err := _Simplestorage.contract.Call(opts, &out, "bad")
-
-	if err != nil {
-		return err
-	}
-
-	return err
-
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Bad is a free data retrieval call binding the contract method 0x9c3674fc.
 //
 // Solidity: function bad() pure returns()
-func (_Simplestorage *SimplestorageSession) Bad() error {
-	return _Simplestorage.Contract.Bad(&_Simplestorage.CallOpts)
-}
+func (_Simplestorage *SimplestorageSession) Bad() error { _ = "STUB: not implemented"; return nil }
 
 // Bad is a free data retrieval call binding the contract method 0x9c3674fc.
 //
 // Solidity: function bad() pure returns()
 func (_Simplestorage *SimplestorageCallerSession) Bad() error {
-	return _Simplestorage.Contract.Bad(&_Simplestorage.CallOpts)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Get is a free data retrieval call binding the contract method 0x6d4ce63c.
 //
 // Solidity: function get() view returns(uint256)
 func (_Simplestorage *SimplestorageCaller) Get(opts *bind.CallOpts) (*big.Int, error) {
-	var out []interface{}
-	err := _Simplestorage.contract.Call(opts, &out, "get")
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Get is a free data retrieval call binding the contract method 0x6d4ce63c.
 //
 // Solidity: function get() view returns(uint256)
 func (_Simplestorage *SimplestorageSession) Get() (*big.Int, error) {
-	return _Simplestorage.Contract.Get(&_Simplestorage.CallOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Get is a free data retrieval call binding the contract method 0x6d4ce63c.
 //
 // Solidity: function get() view returns(uint256)
 func (_Simplestorage *SimplestorageCallerSession) Get() (*big.Int, error) {
-	return _Simplestorage.Contract.Get(&_Simplestorage.CallOpts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Set is a paid mutator transaction binding the contract method 0x60fe47b1.
 //
 // Solidity: function set(uint256 value) returns()
 func (_Simplestorage *SimplestorageTransactor) Set(opts *bind.TransactOpts, value *big.Int) (*types.Transaction, error) {
-	return _Simplestorage.contract.Transact(opts, "set", value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Set is a paid mutator transaction binding the contract method 0x60fe47b1.
 //
 // Solidity: function set(uint256 value) returns()
 func (_Simplestorage *SimplestorageSession) Set(value *big.Int) (*types.Transaction, error) {
-	return _Simplestorage.Contract.Set(&_Simplestorage.TransactOpts, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Set is a paid mutator transaction binding the contract method 0x60fe47b1.
 //
 // Solidity: function set(uint256 value) returns()
 func (_Simplestorage *SimplestorageTransactorSession) Set(value *big.Int) (*types.Transaction, error) {
-	return _Simplestorage.Contract.Set(&_Simplestorage.TransactOpts, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SimplestorageSetEventIterator is returned from FilterSetEvent and is used to iterate over the raw logs and unpacked data for SetEvent events raised by the Simplestorage contract.
@@ -278,55 +257,25 @@ type SimplestorageSetEventIterator struct {
 // are any more events found. In case of a retrieval or parsing error, false is
 // returned and Error() can be queried for the exact failure.
 func (it *SimplestorageSetEventIterator) Next() bool {
+	_ = "STUB: not implemented"
 	// If the iterator failed, stop iterating
-	if it.fail != nil {
-		return false
-	}
-	// If the iterator completed, deliver directly whatever's available
-	if it.done {
-		select {
-		case log := <-it.logs:
-			it.Event = new(SimplestorageSetEvent)
-			if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-				it.fail = err
-				return false
-			}
-			it.Event.Raw = log
-			return true
-
-		default:
-			return false
-		}
-	}
-	// Iterator still in progress, wait for either a data or an error event
-	select {
-	case log := <-it.logs:
-		it.Event = new(SimplestorageSetEvent)
-		if err := it.contract.UnpackLog(it.Event, it.event, log); err != nil {
-			it.fail = err
-			return false
-		}
-		it.Event.Raw = log
-		return true
-
-	case err := <-it.sub.Err():
-		it.done = true
-		it.fail = err
-		return it.Next()
-	}
+	return false
 }
+
+// If the iterator completed, deliver directly whatever's available
+
+// Iterator still in progress, wait for either a data or an error event
 
 // Error returns any retrieval or parsing error occurred during filtering.
 func (it *SimplestorageSetEventIterator) Error() error {
-	return it.fail
-}
+	_ = "STUB: not implemented"
 
-// Close terminates the iteration process, releasing any pending underlying
-// resources.
-func (it *SimplestorageSetEventIterator) Close() error {
-	it.sub.Unsubscribe()
+	// Close terminates the iteration process, releasing any pending underlying
+	// resources.
 	return nil
 }
+
+func (it *SimplestorageSetEventIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // SimplestorageSetEvent represents a SetEvent event raised by the Simplestorage contract.
 type SimplestorageSetEvent struct {
@@ -338,59 +287,24 @@ type SimplestorageSetEvent struct {
 //
 // Solidity: event SetEvent(uint256 value)
 func (_Simplestorage *SimplestorageFilterer) FilterSetEvent(opts *bind.FilterOpts) (*SimplestorageSetEventIterator, error) {
-
-	logs, sub, err := _Simplestorage.contract.FilterLogs(opts, "SetEvent")
-	if err != nil {
-		return nil, err
-	}
-	return &SimplestorageSetEventIterator{contract: _Simplestorage.contract, event: "SetEvent", logs: logs, sub: sub}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // WatchSetEvent is a free log subscription operation binding the contract event 0x0de2d86113046b9e8bb6b785e96a6228f6803952bf53a40b68a36dce316218c1.
 //
 // Solidity: event SetEvent(uint256 value)
 func (_Simplestorage *SimplestorageFilterer) WatchSetEvent(opts *bind.WatchOpts, sink chan<- *SimplestorageSetEvent) (event.Subscription, error) {
-
-	logs, sub, err := _Simplestorage.contract.WatchLogs(opts, "SetEvent")
-	if err != nil {
-		return nil, err
-	}
-	return event.NewSubscription(func(quit <-chan struct{}) error {
-		defer sub.Unsubscribe()
-		for {
-			select {
-			case log := <-logs:
-				// New log arrived, parse the event and forward to the user
-				event := new(SimplestorageSetEvent)
-				if err := _Simplestorage.contract.UnpackLog(event, "SetEvent", log); err != nil {
-					return err
-				}
-				event.Raw = log
-
-				select {
-				case sink <- event:
-				case err := <-sub.Err():
-					return err
-				case <-quit:
-					return nil
-				}
-			case err := <-sub.Err():
-				return err
-			case <-quit:
-				return nil
-			}
-		}
-	}), nil
+	_ = "STUB: not implemented"
+	return *new(event.Subscription), nil
 }
+
+// New log arrived, parse the event and forward to the user
 
 // ParseSetEvent is a log parse operation binding the contract event 0x0de2d86113046b9e8bb6b785e96a6228f6803952bf53a40b68a36dce316218c1.
 //
 // Solidity: event SetEvent(uint256 value)
 func (_Simplestorage *SimplestorageFilterer) ParseSetEvent(log types.Log) (*SimplestorageSetEvent, error) {
-	event := new(SimplestorageSetEvent)
-	if err := _Simplestorage.contract.UnpackLog(event, "SetEvent", log); err != nil {
-		return nil, err
-	}
-	event.Raw = log
-	return event, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

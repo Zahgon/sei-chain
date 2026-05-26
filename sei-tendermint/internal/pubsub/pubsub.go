@@ -36,7 +36,6 @@ package pubsub
 import (
 	"context"
 	"errors"
-	"fmt"
 	"sync"
 
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
@@ -81,12 +80,7 @@ type UnsubscribeArgs struct {
 
 // Validate returns nil if args are valid to identify a subscription to remove.
 // Otherwise, it reports an error.
-func (args UnsubscribeArgs) Validate() error {
-	if args.Subscriber == "" {
-		return errors.New("must specify a subscriber")
-	}
-	return nil
-}
+func (args UnsubscribeArgs) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // Server allows clients to subscribe/unsubscribe for messages, publishing
 // messages with or without events, and manages internal state.
@@ -122,300 +116,137 @@ type Option func(*Server)
 // NewServer returns a new server. See the commentary on the Option functions
 // for a detailed description of how to configure buffering. If no options are
 // provided, the resulting server's queue is unbuffered.
-func NewServer(options ...Option) *Server {
-	s := &Server{}
+func NewServer(options ...Option) *Server { _ = "STUB: not implemented"; return nil }
 
-	s.BaseService = *service.NewBaseService("PubSub", s)
-	for _, opt := range options {
-		opt(s)
-	}
+// The queue receives items to be published.
 
-	// The queue receives items to be published.
-	s.queue = make(chan item, s.queueCap)
-
-	// The index tracks subscriptions by ID and query terms.
-	s.subs.index = newSubIndex()
-
-	return s
-}
+// The index tracks subscriptions by ID and query terms.
 
 // BufferCapacity allows you to specify capacity for publisher's queue.  This
 // is the number of messages that can be published without blocking.  If no
 // buffer is specified, publishing is synchronous with delivery.  This function
 // will panic if cap < 0.
-func BufferCapacity(cap int) Option {
-	if cap < 0 {
-		panic("negative buffer capacity")
-	}
-	return func(s *Server) { s.queueCap = cap }
-}
+func BufferCapacity(cap int) Option { _ = "STUB: not implemented"; return *new(Option) }
 
 // BufferCapacity returns capacity of the publication queue.
-func (s *Server) BufferCapacity() int { return cap(s.queue) }
+func (s *Server) BufferCapacity() int {
+	_ = "STUB: not implemented"
 
-// Observe registers an observer function that will be called synchronously
-// with each published message matching any of the given queries, prior to it
-// being forwarded to any subscriber.  If no queries are specified, all
-// messages will be observed. An error is reported if an observer is already
-// registered.
+	// Observe registers an observer function that will be called synchronously
+	// with each published message matching any of the given queries, prior to it
+	// being forwarded to any subscriber.  If no queries are specified, all
+	// messages will be observed. An error is reported if an observer is already
+	// registered.
+	return 0
+}
+
 func (s *Server) Observe(ctx context.Context, observe func(Message) error, queries ...*query.Query) error {
-	s.subs.Lock()
-	defer s.subs.Unlock()
-	if observe == nil {
-		return errors.New("observe callback is nil")
-	} else if s.subs.observe != nil {
-		return errors.New("an observer is already registered")
-	}
-
-	// Compile the message filter.
-	var matches func(Message) bool
-	if len(queries) == 0 {
-		matches = func(Message) bool { return true }
-	} else {
-		matches = func(msg Message) bool {
-			for _, q := range queries {
-				if q.Matches(msg.events) {
-					return true
-				}
-			}
-			return false
-		}
-	}
-
-	s.subs.observe = func(msg Message) error {
-		if matches(msg) {
-			return observe(msg)
-		}
-		return nil // nothing to do for this message
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Compile the message filter.
+
+// nothing to do for this message
 
 // SubscribeWithArgs creates a subscription for the given arguments.  It is an
 // error if the query is nil, a subscription already exists for the specified
 // client ID and query, or if the capacity arguments are invalid.
 func (s *Server) SubscribeWithArgs(ctx context.Context, args SubscribeArgs) (*Subscription, error) {
-	s.subs.Lock()
-	defer s.subs.Unlock()
-
-	if s.subs.index == nil {
-		return nil, ErrServerStopped
-	} else if s.subs.index.contains(args.ClientID, args.Query.String()) {
-		return nil, ErrAlreadySubscribed
-	}
-
-	if args.Limit == 0 {
-		args.Limit = 1
-	}
-	sub, err := newSubscription(args.Quota, args.Limit)
-	if err != nil {
-		return nil, err
-	}
-	s.subs.index.add(&subInfo{
-		clientID: args.ClientID,
-		query:    args.Query,
-		subID:    sub.id,
-		sub:      sub,
-	})
-	return sub, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Unsubscribe removes the subscription for the given client and/or query.  It
 // returns ErrSubscriptionNotFound if no such subscription exists.
 func (s *Server) Unsubscribe(ctx context.Context, args UnsubscribeArgs) error {
-	if err := args.Validate(); err != nil {
-		return err
-	}
-	s.subs.Lock()
-	defer s.subs.Unlock()
-	if s.subs.index == nil {
-		return ErrServerStopped
-	}
-
-	// TODO(creachadair): Do we need to support unsubscription for an "empty"
-	// query?  I believe that case is not possible by the Query grammar, but we
-	// should make sure.
-	//
-	// Revisit this logic once we are able to remove indexing by query.
-
-	var evict subInfoSet
-	if args.Subscriber != "" {
-		evict = s.subs.index.findClientID(args.Subscriber)
-		if args.Query != nil {
-			evict = evict.withQuery(args.Query.String())
-		}
-	} else {
-		evict = s.subs.index.findQuery(args.Query.String())
-	}
-
-	if len(evict) == 0 {
-		return ErrSubscriptionNotFound
-	}
-	s.removeSubs(evict, ErrUnsubscribed)
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// TODO(creachadair): Do we need to support unsubscription for an "empty"
+// query?  I believe that case is not possible by the Query grammar, but we
+// should make sure.
+//
+// Revisit this logic once we are able to remove indexing by query.
 
 // UnsubscribeAll removes all subscriptions for the given client ID.
 // It returns ErrSubscriptionNotFound if no subscriptions exist for that client.
 func (s *Server) UnsubscribeAll(ctx context.Context, clientID string) error {
-	s.subs.Lock()
-	defer s.subs.Unlock()
-
-	if s.subs.index == nil {
-		return ErrServerStopped
-	}
-	evict := s.subs.index.findClientID(clientID)
-	if len(evict) == 0 {
-		return ErrSubscriptionNotFound
-	}
-	s.removeSubs(evict, ErrUnsubscribed)
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // NumClients returns the number of clients.
-func (s *Server) NumClients() int {
-	s.subs.RLock()
-	defer s.subs.RUnlock()
-	return len(s.subs.index.byClient)
-}
+func (s *Server) NumClients() int { _ = "STUB: not implemented"; return 0 }
 
 // NumClientSubscriptions returns the number of subscriptions the client has.
-func (s *Server) NumClientSubscriptions(clientID string) int {
-	s.subs.RLock()
-	defer s.subs.RUnlock()
-	return len(s.subs.index.findClientID(clientID))
-}
+func (s *Server) NumClientSubscriptions(clientID string) int { _ = "STUB: not implemented"; return 0 }
 
 // Publish publishes the given message. An error will be returned to the caller
 // if the pubsub server has shut down.
-func (s *Server) Publish(msg types.EventData) error {
-	return s.publish(msg, []abci.Event{})
-}
+func (s *Server) Publish(msg types.EventData) error { _ = "STUB: not implemented"; return nil }
 
 // PublishWithEvents publishes the given message with the set of events. The set
 // is matched with clients queries. If there is a match, the message is sent to
 // the client.
 func (s *Server) PublishWithEvents(msg types.EventData, events []abci.Event) error {
-	return s.publish(msg, events)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // OnStop implements part of the Service interface. It is a no-op.
-func (s *Server) OnStop() {}
+func (s *Server) OnStop() {
+	_ = "STUB: not implemented"
 
-// Wait implements Service.Wait by blocking until the server has exited, then
-// yielding to the base service wait.
-func (s *Server) Wait() { <-s.exited; s.BaseService.Wait() }
+	// Wait implements Service.Wait by blocking until the server has exited, then
+	// yielding to the base service wait.
+	return
+}
+
+func (s *Server) Wait() { _ = "STUB: not implemented"; return }
 
 // OnStart implements Service.OnStart by starting the server.
-func (s *Server) OnStart(ctx context.Context) error { s.run(ctx); return nil }
+func (s *Server) OnStart(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
 func (s *Server) publish(data types.EventData, events []abci.Event) error {
-	s.pubs.RLock()
-	defer s.pubs.RUnlock()
-
-	select {
-	case <-s.done:
-		return ErrServerStopped
-	case s.queue <- item{
-		Data:   data,
-		Events: events,
-	}:
-		return nil
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (s *Server) run(ctx context.Context) {
+	_ = "STUB: not implemented"
 	// The server runs until ctx is canceled.
-	s.done = ctx.Done()
-	queue := s.queue
-
-	// Shutdown monitor: When the context ends, wait for any active publish
-	// calls to exit, then close the queue to signal the sender to exit.
-	go func() {
-		<-ctx.Done()
-		s.pubs.Lock()
-		defer s.pubs.Unlock()
-		close(s.queue)
-		s.queue = nil
-	}()
-
-	s.exited = make(chan struct{})
-	go func() {
-		defer close(s.exited)
-
-		// Sender: Service the queue and forward messages to subscribers.
-		for it := range queue {
-			if err := s.send(it.Data, it.Events); err != nil {
-				logger.Error("error sending event", "err", err)
-			}
-		}
-		// Terminate all subscribers before exit.
-		s.subs.Lock()
-		defer s.subs.Unlock()
-		for si := range s.subs.index.all {
-			si.sub.stop(ErrTerminated)
-		}
-		s.subs.index = nil
-	}()
+	return
 }
+
+// Shutdown monitor: When the context ends, wait for any active publish
+// calls to exit, then close the queue to signal the sender to exit.
+
+// Sender: Service the queue and forward messages to subscribers.
+
+// Terminate all subscribers before exit.
 
 // removeSubs cancels and removes all the subscriptions in evict with the given
 // error. The caller must hold the s.subs lock.
-func (s *Server) removeSubs(evict subInfoSet, reason error) {
-	for si := range evict {
-		si.sub.stop(reason)
-	}
-	s.subs.index.removeAll(evict)
-}
+func (s *Server) removeSubs(evict subInfoSet, reason error) { _ = "STUB: not implemented"; return }
 
 // send delivers the given message to all matching subscribers.  An error in
 // query matching stops transmission and is returned.
 func (s *Server) send(data types.EventData, events []abci.Event) error {
+	_ = "STUB: not implemented"
 	// At exit, evict any subscriptions that were too slow.
-	evict := make(subInfoSet)
-	defer func() {
-		if len(evict) != 0 {
-			s.subs.Lock()
-			defer s.subs.Unlock()
-			s.removeSubs(evict, ErrTerminated)
-		}
-	}()
-
-	// N.B. Order is important here. We must acquire and defer the lock release
-	// AFTER deferring the eviction cleanup: The cleanup must happen after the
-	// reader lock has released, or it will deadlock.
-	s.subs.RLock()
-	defer s.subs.RUnlock()
-
-	// If an observer is defined, give it control of the message before
-	// attempting to deliver it to any matching subscribers. If the observer
-	// fails, the message will not be forwarded.
-	if s.subs.observe != nil {
-		err := s.subs.observe(Message{
-			data:   data,
-			events: events,
-		})
-		if err != nil {
-			return fmt.Errorf("observer failed on message: %w", err)
-		}
-	}
-
-	for si := range s.subs.index.all {
-		if !si.query.Matches(events) {
-			continue
-		}
-
-		// Publish the events to the subscriber's queue. If this fails, e.g.,
-		// because the queue is over capacity or out of quota, evict the
-		// subscription from the index.
-		if err := si.sub.publish(Message{
-			subID:  si.sub.id,
-			data:   data,
-			events: events,
-		}); err != nil {
-			evict.add(si)
-		}
-	}
-
 	return nil
 }
+
+// N.B. Order is important here. We must acquire and defer the lock release
+// AFTER deferring the eviction cleanup: The cleanup must happen after the
+// reader lock has released, or it will deadlock.
+
+// If an observer is defined, give it control of the message before
+// attempting to deliver it to any matching subscribers. If the observer
+// fails, the message will not be forwarded.
+
+// Publish the events to the subscriber's queue. If this fails, e.g.,
+// because the queue is over capacity or out of quota, evict the
+// subscription from the index.

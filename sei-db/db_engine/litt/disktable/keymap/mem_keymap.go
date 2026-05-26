@@ -1,12 +1,10 @@
 package keymap
 
 import (
-	"fmt"
 	"log/slog"
 	"sync"
 
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/types"
-	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
 )
 
 var _ Keymap = &memKeymap{}
@@ -31,60 +29,23 @@ var _ BuildKeymap = NewMemKeymap
 func NewMemKeymap(logger *slog.Logger,
 	_ string,
 	doubleWriteProtection bool) (kmap Keymap, requiresReload bool, err error) {
-
-	return &memKeymap{
-		logger:                logger,
-		data:                  make(map[string]types.Address),
-		doubleWriteProtection: doubleWriteProtection,
-	}, true, nil
+	_ = "STUB: not implemented"
+	return *new(Keymap), false, nil
 }
 
-func (m *memKeymap) Put(keys []*types.ScopedKey) error {
-	m.lock.Lock()
-	defer m.lock.Unlock()
-
-	for _, k := range keys {
-		stringKey := util.UnsafeBytesToString(k.Key)
-
-		if m.doubleWriteProtection {
-			_, ok := m.data[stringKey]
-			if ok {
-				return fmt.Errorf("key %s already exists", k.Key)
-			}
-		}
-
-		m.data[stringKey] = k.Address
-	}
-	return nil
-}
+func (m *memKeymap) Put(keys []*types.ScopedKey) error { _ = "STUB: not implemented"; return nil }
 
 func (m *memKeymap) Get(key []byte) (types.Address, bool, error) {
-	m.lock.RLock()
-	defer m.lock.RUnlock()
-
-	address, ok := m.data[util.UnsafeBytesToString(key)]
-	return address, ok, nil
+	_ = "STUB: not implemented"
+	return *new(types.Address), false, nil
 }
 
-func (m *memKeymap) Delete(keys []*types.ScopedKey) error {
-	m.lock.Lock()
-	defer m.lock.Unlock()
-
-	for _, key := range keys {
-		delete(m.data, util.UnsafeBytesToString(key.Key))
-	}
-
-	return nil
-}
+func (m *memKeymap) Delete(keys []*types.ScopedKey) error { _ = "STUB: not implemented"; return nil }
 
 func (m *memKeymap) Stop() error {
+	_ = "STUB: not implemented"
 	// nothing to do here
 	return nil
 }
 
-func (m *memKeymap) Destroy() error {
-	m.lock.Lock()
-	defer m.lock.Unlock()
-	m.data = nil
-	return nil
-}
+func (m *memKeymap) Destroy() error { _ = "STUB: not implemented"; return nil }

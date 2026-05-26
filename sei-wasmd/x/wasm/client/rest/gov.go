@@ -5,7 +5,6 @@ import (
 	"net/http"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
 	govrest "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/client/rest"
@@ -30,38 +29,25 @@ type StoreCodeProposalJSONReq struct {
 }
 
 func (s StoreCodeProposalJSONReq) Content() govtypes.Content {
-	return &types.StoreCodeProposal{
-		Title:                 s.Title,
-		Description:           s.Description,
-		RunAs:                 s.RunAs,
-		WASMByteCode:          s.WASMByteCode,
-		InstantiatePermission: s.InstantiatePermission,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s StoreCodeProposalJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s StoreCodeProposalJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
 func (s StoreCodeProposalJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 func (s StoreCodeProposalJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func StoreCodeProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "wasm_store_code",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req StoreCodeProposalJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type InstantiateProposalJSONReq struct {
@@ -83,41 +69,25 @@ type InstantiateProposalJSONReq struct {
 }
 
 func (s InstantiateProposalJSONReq) Content() govtypes.Content {
-	return &types.InstantiateContractProposal{
-		Title:       s.Title,
-		Description: s.Description,
-		RunAs:       s.RunAs,
-		Admin:       s.Admin,
-		CodeID:      s.Code,
-		Label:       s.Label,
-		Msg:         types.RawContractMessage(s.Msg),
-		Funds:       s.Funds,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s InstantiateProposalJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s InstantiateProposalJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
 func (s InstantiateProposalJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 func (s InstantiateProposalJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func InstantiateProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "wasm_instantiate",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req InstantiateProposalJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type MigrateProposalJSONReq struct {
@@ -135,38 +105,25 @@ type MigrateProposalJSONReq struct {
 }
 
 func (s MigrateProposalJSONReq) Content() govtypes.Content {
-	return &types.MigrateContractProposal{
-		Title:       s.Title,
-		Description: s.Description,
-		Contract:    s.Contract,
-		CodeID:      s.Code,
-		Msg:         types.RawContractMessage(s.Msg),
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s MigrateProposalJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s MigrateProposalJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
 func (s MigrateProposalJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 func (s MigrateProposalJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func MigrateProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "wasm_migrate",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req MigrateProposalJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type ExecuteProposalJSONReq struct {
@@ -186,39 +143,25 @@ type ExecuteProposalJSONReq struct {
 }
 
 func (s ExecuteProposalJSONReq) Content() govtypes.Content {
-	return &types.ExecuteContractProposal{
-		Title:       s.Title,
-		Description: s.Description,
-		Contract:    s.Contract,
-		Msg:         types.RawContractMessage(s.Msg),
-		RunAs:       s.RunAs,
-		Funds:       s.Funds,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s ExecuteProposalJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s ExecuteProposalJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
 func (s ExecuteProposalJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 func (s ExecuteProposalJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func ExecuteProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "wasm_execute",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req ExecuteProposalJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type SudoProposalJSONReq struct {
@@ -235,37 +178,25 @@ type SudoProposalJSONReq struct {
 }
 
 func (s SudoProposalJSONReq) Content() govtypes.Content {
-	return &types.SudoContractProposal{
-		Title:       s.Title,
-		Description: s.Description,
-		Contract:    s.Contract,
-		Msg:         types.RawContractMessage(s.Msg),
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s SudoProposalJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s SudoProposalJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
 func (s SudoProposalJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 func (s SudoProposalJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func SudoProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "wasm_sudo",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req SudoProposalJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type UpdateAdminJSONReq struct {
@@ -282,37 +213,25 @@ type UpdateAdminJSONReq struct {
 }
 
 func (s UpdateAdminJSONReq) Content() govtypes.Content {
-	return &types.UpdateAdminProposal{
-		Title:       s.Title,
-		Description: s.Description,
-		Contract:    s.Contract,
-		NewAdmin:    s.NewAdmin,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s UpdateAdminJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s UpdateAdminJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
 func (s UpdateAdminJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 func (s UpdateAdminJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func UpdateContractAdminProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "wasm_update_admin",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req UpdateAdminJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type ClearAdminJSONReq struct {
@@ -328,36 +247,25 @@ type ClearAdminJSONReq struct {
 }
 
 func (s ClearAdminJSONReq) Content() govtypes.Content {
-	return &types.ClearAdminProposal{
-		Title:       s.Title,
-		Description: s.Description,
-		Contract:    s.Contract,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s ClearAdminJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s ClearAdminJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
 func (s ClearAdminJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 func (s ClearAdminJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func ClearContractAdminProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "wasm_clear_admin",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req ClearAdminJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type PinCodeJSONReq struct {
@@ -373,36 +281,22 @@ type PinCodeJSONReq struct {
 }
 
 func (s PinCodeJSONReq) Content() govtypes.Content {
-	return &types.PinCodesProposal{
-		Title:       s.Title,
-		Description: s.Description,
-		CodeIDs:     s.CodeIDs,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s PinCodeJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s PinCodeJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
-func (s PinCodeJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
-}
+func (s PinCodeJSONReq) GetDeposit() sdk.Coins { _ = "STUB: not implemented"; return *new(sdk.Coins) }
 
 func (s PinCodeJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func PinCodeProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "pin_code",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req PinCodeJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type UnpinCodeJSONReq struct {
@@ -418,36 +312,22 @@ type UnpinCodeJSONReq struct {
 }
 
 func (s UnpinCodeJSONReq) Content() govtypes.Content {
-	return &types.UnpinCodesProposal{
-		Title:       s.Title,
-		Description: s.Description,
-		CodeIDs:     s.CodeIDs,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
-func (s UnpinCodeJSONReq) GetProposer() string {
-	return s.Proposer
-}
+func (s UnpinCodeJSONReq) GetProposer() string { _ = "STUB: not implemented"; return "" }
 
-func (s UnpinCodeJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
-}
+func (s UnpinCodeJSONReq) GetDeposit() sdk.Coins { _ = "STUB: not implemented"; return *new(sdk.Coins) }
 
 func (s UnpinCodeJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func UnpinCodeProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "unpin_code",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req UnpinCodeJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type UpdateInstantiateConfigProposalJSONReq struct {
@@ -461,36 +341,28 @@ type UpdateInstantiateConfigProposalJSONReq struct {
 }
 
 func (s UpdateInstantiateConfigProposalJSONReq) Content() govtypes.Content {
-	return &types.UpdateInstantiateConfigProposal{
-		Title:               s.Title,
-		Description:         s.Description,
-		AccessConfigUpdates: s.AccessConfigUpdates,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
 func (s UpdateInstantiateConfigProposalJSONReq) GetProposer() string {
-	return s.Proposer
+	_ = "STUB: not implemented"
+	return ""
 }
 
 func (s UpdateInstantiateConfigProposalJSONReq) GetDeposit() sdk.Coins {
-	return s.Deposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 func (s UpdateInstantiateConfigProposalJSONReq) GetBaseReq() rest.BaseReq {
-	return s.BaseReq
+	_ = "STUB: not implemented"
+	return *new(rest.BaseReq)
 }
 
 func UpdateInstantiateConfigProposalHandler(cliCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "update_instantiate_config",
-		Handler: func(w http.ResponseWriter, r *http.Request) {
-			var req UpdateInstantiateConfigProposalJSONReq
-			if !rest.ReadRESTReq(w, r, cliCtx.LegacyAmino, &req) {
-				return
-			}
-			toStdTxResponse(cliCtx, w, req)
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 type wasmProposalData interface {
@@ -501,23 +373,6 @@ type wasmProposalData interface {
 }
 
 func toStdTxResponse(cliCtx client.Context, w http.ResponseWriter, data wasmProposalData) {
-	proposerAddr, err := sdk.AccAddressFromBech32(data.GetProposer())
-	if err != nil {
-		rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-		return
-	}
-	msg, err := govtypes.NewMsgSubmitProposal(data.Content(), data.GetDeposit(), proposerAddr)
-	if err != nil {
-		rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-		return
-	}
-	if err := msg.ValidateBasic(); err != nil {
-		rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-		return
-	}
-	baseReq := data.GetBaseReq().Sanitize()
-	if !baseReq.ValidateBasic(w) {
-		return
-	}
-	tx.WriteGeneratedTxResponse(cliCtx, w, baseReq, msg)
+	_ = "STUB: not implemented"
+	return
 }

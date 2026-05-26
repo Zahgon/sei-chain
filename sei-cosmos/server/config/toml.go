@@ -1,10 +1,6 @@
 package config
 
 import (
-	"bytes"
-	"fmt"
-	"os"
-	"path/filepath"
 	"text/template"
 
 	"github.com/spf13/viper"
@@ -238,36 +234,12 @@ func init() {
 
 // ParseConfig retrieves the default environment configuration for the
 // application.
-func ParseConfig(v *viper.Viper) (*Config, error) {
-	conf := DefaultConfig()
-	err := v.Unmarshal(conf)
-
-	return conf, err
-}
+func ParseConfig(v *viper.Viper) (*Config, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // SetConfigTemplate sets the custom app config template for
 // the application
-func SetConfigTemplate(customTemplate string) {
-	var err error
-
-	tmpl := template.New("appConfigFileTemplate")
-
-	if configTemplate, err = tmpl.Parse(customTemplate); err != nil {
-		panic(err)
-	}
-}
+func SetConfigTemplate(customTemplate string) { _ = "STUB: not implemented"; return }
 
 // WriteConfigFile renders config using the template and writes it to
 // configFilePath.
-func WriteConfigFile(configFilePath string, config interface{}) {
-	var buffer bytes.Buffer
-
-	if err := configTemplate.Execute(&buffer, config); err != nil {
-		panic(err)
-	}
-
-	if err := os.WriteFile(filepath.Clean(configFilePath), buffer.Bytes(), 0600); err != nil {
-		fmt.Printf("MustWriteFile failed: %v\n", err)
-		os.Exit(1)
-	}
-}
+func WriteConfigFile(configFilePath string, config interface{}) { _ = "STUB: not implemented"; return }

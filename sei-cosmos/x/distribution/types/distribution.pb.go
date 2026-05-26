@@ -5,13 +5,11 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_sei_protocol_sei_chain_sei_cosmos_types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -33,44 +31,26 @@ type Params struct {
 	WithdrawAddrEnabled bool                                                   `protobuf:"varint,4,opt,name=withdraw_addr_enabled,json=withdrawAddrEnabled,proto3" json:"withdraw_addr_enabled,omitempty" yaml:"withdraw_addr_enabled"`
 }
 
-func (m *Params) Reset()      { *m = Params{} }
-func (*Params) ProtoMessage() {}
-func (*Params) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{0}
-}
-func (m *Params) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Params) Reset()                    { _ = "STUB: not implemented"; return }
+func (*Params) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Params) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Params) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Params) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Params.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Params) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Params.Merge(m, src)
-}
-func (m *Params) XXX_Size() int {
-	return m.Size()
-}
-func (m *Params) XXX_DiscardUnknown() {
-	xxx_messageInfo_Params.DiscardUnknown(m)
-}
+
+func (m *Params) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Params) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Params) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetWithdrawAddrEnabled() bool {
-	if m != nil {
-		return m.WithdrawAddrEnabled
-	}
-	return false
-}
+func (m *Params) GetWithdrawAddrEnabled() bool { _ = "STUB: not implemented"; return false }
 
 // ValidatorHistoricalRewards represents historical rewards for a validator.
 // Height is implicit within the store key.
@@ -90,50 +70,42 @@ type ValidatorHistoricalRewards struct {
 	ReferenceCount        uint32                                                      `protobuf:"varint,2,opt,name=reference_count,json=referenceCount,proto3" json:"reference_count,omitempty" yaml:"reference_count"`
 }
 
-func (m *ValidatorHistoricalRewards) Reset()         { *m = ValidatorHistoricalRewards{} }
-func (m *ValidatorHistoricalRewards) String() string { return proto.CompactTextString(m) }
-func (*ValidatorHistoricalRewards) ProtoMessage()    {}
+func (m *ValidatorHistoricalRewards) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ValidatorHistoricalRewards) String() string { _ = "STUB: not implemented"; return "" }
+func (*ValidatorHistoricalRewards) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ValidatorHistoricalRewards) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ValidatorHistoricalRewards) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ValidatorHistoricalRewards) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ValidatorHistoricalRewards.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ValidatorHistoricalRewards) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidatorHistoricalRewards.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *ValidatorHistoricalRewards) XXX_Size() int {
-	return m.Size()
-}
-func (m *ValidatorHistoricalRewards) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidatorHistoricalRewards.DiscardUnknown(m)
-}
+
+func (m *ValidatorHistoricalRewards) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ValidatorHistoricalRewards) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ValidatorHistoricalRewards proto.InternalMessageInfo
 
 func (m *ValidatorHistoricalRewards) GetCumulativeRewardRatio() github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins {
-	if m != nil {
-		return m.CumulativeRewardRatio
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins)
 }
 
 func (m *ValidatorHistoricalRewards) GetReferenceCount() uint32 {
-	if m != nil {
-		return m.ReferenceCount
-	}
+	_ = "STUB: not implemented"
 	return 0
 }
 
@@ -145,52 +117,38 @@ type ValidatorCurrentRewards struct {
 	Period  uint64                                                      `protobuf:"varint,2,opt,name=period,proto3" json:"period,omitempty"`
 }
 
-func (m *ValidatorCurrentRewards) Reset()         { *m = ValidatorCurrentRewards{} }
-func (m *ValidatorCurrentRewards) String() string { return proto.CompactTextString(m) }
-func (*ValidatorCurrentRewards) ProtoMessage()    {}
+func (m *ValidatorCurrentRewards) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ValidatorCurrentRewards) String() string { _ = "STUB: not implemented"; return "" }
+func (*ValidatorCurrentRewards) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ValidatorCurrentRewards) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ValidatorCurrentRewards) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ValidatorCurrentRewards) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ValidatorCurrentRewards.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ValidatorCurrentRewards) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidatorCurrentRewards.Merge(m, src)
-}
-func (m *ValidatorCurrentRewards) XXX_Size() int {
-	return m.Size()
-}
-func (m *ValidatorCurrentRewards) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidatorCurrentRewards.DiscardUnknown(m)
-}
+
+func (m *ValidatorCurrentRewards) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ValidatorCurrentRewards) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ValidatorCurrentRewards) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ValidatorCurrentRewards proto.InternalMessageInfo
 
 func (m *ValidatorCurrentRewards) GetRewards() github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins {
-	if m != nil {
-		return m.Rewards
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins)
 }
 
-func (m *ValidatorCurrentRewards) GetPeriod() uint64 {
-	if m != nil {
-		return m.Period
-	}
-	return 0
-}
+func (m *ValidatorCurrentRewards) GetPeriod() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // ValidatorAccumulatedCommission represents accumulated commission
 // for a validator kept as a running counter, can be withdrawn at any time.
@@ -198,44 +156,38 @@ type ValidatorAccumulatedCommission struct {
 	Commission github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins `protobuf:"bytes,1,rep,name=commission,proto3,castrepeated=github.com/sei-protocol/sei-chain/sei-cosmos/types.DecCoins" json:"commission"`
 }
 
-func (m *ValidatorAccumulatedCommission) Reset()         { *m = ValidatorAccumulatedCommission{} }
-func (m *ValidatorAccumulatedCommission) String() string { return proto.CompactTextString(m) }
-func (*ValidatorAccumulatedCommission) ProtoMessage()    {}
+func (m *ValidatorAccumulatedCommission) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ValidatorAccumulatedCommission) String() string { _ = "STUB: not implemented"; return "" }
+func (*ValidatorAccumulatedCommission) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ValidatorAccumulatedCommission) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ValidatorAccumulatedCommission) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ValidatorAccumulatedCommission) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ValidatorAccumulatedCommission.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ValidatorAccumulatedCommission) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidatorAccumulatedCommission.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *ValidatorAccumulatedCommission) XXX_Size() int {
-	return m.Size()
-}
-func (m *ValidatorAccumulatedCommission) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidatorAccumulatedCommission.DiscardUnknown(m)
-}
+
+func (m *ValidatorAccumulatedCommission) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ValidatorAccumulatedCommission) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ValidatorAccumulatedCommission proto.InternalMessageInfo
 
 func (m *ValidatorAccumulatedCommission) GetCommission() github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins {
-	if m != nil {
-		return m.Commission
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins)
 }
 
 // ValidatorOutstandingRewards represents outstanding (un-withdrawn) rewards
@@ -244,44 +196,38 @@ type ValidatorOutstandingRewards struct {
 	Rewards github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins `protobuf:"bytes,1,rep,name=rewards,proto3,castrepeated=github.com/sei-protocol/sei-chain/sei-cosmos/types.DecCoins" json:"rewards" yaml:"rewards"`
 }
 
-func (m *ValidatorOutstandingRewards) Reset()         { *m = ValidatorOutstandingRewards{} }
-func (m *ValidatorOutstandingRewards) String() string { return proto.CompactTextString(m) }
-func (*ValidatorOutstandingRewards) ProtoMessage()    {}
+func (m *ValidatorOutstandingRewards) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ValidatorOutstandingRewards) String() string { _ = "STUB: not implemented"; return "" }
+func (*ValidatorOutstandingRewards) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ValidatorOutstandingRewards) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ValidatorOutstandingRewards) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ValidatorOutstandingRewards) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ValidatorOutstandingRewards.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ValidatorOutstandingRewards) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidatorOutstandingRewards.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *ValidatorOutstandingRewards) XXX_Size() int {
-	return m.Size()
-}
-func (m *ValidatorOutstandingRewards) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidatorOutstandingRewards.DiscardUnknown(m)
-}
+
+func (m *ValidatorOutstandingRewards) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ValidatorOutstandingRewards) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ValidatorOutstandingRewards proto.InternalMessageInfo
 
 func (m *ValidatorOutstandingRewards) GetRewards() github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins {
-	if m != nil {
-		return m.Rewards
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins)
 }
 
 // ValidatorSlashEvent represents a validator slash event.
@@ -293,87 +239,60 @@ type ValidatorSlashEvent struct {
 	Fraction        github_com_sei_protocol_sei_chain_sei_cosmos_types.Dec `protobuf:"bytes,2,opt,name=fraction,proto3,customtype=github.com/sei-protocol/sei-chain/sei-cosmos/types.Dec" json:"fraction"`
 }
 
-func (m *ValidatorSlashEvent) Reset()         { *m = ValidatorSlashEvent{} }
-func (m *ValidatorSlashEvent) String() string { return proto.CompactTextString(m) }
-func (*ValidatorSlashEvent) ProtoMessage()    {}
+func (m *ValidatorSlashEvent) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ValidatorSlashEvent) String() string { _ = "STUB: not implemented"; return "" }
+func (*ValidatorSlashEvent) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ValidatorSlashEvent) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ValidatorSlashEvent) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *ValidatorSlashEvent) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ValidatorSlashEvent) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ValidatorSlashEvent.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ValidatorSlashEvent) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidatorSlashEvent.Merge(m, src)
-}
-func (m *ValidatorSlashEvent) XXX_Size() int {
-	return m.Size()
-}
-func (m *ValidatorSlashEvent) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidatorSlashEvent.DiscardUnknown(m)
-}
+
+func (m *ValidatorSlashEvent) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ValidatorSlashEvent) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ValidatorSlashEvent) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ValidatorSlashEvent proto.InternalMessageInfo
 
-func (m *ValidatorSlashEvent) GetValidatorPeriod() uint64 {
-	if m != nil {
-		return m.ValidatorPeriod
-	}
-	return 0
-}
+func (m *ValidatorSlashEvent) GetValidatorPeriod() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // ValidatorSlashEvents is a collection of ValidatorSlashEvent messages.
 type ValidatorSlashEvents struct {
 	ValidatorSlashEvents []ValidatorSlashEvent `protobuf:"bytes,1,rep,name=validator_slash_events,json=validatorSlashEvents,proto3" json:"validator_slash_events" yaml:"validator_slash_events"`
 }
 
-func (m *ValidatorSlashEvents) Reset()      { *m = ValidatorSlashEvents{} }
-func (*ValidatorSlashEvents) ProtoMessage() {}
+func (m *ValidatorSlashEvents) Reset()      { _ = "STUB: not implemented"; return }
+func (*ValidatorSlashEvents) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*ValidatorSlashEvents) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{6}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ValidatorSlashEvents) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *ValidatorSlashEvents) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ValidatorSlashEvents) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ValidatorSlashEvents.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ValidatorSlashEvents) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ValidatorSlashEvents.Merge(m, src)
-}
-func (m *ValidatorSlashEvents) XXX_Size() int {
-	return m.Size()
-}
-func (m *ValidatorSlashEvents) XXX_DiscardUnknown() {
-	xxx_messageInfo_ValidatorSlashEvents.DiscardUnknown(m)
-}
+
+func (m *ValidatorSlashEvents) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ValidatorSlashEvents) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ValidatorSlashEvents) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ValidatorSlashEvents proto.InternalMessageInfo
 
 func (m *ValidatorSlashEvents) GetValidatorSlashEvents() []ValidatorSlashEvent {
-	if m != nil {
-		return m.ValidatorSlashEvents
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -382,44 +301,29 @@ type FeePool struct {
 	CommunityPool github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins `protobuf:"bytes,1,rep,name=community_pool,json=communityPool,proto3,castrepeated=github.com/sei-protocol/sei-chain/sei-cosmos/types.DecCoins" json:"community_pool" yaml:"community_pool"`
 }
 
-func (m *FeePool) Reset()         { *m = FeePool{} }
-func (m *FeePool) String() string { return proto.CompactTextString(m) }
-func (*FeePool) ProtoMessage()    {}
-func (*FeePool) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{7}
-}
-func (m *FeePool) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *FeePool) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *FeePool) String() string            { _ = "STUB: not implemented"; return "" }
+func (*FeePool) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*FeePool) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *FeePool) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *FeePool) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_FeePool.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *FeePool) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FeePool.Merge(m, src)
-}
-func (m *FeePool) XXX_Size() int {
-	return m.Size()
-}
-func (m *FeePool) XXX_DiscardUnknown() {
-	xxx_messageInfo_FeePool.DiscardUnknown(m)
-}
+
+func (m *FeePool) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *FeePool) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *FeePool) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_FeePool proto.InternalMessageInfo
 
 func (m *FeePool) GetCommunityPool() github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins {
-	if m != nil {
-		return m.CommunityPool
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins)
 }
 
 // CommunityPoolSpendProposal details a proposal for use of community funds,
@@ -432,35 +336,31 @@ type CommunityPoolSpendProposal struct {
 	Amount      github_com_sei_protocol_sei_chain_sei_cosmos_types.Coins `protobuf:"bytes,4,rep,name=amount,proto3,castrepeated=github.com/sei-protocol/sei-chain/sei-cosmos/types.Coins" json:"amount"`
 }
 
-func (m *CommunityPoolSpendProposal) Reset()      { *m = CommunityPoolSpendProposal{} }
-func (*CommunityPoolSpendProposal) ProtoMessage() {}
+func (m *CommunityPoolSpendProposal) Reset()      { _ = "STUB: not implemented"; return }
+func (*CommunityPoolSpendProposal) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*CommunityPoolSpendProposal) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{8}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *CommunityPoolSpendProposal) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *CommunityPoolSpendProposal) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CommunityPoolSpendProposal.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *CommunityPoolSpendProposal) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CommunityPoolSpendProposal.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *CommunityPoolSpendProposal) XXX_Size() int {
-	return m.Size()
-}
-func (m *CommunityPoolSpendProposal) XXX_DiscardUnknown() {
-	xxx_messageInfo_CommunityPoolSpendProposal.DiscardUnknown(m)
-}
+
+func (m *CommunityPoolSpendProposal) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CommunityPoolSpendProposal) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_CommunityPoolSpendProposal proto.InternalMessageInfo
 
@@ -476,52 +376,35 @@ type DelegatorStartingInfo struct {
 	Height         uint64                                                 `protobuf:"varint,3,opt,name=height,proto3" json:"creation_height" yaml:"creation_height"`
 }
 
-func (m *DelegatorStartingInfo) Reset()         { *m = DelegatorStartingInfo{} }
-func (m *DelegatorStartingInfo) String() string { return proto.CompactTextString(m) }
-func (*DelegatorStartingInfo) ProtoMessage()    {}
+func (m *DelegatorStartingInfo) Reset()         { _ = "STUB: not implemented"; return }
+func (m *DelegatorStartingInfo) String() string { _ = "STUB: not implemented"; return "" }
+func (*DelegatorStartingInfo) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*DelegatorStartingInfo) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{9}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *DelegatorStartingInfo) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *DelegatorStartingInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DelegatorStartingInfo.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *DelegatorStartingInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DelegatorStartingInfo.Merge(m, src)
-}
-func (m *DelegatorStartingInfo) XXX_Size() int {
-	return m.Size()
-}
-func (m *DelegatorStartingInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_DelegatorStartingInfo.DiscardUnknown(m)
-}
+
+func (m *DelegatorStartingInfo) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *DelegatorStartingInfo) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *DelegatorStartingInfo) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_DelegatorStartingInfo proto.InternalMessageInfo
 
-func (m *DelegatorStartingInfo) GetPreviousPeriod() uint64 {
-	if m != nil {
-		return m.PreviousPeriod
-	}
-	return 0
-}
+func (m *DelegatorStartingInfo) GetPreviousPeriod() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *DelegatorStartingInfo) GetHeight() uint64 {
-	if m != nil {
-		return m.Height
-	}
-	return 0
-}
+func (m *DelegatorStartingInfo) GetHeight() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // DelegationDelegatorReward represents the properties
 // of a delegator's delegation reward.
@@ -530,36 +413,29 @@ type DelegationDelegatorReward struct {
 	Reward           github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins `protobuf:"bytes,2,rep,name=reward,proto3,castrepeated=github.com/sei-protocol/sei-chain/sei-cosmos/types.DecCoins" json:"reward"`
 }
 
-func (m *DelegationDelegatorReward) Reset()         { *m = DelegationDelegatorReward{} }
-func (m *DelegationDelegatorReward) String() string { return proto.CompactTextString(m) }
-func (*DelegationDelegatorReward) ProtoMessage()    {}
+func (m *DelegationDelegatorReward) Reset()         { _ = "STUB: not implemented"; return }
+func (m *DelegationDelegatorReward) String() string { _ = "STUB: not implemented"; return "" }
+func (*DelegationDelegatorReward) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*DelegationDelegatorReward) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{10}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *DelegationDelegatorReward) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *DelegationDelegatorReward) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DelegationDelegatorReward.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *DelegationDelegatorReward) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DelegationDelegatorReward.Merge(m, src)
-}
-func (m *DelegationDelegatorReward) XXX_Size() int {
-	return m.Size()
-}
-func (m *DelegationDelegatorReward) XXX_DiscardUnknown() {
-	xxx_messageInfo_DelegationDelegatorReward.DiscardUnknown(m)
-}
+
+func (m *DelegationDelegatorReward) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *DelegationDelegatorReward) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *DelegationDelegatorReward) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_DelegationDelegatorReward proto.InternalMessageInfo
 
@@ -573,35 +449,37 @@ type CommunityPoolSpendProposalWithDeposit struct {
 	Deposit     string `protobuf:"bytes,5,opt,name=deposit,proto3" json:"deposit,omitempty" yaml:"deposit"`
 }
 
-func (m *CommunityPoolSpendProposalWithDeposit) Reset()         { *m = CommunityPoolSpendProposalWithDeposit{} }
-func (m *CommunityPoolSpendProposalWithDeposit) String() string { return proto.CompactTextString(m) }
-func (*CommunityPoolSpendProposalWithDeposit) ProtoMessage()    {}
+func (m *CommunityPoolSpendProposalWithDeposit) Reset() { _ = "STUB: not implemented"; return }
+func (m *CommunityPoolSpendProposalWithDeposit) String() string {
+	_ = "STUB: not implemented"
+	return ""
+}
+func (*CommunityPoolSpendProposalWithDeposit) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*CommunityPoolSpendProposalWithDeposit) Descriptor() ([]byte, []int) {
-	return fileDescriptor_cd78a31ea281a992, []int{11}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *CommunityPoolSpendProposalWithDeposit) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *CommunityPoolSpendProposalWithDeposit) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CommunityPoolSpendProposalWithDeposit.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *CommunityPoolSpendProposalWithDeposit) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CommunityPoolSpendProposalWithDeposit.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *CommunityPoolSpendProposalWithDeposit) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *CommunityPoolSpendProposalWithDeposit) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *CommunityPoolSpendProposalWithDeposit) XXX_DiscardUnknown() {
-	xxx_messageInfo_CommunityPoolSpendProposalWithDeposit.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_CommunityPoolSpendProposalWithDeposit proto.InternalMessageInfo
@@ -699,2640 +577,302 @@ var fileDescriptor_cd78a31ea281a992 = []byte{
 	0x99, 0xe0, 0xdd, 0x0d, 0x51, 0x0c, 0x00, 0x00,
 }
 
-func (this *Params) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *Params) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*Params)
-	if !ok {
-		that2, ok := that.(Params)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CommunityTax.Equal(that1.CommunityTax) {
-		return false
-	}
-	if !this.BaseProposerReward.Equal(that1.BaseProposerReward) {
-		return false
-	}
-	if !this.BonusProposerReward.Equal(that1.BonusProposerReward) {
-		return false
-	}
-	if this.WithdrawAddrEnabled != that1.WithdrawAddrEnabled {
-		return false
-	}
-	return true
-}
 func (this *ValidatorHistoricalRewards) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ValidatorHistoricalRewards)
-	if !ok {
-		that2, ok := that.(ValidatorHistoricalRewards)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.CumulativeRewardRatio) != len(that1.CumulativeRewardRatio) {
-		return false
-	}
-	for i := range this.CumulativeRewardRatio {
-		if !this.CumulativeRewardRatio[i].Equal(&that1.CumulativeRewardRatio[i]) {
-			return false
-		}
-	}
-	if this.ReferenceCount != that1.ReferenceCount {
-		return false
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *ValidatorCurrentRewards) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ValidatorCurrentRewards)
-	if !ok {
-		that2, ok := that.(ValidatorCurrentRewards)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Rewards) != len(that1.Rewards) {
-		return false
-	}
-	for i := range this.Rewards {
-		if !this.Rewards[i].Equal(&that1.Rewards[i]) {
-			return false
-		}
-	}
-	if this.Period != that1.Period {
-		return false
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *ValidatorAccumulatedCommission) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ValidatorAccumulatedCommission)
-	if !ok {
-		that2, ok := that.(ValidatorAccumulatedCommission)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Commission) != len(that1.Commission) {
-		return false
-	}
-	for i := range this.Commission {
-		if !this.Commission[i].Equal(&that1.Commission[i]) {
-			return false
-		}
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *ValidatorOutstandingRewards) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ValidatorOutstandingRewards)
-	if !ok {
-		that2, ok := that.(ValidatorOutstandingRewards)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.Rewards) != len(that1.Rewards) {
-		return false
-	}
-	for i := range this.Rewards {
-		if !this.Rewards[i].Equal(&that1.Rewards[i]) {
-			return false
-		}
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *ValidatorSlashEvent) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ValidatorSlashEvent)
-	if !ok {
-		that2, ok := that.(ValidatorSlashEvent)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ValidatorPeriod != that1.ValidatorPeriod {
-		return false
-	}
-	if !this.Fraction.Equal(that1.Fraction) {
-		return false
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *ValidatorSlashEvents) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*ValidatorSlashEvents)
-	if !ok {
-		that2, ok := that.(ValidatorSlashEvents)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.ValidatorSlashEvents) != len(that1.ValidatorSlashEvents) {
-		return false
-	}
-	for i := range this.ValidatorSlashEvents {
-		if !this.ValidatorSlashEvents[i].Equal(&that1.ValidatorSlashEvents[i]) {
-			return false
-		}
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
-func (this *FeePool) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
 
-	that1, ok := that.(*FeePool)
-	if !ok {
-		that2, ok := that.(FeePool)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.CommunityPool) != len(that1.CommunityPool) {
-		return false
-	}
-	for i := range this.CommunityPool {
-		if !this.CommunityPool[i].Equal(&that1.CommunityPool[i]) {
-			return false
-		}
-	}
-	return true
-}
+func (this *FeePool) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
+
 func (this *DelegatorStartingInfo) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DelegatorStartingInfo)
-	if !ok {
-		that2, ok := that.(DelegatorStartingInfo)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.PreviousPeriod != that1.PreviousPeriod {
-		return false
-	}
-	if !this.Stake.Equal(that1.Stake) {
-		return false
-	}
-	if this.Height != that1.Height {
-		return false
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *DelegationDelegatorReward) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*DelegationDelegatorReward)
-	if !ok {
-		that2, ok := that.(DelegationDelegatorReward)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.ValidatorAddress != that1.ValidatorAddress {
-		return false
-	}
-	if len(this.Reward) != len(that1.Reward) {
-		return false
-	}
-	for i := range this.Reward {
-		if !this.Reward[i].Equal(&that1.Reward[i]) {
-			return false
-		}
-	}
-	return true
+	_ = "STUB: not implemented"
+	return false
 }
+
 func (this *CommunityPoolSpendProposalWithDeposit) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*CommunityPoolSpendProposalWithDeposit)
-	if !ok {
-		that2, ok := that.(CommunityPoolSpendProposalWithDeposit)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.Title != that1.Title {
-		return false
-	}
-	if this.Description != that1.Description {
-		return false
-	}
-	if this.Recipient != that1.Recipient {
-		return false
-	}
-	if this.Amount != that1.Amount {
-		return false
-	}
-	if this.Deposit != that1.Deposit {
-		return false
-	}
-	return true
-}
-func (m *Params) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (m *Params) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Params) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Params) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.WithdrawAddrEnabled {
-		i--
-		if m.WithdrawAddrEnabled {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x20
-	}
-	{
-		size := m.BonusProposerReward.Size()
-		i -= size
-		if _, err := m.BonusProposerReward.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintDistribution(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x1a
-	{
-		size := m.BaseProposerReward.Size()
-		i -= size
-		if _, err := m.BaseProposerReward.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintDistribution(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size := m.CommunityTax.Size()
-		i -= size
-		if _, err := m.CommunityTax.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintDistribution(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorHistoricalRewards) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ValidatorHistoricalRewards) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorHistoricalRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.ReferenceCount != 0 {
-		i = encodeVarintDistribution(dAtA, i, uint64(m.ReferenceCount))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.CumulativeRewardRatio) > 0 {
-		for iNdEx := len(m.CumulativeRewardRatio) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.CumulativeRewardRatio[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDistribution(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorCurrentRewards) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ValidatorCurrentRewards) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorCurrentRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Period != 0 {
-		i = encodeVarintDistribution(dAtA, i, uint64(m.Period))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Rewards) > 0 {
-		for iNdEx := len(m.Rewards) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Rewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDistribution(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorAccumulatedCommission) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ValidatorAccumulatedCommission) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorAccumulatedCommission) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Commission) > 0 {
-		for iNdEx := len(m.Commission) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Commission[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDistribution(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorOutstandingRewards) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ValidatorOutstandingRewards) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorOutstandingRewards) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Rewards) > 0 {
-		for iNdEx := len(m.Rewards) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Rewards[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDistribution(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorSlashEvent) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ValidatorSlashEvent) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorSlashEvent) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size := m.Fraction.Size()
-		i -= size
-		if _, err := m.Fraction.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintDistribution(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if m.ValidatorPeriod != 0 {
-		i = encodeVarintDistribution(dAtA, i, uint64(m.ValidatorPeriod))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorSlashEvents) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ValidatorSlashEvents) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ValidatorSlashEvents) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ValidatorSlashEvents) > 0 {
-		for iNdEx := len(m.ValidatorSlashEvents) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.ValidatorSlashEvents[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDistribution(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *FeePool) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *FeePool) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *FeePool) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *FeePool) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *FeePool) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.CommunityPool) > 0 {
-		for iNdEx := len(m.CommunityPool) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.CommunityPool[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDistribution(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommunityPoolSpendProposal) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CommunityPoolSpendProposal) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommunityPoolSpendProposal) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Amount) > 0 {
-		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDistribution(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if len(m.Recipient) > 0 {
-		i -= len(m.Recipient)
-		copy(dAtA[i:], m.Recipient)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.Recipient)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Description) > 0 {
-		i -= len(m.Description)
-		copy(dAtA[i:], m.Description)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.Description)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Title) > 0 {
-		i -= len(m.Title)
-		copy(dAtA[i:], m.Title)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.Title)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DelegatorStartingInfo) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *DelegatorStartingInfo) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DelegatorStartingInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Height != 0 {
-		i = encodeVarintDistribution(dAtA, i, uint64(m.Height))
-		i--
-		dAtA[i] = 0x18
-	}
-	{
-		size := m.Stake.Size()
-		i -= size
-		if _, err := m.Stake.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintDistribution(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	if m.PreviousPeriod != 0 {
-		i = encodeVarintDistribution(dAtA, i, uint64(m.PreviousPeriod))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DelegationDelegatorReward) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *DelegationDelegatorReward) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DelegationDelegatorReward) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Reward) > 0 {
-		for iNdEx := len(m.Reward) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Reward[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintDistribution(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.ValidatorAddress) > 0 {
-		i -= len(m.ValidatorAddress)
-		copy(dAtA[i:], m.ValidatorAddress)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.ValidatorAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommunityPoolSpendProposalWithDeposit) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CommunityPoolSpendProposalWithDeposit) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommunityPoolSpendProposalWithDeposit) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Deposit) > 0 {
-		i -= len(m.Deposit)
-		copy(dAtA[i:], m.Deposit)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.Deposit)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if len(m.Amount) > 0 {
-		i -= len(m.Amount)
-		copy(dAtA[i:], m.Amount)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.Amount)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.Recipient) > 0 {
-		i -= len(m.Recipient)
-		copy(dAtA[i:], m.Recipient)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.Recipient)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Description) > 0 {
-		i -= len(m.Description)
-		copy(dAtA[i:], m.Description)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.Description)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Title) > 0 {
-		i -= len(m.Title)
-		copy(dAtA[i:], m.Title)
-		i = encodeVarintDistribution(dAtA, i, uint64(len(m.Title)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintDistribution(dAtA []byte, offset int, v uint64) int {
-	offset -= sovDistribution(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *Params) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.CommunityTax.Size()
-	n += 1 + l + sovDistribution(uint64(l))
-	l = m.BaseProposerReward.Size()
-	n += 1 + l + sovDistribution(uint64(l))
-	l = m.BonusProposerReward.Size()
-	n += 1 + l + sovDistribution(uint64(l))
-	if m.WithdrawAddrEnabled {
-		n += 2
-	}
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *ValidatorHistoricalRewards) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.CumulativeRewardRatio) > 0 {
-		for _, e := range m.CumulativeRewardRatio {
-			l = e.Size()
-			n += 1 + l + sovDistribution(uint64(l))
-		}
-	}
-	if m.ReferenceCount != 0 {
-		n += 1 + sovDistribution(uint64(m.ReferenceCount))
-	}
-	return n
-}
+func (m *Params) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ValidatorCurrentRewards) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Rewards) > 0 {
-		for _, e := range m.Rewards {
-			l = e.Size()
-			n += 1 + l + sovDistribution(uint64(l))
-		}
-	}
-	if m.Period != 0 {
-		n += 1 + sovDistribution(uint64(m.Period))
-	}
-	return n
-}
+func (m *ValidatorHistoricalRewards) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ValidatorAccumulatedCommission) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Commission) > 0 {
-		for _, e := range m.Commission {
-			l = e.Size()
-			n += 1 + l + sovDistribution(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ValidatorCurrentRewards) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ValidatorOutstandingRewards) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Rewards) > 0 {
-		for _, e := range m.Rewards {
-			l = e.Size()
-			n += 1 + l + sovDistribution(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ValidatorAccumulatedCommission) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ValidatorSlashEvent) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.ValidatorPeriod != 0 {
-		n += 1 + sovDistribution(uint64(m.ValidatorPeriod))
-	}
-	l = m.Fraction.Size()
-	n += 1 + l + sovDistribution(uint64(l))
-	return n
-}
+func (m *ValidatorOutstandingRewards) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ValidatorSlashEvents) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ValidatorSlashEvents) > 0 {
-		for _, e := range m.ValidatorSlashEvents {
-			l = e.Size()
-			n += 1 + l + sovDistribution(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ValidatorSlashEvent) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *FeePool) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.CommunityPool) > 0 {
-		for _, e := range m.CommunityPool {
-			l = e.Size()
-			n += 1 + l + sovDistribution(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ValidatorSlashEvents) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *CommunityPoolSpendProposal) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Title)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	l = len(m.Description)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	l = len(m.Recipient)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	if len(m.Amount) > 0 {
-		for _, e := range m.Amount {
-			l = e.Size()
-			n += 1 + l + sovDistribution(uint64(l))
-		}
-	}
-	return n
-}
+func (m *FeePool) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *DelegatorStartingInfo) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.PreviousPeriod != 0 {
-		n += 1 + sovDistribution(uint64(m.PreviousPeriod))
-	}
-	l = m.Stake.Size()
-	n += 1 + l + sovDistribution(uint64(l))
-	if m.Height != 0 {
-		n += 1 + sovDistribution(uint64(m.Height))
-	}
-	return n
-}
+func (m *CommunityPoolSpendProposal) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *DelegationDelegatorReward) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.ValidatorAddress)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	if len(m.Reward) > 0 {
-		for _, e := range m.Reward {
-			l = e.Size()
-			n += 1 + l + sovDistribution(uint64(l))
-		}
-	}
-	return n
-}
+func (m *DelegatorStartingInfo) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *CommunityPoolSpendProposalWithDeposit) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Title)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	l = len(m.Description)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	l = len(m.Recipient)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	l = len(m.Amount)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	l = len(m.Deposit)
-	if l > 0 {
-		n += 1 + l + sovDistribution(uint64(l))
-	}
-	return n
-}
+func (m *DelegationDelegatorReward) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovDistribution(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozDistribution(x uint64) (n int) {
-	return sovDistribution(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *Params) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Params: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Params: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CommunityTax", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.CommunityTax.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BaseProposerReward", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.BaseProposerReward.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BonusProposerReward", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.BonusProposerReward.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WithdrawAddrEnabled", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.WithdrawAddrEnabled = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *CommunityPoolSpendProposalWithDeposit) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func sovDistribution(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozDistribution(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *Params) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ValidatorHistoricalRewards) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ValidatorHistoricalRewards: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ValidatorHistoricalRewards: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CumulativeRewardRatio", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CumulativeRewardRatio = append(m.CumulativeRewardRatio, types.DecCoin{})
-			if err := m.CumulativeRewardRatio[len(m.CumulativeRewardRatio)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ReferenceCount", wireType)
-			}
-			m.ReferenceCount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ReferenceCount |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *ValidatorCurrentRewards) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ValidatorCurrentRewards: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ValidatorCurrentRewards: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Rewards = append(m.Rewards, types.DecCoin{})
-			if err := m.Rewards[len(m.Rewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Period", wireType)
-			}
-			m.Period = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Period |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *ValidatorAccumulatedCommission) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ValidatorAccumulatedCommission: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ValidatorAccumulatedCommission: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Commission", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Commission = append(m.Commission, types.DecCoin{})
-			if err := m.Commission[len(m.Commission)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *ValidatorOutstandingRewards) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ValidatorOutstandingRewards: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ValidatorOutstandingRewards: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Rewards", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Rewards = append(m.Rewards, types.DecCoin{})
-			if err := m.Rewards[len(m.Rewards)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *ValidatorSlashEvent) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ValidatorSlashEvent: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ValidatorSlashEvent: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorPeriod", wireType)
-			}
-			m.ValidatorPeriod = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ValidatorPeriod |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Fraction", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Fraction.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ValidatorSlashEvents) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ValidatorSlashEvents: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ValidatorSlashEvents: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorSlashEvents", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValidatorSlashEvents = append(m.ValidatorSlashEvents, ValidatorSlashEvent{})
-			if err := m.ValidatorSlashEvents[len(m.ValidatorSlashEvents)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *ValidatorSlashEvent) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *FeePool) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: FeePool: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: FeePool: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CommunityPool", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.CommunityPool = append(m.CommunityPool, types.DecCoin{})
-			if err := m.CommunityPool[len(m.CommunityPool)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *ValidatorSlashEvents) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *FeePool) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *CommunityPoolSpendProposal) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CommunityPoolSpendProposal: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CommunityPoolSpendProposal: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Title", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Title = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Description = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Recipient", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Recipient = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Amount = append(m.Amount, types.Coin{})
-			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *DelegatorStartingInfo) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DelegatorStartingInfo: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DelegatorStartingInfo: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PreviousPeriod", wireType)
-			}
-			m.PreviousPeriod = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PreviousPeriod |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Stake", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.Stake.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Height", wireType)
-			}
-			m.Height = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Height |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *DelegatorStartingInfo) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *DelegationDelegatorReward) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DelegationDelegatorReward: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DelegationDelegatorReward: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ValidatorAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ValidatorAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Reward", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Reward = append(m.Reward, types.DecCoin{})
-			if err := m.Reward[len(m.Reward)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *CommunityPoolSpendProposalWithDeposit) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CommunityPoolSpendProposalWithDeposit: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CommunityPoolSpendProposalWithDeposit: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Title", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Title = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Description", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Description = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Recipient", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Recipient = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Amount = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Deposit", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Deposit = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipDistribution(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthDistribution
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipDistribution(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowDistribution
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowDistribution
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthDistribution
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupDistribution
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthDistribution
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipDistribution(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthDistribution        = fmt.Errorf("proto: negative length found during unmarshaling")

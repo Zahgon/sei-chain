@@ -1,12 +1,7 @@
 package legacyabci
 
 import (
-	"fmt"
-	"runtime/debug"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-	scheduler "github.com/sei-protocol/sei-chain/sei-cosmos/types/occ"
 )
 
 // RecoveryHandler handles recovery() object.
@@ -22,76 +17,30 @@ type recoveryMiddleware func(recoveryObj interface{}) (recoveryMiddleware, error
 // processRecovery processes recoveryMiddleware chain for recovery() object.
 // Chain processing stops on non-nil error or when chain is processed.
 func processRecovery(recoveryObj interface{}, middleware recoveryMiddleware) error {
-	if middleware == nil {
-		return nil
-	}
-
-	next, err := middleware(recoveryObj)
-	if err != nil {
-		return err
-	}
-
-	return processRecovery(recoveryObj, next)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // newRecoveryMiddleware creates a RecoveryHandler middleware.
 func newRecoveryMiddleware(handler RecoveryHandler, next recoveryMiddleware) recoveryMiddleware {
-	return func(recoveryObj interface{}) (recoveryMiddleware, error) {
-		if err := handler(recoveryObj); err != nil {
-			return nil, err
-		}
-
-		return next, nil
-	}
+	_ = "STUB: not implemented"
+	return *new(recoveryMiddleware)
 }
 
 // newOutOfGasRecoveryMiddleware creates a standard OutOfGas recovery middleware for app.runTx method.
 func newOutOfGasRecoveryMiddleware(gasWanted uint64, ctx sdk.Context, next recoveryMiddleware) recoveryMiddleware {
-	handler := func(recoveryObj interface{}) error {
-		err, ok := recoveryObj.(sdk.ErrorOutOfGas)
-		if !ok {
-			return nil
-		}
-
-		return sdkerrors.Wrap(
-			sdkerrors.ErrOutOfGas, fmt.Sprintf(
-				"out of gas in location: %v; gasWanted: %d, gasUsed: %d",
-				err.Descriptor, gasWanted, ctx.GasMeter().GasConsumed(),
-			),
-		)
-	}
-
-	return newRecoveryMiddleware(handler, next)
+	_ = "STUB: not implemented"
+	return *new(recoveryMiddleware)
 }
 
 // newOCCAbortRecoveryMiddleware creates a standard OCC Abort recovery middleware for app.runTx method.
 func newOCCAbortRecoveryMiddleware(next recoveryMiddleware) recoveryMiddleware {
-	handler := func(recoveryObj interface{}) error {
-		abort, ok := recoveryObj.(scheduler.Abort)
-		if !ok {
-			return nil
-		}
-
-		return sdkerrors.Wrap(
-			sdkerrors.ErrOCCAbort, fmt.Sprintf(
-				"occ abort occurred with dependent index %d and error: %v",
-				abort.DependentTxIdx, abort.Err,
-			),
-		)
-	}
-
-	return newRecoveryMiddleware(handler, next)
+	_ = "STUB: not implemented"
+	return *new(recoveryMiddleware)
 }
 
 // newDefaultRecoveryMiddleware creates a default (last in chain) recovery middleware for app.runTx method.
 func newDefaultRecoveryMiddleware() recoveryMiddleware {
-	handler := func(recoveryObj interface{}) error {
-		return sdkerrors.Wrap(
-			sdkerrors.ErrPanic, fmt.Sprintf(
-				"recovered: %v\nstack:\n%v", recoveryObj, string(debug.Stack()),
-			),
-		)
-	}
-
-	return newRecoveryMiddleware(handler, nil)
+	_ = "STUB: not implemented"
+	return *new(recoveryMiddleware)
 }

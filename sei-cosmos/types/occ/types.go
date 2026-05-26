@@ -14,9 +14,4 @@ type Abort struct {
 	Err            error
 }
 
-func NewEstimateAbort(dependentTxIdx int) Abort {
-	return Abort{
-		DependentTxIdx: dependentTxIdx,
-		Err:            ErrReadEstimate,
-	}
-}
+func NewEstimateAbort(dependentTxIdx int) Abort { _ = "STUB: not implemented"; return *new(Abort) }

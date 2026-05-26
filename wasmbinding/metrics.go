@@ -2,13 +2,8 @@ package wasmbinding
 
 import (
 	"context"
-	"errors"
 
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-	"github.com/sei-protocol/sei-chain/utils/metrics"
-	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
 	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
 )
 
@@ -32,29 +27,11 @@ var (
 	}
 )
 
-func must[V any](v V, err error) V {
-	if err != nil {
-		panic(err)
-	}
-	return v
-}
+func must[V any](v V, err error) V { _ = "STUB: not implemented"; return *new(V) }
 
 func recordQueryError(ctx context.Context, scenario string, err error) {
-	if err == nil {
-		return
-	}
-	var assocErr evmtypes.AssociationMissingErr
-	if errors.As(err, &assocErr) {
-		wasmQueryMetrics.associationError.Add(ctx, 1, metric.WithAttributes(
-			attribute.String("scenario", scenario),
-			attribute.String("type", assocErr.AddressType()),
-		))
-	} else if codespace, _, _ := sdkerrors.ABCIInfo(err, false); codespace != sdkerrors.UndefinedCodespace {
-		wasmQueryMetrics.sdkError.Add(ctx, 1, metric.WithAttributes(
-			attribute.String("scenario", scenario),
-			attribute.String("codespace", codespace),
-		))
-	}
-	// TODO(PLT-343): remove once wasm_query_association_error and wasm_query_sdk_error verified
-	metrics.IncrementErrorMetrics(scenario, err)
+	_ = "STUB: not implemented"
+	return
 }
+
+// TODO(PLT-343): remove once wasm_query_association_error and wasm_query_sdk_error verified

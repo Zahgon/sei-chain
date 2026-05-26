@@ -2,7 +2,6 @@ package genutil
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -27,56 +26,69 @@ var (
 type AppModuleBasic struct{}
 
 // Name returns the genutil module's name.
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterLegacyAminoCodec registers the genutil module's types on the given LegacyAmino codec.
-func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
+func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	_ = "STUB: not implemented"
 
-// RegisterInterfaces registers the module's interface types
-func (b AppModuleBasic) RegisterInterfaces(_ cdctypes.InterfaceRegistry) {}
+	// RegisterInterfaces registers the module's interface types
+	return
+}
 
-// DefaultGenesis returns default genesis state as raw bytes for the genutil
-// module.
+func (b AppModuleBasic) RegisterInterfaces(_ cdctypes.InterfaceRegistry) {
+	_ = "STUB: not implemented"
+
+	// DefaultGenesis returns default genesis state as raw bytes for the genutil
+	// module.
+	return
+}
+
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesisState())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the genutil module.
 func (b AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, txEncodingConfig client.TxEncodingConfig, bz json.RawMessage) error {
-	var data types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &data); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-
-	return types.ValidateGenesis(&data, txEncodingConfig.TxJSONDecoder())
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes registers the REST routes for the genutil module.
-func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {}
+func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the genutil module.
-func (AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the genutil module.
+	return
 }
 
-// GetTxCmd returns no root tx command for the genutil module.
-func (AppModuleBasic) GetTxCmd() *cobra.Command { return nil }
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {
+	_ = "STUB: not implemented"
 
-// GetQueryCmd returns no root query command for the genutil module.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command { return nil }
+	// GetTxCmd returns no root tx command for the genutil module.
+	return
+}
 
-// AppModule implements an application module for the genutil module.
+func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// GetQueryCmd returns no root query command for the genutil module.
+	return nil
+}
+
+func (AppModuleBasic) GetQueryCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// AppModule implements an application module for the genutil module.
+	return nil
+}
+
 type AppModule struct {
 	AppModuleBasic
 
@@ -91,51 +103,32 @@ func NewAppModule(accountKeeper types.AccountKeeper,
 	stakingKeeper types.StakingKeeper, deliverTx deliverTxfn,
 	txEncodingConfig client.TxEncodingConfig,
 ) module.AppModule {
-
-	return module.NewGenesisOnlyAppModule(AppModule{
-		AppModuleBasic:   AppModuleBasic{},
-		accountKeeper:    accountKeeper,
-		stakingKeeper:    stakingKeeper,
-		deliverTx:        deliverTx,
-		txEncodingConfig: txEncodingConfig,
-	})
+	_ = "STUB: not implemented"
+	return *new(module.AppModule)
 }
 
 // InitGenesis performs genesis initialization for the genutil module.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
-	var genesisState types.GenesisState
-	cdc.MustUnmarshalJSON(data, &genesisState)
-	validators, err := InitGenesis(ctx, am.stakingKeeper, am.deliverTx, genesisState, am.txEncodingConfig)
-	if err != nil {
-		panic(err)
-	}
-	return validators
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the genutil
 // module.
 func (am AppModule) ExportGenesis(_ sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	return am.DefaultGenesis(cdc)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModule) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 { _ = "STUB: not implemented"; return 0 }

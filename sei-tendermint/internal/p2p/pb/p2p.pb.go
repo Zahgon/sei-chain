@@ -7,11 +7,10 @@
 package pb
 
 import (
+	sync "sync"
+
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	reflect "reflect"
-	sync "sync"
-	unsafe "unsafe"
 )
 
 const (
@@ -27,35 +26,19 @@ type PacketPing struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PacketPing) Reset() {
-	*x = PacketPing{}
-	mi := &file_p2p_p2p_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *PacketPing) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *PacketPing) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *PacketPing) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*PacketPing) ProtoMessage() {}
+func (*PacketPing) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *PacketPing) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_p2p_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use PacketPing.ProtoReflect.Descriptor instead.
-func (*PacketPing) Descriptor() ([]byte, []int) {
-	return file_p2p_p2p_proto_rawDescGZIP(), []int{0}
-}
+func (*PacketPing) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 type PacketPong struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -63,35 +46,19 @@ type PacketPong struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PacketPong) Reset() {
-	*x = PacketPong{}
-	mi := &file_p2p_p2p_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *PacketPong) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *PacketPong) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *PacketPong) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*PacketPong) ProtoMessage() {}
+func (*PacketPong) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *PacketPong) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_p2p_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use PacketPong.ProtoReflect.Descriptor instead.
-func (*PacketPong) Descriptor() ([]byte, []int) {
-	return file_p2p_p2p_proto_rawDescGZIP(), []int{1}
-}
+func (*PacketPong) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 type PacketMsg struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -102,56 +69,25 @@ type PacketMsg struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PacketMsg) Reset() {
-	*x = PacketMsg{}
-	mi := &file_p2p_p2p_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *PacketMsg) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *PacketMsg) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *PacketMsg) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*PacketMsg) ProtoMessage() {}
+func (*PacketMsg) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *PacketMsg) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_p2p_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use PacketMsg.ProtoReflect.Descriptor instead.
-func (*PacketMsg) Descriptor() ([]byte, []int) {
-	return file_p2p_p2p_proto_rawDescGZIP(), []int{2}
-}
+func (*PacketMsg) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *PacketMsg) GetChannelId() int32 {
-	if x != nil {
-		return x.ChannelId
-	}
-	return 0
-}
+func (x *PacketMsg) GetChannelId() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (x *PacketMsg) GetEof() bool {
-	if x != nil {
-		return x.Eof
-	}
-	return false
-}
+func (x *PacketMsg) GetEof() bool { _ = "STUB: not implemented"; return false }
 
-func (x *PacketMsg) GetData() []byte {
-	if x != nil {
-		return x.Data
-	}
-	return nil
-}
+func (x *PacketMsg) GetData() []byte { _ = "STUB: not implemented"; return nil }
 
 type Packet struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -165,69 +101,27 @@ type Packet struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Packet) Reset() {
-	*x = Packet{}
-	mi := &file_p2p_p2p_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Packet) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Packet) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Packet) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Packet) ProtoMessage() {}
+func (*Packet) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Packet) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_p2p_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Packet.ProtoReflect.Descriptor instead.
-func (*Packet) Descriptor() ([]byte, []int) {
-	return file_p2p_p2p_proto_rawDescGZIP(), []int{3}
-}
+func (*Packet) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Packet) GetSum() isPacket_Sum {
-	if x != nil {
-		return x.Sum
-	}
-	return nil
-}
+func (x *Packet) GetSum() isPacket_Sum { _ = "STUB: not implemented"; return *new(isPacket_Sum) }
 
-func (x *Packet) GetPacketPing() *PacketPing {
-	if x != nil {
-		if x, ok := x.Sum.(*Packet_PacketPing); ok {
-			return x.PacketPing
-		}
-	}
-	return nil
-}
+func (x *Packet) GetPacketPing() *PacketPing { _ = "STUB: not implemented"; return nil }
 
-func (x *Packet) GetPacketPong() *PacketPong {
-	if x != nil {
-		if x, ok := x.Sum.(*Packet_PacketPong); ok {
-			return x.PacketPong
-		}
-	}
-	return nil
-}
+func (x *Packet) GetPacketPong() *PacketPong { _ = "STUB: not implemented"; return nil }
 
-func (x *Packet) GetPacketMsg() *PacketMsg {
-	if x != nil {
-		if x, ok := x.Sum.(*Packet_PacketMsg); ok {
-			return x.PacketMsg
-		}
-	}
-	return nil
-}
+func (x *Packet) GetPacketMsg() *PacketMsg { _ = "STUB: not implemented"; return nil }
 
 type isPacket_Sum interface {
 	isPacket_Sum()
@@ -245,11 +139,11 @@ type Packet_PacketMsg struct {
 	PacketMsg *PacketMsg `protobuf:"bytes,3,opt,name=packet_msg,json=packetMsg,proto3,oneof"`
 }
 
-func (*Packet_PacketPing) isPacket_Sum() {}
+func (*Packet_PacketPing) isPacket_Sum() { _ = "STUB: not implemented"; return }
 
-func (*Packet_PacketPong) isPacket_Sum() {}
+func (*Packet_PacketPong) isPacket_Sum() { _ = "STUB: not implemented"; return }
 
-func (*Packet_PacketMsg) isPacket_Sum() {}
+func (*Packet_PacketMsg) isPacket_Sum() { _ = "STUB: not implemented"; return }
 
 type NodePublicKey struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -258,42 +152,21 @@ type NodePublicKey struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *NodePublicKey) Reset() {
-	*x = NodePublicKey{}
-	mi := &file_p2p_p2p_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *NodePublicKey) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *NodePublicKey) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *NodePublicKey) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*NodePublicKey) ProtoMessage() {}
+func (*NodePublicKey) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *NodePublicKey) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_p2p_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use NodePublicKey.ProtoReflect.Descriptor instead.
-func (*NodePublicKey) Descriptor() ([]byte, []int) {
-	return file_p2p_p2p_proto_rawDescGZIP(), []int{4}
-}
+func (*NodePublicKey) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *NodePublicKey) GetEd25519() []byte {
-	if x != nil {
-		return x.Ed25519
-	}
-	return nil
-}
+func (x *NodePublicKey) GetEd25519() []byte { _ = "STUB: not implemented"; return nil }
 
 type Preface struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -303,42 +176,21 @@ type Preface struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Preface) Reset() {
-	*x = Preface{}
-	mi := &file_p2p_p2p_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Preface) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Preface) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Preface) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Preface) ProtoMessage() {}
+func (*Preface) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Preface) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_p2p_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Preface.ProtoReflect.Descriptor instead.
-func (*Preface) Descriptor() ([]byte, []int) {
-	return file_p2p_p2p_proto_rawDescGZIP(), []int{5}
-}
+func (*Preface) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Preface) GetStsPublicKey() []byte {
-	if x != nil {
-		return x.StsPublicKey
-	}
-	return nil
-}
+func (x *Preface) GetStsPublicKey() []byte { _ = "STUB: not implemented"; return nil }
 
 type Handshake struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -357,70 +209,29 @@ type Handshake struct {
 	sizeCache         protoimpl.SizeCache
 }
 
-func (x *Handshake) Reset() {
-	*x = Handshake{}
-	mi := &file_p2p_p2p_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Handshake) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Handshake) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Handshake) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Handshake) ProtoMessage() {}
+func (*Handshake) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Handshake) ProtoReflect() protoreflect.Message {
-	mi := &file_p2p_p2p_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Handshake.ProtoReflect.Descriptor instead.
-func (*Handshake) Descriptor() ([]byte, []int) {
-	return file_p2p_p2p_proto_rawDescGZIP(), []int{6}
-}
+func (*Handshake) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Handshake) GetNodeAuthKey() *NodePublicKey {
-	if x != nil {
-		return x.NodeAuthKey
-	}
-	return nil
-}
+func (x *Handshake) GetNodeAuthKey() *NodePublicKey { _ = "STUB: not implemented"; return nil }
 
-func (x *Handshake) GetNodeAuthSig() []byte {
-	if x != nil {
-		return x.NodeAuthSig
-	}
-	return nil
-}
+func (x *Handshake) GetNodeAuthSig() []byte { _ = "STUB: not implemented"; return nil }
 
-func (x *Handshake) GetSelfAddr() string {
-	if x != nil && x.SelfAddr != nil {
-		return *x.SelfAddr
-	}
-	return ""
-}
+func (x *Handshake) GetSelfAddr() string { _ = "STUB: not implemented"; return "" }
 
-func (x *Handshake) GetPexAddrs() []string {
-	if x != nil {
-		return x.PexAddrs
-	}
-	return nil
-}
+func (x *Handshake) GetPexAddrs() []string { _ = "STUB: not implemented"; return nil }
 
-func (x *Handshake) GetSeiGigaConnection() bool {
-	if x != nil {
-		return x.SeiGigaConnection
-	}
-	return false
-}
+func (x *Handshake) GetSeiGigaConnection() bool { _ = "STUB: not implemented"; return false }
 
 var File_p2p_p2p_proto protoreflect.FileDescriptor
 
@@ -462,12 +273,7 @@ var (
 	file_p2p_p2p_proto_rawDescData []byte
 )
 
-func file_p2p_p2p_proto_rawDescGZIP() []byte {
-	file_p2p_p2p_proto_rawDescOnce.Do(func() {
-		file_p2p_p2p_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_p2p_p2p_proto_rawDesc), len(file_p2p_p2p_proto_rawDesc)))
-	})
-	return file_p2p_p2p_proto_rawDescData
-}
+func file_p2p_p2p_proto_rawDescGZIP() []byte { _ = "STUB: not implemented"; return nil }
 
 var file_p2p_p2p_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_p2p_p2p_proto_goTypes = []any{
@@ -491,32 +297,5 @@ var file_p2p_p2p_proto_depIdxs = []int32{
 	0, // [0:4] is the sub-list for field type_name
 }
 
-func init() { file_p2p_p2p_proto_init() }
-func file_p2p_p2p_proto_init() {
-	if File_p2p_p2p_proto != nil {
-		return
-	}
-	file_p2p_p2p_proto_msgTypes[3].OneofWrappers = []any{
-		(*Packet_PacketPing)(nil),
-		(*Packet_PacketPong)(nil),
-		(*Packet_PacketMsg)(nil),
-	}
-	file_p2p_p2p_proto_msgTypes[6].OneofWrappers = []any{}
-	type x struct{}
-	out := protoimpl.TypeBuilder{
-		File: protoimpl.DescBuilder{
-			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_p2p_p2p_proto_rawDesc), len(file_p2p_p2p_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   7,
-			NumExtensions: 0,
-			NumServices:   0,
-		},
-		GoTypes:           file_p2p_p2p_proto_goTypes,
-		DependencyIndexes: file_p2p_p2p_proto_depIdxs,
-		MessageInfos:      file_p2p_p2p_proto_msgTypes,
-	}.Build()
-	File_p2p_p2p_proto = out.File
-	file_p2p_p2p_proto_goTypes = nil
-	file_p2p_p2p_proto_depIdxs = nil
-}
+func init()                    { file_p2p_p2p_proto_init() }
+func file_p2p_p2p_proto_init() { _ = "STUB: not implemented"; return }

@@ -30,75 +30,20 @@ func NewFIFOCache[K comparable, V any](
 	maxWeight uint64,
 	calculator WeightCalculator[K, V],
 	metrics *CacheMetrics) Cache[K, V] {
-
-	if calculator == nil {
-		calculator = func(K, V) uint64 { return 1 }
-	}
-
-	return &FIFOCache[K, V]{
-		maxWeight:        maxWeight,
-		data:             make(map[K]V),
-		weightCalculator: calculator,
-		evictionQueue:    NewQueue[*insertionRecord](1024),
-		metrics:          metrics,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (f *FIFOCache[K, V]) Get(key K) (V, bool) {
-	val, ok := f.data[key]
-	return val, ok
-}
+func (f *FIFOCache[K, V]) Get(key K) (V, bool) { _ = "STUB: not implemented"; return *new(V), false }
 
-func (f *FIFOCache[K, V]) Put(key K, value V) {
-	weight := f.weightCalculator(key, value)
-	if weight > f.maxWeight {
-		// this item won't fit in the cache no matter what we evict
-		return
-	}
+func (f *FIFOCache[K, V]) Put(key K, value V) { _ = "STUB: not implemented"; return }
 
-	old, ok := f.data[key]
-	f.currentWeight += weight
-	f.data[key] = value
-	if ok {
-		oldWeight := f.weightCalculator(key, old)
-		f.currentWeight -= oldWeight
-	} else {
-		f.evictionQueue.Push(&insertionRecord{
-			key:       key,
-			timestamp: time.Now(),
-		})
-	}
+// this item won't fit in the cache no matter what we evict
 
-	if f.currentWeight > f.maxWeight {
-		f.evict()
-	}
+func (f *FIFOCache[K, V]) evict() { _ = "STUB: not implemented"; return }
 
-	f.metrics.reportInsertion(weight)
-	f.metrics.reportCurrentSize(len(f.data), f.currentWeight)
-}
+func (f *FIFOCache[K, V]) Size() int { _ = "STUB: not implemented"; return 0 }
 
-func (f *FIFOCache[K, V]) evict() {
-	now := time.Now()
+func (f *FIFOCache[K, V]) Weight() uint64 { _ = "STUB: not implemented"; return 0 }
 
-	for f.currentWeight > f.maxWeight {
-		next := f.evictionQueue.Pop()
-		keyToEvict := next.key.(K)
-		weightToEvict := f.weightCalculator(keyToEvict, f.data[keyToEvict])
-		delete(f.data, keyToEvict)
-		f.currentWeight -= weightToEvict
-		f.metrics.reportEviction(now.Sub(next.timestamp))
-	}
-}
-
-func (f *FIFOCache[K, V]) Size() int {
-	return len(f.data)
-}
-
-func (f *FIFOCache[K, V]) Weight() uint64 {
-	return f.currentWeight
-}
-
-func (f *FIFOCache[K, V]) SetMaxWeight(capacity uint64) {
-	f.maxWeight = capacity
-	f.evict()
-}
+func (f *FIFOCache[K, V]) SetMaxWeight(capacity uint64) { _ = "STUB: not implemented"; return }

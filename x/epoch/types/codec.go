@@ -3,16 +3,12 @@ package types
 import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	cdctypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-
 	// this line is used by starport scaffolding # 1
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/msgservice"
 )
 
-func RegisterCodec(_ *codec.LegacyAmino) {}
+func RegisterCodec(_ *codec.LegacyAmino) { _ = "STUB: not implemented"; return }
 
-func RegisterInterfaces(registry cdctypes.InterfaceRegistry) {
-	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
-}
+func RegisterInterfaces(registry cdctypes.InterfaceRegistry) { _ = "STUB: not implemented"; return }
 
 var (
 	amino     = codec.NewLegacyAmino()

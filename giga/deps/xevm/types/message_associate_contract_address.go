@@ -2,7 +2,6 @@ package types
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 const TypeMsgAssociateContractAddress = "evm_associate_contract_address"
@@ -12,38 +11,25 @@ var (
 )
 
 func NewMsgAssociateContractAddress(sender sdk.AccAddress, addr sdk.AccAddress) *MsgAssociateContractAddress {
-	return &MsgAssociateContractAddress{Sender: sender.String(), Address: addr.String()}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (msg *MsgAssociateContractAddress) Route() string {
-	return RouterKey
-}
+func (msg *MsgAssociateContractAddress) Route() string { _ = "STUB: not implemented"; return "" }
 
-func (msg *MsgAssociateContractAddress) Type() string {
-	return TypeMsgAssociateContractAddress
-}
+func (msg *MsgAssociateContractAddress) Type() string { _ = "STUB: not implemented"; return "" }
 
 func (msg *MsgAssociateContractAddress) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{from}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (msg *MsgAssociateContractAddress) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (msg *MsgAssociateContractAddress) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
-
-	if _, err := sdk.AccAddressFromBech32(msg.Address); err != nil {
-		return sdkerrors.ErrInvalidAddress
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }

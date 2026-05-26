@@ -13,71 +13,35 @@ type RingBuf[T any] struct {
 }
 
 // NewRingBuf creates a new ring buffer with the given capacity.
-func NewRingBuf[T any](capacity int) RingBuf[T] {
-	return RingBuf[T]{first: 0, len: 0, buf: make([]T, capacity)}
-}
+func NewRingBuf[T any](capacity int) RingBuf[T] { _ = "STUB: not implemented"; return nil }
 
 // Len returns the number of elements in the ring buffer.
 func (r *RingBuf[T]) Len() int {
-	return r.len
+	_ = "STUB: not implemented"
+
+	// Full returns true if the ring buffer is full.
+	return 0
 }
 
-// Full returns true if the ring buffer is full.
-func (r *RingBuf[T]) Full() bool {
-	return r.len == len(r.buf)
-}
+func (r *RingBuf[T]) Full() bool { _ = "STUB: not implemented"; return false }
 
 // Get returns the i-th element of the ring buffer.
 // Panics if i is out of range.
-func (r *RingBuf[T]) Get(i int) T {
-	if i < 0 || i >= r.len {
-		panic("index out of range")
-	}
-	return r.buf[(r.first+i)%len(r.buf)]
-}
+func (r *RingBuf[T]) Get(i int) T { _ = "STUB: not implemented"; return *new(T) }
 
 // TryGet returns the i-th element of the ring buffer.
-func (r *RingBuf[T]) TryGet(i int) (T, bool) {
-	if i < 0 || i >= r.len {
-		return Zero[T](), false
-	}
-	return r.buf[(r.first+i)%len(r.buf)], true
-}
+func (r *RingBuf[T]) TryGet(i int) (T, bool) { _ = "STUB: not implemented"; return *new(T), false }
 
 // Last returns the last element of the ring buffer.
-func (r *RingBuf[T]) Last() (T, bool) {
-	return r.TryGet(r.len - 1)
-}
+func (r *RingBuf[T]) Last() (T, bool) { _ = "STUB: not implemented"; return *new(T), false }
 
 // PushBack adds an element to the back of the ring buffer.
 // Panics if the ring buffer is full.
-func (r *RingBuf[T]) PushBack(x T) {
-	if r.len == len(r.buf) {
-		panic("ring buffer full")
-	}
-	r.buf[(r.first+r.len)%len(r.buf)] = x
-	r.len += 1
-}
+func (r *RingBuf[T]) PushBack(x T) { _ = "STUB: not implemented"; return }
 
 // PopFront removes and returns the first element of the ring buffer.
 // Panics if the ring buffer is empty.
-func (r *RingBuf[T]) PopFront() T {
-	if r.len == 0 {
-		panic("ring buffer empty")
-	}
-	x := r.buf[r.first]
-	r.first = (r.first + 1) % len(r.buf)
-	r.len -= 1
-	return x
-}
+func (r *RingBuf[T]) PopFront() T { _ = "STUB: not implemented"; return *new(T) }
 
 // All iterates over all the elements in the ring buffer.
-func (r *RingBuf[T]) All() iter.Seq[T] {
-	return func(y func(T) bool) {
-		for i := range r.len {
-			if !y(r.Get(i)) {
-				break
-			}
-		}
-	}
-}
+func (r *RingBuf[T]) All() iter.Seq[T] { _ = "STUB: not implemented"; return nil }

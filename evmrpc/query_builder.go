@@ -1,29 +1,11 @@
 package evmrpc
 
-import (
-	"strings"
-)
-
 type QueryBuilder struct {
 	conditions []string
 }
 
-func NewHeadQueryBuilder() *QueryBuilder {
-	return &QueryBuilder{
-		conditions: []string{
-			"tm.event = 'NewBlockHeader'",
-		},
-	}
-}
+func NewHeadQueryBuilder() *QueryBuilder { _ = "STUB: not implemented"; return nil }
 
-func NewBlockQueryBuilder() *QueryBuilder {
-	return &QueryBuilder{
-		conditions: []string{
-			"tm.event = 'NewBlock'",
-		},
-	}
-}
+func NewBlockQueryBuilder() *QueryBuilder { _ = "STUB: not implemented"; return nil }
 
-func (q *QueryBuilder) Build() string {
-	return strings.Join(q.conditions, " AND ")
-}
+func (q *QueryBuilder) Build() string { _ = "STUB: not implemented"; return "" }

@@ -4,107 +4,51 @@ package errors
 // plus some extra utilities to parse those errors
 
 import (
-	"fmt"
-
-	grpccodes "google.golang.org/grpc/codes"
-	grpcstatus "google.golang.org/grpc/status"
-
 	"github.com/coinbase/rosetta-sdk-go/types"
 )
 
 // ListErrors lists all the registered errors
-func ListErrors() []*types.Error {
-	return registry.list()
-}
+func ListErrors() []*types.Error { _ = "STUB: not implemented"; return nil }
 
 // SealAndListErrors seals the registry and lists its errors
-func SealAndListErrors() []*types.Error {
-	registry.seal()
-	return registry.list()
-}
+func SealAndListErrors() []*types.Error { _ = "STUB: not implemented"; return nil }
 
 // Error defines an error that can be converted to a Rosetta API error.
 type Error struct {
 	rosErr *types.Error
 }
 
-func (e *Error) Error() string {
-	if e.rosErr == nil {
-		return ErrUnknown.Error()
-	}
-	return fmt.Sprintf("rosetta: (%d) %s", e.rosErr.Code, e.rosErr.Message)
-}
+func (e *Error) Error() string { _ = "STUB: not implemented"; return "" }
 
 // Is implements errors.Is for *Error, two errors are considered equal
 // if their error codes are identical
 func (e *Error) Is(err error) bool {
+	_ = "STUB: not implemented"
 	// assert it can be casted
-	rosErr, ok := err.(*Error)
-	if rosErr == nil || !ok {
-		return false
-	}
-	// check that both *Error's are correctly initialized to avoid dereference panics
-	if rosErr.rosErr == nil || e.rosErr == nil {
-		return false
-	}
-	// messages are equal if their error codes match
-	return rosErr.rosErr.Code == e.rosErr.Code
+	return false
 }
 
+// check that both *Error's are correctly initialized to avoid dereference panics
+
+// messages are equal if their error codes match
+
 // WrapError wraps the rosetta error with additional context
-func WrapError(err *Error, msg string) *Error {
-	return &Error{rosErr: &types.Error{
-		Code:        err.rosErr.Code,
-		Message:     err.rosErr.Message,
-		Description: err.rosErr.Description,
-		Retriable:   err.rosErr.Retriable,
-		Details: map[string]interface{}{
-			"info": msg,
-		},
-	}}
-}
+func WrapError(err *Error, msg string) *Error { _ = "STUB: not implemented"; return nil }
 
 // ToRosetta attempts to converting an error into a rosetta
 // error, if the error cannot be converted it will be parsed as unknown
 func ToRosetta(err error) *types.Error {
+	_ = "STUB: not implemented"
 	// if it's null or not known
-	rosErr, ok := err.(*Error)
-	if rosErr == nil || !ok {
-		return ToRosetta(WrapError(ErrUnknown, ErrUnknown.Error()))
-	}
-	return rosErr.rosErr
+	return nil
 }
 
 // FromGRPCToRosettaError converts a gRPC error to rosetta error
-func FromGRPCToRosettaError(err error) *Error {
-	status, ok := grpcstatus.FromError(err)
-	if !ok {
-		return WrapError(ErrUnknown, err.Error())
-	}
-	switch status.Code() {
-	case grpccodes.NotFound:
-		return WrapError(ErrNotFound, status.Message())
-	case grpccodes.FailedPrecondition:
-		return WrapError(ErrBadArgument, status.Message())
-	case grpccodes.InvalidArgument:
-		return WrapError(ErrBadArgument, status.Message())
-	case grpccodes.Internal:
-		return WrapError(ErrInternal, status.Message())
-	default:
-		return WrapError(ErrUnknown, status.Message())
-	}
-}
+func FromGRPCToRosettaError(err error) *Error { _ = "STUB: not implemented"; return nil }
 
 func RegisterError(code int32, message string, retryable bool, description string) *Error {
-	e := &Error{rosErr: &types.Error{
-		Code:        code,
-		Message:     message,
-		Description: &description,
-		Retriable:   retryable,
-		Details:     nil,
-	}}
-	registry.add(e)
-	return e
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Default error list

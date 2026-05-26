@@ -1,11 +1,7 @@
 package types
 
 import (
-	"encoding/hex"
-	"errors"
-	"fmt"
 	"regexp"
-	"strings"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
 )
@@ -23,44 +19,20 @@ type NodeID string
 
 // NewNodeID returns a lowercased (normalized) NodeID, or errors if the
 // node ID is invalid.
-func NewNodeID(nodeID string) (NodeID, error) {
-	n := NodeID(strings.ToLower(nodeID))
-	return n, n.Validate()
-}
+func NewNodeID(nodeID string) (NodeID, error) { _ = "STUB: not implemented"; return *new(NodeID), nil }
 
 // IDAddressString returns id@hostPort. It strips the leading
 // protocol from protocolHostPort if it exists.
 func (id NodeID) AddressString(protocolHostPort string) string {
-	return fmt.Sprintf("%s@%s", id, removeProtocolIfDefined(protocolHostPort))
+	_ = "STUB: not implemented"
+	return ""
 }
 
 // NodeIDFromPubKey creates a node ID from a given PubKey address.
-func NodeIDFromPubKey(pubKey crypto.PubKey) NodeID {
-	return NodeID(hex.EncodeToString(pubKey.Address()))
-}
+func NodeIDFromPubKey(pubKey crypto.PubKey) NodeID { _ = "STUB: not implemented"; return *new(NodeID) }
 
 // Bytes converts the node ID to its binary byte representation.
-func (id NodeID) Bytes() ([]byte, error) {
-	bz, err := hex.DecodeString(string(id))
-	if err != nil {
-		return nil, fmt.Errorf("invalid node ID encoding: %w", err)
-	}
-	return bz, nil
-}
+func (id NodeID) Bytes() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Validate validates the NodeID.
-func (id NodeID) Validate() error {
-	switch {
-	case len(id) == 0:
-		return errors.New("empty node ID")
-
-	case len(id) != 2*NodeIDByteLength:
-		return fmt.Errorf("invalid node ID length %d, expected %d", len(id), 2*NodeIDByteLength)
-
-	case !reNodeID.MatchString(string(id)):
-		return fmt.Errorf("node ID can only contain lowercased hex digits")
-
-	default:
-		return nil
-	}
-}
+func (id NodeID) Validate() error { _ = "STUB: not implemented"; return nil }

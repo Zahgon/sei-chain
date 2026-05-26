@@ -2,13 +2,9 @@ package core
 
 import (
 	"context"
-	"encoding/base64"
-	"fmt"
 	"net"
-	"net/http"
 	"time"
 
-	"github.com/rs/cors"
 	"github.com/sei-protocol/seilog"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
@@ -20,16 +16,10 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/p2p"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/proxy"
-	tmpubsub "github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query"
 	sm "github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/statesync"
-	tmjson "github.com/sei-protocol/sei-chain/sei-tendermint/libs/json"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/strings"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/rpc/coretypes"
-	rpcserver "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/jsonrpc/server"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
@@ -99,26 +89,14 @@ type Environment struct {
 //----------------------------------------------
 
 func validatePage(pagePtr *int, perPage, totalCount int) (int, error) {
+	_ = "STUB: not implemented"
 	// this can only happen if we haven't first run validatePerPage
-	if perPage < 1 {
-		panic(fmt.Errorf("%w (%d)", coretypes.ErrZeroOrNegativePerPage, perPage))
-	}
-
-	if pagePtr == nil { // no page parameter
-		return 1, nil
-	}
-
-	pages := ((totalCount - 1) / perPage) + 1
-	if pages == 0 {
-		pages = 1 // one page (even if it's empty)
-	}
-	page := *pagePtr
-	if page <= 0 || page > pages {
-		return 1, fmt.Errorf("%w expected range: [1, %d], given %d", coretypes.ErrPageOutOfRange, pages, page)
-	}
-
-	return page, nil
+	return 0, nil
 }
+
+// no page parameter
+
+// one page (even if it's empty)
 
 // gigaRouter returns the GigaRouter when one is wired into env.Router (which
 // is the definition of "Autobahn is active for this Environment"). Returns
@@ -130,236 +108,58 @@ func validatePage(pagePtr *int, perPage, totalCount int) (int, error) {
 //	    // Autobahn path, r is the router
 //	}
 func (env *Environment) gigaRouter() utils.Option[*p2p.GigaRouter] {
-	if env.Router == nil { // inspect mode
-		return utils.None[*p2p.GigaRouter]()
-	}
-	return env.Router.Giga()
+	_ = "STUB: not implemented"
+	return nil
+	// inspect mode
 }
 
-func (env *Environment) validatePerPage(perPagePtr *int) int {
-	if perPagePtr == nil { // no per_page parameter
-		return defaultPerPage
-	}
+func (env *Environment) validatePerPage(perPagePtr *int) int { _ = "STUB: not implemented"; return 0 }
 
-	perPage := *perPagePtr
-	if perPage < 1 {
-		return defaultPerPage
-		// in unsafe mode there is no max on the page size but in safe mode
-		// we cap it to maxPerPage
-	} else if perPage > maxPerPage && !env.Config.Unsafe {
-		return maxPerPage
-	}
-	return perPage
-}
+// no per_page parameter
+
+// in unsafe mode there is no max on the page size but in safe mode
+// we cap it to maxPerPage
 
 // InitGenesisChunks configures the environment and should be called on service
 // startup.
-func (env *Environment) InitGenesisChunks() error {
-	if env.genChunks != nil {
-		return nil
-	}
+func (env *Environment) InitGenesisChunks() error { _ = "STUB: not implemented"; return nil }
 
-	if env.GenDoc == nil {
-		return nil
-	}
-
-	data, err := tmjson.Marshal(env.GenDoc)
-	if err != nil {
-		return err
-	}
-
-	for i := 0; i < len(data); i += genesisChunkSize {
-		end := i + genesisChunkSize
-
-		if end > len(data) {
-			end = len(data)
-		}
-
-		env.genChunks = append(env.genChunks, base64.StdEncoding.EncodeToString(data[i:end]))
-	}
-
-	return nil
-}
-
-func validateSkipCount(page, perPage int) int {
-	skipCount := (page - 1) * perPage
-	if skipCount < 0 {
-		return 0
-	}
-
-	return skipCount
-}
+func validateSkipCount(page, perPage int) int { _ = "STUB: not implemented"; return 0 }
 
 // latestHeight can be either latest committed or uncommitted (+1) height.
 func (env *Environment) getHeight(latestHeight int64, heightPtr *int64) (int64, error) {
-	if heightPtr != nil {
-		height := *heightPtr
-		if height <= 0 {
-			return 0, fmt.Errorf("%w (requested height: %d)", coretypes.ErrZeroOrNegativeHeight, height)
-		}
-		if height > latestHeight {
-			return 0, fmt.Errorf("%w (requested height: %d, blockchain height: %d)",
-				coretypes.ErrHeightExceedsChainHead, height, latestHeight)
-		}
-		base := env.BlockStore.Base()
-		if height < base {
-			return 0, coretypes.WrapErrHeightNotAvailable(height, utils.Some(base))
-		}
-		return height, nil
-	}
-	return latestHeight, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (env *Environment) latestUncommittedHeight() int64 {
-	if env.ConsensusReactor != nil {
-		// consensus reactor can be nil in inspect mode.
+func (env *Environment) latestUncommittedHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
-		nodeIsSyncing := env.ConsensusReactor.WaitSync()
-		if nodeIsSyncing {
-			return env.BlockStore.Height()
-		}
-	}
-	return env.BlockStore.Height() + 1
-}
+// consensus reactor can be nil in inspect mode.
 
 // StartService constructs and starts listeners for the RPC service
 // according to the config object, returning an error if the service
 // cannot be constructed or started. The listeners, which provide
 // access to the service, run until the context is canceled.
 func (env *Environment) StartService(ctx context.Context, conf *config.Config) ([]net.Listener, error) {
-	if err := env.InitGenesisChunks(); err != nil {
-		return nil, err
-	}
-
-	env.Listeners = []string{
-		fmt.Sprintf("Listener(@%v)", conf.P2P.ExternalAddress),
-	}
-
-	listenAddrs := strings.SplitAndTrimEmpty(conf.RPC.ListenAddress, ",", " ")
-	routes := NewRoutesMap(env, &RouteOptions{
-		Unsafe: conf.RPC.Unsafe,
-	})
-
-	cfg := rpcserver.DefaultConfig()
-	cfg.MaxBodyBytes = conf.RPC.MaxBodyBytes
-	cfg.MaxHeaderBytes = conf.RPC.MaxHeaderBytes
-	cfg.MaxOpenConnections = conf.RPC.MaxOpenConnections
-	// If necessary adjust global WriteTimeout to ensure it's greater than
-	// TimeoutBroadcastTxCommit.
-	// See https://github.com/tendermint/tendermint/issues/3435
-	// Note we don't need to adjust anything if the timeout is already unlimited.
-	if cfg.WriteTimeout > 0 && cfg.WriteTimeout <= conf.RPC.TimeoutBroadcastTxCommit {
-		cfg.WriteTimeout = conf.RPC.TimeoutBroadcastTxCommit + 1*time.Second
-	}
-
-	if conf.RPC.TimeoutRead > 0 {
-		cfg.ReadTimeout = conf.RPC.TimeoutRead
-	}
-
-	// If the event log is enabled, subscribe to all events published to the
-	// event bus, and forward them to the event log.
-	if lg := env.EventLog; lg != nil {
-		// TODO(creachadair): This is kind of a hack, ideally we'd share the
-		// observer with the indexer, but it's tricky to plumb them together.
-		// For now, use a "normal" subscription with a big buffer allowance.
-		// The event log should always be able to keep up.
-		const subscriberID = "event-log-subscriber"
-		sub, err := env.EventBus.SubscribeWithArgs(ctx, tmpubsub.SubscribeArgs{
-			ClientID: subscriberID,
-			Query:    query.All,
-			Limit:    1 << 16, // essentially "no limit"
-		})
-		if err != nil {
-			return nil, fmt.Errorf("event log subscribe: %w", err)
-		}
-		go func() {
-			// N.B. Use background for unsubscribe, ctx is already terminated.
-			defer func() { _ = env.EventBus.UnsubscribeAll(context.Background(), subscriberID) }()
-			for {
-				msg, err := sub.Next(ctx)
-				if err != nil {
-					logger.Error("Subscription terminated", "err", err)
-					return
-				}
-				etype, ok := eventlog.FindType(msg.Events())
-				if ok {
-					_ = lg.Add(etype, msg.Data())
-				}
-			}
-		}()
-
-		logger.Info("Event log subscription enabled")
-	}
-
-	// We may expose the RPC over both TCP and a Unix-domain socket.
-	listeners := make([]net.Listener, len(listenAddrs))
-	for i, listenAddr := range listenAddrs {
-		mux := http.NewServeMux()
-		rpcserver.RegisterRPCFuncs(mux, routes)
-
-		if conf.RPC.ExperimentalDisableWebsocket {
-			logger.Info("Disabling websocket endpoints (experimental-disable-websocket=true)", "module", "rpc-server")
-		} else {
-			logger.Info("WARNING: Websocket RPC access is deprecated and will be removed "+
-				"in Tendermint v0.37. See https://tinyurl.com/adr075 for more information.", "module", "rpc-server")
-			wm := rpcserver.NewWebsocketManager(routes,
-				rpcserver.OnDisconnect(func(remoteAddr string) {
-					err := env.EventBus.UnsubscribeAll(context.Background(), remoteAddr)
-					if err != nil && err != tmpubsub.ErrSubscriptionNotFound {
-						logger.Error("Failed to unsubscribe addr from events", "addr", remoteAddr, "protocol", "websocket", "err", err)
-					}
-				}),
-				rpcserver.ReadLimit(cfg.MaxBodyBytes),
-			)
-			mux.HandleFunc("/websocket", wm.WebsocketHandler)
-		}
-
-		listener, err := rpcserver.Listen(
-			listenAddr,
-			cfg.MaxOpenConnections,
-		)
-		if err != nil {
-			return nil, err
-		}
-
-		var rootHandler http.Handler = mux
-		if conf.RPC.IsCorsEnabled() {
-			corsMiddleware := cors.New(cors.Options{
-				AllowedOrigins: conf.RPC.CORSAllowedOrigins,
-				AllowedMethods: conf.RPC.CORSAllowedMethods,
-				AllowedHeaders: conf.RPC.CORSAllowedHeaders,
-			})
-			rootHandler = corsMiddleware.Handler(mux)
-		}
-		if conf.RPC.IsTLSEnabled() {
-			go func() {
-				if err := rpcserver.ServeTLS(
-					ctx,
-					listener,
-					rootHandler,
-					conf.RPC.CertFile(),
-					conf.RPC.KeyFile(),
-					cfg,
-				); err != nil {
-					logger.Error("error serving server with TLS", "err", err)
-				}
-			}()
-		} else {
-			go func() {
-				if err := rpcserver.Serve(
-					ctx,
-					listener,
-					rootHandler,
-					cfg,
-				); err != nil {
-					logger.Error("error serving server", "err", err)
-				}
-			}()
-		}
-
-		listeners[i] = listener
-	}
-
-	return listeners, nil
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// If necessary adjust global WriteTimeout to ensure it's greater than
+// TimeoutBroadcastTxCommit.
+// See https://github.com/tendermint/tendermint/issues/3435
+// Note we don't need to adjust anything if the timeout is already unlimited.
+
+// If the event log is enabled, subscribe to all events published to the
+// event bus, and forward them to the event log.
+
+// TODO(creachadair): This is kind of a hack, ideally we'd share the
+// observer with the indexer, but it's tricky to plumb them together.
+// For now, use a "normal" subscription with a big buffer allowance.
+// The event log should always be able to keep up.
+
+// essentially "no limit"
+
+// N.B. Use background for unsubscribe, ctx is already terminated.
+
+// We may expose the RPC over both TCP and a Unix-domain socket.

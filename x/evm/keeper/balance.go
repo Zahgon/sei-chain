@@ -4,14 +4,11 @@ import (
 	"math/big"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/x/evm/state"
 )
 
 func (k *Keeper) GetBalance(ctx sdk.Context, addr sdk.AccAddress) *big.Int {
-	denom := k.GetBaseDenom(ctx)
-	allUsei := k.BankKeeper().GetBalance(ctx, addr, denom).Amount
-	lockedUsei := k.BankKeeper().LockedCoins(ctx, addr).AmountOf(denom) // LockedCoins doesn't use iterators
-	usei := allUsei.Sub(lockedUsei)
-	wei := k.BankKeeper().GetWeiBalance(ctx, addr)
-	return usei.Mul(state.SdkUseiToSweiMultiplier).Add(wei).BigInt()
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// LockedCoins doesn't use iterators

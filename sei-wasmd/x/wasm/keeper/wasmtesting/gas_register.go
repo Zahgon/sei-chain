@@ -17,50 +17,33 @@ type MockGasRegister struct {
 }
 
 func (m MockGasRegister) NewContractInstanceCosts(pinned bool, msgLen int) sdk.Gas {
-	if m.NewContractInstanceCostFn == nil {
-		panic("not expected to be called")
-	}
-	return m.NewContractInstanceCostFn(pinned, msgLen)
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }
 
 func (m MockGasRegister) CompileCosts(byteLength int) sdk.Gas {
-	if m.CompileCostFn == nil {
-		panic("not expected to be called")
-	}
-	return m.CompileCostFn(byteLength)
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }
 
 func (m MockGasRegister) InstantiateContractCosts(pinned bool, msgLen int) sdk.Gas {
-	if m.InstantiateContractCostFn == nil {
-		panic("not expected to be called")
-	}
-	return m.InstantiateContractCostFn(pinned, msgLen)
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }
 
 func (m MockGasRegister) ReplyCosts(pinned bool, reply wasmvmtypes.Reply) sdk.Gas {
-	if m.ReplyCostFn == nil {
-		panic("not expected to be called")
-	}
-	return m.ReplyCostFn(pinned, reply)
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }
 
 func (m MockGasRegister) EventCosts(evts []wasmvmtypes.EventAttribute, events wasmvmtypes.Events) sdk.Gas {
-	if m.EventCostsFn == nil {
-		panic("not expected to be called")
-	}
-	return m.EventCostsFn(evts)
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }
 
-func (m MockGasRegister) ToWasmVMGas(source sdk.Gas) uint64 {
-	if m.ToWasmVMGasFn == nil {
-		panic("not expected to be called")
-	}
-	return m.ToWasmVMGasFn(source)
-}
+func (m MockGasRegister) ToWasmVMGas(source sdk.Gas) uint64 { _ = "STUB: not implemented"; return 0 }
 
 func (m MockGasRegister) FromWasmVMGas(source uint64) sdk.Gas {
-	if m.FromWasmVMGasFn == nil {
-		panic("not expected to be called")
-	}
-	return m.FromWasmVMGasFn(source)
+	_ = "STUB: not implemented"
+	return *new(sdk.Gas)
 }

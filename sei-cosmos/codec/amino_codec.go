@@ -13,82 +13,87 @@ type AminoCodec struct {
 var _ Codec = &AminoCodec{}
 
 // NewAminoCodec returns a reference to a new AminoCodec
-func NewAminoCodec(codec *LegacyAmino) *AminoCodec {
-	return &AminoCodec{LegacyAmino: codec}
-}
+func NewAminoCodec(codec *LegacyAmino) *AminoCodec { _ = "STUB: not implemented"; return nil }
 
 // Marshal implements BinaryMarshaler.Marshal method.
 func (ac *AminoCodec) Marshal(o ProtoMarshaler) ([]byte, error) {
-	return ac.LegacyAmino.Marshal(o)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MustMarshal implements BinaryMarshaler.MustMarshal method.
-func (ac *AminoCodec) MustMarshal(o ProtoMarshaler) []byte {
-	return ac.LegacyAmino.MustMarshal(o)
-}
+func (ac *AminoCodec) MustMarshal(o ProtoMarshaler) []byte { _ = "STUB: not implemented"; return nil }
 
 // MarshalLengthPrefixed implements BinaryMarshaler.MarshalLengthPrefixed method.
 func (ac *AminoCodec) MarshalLengthPrefixed(o ProtoMarshaler) ([]byte, error) {
-	return ac.LegacyAmino.MarshalLengthPrefixed(o)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MustMarshalLengthPrefixed implements BinaryMarshaler.MustMarshalLengthPrefixed method.
 func (ac *AminoCodec) MustMarshalLengthPrefixed(o ProtoMarshaler) []byte {
-	return ac.LegacyAmino.MustMarshalLengthPrefixed(o)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Unmarshal implements BinaryMarshaler.Unmarshal method.
 func (ac *AminoCodec) Unmarshal(bz []byte, ptr ProtoMarshaler) error {
-	return ac.LegacyAmino.Unmarshal(bz, ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MustUnmarshal implements BinaryMarshaler.MustUnmarshal method.
 func (ac *AminoCodec) MustUnmarshal(bz []byte, ptr ProtoMarshaler) {
-	ac.LegacyAmino.MustUnmarshal(bz, ptr)
+	_ = "STUB: not implemented"
+	return
 }
 
 // UnmarshalLengthPrefixed implements BinaryMarshaler.UnmarshalLengthPrefixed method.
 func (ac *AminoCodec) UnmarshalLengthPrefixed(bz []byte, ptr ProtoMarshaler) error {
-	return ac.LegacyAmino.UnmarshalLengthPrefixed(bz, ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MustUnmarshalLengthPrefixed implements BinaryMarshaler.MustUnmarshalLengthPrefixed method.
 func (ac *AminoCodec) MustUnmarshalLengthPrefixed(bz []byte, ptr ProtoMarshaler) {
-	ac.LegacyAmino.MustUnmarshalLengthPrefixed(bz, ptr)
+	_ = "STUB: not implemented"
+	return
 }
 
 // MarshalJSON implements JSONCodec.MarshalJSON method,
 // it marshals to JSON using legacy amino codec.
 func (ac *AminoCodec) MarshalAsJSON(o proto.Message) ([]byte, error) {
-	return ac.LegacyAmino.MarshalAsJSON(o)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MustMarshalJSON implements JSONCodec.MustMarshalJSON method,
 // it executes MarshalJSON except it panics upon failure.
 func (ac *AminoCodec) MustMarshalJSON(o proto.Message) []byte {
-	return ac.LegacyAmino.MustMarshalJSON(o)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnmarshalJSON implements JSONCodec.UnmarshalJSON method,
 // it unmarshals from JSON using legacy amino codec.
 func (ac *AminoCodec) UnmarshalAsJSON(bz []byte, ptr proto.Message) error {
-	return ac.LegacyAmino.UnmarshalAsJSON(bz, ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MustUnmarshalJSON implements JSONCodec.MustUnmarshalJSON method,
 // it executes UnmarshalJSON except it panics upon failure.
 func (ac *AminoCodec) MustUnmarshalJSON(bz []byte, ptr proto.Message) {
-	ac.LegacyAmino.MustUnmarshalJSON(bz, ptr)
+	_ = "STUB: not implemented"
+	return
 }
 
 // MarshalInterface is a convenience function for amino marshaling interfaces.
 // The `i` must be an interface.
 // NOTE: to marshal a concrete type, you should use Marshal instead
 func (ac *AminoCodec) MarshalInterface(i proto.Message) ([]byte, error) {
-	if err := assertNotNil(i); err != nil {
-		return nil, err
-	}
-	return ac.LegacyAmino.Marshal(i)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UnmarshalInterface is a convenience function for amino unmarshaling interfaces.
@@ -100,17 +105,16 @@ func (ac *AminoCodec) MarshalInterface(i proto.Message) ([]byte, error) {
 //	var x MyInterface
 //	err := cdc.UnmarshalInterface(bz, &x)
 func (ac *AminoCodec) UnmarshalInterface(bz []byte, ptr interface{}) error {
-	return ac.LegacyAmino.Unmarshal(bz, ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MarshalInterfaceJSON is a convenience function for amino marshaling interfaces.
 // The `i` must be an interface.
 // NOTE: to marshal a concrete type, you should use MarshalJSON instead
 func (ac *AminoCodec) MarshalInterfaceJSON(i proto.Message) ([]byte, error) {
-	if err := assertNotNil(i); err != nil {
-		return nil, err
-	}
-	return ac.LegacyAmino.MarshalAsJSON(i)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UnmarshalInterfaceJSON is a convenience function for amino unmarshaling interfaces.
@@ -122,5 +126,6 @@ func (ac *AminoCodec) MarshalInterfaceJSON(i proto.Message) ([]byte, error) {
 //	var x MyInterface
 //	err := cdc.UnmarshalInterfaceJSON(bz, &x)
 func (ac *AminoCodec) UnmarshalInterfaceJSON(bz []byte, ptr interface{}) error {
-	return ac.LegacyAmino.UnmarshalAsJSON(bz, ptr)
+	_ = "STUB: not implemented"
+	return nil
 }

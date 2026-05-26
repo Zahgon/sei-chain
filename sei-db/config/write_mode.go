@@ -1,7 +1,5 @@
 package config
 
-import "fmt"
-
 // WriteMode defines how EVM data writes are routed between backends.
 type WriteMode string
 
@@ -54,35 +52,17 @@ const (
 )
 
 // IsValid returns true if the write mode is a recognized value
-func (m WriteMode) IsValid() bool {
-	switch m {
-	case MemiavlOnly, MigrateEVM, EVMMigrated, MigrateAllButBank,
-		AllMigratedButBank, MigrateBank, FlatKVOnly, TestOnlyDualWrite:
-		return true
-	default:
-		return false
-	}
-}
+func (m WriteMode) IsValid() bool { _ = "STUB: not implemented"; return false }
 
 // IsMigrationMode reports whether the mode is one of the active
 // migration transitions (i.e. one that copies data from memiavl to
 // flatkv in the background). Callers use it to decide when
 // migration-specific setup is required, such as ensuring the
 // MigrationStore tree exists on memiavl.
-func (m WriteMode) IsMigrationMode() bool {
-	switch m {
-	case MigrateEVM, MigrateAllButBank, MigrateBank:
-		return true
-	default:
-		return false
-	}
-}
+func (m WriteMode) IsMigrationMode() bool { _ = "STUB: not implemented"; return false }
 
 // ParseWriteMode converts a string to a WriteMode, returning an error if invalid
 func ParseWriteMode(s string) (WriteMode, error) {
-	m := WriteMode(s)
-	if !m.IsValid() {
-		return "", fmt.Errorf("invalid write mode: %s", s)
-	}
-	return m, nil
+	_ = "STUB: not implemented"
+	return *new(WriteMode), nil
 }

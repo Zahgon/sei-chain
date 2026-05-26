@@ -1,9 +1,6 @@
 package config
 
 import (
-	"os"
-	"path/filepath"
-
 	dbm "github.com/tendermint/tm-db"
 )
 
@@ -21,38 +18,17 @@ type DBProvider func(*DBContext) (dbm.DB, error)
 // subdirectory under the data folder, with backward compatibility
 // for existing nodes that have data in the legacy flat layout.
 func DefaultDBProvider(ctx *DBContext) (dbm.DB, error) {
-	dbType := dbm.BackendType(ctx.Config.DBBackend)
-	dbDir := ResolveDBDir(ctx.ID, ctx.Config.DBDir())
-	return dbm.NewDB(ctx.ID, dbType, dbDir)
+	_ = "STUB: not implemented"
+	return *new(dbm.DB), nil
 }
 
 // dbSubDir returns the new subdirectory for a given DB identifier.
-func dbSubDir(dbID string) string {
-	switch dbID {
-	case "blockstore", "tx_index", "state", "evidence", "peerstore":
-		return "tendermint"
-	default:
-		return ""
-	}
-}
+func dbSubDir(dbID string) string { _ = "STUB: not implemented"; return "" }
 
 // ResolveDBDir returns the directory in which the given DB should be opened.
 // If legacy data exists directly under baseDir (e.g. baseDir/blockstore.db),
 // baseDir is returned for backward compatibility. Otherwise the new
 // subdirectory layout (e.g. baseDir/ledger) is used.
-func ResolveDBDir(dbID string, baseDir string) string {
-	subDir := dbSubDir(dbID)
-	if subDir == "" {
-		return baseDir
-	}
-	legacyPath := filepath.Join(baseDir, dbID+".db")
-	if dirExists(legacyPath) {
-		return baseDir
-	}
-	return filepath.Join(baseDir, subDir)
-}
+func ResolveDBDir(dbID string, baseDir string) string { _ = "STUB: not implemented"; return "" }
 
-func dirExists(path string) bool {
-	info, err := os.Stat(path)
-	return err == nil && info.IsDir()
-}
+func dirExists(path string) bool { _ = "STUB: not implemented"; return false }

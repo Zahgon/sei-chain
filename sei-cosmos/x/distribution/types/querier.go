@@ -24,9 +24,8 @@ type QueryValidatorOutstandingRewardsParams struct {
 
 // creates a new instance of QueryValidatorOutstandingRewardsParams
 func NewQueryValidatorOutstandingRewardsParams(validatorAddr sdk.ValAddress) QueryValidatorOutstandingRewardsParams {
-	return QueryValidatorOutstandingRewardsParams{
-		ValidatorAddress: validatorAddr,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryValidatorOutstandingRewardsParams)
 }
 
 // params for query 'custom/distr/validator_commission'
@@ -36,9 +35,8 @@ type QueryValidatorCommissionParams struct {
 
 // creates a new instance of QueryValidatorCommissionParams
 func NewQueryValidatorCommissionParams(validatorAddr sdk.ValAddress) QueryValidatorCommissionParams {
-	return QueryValidatorCommissionParams{
-		ValidatorAddress: validatorAddr,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryValidatorCommissionParams)
 }
 
 // params for query 'custom/distr/validator_slashes'
@@ -50,11 +48,8 @@ type QueryValidatorSlashesParams struct {
 
 // creates a new instance of QueryValidatorSlashesParams
 func NewQueryValidatorSlashesParams(validatorAddr sdk.ValAddress, startingHeight uint64, endingHeight uint64) QueryValidatorSlashesParams {
-	return QueryValidatorSlashesParams{
-		ValidatorAddress: validatorAddr,
-		StartingHeight:   startingHeight,
-		EndingHeight:     endingHeight,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryValidatorSlashesParams)
 }
 
 // params for query 'custom/distr/delegation_rewards'
@@ -65,10 +60,8 @@ type QueryDelegationRewardsParams struct {
 
 // creates a new instance of QueryDelegationRewardsParams
 func NewQueryDelegationRewardsParams(delegatorAddr sdk.AccAddress, validatorAddr sdk.ValAddress) QueryDelegationRewardsParams {
-	return QueryDelegationRewardsParams{
-		DelegatorAddress: delegatorAddr,
-		ValidatorAddress: validatorAddr,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryDelegationRewardsParams)
 }
 
 // params for query 'custom/distr/delegator_total_rewards' and 'custom/distr/delegator_validators'
@@ -78,9 +71,8 @@ type QueryDelegatorParams struct {
 
 // creates a new instance of QueryDelegationRewardsParams
 func NewQueryDelegatorParams(delegatorAddr sdk.AccAddress) QueryDelegatorParams {
-	return QueryDelegatorParams{
-		DelegatorAddress: delegatorAddr,
-	}
+	_ = "STUB: not implemented"
+	return *new(QueryDelegatorParams)
 }
 
 // params for query 'custom/distr/withdraw_addr'
@@ -90,5 +82,6 @@ type QueryDelegatorWithdrawAddrParams struct {
 
 // NewQueryDelegatorWithdrawAddrParams creates a new instance of QueryDelegatorWithdrawAddrParams.
 func NewQueryDelegatorWithdrawAddrParams(delegatorAddr sdk.AccAddress) QueryDelegatorWithdrawAddrParams {
-	return QueryDelegatorWithdrawAddrParams{DelegatorAddress: delegatorAddr}
+	_ = "STUB: not implemented"
+	return *new(QueryDelegatorWithdrawAddrParams)
 }

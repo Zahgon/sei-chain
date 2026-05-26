@@ -1,21 +1,5 @@
 package crypto
 
-import (
-	"bytes"
-	"encoding/hex"
-	"errors"
-	"fmt"
-	"io"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/tendermint/crypto/bcrypt"
-	"golang.org/x/crypto/nacl/secretbox"
-	"golang.org/x/crypto/openpgp/armor" //nolint:staticcheck // SA1019: not worth fixing
-
-	cosmoscrypto "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/utils"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-)
-
 const (
 	blockTypePrivKey = "TENDERMINT PRIVATE KEY"
 	blockTypeKeyInfo = "TENDERMINT KEY INFO"
@@ -28,33 +12,13 @@ const (
 )
 
 func EncodeArmor(blockType string, headers map[string]string, data []byte) string {
-	buf := new(bytes.Buffer)
-	w, err := armor.Encode(buf, blockType, headers)
-	if err != nil {
-		panic(fmt.Errorf("could not encode ascii armor: %s", err))
-	}
-	_, err = w.Write(data)
-	if err != nil {
-		panic(fmt.Errorf("could not encode ascii armor: %s", err))
-	}
-	err = w.Close()
-	if err != nil {
-		panic(fmt.Errorf("could not encode ascii armor: %s", err))
-	}
-	return buf.String()
+	_ = "STUB: not implemented"
+	return ""
 }
 
 func DecodeArmor(armorStr string) (blockType string, headers map[string]string, data []byte, err error) {
-	buf := bytes.NewBufferString(armorStr)
-	block, err := armor.Decode(buf)
-	if err != nil {
-		return "", nil, nil, err
-	}
-	data, err = io.ReadAll(block.Body)
-	if err != nil {
-		return "", nil, nil, err
-	}
-	return block.Type, block.Header, data, nil
+	_ = "STUB: not implemented"
+	return "", nil, nil, nil
 }
 
 const nonceLen = 24
@@ -63,40 +27,15 @@ const secretLen = 32
 // secret must be 32 bytes long. Use something like Sha256(Bcrypt(passphrase))
 // The ciphertext is (secretbox.Overhead + 24) bytes longer than the plaintext.
 func EncryptSymmetric(plaintext []byte, secret []byte) (ciphertext []byte) {
-	if len(secret) != secretLen {
-		panic(fmt.Sprintf("Secret must be 32 bytes long, got len %v", len(secret)))
-	}
-	nonce := crypto.CRandBytes(nonceLen)
-	nonceArr := [nonceLen]byte{}
-	copy(nonceArr[:], nonce)
-	secretArr := [secretLen]byte{}
-	copy(secretArr[:], secret)
-	ciphertext = make([]byte, nonceLen+secretbox.Overhead+len(plaintext))
-	copy(ciphertext, nonce)
-	secretbox.Seal(ciphertext[nonceLen:nonceLen], plaintext, &nonceArr, &secretArr)
-	return ciphertext
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // secret must be 32 bytes long. Use something like Sha256(Bcrypt(passphrase))
 // The ciphertext is (secretbox.Overhead + 24) bytes longer than the plaintext.
 func DecryptSymmetric(ciphertext []byte, secret []byte) (plaintext []byte, err error) {
-	if len(secret) != secretLen {
-		panic(fmt.Sprintf("Secret must be 32 bytes long, got len %v", len(secret)))
-	}
-	if len(ciphertext) <= secretbox.Overhead+nonceLen {
-		return nil, errors.New("ciphertext is too short")
-	}
-	nonce := ciphertext[:nonceLen]
-	nonceArr := [nonceLen]byte{}
-	copy(nonceArr[:], nonce)
-	secretArr := [secretLen]byte{}
-	copy(secretArr[:], secret)
-	plaintext = make([]byte, len(ciphertext)-nonceLen-secretbox.Overhead)
-	_, ok := secretbox.Open(plaintext[:0], ciphertext[nonceLen:], &nonceArr, &secretArr)
-	if !ok {
-		return nil, errors.New("ciphertext decryption failed")
-	}
-	return plaintext, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BcryptSecurityParameter is security parameter var, and it can be changed within the lcd test.
@@ -119,85 +58,31 @@ var BcryptSecurityParameter = 12
 
 // Encrypt and armor the private key.
 func EncryptArmorPrivKey(privKeyBytes []byte, passphrase string, algo string) string {
-	saltBytes, encBytes := encryptPrivKey(privKeyBytes, passphrase)
-	header := map[string]string{
-		"kdf":  "bcrypt",
-		"salt": fmt.Sprintf("%X", saltBytes),
-	}
-
-	if algo != "" {
-		header[headerType] = algo
-	}
-
-	armorStr := EncodeArmor(blockTypePrivKey, header, encBytes)
-
-	return armorStr
+	_ = "STUB: not implemented"
+	return ""
 }
 
 // encrypt the given privKey with the passphrase using a randomly
 // generated salt and the xsalsa20 cipher. returns the salt and the
 // encrypted priv key.
 func encryptPrivKey(privKeyBytes []byte, passphrase string) (saltBytes []byte, encBytes []byte) {
-	saltBytes = crypto.CRandBytes(16)
-	key, err := bcrypt.GenerateFromPassword(saltBytes, []byte(passphrase), BcryptSecurityParameter)
-
-	if err != nil {
-		panic(sdkerrors.Wrap(err, "error generating bcrypt key from passphrase"))
-	}
-
-	key = cosmoscrypto.Sha256(key) // get 32 bytes
-
-	return saltBytes, EncryptSymmetric(privKeyBytes, key)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// get 32 bytes
 
 // UnarmorDecryptPrivKey returns the privkey byte slice, a string of the algo type, and an error
 func UnarmorDecryptPrivKey(armorStr string, passphrase string) (privKey []byte, algo string, err error) {
-	blockType, header, encBytes, err := DecodeArmor(armorStr)
-	if err != nil {
-		return privKey, "", err
-	}
-
-	if blockType != blockTypePrivKey {
-		return privKey, "", fmt.Errorf("unrecognized armor type: %v", blockType)
-	}
-
-	if header["kdf"] != "bcrypt" {
-		return privKey, "", fmt.Errorf("unrecognized KDF type: %v", header["kdf"])
-	}
-
-	if header["salt"] == "" {
-		return privKey, "", fmt.Errorf("missing salt bytes")
-	}
-
-	saltBytes, err := hex.DecodeString(header["salt"])
-	if err != nil {
-		return privKey, "", fmt.Errorf("error decoding salt: %v", err.Error())
-	}
-
-	privKey, err = decryptPrivKey(saltBytes, encBytes, passphrase)
-
-	if header[headerType] == "" {
-		header[headerType] = defaultAlgo
-	}
-
-	return privKey, header[headerType], err
+	_ = "STUB: not implemented"
+	return nil, "", nil
 }
 
 func decryptPrivKey(saltBytes []byte, encBytes []byte, passphrase string) (privKey []byte, err error) {
-	key, err := bcrypt.GenerateFromPassword(saltBytes, []byte(passphrase), BcryptSecurityParameter)
-	if err != nil {
-		return privKey, sdkerrors.Wrap(err, "error generating bcrypt key from passphrase")
-	}
-
-	key = cosmoscrypto.Sha256(key) // Get 32 bytes
-
-	privKeyBytes, err := DecryptSymmetric(encBytes, key)
-	if err != nil && err.Error() == "Ciphertext decryption failed" {
-		return privKey, sdkerrors.ErrWrongPassword
-	} else if err != nil {
-		return privKey, err
-	}
-
-	// return legacy.PrivKeyFromBytes(privKeyBytes)
-	return privKeyBytes, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Get 32 bytes
+
+// return legacy.PrivKeyFromBytes(privKeyBytes)

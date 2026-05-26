@@ -24,10 +24,10 @@ type Derived struct {
 
 // Derived should never come from deserialization or be transmitted after serialization,
 // so all methods below would no-op.
-func (d Derived) Marshal() ([]byte, error)             { return []byte{}, nil }
-func (d *Derived) MarshalTo([]byte) (n int, err error) { return }
-func (d *Derived) Unmarshal([]byte) error              { return nil }
-func (d *Derived) Size() int                           { return 0 }
+func (d Derived) Marshal() ([]byte, error)             { _ = "STUB: not implemented"; return nil, nil }
+func (d *Derived) MarshalTo([]byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
+func (d *Derived) Unmarshal([]byte) error              { _ = "STUB: not implemented"; return nil }
+func (d *Derived) Size() int                           { _ = "STUB: not implemented"; return 0 }
 
-func (d Derived) MarshalJSON() ([]byte, error) { return []byte{}, nil }
-func (d *Derived) UnmarshalJSON([]byte) error  { return nil }
+func (d Derived) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
+func (d *Derived) UnmarshalJSON([]byte) error  { _ = "STUB: not implemented"; return nil }

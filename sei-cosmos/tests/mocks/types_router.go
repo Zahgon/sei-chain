@@ -5,8 +5,6 @@
 package mocks
 
 import (
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 	types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -23,43 +21,37 @@ type MockRouterMockRecorder struct {
 }
 
 // NewMockRouter creates a new mock instance.
-func NewMockRouter(ctrl *gomock.Controller) *MockRouter {
-	mock := &MockRouter{ctrl: ctrl}
-	mock.recorder = &MockRouterMockRecorder{mock}
-	return mock
-}
+func NewMockRouter(ctrl *gomock.Controller) *MockRouter { _ = "STUB: not implemented"; return nil }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockRouter) EXPECT() *MockRouterMockRecorder {
-	return m.recorder
+	_ = "STUB: not implemented"
+
+	// AddRoute mocks base method.
+	return nil
 }
 
-// AddRoute mocks base method.
 func (m *MockRouter) AddRoute(r types.Route) types.Router {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddRoute", r)
-	ret0, _ := ret[0].(types.Router)
-	return ret0
+	_ = "STUB: not implemented"
+	return *new(types.Router)
 }
 
 // AddRoute indicates an expected call of AddRoute.
 func (mr *MockRouterMockRecorder) AddRoute(r interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRoute", reflect.TypeOf((*MockRouter)(nil).AddRoute), r)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Route mocks base method.
 func (m *MockRouter) Route(ctx types.Context, path string) types.Handler {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Route", ctx, path)
-	ret0, _ := ret[0].(types.Handler)
-	return ret0
+	_ = "STUB: not implemented"
+	return *new(types.Handler)
 }
 
 // Route indicates an expected call of Route.
 func (mr *MockRouterMockRecorder) Route(ctx, path interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Route", reflect.TypeOf((*MockRouter)(nil).Route), ctx, path)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MockQueryRouter is a mock of QueryRouter interface.
@@ -75,40 +67,37 @@ type MockQueryRouterMockRecorder struct {
 
 // NewMockQueryRouter creates a new mock instance.
 func NewMockQueryRouter(ctrl *gomock.Controller) *MockQueryRouter {
-	mock := &MockQueryRouter{ctrl: ctrl}
-	mock.recorder = &MockQueryRouterMockRecorder{mock}
-	return mock
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockQueryRouter) EXPECT() *MockQueryRouterMockRecorder {
-	return m.recorder
+	_ = "STUB: not implemented"
+
+	// AddRoute mocks base method.
+	return nil
 }
 
-// AddRoute mocks base method.
 func (m *MockQueryRouter) AddRoute(r string, h types.Querier) types.QueryRouter {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "AddRoute", r, h)
-	ret0, _ := ret[0].(types.QueryRouter)
-	return ret0
+	_ = "STUB: not implemented"
+	return *new(types.QueryRouter)
 }
 
 // AddRoute indicates an expected call of AddRoute.
 func (mr *MockQueryRouterMockRecorder) AddRoute(r, h interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddRoute", reflect.TypeOf((*MockQueryRouter)(nil).AddRoute), r, h)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Route mocks base method.
 func (m *MockQueryRouter) Route(path string) types.Querier {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Route", path)
-	ret0, _ := ret[0].(types.Querier)
-	return ret0
+	_ = "STUB: not implemented"
+	return *new(types.Querier)
 }
 
 // Route indicates an expected call of Route.
 func (mr *MockQueryRouterMockRecorder) Route(path interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Route", reflect.TypeOf((*MockQueryRouter)(nil).Route), path)
+	_ = "STUB: not implemented"
+	return nil
 }

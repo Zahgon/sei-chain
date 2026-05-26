@@ -2,8 +2,6 @@ package snapshots
 
 import (
 	"io"
-
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 // ChunkWriter reads an input stream, splits it into fixed-size chunks, and writes them to a
@@ -18,91 +16,27 @@ type ChunkWriter struct {
 
 // NewChunkWriter creates a new ChunkWriter. If chunkSize is 0, no chunking will be done.
 func NewChunkWriter(ch chan<- io.ReadCloser, chunkSize uint64) *ChunkWriter {
-	return &ChunkWriter{
-		ch:        ch,
-		chunkSize: chunkSize,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // chunk creates a new chunk.
-func (w *ChunkWriter) chunk() error {
-	if w.pipe != nil {
-		err := w.pipe.Close()
-		if err != nil {
-			return err
-		}
-	}
-	pr, pw := io.Pipe()
-	w.ch <- pr
-	w.pipe = pw
-	w.written = 0
-	return nil
-}
+func (w *ChunkWriter) chunk() error { _ = "STUB: not implemented"; return nil }
 
 // Close implements io.Closer.
-func (w *ChunkWriter) Close() error {
-	if !w.closed {
-		w.closed = true
-		close(w.ch)
-		var err error
-		if w.pipe != nil {
-			err = w.pipe.Close()
-		}
-		return err
-	}
-	return nil
-}
+func (w *ChunkWriter) Close() error { _ = "STUB: not implemented"; return nil }
 
 // CloseWithError closes the writer and sends an error to the reader.
-func (w *ChunkWriter) CloseWithError(err error) {
-	if !w.closed {
-		if w.pipe == nil {
-			// create a dummy pipe just to propagate the error to the reader, it always returns nil
-			_ = w.chunk()
-		}
-		w.closed = true
-		close(w.ch)
-		if w.pipe != nil {
-			_ = w.pipe.CloseWithError(err)
-		}
-	}
-}
+func (w *ChunkWriter) CloseWithError(err error) { _ = "STUB: not implemented"; return }
+
+// create a dummy pipe just to propagate the error to the reader, it always returns nil
 
 // Write implements io.Writer.
-func (w *ChunkWriter) Write(data []byte) (int, error) {
-	if w.closed {
-		return 0, sdkerrors.Wrap(sdkerrors.ErrLogic, "cannot write to closed ChunkWriter")
-	}
-	nTotal := 0
-	for len(data) > 0 {
-		if w.pipe == nil || (w.written >= w.chunkSize && w.chunkSize > 0) {
-			err := w.chunk()
-			if err != nil {
-				return nTotal, err
-			}
-		}
+func (w *ChunkWriter) Write(data []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
-		var writeSize uint64
-		lenAsUint64 := uint64(len(data)) //nolint:gosec
-		if w.chunkSize == 0 {
-			writeSize = lenAsUint64
-		} else {
-			writeSize = w.chunkSize - w.written
-		}
-		if writeSize > lenAsUint64 {
-			writeSize = lenAsUint64
-		}
+//nolint:gosec
 
-		n, err := w.pipe.Write(data[:writeSize])
-		w.written += uint64(n) //nolint:gosec
-		nTotal += n
-		if err != nil {
-			return nTotal, err
-		}
-		data = data[writeSize:]
-	}
-	return nTotal, nil
-}
+//nolint:gosec
 
 // ChunkReader reads chunks from a channel of io.ReadClosers and outputs them as an io.Reader
 type ChunkReader struct {
@@ -111,58 +45,16 @@ type ChunkReader struct {
 }
 
 // NewChunkReader creates a new ChunkReader.
-func NewChunkReader(ch <-chan io.ReadCloser) *ChunkReader {
-	return &ChunkReader{ch: ch}
-}
+func NewChunkReader(ch <-chan io.ReadCloser) *ChunkReader { _ = "STUB: not implemented"; return nil }
 
 // next fetches the next chunk from the channel, or returns io.EOF if there are no more chunks.
-func (r *ChunkReader) next() error {
-	reader, ok := <-r.ch
-	if !ok {
-		return io.EOF
-	}
-	r.reader = reader
-	return nil
-}
+func (r *ChunkReader) next() error { _ = "STUB: not implemented"; return nil }
 
 // Close implements io.ReadCloser.
-func (r *ChunkReader) Close() error {
-	var err error
-	if r.reader != nil {
-		err = r.reader.Close()
-		r.reader = nil
-	}
-	for reader := range r.ch {
-		if e := reader.Close(); e != nil && err == nil {
-			err = e
-		}
-	}
-	return err
-}
+func (r *ChunkReader) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Read implements io.Reader.
-func (r *ChunkReader) Read(p []byte) (int, error) {
-	if r.reader == nil {
-		err := r.next()
-		if err != nil {
-			return 0, err
-		}
-	}
-	n, err := r.reader.Read(p)
-	if err == io.EOF {
-		err = r.reader.Close()
-		r.reader = nil
-		if err != nil {
-			return 0, err
-		}
-		return r.Read(p)
-	}
-	return n, err
-}
+func (r *ChunkReader) Read(p []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // DrainChunks drains and closes all remaining chunks from a chunk channel.
-func DrainChunks(chunks <-chan io.ReadCloser) {
-	for chunk := range chunks {
-		_ = chunk.Close()
-	}
-}
+func DrainChunks(chunks <-chan io.ReadCloser) { _ = "STUB: not implemented"; return }

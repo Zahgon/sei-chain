@@ -14,7 +14,4 @@ import (
 type GenesisState map[string]json.RawMessage
 
 // NewDefaultGenesisState generates the default state for the application.
-func NewDefaultGenesisState() GenesisState {
-	encodingConfig := MakeEncodingConfig()
-	return ModuleBasics.DefaultGenesis(encodingConfig.Marshaler)
-}
+func NewDefaultGenesisState() GenesisState { _ = "STUB: not implemented"; return *new(GenesisState) }

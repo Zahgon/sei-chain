@@ -1,13 +1,10 @@
 package types
 
 import (
-	"bytes"
 	"context"
 	"errors"
-	"fmt"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 )
 
@@ -34,26 +31,11 @@ type PrivValidator interface {
 
 type PrivValidatorsByAddress []PrivValidator
 
-func (pvs PrivValidatorsByAddress) Len() int {
-	return len(pvs)
-}
+func (pvs PrivValidatorsByAddress) Len() int { _ = "STUB: not implemented"; return 0 }
 
-func (pvs PrivValidatorsByAddress) Less(i, j int) bool {
-	pvi, err := pvs[i].GetPubKey(context.TODO())
-	if err != nil {
-		panic(err)
-	}
-	pvj, err := pvs[j].GetPubKey(context.TODO())
-	if err != nil {
-		panic(err)
-	}
+func (pvs PrivValidatorsByAddress) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
 
-	return bytes.Compare(pvi.Address(), pvj.Address()) == -1
-}
-
-func (pvs PrivValidatorsByAddress) Swap(i, j int) {
-	pvs[i], pvs[j] = pvs[j], pvs[i]
-}
+func (pvs PrivValidatorsByAddress) Swap(i, j int) { _ = "STUB: not implemented"; return }
 
 //----------------------------------------
 // MockPV
@@ -66,67 +48,50 @@ type MockPV struct {
 	breakVoteSigning     bool
 }
 
-func NewMockPV() MockPV {
-	return MockPV{ed25519.GenerateSecretKey(), false, false}
-}
+func NewMockPV() MockPV { _ = "STUB: not implemented"; return *new(MockPV) }
 
 // NewMockPVWithParams allows one to create a MockPV instance, but with finer
 // grained control over the operation of the mock validator. This is useful for
 // mocking test failures.
 func NewMockPVWithParams(privKey crypto.PrivKey, breakProposalSigning, breakVoteSigning bool) MockPV {
-	return MockPV{privKey, breakProposalSigning, breakVoteSigning}
+	_ = "STUB: not implemented"
+	return *new(MockPV)
 }
 
 // Implements PrivValidator.
 func (pv MockPV) GetPubKey(ctx context.Context) (crypto.PubKey, error) {
-	return pv.PrivKey.Public(), nil
+	_ = "STUB: not implemented"
+	return *new(crypto.PubKey), nil
 }
 
 // Implements PrivValidator.
 func (pv MockPV) SignVote(ctx context.Context, chainID string, vote *tmproto.Vote) error {
-	useChainID := chainID
-	if pv.breakVoteSigning {
-		useChainID = "incorrect-chain-id"
-	}
-
-	signBytes := VoteSignBytes(useChainID, vote)
-	sig := pv.PrivKey.Sign(signBytes)
-	vote.Signature = sig.Bytes()
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // Implements PrivValidator.
 func (pv MockPV) SignProposal(ctx context.Context, chainID string, proposal *tmproto.Proposal) error {
-	useChainID := chainID
-	if pv.breakProposalSigning {
-		useChainID = "incorrect-chain-id"
-	}
-
-	signBytes := ProposalSignBytes(useChainID, proposal)
-	sig := pv.PrivKey.Sign(signBytes)
-	proposal.Signature = sig.Bytes()
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (pv MockPV) ExtractIntoValidator(ctx context.Context, votingPower int64) *Validator {
-	pubKey, _ := pv.GetPubKey(ctx)
-	return &Validator{
-		Address:     pubKey.Address(),
-		PubKey:      pubKey,
-		VotingPower: votingPower,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // String returns a string representation of the MockPV.
-func (pv MockPV) String() string {
-	mpv, _ := pv.GetPubKey(context.TODO()) // mockPV will never return an error, ignored here
-	return fmt.Sprintf("MockPV{%v}", mpv.Address())
-}
+func (pv MockPV) String() string { _ = "STUB: not implemented"; return "" }
+
+// mockPV will never return an error, ignored here
 
 // XXX: Implement.
 func (pv MockPV) DisableChecks() {
+	_ = "STUB: not implemented"
 	// Currently this does nothing,
 	// as MockPV has no safety checks at all.
+	return
 }
 
 type ErroringMockPV struct {
@@ -137,21 +102,23 @@ var ErroringMockPVErr = errors.New("erroringMockPV always returns an error")
 
 // Implements PrivValidator.
 func (pv *ErroringMockPV) GetPubKey(ctx context.Context) (crypto.PubKey, error) {
-	return crypto.PubKey{}, ErroringMockPVErr
+	_ = "STUB: not implemented"
+	return *new(crypto.PubKey), nil
 }
 
 // Implements PrivValidator.
 func (pv *ErroringMockPV) SignVote(ctx context.Context, chainID string, vote *tmproto.Vote) error {
-	return ErroringMockPVErr
+	_ = "STUB: not implemented"
+	return nil
+
+	// Implements PrivValidator.
 }
 
-// Implements PrivValidator.
 func (pv *ErroringMockPV) SignProposal(ctx context.Context, chainID string, proposal *tmproto.Proposal) error {
-	return ErroringMockPVErr
+	_ = "STUB: not implemented"
+	return nil
+
+	// NewErroringMockPV returns a MockPV that fails on each signing request. Again, for testing only.
 }
 
-// NewErroringMockPV returns a MockPV that fails on each signing request. Again, for testing only.
-
-func NewErroringMockPV() *ErroringMockPV {
-	return &ErroringMockPV{MockPV{ed25519.GenerateSecretKey(), false, false}}
-}
+func NewErroringMockPV() *ErroringMockPV { _ = "STUB: not implemented"; return nil }

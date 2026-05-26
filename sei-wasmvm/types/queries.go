@@ -18,12 +18,10 @@ type queryResponseImpl struct {
 // A custom serializer that allows us to map QueryResponse instances to the Rust
 // enum `ContractResult<Binary>`
 func (q QueryResponse) MarshalJSON() ([]byte, error) {
+	_ = "STUB: not implemented"
 	// In case both Ok and Err are empty, this is interpreted and seralized
 	// as an Ok case with no data because errors must not be empty.
-	if len(q.Ok) == 0 && len(q.Err) == 0 {
-		return []byte(`{"ok":""}`), nil
-	}
-	return json.Marshal(queryResponseImpl(q))
+	return nil, nil
 }
 
 //-------- Querier -----------
@@ -54,20 +52,8 @@ type Querier interface {
 
 // this is a thin wrapper around the desired Go API to give us types closer to Rust FFI
 func RustQuery(querier Querier, binRequest []byte, gasLimit uint64) QuerierResult {
-	var request QueryRequest
-	err := json.Unmarshal(binRequest, &request)
-	if err != nil {
-		return QuerierResult{
-			Err: &SystemError{
-				InvalidRequest: &InvalidRequest{
-					Err:     err.Error(),
-					Request: binRequest,
-				},
-			},
-		}
-	}
-	bz, err := querier.Query(request, gasLimit)
-	return ToQuerierResult(bz, err)
+	_ = "STUB: not implemented"
+	return *new(QuerierResult)
 }
 
 // This is a 2-level result
@@ -77,24 +63,8 @@ type QuerierResult struct {
 }
 
 func ToQuerierResult(response []byte, err error) QuerierResult {
-	if err == nil {
-		return QuerierResult{
-			Ok: &QueryResponse{
-				Ok: response,
-			},
-		}
-	}
-	syserr := ToSystemError(err)
-	if syserr != nil {
-		return QuerierResult{
-			Err: syserr,
-		}
-	}
-	return QuerierResult{
-		Ok: &QueryResponse{
-			Err: err.Error(),
-		},
-	}
+	_ = "STUB: not implemented"
+	return *new(QuerierResult)
 }
 
 // QueryRequest is an rust enum and only (exactly) one of the fields should be set
@@ -198,25 +168,12 @@ type ListChannelsResponse struct {
 type IBCChannels []IBCChannel
 
 // MarshalJSON ensures that we get [] for empty arrays
-func (e IBCChannels) MarshalJSON() ([]byte, error) {
-	if len(e) == 0 {
-		return []byte("[]"), nil
-	}
-	var raw []IBCChannel = e
-	return json.Marshal(raw)
-}
+func (e IBCChannels) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON ensures that we get [] for empty arrays
 func (e *IBCChannels) UnmarshalJSON(data []byte) error {
+	_ = "STUB: not implemented"
 	// make sure we deserialize [] back to null
-	if isEmptyOrNull(data) {
-		return nil
-	}
-	var raw []IBCChannel
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-	*e = raw
 	return nil
 }
 
@@ -224,25 +181,12 @@ func (e *IBCChannels) UnmarshalJSON(data []byte) error {
 type IBCEndpoints []IBCEndpoint
 
 // MarshalJSON ensures that we get [] for empty arrays
-func (e IBCEndpoints) MarshalJSON() ([]byte, error) {
-	if len(e) == 0 {
-		return []byte("[]"), nil
-	}
-	var raw []IBCEndpoint = e
-	return json.Marshal(raw)
-}
+func (e IBCEndpoints) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON ensures that we get [] for empty arrays
 func (e *IBCEndpoints) UnmarshalJSON(data []byte) error {
+	_ = "STUB: not implemented"
 	// make sure we deserialize [] back to null
-	if isEmptyOrNull(data) {
-		return nil
-	}
-	var raw []IBCEndpoint
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-	*e = raw
 	return nil
 }
 
@@ -278,25 +222,12 @@ type AllValidatorsResponse struct {
 type Validators []Validator
 
 // MarshalJSON ensures that we get [] for empty arrays
-func (v Validators) MarshalJSON() ([]byte, error) {
-	if len(v) == 0 {
-		return []byte("[]"), nil
-	}
-	var raw []Validator = v
-	return json.Marshal(raw)
-}
+func (v Validators) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON ensures that we get [] for empty arrays
 func (v *Validators) UnmarshalJSON(data []byte) error {
+	_ = "STUB: not implemented"
 	// make sure we deserialize [] back to null
-	if isEmptyOrNull(data) {
-		return nil
-	}
-	var raw []Validator
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-	*v = raw
 	return nil
 }
 
@@ -337,25 +268,12 @@ type AllDelegationsResponse struct {
 type Delegations []Delegation
 
 // MarshalJSON ensures that we get [] for empty arrays
-func (d Delegations) MarshalJSON() ([]byte, error) {
-	if len(d) == 0 {
-		return []byte("[]"), nil
-	}
-	var raw []Delegation = d
-	return json.Marshal(raw)
-}
+func (d Delegations) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON ensures that we get [] for empty arrays
 func (d *Delegations) UnmarshalJSON(data []byte) error {
+	_ = "STUB: not implemented"
 	// make sure we deserialize [] back to null
-	if isEmptyOrNull(data) {
-		return nil
-	}
-	var raw []Delegation
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-	*d = raw
 	return nil
 }
 

@@ -3,9 +3,6 @@ package ecdsa
 import (
 	"crypto/ecdsa"
 	"crypto/elliptic"
-	"crypto/rand"
-	"crypto/sha256"
-	"fmt"
 	"math/big"
 )
 
@@ -22,43 +19,24 @@ var p256HalfOrder = new(big.Int).Rsh(p256Order, 1)
 
 // IsSNormalized returns true for the integer sigS if sigS falls in
 // lower half of the curve order
-func IsSNormalized(sigS *big.Int) bool {
-	return sigS.Cmp(p256HalfOrder) != 1
-}
+func IsSNormalized(sigS *big.Int) bool { _ = "STUB: not implemented"; return false }
 
 // NormalizeS will invert the s value if not already in the lower half
 // of curve order value
-func NormalizeS(sigS *big.Int) *big.Int {
-
-	if IsSNormalized(sigS) {
-		return sigS
-	}
-
-	return new(big.Int).Sub(p256Order, sigS)
-}
+func NormalizeS(sigS *big.Int) *big.Int { _ = "STUB: not implemented"; return nil }
 
 // signatureRaw will serialize signature to R || S.
 // R, S are padded to 32 bytes respectively.
 // code roughly copied from secp256k1_nocgo.go
-func signatureRaw(r *big.Int, s *big.Int) []byte {
+func signatureRaw(r *big.Int, s *big.Int) []byte { _ = "STUB: not implemented"; return nil }
 
-	rBytes := r.Bytes()
-	sBytes := s.Bytes()
-	sigBytes := make([]byte, 64)
-	// 0 pad the byte arrays from the left if they aren't big enough.
-	copy(sigBytes[32-len(rBytes):32], rBytes)
-	copy(sigBytes[64-len(sBytes):64], sBytes)
-	return sigBytes
-}
+// 0 pad the byte arrays from the left if they aren't big enough.
 
 // GenPrivKey generates a new secp256r1 private key. It uses operating
 // system randomness.
 func GenPrivKey(curve elliptic.Curve) (PrivKey, error) {
-	key, err := ecdsa.GenerateKey(curve, rand.Reader)
-	if err != nil {
-		return PrivKey{}, err
-	}
-	return PrivKey{*key}, nil
+	_ = "STUB: not implemented"
+	return *new(PrivKey), nil
 }
 
 type PrivKey struct {
@@ -66,20 +44,10 @@ type PrivKey struct {
 }
 
 // PubKey returns ECDSA public key associated with this private key.
-func (sk *PrivKey) PubKey() PubKey {
-	return PubKey{sk.PublicKey, nil}
-}
+func (sk *PrivKey) PubKey() PubKey { _ = "STUB: not implemented"; return *new(PubKey) }
 
 // Bytes serialize the private key using big-endian.
-func (sk *PrivKey) Bytes() []byte {
-	if sk == nil {
-		return nil
-	}
-	fieldSize := (sk.Curve.Params().BitSize + 7) / 8
-	bz := make([]byte, fieldSize)
-	sk.D.FillBytes(bz)
-	return bz
-}
+func (sk *PrivKey) Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // Sign hashes and signs the message using ECDSA. Implements SDK
 // PrivKey interface.
@@ -89,39 +57,16 @@ func (sk *PrivKey) Bytes() []byte {
 // See issue: https://github.com/cosmos/cosmos-sdk/issues/9723
 // It then raw encodes the signature as two fixed width 32-byte values
 // concatenated, reusing the code copied from secp256k1_nocgo.go
-func (sk *PrivKey) Sign(msg []byte) ([]byte, error) {
-
-	digest := sha256.Sum256(msg)
-	r, s, err := ecdsa.Sign(rand.Reader, &sk.PrivateKey, digest[:])
-
-	if err != nil {
-		return nil, err
-	}
-
-	normS := NormalizeS(s)
-	return signatureRaw(r, normS), nil
-}
+func (sk *PrivKey) Sign(msg []byte) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // String returns a string representation of the public key based on the curveName.
-func (sk *PrivKey) String(name string) string {
-	return name + "{-}"
-}
+func (sk *PrivKey) String(name string) string { _ = "STUB: not implemented"; return "" }
 
 // MarshalTo implements proto.Marshaler interface.
-func (sk *PrivKey) MarshalTo(dAtA []byte) (int, error) {
-	bz := sk.Bytes()
-	copy(dAtA, bz)
-	return len(bz), nil
-}
+func (sk *PrivKey) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // Unmarshal implements proto.Marshaler interface.
 func (sk *PrivKey) Unmarshal(bz []byte, curve elliptic.Curve, expectedSize int) error {
-	if len(bz) != expectedSize {
-		return fmt.Errorf("wrong ECDSA SK bytes, expecting %d bytes", expectedSize)
-	}
-
-	sk.Curve = curve
-	sk.D = new(big.Int).SetBytes(bz)
-	sk.X, sk.Y = curve.ScalarBaseMult(bz)
+	_ = "STUB: not implemented"
 	return nil
 }

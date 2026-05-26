@@ -2,19 +2,12 @@ package cryptosim
 
 import (
 	"context"
-	"fmt"
-	"path/filepath"
 	"sync"
-	"time"
 
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/eth/filters"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	crand "github.com/sei-protocol/sei-chain/sei-db/common/rand"
-	dbconfig "github.com/sei-protocol/sei-chain/sei-db/config"
 	"github.com/sei-protocol/sei-chain/sei-db/ledger_db/receipt"
-	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
 )
 
@@ -45,39 +38,19 @@ type txHashRing struct {
 	count   int
 }
 
-func newTxHashRing(size int) *txHashRing {
-	return &txHashRing{
-		entries: make([]txHashEntry, size),
-		size:    size,
-	}
-}
+func newTxHashRing(size int) *txHashRing { _ = "STUB: not implemented"; return nil }
 
 // Push appends a tx hash entry to the ring, overwriting the oldest entry when full.
 func (r *txHashRing) Push(txHash common.Hash, blockNumber uint64, contractAddress common.Address) {
-	r.mu.Lock()
-	defer r.mu.Unlock()
-	r.entries[r.head] = txHashEntry{
-		txHash:          txHash,
-		blockNumber:     blockNumber,
-		contractAddress: contractAddress,
-	}
-	r.head = (r.head + 1) % r.size
-	if r.count < r.size {
-		r.count++
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // RandomEntry returns a random entry from the ring, using CannedRandom to
 // avoid potential rand.Rand hotspots under high-concurrency benchmarks.
 func (r *txHashRing) RandomEntry(crand *crand.CannedRandom) *txHashEntry {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	if r.count == 0 {
-		return nil
-	}
-	idx := int(crand.Int64Range(0, int64(r.count)))
-	entry := r.entries[idx]
-	return &entry
+	_ = "STUB: not implemented"
+	return nil
 }
 
 const maxRingSampleAttempts = 100
@@ -86,18 +59,7 @@ const maxRingSampleAttempts = 100
 // [minBlock, maxBlock]. Returns nil if no matching entry is found after a
 // bounded number of attempts.
 func (r *txHashRing) RandomEntryInBlockRange(crand *crand.CannedRandom, minBlock, maxBlock uint64) *txHashEntry {
-	r.mu.RLock()
-	defer r.mu.RUnlock()
-	if r.count == 0 {
-		return nil
-	}
-	for range maxRingSampleAttempts {
-		idx := int(crand.Int64Range(0, int64(r.count)))
-		entry := r.entries[idx]
-		if entry.blockNumber >= minBlock && entry.blockNumber <= maxBlock {
-			return &entry
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -135,188 +97,35 @@ func NewRecieptStoreSimulator(
 	metrics *CryptosimMetrics,
 	crand *crand.CannedRandom,
 ) (*RecieptStoreSimulator, error) {
-	derivedCtx, cancel := context.WithCancel(ctx)
-
-	storeCfg := dbconfig.ReceiptStoreConfig{
-		DBDirectory:          filepath.Join(config.DataDir, "receipts"),
-		Backend:              "parquet",
-		KeepRecent:           int(config.ReceiptKeepRecent),
-		PruneIntervalSeconds: int(config.ReceiptPruneIntervalSeconds),
-		TxIndexBackend:       config.ReceiptTxIndexBackend,
-	}
-
-	// nil StoreKey is safe: the parquet write path never touches the legacy KV store.
-	// Cryptosim passes its metrics into the cache wrapper so cache hits/misses are
-	// measured at the only layer that can distinguish them reliably.
-	store, err := receipt.NewReceiptStoreWithReadMetrics(storeCfg, nil, metrics)
-	if err != nil {
-		cancel()
-		return nil, fmt.Errorf("failed to create receipt store: %w", err)
-	}
-
-	txRing := newTxHashRing(defaultTxHashRingSize)
-
-	r := &RecieptStoreSimulator{
-		ctx:                      derivedCtx,
-		cancel:                   cancel,
-		config:                   config,
-		recieptsChan:             recieptsChan,
-		store:                    store,
-		crand:                    crand,
-		txRing:                   txRing,
-		metrics:                  metrics,
-		receiptCacheWindowBlocks: receipt.StableReceiptCacheWindowBlocks(store),
-	}
-	go r.mainLoop()
-
-	if config.ReceiptReadConcurrency > 0 && config.ReceiptReadsPerSecond > 0 {
-		r.startReceiptReaders()
-	}
-	if config.ReceiptLogFilterReadConcurrency > 0 && config.ReceiptLogFilterReadsPerSecond > 0 {
-		r.startLogFilterReaders()
-	}
-
-	return r, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (r *RecieptStoreSimulator) mainLoop() {
-	defer func() {
-		if err := r.store.Close(); err != nil {
-			fmt.Printf("failed to close receipt store: %v\n", err)
-		}
-	}()
-	for {
-		select {
-		case <-r.ctx.Done():
-			return
-		case blk := <-r.recieptsChan:
-			r.processBlock(blk)
-		}
-	}
-}
+// nil StoreKey is safe: the parquet write path never touches the legacy KV store.
+// Cryptosim passes its metrics into the cache wrapper so cache hits/misses are
+// measured at the only layer that can distinguish them reliably.
+
+func (r *RecieptStoreSimulator) mainLoop() { _ = "STUB: not implemented"; return }
 
 // Processes a block of receipts using the production ReceiptStore.SetReceipts path,
 // then populates the ring buffer with contract addresses for log filter reads.
-func (r *RecieptStoreSimulator) processBlock(blk *block) {
-	blockNumber := uint64(blk.BlockNumber()) //nolint:gosec
+func (r *RecieptStoreSimulator) processBlock(blk *block) { _ = "STUB: not implemented"; return }
 
-	records := make([]receipt.ReceiptRecord, 0, len(blk.reciepts))
-	var marshalErrors int64
+//nolint:gosec
 
-	type ringEntry struct {
-		txHash          common.Hash
-		contractAddress common.Address
-	}
-	ringEntries := make([]ringEntry, 0, len(blk.reciepts))
+//nolint:gosec
 
-	for _, rcpt := range blk.reciepts {
-		if rcpt == nil {
-			continue
-		}
-
-		receiptBytes, err := rcpt.Marshal()
-		if err != nil {
-			fmt.Printf("failed to marshal receipt: %v\n", err)
-			marshalErrors++
-			continue
-		}
-
-		txHash := common.HexToHash(rcpt.TxHashHex)
-		records = append(records, receipt.ReceiptRecord{
-			TxHash:       txHash,
-			Receipt:      rcpt,
-			ReceiptBytes: receiptBytes,
-		})
-
-		ringEntries = append(ringEntries, ringEntry{
-			txHash:          txHash,
-			contractAddress: common.HexToAddress(rcpt.ContractAddress),
-		})
-	}
-
-	for range marshalErrors {
-		r.metrics.ReportReceiptError()
-	}
-
-	if len(records) > 0 {
-		sdkCtx := sdk.NewContext(nil, tmproto.Header{Height: int64(blockNumber)}, false) //nolint:gosec
-
-		start := time.Now()
-		if err := r.store.SetReceipts(sdkCtx, records); err != nil {
-			fmt.Printf("failed to write receipts for block %d: %v\n", blockNumber, err)
-			r.metrics.ReportReceiptError()
-			return
-		}
-		r.metrics.RecordReceiptBlockWriteDuration(time.Since(start))
-		r.metrics.ReportReceiptsWritten(int64(len(records)))
-	}
-
-	for _, entry := range ringEntries {
-		r.txRing.Push(entry.txHash, blockNumber, entry.contractAddress)
-	}
-
-	if err := r.store.SetLatestVersion(int64(blockNumber)); err != nil { //nolint:gosec
-		fmt.Printf("failed to update latest version for block %d: %v\n", blockNumber, err)
-	}
-}
+//nolint:gosec
 
 // startReceiptReaders launches dedicated goroutines for receipt-by-hash lookups.
-func (r *RecieptStoreSimulator) startReceiptReaders() {
-	readerCount := r.config.ReceiptReadConcurrency
-	totalReadsPerSec := r.config.ReceiptReadsPerSecond
-	if totalReadsPerSec <= 0 {
-		totalReadsPerSec = 1000
-	}
-
-	readsPerReader := totalReadsPerSec / readerCount
-	if readsPerReader < 1 {
-		readsPerReader = 1
-	}
-
-	for i := 0; i < readerCount; i++ {
-		readerCrand := r.crand.Clone(true)
-		go r.tickerLoop(readsPerReader, readerCrand, r.executeReceiptRead)
-	}
-
-	fmt.Printf("Started %d receipt reader goroutines (%d reads/sec each)\n",
-		readerCount, readsPerReader)
-}
+func (r *RecieptStoreSimulator) startReceiptReaders() { _ = "STUB: not implemented"; return }
 
 // startLogFilterReaders launches dedicated goroutines for log filter (eth_getLogs) queries.
-func (r *RecieptStoreSimulator) startLogFilterReaders() {
-	readerCount := r.config.ReceiptLogFilterReadConcurrency
-	totalReadsPerSec := r.config.ReceiptLogFilterReadsPerSecond
-	if totalReadsPerSec <= 0 {
-		totalReadsPerSec = 100
-	}
-
-	readsPerReader := totalReadsPerSec / readerCount
-	if readsPerReader < 1 {
-		readsPerReader = 1
-	}
-
-	for i := 0; i < readerCount; i++ {
-		readerCrand := r.crand.Clone(true)
-		go r.tickerLoop(readsPerReader, readerCrand, r.executeLogFilterRead)
-	}
-
-	fmt.Printf("Started %d log filter reader goroutines (%d reads/sec each)\n",
-		readerCount, readsPerReader)
-}
+func (r *RecieptStoreSimulator) startLogFilterReaders() { _ = "STUB: not implemented"; return }
 
 func (r *RecieptStoreSimulator) tickerLoop(readsPerSecond int, crand *crand.CannedRandom, fn func(*crand.CannedRandom)) {
-	interval := time.Second / time.Duration(readsPerSecond)
-	ticker := time.NewTicker(interval)
-	defer ticker.Stop()
-
-	for {
-		select {
-		case <-r.ctx.Done():
-			return
-		case <-ticker.C:
-			fn(crand)
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // executeReceiptRead samples a tx hash from the ring and queries GetReceipt.
@@ -325,51 +134,11 @@ func (r *RecieptStoreSimulator) tickerLoop(readsPerSecond int, crand *crand.Cann
 //   - "cache": only blocks within the cache window (guaranteed cache hit).
 //   - "duckdb": only blocks older than the cache window (guaranteed cache miss).
 func (r *RecieptStoreSimulator) executeReceiptRead(crand *crand.CannedRandom) {
-	latestBlock := r.store.LatestVersion()
-	if latestBlock <= 0 {
-		return
-	}
-	latest := uint64(latestBlock) //nolint:gosec
-	cacheWindow := r.receiptCacheWindowBlocks
-
-	buffer := cacheWindow / 10
-	var entry *txHashEntry
-	switch r.config.ReceiptReadMode {
-	case receiptReadModeCache:
-		safeWindow := cacheWindow - buffer
-		minBlock := uint64(0)
-		if latest > safeWindow {
-			minBlock = latest - safeWindow
-		}
-		entry = r.txRing.RandomEntryInBlockRange(crand, minBlock, latest)
-	case receiptReadModeDuckDB:
-		maxBlock := uint64(0)
-		if latest > cacheWindow {
-			maxBlock = latest - cacheWindow - 1
-		}
-		entry = r.txRing.RandomEntryInBlockRange(crand, 0, maxBlock)
-	}
-	if entry == nil {
-		return
-	}
-
-	r.metrics.ReportReceiptRead()
-
-	sdkCtx := sdk.NewContext(nil, tmproto.Header{}, false)
-	start := time.Now()
-	rcpt, err := r.store.GetReceipt(sdkCtx, entry.txHash)
-	r.metrics.RecordReceiptReadDuration(time.Since(start).Seconds())
-
-	if err != nil {
-		r.metrics.ReportReceiptError()
-		return
-	}
-	if rcpt != nil {
-		r.metrics.ReportReceiptReadFound()
-		return
-	}
-	r.metrics.ReportReceiptReadNotFound()
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec
 
 // executeLogFilterRead simulates an eth_getLogs query filtering by contract address
 // over a configurable block range. Contract addresses come from the ring buffer.
@@ -378,105 +147,34 @@ func (r *RecieptStoreSimulator) executeReceiptRead(crand *crand.CannedRandom) {
 //   - "cache": block range falls entirely within the cache window (DuckDB skipped).
 //   - "duckdb": block range falls entirely before the cache window (cache miss).
 func (r *RecieptStoreSimulator) executeLogFilterRead(crand *crand.CannedRandom) {
-	entry := r.txRing.RandomEntry(crand)
-	if entry == nil {
-		return
-	}
-
-	latestVersion := r.store.LatestVersion()
-	if latestVersion <= 0 {
-		return
-	}
-
-	//nolint:gosec // Config validation guarantees a positive block range before this conversion.
-	rangeSize := uint64(crand.Int64Range(
-		int64(r.config.ReceiptLogFilterMinBlockRange),
-		int64(r.config.ReceiptLogFilterMaxBlockRange)+1,
-	))
-	latest := uint64(latestVersion) //nolint:gosec
-	cacheWindow := r.receiptCacheWindowBlocks
-
-	var fromBlock, toBlock uint64
-
-	buffer := cacheWindow / 10
-	switch r.config.ReceiptLogFilterReadMode {
-	case receiptReadModeCache:
-		safeWindow := cacheWindow - buffer
-		cacheMin := uint64(0)
-		if latest > safeWindow {
-			cacheMin = latest - safeWindow
-		}
-		if latest <= cacheMin {
-			return
-		}
-		fromBlock = uint64(crand.Int64Range(int64(cacheMin), int64(latest)+1)) //nolint:gosec
-		toBlock = fromBlock + rangeSize
-		if toBlock > latest {
-			toBlock = latest
-		}
-	case receiptReadModeDuckDB:
-		if latest <= cacheWindow {
-			return
-		}
-		coldMax := latest - cacheWindow - 1
-		earliestBlock := uint64(1)
-		if r.config.ReceiptKeepRecent > 0 && latest > uint64(r.config.ReceiptKeepRecent) { //nolint:gosec
-			earliestBlock = latest - uint64(r.config.ReceiptKeepRecent) + 1 //nolint:gosec
-		}
-		if coldMax < earliestBlock {
-			return
-		}
-		fromBlock = uint64(crand.Int64Range(int64(earliestBlock), int64(coldMax)+1)) //nolint:gosec
-		toBlock = fromBlock + rangeSize
-		if toBlock > coldMax {
-			toBlock = coldMax
-		}
-	}
-
-	crit := filters.FilterCriteria{
-		Addresses: []common.Address{entry.contractAddress},
-	}
-
-	sdkCtx := sdk.NewContext(nil, tmproto.Header{}, false)
-	start := time.Now()
-	logs, err := r.store.FilterLogs(sdkCtx, fromBlock, toBlock, crit)
-	r.metrics.RecordReceiptLogFilterDuration(time.Since(start).Seconds())
-	r.metrics.RecordLogFilterLogsReturned(int64(len(logs)))
-
-	if err != nil {
-		r.metrics.ReportReceiptError()
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec // Config validation guarantees a positive block range before this conversion.
+
+//nolint:gosec
+
+//nolint:gosec
+
+//nolint:gosec
+//nolint:gosec
+
+//nolint:gosec
 
 // convertLogsForTx converts evmtypes.Log entries to ethtypes.Log entries.
 // Mirrors receipt.getLogsForTx.
 func convertLogsForTx(rcpt *evmtypes.Receipt, logStartIndex uint) []*ethtypes.Log {
-	logs := make([]*ethtypes.Log, 0, len(rcpt.Logs))
-	for _, l := range rcpt.Logs {
-		logs = append(logs, convertLogEntry(l, rcpt, logStartIndex))
-	}
-	return logs
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // convertLogEntry converts a single evmtypes.Log to an ethtypes.Log.
 // Mirrors receipt.convertLog.
 func convertLogEntry(l *evmtypes.Log, rcpt *evmtypes.Receipt, logStartIndex uint) *ethtypes.Log {
-	return &ethtypes.Log{
-		Address:     common.HexToAddress(l.Address),
-		Topics:      mapTopics(l.Topics),
-		Data:        l.Data,
-		BlockNumber: rcpt.BlockNumber,
-		TxHash:      common.HexToHash(rcpt.TxHashHex),
-		TxIndex:     uint(rcpt.TransactionIndex),
-		Index:       uint(l.Index) + logStartIndex,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // mapTopics converts hex-encoded topic strings to common.Hash values.
-func mapTopics(topics []string) []common.Hash {
-	result := make([]common.Hash, len(topics))
-	for i, t := range topics {
-		result[i] = common.HexToHash(t)
-	}
-	return result
-}
+func mapTopics(topics []string) []common.Hash { _ = "STUB: not implemented"; return nil }

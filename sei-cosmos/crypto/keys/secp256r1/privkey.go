@@ -6,46 +6,39 @@ import (
 )
 
 // GenPrivKey generates a new secp256r1 private key. It uses operating system randomness.
-func GenPrivKey() (*PrivKey, error) {
-	key, err := ecdsa.GenPrivKey(secp256r1)
-	return &PrivKey{&ecdsaSK{key}}, err
-}
+func GenPrivKey() (*PrivKey, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // PubKey implements SDK PrivKey interface.
 func (m *PrivKey) PubKey() cryptotypes.PubKey {
-	return &PubKey{&ecdsaPK{m.Secret.PubKey()}}
+	_ = "STUB: not implemented"
+	return *new(cryptotypes.PubKey)
 }
 
 // String implements SDK proto.Message interface.
-func (m *PrivKey) String() string {
-	return m.Secret.String(name)
-}
+func (m *PrivKey) String() string { _ = "STUB: not implemented"; return "" }
 
 // Type returns key type name. Implements SDK PrivKey interface.
 func (m *PrivKey) Type() string {
-	return name
+	_ = "STUB: not implemented"
+
+	// Sign hashes and signs the message usign ECDSA. Implements sdk.PrivKey interface.
+	return ""
 }
 
-// Sign hashes and signs the message usign ECDSA. Implements sdk.PrivKey interface.
 func (m *PrivKey) Sign(msg []byte) ([]byte, error) {
-	return m.Secret.Sign(msg)
+	_ = "STUB: not implemented"
+	return nil,
+
+		// Bytes serialize the private key.
+		nil
 }
 
-// Bytes serialize the private key.
-func (m *PrivKey) Bytes() []byte {
-	if m == nil {
-		return nil
-	}
-	return m.Secret.Bytes()
-}
+func (m *PrivKey) Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // Equals implements SDK PrivKey interface.
 func (m *PrivKey) Equals(other cryptotypes.LedgerPrivKey) bool {
-	sk2, ok := other.(*PrivKey)
-	if !ok {
-		return false
-	}
-	return m.Secret.Equal(&sk2.Secret.PrivateKey)
+	_ = "STUB: not implemented"
+	return false
 }
 
 type ecdsaSK struct {
@@ -53,14 +46,7 @@ type ecdsaSK struct {
 }
 
 // Size implements proto.Marshaler interface
-func (sk *ecdsaSK) Size() int {
-	if sk == nil {
-		return 0
-	}
-	return fieldSize
-}
+func (sk *ecdsaSK) Size() int { _ = "STUB: not implemented"; return 0 }
 
 // Unmarshal implements proto.Marshaler interface
-func (sk *ecdsaSK) Unmarshal(bz []byte) error {
-	return sk.PrivKey.Unmarshal(bz, secp256r1, fieldSize)
-}
+func (sk *ecdsaSK) Unmarshal(bz []byte) error { _ = "STUB: not implemented"; return nil }

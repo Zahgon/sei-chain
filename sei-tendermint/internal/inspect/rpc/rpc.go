@@ -3,13 +3,10 @@ package rpc
 import (
 	"context"
 	"net/http"
-	"time"
 
-	"github.com/rs/cors"
 	"github.com/sei-protocol/seilog"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/rpc/core"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer"
@@ -31,102 +28,37 @@ type eventBusUnsubscriber interface {
 
 // Routes returns the set of routes used by the Inspector server.
 func Routes(cfg config.RPCConfig, s state.Store, bs state.BlockStore, es []indexer.EventSink) core.RoutesMap {
-	env := &core.Environment{
-		Config:     cfg,
-		EventSinks: es,
-		StateStore: s,
-		BlockStore: bs,
-	}
-	return core.RoutesMap{
-		"blockchain":       server.NewRPCFunc(env.BlockchainInfo),
-		"consensus_params": server.NewRPCFunc(env.ConsensusParams),
-		"block":            server.NewRPCFunc(env.Block),
-		"block_by_hash":    server.NewRPCFunc(env.BlockByHash),
-		"block_results":    server.NewRPCFunc(env.BlockResults),
-		"commit":           server.NewRPCFunc(env.Commit),
-		"validators":       server.NewRPCFunc(env.Validators),
-		"tx":               server.NewRPCFunc(env.Tx),
-		"tx_search":        server.NewRPCFunc(env.TxSearch),
-		"block_search":     server.NewRPCFunc(env.BlockSearch),
-	}
+	_ = "STUB: not implemented"
+	return *new(core.RoutesMap)
 }
 
 // Handler returns the http.Handler configured for use with an Inspector server. Handler
 // registers the routes on the http.Handler and also registers the websocket handler
 // and the CORS handler if specified by the configuration options.
 func Handler(rpcConfig *config.RPCConfig, routes core.RoutesMap) http.Handler {
-	mux := http.NewServeMux()
-
-	var eventBus eventBusUnsubscriber
-
-	websocketDisconnectFn := func(remoteAddr string) {
-		err := eventBus.UnsubscribeAll(context.Background(), remoteAddr)
-		if err != nil && err != pubsub.ErrSubscriptionNotFound {
-			logger.Error("Failed to unsubscribe addr from events", "addr", remoteAddr, "err", err)
-		}
-	}
-	wm := server.NewWebsocketManager(routes,
-		server.OnDisconnect(websocketDisconnectFn),
-		server.ReadLimit(rpcConfig.MaxBodyBytes))
-	mux.HandleFunc("/websocket", wm.WebsocketHandler)
-
-	server.RegisterRPCFuncs(mux, routes)
-	var rootHandler http.Handler = mux
-	if rpcConfig.IsCorsEnabled() {
-		rootHandler = addCORSHandler(rpcConfig, mux)
-	}
-	return rootHandler
+	_ = "STUB: not implemented"
+	return *new(http.Handler)
 }
 
 func addCORSHandler(rpcConfig *config.RPCConfig, h http.Handler) http.Handler {
-	corsMiddleware := cors.New(cors.Options{
-		AllowedOrigins: rpcConfig.CORSAllowedOrigins,
-		AllowedMethods: rpcConfig.CORSAllowedMethods,
-		AllowedHeaders: rpcConfig.CORSAllowedHeaders,
-	})
-	h = corsMiddleware.Handler(h)
-	return h
+	_ = "STUB: not implemented"
+	return *new(http.Handler)
 }
 
 // ListenAndServe listens on the address specified in srv.Addr and handles any
 // incoming requests over HTTP using the Inspector rpc handler specified on the server.
-func (srv *Server) ListenAndServe(ctx context.Context) error {
-	listener, err := server.Listen(srv.Addr, srv.Config.MaxOpenConnections)
-	if err != nil {
-		return err
-	}
-	go func() {
-		<-ctx.Done()
-		_ = listener.Close()
-	}()
-
-	return server.Serve(ctx, listener, srv.Handler, serverRPCConfig(srv.Config))
-}
+func (srv *Server) ListenAndServe(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
 // ListenAndServeTLS listens on the address specified in srv.Addr. ListenAndServeTLS handles
 // incoming requests over HTTPS using the Inspector rpc handler specified on the server.
 func (srv *Server) ListenAndServeTLS(ctx context.Context, certFile, keyFile string) error {
-	listener, err := server.Listen(srv.Addr, srv.Config.MaxOpenConnections)
-	if err != nil {
-		return err
-	}
-	go func() {
-		<-ctx.Done()
-		_ = listener.Close()
-	}()
-	return server.ServeTLS(ctx, listener, srv.Handler, certFile, keyFile, serverRPCConfig(srv.Config))
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func serverRPCConfig(r *config.RPCConfig) *server.Config {
-	cfg := server.DefaultConfig()
-	cfg.MaxBodyBytes = r.MaxBodyBytes
-	cfg.MaxHeaderBytes = r.MaxHeaderBytes
-	// If necessary adjust global WriteTimeout to ensure it's greater than
-	// TimeoutBroadcastTxCommit.
-	// See https://github.com/tendermint/tendermint/issues/3435
-	// Note we don't need to adjust anything if the timeout is already unlimited.
-	if cfg.WriteTimeout > 0 && cfg.WriteTimeout <= r.TimeoutBroadcastTxCommit {
-		cfg.WriteTimeout = r.TimeoutBroadcastTxCommit + 1*time.Second
-	}
-	return cfg
-}
+func serverRPCConfig(r *config.RPCConfig) *server.Config { _ = "STUB: not implemented"; return nil }
+
+// If necessary adjust global WriteTimeout to ensure it's greater than
+// TimeoutBroadcastTxCommit.
+// See https://github.com/tendermint/tendermint/issues/3435
+// Note we don't need to adjust anything if the timeout is already unlimited.

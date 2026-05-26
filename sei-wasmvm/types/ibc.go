@@ -20,18 +20,14 @@ type IBCChannelOpenMsg struct {
 
 // GetChannel returns the IBCChannel in this message.
 func (msg IBCChannelOpenMsg) GetChannel() IBCChannel {
-	if msg.OpenInit != nil {
-		return msg.OpenInit.Channel
-	}
-	return msg.OpenTry.Channel
+	_ = "STUB: not implemented"
+	return *new(IBCChannel)
 }
 
 // GetCounterVersion checks if the message has a counterparty version and
 // returns it if so.
 func (msg IBCChannelOpenMsg) GetCounterVersion() (ver string, ok bool) {
-	if msg.OpenTry != nil {
-		return msg.OpenTry.CounterpartyVersion, true
-	}
+	_ = "STUB: not implemented"
 	return "", false
 }
 
@@ -40,9 +36,8 @@ type IBCOpenInit struct {
 }
 
 func (m *IBCOpenInit) ToMsg() IBCChannelOpenMsg {
-	return IBCChannelOpenMsg{
-		OpenInit: m,
-	}
+	_ = "STUB: not implemented"
+	return *new(IBCChannelOpenMsg)
 }
 
 type IBCOpenTry struct {
@@ -51,9 +46,8 @@ type IBCOpenTry struct {
 }
 
 func (m *IBCOpenTry) ToMsg() IBCChannelOpenMsg {
-	return IBCChannelOpenMsg{
-		OpenTry: m,
-	}
+	_ = "STUB: not implemented"
+	return *new(IBCChannelOpenMsg)
 }
 
 type IBCChannelConnectMsg struct {
@@ -63,18 +57,14 @@ type IBCChannelConnectMsg struct {
 
 // GetChannel returns the IBCChannel in this message.
 func (msg IBCChannelConnectMsg) GetChannel() IBCChannel {
-	if msg.OpenAck != nil {
-		return msg.OpenAck.Channel
-	}
-	return msg.OpenConfirm.Channel
+	_ = "STUB: not implemented"
+	return *new(IBCChannel)
 }
 
 // GetCounterVersion checks if the message has a counterparty version and
 // returns it if so.
 func (msg IBCChannelConnectMsg) GetCounterVersion() (ver string, ok bool) {
-	if msg.OpenAck != nil {
-		return msg.OpenAck.CounterpartyVersion, true
-	}
+	_ = "STUB: not implemented"
 	return "", false
 }
 
@@ -84,9 +74,8 @@ type IBCOpenAck struct {
 }
 
 func (m *IBCOpenAck) ToMsg() IBCChannelConnectMsg {
-	return IBCChannelConnectMsg{
-		OpenAck: m,
-	}
+	_ = "STUB: not implemented"
+	return *new(IBCChannelConnectMsg)
 }
 
 type IBCOpenConfirm struct {
@@ -94,9 +83,8 @@ type IBCOpenConfirm struct {
 }
 
 func (m *IBCOpenConfirm) ToMsg() IBCChannelConnectMsg {
-	return IBCChannelConnectMsg{
-		OpenConfirm: m,
-	}
+	_ = "STUB: not implemented"
+	return *new(IBCChannelConnectMsg)
 }
 
 type IBCChannelCloseMsg struct {
@@ -106,10 +94,8 @@ type IBCChannelCloseMsg struct {
 
 // GetChannel returns the IBCChannel in this message.
 func (msg IBCChannelCloseMsg) GetChannel() IBCChannel {
-	if msg.CloseInit != nil {
-		return msg.CloseInit.Channel
-	}
-	return msg.CloseConfirm.Channel
+	_ = "STUB: not implemented"
+	return *new(IBCChannel)
 }
 
 type IBCCloseInit struct {
@@ -117,9 +103,8 @@ type IBCCloseInit struct {
 }
 
 func (m *IBCCloseInit) ToMsg() IBCChannelCloseMsg {
-	return IBCChannelCloseMsg{
-		CloseInit: m,
-	}
+	_ = "STUB: not implemented"
+	return *new(IBCChannelCloseMsg)
 }
 
 type IBCCloseConfirm struct {
@@ -127,9 +112,8 @@ type IBCCloseConfirm struct {
 }
 
 func (m *IBCCloseConfirm) ToMsg() IBCChannelCloseMsg {
-	return IBCChannelCloseMsg{
-		CloseConfirm: m,
-	}
+	_ = "STUB: not implemented"
+	return *new(IBCChannelCloseMsg)
 }
 
 type IBCPacketReceiveMsg struct {
@@ -172,9 +156,7 @@ type IBCTimeoutBlock struct {
 	Height uint64 `json:"height"`
 }
 
-func (t IBCTimeoutBlock) IsZero() bool {
-	return t.Revision == 0 && t.Height == 0
-}
+func (t IBCTimeoutBlock) IsZero() bool { _ = "STUB: not implemented"; return false }
 
 // IBCTimeout is the timeout for an IBC packet. At least one of block and timestamp is required.
 type IBCTimeout struct {

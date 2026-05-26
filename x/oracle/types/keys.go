@@ -1,10 +1,7 @@
 package types
 
 import (
-	"encoding/binary"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/address"
 )
 
 const (
@@ -51,59 +48,32 @@ var (
 )
 
 // GetExchangeRateKey - stored by *denom*
-func GetExchangeRateKey(denom string) []byte {
-	return append(ExchangeRateKey, []byte(denom)...)
-}
+func GetExchangeRateKey(denom string) []byte { _ = "STUB: not implemented"; return nil }
 
 // GetFeederDelegationKey - stored by *Validator* address
-func GetFeederDelegationKey(v sdk.ValAddress) []byte {
-	return append(FeederDelegationKey, address.MustLengthPrefix(v)...)
-}
+func GetFeederDelegationKey(v sdk.ValAddress) []byte { _ = "STUB: not implemented"; return nil }
 
 // GetVotePenaltyCounterKey - stored by *Validator* address
-func GetVotePenaltyCounterKey(v sdk.ValAddress) []byte {
-	return append(VotePenaltyCounterKey, address.MustLengthPrefix(v)...)
-}
+func GetVotePenaltyCounterKey(v sdk.ValAddress) []byte { _ = "STUB: not implemented"; return nil }
 
 // GetAggregateExchangeRateVoteKey - stored by *Validator* address
 func GetAggregateExchangeRateVoteKey(v sdk.ValAddress) []byte {
-	return append(AggregateExchangeRateVoteKey, address.MustLengthPrefix(v)...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetSpamPreventionCounterKey - stored by *Validator* address
-func GetSpamPreventionCounterKey(v sdk.ValAddress) []byte {
-	return append(SpamPreventionCounter, address.MustLengthPrefix(v)...)
-}
+func GetSpamPreventionCounterKey(v sdk.ValAddress) []byte { _ = "STUB: not implemented"; return nil }
 
-func GetVoteTargetKey(d string) []byte {
-	return append(VoteTargetKey, []byte(d)...)
-}
+func GetVoteTargetKey(d string) []byte { _ = "STUB: not implemented"; return nil }
 
-func ExtractDenomFromVoteTargetKey(key []byte) (denom string) {
-	denom = string(key[1:])
-	return
-}
+func ExtractDenomFromVoteTargetKey(key []byte) (denom string) { _ = "STUB: not implemented"; return "" }
 
-func GetKeyForTimestamp(timestamp uint64) []byte {
-	timestampKey := make([]byte, 8)
-	binary.BigEndian.PutUint64(timestampKey, timestamp)
-	return timestampKey
-}
+func GetKeyForTimestamp(timestamp uint64) []byte { _ = "STUB: not implemented"; return nil }
 
-func GetPriceSnapshotKey(timestamp uint64) []byte {
-	return append(PriceSnapshotKey, GetKeyForTimestamp(timestamp)...)
-}
+func GetPriceSnapshotKey(timestamp uint64) []byte { _ = "STUB: not implemented"; return nil }
 
 func GetPriceSnapshotKeyForIteration(timestampA uint64, timestampB uint64) []byte {
-	var result []byte
-	keyA := GetKeyForTimestamp(timestampA)
-	keyB := GetKeyForTimestamp(timestampB)
-	for i := 0; i < 8; i++ {
-		if keyA[i] == keyB[i] {
-			result = append(result, keyA[i])
-		} else {
-			break
-		}
-	}
-	return append(PriceSnapshotKey, result...)
+	_ = "STUB: not implemented"
+	return nil
 }

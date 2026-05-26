@@ -6,16 +6,12 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	io "io"
 	math "math"
-	math_bits "math/bits"
 
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -33,43 +29,40 @@ type QuerySeiAddressByEVMAddressRequest struct {
 	EvmAddress string `protobuf:"bytes,1,opt,name=evm_address,json=evmAddress,proto3" json:"evm_address,omitempty"`
 }
 
-func (m *QuerySeiAddressByEVMAddressRequest) Reset()         { *m = QuerySeiAddressByEVMAddressRequest{} }
-func (m *QuerySeiAddressByEVMAddressRequest) String() string { return proto.CompactTextString(m) }
-func (*QuerySeiAddressByEVMAddressRequest) ProtoMessage()    {}
+func (m *QuerySeiAddressByEVMAddressRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QuerySeiAddressByEVMAddressRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QuerySeiAddressByEVMAddressRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QuerySeiAddressByEVMAddressRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QuerySeiAddressByEVMAddressRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QuerySeiAddressByEVMAddressRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QuerySeiAddressByEVMAddressRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QuerySeiAddressByEVMAddressRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QuerySeiAddressByEVMAddressRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QuerySeiAddressByEVMAddressRequest) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *QuerySeiAddressByEVMAddressRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *QuerySeiAddressByEVMAddressRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QuerySeiAddressByEVMAddressRequest.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_QuerySeiAddressByEVMAddressRequest proto.InternalMessageInfo
 
 func (m *QuerySeiAddressByEVMAddressRequest) GetEvmAddress() string {
-	if m != nil {
-		return m.EvmAddress
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
@@ -78,50 +71,45 @@ type QuerySeiAddressByEVMAddressResponse struct {
 	Associated bool   `protobuf:"varint,2,opt,name=associated,proto3" json:"associated,omitempty"`
 }
 
-func (m *QuerySeiAddressByEVMAddressResponse) Reset()         { *m = QuerySeiAddressByEVMAddressResponse{} }
-func (m *QuerySeiAddressByEVMAddressResponse) String() string { return proto.CompactTextString(m) }
-func (*QuerySeiAddressByEVMAddressResponse) ProtoMessage()    {}
+func (m *QuerySeiAddressByEVMAddressResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QuerySeiAddressByEVMAddressResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QuerySeiAddressByEVMAddressResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QuerySeiAddressByEVMAddressResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QuerySeiAddressByEVMAddressResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QuerySeiAddressByEVMAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QuerySeiAddressByEVMAddressResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QuerySeiAddressByEVMAddressResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QuerySeiAddressByEVMAddressResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QuerySeiAddressByEVMAddressResponse) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *QuerySeiAddressByEVMAddressResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *QuerySeiAddressByEVMAddressResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QuerySeiAddressByEVMAddressResponse.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_QuerySeiAddressByEVMAddressResponse proto.InternalMessageInfo
 
 func (m *QuerySeiAddressByEVMAddressResponse) GetSeiAddress() string {
-	if m != nil {
-		return m.SeiAddress
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
 func (m *QuerySeiAddressByEVMAddressResponse) GetAssociated() bool {
-	if m != nil {
-		return m.Associated
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
@@ -129,43 +117,40 @@ type QueryEVMAddressBySeiAddressRequest struct {
 	SeiAddress string `protobuf:"bytes,1,opt,name=sei_address,json=seiAddress,proto3" json:"sei_address,omitempty"`
 }
 
-func (m *QueryEVMAddressBySeiAddressRequest) Reset()         { *m = QueryEVMAddressBySeiAddressRequest{} }
-func (m *QueryEVMAddressBySeiAddressRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryEVMAddressBySeiAddressRequest) ProtoMessage()    {}
+func (m *QueryEVMAddressBySeiAddressRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryEVMAddressBySeiAddressRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryEVMAddressBySeiAddressRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryEVMAddressBySeiAddressRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryEVMAddressBySeiAddressRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryEVMAddressBySeiAddressRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryEVMAddressBySeiAddressRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryEVMAddressBySeiAddressRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryEVMAddressBySeiAddressRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryEVMAddressBySeiAddressRequest) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *QueryEVMAddressBySeiAddressRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *QueryEVMAddressBySeiAddressRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryEVMAddressBySeiAddressRequest.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_QueryEVMAddressBySeiAddressRequest proto.InternalMessageInfo
 
 func (m *QueryEVMAddressBySeiAddressRequest) GetSeiAddress() string {
-	if m != nil {
-		return m.SeiAddress
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
@@ -174,50 +159,45 @@ type QueryEVMAddressBySeiAddressResponse struct {
 	Associated bool   `protobuf:"varint,2,opt,name=associated,proto3" json:"associated,omitempty"`
 }
 
-func (m *QueryEVMAddressBySeiAddressResponse) Reset()         { *m = QueryEVMAddressBySeiAddressResponse{} }
-func (m *QueryEVMAddressBySeiAddressResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryEVMAddressBySeiAddressResponse) ProtoMessage()    {}
+func (m *QueryEVMAddressBySeiAddressResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryEVMAddressBySeiAddressResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryEVMAddressBySeiAddressResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryEVMAddressBySeiAddressResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryEVMAddressBySeiAddressResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryEVMAddressBySeiAddressResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryEVMAddressBySeiAddressResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryEVMAddressBySeiAddressResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryEVMAddressBySeiAddressResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryEVMAddressBySeiAddressResponse) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *QueryEVMAddressBySeiAddressResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *QueryEVMAddressBySeiAddressResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryEVMAddressBySeiAddressResponse.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_QueryEVMAddressBySeiAddressResponse proto.InternalMessageInfo
 
 func (m *QueryEVMAddressBySeiAddressResponse) GetEvmAddress() string {
-	if m != nil {
-		return m.EvmAddress
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
 func (m *QueryEVMAddressBySeiAddressResponse) GetAssociated() bool {
-	if m != nil {
-		return m.Associated
-	}
+	_ = "STUB: not implemented"
 	return false
 }
 
@@ -226,148 +206,102 @@ type QueryStaticCallRequest struct {
 	To   string `protobuf:"bytes,2,opt,name=to,proto3" json:"to,omitempty"`
 }
 
-func (m *QueryStaticCallRequest) Reset()         { *m = QueryStaticCallRequest{} }
-func (m *QueryStaticCallRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryStaticCallRequest) ProtoMessage()    {}
+func (m *QueryStaticCallRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryStaticCallRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryStaticCallRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryStaticCallRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryStaticCallRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *QueryStaticCallRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryStaticCallRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *QueryStaticCallRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryStaticCallRequest.Merge(m, src)
-}
-func (m *QueryStaticCallRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryStaticCallRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryStaticCallRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_QueryStaticCallRequest proto.InternalMessageInfo
-
-func (m *QueryStaticCallRequest) GetData() []byte {
-	if m != nil {
-		return m.Data
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *QueryStaticCallRequest) GetTo() string {
-	if m != nil {
-		return m.To
-	}
-	return ""
+func (m *QueryStaticCallRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func (m *QueryStaticCallRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryStaticCallRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryStaticCallRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
+
+var xxx_messageInfo_QueryStaticCallRequest proto.InternalMessageInfo
+
+func (m *QueryStaticCallRequest) GetData() []byte { _ = "STUB: not implemented"; return nil }
+
+func (m *QueryStaticCallRequest) GetTo() string { _ = "STUB: not implemented"; return "" }
 
 type QueryStaticCallResponse struct {
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (m *QueryStaticCallResponse) Reset()         { *m = QueryStaticCallResponse{} }
-func (m *QueryStaticCallResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryStaticCallResponse) ProtoMessage()    {}
+func (m *QueryStaticCallResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryStaticCallResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryStaticCallResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryStaticCallResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryStaticCallResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryStaticCallResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryStaticCallResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryStaticCallResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryStaticCallResponse.Merge(m, src)
-}
-func (m *QueryStaticCallResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryStaticCallResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryStaticCallResponse.DiscardUnknown(m)
-}
+
+func (m *QueryStaticCallResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryStaticCallResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryStaticCallResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryStaticCallResponse proto.InternalMessageInfo
 
-func (m *QueryStaticCallResponse) GetData() []byte {
-	if m != nil {
-		return m.Data
-	}
-	return nil
-}
+func (m *QueryStaticCallResponse) GetData() []byte { _ = "STUB: not implemented"; return nil }
 
 type QueryPointerRequest struct {
 	PointerType PointerType `protobuf:"varint,1,opt,name=pointer_type,json=pointerType,proto3,enum=seiprotocol.seichain.gigaevm.PointerType" json:"pointer_type,omitempty"`
 	Pointee     string      `protobuf:"bytes,2,opt,name=pointee,proto3" json:"pointee,omitempty"`
 }
 
-func (m *QueryPointerRequest) Reset()         { *m = QueryPointerRequest{} }
-func (m *QueryPointerRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryPointerRequest) ProtoMessage()    {}
+func (m *QueryPointerRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryPointerRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryPointerRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryPointerRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{6}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryPointerRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *QueryPointerRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryPointerRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryPointerRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryPointerRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryPointerRequest.Merge(m, src)
-}
-func (m *QueryPointerRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryPointerRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryPointerRequest.DiscardUnknown(m)
-}
+
+func (m *QueryPointerRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryPointerRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryPointerRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryPointerRequest proto.InternalMessageInfo
 
 func (m *QueryPointerRequest) GetPointerType() PointerType {
-	if m != nil {
-		return m.PointerType
-	}
-	return PointerType_ERC20
+	_ = "STUB: not implemented"
+	return *new(PointerType)
 }
 
-func (m *QueryPointerRequest) GetPointee() string {
-	if m != nil {
-		return m.Pointee
-	}
-	return ""
-}
+func (m *QueryPointerRequest) GetPointee() string { _ = "STUB: not implemented"; return "" }
 
 type QueryPointerResponse struct {
 	Pointer string `protobuf:"bytes,1,opt,name=pointer,proto3" json:"pointer,omitempty"`
@@ -375,102 +309,71 @@ type QueryPointerResponse struct {
 	Exists  bool   `protobuf:"varint,3,opt,name=exists,proto3" json:"exists,omitempty"`
 }
 
-func (m *QueryPointerResponse) Reset()         { *m = QueryPointerResponse{} }
-func (m *QueryPointerResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryPointerResponse) ProtoMessage()    {}
+func (m *QueryPointerResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryPointerResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryPointerResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryPointerResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{7}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryPointerResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *QueryPointerResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryPointerResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryPointerResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryPointerResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryPointerResponse.Merge(m, src)
-}
-func (m *QueryPointerResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryPointerResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryPointerResponse.DiscardUnknown(m)
-}
+
+func (m *QueryPointerResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryPointerResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryPointerResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryPointerResponse proto.InternalMessageInfo
 
-func (m *QueryPointerResponse) GetPointer() string {
-	if m != nil {
-		return m.Pointer
-	}
-	return ""
-}
+func (m *QueryPointerResponse) GetPointer() string { _ = "STUB: not implemented"; return "" }
 
-func (m *QueryPointerResponse) GetVersion() uint32 {
-	if m != nil {
-		return m.Version
-	}
-	return 0
-}
+func (m *QueryPointerResponse) GetVersion() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointerResponse) GetExists() bool {
-	if m != nil {
-		return m.Exists
-	}
-	return false
-}
+func (m *QueryPointerResponse) GetExists() bool { _ = "STUB: not implemented"; return false }
 
 type QueryPointerVersionRequest struct {
 	PointerType PointerType `protobuf:"varint,1,opt,name=pointer_type,json=pointerType,proto3,enum=seiprotocol.seichain.gigaevm.PointerType" json:"pointer_type,omitempty"`
 }
 
-func (m *QueryPointerVersionRequest) Reset()         { *m = QueryPointerVersionRequest{} }
-func (m *QueryPointerVersionRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryPointerVersionRequest) ProtoMessage()    {}
+func (m *QueryPointerVersionRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryPointerVersionRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryPointerVersionRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryPointerVersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{8}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryPointerVersionRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryPointerVersionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryPointerVersionRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryPointerVersionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryPointerVersionRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryPointerVersionRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryPointerVersionRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryPointerVersionRequest.DiscardUnknown(m)
-}
+
+func (m *QueryPointerVersionRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryPointerVersionRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryPointerVersionRequest proto.InternalMessageInfo
 
 func (m *QueryPointerVersionRequest) GetPointerType() PointerType {
-	if m != nil {
-		return m.PointerType
-	}
-	return PointerType_ERC20
+	_ = "STUB: not implemented"
+	return *new(PointerType)
 }
 
 type QueryPointerVersionResponse struct {
@@ -478,104 +381,73 @@ type QueryPointerVersionResponse struct {
 	CwCodeId uint64 `protobuf:"varint,2,opt,name=cw_code_id,json=cwCodeId,proto3" json:"cw_code_id,omitempty"`
 }
 
-func (m *QueryPointerVersionResponse) Reset()         { *m = QueryPointerVersionResponse{} }
-func (m *QueryPointerVersionResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryPointerVersionResponse) ProtoMessage()    {}
+func (m *QueryPointerVersionResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryPointerVersionResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryPointerVersionResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryPointerVersionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{9}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryPointerVersionResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryPointerVersionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryPointerVersionResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryPointerVersionResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryPointerVersionResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *QueryPointerVersionResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryPointerVersionResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryPointerVersionResponse.DiscardUnknown(m)
-}
+
+func (m *QueryPointerVersionResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryPointerVersionResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryPointerVersionResponse proto.InternalMessageInfo
 
-func (m *QueryPointerVersionResponse) GetVersion() uint32 {
-	if m != nil {
-		return m.Version
-	}
-	return 0
-}
+func (m *QueryPointerVersionResponse) GetVersion() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointerVersionResponse) GetCwCodeId() uint64 {
-	if m != nil {
-		return m.CwCodeId
-	}
-	return 0
-}
+func (m *QueryPointerVersionResponse) GetCwCodeId() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type QueryPointeeRequest struct {
 	PointerType PointerType `protobuf:"varint,1,opt,name=pointer_type,json=pointerType,proto3,enum=seiprotocol.seichain.gigaevm.PointerType" json:"pointer_type,omitempty"`
 	Pointer     string      `protobuf:"bytes,2,opt,name=pointer,proto3" json:"pointer,omitempty"`
 }
 
-func (m *QueryPointeeRequest) Reset()         { *m = QueryPointeeRequest{} }
-func (m *QueryPointeeRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryPointeeRequest) ProtoMessage()    {}
+func (m *QueryPointeeRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryPointeeRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryPointeeRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryPointeeRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{10}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryPointeeRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *QueryPointeeRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryPointeeRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryPointeeRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryPointeeRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryPointeeRequest.Merge(m, src)
-}
-func (m *QueryPointeeRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryPointeeRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryPointeeRequest.DiscardUnknown(m)
-}
+
+func (m *QueryPointeeRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryPointeeRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryPointeeRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryPointeeRequest proto.InternalMessageInfo
 
 func (m *QueryPointeeRequest) GetPointerType() PointerType {
-	if m != nil {
-		return m.PointerType
-	}
-	return PointerType_ERC20
+	_ = "STUB: not implemented"
+	return *new(PointerType)
 }
 
-func (m *QueryPointeeRequest) GetPointer() string {
-	if m != nil {
-		return m.Pointer
-	}
-	return ""
-}
+func (m *QueryPointeeRequest) GetPointer() string { _ = "STUB: not implemented"; return "" }
 
 type QueryPointeeResponse struct {
 	Pointee string `protobuf:"bytes,1,opt,name=pointee,proto3" json:"pointee,omitempty"`
@@ -583,59 +455,34 @@ type QueryPointeeResponse struct {
 	Exists  bool   `protobuf:"varint,3,opt,name=exists,proto3" json:"exists,omitempty"`
 }
 
-func (m *QueryPointeeResponse) Reset()         { *m = QueryPointeeResponse{} }
-func (m *QueryPointeeResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryPointeeResponse) ProtoMessage()    {}
+func (m *QueryPointeeResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryPointeeResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryPointeeResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryPointeeResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_11c0d37eed5339f7, []int{11}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryPointeeResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *QueryPointeeResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryPointeeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryPointeeResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryPointeeResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryPointeeResponse.Merge(m, src)
-}
-func (m *QueryPointeeResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryPointeeResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryPointeeResponse.DiscardUnknown(m)
-}
+
+func (m *QueryPointeeResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryPointeeResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryPointeeResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryPointeeResponse proto.InternalMessageInfo
 
-func (m *QueryPointeeResponse) GetPointee() string {
-	if m != nil {
-		return m.Pointee
-	}
-	return ""
-}
+func (m *QueryPointeeResponse) GetPointee() string { _ = "STUB: not implemented"; return "" }
 
-func (m *QueryPointeeResponse) GetVersion() uint32 {
-	if m != nil {
-		return m.Version
-	}
-	return 0
-}
+func (m *QueryPointeeResponse) GetVersion() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointeeResponse) GetExists() bool {
-	if m != nil {
-		return m.Exists
-	}
-	return false
-}
+func (m *QueryPointeeResponse) GetExists() bool { _ = "STUB: not implemented"; return false }
 
 func init() {
 	proto.RegisterType((*QuerySeiAddressByEVMAddressRequest)(nil), "seiprotocol.seichain.gigaevm.QuerySeiAddressByEVMAddressRequest")
@@ -725,61 +572,38 @@ type queryClient struct {
 }
 
 func NewQueryClient(cc grpc1.ClientConn) QueryClient {
-	return &queryClient{cc}
+	_ = "STUB: not implemented"
+	return *new(QueryClient)
 }
 
 func (c *queryClient) SeiAddressByEVMAddress(ctx context.Context, in *QuerySeiAddressByEVMAddressRequest, opts ...grpc.CallOption) (*QuerySeiAddressByEVMAddressResponse, error) {
-	out := new(QuerySeiAddressByEVMAddressResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.gigaevm.Query/SeiAddressByEVMAddress", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) EVMAddressBySeiAddress(ctx context.Context, in *QueryEVMAddressBySeiAddressRequest, opts ...grpc.CallOption) (*QueryEVMAddressBySeiAddressResponse, error) {
-	out := new(QueryEVMAddressBySeiAddressResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.gigaevm.Query/EVMAddressBySeiAddress", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) StaticCall(ctx context.Context, in *QueryStaticCallRequest, opts ...grpc.CallOption) (*QueryStaticCallResponse, error) {
-	out := new(QueryStaticCallResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.gigaevm.Query/StaticCall", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) Pointer(ctx context.Context, in *QueryPointerRequest, opts ...grpc.CallOption) (*QueryPointerResponse, error) {
-	out := new(QueryPointerResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.gigaevm.Query/Pointer", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) PointerVersion(ctx context.Context, in *QueryPointerVersionRequest, opts ...grpc.CallOption) (*QueryPointerVersionResponse, error) {
-	out := new(QueryPointerVersionResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.gigaevm.Query/PointerVersion", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *queryClient) Pointee(ctx context.Context, in *QueryPointeeRequest, opts ...grpc.CallOption) (*QueryPointeeResponse, error) {
-	out := new(QueryPointeeResponse)
-	err := c.cc.Invoke(ctx, "/seiprotocol.seichain.gigaevm.Query/Pointee", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // QueryServer is the server API for Query service.
@@ -797,134 +621,65 @@ type UnimplementedQueryServer struct {
 }
 
 func (*UnimplementedQueryServer) SeiAddressByEVMAddress(ctx context.Context, req *QuerySeiAddressByEVMAddressRequest) (*QuerySeiAddressByEVMAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SeiAddressByEVMAddress not implemented")
-}
-func (*UnimplementedQueryServer) EVMAddressBySeiAddress(ctx context.Context, req *QueryEVMAddressBySeiAddressRequest) (*QueryEVMAddressBySeiAddressResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EVMAddressBySeiAddress not implemented")
-}
-func (*UnimplementedQueryServer) StaticCall(ctx context.Context, req *QueryStaticCallRequest) (*QueryStaticCallResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method StaticCall not implemented")
-}
-func (*UnimplementedQueryServer) Pointer(ctx context.Context, req *QueryPointerRequest) (*QueryPointerResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Pointer not implemented")
-}
-func (*UnimplementedQueryServer) PointerVersion(ctx context.Context, req *QueryPointerVersionRequest) (*QueryPointerVersionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method PointerVersion not implemented")
-}
-func (*UnimplementedQueryServer) Pointee(ctx context.Context, req *QueryPointeeRequest) (*QueryPointeeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Pointee not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
-	s.RegisterService(&_Query_serviceDesc, srv)
+func (*UnimplementedQueryServer) EVMAddressBySeiAddress(ctx context.Context, req *QueryEVMAddressBySeiAddressRequest) (*QueryEVMAddressBySeiAddressResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+func (*UnimplementedQueryServer) StaticCall(ctx context.Context, req *QueryStaticCallRequest) (*QueryStaticCallResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) Pointer(ctx context.Context, req *QueryPointerRequest) (*QueryPointerResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) PointerVersion(ctx context.Context, req *QueryPointerVersionRequest) (*QueryPointerVersionResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (*UnimplementedQueryServer) Pointee(ctx context.Context, req *QueryPointeeRequest) (*QueryPointeeResponse, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func RegisterQueryServer(s grpc1.Server, srv QueryServer) { _ = "STUB: not implemented"; return }
 
 func _Query_SeiAddressByEVMAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QuerySeiAddressByEVMAddressRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).SeiAddressByEVMAddress(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.gigaevm.Query/SeiAddressByEVMAddress",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).SeiAddressByEVMAddress(ctx, req.(*QuerySeiAddressByEVMAddressRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_EVMAddressBySeiAddress_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryEVMAddressBySeiAddressRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).EVMAddressBySeiAddress(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.gigaevm.Query/EVMAddressBySeiAddress",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).EVMAddressBySeiAddress(ctx, req.(*QueryEVMAddressBySeiAddressRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_StaticCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryStaticCallRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).StaticCall(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.gigaevm.Query/StaticCall",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).StaticCall(ctx, req.(*QueryStaticCallRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_Pointer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryPointerRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Pointer(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.gigaevm.Query/Pointer",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Pointer(ctx, req.(*QueryPointerRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_PointerVersion_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryPointerVersionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).PointerVersion(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.gigaevm.Query/PointerVersion",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).PointerVersion(ctx, req.(*QueryPointerVersionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _Query_Pointee_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryPointeeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(QueryServer).Pointee(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/seiprotocol.seichain.gigaevm.Query/Pointee",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Pointee(ctx, req.(*QueryPointeeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Query_serviceDesc = grpc.ServiceDesc{
@@ -961,1882 +716,264 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *QuerySeiAddressByEVMAddressRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QuerySeiAddressByEVMAddressRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QuerySeiAddressByEVMAddressRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.EvmAddress) > 0 {
-		i -= len(m.EvmAddress)
-		copy(dAtA[i:], m.EvmAddress)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.EvmAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QuerySeiAddressByEVMAddressResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QuerySeiAddressByEVMAddressResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QuerySeiAddressByEVMAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Associated {
-		i--
-		if m.Associated {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.SeiAddress) > 0 {
-		i -= len(m.SeiAddress)
-		copy(dAtA[i:], m.SeiAddress)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.SeiAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryEVMAddressBySeiAddressRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryEVMAddressBySeiAddressRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryEVMAddressBySeiAddressRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.SeiAddress) > 0 {
-		i -= len(m.SeiAddress)
-		copy(dAtA[i:], m.SeiAddress)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.SeiAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryEVMAddressBySeiAddressResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryEVMAddressBySeiAddressResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryEVMAddressBySeiAddressResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Associated {
-		i--
-		if m.Associated {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.EvmAddress) > 0 {
-		i -= len(m.EvmAddress)
-		copy(dAtA[i:], m.EvmAddress)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.EvmAddress)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryStaticCallRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryStaticCallRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryStaticCallRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.To) > 0 {
-		i -= len(m.To)
-		copy(dAtA[i:], m.To)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.To)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Data) > 0 {
-		i -= len(m.Data)
-		copy(dAtA[i:], m.Data)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Data)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryStaticCallResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryStaticCallResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryStaticCallResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Data) > 0 {
-		i -= len(m.Data)
-		copy(dAtA[i:], m.Data)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Data)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointerRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryPointerRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointerRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Pointee) > 0 {
-		i -= len(m.Pointee)
-		copy(dAtA[i:], m.Pointee)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Pointee)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.PointerType != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.PointerType))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointerResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryPointerResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointerResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Exists {
-		i--
-		if m.Exists {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.Version != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Version))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Pointer) > 0 {
-		i -= len(m.Pointer)
-		copy(dAtA[i:], m.Pointer)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Pointer)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointerVersionRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryPointerVersionRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointerVersionRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.PointerType != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.PointerType))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointerVersionResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryPointerVersionResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointerVersionResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.CwCodeId != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.CwCodeId))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Version != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Version))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointeeRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryPointeeRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointeeRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Pointer) > 0 {
-		i -= len(m.Pointer)
-		copy(dAtA[i:], m.Pointer)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Pointer)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.PointerType != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.PointerType))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointeeResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryPointeeResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryPointeeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Exists {
-		i--
-		if m.Exists {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.Version != 0 {
-		i = encodeVarintQuery(dAtA, i, uint64(m.Version))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Pointee) > 0 {
-		i -= len(m.Pointee)
-		copy(dAtA[i:], m.Pointee)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.Pointee)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintQuery(dAtA []byte, offset int, v uint64) int {
-	offset -= sovQuery(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *QuerySeiAddressByEVMAddressRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.EvmAddress)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func encodeVarintQuery(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *QuerySeiAddressByEVMAddressResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.SeiAddress)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.Associated {
-		n += 2
-	}
-	return n
-}
+func (m *QuerySeiAddressByEVMAddressRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryEVMAddressBySeiAddressRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.SeiAddress)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QuerySeiAddressByEVMAddressResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryEVMAddressBySeiAddressResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.EvmAddress)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.Associated {
-		n += 2
-	}
-	return n
-}
+func (m *QueryEVMAddressBySeiAddressRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryStaticCallRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Data)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	l = len(m.To)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryEVMAddressBySeiAddressResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryStaticCallResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Data)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryStaticCallRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointerRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.PointerType != 0 {
-		n += 1 + sovQuery(uint64(m.PointerType))
-	}
-	l = len(m.Pointee)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryStaticCallResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointerResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Pointer)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.Version != 0 {
-		n += 1 + sovQuery(uint64(m.Version))
-	}
-	if m.Exists {
-		n += 2
-	}
-	return n
-}
+func (m *QueryPointerRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointerVersionRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.PointerType != 0 {
-		n += 1 + sovQuery(uint64(m.PointerType))
-	}
-	return n
-}
+func (m *QueryPointerResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointerVersionResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Version != 0 {
-		n += 1 + sovQuery(uint64(m.Version))
-	}
-	if m.CwCodeId != 0 {
-		n += 1 + sovQuery(uint64(m.CwCodeId))
-	}
-	return n
-}
+func (m *QueryPointerVersionRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointeeRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.PointerType != 0 {
-		n += 1 + sovQuery(uint64(m.PointerType))
-	}
-	l = len(m.Pointer)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	return n
-}
+func (m *QueryPointerVersionResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryPointeeResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Pointee)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.Version != 0 {
-		n += 1 + sovQuery(uint64(m.Version))
-	}
-	if m.Exists {
-		n += 2
-	}
-	return n
-}
+func (m *QueryPointeeRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovQuery(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozQuery(x uint64) (n int) {
-	return sovQuery(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
+func (m *QueryPointeeResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sovQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozQuery(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
 func (m *QuerySeiAddressByEVMAddressRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QuerySeiAddressByEVMAddressRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QuerySeiAddressByEVMAddressRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EvmAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EvmAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QuerySeiAddressByEVMAddressResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QuerySeiAddressByEVMAddressResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QuerySeiAddressByEVMAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SeiAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SeiAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Associated", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Associated = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryEVMAddressBySeiAddressRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryEVMAddressBySeiAddressRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryEVMAddressBySeiAddressRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SeiAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SeiAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryEVMAddressBySeiAddressResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryEVMAddressBySeiAddressResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryEVMAddressBySeiAddressResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EvmAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EvmAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Associated", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Associated = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryStaticCallRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryStaticCallRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryStaticCallRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
-			if m.Data == nil {
-				m.Data = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field To", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.To = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryStaticCallResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryStaticCallResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryStaticCallResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
-			if m.Data == nil {
-				m.Data = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *QueryPointerRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryPointerRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryPointerRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PointerType", wireType)
-			}
-			m.PointerType = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PointerType |= PointerType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pointee", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Pointee = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryPointerResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryPointerResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryPointerResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pointer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Pointer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
-			}
-			m.Version = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Version |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Exists", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Exists = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *QueryPointerRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *QueryPointerResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *QueryPointerVersionRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryPointerVersionRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryPointerVersionRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PointerType", wireType)
-			}
-			m.PointerType = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PointerType |= PointerType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryPointerVersionResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryPointerVersionResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryPointerVersionResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
-			}
-			m.Version = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Version |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CwCodeId", wireType)
-			}
-			m.CwCodeId = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CwCodeId |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *QueryPointeeRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryPointeeRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryPointeeRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PointerType", wireType)
-			}
-			m.PointerType = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PointerType |= PointerType(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pointer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Pointer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *QueryPointeeResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryPointeeResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryPointeeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pointee", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Pointee = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Version", wireType)
-			}
-			m.Version = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Version |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Exists", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Exists = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipQuery(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *QueryPointeeRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipQuery(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowQuery
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthQuery
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupQuery
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthQuery
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *QueryPointeeResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipQuery(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthQuery        = fmt.Errorf("proto: negative length found during unmarshaling")

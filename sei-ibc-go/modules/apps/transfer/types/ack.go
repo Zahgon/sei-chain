@@ -1,10 +1,6 @@
 package types
 
 import (
-	"fmt"
-
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-
 	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
 )
 
@@ -17,11 +13,10 @@ const (
 // NewErrorAcknowledgement returns a deterministic error string which may be used in
 // the packet acknowledgement.
 func NewErrorAcknowledgement(err error) channeltypes.Acknowledgement {
+	_ = "STUB: not implemented"
 	// the ABCI code is included in the abcitypes.ResponseDeliverTx hash
 	// constructed in Tendermint and is therefore deterministic
-	_, code, _ := sdkerrors.ABCIInfo(err, false) // discard non-determinstic codespace and log values
-
-	errorString := fmt.Sprintf("ABCI code: %d: %s", code, ackErrorString)
-
-	return channeltypes.NewErrorAcknowledgement(errorString)
+	return *new(channeltypes.Acknowledgement)
 }
+
+// discard non-determinstic codespace and log values

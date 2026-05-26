@@ -1,13 +1,5 @@
 package keymap
 
-import (
-	"fmt"
-	"os"
-	"path"
-
-	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
-)
-
 // KeymapTypeFileName is the name of the file that contains the keymap type.
 const KeymapTypeFileName = "keymap-type.txt"
 
@@ -23,97 +15,36 @@ type KeymapTypeFile struct {
 
 // KeymapFileExists checks if the keymap type file exists in the target directory.
 func KeymapFileExists(keymapPath string) (bool, error) {
-	return util.Exists(path.Join(keymapPath, KeymapTypeFileName))
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // NewKeymapTypeFile creates a new KeymapTypeFile.
 func NewKeymapTypeFile(keymapPath string, keymapType KeymapType) *KeymapTypeFile {
-	return &KeymapTypeFile{
-		keymapPath: keymapPath,
-		keymapType: keymapType,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // LoadKeymapTypeFile loads the keymap type from the keymap directory.
 func LoadKeymapTypeFile(keymapPath string) (*KeymapTypeFile, error) {
-	filePath := path.Join(keymapPath, KeymapTypeFileName)
-
-	if err := util.ErrIfNotExists(filePath); err != nil {
-		return nil, fmt.Errorf("keymap type file does not exist: %v", filePath)
-	}
-
-	fileContents, err := os.ReadFile(filePath) //nolint:gosec // path within keymap directory
-	if err != nil {
-		return nil, fmt.Errorf("unable to read keymap type file: %v", err)
-	}
-
-	var keymapType KeymapType
-	switch string(fileContents) {
-	case MemKeymapType:
-		keymapType = MemKeymapType
-	case PebbleDBKeymapType:
-		keymapType = PebbleDBKeymapType
-	case UnsafePebbleDBKeymapType:
-		keymapType = UnsafePebbleDBKeymapType
-	default:
-		return nil, fmt.Errorf("unknown keymap type: %s", string(fileContents))
-	}
-
-	return &KeymapTypeFile{
-		keymapPath: keymapPath,
-		keymapType: keymapType,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // path within keymap directory
 
 // Type returns the type of the keymap.
 func (k *KeymapTypeFile) Type() KeymapType {
-	return k.keymapType
+	_ = "STUB: not implemented"
+	return *
+
+	// Write writes the keymap type to the keymap directory.
+	new(KeymapType)
 }
 
-// Write writes the keymap type to the keymap directory.
-func (k *KeymapTypeFile) Write() error {
-	filePath := path.Join(k.keymapPath, KeymapTypeFileName)
+func (k *KeymapTypeFile) Write() error { _ = "STUB: not implemented"; return nil }
 
-	exists, _, err := util.ErrIfNotWritableFile(filePath)
-	if err != nil {
-		return fmt.Errorf("unable to open keymap type file: %v", err)
-	}
-
-	if exists {
-		return fmt.Errorf("keymap type file already exists: %v", filePath)
-	}
-
-	keymapFile, err := os.Create(filePath) //nolint:gosec // path within keymap directory
-	if err != nil {
-		return fmt.Errorf("unable to create keymap type file: %v", err)
-	}
-
-	_, err = keymapFile.WriteString(string(k.keymapType))
-	if err != nil {
-		return fmt.Errorf("unable to write keymap type file: %v", err)
-	}
-
-	err = keymapFile.Close()
-	if err != nil {
-		return fmt.Errorf("unable to close keymap type file: %v", err)
-	}
-
-	return nil
-}
+//nolint:gosec // path within keymap directory
 
 // Delete deletes the keymap type file.
-func (k *KeymapTypeFile) Delete() error {
-	exists, err := util.Exists(path.Join(k.keymapPath, KeymapTypeFileName))
-	if err != nil {
-		return fmt.Errorf("error checking for keymap type file: %w", err)
-	}
-	if !exists {
-		return nil
-	}
-
-	err = os.Remove(path.Join(k.keymapPath, KeymapTypeFileName))
-	if err != nil {
-		return fmt.Errorf("unable to delete keymap type file: %v", err)
-	}
-	return nil
-}
+func (k *KeymapTypeFile) Delete() error { _ = "STUB: not implemented"; return nil }

@@ -6,17 +6,12 @@
 package main
 
 import (
-	"bytes"
 	"flag"
 	"fmt"
-	"io/fs"
 	"log"
 	"os"
 	"path/filepath"
 	"regexp"
-	"strings"
-
-	"github.com/creachadair/atomicfile"
 )
 
 var (
@@ -82,124 +77,48 @@ func main() {
 	}
 }
 
-func processPath(r *regexp.Regexp, path string) error {
-	fi, err := os.Lstat(path)
-	if err != nil {
-		return err
-	}
-	if fi.Mode().IsDir() {
-		return processDir(r, path)
-	} else if fi.Mode().IsRegular() {
-		return processFile(r, path)
-	}
-	return nil // nothing to do with links, device files, sockets, etc.
-}
+func processPath(r *regexp.Regexp, path string) error { _ = "STUB: not implemented"; return nil }
 
-func processDir(r *regexp.Regexp, root string) error {
-	return filepath.Walk(root, func(path string, fi fs.FileInfo, err error) error {
-		if err != nil {
-			return err
-		}
-		if fi.IsDir() {
-			if skipPath.Contains(path) {
-				log.Printf("Skipping %q (per -skip-path)", path)
-				return filepath.SkipDir // explicitly skipped
-			} else if !*doRecur && path != root {
-				return filepath.SkipDir // skipped because we aren't recurring
-			}
-			return nil // nothing else to do for directories
-		} else if skipPath.Contains(path) {
-			log.Printf("Skipping %q (per -skip-path)", path)
-			return nil // explicitly skipped
-		} else if filepath.Ext(path) != ".md" {
-			return nil // nothing to do for non-Markdown files
-		}
+// nothing to do with links, device files, sockets, etc.
 
-		return processFile(r, path)
-	})
-}
+func processDir(r *regexp.Regexp, root string) error { _ = "STUB: not implemented"; return nil }
 
-func processFile(r *regexp.Regexp, path string) error {
-	log.Printf("Processing file %q", path)
-	input, err := os.ReadFile(filepath.Clean(path))
-	if err != nil {
-		return err
-	}
+// explicitly skipped
 
-	pos := 0
-	var output bytes.Buffer
-	for _, m := range linkRE.FindAllSubmatchIndex(input, -1) {
-		href := string(input[m[2]:m[3]])
-		u := r.FindStringIndex(href)
-		if u == nil || skipMatch.MatchString(href) {
-			if u != nil {
-				log.Printf("Skipped URL %q (by -skip-match)", href)
-			}
-			output.Write(input[pos:m[1]]) // copy the existing data as-is
-			pos = m[1]
-			continue
-		}
+// skipped because we aren't recurring
 
-		// Copy everything before the URL as-is, then write the replacement.
-		output.Write(input[pos:m[2]]) // everything up to the URL
-		fmt.Fprintf(&output, `https://github.com/%s/blob/%s%s`, *repoName, *targetBranch, href[u[1]:])
+// nothing else to do for directories
 
-		// Write out the tail of the match, everything after the URL.
-		output.Write(input[m[3]:m[1]])
-		pos = m[1]
-	}
-	output.Write(input[pos:]) // the rest of the file
+// explicitly skipped
 
-	_, err = atomicfile.WriteAll(path, &output, 0644)
-	return err
-}
+// nothing to do for non-Markdown files
+
+func processFile(r *regexp.Regexp, path string) error { _ = "STUB: not implemented"; return nil }
+
+// copy the existing data as-is
+
+// Copy everything before the URL as-is, then write the replacement.
+// everything up to the URL
+
+// Write out the tail of the match, everything after the URL.
+
+// the rest of the file
 
 // stringList implements the flag.Value interface for a comma-separated list of strings.
 type stringList []string
 
-func (lst *stringList) Set(s string) error {
-	if s == "" {
-		*lst = nil
-	} else {
-		*lst = strings.Split(s, ",")
-	}
-	return nil
-}
+func (lst *stringList) Set(s string) error { _ = "STUB: not implemented"; return nil }
 
 // Contains reports whether lst contains s.
-func (lst stringList) Contains(s string) bool {
-	for _, elt := range lst {
-		if s == elt {
-			return true
-		}
-	}
-	return false
-}
+func (lst stringList) Contains(s string) bool { _ = "STUB: not implemented"; return false }
 
-func (lst stringList) String() string { return strings.Join([]string(lst), ",") }
+func (lst stringList) String() string { _ = "STUB: not implemented"; return "" }
 
 // regexpFlag implements the flag.Value interface for a regular expression.
 type regexpFlag struct{ *regexp.Regexp }
 
-func (r regexpFlag) MatchString(s string) bool {
-	if r.Regexp == nil {
-		return false
-	}
-	return r.Regexp.MatchString(s)
-}
+func (r regexpFlag) MatchString(s string) bool { _ = "STUB: not implemented"; return false }
 
-func (r *regexpFlag) Set(s string) error {
-	c, err := regexp.Compile(s)
-	if err != nil {
-		return err
-	}
-	r.Regexp = c
-	return nil
-}
+func (r *regexpFlag) Set(s string) error { _ = "STUB: not implemented"; return nil }
 
-func (r regexpFlag) String() string {
-	if r.Regexp == nil {
-		return ""
-	}
-	return r.Regexp.String()
-}
+func (r regexpFlag) String() string { _ = "STUB: not implemented"; return "" }

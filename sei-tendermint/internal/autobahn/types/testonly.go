@@ -1,266 +1,130 @@
 package types
 
 import (
-	"time"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/ed25519"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/autobahn/pb"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/hashable"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 )
 
 // GenNodeID generates a random NodeID.
-func GenNodeID(rng utils.Rng) NodeID {
-	return NodeID(utils.GenString(rng, 10))
-}
+func GenNodeID(rng utils.Rng) NodeID { _ = "STUB: not implemented"; return *new(NodeID) }
 
 // GenPublicKey generates a random PublicKey.
-func GenPublicKey(rng utils.Rng) PublicKey {
-	return GenSecretKey(rng).Public()
-}
+func GenPublicKey(rng utils.Rng) PublicKey { _ = "STUB: not implemented"; return *new(PublicKey) }
 
 // GenSecretKey generates a random SecretKey.
-func GenSecretKey(rng utils.Rng) SecretKey {
-	return SecretKey{key: ed25519.TestSecretKey(utils.GenBytes(rng, 32))}
-}
+func GenSecretKey(rng utils.Rng) SecretKey { _ = "STUB: not implemented"; return *new(SecretKey) }
 
 // GenCommittee generates a random Committee of the given size.
 // Returns the generated secret keys as well.
 func GenCommittee(rng utils.Rng, size int) (*Committee, []SecretKey) {
-	sks := utils.GenSliceN(rng, size, GenSecretKey)
-	pks := make([]PublicKey, size)
-	for i, sk := range sks {
-		pks[i] = sk.Public()
-	}
-	c, err := NewRoundRobinElection(pks, GenGlobalBlockNumber(rng)%1000000, time.Now())
-	if err != nil {
-		panic(err)
-	}
-	return c, sks
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TestSecretKey creates a SecretKey for testing purposes.
 // It uses NodeID as the seed of the secret key.
-func TestSecretKey(nodeID NodeID) SecretKey {
-	return SecretKey{key: ed25519.TestSecretKey([]byte(nodeID))}
-}
+func TestSecretKey(nodeID NodeID) SecretKey { _ = "STUB: not implemented"; return *new(SecretKey) }
 
 // GenLaneID generates a random LaneID.
-func GenLaneID(rng utils.Rng) LaneID {
-	return TestSecretKey(GenNodeID(rng)).Public()
-}
+func GenLaneID(rng utils.Rng) LaneID { _ = "STUB: not implemented"; return *new(LaneID) }
 
 // GenSignature generates a random Signature.
-func GenSignature(rng utils.Rng) *Signature {
-	key := GenSecretKey(rng)
-	return &Signature{
-		key: key.Public(),
-		sig: key.key.Sign(utils.GenBytes(rng, 10)),
-	}
-}
+func GenSignature(rng utils.Rng) *Signature { _ = "STUB: not implemented"; return nil }
 
 // GenBlockNumber generates a random BlockNumber.
-func GenBlockNumber(rng utils.Rng) BlockNumber {
-	return BlockNumber(rng.Uint64())
-}
+func GenBlockNumber(rng utils.Rng) BlockNumber { _ = "STUB: not implemented"; return *new(BlockNumber) }
 
 // GenLaneRange generates a random LaneRange.
-func GenLaneRange(rng utils.Rng) *LaneRange {
-	return NewLaneRange(GenLaneID(rng), GenBlockNumber(rng), utils.Some(GenBlockHeader(rng)))
-}
+func GenLaneRange(rng utils.Rng) *LaneRange { _ = "STUB: not implemented"; return nil }
 
 // GenBlockHeaderHash generates a random BlockHeaderHash.
 func GenBlockHeaderHash(rng utils.Rng) BlockHeaderHash {
-	return BlockHeaderHash(hashable.GenHash[*pb.BlockHeader](rng))
+	_ = "STUB: not implemented"
+	return *new(BlockHeaderHash)
 }
 
 // GenPayloadHash generates a random PayloadHash.
-func GenPayloadHash(rng utils.Rng) PayloadHash {
-	return PayloadHash(hashable.GenHash[*pb.Payload](rng))
-}
+func GenPayloadHash(rng utils.Rng) PayloadHash { _ = "STUB: not implemented"; return *new(PayloadHash) }
 
 // GenBlockHeader generates a random BlockHeader.
-func GenBlockHeader(rng utils.Rng) *BlockHeader {
-	return &BlockHeader{
-		lane:        GenLaneID(rng),
-		blockNumber: GenBlockNumber(rng),
-		payloadHash: GenPayloadHash(rng),
-	}
-}
+func GenBlockHeader(rng utils.Rng) *BlockHeader { _ = "STUB: not implemented"; return nil }
 
 // GenPayload generates a random Payload.
-func GenPayload(rng utils.Rng) *Payload {
-	return utils.OrPanic1(PayloadBuilder{
-		CreatedAt: utils.GenTimestamp(rng),
-		TotalGas:  rng.Uint64(),
-		EdgeCount: rng.Int63(),
-		Coinbase:  utils.GenBytes(rng, 10),
-		Basefee:   rng.Int63(),
-		Txs:       utils.GenSlice(rng, func(rng utils.Rng) []byte { return utils.GenBytes(rng, 10) }),
-	}.Build())
-}
+func GenPayload(rng utils.Rng) *Payload { _ = "STUB: not implemented"; return nil }
 
 // GenBlock generates a random Block.
-func GenBlock(rng utils.Rng) *Block {
-	return NewBlock(
-		GenLaneID(rng),
-		GenBlockNumber(rng),
-		GenBlockHeaderHash(rng),
-		GenPayload(rng),
-	)
-}
+func GenBlock(rng utils.Rng) *Block { _ = "STUB: not implemented"; return nil }
 
 // GenSigned generates a random Signed.
-func GenSigned[T Msg](rng utils.Rng, msg T) *Signed[T] {
-	return Sign(GenSecretKey(rng), msg)
-}
+func GenSigned[T Msg](rng utils.Rng, msg T) *Signed[T] { _ = "STUB: not implemented"; return nil }
 
 // GenLaneProposal generates a random LaneProposal.
-func GenLaneProposal(rng utils.Rng) *LaneProposal {
-	return NewLaneProposal(GenBlock(rng))
-}
+func GenLaneProposal(rng utils.Rng) *LaneProposal { _ = "STUB: not implemented"; return nil }
 
 // GenLaneVote generates a random LaneVote.
-func GenLaneVote(rng utils.Rng) *LaneVote {
-	return NewLaneVote(GenBlockHeader(rng))
-}
+func GenLaneVote(rng utils.Rng) *LaneVote { _ = "STUB: not implemented"; return nil }
 
 // GenLaneQC generates a random LaneQC.
-func GenLaneQC(rng utils.Rng) *LaneQC {
-	vote := GenLaneVote(rng)
-	return NewLaneQC(utils.GenSlice(
-		rng,
-		func(rng utils.Rng) *Signed[*LaneVote] { return GenSigned(rng, vote) },
-	))
-}
+func GenLaneQC(rng utils.Rng) *LaneQC { _ = "STUB: not implemented"; return nil }
 
 // GenRoadIndex generates a random RoadIndex.
-func GenRoadIndex(rng utils.Rng) RoadIndex {
-	return RoadIndex(rng.Uint64())
-}
+func GenRoadIndex(rng utils.Rng) RoadIndex { _ = "STUB: not implemented"; return *new(RoadIndex) }
 
 // GenViewNumber generates a random ViewNumber.
-func GenViewNumber(rng utils.Rng) ViewNumber {
-	return ViewNumber(rng.Uint64())
-}
+func GenViewNumber(rng utils.Rng) ViewNumber { _ = "STUB: not implemented"; return *new(ViewNumber) }
 
 // GenView generates a random View.
-func GenView(rng utils.Rng) View {
-	return View{
-		Index:  GenRoadIndex(rng),
-		Number: GenViewNumber(rng),
-	}
-}
+func GenView(rng utils.Rng) View { _ = "STUB: not implemented"; return *new(View) }
 
 // GenProposal generates a random Proposal.
-func GenProposal(rng utils.Rng) *Proposal {
-	return newProposal(GenView(rng), time.Now(), utils.GenSlice(rng, GenLaneRange), utils.Some(GenAppProposal(rng)))
-}
+func GenProposal(rng utils.Rng) *Proposal { _ = "STUB: not implemented"; return nil }
 
 // GenProposalAt generates a Proposal at a specific view.
-func GenProposalAt(rng utils.Rng, view View) *Proposal {
-	return newProposal(view, time.Now(), utils.GenSlice(rng, GenLaneRange), utils.Some(GenAppProposal(rng)))
-}
+func GenProposalAt(rng utils.Rng, view View) *Proposal { _ = "STUB: not implemented"; return nil }
 
 // GenAppHash generates a random AppHash.
-func GenAppHash(rng utils.Rng) AppHash {
-	return AppHash(utils.GenBytes(rng, 32))
-}
+func GenAppHash(rng utils.Rng) AppHash { _ = "STUB: not implemented"; return *new(AppHash) }
 
 // GenAppProposal generates a random AppProposal.
-func GenAppProposal(rng utils.Rng) *AppProposal {
-	return NewAppProposal(GenGlobalBlockNumber(rng), GenRoadIndex(rng), GenAppHash(rng))
-}
+func GenAppProposal(rng utils.Rng) *AppProposal { _ = "STUB: not implemented"; return nil }
 
 // GenAppVote generates a random AppVote.
-func GenAppVote(rng utils.Rng) *AppVote {
-	return NewAppVote(GenAppProposal(rng))
-}
+func GenAppVote(rng utils.Rng) *AppVote { _ = "STUB: not implemented"; return nil }
 
 // GenAppQC generates a random AppQC.
-func GenAppQC(rng utils.Rng) *AppQC {
-	vote := GenAppVote(rng)
-	return NewAppQC(utils.GenSlice(
-		rng,
-		func(rng utils.Rng) *Signed[*AppVote] { return GenSigned(rng, vote) },
-	))
-}
+func GenAppQC(rng utils.Rng) *AppQC { _ = "STUB: not implemented"; return nil }
 
 // GenFullProposal generates a random FullProposal.
-func GenFullProposal(rng utils.Rng) *FullProposal {
-	laneQCs := map[LaneID]*LaneQC{}
-	for _, qc := range utils.GenSlice(rng, GenLaneQC) {
-		laneQCs[qc.Header().Lane()] = qc
-	}
-	return &FullProposal{
-		proposal:  GenSigned(rng, GenProposal(rng)),
-		laneQCs:   laneQCs,
-		appQC:     utils.Some(GenAppQC(rng)),
-		timeoutQC: utils.Some(GenTimeoutQC(rng)),
-	}
-}
+func GenFullProposal(rng utils.Rng) *FullProposal { _ = "STUB: not implemented"; return nil }
 
 // GenGlobalBlockNumber generates a random GlobalBlockNumber.
 func GenGlobalBlockNumber(rng utils.Rng) GlobalBlockNumber {
-	return GlobalBlockNumber(rng.Uint64())
+	_ = "STUB: not implemented"
+	return *new(GlobalBlockNumber)
 }
 
 // GenGlobalBlock generates a random GlobalBlock.
-func GenGlobalBlock(rng utils.Rng) *GlobalBlock {
-	return &GlobalBlock{
-		GlobalNumber:  GenGlobalBlockNumber(rng),
-		Payload:       GenPayload(rng),
-		FinalAppState: utils.Some(GenAppProposal(rng)),
-	}
-}
+func GenGlobalBlock(rng utils.Rng) *GlobalBlock { _ = "STUB: not implemented"; return nil }
 
 // GenPrepareVote generates a random PrepareVote.
-func GenPrepareVote(rng utils.Rng) *PrepareVote {
-	return NewPrepareVote(GenProposal(rng))
-}
+func GenPrepareVote(rng utils.Rng) *PrepareVote { _ = "STUB: not implemented"; return nil }
 
 // GenPrepareQC generates a random PrepareQC.
-func GenPrepareQC(rng utils.Rng) *PrepareQC {
-	vote := GenPrepareVote(rng)
-	return NewPrepareQC(utils.GenSlice(
-		rng,
-		func(rng utils.Rng) *Signed[*PrepareVote] { return GenSigned(rng, vote) },
-	))
-}
+func GenPrepareQC(rng utils.Rng) *PrepareQC { _ = "STUB: not implemented"; return nil }
 
 // GenCommitVote generates a random CommitVote.
-func GenCommitVote(rng utils.Rng) *CommitVote {
-	return NewCommitVote(GenProposal(rng))
-}
+func GenCommitVote(rng utils.Rng) *CommitVote { _ = "STUB: not implemented"; return nil }
 
 // GenCommitQC generates a random CommitQC.
-func GenCommitQC(rng utils.Rng) *CommitQC {
-	vote := GenCommitVote(rng)
-	return NewCommitQC(utils.GenSlice(
-		rng,
-		func(rng utils.Rng) *Signed[*CommitVote] { return GenSigned(rng, vote) },
-	))
-}
+func GenCommitQC(rng utils.Rng) *CommitQC { _ = "STUB: not implemented"; return nil }
 
 // GenFullCommitQC generates a random FullCommitQC.
-func GenFullCommitQC(rng utils.Rng) *FullCommitQC {
-	return &FullCommitQC{
-		qc:      GenCommitQC(rng),
-		headers: utils.GenSlice(rng, GenBlockHeader),
-	}
-}
+func GenFullCommitQC(rng utils.Rng) *FullCommitQC { _ = "STUB: not implemented"; return nil }
 
 // GenTimeoutVote generates a random TimeoutVote.
-func GenTimeoutVote(rng utils.Rng) *TimeoutVote {
-	return NewTimeoutVote(GenView(rng), utils.Some(GenViewNumber(rng)))
-}
+func GenTimeoutVote(rng utils.Rng) *TimeoutVote { _ = "STUB: not implemented"; return nil }
 
 // GenFullTimeoutVote generates a random FullTimeoutVote.
-func GenFullTimeoutVote(rng utils.Rng) *FullTimeoutVote {
-	return NewFullTimeoutVote(GenSecretKey(rng), GenView(rng), utils.Some(GenPrepareQC(rng)))
-}
+func GenFullTimeoutVote(rng utils.Rng) *FullTimeoutVote { _ = "STUB: not implemented"; return nil }
 
 // GenTimeoutQC generates a random TimeoutQC.
-func GenTimeoutQC(rng utils.Rng) *TimeoutQC {
-	return NewTimeoutQC(utils.GenSlice(rng, GenFullTimeoutVote))
-}
+func GenTimeoutQC(rng utils.Rng) *TimeoutQC { _ = "STUB: not implemented"; return nil }

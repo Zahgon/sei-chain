@@ -1,16 +1,8 @@
 package main
 
 import (
-	"archive/tar"
-	"bytes"
-	"compress/gzip"
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
-	"fmt"
-	"io"
 	"log"
-	"net/http"
 	"os"
 	"os/signal"
 	"path/filepath"
@@ -80,123 +72,26 @@ func main() {
 }
 
 // libFileName returns the output filename for a platform's library
-func (p Platform) libFileName() string {
-	return fmt.Sprintf("libevmone.%s_%s_%s.%s", evmoneVersion, p.OS, p.Arch, p.Ext)
-}
+func (p Platform) libFileName() string { _ = "STUB: not implemented"; return "" }
 
 // checkExistingLib checks if the library file already exists with the correct hash.
 // Returns true if the file exists and has the correct hash, false otherwise.
 func checkExistingLib(p Platform, outDir string) (bool, error) {
-	outPath := filepath.Clean(filepath.Join(outDir, p.libFileName()))
-
-	f, err := os.Open(outPath)
-	if err != nil {
-		if os.IsNotExist(err) {
-			return false, nil
-		}
-		return false, fmt.Errorf("open existing file: %w", err)
-	}
-	defer func() { _ = f.Close() }()
-
-	h := sha256.New()
-	if _, err := io.Copy(h, f); err != nil {
-		return false, fmt.Errorf("hash existing file: %w", err)
-	}
-
-	actual := hex.EncodeToString(h.Sum(nil))
-	return actual == p.LibHash, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 func downloadAndExtract(ctx context.Context, p Platform, outDir string) error {
-	outName := p.libFileName()
-	outPath := filepath.Join(outDir, outName)
-
-	// Check if file already exists with correct hash
-	exists, err := checkExistingLib(p, outDir)
-	if err != nil {
-		return fmt.Errorf("check existing: %w", err)
-	}
-	if exists {
-		log.Printf("Skipping %s (already exists with correct hash)\n", outName)
-		return nil
-	}
-
-	url := fmt.Sprintf("https://github.com/ethereum/evmone/releases/download/v%s/%s", evmoneVersion, p.Archive)
-	log.Printf("Downloading %s...\n", p.Archive)
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
-	if err != nil {
-		return fmt.Errorf("create request: %w", err)
-	}
-
-	resp, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return fmt.Errorf("download: %w", err)
-	}
-	defer func() { _ = resp.Body.Close() }()
-
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("download: %s", resp.Status)
-	}
-
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return fmt.Errorf("read: %w", err)
-	}
-
-	// Check for cancellation after download
-	if ctx.Err() != nil {
-		return ctx.Err()
-	}
-
-	// Verify SHA-256 hash of the downloaded archive
-	sum := sha256.Sum256(body)
-	actual := hex.EncodeToString(sum[:])
-	if actual != p.Hash {
-		return fmt.Errorf("hash mismatch: expected %s, got %s", p.Hash, actual)
-	}
-	log.Printf("  Archive hash verified: %s-%s\n", p.OS, p.Arch)
-
-	gzr, err := gzip.NewReader(bytes.NewReader(body))
-	if err != nil {
-		return fmt.Errorf("gzip: %w", err)
-	}
-	defer func() { _ = gzr.Close() }()
-
-	tr := tar.NewReader(gzr)
-	for ctx.Err() == nil {
-		header, err := tr.Next()
-		if err == io.EOF {
-			return fmt.Errorf("library not found in archive (looking for %s)", p.LibPath)
-		}
-		if err != nil {
-			return fmt.Errorf("tar: %w", err)
-		}
-		if header.Typeflag == tar.TypeReg {
-			fmt.Println(header.Name)
-		}
-
-		if header.Typeflag != tar.TypeReg || header.Name != p.LibPath {
-			continue
-		}
-
-		f, err := os.OpenFile(outPath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644) //nolint:gosec
-		if err != nil {
-			return fmt.Errorf("create: %w", err)
-		}
-
-		const maxSize = 100 << 20 // 100MiB maximum copy
-		if _, err := io.CopyN(f, tr, maxSize); err != nil && err != io.EOF {
-			_ = f.Close()
-			return fmt.Errorf("extract: %w", err)
-		}
-
-		if err := f.Close(); err != nil {
-			return fmt.Errorf("close: %w", err)
-		}
-
-		log.Printf("  Extracted: %s\n", outPath)
-		return nil
-	}
-	return ctx.Err()
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Check if file already exists with correct hash
+
+// Check for cancellation after download
+
+// Verify SHA-256 hash of the downloaded archive
+
+//nolint:gosec
+
+// 100MiB maximum copy

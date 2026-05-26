@@ -20,33 +20,16 @@ func (store *VersionIndexedStore) newMemIterator(
 	items *dbm.MemDB,
 	ascending bool,
 ) *memIterator {
-	var iter types.Iterator
-	var err error
-
-	if ascending {
-		iter, err = items.Iterator(start, end)
-	} else {
-		iter, err = items.ReverseIterator(start, end)
-	}
-
-	if err != nil {
-		if iter != nil {
-			_ = iter.Close()
-		}
-		panic(err)
-	}
-
-	return &memIterator{
-		Iterator: iter,
-		mvkv:     store,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // try to get value from the writeset, otherwise try to get from multiversion store, otherwise try to get from parent
 func (mi *memIterator) Value() []byte {
-	key := mi.Key()
+	_ = "STUB: not implemented"
+
 	// TODO: verify that this is correct
-	return mi.mvkv.Get(key)
+	return nil
 }
 
 type validationIterator struct {
@@ -69,58 +52,22 @@ func (store *Store) newMVSValidationIterator(
 	writeset WriteSet,
 	abortChannel chan occtypes.Abort,
 ) *validationIterator {
-	var iter types.Iterator
-	var err error
-
-	if ascending {
-		iter, err = items.Iterator(start, end)
-	} else {
-		iter, err = items.ReverseIterator(start, end)
-	}
-
-	if err != nil {
-		if iter != nil {
-			_ = iter.Close()
-		}
-		panic(err)
-	}
-
-	return &validationIterator{
-		Iterator:     iter,
-		mvStore:      store,
-		index:        index,
-		abortChannel: abortChannel,
-		writeset:     writeset,
-		readCache:    make(map[string][]byte),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // try to get value from the writeset, otherwise try to get from multiversion store, otherwise try to get from parent iterator
 func (vi *validationIterator) Value() []byte {
-	key := vi.Key()
+	_ = "STUB: not implemented"
 
 	// try fetch from writeset - return if exists
-	if val, ok := vi.writeset[string(key)]; ok {
-		return val
-	}
-	// serve value from readcache (means it has previously been accessed by this iterator so we want consistent behavior here)
-	if val, ok := vi.readCache[string(key)]; ok {
-		return val
-	}
-
-	// get the value from the multiversion store
-	val := vi.mvStore.GetLatestBeforeIndex(vi.index, key)
-
-	// if we have an estimate, write to abort channel
-	if val.IsEstimate() {
-		vi.abortChannel <- occtypes.NewEstimateAbort(val.Index())
-	}
-
-	// if we have a deleted value, return nil
-	if val.IsDeleted() {
-		vi.readCache[string(key)] = nil
-		return nil
-	}
-	vi.readCache[string(key)] = val.Value()
-	return val.Value()
+	return nil
 }
+
+// serve value from readcache (means it has previously been accessed by this iterator so we want consistent behavior here)
+
+// get the value from the multiversion store
+
+// if we have an estimate, write to abort channel
+
+// if we have a deleted value, return nil

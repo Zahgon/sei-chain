@@ -1,10 +1,7 @@
 package types
 
 import (
-	"fmt"
 	"time"
-
-	yaml "gopkg.in/yaml.v2"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
@@ -36,219 +33,84 @@ var (
 
 // ParamKeyTable - Key declaration for parameters
 func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable(
-		paramtypes.NewParamSetPair(ParamStoreKeyDepositParams, DepositParams{}, validateDepositParams),
-		paramtypes.NewParamSetPair(ParamStoreKeyVotingParams, VotingParams{}, validateVotingParams),
-		paramtypes.NewParamSetPair(ParamStoreKeyTallyParams, TallyParams{}, validateTallyParams),
-	)
+	_ = "STUB: not implemented"
+	return *new(paramtypes.KeyTable)
 }
 
 // NewDepositParams creates a new DepositParams object
 func NewDepositParams(minDeposit sdk.Coins, minExpeditedDeposit sdk.Coins, maxDepositPeriod time.Duration) DepositParams {
-	return DepositParams{
-		MinDeposit:          minDeposit,
-		MaxDepositPeriod:    maxDepositPeriod,
-		MinExpeditedDeposit: minExpeditedDeposit,
-	}
+	_ = "STUB: not implemented"
+	return *new(DepositParams)
 }
 
 // DefaultDepositParams default parameters for deposits
-func DefaultDepositParams() DepositParams {
-	return NewDepositParams(
-		sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, DefaultMinDepositTokens)),
-		sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, DefaultMinExpeditedDepositTokens)),
-		DefaultPeriod,
-	)
-}
+func DefaultDepositParams() DepositParams { _ = "STUB: not implemented"; return *new(DepositParams) }
 
 // String implements stringer insterface
-func (dp DepositParams) String() string {
-	out, _ := yaml.Marshal(dp)
-	return string(out)
-}
+func (dp DepositParams) String() string { _ = "STUB: not implemented"; return "" }
 
 // GetMinimumDeposit returns minimum deposit based on the value isExpedited
 func (dp DepositParams) GetMinimumDeposit(isExpedited bool) sdk.Coins {
-	if isExpedited {
-		return dp.MinExpeditedDeposit
-	}
-	return dp.MinDeposit
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // Equal checks equality of DepositParams
-func (dp DepositParams) Equal(dp2 DepositParams) bool {
-	return dp.MinDeposit.IsEqual(dp2.MinDeposit) &&
-		dp.MinExpeditedDeposit.IsEqual(dp2.MinExpeditedDeposit) &&
-		dp.MaxDepositPeriod == dp2.MaxDepositPeriod
-}
+func (dp DepositParams) Equal(dp2 DepositParams) bool { _ = "STUB: not implemented"; return false }
 
-func validateDepositParams(i interface{}) error {
-	v, ok := i.(DepositParams)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if !v.MinDeposit.IsValid() {
-		return fmt.Errorf("invalid minimum deposit: %s", v.MinDeposit)
-	}
-	if !v.MinExpeditedDeposit.IsValid() {
-		return fmt.Errorf("invalid minimum expedited deposit: %s", v.MinExpeditedDeposit)
-	}
-	if v.MinExpeditedDeposit.IsAllLTE(v.MinDeposit) {
-		return fmt.Errorf("minimum expedited deposit: %s should be larger than minimum deposit: %s", v.MinExpeditedDeposit, v.MinDeposit)
-	}
-	if v.MaxDepositPeriod <= 0 {
-		return fmt.Errorf("maximum deposit period must be positive: %d", v.MaxDepositPeriod)
-	}
-
-	return nil
-}
+func validateDepositParams(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
 // NewTallyParams creates a new TallyParams object
 func NewTallyParams(quorum, expeditedQuorum, threshold, expeditedThreshold, vetoThreshold sdk.Dec) TallyParams {
-	return TallyParams{
-		Quorum:             quorum,
-		ExpeditedQuorum:    expeditedQuorum,
-		Threshold:          threshold,
-		VetoThreshold:      vetoThreshold,
-		ExpeditedThreshold: expeditedThreshold,
-	}
+	_ = "STUB: not implemented"
+	return *new(TallyParams)
 }
 
 // DefaultTallyParams default parameters for tallying
-func DefaultTallyParams() TallyParams {
-	return NewTallyParams(DefaultQuorum, DefaultExpeditedQuorum, DefaultThreshold, DefaultExpeditedThreshold, DefaultVetoThreshold)
-}
+func DefaultTallyParams() TallyParams { _ = "STUB: not implemented"; return *new(TallyParams) }
 
 // GetThreshold returns threshold based on the value isExpedited
 func (tp TallyParams) GetThreshold(isExpedited bool) sdk.Dec {
-	if isExpedited {
-		return tp.ExpeditedThreshold
-	}
-	return tp.Threshold
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
 }
 
 // GetQuorum returns quorum based on the value isExpedited
 func (tp TallyParams) GetQuorum(isExpedited bool) sdk.Dec {
-	if isExpedited {
-		return tp.ExpeditedQuorum
-	}
-	return tp.Quorum
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
 }
 
 // Equal checks equality of TallyParams
-func (tp TallyParams) Equal(other TallyParams) bool {
-	return tp.Quorum.Equal(other.Quorum) &&
-		tp.ExpeditedQuorum.Equal(other.ExpeditedQuorum) &&
-		tp.Threshold.Equal(other.Threshold) &&
-		tp.ExpeditedThreshold.Equal(other.ExpeditedThreshold) &&
-		tp.VetoThreshold.Equal(other.VetoThreshold)
-}
+func (tp TallyParams) Equal(other TallyParams) bool { _ = "STUB: not implemented"; return false }
 
 // String implements stringer insterface
-func (tp TallyParams) String() string {
-	out, _ := yaml.Marshal(tp)
-	return string(out)
-}
+func (tp TallyParams) String() string { _ = "STUB: not implemented"; return "" }
 
-func validateTallyParams(i interface{}) error {
-	v, ok := i.(TallyParams)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v.Quorum.IsNegative() {
-		return fmt.Errorf("quorom cannot be negative: %s", v.Quorum)
-	}
-	if v.Quorum.GT(sdk.OneDec()) {
-		return fmt.Errorf("quorom too large: %s", v)
-	}
-	if v.ExpeditedQuorum.IsNegative() {
-		return fmt.Errorf("expedited quorom cannot be negative: %s", v.ExpeditedQuorum)
-	}
-	if v.ExpeditedQuorum.GT(sdk.OneDec()) {
-		return fmt.Errorf("expedited quorom too large: %s", v.ExpeditedQuorum)
-	}
-	if v.ExpeditedQuorum.LTE(v.Quorum) {
-		return fmt.Errorf("expedited quorum %s, must be greater than the regular quorum %s", v.ExpeditedQuorum, v.Quorum)
-	}
-	if !v.Threshold.IsPositive() {
-		return fmt.Errorf("vote threshold must be positive: %s", v.Threshold)
-	}
-	if v.Threshold.GT(sdk.OneDec()) {
-		return fmt.Errorf("vote threshold too large: %s", v.Threshold)
-	}
-	if !v.ExpeditedThreshold.IsPositive() {
-		return fmt.Errorf("expedited ote threshold must be positive: %s", v.ExpeditedThreshold)
-	}
-	if v.ExpeditedThreshold.GT(sdk.OneDec()) {
-		return fmt.Errorf("expedited vote threshold too large: %s", v.ExpeditedThreshold)
-	}
-	if v.ExpeditedThreshold.LTE(v.Threshold) {
-		return fmt.Errorf("expedited vote threshold %s, must be greater than the regular threshold %s", v.ExpeditedThreshold, v.Threshold)
-	}
-	if !v.VetoThreshold.IsPositive() {
-		return fmt.Errorf("veto threshold must be positive: %s", v.Threshold)
-	}
-	if v.VetoThreshold.GT(sdk.OneDec()) {
-		return fmt.Errorf("veto threshold too large: %s", v)
-	}
-
-	return nil
-}
+func validateTallyParams(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
 // NewVotingParams creates a new VotingParams object
 func NewVotingParams(votingPeriod time.Duration, expeditedPeriod time.Duration) VotingParams {
-	return VotingParams{
-		VotingPeriod:          votingPeriod,
-		ExpeditedVotingPeriod: expeditedPeriod,
-	}
+	_ = "STUB: not implemented"
+	return *new(VotingParams)
 }
 
 // GetVotingPeriod returns voting period based on whether isExpedited is requested.
 func (vp VotingParams) GetVotingPeriod(isExpedited bool) time.Duration {
-	if isExpedited {
-		return vp.ExpeditedVotingPeriod
-	}
-	return vp.VotingPeriod
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // DefaultVotingParams default parameters for voting
-func DefaultVotingParams() VotingParams {
-	return NewVotingParams(DefaultPeriod, DefaultExpeditedPeriod)
-}
+func DefaultVotingParams() VotingParams { _ = "STUB: not implemented"; return *new(VotingParams) }
 
 // Equal checks equality of TallyParams
-func (vp VotingParams) Equal(other VotingParams) bool {
-	return vp.VotingPeriod == other.VotingPeriod && vp.ExpeditedVotingPeriod == other.ExpeditedVotingPeriod
-}
+func (vp VotingParams) Equal(other VotingParams) bool { _ = "STUB: not implemented"; return false }
 
 // String implements stringer interface
-func (vp VotingParams) String() string {
-	out, _ := yaml.Marshal(vp)
-	return string(out)
-}
+func (vp VotingParams) String() string { _ = "STUB: not implemented"; return "" }
 
-func validateVotingParams(i interface{}) error {
-	v, ok := i.(VotingParams)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-
-	if v.VotingPeriod <= 0 {
-		return fmt.Errorf("voting period must be positive: %s", v.VotingPeriod)
-	}
-
-	if v.ExpeditedVotingPeriod <= 0 {
-		return fmt.Errorf("expedited voting period must be positive: %s", v.ExpeditedVotingPeriod)
-	}
-
-	if v.ExpeditedVotingPeriod >= v.VotingPeriod {
-		return fmt.Errorf("expedited voting period %s must less than the regular voting period %s", v.ExpeditedVotingPeriod, v.VotingPeriod)
-	}
-
-	return nil
-}
+func validateVotingParams(i interface{}) error { _ = "STUB: not implemented"; return nil }
 
 // Params returns all of the governance params
 type Params struct {
@@ -257,21 +119,13 @@ type Params struct {
 	DepositParams DepositParams `json:"deposit_params" yaml:"deposit_params"`
 }
 
-func (gp Params) String() string {
-	return gp.VotingParams.String() + "\n" +
-		gp.TallyParams.String() + "\n" + gp.DepositParams.String()
-}
+func (gp Params) String() string { _ = "STUB: not implemented"; return "" }
 
 // NewParams creates a new gov Params instance
 func NewParams(vp VotingParams, tp TallyParams, dp DepositParams) Params {
-	return Params{
-		VotingParams:  vp,
-		DepositParams: dp,
-		TallyParams:   tp,
-	}
+	_ = "STUB: not implemented"
+	return *new(Params)
 }
 
 // DefaultParams default governance params
-func DefaultParams() Params {
-	return NewParams(DefaultVotingParams(), DefaultTallyParams(), DefaultDepositParams())
-}
+func DefaultParams() Params { _ = "STUB: not implemented"; return *new(Params) }

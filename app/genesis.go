@@ -5,12 +5,8 @@ import (
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	genesistypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/genesis"
-	distrtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/types"
-
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 
 	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
-	"github.com/spf13/cast"
 )
 
 var DefaultGenesisConfig = genesistypes.GenesisImportConfig{
@@ -24,17 +20,10 @@ const (
 )
 
 func ReadGenesisImportConfig(opts servertypes.AppOptions) (genesistypes.GenesisImportConfig, error) {
-	cfg := DefaultGenesisConfig // copy
-	var err error
-	if v := opts.Get(flagGenesisStreamImport); v != nil {
-		if cfg.StreamGenesisImport, err = cast.ToBoolE(v); err != nil {
-			return cfg, err
-		}
-	}
-	if v := opts.Get(flagGenesisImportFile); v != nil {
-		cfg.GenesisStreamFile = v.(string)
-	}
-	return cfg, nil
+	_ = "STUB: not implemented"
+	return *
+	// copy
+	new(genesistypes.GenesisImportConfig), nil
 }
 
 // The genesis state of the blockchain is represented here as a map of raw json
@@ -48,15 +37,8 @@ type GenesisState map[string]json.RawMessage
 
 // NewDefaultGenesisState generates the default state for the application.
 func NewDefaultGenesisState(cdc codec.JSONCodec) GenesisState {
-	encCfg := MakeEncodingConfig()
-	gen := ModuleBasics.DefaultGenesis(cdc)
-
-	// Override distribution config to remove community tax
-	distrGen := distrtypes.GenesisState{
-		Params: distrtypes.Params{
-			CommunityTax: sdk.NewDec(0),
-		},
-	}
-	gen[distrtypes.ModuleName] = encCfg.Marshaler.MustMarshalJSON(&distrGen)
-	return gen
+	_ = "STUB: not implemented"
+	return *new(GenesisState)
 }
+
+// Override distribution config to remove community tax

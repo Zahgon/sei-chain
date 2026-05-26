@@ -1,12 +1,7 @@
 package state
 
 import (
-	"encoding/binary"
-	"fmt"
-
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/ethereum/go-ethereum/crypto"
-	"github.com/sei-protocol/sei-chain/giga/deps/xevm/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
@@ -107,184 +102,73 @@ type (
 	}
 )
 
-func (e *accessListAddAccountChange) revert(s *DBImpl) {
-	delete(s.tempState.transientAccessLists.Addresses, e.address)
-}
+func (e *accessListAddAccountChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
 func (e *accessListAddSlotChange) revert(s *DBImpl) {
+	_ = "STUB: not implemented"
 	// since slot change always comes after address change, and revert
 	// happens in reverse order, the address access list hasn't been
 	// cleared at this point.
-	idx, ok := s.tempState.transientAccessLists.Addresses[e.address]
-	// If the address was already removed or has no slots (idx == -1),
-	// there is nothing to revert.
-	if !ok || idx == -1 {
-		return
-	}
-	slotsList := s.tempState.transientAccessLists.Slots
-	// Bounds check in case a prior revert already modified the slots slice.
-	if idx >= len(slotsList) {
-		return
-	}
-	slots := slotsList[idx]
-	delete(slots, e.slot)
-	if len(slots) == 0 {
-		s.tempState.transientAccessLists.Slots = append(slotsList[:idx], slotsList[idx+1:]...)
-		s.tempState.transientAccessLists.Addresses[e.address] = -1
-	}
+	return
 }
 
-func (e *surplusChange) revert(s *DBImpl) {
-	s.tempState.surplus = s.tempState.surplus.Sub(e.delta)
-}
+// If the address was already removed or has no slots (idx == -1),
+// there is nothing to revert.
 
-func (e *addLogChange) revert(s *DBImpl) {
-	s.tempState.logs = s.tempState.logs[:len(s.tempState.logs)-1]
-}
+// Bounds check in case a prior revert already modified the slots slice.
 
-func (e *refundChange) revert(s *DBImpl) {
-	bz := make([]byte, 8)
-	binary.BigEndian.PutUint64(bz, e.prev)
-	s.tempState.transientModuleStates[string(GasRefundKey)] = bz
-}
+func (e *surplusChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
-func (e *transientStorageChange) revert(s *DBImpl) {
-	states := s.tempState.transientStates[e.account.Hex()]
-	if e.prevalue.Cmp(common.Hash{}) == 0 {
-		// If the per-account transient map was already removed by a later revert,
-		// there is nothing to delete.
-		if states == nil {
-			return
-		}
-		delete(states, e.key.Hex())
-		if len(states) == 0 {
-			delete(s.tempState.transientStates, e.account.Hex())
-		}
-	} else {
-		// A prior revert may have deleted the per-account map when it became empty.
-		// Re-create it so we can restore a non-zero prevalue.
-		if states == nil {
-			states = make(map[string]common.Hash)
-			s.tempState.transientStates[e.account.Hex()] = states
-		}
-		states[e.key.Hex()] = e.prevalue
-	}
-}
+func (e *addLogChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
-func (e *accountStatusChange) revert(s *DBImpl) {
-	accts := s.tempState.transientAccounts
-	if e.prev == nil {
-		delete(accts, e.account.Hex())
-	} else {
-		accts[e.account.Hex()] = e.prev
-	}
-}
+func (e *refundChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
-func (e *storageChange) revert(s *DBImpl) {
-	s.k.SetState(s.ctx, e.addr, e.key, e.prev)
-}
+func (e *transientStorageChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
-func (e *codeChange) revert(s *DBImpl) {
-	restoreCode(s, e.addr, e.prevCode, e.prevCodeExists)
-	e.prevMapping.restore(s, e.addr)
-}
+// If the per-account transient map was already removed by a later revert,
+// there is nothing to delete.
 
-func (e *nonceChange) revert(s *DBImpl) {
-	restoreNonce(s, e.addr, e.prev, e.prevExists)
-}
+// A prior revert may have deleted the per-account map when it became empty.
+// Re-create it so we can restore a non-zero prevalue.
+
+func (e *accountStatusChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
+
+func (e *storageChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
+
+func (e *codeChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
+
+func (e *nonceChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
 func (e *balanceChange) revert(s *DBImpl) {
+	_ = "STUB: not implemented"
 	// Suppress events on revert
-	ctx := s.ctx.WithEventManager(sdk.NewEventManager())
-	denom := s.k.GetBaseDenom(s.ctx)
-	if e.isAdd {
-		// Was AddBalance: reverse by subtracting
-		if err := s.k.BankKeeper().SubUnlockedCoins(ctx, e.seiAddr, sdk.NewCoins(sdk.NewCoin(denom, e.usei)), true); err != nil {
-			panic(fmt.Sprintf("balanceChange revert SubUnlockedCoins: %v", err))
-		}
-		if err := s.k.BankKeeper().SubWei(ctx, e.seiAddr, e.wei); err != nil {
-			panic(fmt.Sprintf("balanceChange revert SubWei: %v", err))
-		}
-	} else {
-		// Was SubBalance: reverse by adding
-		if err := s.k.BankKeeper().AddCoins(ctx, e.seiAddr, sdk.NewCoins(sdk.NewCoin(denom, e.usei)), true); err != nil {
-			panic(fmt.Sprintf("balanceChange revert AddCoins: %v", err))
-		}
-		if err := s.k.BankKeeper().AddWei(ctx, e.seiAddr, e.wei); err != nil {
-			panic(fmt.Sprintf("balanceChange revert AddWei: %v", err))
-		}
-	}
+	return
 }
 
-func (e *createAccountChange) revert(s *DBImpl) {
-	restoreCode(s, e.addr, e.prevCode, e.prevCodeExists)
-	restoreNonce(s, e.addr, e.prevNonce, e.prevNonceExists)
-	for k, v := range e.prevSlots {
-		s.k.SetState(s.ctx, e.addr, k, v)
-	}
-}
+// Was AddBalance: reverse by subtracting
 
-func (e *deleteMappingChange) revert(s *DBImpl) {
-	ctx := s.ctx.WithEventManager(sdk.NewEventManager())
-	s.k.SetAddressMapping(ctx, e.seiAddr, e.evmAddr)
-}
+// Was SubBalance: reverse by adding
+
+func (e *createAccountChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
+
+func (e *deleteMappingChange) revert(s *DBImpl) { _ = "STUB: not implemented"; return }
 
 func captureAddressMapping(s *DBImpl, addr common.Address) addressMappingState {
-	seiAddr, ok := s.k.GetSeiAddress(s.ctx, addr)
-	if !ok {
-		seiAddr = s.k.GetSeiAddressOrDefault(s.ctx, addr)
-	}
-	accountExists := s.k.AccountKeeper().HasAccount(s.ctx, seiAddr)
-	return addressMappingState{
-		exists:              ok,
-		seiAddr:             append(sdk.AccAddress(nil), seiAddr...),
-		accountCreated:      !ok && !accountExists,
-		globalAccountNumber: s.k.AccountKeeper().GetGlobalAccountNumberBytes(s.ctx),
-	}
+	_ = "STUB: not implemented"
+	return *new(addressMappingState)
 }
 
 func (m addressMappingState) restore(s *DBImpl, addr common.Address) {
-	currentSeiAddr, ok := s.k.GetSeiAddress(s.ctx, addr)
-	if ok && (!m.exists || !currentSeiAddr.Equals(m.seiAddr)) {
-		s.k.DeleteAddressMapping(s.ctx, currentSeiAddr, addr)
-	}
-	if m.exists && (!ok || !currentSeiAddr.Equals(m.seiAddr)) {
-		ctx := s.ctx.WithEventManager(sdk.NewEventManager())
-		s.k.SetAddressMapping(ctx, m.seiAddr, addr)
-	}
-	if m.accountCreated {
-		if acc := s.k.AccountKeeper().GetAccount(s.ctx, m.seiAddr); acc != nil {
-			s.k.AccountKeeper().RemoveAccount(s.ctx, acc)
-		}
-		s.k.AccountKeeper().SetGlobalAccountNumberBytes(s.ctx, m.globalAccountNumber)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func restoreCode(s *DBImpl, addr common.Address, code []byte, exists bool) {
-	if !exists {
-		deleteIfExists(s.k.PrefixStore(s.ctx, types.CodeKeyPrefix), addr[:])
-		deleteIfExists(s.k.PrefixStore(s.ctx, types.CodeHashKeyPrefix), addr[:])
-		deleteIfExists(s.k.PrefixStore(s.ctx, types.CodeSizeKeyPrefix), addr[:])
-		return
-	}
-
-	if code == nil {
-		code = []byte{}
-	}
-	s.k.PrefixStore(s.ctx, types.CodeKeyPrefix).Set(addr[:], code)
-
-	length := make([]byte, 8)
-	binary.BigEndian.PutUint64(length, uint64(len(code)))
-	s.k.PrefixStore(s.ctx, types.CodeSizeKeyPrefix).Set(addr[:], length)
-
-	hash := crypto.Keccak256Hash(code)
-	s.k.PrefixStore(s.ctx, types.CodeHashKeyPrefix).Set(addr[:], hash[:])
+	_ = "STUB: not implemented"
+	return
 }
 
 func restoreNonce(s *DBImpl, addr common.Address, nonce uint64, exists bool) {
-	if !exists {
-		deleteIfExists(s.k.PrefixStore(s.ctx, types.NonceKeyPrefix), addr[:])
-		return
-	}
-	s.k.SetNonce(s.ctx, addr, nonce)
+	_ = "STUB: not implemented"
+	return
 }

@@ -2,8 +2,6 @@ package simulation
 
 import (
 	"encoding/json"
-	"math/rand"
-	"sort"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
 )
@@ -26,84 +24,54 @@ type OperationEntry struct {
 
 // NewOperationEntry creates a new OperationEntry instance
 func NewOperationEntry(entry string, height, order int64, op json.RawMessage) OperationEntry {
-	return OperationEntry{
-		EntryKind: entry,
-		Height:    height,
-		Order:     order,
-		Operation: op,
-	}
+	_ = "STUB: not implemented"
+	return *new(OperationEntry)
 }
 
 // BeginBlockEntry - operation entry for begin block
 func BeginBlockEntry(height int64) OperationEntry {
-	return NewOperationEntry(BeginBlockEntryKind, height, -1, nil)
+	_ = "STUB: not implemented"
+	return *new(OperationEntry)
 }
 
 // EndBlockEntry - operation entry for end block
 func EndBlockEntry(height int64) OperationEntry {
-	return NewOperationEntry(EndBlockEntryKind, height, -1, nil)
+	_ = "STUB: not implemented"
+	return *new(OperationEntry)
 }
 
 // MsgEntry - operation entry for standard msg
 func MsgEntry(height, order int64, opMsg simulation.OperationMsg) OperationEntry {
-	return NewOperationEntry(MsgEntryKind, height, order, opMsg.MustMarshal())
+	_ = "STUB: not implemented"
+	return *new(OperationEntry)
 }
 
 // QueuedMsgEntry creates an operation entry for a given queued message.
 func QueuedMsgEntry(height int64, opMsg simulation.OperationMsg) OperationEntry {
-	return NewOperationEntry(QueuedMsgEntryKind, height, -1, opMsg.MustMarshal())
+	_ = "STUB: not implemented"
+	return *new(OperationEntry)
 }
 
 // MustMarshal marshals the operation entry, panic on error.
 func (oe OperationEntry) MustMarshal() json.RawMessage {
-	out, err := json.Marshal(oe)
-	if err != nil {
-		panic(err)
-	}
-
-	return out
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // OperationQueue defines an object for a queue of operations
 type OperationQueue map[int][]simulation.Operation
 
 // NewOperationQueue creates a new OperationQueue instance.
-func NewOperationQueue() OperationQueue {
-	return make(OperationQueue)
-}
+func NewOperationQueue() OperationQueue { _ = "STUB: not implemented"; return *new(OperationQueue) }
 
 // queueOperations adds all future operations into the operation queue.
 func queueOperations(queuedOps OperationQueue, queuedTimeOps []simulation.FutureOperation, futureOps []simulation.FutureOperation) {
-	if futureOps == nil {
-		return
-	}
-
-	for _, futureOp := range futureOps {
-		futureOp := futureOp
-		if futureOp.BlockHeight != 0 {
-			if val, ok := queuedOps[futureOp.BlockHeight]; ok {
-				queuedOps[futureOp.BlockHeight] = append(val, futureOp.Op)
-			} else {
-				queuedOps[futureOp.BlockHeight] = []simulation.Operation{futureOp.Op}
-			}
-
-			continue
-		}
-
-		// TODO: Replace with proper sorted data structure, so don't have the
-		// copy entire slice
-		index := sort.Search(
-			len(queuedTimeOps),
-			func(i int) bool {
-				return queuedTimeOps[i].BlockTime.After(futureOp.BlockTime)
-			},
-		)
-
-		queuedTimeOps = append(queuedTimeOps, simulation.FutureOperation{})
-		copy(queuedTimeOps[index+1:], queuedTimeOps[index:])
-		queuedTimeOps[index] = futureOp
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+// TODO: Replace with proper sorted data structure, so don't have the
+// copy entire slice
 
 // WeightedOperation is an operation with associated weight.
 // This is used to bias the selection operation within the simulator.
@@ -112,47 +80,28 @@ type WeightedOperation struct {
 	op     simulation.Operation
 }
 
-func (w WeightedOperation) Weight() int {
-	return w.weight
-}
+func (w WeightedOperation) Weight() int { _ = "STUB: not implemented"; return 0 }
 
 func (w WeightedOperation) Op() simulation.Operation {
-	return w.op
+	_ = "STUB: not implemented"
+
+	// NewWeightedOperation creates a new WeightedOperation instance
+	return *new(simulation.Operation)
 }
 
-// NewWeightedOperation creates a new WeightedOperation instance
 func NewWeightedOperation(weight int, op simulation.Operation) WeightedOperation {
-	return WeightedOperation{
-		weight: weight,
-		op:     op,
-	}
+	_ = "STUB: not implemented"
+	return *new(WeightedOperation)
 }
 
 // WeightedOperations is the group of all weighted operations to simulate.
 type WeightedOperations []simulation.WeightedOperation
 
-func (ops WeightedOperations) totalWeight() int {
-	totalOpWeight := 0
-	for _, op := range ops {
-		totalOpWeight += op.Weight()
-	}
-
-	return totalOpWeight
-}
+func (ops WeightedOperations) totalWeight() int { _ = "STUB: not implemented"; return 0 }
 
 func (ops WeightedOperations) getSelectOpFn() simulation.SelectOpFn {
-	totalOpWeight := ops.totalWeight()
-
-	return func(r *rand.Rand) simulation.Operation {
-		x := r.Intn(totalOpWeight)
-		for i := 0; i < len(ops); i++ {
-			if x <= ops[i].Weight() {
-				return ops[i].Op()
-			}
-
-			x -= ops[i].Weight()
-		}
-		// shouldn't happen
-		return ops[0].Op()
-	}
+	_ = "STUB: not implemented"
+	return *new(simulation.SelectOpFn)
 }
+
+// shouldn't happen

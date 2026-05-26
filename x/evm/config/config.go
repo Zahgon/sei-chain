@@ -26,29 +26,16 @@ var EVMChainIDMapping = map[int64]string{
 	int64(713715): "arctic-1",
 }
 
-func GetEVMChainID(cosmosChainID string) *big.Int {
-	if evmChainID, ok := ChainIDMapping[cosmosChainID]; ok {
-		return big.NewInt(evmChainID)
-	}
-	return big.NewInt(DefaultChainID)
-}
+func GetEVMChainID(cosmosChainID string) *big.Int { _ = "STUB: not implemented"; return nil }
 
 func GetVersionWthDefault(ctx sdk.Context, override uint16, defaultVersion uint16) uint16 {
+	_ = "STUB: not implemented"
 	// overrides are only available on non-live chain IDs
-	if override > 0 && !IsLiveChainID(ctx) {
-		return override
-	}
-	return defaultVersion
+	return 0
 }
 
 // IsLiveChainID return true if one of the live chainIDs
-func IsLiveChainID(ctx sdk.Context) bool {
-	_, ok := ChainIDMapping[ctx.ChainID()]
-	return ok
-}
+func IsLiveChainID(ctx sdk.Context) bool { _ = "STUB: not implemented"; return false }
 
 // IsLiveEVMChainID returns true is this chainID is reserved for one of the live chains.
-func IsLiveEVMChainID(evmChainID int64) bool {
-	_, ok := EVMChainIDMapping[evmChainID]
-	return ok
-}
+func IsLiveEVMChainID(evmChainID int64) bool { _ = "STUB: not implemented"; return false }

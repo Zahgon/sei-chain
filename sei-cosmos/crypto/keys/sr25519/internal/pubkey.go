@@ -1,9 +1,6 @@
 package internal
 
 import (
-	"bytes"
-	"fmt"
-
 	"github.com/oasisprotocol/curve25519-voi/primitives/sr25519"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
@@ -22,36 +19,18 @@ type PubKey []byte
 
 // Address is the SHA256-20 of the raw pubkey bytes.
 func (pubKey PubKey) Address() crypto.Address {
-	if len(pubKey) != PubKeySize {
-		panic("pubkey is incorrect size")
-	}
-	return crypto.AddressHash(pubKey)
+	_ = "STUB: not implemented"
+	return *new(crypto.Address)
 }
 
 // Bytes returns the PubKey byte format.
-func (pubKey PubKey) Bytes() []byte {
-	return []byte(pubKey)
-}
+func (pubKey PubKey) Bytes() []byte { _ = "STUB: not implemented"; return nil }
 
-func (pubKey PubKey) Equals(other PubKey) bool {
-	return bytes.Equal(pubKey[:], other[:])
-}
+func (pubKey PubKey) Equals(other PubKey) bool { _ = "STUB: not implemented"; return false }
 
 func (pubKey PubKey) VerifySignature(msg []byte, sigBytes []byte) bool {
-	var srpk sr25519.PublicKey
-	if err := srpk.UnmarshalBinary(pubKey); err != nil {
-		return false
-	}
-
-	var sig sr25519.Signature
-	if err := sig.UnmarshalBinary(sigBytes); err != nil {
-		return false
-	}
-
-	st := signingCtx.NewTranscriptBytes(msg)
-	return srpk.Verify(st, &sig)
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (pubKey PubKey) String() string {
-	return fmt.Sprintf("PubKeySr25519{%X}", []byte(pubKey))
-}
+func (pubKey PubKey) String() string { _ = "STUB: not implemented"; return "" }

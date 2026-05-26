@@ -14,7 +14,8 @@ type (
 
 // NewParamSetPair creates a new ParamSetPair instance.
 func NewParamSetPair(key []byte, value interface{}, vfn ValueValidatorFn) ParamSetPair {
-	return ParamSetPair{key, value, vfn}
+	_ = "STUB: not implemented"
+	return *new(ParamSetPair)
 }
 
 // ParamSetPairs Slice of KeyFieldPair

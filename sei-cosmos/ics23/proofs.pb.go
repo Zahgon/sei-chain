@@ -5,10 +5,9 @@ package ics23
 
 import (
 	fmt "fmt"
-	proto "github.com/gogo/protobuf/proto"
-	io "io"
 	math "math"
-	math_bits "math/bits"
+
+	proto "github.com/gogo/protobuf/proto"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -55,13 +54,9 @@ var HashOp_value = map[string]int32{
 	"SHA512_256": 6,
 }
 
-func (x HashOp) String() string {
-	return proto.EnumName(HashOp_name, int32(x))
-}
+func (x HashOp) String() string { _ = "STUB: not implemented"; return "" }
 
-func (HashOp) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{0}
-}
+func (HashOp) EnumDescriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 // *
 // LengthOp defines how to process the key and value of the LeafOp
@@ -115,13 +110,9 @@ var LengthOp_value = map[string]int32{
 	"REQUIRE_64_BYTES": 8,
 }
 
-func (x LengthOp) String() string {
-	return proto.EnumName(LengthOp_name, int32(x))
-}
+func (x LengthOp) String() string { _ = "STUB: not implemented"; return "" }
 
-func (LengthOp) EnumDescriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{1}
-}
+func (LengthOp) EnumDescriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 // *
 // ExistenceProof takes a key and a value and a set of steps to perform on it.
@@ -150,66 +141,33 @@ type ExistenceProof struct {
 	Path  []*InnerOp `protobuf:"bytes,4,rep,name=path,proto3" json:"path,omitempty"`
 }
 
-func (m *ExistenceProof) Reset()         { *m = ExistenceProof{} }
-func (m *ExistenceProof) String() string { return proto.CompactTextString(m) }
-func (*ExistenceProof) ProtoMessage()    {}
-func (*ExistenceProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{0}
-}
-func (m *ExistenceProof) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ExistenceProof) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *ExistenceProof) String() string            { _ = "STUB: not implemented"; return "" }
+func (*ExistenceProof) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ExistenceProof) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ExistenceProof) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ExistenceProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ExistenceProof.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ExistenceProof) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ExistenceProof.Merge(m, src)
-}
-func (m *ExistenceProof) XXX_Size() int {
-	return m.Size()
-}
-func (m *ExistenceProof) XXX_DiscardUnknown() {
-	xxx_messageInfo_ExistenceProof.DiscardUnknown(m)
-}
+
+func (m *ExistenceProof) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ExistenceProof) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ExistenceProof) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ExistenceProof proto.InternalMessageInfo
 
-func (m *ExistenceProof) GetKey() []byte {
-	if m != nil {
-		return m.Key
-	}
-	return nil
-}
+func (m *ExistenceProof) GetKey() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *ExistenceProof) GetValue() []byte {
-	if m != nil {
-		return m.Value
-	}
-	return nil
-}
+func (m *ExistenceProof) GetValue() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *ExistenceProof) GetLeaf() *LeafOp {
-	if m != nil {
-		return m.Leaf
-	}
-	return nil
-}
+func (m *ExistenceProof) GetLeaf() *LeafOp { _ = "STUB: not implemented"; return nil }
 
-func (m *ExistenceProof) GetPath() []*InnerOp {
-	if m != nil {
-		return m.Path
-	}
-	return nil
-}
+func (m *ExistenceProof) GetPath() []*InnerOp { _ = "STUB: not implemented"; return nil }
 
 // NonExistenceProof takes a proof of two neighbors, one left of the desired key,
 // one right of the desired key. If both proofs are valid AND they are neighbors,
@@ -220,59 +178,31 @@ type NonExistenceProof struct {
 	Right *ExistenceProof `protobuf:"bytes,3,opt,name=right,proto3" json:"right,omitempty"`
 }
 
-func (m *NonExistenceProof) Reset()         { *m = NonExistenceProof{} }
-func (m *NonExistenceProof) String() string { return proto.CompactTextString(m) }
-func (*NonExistenceProof) ProtoMessage()    {}
-func (*NonExistenceProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{1}
-}
-func (m *NonExistenceProof) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *NonExistenceProof) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *NonExistenceProof) String() string            { _ = "STUB: not implemented"; return "" }
+func (*NonExistenceProof) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*NonExistenceProof) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *NonExistenceProof) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *NonExistenceProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_NonExistenceProof.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *NonExistenceProof) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_NonExistenceProof.Merge(m, src)
-}
-func (m *NonExistenceProof) XXX_Size() int {
-	return m.Size()
-}
-func (m *NonExistenceProof) XXX_DiscardUnknown() {
-	xxx_messageInfo_NonExistenceProof.DiscardUnknown(m)
-}
+
+func (m *NonExistenceProof) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *NonExistenceProof) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *NonExistenceProof) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_NonExistenceProof proto.InternalMessageInfo
 
-func (m *NonExistenceProof) GetKey() []byte {
-	if m != nil {
-		return m.Key
-	}
-	return nil
-}
+func (m *NonExistenceProof) GetKey() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *NonExistenceProof) GetLeft() *ExistenceProof {
-	if m != nil {
-		return m.Left
-	}
-	return nil
-}
+func (m *NonExistenceProof) GetLeft() *ExistenceProof { _ = "STUB: not implemented"; return nil }
 
-func (m *NonExistenceProof) GetRight() *ExistenceProof {
-	if m != nil {
-		return m.Right
-	}
-	return nil
-}
+func (m *NonExistenceProof) GetRight() *ExistenceProof { _ = "STUB: not implemented"; return nil }
 
 // CommitmentProof is either an ExistenceProof or a NonExistenceProof, or a Batch of such messages
 type CommitmentProof struct {
@@ -284,36 +214,23 @@ type CommitmentProof struct {
 	Proof isCommitmentProof_Proof `protobuf_oneof:"proof"`
 }
 
-func (m *CommitmentProof) Reset()         { *m = CommitmentProof{} }
-func (m *CommitmentProof) String() string { return proto.CompactTextString(m) }
-func (*CommitmentProof) ProtoMessage()    {}
-func (*CommitmentProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{2}
-}
-func (m *CommitmentProof) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *CommitmentProof) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *CommitmentProof) String() string            { _ = "STUB: not implemented"; return "" }
+func (*CommitmentProof) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*CommitmentProof) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *CommitmentProof) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *CommitmentProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CommitmentProof.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CommitmentProof) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CommitmentProof.Merge(m, src)
-}
-func (m *CommitmentProof) XXX_Size() int {
-	return m.Size()
-}
-func (m *CommitmentProof) XXX_DiscardUnknown() {
-	xxx_messageInfo_CommitmentProof.DiscardUnknown(m)
-}
+
+func (m *CommitmentProof) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *CommitmentProof) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CommitmentProof) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_CommitmentProof proto.InternalMessageInfo
 
@@ -336,55 +253,29 @@ type CommitmentProof_Compressed struct {
 	Compressed *CompressedBatchProof `protobuf:"bytes,4,opt,name=compressed,proto3,oneof" json:"compressed,omitempty"`
 }
 
-func (*CommitmentProof_Exist) isCommitmentProof_Proof()      {}
-func (*CommitmentProof_Nonexist) isCommitmentProof_Proof()   {}
-func (*CommitmentProof_Batch) isCommitmentProof_Proof()      {}
-func (*CommitmentProof_Compressed) isCommitmentProof_Proof() {}
+func (*CommitmentProof_Exist) isCommitmentProof_Proof()      { _ = "STUB: not implemented"; return }
+func (*CommitmentProof_Nonexist) isCommitmentProof_Proof()   { _ = "STUB: not implemented"; return }
+func (*CommitmentProof_Batch) isCommitmentProof_Proof()      { _ = "STUB: not implemented"; return }
+func (*CommitmentProof_Compressed) isCommitmentProof_Proof() { _ = "STUB: not implemented"; return }
 
 func (m *CommitmentProof) GetProof() isCommitmentProof_Proof {
-	if m != nil {
-		return m.Proof
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(isCommitmentProof_Proof)
 }
 
-func (m *CommitmentProof) GetExist() *ExistenceProof {
-	if x, ok := m.GetProof().(*CommitmentProof_Exist); ok {
-		return x.Exist
-	}
-	return nil
-}
+func (m *CommitmentProof) GetExist() *ExistenceProof { _ = "STUB: not implemented"; return nil }
 
-func (m *CommitmentProof) GetNonexist() *NonExistenceProof {
-	if x, ok := m.GetProof().(*CommitmentProof_Nonexist); ok {
-		return x.Nonexist
-	}
-	return nil
-}
+func (m *CommitmentProof) GetNonexist() *NonExistenceProof { _ = "STUB: not implemented"; return nil }
 
-func (m *CommitmentProof) GetBatch() *BatchProof {
-	if x, ok := m.GetProof().(*CommitmentProof_Batch); ok {
-		return x.Batch
-	}
-	return nil
-}
+func (m *CommitmentProof) GetBatch() *BatchProof { _ = "STUB: not implemented"; return nil }
 
 func (m *CommitmentProof) GetCompressed() *CompressedBatchProof {
-	if x, ok := m.GetProof().(*CommitmentProof_Compressed); ok {
-		return x.Compressed
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*CommitmentProof) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*CommitmentProof_Exist)(nil),
-		(*CommitmentProof_Nonexist)(nil),
-		(*CommitmentProof_Batch)(nil),
-		(*CommitmentProof_Compressed)(nil),
-	}
-}
+func (*CommitmentProof) XXX_OneofWrappers() []interface{} { _ = "STUB: not implemented"; return nil }
 
 // *
 // LeafOp represents the raw key-value data we wish to prove, and
@@ -411,73 +302,35 @@ type LeafOp struct {
 	Prefix []byte `protobuf:"bytes,5,opt,name=prefix,proto3" json:"prefix,omitempty"`
 }
 
-func (m *LeafOp) Reset()         { *m = LeafOp{} }
-func (m *LeafOp) String() string { return proto.CompactTextString(m) }
-func (*LeafOp) ProtoMessage()    {}
-func (*LeafOp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{3}
-}
-func (m *LeafOp) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *LeafOp) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *LeafOp) String() string            { _ = "STUB: not implemented"; return "" }
+func (*LeafOp) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*LeafOp) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *LeafOp) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *LeafOp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_LeafOp.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *LeafOp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LeafOp.Merge(m, src)
-}
-func (m *LeafOp) XXX_Size() int {
-	return m.Size()
-}
-func (m *LeafOp) XXX_DiscardUnknown() {
-	xxx_messageInfo_LeafOp.DiscardUnknown(m)
-}
+
+func (m *LeafOp) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *LeafOp) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *LeafOp) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_LeafOp proto.InternalMessageInfo
 
-func (m *LeafOp) GetHash() HashOp {
-	if m != nil {
-		return m.Hash
-	}
-	return HashOp_NO_HASH
-}
+func (m *LeafOp) GetHash() HashOp { _ = "STUB: not implemented"; return *new(HashOp) }
 
-func (m *LeafOp) GetPrehashKey() HashOp {
-	if m != nil {
-		return m.PrehashKey
-	}
-	return HashOp_NO_HASH
-}
+func (m *LeafOp) GetPrehashKey() HashOp { _ = "STUB: not implemented"; return *new(HashOp) }
 
-func (m *LeafOp) GetPrehashValue() HashOp {
-	if m != nil {
-		return m.PrehashValue
-	}
-	return HashOp_NO_HASH
-}
+func (m *LeafOp) GetPrehashValue() HashOp { _ = "STUB: not implemented"; return *new(HashOp) }
 
-func (m *LeafOp) GetLength() LengthOp {
-	if m != nil {
-		return m.Length
-	}
-	return LengthOp_NO_PREFIX
-}
+func (m *LeafOp) GetLength() LengthOp { _ = "STUB: not implemented"; return *new(LengthOp) }
 
-func (m *LeafOp) GetPrefix() []byte {
-	if m != nil {
-		return m.Prefix
-	}
-	return nil
-}
+func (m *LeafOp) GetPrefix() []byte { _ = "STUB: not implemented"; return nil }
 
 // *
 // InnerOp represents a merkle-proof step that is not a leaf.
@@ -501,59 +354,31 @@ type InnerOp struct {
 	Suffix []byte `protobuf:"bytes,3,opt,name=suffix,proto3" json:"suffix,omitempty"`
 }
 
-func (m *InnerOp) Reset()         { *m = InnerOp{} }
-func (m *InnerOp) String() string { return proto.CompactTextString(m) }
-func (*InnerOp) ProtoMessage()    {}
-func (*InnerOp) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{4}
-}
-func (m *InnerOp) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *InnerOp) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *InnerOp) String() string            { _ = "STUB: not implemented"; return "" }
+func (*InnerOp) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*InnerOp) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *InnerOp) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *InnerOp) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InnerOp.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *InnerOp) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InnerOp.Merge(m, src)
-}
-func (m *InnerOp) XXX_Size() int {
-	return m.Size()
-}
-func (m *InnerOp) XXX_DiscardUnknown() {
-	xxx_messageInfo_InnerOp.DiscardUnknown(m)
-}
+
+func (m *InnerOp) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *InnerOp) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *InnerOp) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_InnerOp proto.InternalMessageInfo
 
-func (m *InnerOp) GetHash() HashOp {
-	if m != nil {
-		return m.Hash
-	}
-	return HashOp_NO_HASH
-}
+func (m *InnerOp) GetHash() HashOp { _ = "STUB: not implemented"; return *new(HashOp) }
 
-func (m *InnerOp) GetPrefix() []byte {
-	if m != nil {
-		return m.Prefix
-	}
-	return nil
-}
+func (m *InnerOp) GetPrefix() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *InnerOp) GetSuffix() []byte {
-	if m != nil {
-		return m.Suffix
-	}
-	return nil
-}
+func (m *InnerOp) GetSuffix() []byte { _ = "STUB: not implemented"; return nil }
 
 // *
 // ProofSpec defines what the expected parameters are for a given proof type.
@@ -577,66 +402,33 @@ type ProofSpec struct {
 	MinDepth int32 `protobuf:"varint,4,opt,name=min_depth,json=minDepth,proto3" json:"min_depth,omitempty"`
 }
 
-func (m *ProofSpec) Reset()         { *m = ProofSpec{} }
-func (m *ProofSpec) String() string { return proto.CompactTextString(m) }
-func (*ProofSpec) ProtoMessage()    {}
-func (*ProofSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{5}
-}
-func (m *ProofSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ProofSpec) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *ProofSpec) String() string            { _ = "STUB: not implemented"; return "" }
+func (*ProofSpec) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ProofSpec) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ProofSpec) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ProofSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ProofSpec.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ProofSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ProofSpec.Merge(m, src)
-}
-func (m *ProofSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *ProofSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_ProofSpec.DiscardUnknown(m)
-}
+
+func (m *ProofSpec) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ProofSpec) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ProofSpec) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ProofSpec proto.InternalMessageInfo
 
-func (m *ProofSpec) GetLeafSpec() *LeafOp {
-	if m != nil {
-		return m.LeafSpec
-	}
-	return nil
-}
+func (m *ProofSpec) GetLeafSpec() *LeafOp { _ = "STUB: not implemented"; return nil }
 
-func (m *ProofSpec) GetInnerSpec() *InnerSpec {
-	if m != nil {
-		return m.InnerSpec
-	}
-	return nil
-}
+func (m *ProofSpec) GetInnerSpec() *InnerSpec { _ = "STUB: not implemented"; return nil }
 
-func (m *ProofSpec) GetMaxDepth() int32 {
-	if m != nil {
-		return m.MaxDepth
-	}
-	return 0
-}
+func (m *ProofSpec) GetMaxDepth() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *ProofSpec) GetMinDepth() int32 {
-	if m != nil {
-		return m.MinDepth
-	}
-	return 0
-}
+func (m *ProofSpec) GetMinDepth() int32 { _ = "STUB: not implemented"; return 0 }
 
 // InnerSpec contains all store-specific structure info to determine if two proofs from a
 // given store are neighbors.
@@ -660,125 +452,64 @@ type InnerSpec struct {
 	Hash HashOp `protobuf:"varint,6,opt,name=hash,proto3,enum=ics23.HashOp" json:"hash,omitempty"`
 }
 
-func (m *InnerSpec) Reset()         { *m = InnerSpec{} }
-func (m *InnerSpec) String() string { return proto.CompactTextString(m) }
-func (*InnerSpec) ProtoMessage()    {}
-func (*InnerSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{6}
-}
-func (m *InnerSpec) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *InnerSpec) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *InnerSpec) String() string            { _ = "STUB: not implemented"; return "" }
+func (*InnerSpec) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*InnerSpec) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *InnerSpec) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *InnerSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InnerSpec.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *InnerSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InnerSpec.Merge(m, src)
-}
-func (m *InnerSpec) XXX_Size() int {
-	return m.Size()
-}
-func (m *InnerSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_InnerSpec.DiscardUnknown(m)
-}
+
+func (m *InnerSpec) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *InnerSpec) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *InnerSpec) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_InnerSpec proto.InternalMessageInfo
 
-func (m *InnerSpec) GetChildOrder() []int32 {
-	if m != nil {
-		return m.ChildOrder
-	}
-	return nil
-}
+func (m *InnerSpec) GetChildOrder() []int32 { _ = "STUB: not implemented"; return nil }
 
-func (m *InnerSpec) GetChildSize() int32 {
-	if m != nil {
-		return m.ChildSize
-	}
-	return 0
-}
+func (m *InnerSpec) GetChildSize() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *InnerSpec) GetMinPrefixLength() int32 {
-	if m != nil {
-		return m.MinPrefixLength
-	}
-	return 0
-}
+func (m *InnerSpec) GetMinPrefixLength() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *InnerSpec) GetMaxPrefixLength() int32 {
-	if m != nil {
-		return m.MaxPrefixLength
-	}
-	return 0
-}
+func (m *InnerSpec) GetMaxPrefixLength() int32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *InnerSpec) GetEmptyChild() []byte {
-	if m != nil {
-		return m.EmptyChild
-	}
-	return nil
-}
+func (m *InnerSpec) GetEmptyChild() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *InnerSpec) GetHash() HashOp {
-	if m != nil {
-		return m.Hash
-	}
-	return HashOp_NO_HASH
-}
+func (m *InnerSpec) GetHash() HashOp { _ = "STUB: not implemented"; return *new(HashOp) }
 
 // BatchProof is a group of multiple proof types than can be compressed
 type BatchProof struct {
 	Entries []*BatchEntry `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries,omitempty"`
 }
 
-func (m *BatchProof) Reset()         { *m = BatchProof{} }
-func (m *BatchProof) String() string { return proto.CompactTextString(m) }
-func (*BatchProof) ProtoMessage()    {}
-func (*BatchProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{7}
-}
-func (m *BatchProof) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *BatchProof) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *BatchProof) String() string            { _ = "STUB: not implemented"; return "" }
+func (*BatchProof) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*BatchProof) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *BatchProof) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *BatchProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_BatchProof.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *BatchProof) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchProof.Merge(m, src)
-}
-func (m *BatchProof) XXX_Size() int {
-	return m.Size()
-}
-func (m *BatchProof) XXX_DiscardUnknown() {
-	xxx_messageInfo_BatchProof.DiscardUnknown(m)
-}
+
+func (m *BatchProof) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *BatchProof) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *BatchProof) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_BatchProof proto.InternalMessageInfo
 
-func (m *BatchProof) GetEntries() []*BatchEntry {
-	if m != nil {
-		return m.Entries
-	}
-	return nil
-}
+func (m *BatchProof) GetEntries() []*BatchEntry { _ = "STUB: not implemented"; return nil }
 
 // Use BatchEntry not CommitmentProof, to avoid recursion
 type BatchEntry struct {
@@ -788,36 +519,23 @@ type BatchEntry struct {
 	Proof isBatchEntry_Proof `protobuf_oneof:"proof"`
 }
 
-func (m *BatchEntry) Reset()         { *m = BatchEntry{} }
-func (m *BatchEntry) String() string { return proto.CompactTextString(m) }
-func (*BatchEntry) ProtoMessage()    {}
-func (*BatchEntry) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{8}
-}
-func (m *BatchEntry) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *BatchEntry) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *BatchEntry) String() string            { _ = "STUB: not implemented"; return "" }
+func (*BatchEntry) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*BatchEntry) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *BatchEntry) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *BatchEntry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_BatchEntry.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *BatchEntry) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BatchEntry.Merge(m, src)
-}
-func (m *BatchEntry) XXX_Size() int {
-	return m.Size()
-}
-func (m *BatchEntry) XXX_DiscardUnknown() {
-	xxx_messageInfo_BatchEntry.DiscardUnknown(m)
-}
+
+func (m *BatchEntry) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *BatchEntry) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *BatchEntry) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_BatchEntry proto.InternalMessageInfo
 
@@ -834,89 +552,55 @@ type BatchEntry_Nonexist struct {
 	Nonexist *NonExistenceProof `protobuf:"bytes,2,opt,name=nonexist,proto3,oneof" json:"nonexist,omitempty"`
 }
 
-func (*BatchEntry_Exist) isBatchEntry_Proof()    {}
-func (*BatchEntry_Nonexist) isBatchEntry_Proof() {}
+func (*BatchEntry_Exist) isBatchEntry_Proof()    { _ = "STUB: not implemented"; return }
+func (*BatchEntry_Nonexist) isBatchEntry_Proof() { _ = "STUB: not implemented"; return }
 
 func (m *BatchEntry) GetProof() isBatchEntry_Proof {
-	if m != nil {
-		return m.Proof
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(isBatchEntry_Proof)
 }
 
-func (m *BatchEntry) GetExist() *ExistenceProof {
-	if x, ok := m.GetProof().(*BatchEntry_Exist); ok {
-		return x.Exist
-	}
-	return nil
-}
+func (m *BatchEntry) GetExist() *ExistenceProof { _ = "STUB: not implemented"; return nil }
 
-func (m *BatchEntry) GetNonexist() *NonExistenceProof {
-	if x, ok := m.GetProof().(*BatchEntry_Nonexist); ok {
-		return x.Nonexist
-	}
-	return nil
-}
+func (m *BatchEntry) GetNonexist() *NonExistenceProof { _ = "STUB: not implemented"; return nil }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
-func (*BatchEntry) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*BatchEntry_Exist)(nil),
-		(*BatchEntry_Nonexist)(nil),
-	}
-}
+func (*BatchEntry) XXX_OneofWrappers() []interface{} { _ = "STUB: not implemented"; return nil }
 
 type CompressedBatchProof struct {
 	Entries      []*CompressedBatchEntry `protobuf:"bytes,1,rep,name=entries,proto3" json:"entries,omitempty"`
 	LookupInners []*InnerOp              `protobuf:"bytes,2,rep,name=lookup_inners,json=lookupInners,proto3" json:"lookup_inners,omitempty"`
 }
 
-func (m *CompressedBatchProof) Reset()         { *m = CompressedBatchProof{} }
-func (m *CompressedBatchProof) String() string { return proto.CompactTextString(m) }
-func (*CompressedBatchProof) ProtoMessage()    {}
+func (m *CompressedBatchProof) Reset()         { _ = "STUB: not implemented"; return }
+func (m *CompressedBatchProof) String() string { _ = "STUB: not implemented"; return "" }
+func (*CompressedBatchProof) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*CompressedBatchProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{9}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CompressedBatchProof) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *CompressedBatchProof) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *CompressedBatchProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CompressedBatchProof.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CompressedBatchProof) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CompressedBatchProof.Merge(m, src)
-}
-func (m *CompressedBatchProof) XXX_Size() int {
-	return m.Size()
-}
-func (m *CompressedBatchProof) XXX_DiscardUnknown() {
-	xxx_messageInfo_CompressedBatchProof.DiscardUnknown(m)
-}
+
+func (m *CompressedBatchProof) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *CompressedBatchProof) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CompressedBatchProof) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_CompressedBatchProof proto.InternalMessageInfo
 
 func (m *CompressedBatchProof) GetEntries() []*CompressedBatchEntry {
-	if m != nil {
-		return m.Entries
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *CompressedBatchProof) GetLookupInners() []*InnerOp {
-	if m != nil {
-		return m.LookupInners
-	}
-	return nil
-}
+func (m *CompressedBatchProof) GetLookupInners() []*InnerOp { _ = "STUB: not implemented"; return nil }
 
 // Use BatchEntry not CommitmentProof, to avoid recursion
 type CompressedBatchEntry struct {
@@ -926,36 +610,26 @@ type CompressedBatchEntry struct {
 	Proof isCompressedBatchEntry_Proof `protobuf_oneof:"proof"`
 }
 
-func (m *CompressedBatchEntry) Reset()         { *m = CompressedBatchEntry{} }
-func (m *CompressedBatchEntry) String() string { return proto.CompactTextString(m) }
-func (*CompressedBatchEntry) ProtoMessage()    {}
+func (m *CompressedBatchEntry) Reset()         { _ = "STUB: not implemented"; return }
+func (m *CompressedBatchEntry) String() string { _ = "STUB: not implemented"; return "" }
+func (*CompressedBatchEntry) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*CompressedBatchEntry) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{10}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CompressedBatchEntry) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *CompressedBatchEntry) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *CompressedBatchEntry) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CompressedBatchEntry.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CompressedBatchEntry) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CompressedBatchEntry.Merge(m, src)
-}
-func (m *CompressedBatchEntry) XXX_Size() int {
-	return m.Size()
-}
-func (m *CompressedBatchEntry) XXX_DiscardUnknown() {
-	xxx_messageInfo_CompressedBatchEntry.DiscardUnknown(m)
-}
+
+func (m *CompressedBatchEntry) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *CompressedBatchEntry) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CompressedBatchEntry) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_CompressedBatchEntry proto.InternalMessageInfo
 
@@ -972,36 +646,34 @@ type CompressedBatchEntry_Nonexist struct {
 	Nonexist *CompressedNonExistenceProof `protobuf:"bytes,2,opt,name=nonexist,proto3,oneof" json:"nonexist,omitempty"`
 }
 
-func (*CompressedBatchEntry_Exist) isCompressedBatchEntry_Proof()    {}
-func (*CompressedBatchEntry_Nonexist) isCompressedBatchEntry_Proof() {}
+func (*CompressedBatchEntry_Exist) isCompressedBatchEntry_Proof() {
+	_ = "STUB: not implemented"
+	return
+}
+func (*CompressedBatchEntry_Nonexist) isCompressedBatchEntry_Proof() {
+	_ = "STUB: not implemented"
+	return
+}
 
 func (m *CompressedBatchEntry) GetProof() isCompressedBatchEntry_Proof {
-	if m != nil {
-		return m.Proof
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(isCompressedBatchEntry_Proof)
 }
 
 func (m *CompressedBatchEntry) GetExist() *CompressedExistenceProof {
-	if x, ok := m.GetProof().(*CompressedBatchEntry_Exist); ok {
-		return x.Exist
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *CompressedBatchEntry) GetNonexist() *CompressedNonExistenceProof {
-	if x, ok := m.GetProof().(*CompressedBatchEntry_Nonexist); ok {
-		return x.Nonexist
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // XXX_OneofWrappers is for the internal use of the proto package.
 func (*CompressedBatchEntry) XXX_OneofWrappers() []interface{} {
-	return []interface{}{
-		(*CompressedBatchEntry_Exist)(nil),
-		(*CompressedBatchEntry_Nonexist)(nil),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type CompressedExistenceProof struct {
@@ -1012,66 +684,39 @@ type CompressedExistenceProof struct {
 	Path []int32 `protobuf:"varint,4,rep,packed,name=path,proto3" json:"path,omitempty"`
 }
 
-func (m *CompressedExistenceProof) Reset()         { *m = CompressedExistenceProof{} }
-func (m *CompressedExistenceProof) String() string { return proto.CompactTextString(m) }
-func (*CompressedExistenceProof) ProtoMessage()    {}
+func (m *CompressedExistenceProof) Reset()         { _ = "STUB: not implemented"; return }
+func (m *CompressedExistenceProof) String() string { _ = "STUB: not implemented"; return "" }
+func (*CompressedExistenceProof) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*CompressedExistenceProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{11}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *CompressedExistenceProof) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *CompressedExistenceProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CompressedExistenceProof.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CompressedExistenceProof) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CompressedExistenceProof.Merge(m, src)
-}
-func (m *CompressedExistenceProof) XXX_Size() int {
-	return m.Size()
-}
-func (m *CompressedExistenceProof) XXX_DiscardUnknown() {
-	xxx_messageInfo_CompressedExistenceProof.DiscardUnknown(m)
-}
+
+func (m *CompressedExistenceProof) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *CompressedExistenceProof) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CompressedExistenceProof) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_CompressedExistenceProof proto.InternalMessageInfo
 
-func (m *CompressedExistenceProof) GetKey() []byte {
-	if m != nil {
-		return m.Key
-	}
-	return nil
-}
+func (m *CompressedExistenceProof) GetKey() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *CompressedExistenceProof) GetValue() []byte {
-	if m != nil {
-		return m.Value
-	}
-	return nil
-}
+func (m *CompressedExistenceProof) GetValue() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *CompressedExistenceProof) GetLeaf() *LeafOp {
-	if m != nil {
-		return m.Leaf
-	}
-	return nil
-}
+func (m *CompressedExistenceProof) GetLeaf() *LeafOp { _ = "STUB: not implemented"; return nil }
 
-func (m *CompressedExistenceProof) GetPath() []int32 {
-	if m != nil {
-		return m.Path
-	}
-	return nil
-}
+func (m *CompressedExistenceProof) GetPath() []int32 { _ = "STUB: not implemented"; return nil }
 
 type CompressedNonExistenceProof struct {
 	Key   []byte                    `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
@@ -1079,57 +724,44 @@ type CompressedNonExistenceProof struct {
 	Right *CompressedExistenceProof `protobuf:"bytes,3,opt,name=right,proto3" json:"right,omitempty"`
 }
 
-func (m *CompressedNonExistenceProof) Reset()         { *m = CompressedNonExistenceProof{} }
-func (m *CompressedNonExistenceProof) String() string { return proto.CompactTextString(m) }
-func (*CompressedNonExistenceProof) ProtoMessage()    {}
+func (m *CompressedNonExistenceProof) Reset()         { _ = "STUB: not implemented"; return }
+func (m *CompressedNonExistenceProof) String() string { _ = "STUB: not implemented"; return "" }
+func (*CompressedNonExistenceProof) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*CompressedNonExistenceProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_855156e15e7b8e99, []int{12}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *CompressedNonExistenceProof) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *CompressedNonExistenceProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CompressedNonExistenceProof.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *CompressedNonExistenceProof) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CompressedNonExistenceProof.Merge(m, src)
-}
-func (m *CompressedNonExistenceProof) XXX_Size() int {
-	return m.Size()
-}
-func (m *CompressedNonExistenceProof) XXX_DiscardUnknown() {
-	xxx_messageInfo_CompressedNonExistenceProof.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CompressedNonExistenceProof proto.InternalMessageInfo
-
-func (m *CompressedNonExistenceProof) GetKey() []byte {
-	if m != nil {
-		return m.Key
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+func (m *CompressedNonExistenceProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	_ = "STUB: not implemented"
+	return nil, nil
+}
+
+func (m *CompressedNonExistenceProof) XXX_Merge(src proto.Message) {
+	_ = "STUB: not implemented"
+	return
+}
+
+func (m *CompressedNonExistenceProof) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CompressedNonExistenceProof) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
+
+var xxx_messageInfo_CompressedNonExistenceProof proto.InternalMessageInfo
+
+func (m *CompressedNonExistenceProof) GetKey() []byte { _ = "STUB: not implemented"; return nil }
+
 func (m *CompressedNonExistenceProof) GetLeft() *CompressedExistenceProof {
-	if m != nil {
-		return m.Left
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *CompressedNonExistenceProof) GetRight() *CompressedExistenceProof {
-	if m != nil {
-		return m.Right
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -1217,3329 +849,325 @@ var fileDescriptor_855156e15e7b8e99 = []byte{
 }
 
 func (m *ExistenceProof) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ExistenceProof) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ExistenceProof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Path) > 0 {
-		for iNdEx := len(m.Path) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Path[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintProofs(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if m.Leaf != nil {
-		{
-			size, err := m.Leaf.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Value) > 0 {
-		i -= len(m.Value)
-		copy(dAtA[i:], m.Value)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Value)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Key) > 0 {
-		i -= len(m.Key)
-		copy(dAtA[i:], m.Key)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *NonExistenceProof) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *NonExistenceProof) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *NonExistenceProof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Right != nil {
-		{
-			size, err := m.Right.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Left != nil {
-		{
-			size, err := m.Left.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Key) > 0 {
-		i -= len(m.Key)
-		copy(dAtA[i:], m.Key)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommitmentProof) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CommitmentProof) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommitmentProof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Proof != nil {
-		{
-			size := m.Proof.Size()
-			i -= size
-			if _, err := m.Proof.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommitmentProof_Exist) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommitmentProof_Exist) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Exist != nil {
-		{
-			size, err := m.Exist.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *CommitmentProof_Nonexist) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommitmentProof_Nonexist) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Nonexist != nil {
-		{
-			size, err := m.Nonexist.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *CommitmentProof_Batch) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommitmentProof_Batch) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Batch != nil {
-		{
-			size, err := m.Batch.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *CommitmentProof_Compressed) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CommitmentProof_Compressed) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Compressed != nil {
-		{
-			size, err := m.Compressed.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	return len(dAtA) - i, nil
-}
-func (m *LeafOp) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *LeafOp) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *LeafOp) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *LeafOp) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *LeafOp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Prefix) > 0 {
-		i -= len(m.Prefix)
-		copy(dAtA[i:], m.Prefix)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Prefix)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Length != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.Length))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.PrehashValue != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.PrehashValue))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.PrehashKey != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.PrehashKey))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Hash != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.Hash))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *InnerOp) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *InnerOp) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *InnerOp) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *InnerOp) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *InnerOp) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Suffix) > 0 {
-		i -= len(m.Suffix)
-		copy(dAtA[i:], m.Suffix)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Suffix)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Prefix) > 0 {
-		i -= len(m.Prefix)
-		copy(dAtA[i:], m.Prefix)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Prefix)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Hash != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.Hash))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *ProofSpec) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *ProofSpec) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *ProofSpec) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *ProofSpec) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *ProofSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.MinDepth != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.MinDepth))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.MaxDepth != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.MaxDepth))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.InnerSpec != nil {
-		{
-			size, err := m.InnerSpec.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.LeafSpec != nil {
-		{
-			size, err := m.LeafSpec.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *InnerSpec) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *InnerSpec) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *InnerSpec) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *InnerSpec) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *InnerSpec) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Hash != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.Hash))
-		i--
-		dAtA[i] = 0x30
-	}
-	if len(m.EmptyChild) > 0 {
-		i -= len(m.EmptyChild)
-		copy(dAtA[i:], m.EmptyChild)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.EmptyChild)))
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.MaxPrefixLength != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.MaxPrefixLength))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.MinPrefixLength != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.MinPrefixLength))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.ChildSize != 0 {
-		i = encodeVarintProofs(dAtA, i, uint64(m.ChildSize))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.ChildOrder) > 0 {
-		dAtA11 := make([]byte, len(m.ChildOrder)*10)
-		var j10 int
-		for _, num1 := range m.ChildOrder {
-			num := uint64(num1)
-			for num >= 1<<7 {
-				dAtA11[j10] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j10++
-			}
-			dAtA11[j10] = uint8(num)
-			j10++
-		}
-		i -= j10
-		copy(dAtA[i:], dAtA11[:j10])
-		i = encodeVarintProofs(dAtA, i, uint64(j10))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *BatchProof) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *BatchProof) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *BatchProof) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *BatchProof) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *BatchProof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Entries) > 0 {
-		for iNdEx := len(m.Entries) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Entries[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintProofs(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *BatchEntry) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *BatchEntry) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *BatchEntry) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *BatchEntry) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *BatchEntry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Proof != nil {
-		{
-			size := m.Proof.Size()
-			i -= size
-			if _, err := m.Proof.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *BatchEntry_Exist) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *BatchEntry_Exist) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Exist != nil {
-		{
-			size, err := m.Exist.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *BatchEntry_Nonexist) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *BatchEntry_Nonexist) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Nonexist != nil {
-		{
-			size, err := m.Nonexist.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *CompressedBatchProof) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CompressedBatchProof) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedBatchProof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.LookupInners) > 0 {
-		for iNdEx := len(m.LookupInners) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.LookupInners[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintProofs(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Entries) > 0 {
-		for iNdEx := len(m.Entries) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Entries[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintProofs(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedBatchEntry) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CompressedBatchEntry) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedBatchEntry) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Proof != nil {
-		{
-			size := m.Proof.Size()
-			i -= size
-			if _, err := m.Proof.MarshalTo(dAtA[i:]); err != nil {
-				return 0, err
-			}
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedBatchEntry_Exist) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedBatchEntry_Exist) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Exist != nil {
-		{
-			size, err := m.Exist.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *CompressedBatchEntry_Nonexist) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedBatchEntry_Nonexist) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	if m.Nonexist != nil {
-		{
-			size, err := m.Nonexist.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
 func (m *CompressedExistenceProof) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CompressedExistenceProof) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedExistenceProof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Path) > 0 {
-		dAtA17 := make([]byte, len(m.Path)*10)
-		var j16 int
-		for _, num1 := range m.Path {
-			num := uint64(num1)
-			for num >= 1<<7 {
-				dAtA17[j16] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j16++
-			}
-			dAtA17[j16] = uint8(num)
-			j16++
-		}
-		i -= j16
-		copy(dAtA[i:], dAtA17[:j16])
-		i = encodeVarintProofs(dAtA, i, uint64(j16))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.Leaf != nil {
-		{
-			size, err := m.Leaf.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Value) > 0 {
-		i -= len(m.Value)
-		copy(dAtA[i:], m.Value)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Value)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Key) > 0 {
-		i -= len(m.Key)
-		copy(dAtA[i:], m.Key)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedNonExistenceProof) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CompressedNonExistenceProof) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CompressedNonExistenceProof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Right != nil {
-		{
-			size, err := m.Right.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Left != nil {
-		{
-			size, err := m.Left.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintProofs(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Key) > 0 {
-		i -= len(m.Key)
-		copy(dAtA[i:], m.Key)
-		i = encodeVarintProofs(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintProofs(dAtA []byte, offset int, v uint64) int {
-	offset -= sovProofs(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *ExistenceProof) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Key)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	l = len(m.Value)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.Leaf != nil {
-		l = m.Leaf.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if len(m.Path) > 0 {
-		for _, e := range m.Path {
-			l = e.Size()
-			n += 1 + l + sovProofs(uint64(l))
-		}
-	}
-	return n
-}
+func encodeVarintProofs(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *NonExistenceProof) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Key)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.Left != nil {
-		l = m.Left.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.Right != nil {
-		l = m.Right.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
+func (m *ExistenceProof) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *CommitmentProof) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Proof != nil {
-		n += m.Proof.Size()
-	}
-	return n
-}
+func (m *NonExistenceProof) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *CommitmentProof_Exist) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Exist != nil {
-		l = m.Exist.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
-func (m *CommitmentProof_Nonexist) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Nonexist != nil {
-		l = m.Nonexist.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
-func (m *CommitmentProof_Batch) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Batch != nil {
-		l = m.Batch.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
-func (m *CommitmentProof_Compressed) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Compressed != nil {
-		l = m.Compressed.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
-func (m *LeafOp) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Hash != 0 {
-		n += 1 + sovProofs(uint64(m.Hash))
-	}
-	if m.PrehashKey != 0 {
-		n += 1 + sovProofs(uint64(m.PrehashKey))
-	}
-	if m.PrehashValue != 0 {
-		n += 1 + sovProofs(uint64(m.PrehashValue))
-	}
-	if m.Length != 0 {
-		n += 1 + sovProofs(uint64(m.Length))
-	}
-	l = len(m.Prefix)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
+func (m *CommitmentProof) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *InnerOp) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Hash != 0 {
-		n += 1 + sovProofs(uint64(m.Hash))
-	}
-	l = len(m.Prefix)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	l = len(m.Suffix)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
+func (m *CommitmentProof_Exist) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ProofSpec) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.LeafSpec != nil {
-		l = m.LeafSpec.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.InnerSpec != nil {
-		l = m.InnerSpec.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.MaxDepth != 0 {
-		n += 1 + sovProofs(uint64(m.MaxDepth))
-	}
-	if m.MinDepth != 0 {
-		n += 1 + sovProofs(uint64(m.MinDepth))
-	}
-	return n
-}
+func (m *CommitmentProof_Nonexist) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *InnerSpec) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ChildOrder) > 0 {
-		l = 0
-		for _, e := range m.ChildOrder {
-			l += sovProofs(uint64(e))
-		}
-		n += 1 + sovProofs(uint64(l)) + l
-	}
-	if m.ChildSize != 0 {
-		n += 1 + sovProofs(uint64(m.ChildSize))
-	}
-	if m.MinPrefixLength != 0 {
-		n += 1 + sovProofs(uint64(m.MinPrefixLength))
-	}
-	if m.MaxPrefixLength != 0 {
-		n += 1 + sovProofs(uint64(m.MaxPrefixLength))
-	}
-	l = len(m.EmptyChild)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.Hash != 0 {
-		n += 1 + sovProofs(uint64(m.Hash))
-	}
-	return n
-}
+func (m *CommitmentProof_Batch) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *BatchProof) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Entries) > 0 {
-		for _, e := range m.Entries {
-			l = e.Size()
-			n += 1 + l + sovProofs(uint64(l))
-		}
-	}
-	return n
-}
+func (m *CommitmentProof_Compressed) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *BatchEntry) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Proof != nil {
-		n += m.Proof.Size()
-	}
-	return n
-}
+func (m *LeafOp) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *BatchEntry_Exist) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Exist != nil {
-		l = m.Exist.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
-func (m *BatchEntry_Nonexist) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Nonexist != nil {
-		l = m.Nonexist.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
-func (m *CompressedBatchProof) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Entries) > 0 {
-		for _, e := range m.Entries {
-			l = e.Size()
-			n += 1 + l + sovProofs(uint64(l))
-		}
-	}
-	if len(m.LookupInners) > 0 {
-		for _, e := range m.LookupInners {
-			l = e.Size()
-			n += 1 + l + sovProofs(uint64(l))
-		}
-	}
-	return n
-}
+func (m *InnerOp) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *CompressedBatchEntry) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Proof != nil {
-		n += m.Proof.Size()
-	}
-	return n
-}
+func (m *ProofSpec) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *CompressedBatchEntry_Exist) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Exist != nil {
-		l = m.Exist.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
-func (m *CompressedBatchEntry_Nonexist) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Nonexist != nil {
-		l = m.Nonexist.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
-func (m *CompressedExistenceProof) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Key)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	l = len(m.Value)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.Leaf != nil {
-		l = m.Leaf.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if len(m.Path) > 0 {
-		l = 0
-		for _, e := range m.Path {
-			l += sovProofs(uint64(e))
-		}
-		n += 1 + sovProofs(uint64(l)) + l
-	}
-	return n
-}
+func (m *InnerSpec) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *CompressedNonExistenceProof) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Key)
-	if l > 0 {
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.Left != nil {
-		l = m.Left.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	if m.Right != nil {
-		l = m.Right.Size()
-		n += 1 + l + sovProofs(uint64(l))
-	}
-	return n
-}
+func (m *BatchProof) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovProofs(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozProofs(x uint64) (n int) {
-	return sovProofs(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *ExistenceProof) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ExistenceProof: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ExistenceProof: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Key = append(m.Key[:0], dAtA[iNdEx:postIndex]...)
-			if m.Key == nil {
-				m.Key = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Value = append(m.Value[:0], dAtA[iNdEx:postIndex]...)
-			if m.Value == nil {
-				m.Value = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Leaf", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Leaf == nil {
-				m.Leaf = &LeafOp{}
-			}
-			if err := m.Leaf.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Path = append(m.Path, &InnerOp{})
-			if err := m.Path[len(m.Path)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *BatchEntry) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *NonExistenceProof) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: NonExistenceProof: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: NonExistenceProof: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Key = append(m.Key[:0], dAtA[iNdEx:postIndex]...)
-			if m.Key == nil {
-				m.Key = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Left", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Left == nil {
-				m.Left = &ExistenceProof{}
-			}
-			if err := m.Left.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Right", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Right == nil {
-				m.Right = &ExistenceProof{}
-			}
-			if err := m.Right.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *BatchEntry_Exist) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CommitmentProof) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CommitmentProof: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CommitmentProof: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Exist", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ExistenceProof{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Proof = &CommitmentProof_Exist{v}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Nonexist", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &NonExistenceProof{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Proof = &CommitmentProof_Nonexist{v}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Batch", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &BatchProof{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Proof = &CommitmentProof_Batch{v}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Compressed", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &CompressedBatchProof{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Proof = &CommitmentProof_Compressed{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *BatchEntry_Nonexist) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *LeafOp) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: LeafOp: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LeafOp: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Hash", wireType)
-			}
-			m.Hash = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Hash |= HashOp(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrehashKey", wireType)
-			}
-			m.PrehashKey = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PrehashKey |= HashOp(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PrehashValue", wireType)
-			}
-			m.PrehashValue = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PrehashValue |= HashOp(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Length", wireType)
-			}
-			m.Length = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Length |= LengthOp(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Prefix", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Prefix = append(m.Prefix[:0], dAtA[iNdEx:postIndex]...)
-			if m.Prefix == nil {
-				m.Prefix = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *CompressedBatchProof) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *InnerOp) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InnerOp: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InnerOp: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Hash", wireType)
-			}
-			m.Hash = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Hash |= HashOp(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Prefix", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Prefix = append(m.Prefix[:0], dAtA[iNdEx:postIndex]...)
-			if m.Prefix == nil {
-				m.Prefix = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Suffix", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Suffix = append(m.Suffix[:0], dAtA[iNdEx:postIndex]...)
-			if m.Suffix == nil {
-				m.Suffix = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *CompressedBatchEntry) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ProofSpec) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ProofSpec: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ProofSpec: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LeafSpec", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.LeafSpec == nil {
-				m.LeafSpec = &LeafOp{}
-			}
-			if err := m.LeafSpec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InnerSpec", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.InnerSpec == nil {
-				m.InnerSpec = &InnerSpec{}
-			}
-			if err := m.InnerSpec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxDepth", wireType)
-			}
-			m.MaxDepth = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxDepth |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MinDepth", wireType)
-			}
-			m.MinDepth = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MinDepth |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *CompressedBatchEntry_Exist) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *InnerSpec) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InnerSpec: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InnerSpec: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType == 0 {
-				var v int32
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowProofs
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= int32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.ChildOrder = append(m.ChildOrder, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowProofs
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthProofs
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthProofs
-				}
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				var elementCount int
-				var count int
-				for _, integer := range dAtA[iNdEx:postIndex] {
-					if integer < 128 {
-						count++
-					}
-				}
-				elementCount = count
-				if elementCount != 0 && len(m.ChildOrder) == 0 {
-					m.ChildOrder = make([]int32, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v int32
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowProofs
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= int32(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.ChildOrder = append(m.ChildOrder, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChildOrder", wireType)
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ChildSize", wireType)
-			}
-			m.ChildSize = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.ChildSize |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MinPrefixLength", wireType)
-			}
-			m.MinPrefixLength = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MinPrefixLength |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MaxPrefixLength", wireType)
-			}
-			m.MaxPrefixLength = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.MaxPrefixLength |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EmptyChild", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EmptyChild = append(m.EmptyChild[:0], dAtA[iNdEx:postIndex]...)
-			if m.EmptyChild == nil {
-				m.EmptyChild = []byte{}
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Hash", wireType)
-			}
-			m.Hash = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Hash |= HashOp(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *CompressedBatchEntry_Nonexist) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *BatchProof) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: BatchProof: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BatchProof: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Entries = append(m.Entries, &BatchEntry{})
-			if err := m.Entries[len(m.Entries)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *CompressedExistenceProof) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *BatchEntry) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: BatchEntry: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BatchEntry: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Exist", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &ExistenceProof{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Proof = &BatchEntry_Exist{v}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Nonexist", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &NonExistenceProof{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Proof = &BatchEntry_Nonexist{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *CompressedNonExistenceProof) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CompressedBatchProof) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CompressedBatchProof: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CompressedBatchProof: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Entries", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Entries = append(m.Entries, &CompressedBatchEntry{})
-			if err := m.Entries[len(m.Entries)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LookupInners", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LookupInners = append(m.LookupInners, &InnerOp{})
-			if err := m.LookupInners[len(m.LookupInners)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovProofs(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CompressedBatchEntry) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CompressedBatchEntry: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CompressedBatchEntry: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Exist", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &CompressedExistenceProof{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Proof = &CompressedBatchEntry_Exist{v}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Nonexist", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			v := &CompressedNonExistenceProof{}
-			if err := v.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			m.Proof = &CompressedBatchEntry_Nonexist{v}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sozProofs(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *ExistenceProof) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *NonExistenceProof) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *CommitmentProof) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *LeafOp) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *InnerOp) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *ProofSpec) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *InnerSpec) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *BatchProof) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *BatchEntry) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *CompressedBatchProof) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *CompressedBatchEntry) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *CompressedExistenceProof) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CompressedExistenceProof: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CompressedExistenceProof: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Key = append(m.Key[:0], dAtA[iNdEx:postIndex]...)
-			if m.Key == nil {
-				m.Key = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Value = append(m.Value[:0], dAtA[iNdEx:postIndex]...)
-			if m.Value == nil {
-				m.Value = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Leaf", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Leaf == nil {
-				m.Leaf = &LeafOp{}
-			}
-			if err := m.Leaf.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType == 0 {
-				var v int32
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowProofs
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= int32(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				m.Path = append(m.Path, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowProofs
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthProofs
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthProofs
-				}
-				if postIndex > l {
-					return io.ErrUnexpectedEOF
-				}
-				var elementCount int
-				var count int
-				for _, integer := range dAtA[iNdEx:postIndex] {
-					if integer < 128 {
-						count++
-					}
-				}
-				elementCount = count
-				if elementCount != 0 && len(m.Path) == 0 {
-					m.Path = make([]int32, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v int32
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowProofs
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= int32(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.Path = append(m.Path, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field Path", wireType)
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *CompressedNonExistenceProof) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CompressedNonExistenceProof: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CompressedNonExistenceProof: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Key = append(m.Key[:0], dAtA[iNdEx:postIndex]...)
-			if m.Key == nil {
-				m.Key = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Left", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Left == nil {
-				m.Left = &CompressedExistenceProof{}
-			}
-			if err := m.Left.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Right", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthProofs
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Right == nil {
-				m.Right = &CompressedExistenceProof{}
-			}
-			if err := m.Right.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipProofs(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthProofs
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipProofs(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowProofs
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowProofs
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthProofs
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupProofs
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthProofs
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipProofs(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthProofs        = fmt.Errorf("proto: negative length found during unmarshaling")

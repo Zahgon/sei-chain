@@ -27,7 +27,8 @@ type QueryExchangeRateParams struct {
 
 // NewQueryExchangeRateParams returns params for exchange_rate query
 func NewQueryExchangeRateParams(denom string) QueryExchangeRateParams {
-	return QueryExchangeRateParams{denom}
+	_ = "STUB: not implemented"
+	return *new(QueryExchangeRateParams)
 }
 
 // QueryTwapParams defines the params for the following queries:
@@ -38,7 +39,8 @@ type QueryTwapsParams struct {
 
 // NewQueryExchangeRateParams returns params for exchange_rate query
 func NewQueryTwapsParams(lookbackSeconds int64) QueryTwapsParams {
-	return QueryTwapsParams{lookbackSeconds}
+	_ = "STUB: not implemented"
+	return *new(QueryTwapsParams)
 }
 
 // QueryVotesParams defines the params for the following queries:
@@ -50,7 +52,8 @@ type QueryVotesParams struct {
 
 // NewQueryVotesParams returns params for exchange_rate votes query
 func NewQueryVotesParams(voter sdk.ValAddress, denom string) QueryVotesParams {
-	return QueryVotesParams{voter, denom}
+	_ = "STUB: not implemented"
+	return *new(QueryVotesParams)
 }
 
 // QueryFeederDelegationParams defeins the params for the following queries:
@@ -61,7 +64,8 @@ type QueryFeederDelegationParams struct {
 
 // NewQueryFeederDelegationParams returns params for feeder delegation query
 func NewQueryFeederDelegationParams(validator sdk.ValAddress) QueryFeederDelegationParams {
-	return QueryFeederDelegationParams{validator}
+	_ = "STUB: not implemented"
+	return *new(QueryFeederDelegationParams)
 }
 
 // QueryMissCounterParams defines the params for the following queries:
@@ -72,7 +76,8 @@ type QueryVotePenaltyCounterParams struct {
 
 // NewQueryVotePenaltyCounterParams returns params for feeder delegation query
 func NewQueryVotePenaltyCounterParams(validator sdk.ValAddress) QueryVotePenaltyCounterParams {
-	return QueryVotePenaltyCounterParams{validator}
+	_ = "STUB: not implemented"
+	return *new(QueryVotePenaltyCounterParams)
 }
 
 // QueryAggregateVoteParams defines the params for the following queries:
@@ -83,5 +88,6 @@ type QueryAggregateVoteParams struct {
 
 // NewQueryAggregateVoteParams returns params for feeder delegation query
 func NewQueryAggregateVoteParams(validator sdk.ValAddress) QueryAggregateVoteParams {
-	return QueryAggregateVoteParams{validator}
+	_ = "STUB: not implemented"
+	return *new(QueryAggregateVoteParams)
 }

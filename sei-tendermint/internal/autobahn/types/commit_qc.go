@@ -16,40 +16,26 @@ type CommitQC struct {
 }
 
 // NewCommitQC constructs a new CommitQC.
-func NewCommitQC(votes []*Signed[*CommitVote]) *CommitQC {
-	if len(votes) == 0 {
-		panic("qc cannot be empty")
-	}
-	sigs := make([]*Signature, len(votes))
-	for i, v := range votes {
-		sigs[i] = v.sig
-	}
-	return &CommitQC{vote: votes[0].hashed, sigs: sigs}
-}
+func NewCommitQC(votes []*Signed[*CommitVote]) *CommitQC { _ = "STUB: not implemented"; return nil }
 
 // Proposal .
-func (m *CommitQC) Proposal() *Proposal { return m.vote.Msg().proposal }
+func (m *CommitQC) Proposal() *Proposal { _ = "STUB: not implemented"; return nil }
 
 // Index .
-func (m *CommitQC) Index() RoadIndex {
-	return m.Proposal().Index()
-}
+func (m *CommitQC) Index() RoadIndex { _ = "STUB: not implemented"; return *new(RoadIndex) }
 
 // LaneRange returns the range of lane blocks.
-func (m *CommitQC) LaneRange(lane LaneID) *LaneRange {
-	return m.Proposal().LaneRange(lane)
-}
+func (m *CommitQC) LaneRange(lane LaneID) *LaneRange { _ = "STUB: not implemented"; return nil }
 
 // GlobalRange returns the finalized global block range.
 func (m *CommitQC) GlobalRange(c *Committee) GlobalRange {
-	return m.Proposal().GlobalRange(c)
+	_ = "STUB: not implemented"
+	return *new(GlobalRange)
 }
 
 // Verify verifies the CommitQC against the committee.
 // Currently it doesn't require the previous CommitQC.
-func (m *CommitQC) Verify(c *Committee) error {
-	return m.vote.verifyQC(c, c.CommitQuorum(), m.sigs)
-}
+func (m *CommitQC) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 // FullCommitQC is a CommitQC with the headers of the blocks finalized by it.
 type FullCommitQC struct {
@@ -60,48 +46,38 @@ type FullCommitQC struct {
 
 // NewFullCommitQC constructs a new FullCommitQC.
 func NewFullCommitQC(qc *CommitQC, headers []*BlockHeader) *FullCommitQC {
-	if got, want := len(headers), int(qc.Proposal().globalRangeWithoutOffset.Len()); got != want { //nolint:gosec // total lane range len is a small bounded value representing block count in a QC
-		panic(fmt.Sprintf("headers length %d != finalized blocks %d", got, want))
-	}
-	return &FullCommitQC{qc: qc, headers: headers}
-}
-
-// QC CommitQC.
-func (m *FullCommitQC) QC() *CommitQC { return m.qc }
-
-// Headers of the blocks finalized by the QC.
-func (m *FullCommitQC) Headers() []*BlockHeader { return m.headers }
-
-// Index .
-func (m *FullCommitQC) Index() RoadIndex {
-	return m.qc.Index()
-}
-
-// Verify verifies the FullCommitQC against the committee.
-func (m *FullCommitQC) Verify(c *Committee) error {
-	if err := m.qc.Verify(c); err != nil {
-		return fmt.Errorf("qC: %w", err)
-	}
-	n := uint64(0)
-	if want, got := int(m.qc.GlobalRange(c).Len()), len(m.headers); want != got { //nolint:gosec // global range len is a small bounded value representing block count in a QC
-		return fmt.Errorf("len(headers) = %d, want %d", got, want)
-	}
-	for lane := range c.Lanes().All() {
-		lr := m.qc.LaneRange(lane)
-		if lr.Len() == 0 {
-			continue
-		}
-		n += lr.Len()
-		want := lr.LastHash()
-		for i := range lr.Len() {
-			if got := m.headers[n-i-1].Hash(); got != want {
-				return fmt.Errorf("header[%d].Hash() = %v, want %v", i, got, want)
-			}
-			want = m.headers[n-i-1].ParentHash()
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+//nolint:gosec // total lane range len is a small bounded value representing block count in a QC
+
+// QC CommitQC.
+func (m *FullCommitQC) QC() *CommitQC {
+	_ = "STUB: not implemented"
+
+	// Headers of the blocks finalized by the QC.
+	return nil
+}
+
+func (m *FullCommitQC) Headers() []*BlockHeader {
+	_ = "STUB: not implemented"
+
+	// Index .
+	return nil
+}
+
+func (m *FullCommitQC) Index() RoadIndex {
+	_ = "STUB: not implemented"
+	return *
+
+	// Verify verifies the FullCommitQC against the committee.
+	new(RoadIndex)
+}
+
+func (m *FullCommitQC) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
+
+//nolint:gosec // global range len is a small bounded value representing block count in a QC
 
 // CommitQCConv is a protobuf converter for CommitQC.
 var CommitQCConv = protoutils.Conv[*CommitQC, *pb.CommitQC]{

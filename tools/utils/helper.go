@@ -1,8 +1,6 @@
 package utils
 
 import (
-	"fmt"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 	authzkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/authz/keeper"
@@ -56,10 +54,6 @@ var Modules = []string{
 	"upgrade",
 	"wasm"}
 
-func BuildRawPrefix(moduleName string) string {
-	return fmt.Sprintf("s/k:%s/n", moduleName)
-}
+func BuildRawPrefix(moduleName string) string { _ = "STUB: not implemented"; return "" }
 
-func BuildTreePrefix(moduleName string) string {
-	return fmt.Sprintf("s/k:%s/", moduleName)
-}
+func BuildTreePrefix(moduleName string) string { _ = "STUB: not implemented"; return "" }

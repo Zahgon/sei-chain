@@ -42,14 +42,4 @@ type Config struct {
 	SnapshotWriteRateMBps int `mapstructure:"snapshot-write-rate-mbps"`
 }
 
-func DefaultConfig() Config {
-	return Config{
-		AsyncCommitBuffer:         DefaultAsyncCommitBuffer,
-		SnapshotInterval:          DefaultSnapshotInterval,
-		SnapshotKeepRecent:        DefaultSnapshotKeepRecent,
-		SnapshotMinTimeInterval:   DefaultSnapshotMinTimeInterval,
-		SnapshotPrefetchThreshold: DefaultSnapshotPrefetchThreshold,
-		SnapshotWriteRateMBps:     DefaultSnapshotWriteRateMBps,
-		SnapshotWriterLimit:       DefaultSnapshotWriterLimit,
-	}
-}
+func DefaultConfig() Config { _ = "STUB: not implemented"; return *new(Config) }

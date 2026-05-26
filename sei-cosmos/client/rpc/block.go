@@ -2,130 +2,42 @@ package rpc
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-	"strconv"
 
-	"github.com/gorilla/mux"
 	"github.com/spf13/cobra"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
 )
 
 // BlockCommand returns the verified block data for a given heights
-func BlockCommand() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "block [height]",
-		Short: "Get verified data for a the block at given height",
-		Args:  cobra.MaximumNArgs(1),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientQueryContext(cmd)
-			if err != nil {
-				return err
-			}
-			var height *int64
+func BlockCommand() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
-			// optional height
-			if len(args) > 0 {
-				h, err := strconv.Atoi(args[0])
-				if err != nil {
-					return err
-				}
-				if h > 0 {
-					tmp := int64(h)
-					height = &tmp
-				}
-			}
-
-			output, err := getBlock(clientCtx, height)
-			if err != nil {
-				return err
-			}
-
-			fmt.Println(string(output))
-			return nil
-		},
-	}
-
-	cmd.Flags().StringP(flags.FlagNode, "n", "tcp://localhost:26657", "Node to connect to")
-
-	return cmd
-}
+// optional height
 
 func getBlock(clientCtx client.Context, height *int64) ([]byte, error) {
+	_ = "STUB: not implemented"
 	// get the node
-	node, err := clientCtx.GetNode()
-	if err != nil {
-		return nil, err
-	}
-
-	// header -> BlockchainInfo
-	// header, tx -> Block
-	// results -> BlockResults
-	res, err := node.Block(context.Background(), height)
-	if err != nil {
-		return nil, err
-	}
-
-	return legacy.Cdc.MarshalAsJSON(res)
+	return nil, nil
 }
+
+// header -> BlockchainInfo
+// header, tx -> Block
+// results -> BlockResults
 
 // get the current blockchain height
 func GetChainHeight(ctx context.Context, node client.Client) (int64, error) {
-	status, err := node.Status(ctx)
-	if err != nil {
-		return -1, err
-	}
-	return status.SyncInfo.LatestBlockHeight, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 // REST handler to get a block
 func BlockRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		vars := mux.Vars(r)
-
-		height, err := strconv.ParseInt(vars["height"], 10, 64)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest,
-				"couldn't parse block height. Assumed format is '/block/{height}'.")
-			return
-		}
-
-		node, err := clientCtx.GetNode()
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-		chainHeight, err := GetChainHeight(r.Context(), node)
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusInternalServerError, "failed to parse chain height")
-			return
-		}
-
-		if height > chainHeight {
-			rest.WriteErrorResponse(w, http.StatusNotFound, "requested block height is bigger then the chain length")
-			return
-		}
-
-		output, err := getBlock(clientCtx, &height)
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-
-		rest.PostProcessResponseBare(w, clientCtx, output)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 // REST handler to get the latest block
 func LatestBlockRequestHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		output, err := getBlock(clientCtx, nil)
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-
-		rest.PostProcessResponseBare(w, clientCtx, output)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }

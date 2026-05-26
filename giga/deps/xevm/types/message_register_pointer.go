@@ -3,7 +3,6 @@ package types
 import (
 	"github.com/ethereum/go-ethereum/common"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 const TypeMsgRegisterPointer = "evm_register_pointer"
@@ -13,46 +12,26 @@ var (
 )
 
 func NewMsgRegisterERC20Pointer(sender sdk.AccAddress, ercAddress common.Address) *MsgRegisterPointer {
-	return &MsgRegisterPointer{Sender: sender.String(), ErcAddress: ercAddress.Hex(), PointerType: PointerType_ERC20}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func NewMsgRegisterERC721Pointer(sender sdk.AccAddress, ercAddress common.Address) *MsgRegisterPointer {
-	return &MsgRegisterPointer{Sender: sender.String(), ErcAddress: ercAddress.Hex(), PointerType: PointerType_ERC721}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func NewMsgRegisterERC1155Pointer(sender sdk.AccAddress, ercAddress common.Address) *MsgRegisterPointer {
-	return &MsgRegisterPointer{Sender: sender.String(), ErcAddress: ercAddress.Hex(), PointerType: PointerType_ERC1155}
-}
-
-func (msg *MsgRegisterPointer) Route() string {
-	return RouterKey
-}
-
-func (msg *MsgRegisterPointer) Type() string {
-	return TypeMsgRegisterPointer
-}
-
-func (msg *MsgRegisterPointer) GetSigners() []sdk.AccAddress {
-	from, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{from}
-}
-
-func (msg *MsgRegisterPointer) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(msg))
-}
-
-func (msg *MsgRegisterPointer) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Sender)
-	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "Invalid sender address (%s)", err)
-	}
-
-	if !common.IsHexAddress(msg.ErcAddress) {
-		return sdkerrors.ErrInvalidAddress
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+func (msg *MsgRegisterPointer) Route() string { _ = "STUB: not implemented"; return "" }
+
+func (msg *MsgRegisterPointer) Type() string { _ = "STUB: not implemented"; return "" }
+
+func (msg *MsgRegisterPointer) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
+
+func (msg *MsgRegisterPointer) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
+
+func (msg *MsgRegisterPointer) ValidateBasic() error { _ = "STUB: not implemented"; return nil }

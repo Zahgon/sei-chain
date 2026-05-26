@@ -2,10 +2,7 @@ package eventbus
 
 import (
 	"context"
-	"fmt"
-	"strings"
 
-	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	tmpubsub "github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub"
 	tmquery "github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/service"
@@ -29,170 +26,139 @@ type EventBus struct {
 }
 
 // NewDefault returns a new event bus with default options.
-func NewDefault() *EventBus {
-	pubsub := tmpubsub.NewServer(tmpubsub.BufferCapacity(DefaultBufferCapacity))
-	b := &EventBus{pubsub: pubsub}
-	b.BaseService = *service.NewBaseService("EventBus", b)
-	return b
-}
+func NewDefault() *EventBus { _ = "STUB: not implemented"; return nil }
 
-func (b *EventBus) OnStart(ctx context.Context) error {
-	return b.pubsub.Start(ctx)
-}
+func (b *EventBus) OnStart(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-func (b *EventBus) OnStop() {}
+func (b *EventBus) OnStop() { _ = "STUB: not implemented"; return }
 
-func (b *EventBus) NumClients() int {
-	return b.pubsub.NumClients()
-}
+func (b *EventBus) NumClients() int { _ = "STUB: not implemented"; return 0 }
 
-func (b *EventBus) NumClientSubscriptions(clientID string) int {
-	return b.pubsub.NumClientSubscriptions(clientID)
-}
+func (b *EventBus) NumClientSubscriptions(clientID string) int { _ = "STUB: not implemented"; return 0 }
 
 func (b *EventBus) SubscribeWithArgs(ctx context.Context, args tmpubsub.SubscribeArgs) (Subscription, error) {
-	return b.pubsub.SubscribeWithArgs(ctx, args)
+	_ = "STUB: not implemented"
+	return *new(Subscription), nil
 }
 
 func (b *EventBus) Unsubscribe(ctx context.Context, args tmpubsub.UnsubscribeArgs) error {
-	return b.pubsub.Unsubscribe(ctx, args)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) UnsubscribeAll(ctx context.Context, subscriber string) error {
-	return b.pubsub.UnsubscribeAll(ctx, subscriber)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) Observe(ctx context.Context, observe func(tmpubsub.Message) error, queries ...*tmquery.Query) error {
-	return b.pubsub.Observe(ctx, observe, queries...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) Publish(eventValue string, eventData types.EventData) error {
-	tokens := strings.Split(types.EventTypeKey, ".")
-	event := abci.Event{
-		Type: tokens[0],
-		Attributes: []abci.EventAttribute{
-			{
-				Key:   []byte(tokens[1]),
-				Value: []byte(eventValue),
-			},
-		},
-	}
-
-	return b.pubsub.PublishWithEvents(eventData, []abci.Event{event})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventNewBlock(data types.EventDataNewBlock) error {
-	events := data.ResultFinalizeBlock.Events
-
-	// add Tendermint-reserved new block event
-	// copy to a new destination explicitly
-	events = append([]abci.Event{}, append(events, types.EventNewBlock)...)
-
-	return b.pubsub.PublishWithEvents(data, events)
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// add Tendermint-reserved new block event
+// copy to a new destination explicitly
 
 func (b *EventBus) PublishEventNewBlockHeader(data types.EventDataNewBlockHeader) error {
+	_ = "STUB: not implemented"
 	// no explicit deadline for publishing events
-
-	events := data.ResultFinalizeBlock.Events
-
-	// add Tendermint-reserved new block header event
-	// copy to a new destination explicitly
-	events = append([]abci.Event{}, append(events, types.EventNewBlockHeader)...)
-
-	return b.pubsub.PublishWithEvents(data, events)
+	return nil
 }
 
+// add Tendermint-reserved new block header event
+// copy to a new destination explicitly
+
 func (b *EventBus) PublishEventNewEvidence(evidence types.EventDataNewEvidence) error {
-	return b.Publish(types.EventNewEvidenceValue, evidence)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventVote(data types.EventDataVote) error {
-	return b.Publish(types.EventVoteValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventValidBlock(data types.EventDataRoundState) error {
-	return b.Publish(types.EventValidBlockValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventBlockSyncStatus(data types.EventDataBlockSyncStatus) error {
-	return b.Publish(types.EventBlockSyncStatusValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventStateSyncStatus(data types.EventDataStateSyncStatus) error {
-	return b.Publish(types.EventStateSyncStatusValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // PublishEventTx publishes tx event with events from Result. Note it will add
 // predefined keys (EventTypeKey, TxHashKey). Existing events with the same keys
 // will be overwritten.
 func (b *EventBus) PublishEventTx(data types.EventDataTx) error {
-	events := data.Result.Events
-
-	// add Tendermint-reserved events
-	events = append(events, types.EventTx)
-
-	tokens := strings.Split(types.TxHashKey, ".")
-	events = append(events, abci.Event{
-		Type: tokens[0],
-		Attributes: []abci.EventAttribute{
-			{
-				Key:   []byte(tokens[1]),
-				Value: []byte(fmt.Sprintf("%X", types.Tx(data.Tx).Hash())),
-			},
-		},
-	})
-
-	tokens = strings.Split(types.TxHeightKey, ".")
-	events = append(events, abci.Event{
-		Type: tokens[0],
-		Attributes: []abci.EventAttribute{
-			{
-				Key:   []byte(tokens[1]),
-				Value: []byte(fmt.Sprintf("%d", data.Height)),
-			},
-		},
-	})
-
-	return b.pubsub.PublishWithEvents(data, events)
+	_ = "STUB: not implemented"
+	return nil
 }
 
+// add Tendermint-reserved events
+
 func (b *EventBus) PublishEventNewRoundStep(data types.EventDataRoundState) error {
-	return b.Publish(types.EventNewRoundStepValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventTimeoutPropose(data types.EventDataRoundState) error {
-	return b.Publish(types.EventTimeoutProposeValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventTimeoutWait(data types.EventDataRoundState) error {
-	return b.Publish(types.EventTimeoutWaitValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventNewRound(data types.EventDataNewRound) error {
-	return b.Publish(types.EventNewRoundValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventCompleteProposal(data types.EventDataCompleteProposal) error {
-	return b.Publish(types.EventCompleteProposalValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventPolka(data types.EventDataRoundState) error {
-	return b.Publish(types.EventPolkaValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventRelock(data types.EventDataRoundState) error {
-	return b.Publish(types.EventRelockValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventLock(data types.EventDataRoundState) error {
-	return b.Publish(types.EventLockValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventValidatorSetUpdates(data types.EventDataValidatorSetUpdates) error {
-	return b.Publish(types.EventValidatorSetUpdatesValue, data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (b *EventBus) PublishEventEvidenceValidated(evidence types.EventDataEvidenceValidated) error {
-	return b.Publish(types.EventEvidenceValidatedValue, evidence)
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -6,15 +6,12 @@ package v2alpha1
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -45,80 +42,43 @@ type AppDescriptor struct {
 	Tx *TxDescriptor `protobuf:"bytes,6,opt,name=tx,proto3" json:"tx,omitempty"`
 }
 
-func (m *AppDescriptor) Reset()         { *m = AppDescriptor{} }
-func (m *AppDescriptor) String() string { return proto.CompactTextString(m) }
-func (*AppDescriptor) ProtoMessage()    {}
-func (*AppDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{0}
-}
-func (m *AppDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *AppDescriptor) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *AppDescriptor) String() string            { _ = "STUB: not implemented"; return "" }
+func (*AppDescriptor) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*AppDescriptor) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *AppDescriptor) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *AppDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AppDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *AppDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AppDescriptor.Merge(m, src)
-}
-func (m *AppDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *AppDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_AppDescriptor.DiscardUnknown(m)
-}
+
+func (m *AppDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *AppDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *AppDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_AppDescriptor proto.InternalMessageInfo
 
-func (m *AppDescriptor) GetAuthn() *AuthnDescriptor {
-	if m != nil {
-		return m.Authn
-	}
-	return nil
-}
+func (m *AppDescriptor) GetAuthn() *AuthnDescriptor { _ = "STUB: not implemented"; return nil }
 
-func (m *AppDescriptor) GetChain() *ChainDescriptor {
-	if m != nil {
-		return m.Chain
-	}
-	return nil
-}
+func (m *AppDescriptor) GetChain() *ChainDescriptor { _ = "STUB: not implemented"; return nil }
 
-func (m *AppDescriptor) GetCodec() *CodecDescriptor {
-	if m != nil {
-		return m.Codec
-	}
-	return nil
-}
+func (m *AppDescriptor) GetCodec() *CodecDescriptor { _ = "STUB: not implemented"; return nil }
 
 func (m *AppDescriptor) GetConfiguration() *ConfigurationDescriptor {
-	if m != nil {
-		return m.Configuration
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *AppDescriptor) GetQueryServices() *QueryServicesDescriptor {
-	if m != nil {
-		return m.QueryServices
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (m *AppDescriptor) GetTx() *TxDescriptor {
-	if m != nil {
-		return m.Tx
-	}
-	return nil
-}
+func (m *AppDescriptor) GetTx() *TxDescriptor { _ = "STUB: not implemented"; return nil }
 
 // TxDescriptor describes the accepted transaction type
 type TxDescriptor struct {
@@ -130,52 +90,29 @@ type TxDescriptor struct {
 	Msgs []*MsgDescriptor `protobuf:"bytes,2,rep,name=msgs,proto3" json:"msgs,omitempty"`
 }
 
-func (m *TxDescriptor) Reset()         { *m = TxDescriptor{} }
-func (m *TxDescriptor) String() string { return proto.CompactTextString(m) }
-func (*TxDescriptor) ProtoMessage()    {}
-func (*TxDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{1}
-}
-func (m *TxDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *TxDescriptor) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *TxDescriptor) String() string            { _ = "STUB: not implemented"; return "" }
+func (*TxDescriptor) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*TxDescriptor) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *TxDescriptor) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *TxDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_TxDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *TxDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_TxDescriptor.Merge(m, src)
-}
-func (m *TxDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *TxDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_TxDescriptor.DiscardUnknown(m)
-}
+
+func (m *TxDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *TxDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *TxDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_TxDescriptor proto.InternalMessageInfo
 
-func (m *TxDescriptor) GetFullname() string {
-	if m != nil {
-		return m.Fullname
-	}
-	return ""
-}
+func (m *TxDescriptor) GetFullname() string { _ = "STUB: not implemented"; return "" }
 
-func (m *TxDescriptor) GetMsgs() []*MsgDescriptor {
-	if m != nil {
-		return m.Msgs
-	}
-	return nil
-}
+func (m *TxDescriptor) GetMsgs() []*MsgDescriptor { _ = "STUB: not implemented"; return nil }
 
 // AuthnDescriptor provides information on how to sign transactions without relying
 // on the online RPCs GetTxMetadata and CombineUnsignedTxAndSignatures
@@ -184,43 +121,28 @@ type AuthnDescriptor struct {
 	SignModes []*SigningModeDescriptor `protobuf:"bytes,1,rep,name=sign_modes,json=signModes,proto3" json:"sign_modes,omitempty"`
 }
 
-func (m *AuthnDescriptor) Reset()         { *m = AuthnDescriptor{} }
-func (m *AuthnDescriptor) String() string { return proto.CompactTextString(m) }
-func (*AuthnDescriptor) ProtoMessage()    {}
-func (*AuthnDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{2}
-}
-func (m *AuthnDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *AuthnDescriptor) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *AuthnDescriptor) String() string            { _ = "STUB: not implemented"; return "" }
+func (*AuthnDescriptor) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*AuthnDescriptor) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *AuthnDescriptor) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *AuthnDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AuthnDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *AuthnDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AuthnDescriptor.Merge(m, src)
-}
-func (m *AuthnDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *AuthnDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_AuthnDescriptor.DiscardUnknown(m)
-}
+
+func (m *AuthnDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *AuthnDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *AuthnDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_AuthnDescriptor proto.InternalMessageInfo
 
 func (m *AuthnDescriptor) GetSignModes() []*SigningModeDescriptor {
-	if m != nil {
-		return m.SignModes
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -238,57 +160,38 @@ type SigningModeDescriptor struct {
 	AuthnInfoProviderMethodFullname string `protobuf:"bytes,3,opt,name=authn_info_provider_method_fullname,json=authnInfoProviderMethodFullname,proto3" json:"authn_info_provider_method_fullname,omitempty"`
 }
 
-func (m *SigningModeDescriptor) Reset()         { *m = SigningModeDescriptor{} }
-func (m *SigningModeDescriptor) String() string { return proto.CompactTextString(m) }
-func (*SigningModeDescriptor) ProtoMessage()    {}
+func (m *SigningModeDescriptor) Reset()         { _ = "STUB: not implemented"; return }
+func (m *SigningModeDescriptor) String() string { _ = "STUB: not implemented"; return "" }
+func (*SigningModeDescriptor) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*SigningModeDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *SigningModeDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *SigningModeDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_SigningModeDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *SigningModeDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_SigningModeDescriptor.Merge(m, src)
-}
-func (m *SigningModeDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *SigningModeDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_SigningModeDescriptor.DiscardUnknown(m)
-}
+
+func (m *SigningModeDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *SigningModeDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *SigningModeDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_SigningModeDescriptor proto.InternalMessageInfo
 
-func (m *SigningModeDescriptor) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
+func (m *SigningModeDescriptor) GetName() string { _ = "STUB: not implemented"; return "" }
 
-func (m *SigningModeDescriptor) GetNumber() int32 {
-	if m != nil {
-		return m.Number
-	}
-	return 0
-}
+func (m *SigningModeDescriptor) GetNumber() int32 { _ = "STUB: not implemented"; return 0 }
 
 func (m *SigningModeDescriptor) GetAuthnInfoProviderMethodFullname() string {
-	if m != nil {
-		return m.AuthnInfoProviderMethodFullname
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
@@ -298,45 +201,27 @@ type ChainDescriptor struct {
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (m *ChainDescriptor) Reset()         { *m = ChainDescriptor{} }
-func (m *ChainDescriptor) String() string { return proto.CompactTextString(m) }
-func (*ChainDescriptor) ProtoMessage()    {}
-func (*ChainDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{4}
-}
-func (m *ChainDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ChainDescriptor) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *ChainDescriptor) String() string            { _ = "STUB: not implemented"; return "" }
+func (*ChainDescriptor) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ChainDescriptor) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ChainDescriptor) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ChainDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ChainDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ChainDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ChainDescriptor.Merge(m, src)
-}
-func (m *ChainDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *ChainDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_ChainDescriptor.DiscardUnknown(m)
-}
+
+func (m *ChainDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ChainDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ChainDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ChainDescriptor proto.InternalMessageInfo
 
-func (m *ChainDescriptor) GetId() string {
-	if m != nil {
-		return m.Id
-	}
-	return ""
-}
+func (m *ChainDescriptor) GetId() string { _ = "STUB: not implemented"; return "" }
 
 // CodecDescriptor describes the registered interfaces and provides metadata information on the types
 type CodecDescriptor struct {
@@ -344,43 +229,28 @@ type CodecDescriptor struct {
 	Interfaces []*InterfaceDescriptor `protobuf:"bytes,1,rep,name=interfaces,proto3" json:"interfaces,omitempty"`
 }
 
-func (m *CodecDescriptor) Reset()         { *m = CodecDescriptor{} }
-func (m *CodecDescriptor) String() string { return proto.CompactTextString(m) }
-func (*CodecDescriptor) ProtoMessage()    {}
-func (*CodecDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{5}
-}
-func (m *CodecDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *CodecDescriptor) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *CodecDescriptor) String() string            { _ = "STUB: not implemented"; return "" }
+func (*CodecDescriptor) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*CodecDescriptor) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *CodecDescriptor) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *CodecDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CodecDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CodecDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CodecDescriptor.Merge(m, src)
-}
-func (m *CodecDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *CodecDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_CodecDescriptor.DiscardUnknown(m)
-}
+
+func (m *CodecDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *CodecDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CodecDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_CodecDescriptor proto.InternalMessageInfo
 
 func (m *CodecDescriptor) GetInterfaces() []*InterfaceDescriptor {
-	if m != nil {
-		return m.Interfaces
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -395,57 +265,38 @@ type InterfaceDescriptor struct {
 	InterfaceImplementers []*InterfaceImplementerDescriptor `protobuf:"bytes,3,rep,name=interface_implementers,json=interfaceImplementers,proto3" json:"interface_implementers,omitempty"`
 }
 
-func (m *InterfaceDescriptor) Reset()         { *m = InterfaceDescriptor{} }
-func (m *InterfaceDescriptor) String() string { return proto.CompactTextString(m) }
-func (*InterfaceDescriptor) ProtoMessage()    {}
+func (m *InterfaceDescriptor) Reset()         { _ = "STUB: not implemented"; return }
+func (m *InterfaceDescriptor) String() string { _ = "STUB: not implemented"; return "" }
+func (*InterfaceDescriptor) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*InterfaceDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{6}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *InterfaceDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+
+func (m *InterfaceDescriptor) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *InterfaceDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InterfaceDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *InterfaceDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InterfaceDescriptor.Merge(m, src)
-}
-func (m *InterfaceDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *InterfaceDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_InterfaceDescriptor.DiscardUnknown(m)
-}
+
+func (m *InterfaceDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *InterfaceDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *InterfaceDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_InterfaceDescriptor proto.InternalMessageInfo
 
-func (m *InterfaceDescriptor) GetFullname() string {
-	if m != nil {
-		return m.Fullname
-	}
-	return ""
-}
+func (m *InterfaceDescriptor) GetFullname() string { _ = "STUB: not implemented"; return "" }
 
 func (m *InterfaceDescriptor) GetInterfaceAcceptingMessages() []*InterfaceAcceptingMessageDescriptor {
-	if m != nil {
-		return m.InterfaceAcceptingMessages
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (m *InterfaceDescriptor) GetInterfaceImplementers() []*InterfaceImplementerDescriptor {
-	if m != nil {
-		return m.InterfaceImplementers
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -460,52 +311,38 @@ type InterfaceImplementerDescriptor struct {
 	TypeUrl string `protobuf:"bytes,2,opt,name=type_url,json=typeUrl,proto3" json:"type_url,omitempty"`
 }
 
-func (m *InterfaceImplementerDescriptor) Reset()         { *m = InterfaceImplementerDescriptor{} }
-func (m *InterfaceImplementerDescriptor) String() string { return proto.CompactTextString(m) }
-func (*InterfaceImplementerDescriptor) ProtoMessage()    {}
+func (m *InterfaceImplementerDescriptor) Reset()         { _ = "STUB: not implemented"; return }
+func (m *InterfaceImplementerDescriptor) String() string { _ = "STUB: not implemented"; return "" }
+func (*InterfaceImplementerDescriptor) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*InterfaceImplementerDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{7}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *InterfaceImplementerDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *InterfaceImplementerDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InterfaceImplementerDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *InterfaceImplementerDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InterfaceImplementerDescriptor.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *InterfaceImplementerDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *InterfaceImplementerDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_InterfaceImplementerDescriptor.DiscardUnknown(m)
-}
+
+func (m *InterfaceImplementerDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *InterfaceImplementerDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_InterfaceImplementerDescriptor proto.InternalMessageInfo
 
-func (m *InterfaceImplementerDescriptor) GetFullname() string {
-	if m != nil {
-		return m.Fullname
-	}
-	return ""
-}
+func (m *InterfaceImplementerDescriptor) GetFullname() string { _ = "STUB: not implemented"; return "" }
 
-func (m *InterfaceImplementerDescriptor) GetTypeUrl() string {
-	if m != nil {
-		return m.TypeUrl
-	}
-	return ""
-}
+func (m *InterfaceImplementerDescriptor) GetTypeUrl() string { _ = "STUB: not implemented"; return "" }
 
 // InterfaceAcceptingMessageDescriptor describes a protobuf message which contains
 // an interface represented as a google.protobuf.Any
@@ -518,50 +355,45 @@ type InterfaceAcceptingMessageDescriptor struct {
 	FieldDescriptorNames []string `protobuf:"bytes,2,rep,name=field_descriptor_names,json=fieldDescriptorNames,proto3" json:"field_descriptor_names,omitempty"`
 }
 
-func (m *InterfaceAcceptingMessageDescriptor) Reset()         { *m = InterfaceAcceptingMessageDescriptor{} }
-func (m *InterfaceAcceptingMessageDescriptor) String() string { return proto.CompactTextString(m) }
-func (*InterfaceAcceptingMessageDescriptor) ProtoMessage()    {}
+func (m *InterfaceAcceptingMessageDescriptor) Reset()         { _ = "STUB: not implemented"; return }
+func (m *InterfaceAcceptingMessageDescriptor) String() string { _ = "STUB: not implemented"; return "" }
+func (*InterfaceAcceptingMessageDescriptor) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*InterfaceAcceptingMessageDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{8}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *InterfaceAcceptingMessageDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *InterfaceAcceptingMessageDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_InterfaceAcceptingMessageDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *InterfaceAcceptingMessageDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_InterfaceAcceptingMessageDescriptor.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *InterfaceAcceptingMessageDescriptor) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *InterfaceAcceptingMessageDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *InterfaceAcceptingMessageDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_InterfaceAcceptingMessageDescriptor.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_InterfaceAcceptingMessageDescriptor proto.InternalMessageInfo
 
 func (m *InterfaceAcceptingMessageDescriptor) GetFullname() string {
-	if m != nil {
-		return m.Fullname
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
 func (m *InterfaceAcceptingMessageDescriptor) GetFieldDescriptorNames() []string {
-	if m != nil {
-		return m.FieldDescriptorNames
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -571,43 +403,34 @@ type ConfigurationDescriptor struct {
 	Bech32AccountAddressPrefix string `protobuf:"bytes,1,opt,name=bech32_account_address_prefix,json=bech32AccountAddressPrefix,proto3" json:"bech32_account_address_prefix,omitempty"`
 }
 
-func (m *ConfigurationDescriptor) Reset()         { *m = ConfigurationDescriptor{} }
-func (m *ConfigurationDescriptor) String() string { return proto.CompactTextString(m) }
-func (*ConfigurationDescriptor) ProtoMessage()    {}
+func (m *ConfigurationDescriptor) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ConfigurationDescriptor) String() string { _ = "STUB: not implemented"; return "" }
+func (*ConfigurationDescriptor) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ConfigurationDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{9}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ConfigurationDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ConfigurationDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ConfigurationDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ConfigurationDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigurationDescriptor.Merge(m, src)
-}
-func (m *ConfigurationDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *ConfigurationDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_ConfigurationDescriptor.DiscardUnknown(m)
-}
+
+func (m *ConfigurationDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ConfigurationDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ConfigurationDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ConfigurationDescriptor proto.InternalMessageInfo
 
 func (m *ConfigurationDescriptor) GetBech32AccountAddressPrefix() string {
-	if m != nil {
-		return m.Bech32AccountAddressPrefix
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
@@ -617,80 +440,55 @@ type MsgDescriptor struct {
 	MsgTypeUrl string `protobuf:"bytes,1,opt,name=msg_type_url,json=msgTypeUrl,proto3" json:"msg_type_url,omitempty"`
 }
 
-func (m *MsgDescriptor) Reset()         { *m = MsgDescriptor{} }
-func (m *MsgDescriptor) String() string { return proto.CompactTextString(m) }
-func (*MsgDescriptor) ProtoMessage()    {}
-func (*MsgDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{10}
-}
-func (m *MsgDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgDescriptor) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgDescriptor) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgDescriptor) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgDescriptor) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgDescriptor) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgDescriptor.Merge(m, src)
-}
-func (m *MsgDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgDescriptor.DiscardUnknown(m)
-}
+
+func (m *MsgDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgDescriptor proto.InternalMessageInfo
 
-func (m *MsgDescriptor) GetMsgTypeUrl() string {
-	if m != nil {
-		return m.MsgTypeUrl
-	}
-	return ""
-}
+func (m *MsgDescriptor) GetMsgTypeUrl() string { _ = "STUB: not implemented"; return "" }
 
 // GetAuthnDescriptorRequest is the request used for the GetAuthnDescriptor RPC
 type GetAuthnDescriptorRequest struct {
 }
 
-func (m *GetAuthnDescriptorRequest) Reset()         { *m = GetAuthnDescriptorRequest{} }
-func (m *GetAuthnDescriptorRequest) String() string { return proto.CompactTextString(m) }
-func (*GetAuthnDescriptorRequest) ProtoMessage()    {}
+func (m *GetAuthnDescriptorRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetAuthnDescriptorRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetAuthnDescriptorRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetAuthnDescriptorRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{11}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetAuthnDescriptorRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetAuthnDescriptorRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAuthnDescriptorRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetAuthnDescriptorRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAuthnDescriptorRequest.Merge(m, src)
-}
-func (m *GetAuthnDescriptorRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAuthnDescriptorRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAuthnDescriptorRequest.DiscardUnknown(m)
-}
+
+func (m *GetAuthnDescriptorRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetAuthnDescriptorRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetAuthnDescriptorRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetAuthnDescriptorRequest proto.InternalMessageInfo
 
@@ -700,43 +498,37 @@ type GetAuthnDescriptorResponse struct {
 	Authn *AuthnDescriptor `protobuf:"bytes,1,opt,name=authn,proto3" json:"authn,omitempty"`
 }
 
-func (m *GetAuthnDescriptorResponse) Reset()         { *m = GetAuthnDescriptorResponse{} }
-func (m *GetAuthnDescriptorResponse) String() string { return proto.CompactTextString(m) }
-func (*GetAuthnDescriptorResponse) ProtoMessage()    {}
+func (m *GetAuthnDescriptorResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetAuthnDescriptorResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetAuthnDescriptorResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetAuthnDescriptorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{12}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetAuthnDescriptorResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetAuthnDescriptorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetAuthnDescriptorResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetAuthnDescriptorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetAuthnDescriptorResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetAuthnDescriptorResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetAuthnDescriptorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetAuthnDescriptorResponse.DiscardUnknown(m)
-}
+
+func (m *GetAuthnDescriptorResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetAuthnDescriptorResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetAuthnDescriptorResponse proto.InternalMessageInfo
 
 func (m *GetAuthnDescriptorResponse) GetAuthn() *AuthnDescriptor {
-	if m != nil {
-		return m.Authn
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -744,36 +536,29 @@ func (m *GetAuthnDescriptorResponse) GetAuthn() *AuthnDescriptor {
 type GetChainDescriptorRequest struct {
 }
 
-func (m *GetChainDescriptorRequest) Reset()         { *m = GetChainDescriptorRequest{} }
-func (m *GetChainDescriptorRequest) String() string { return proto.CompactTextString(m) }
-func (*GetChainDescriptorRequest) ProtoMessage()    {}
+func (m *GetChainDescriptorRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetChainDescriptorRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetChainDescriptorRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetChainDescriptorRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{13}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetChainDescriptorRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetChainDescriptorRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetChainDescriptorRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetChainDescriptorRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetChainDescriptorRequest.Merge(m, src)
-}
-func (m *GetChainDescriptorRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetChainDescriptorRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetChainDescriptorRequest.DiscardUnknown(m)
-}
+
+func (m *GetChainDescriptorRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetChainDescriptorRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetChainDescriptorRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetChainDescriptorRequest proto.InternalMessageInfo
 
@@ -783,43 +568,37 @@ type GetChainDescriptorResponse struct {
 	Chain *ChainDescriptor `protobuf:"bytes,1,opt,name=chain,proto3" json:"chain,omitempty"`
 }
 
-func (m *GetChainDescriptorResponse) Reset()         { *m = GetChainDescriptorResponse{} }
-func (m *GetChainDescriptorResponse) String() string { return proto.CompactTextString(m) }
-func (*GetChainDescriptorResponse) ProtoMessage()    {}
+func (m *GetChainDescriptorResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetChainDescriptorResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetChainDescriptorResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetChainDescriptorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{14}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetChainDescriptorResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetChainDescriptorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetChainDescriptorResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetChainDescriptorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetChainDescriptorResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetChainDescriptorResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetChainDescriptorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetChainDescriptorResponse.DiscardUnknown(m)
-}
+
+func (m *GetChainDescriptorResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetChainDescriptorResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetChainDescriptorResponse proto.InternalMessageInfo
 
 func (m *GetChainDescriptorResponse) GetChain() *ChainDescriptor {
-	if m != nil {
-		return m.Chain
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -827,36 +606,29 @@ func (m *GetChainDescriptorResponse) GetChain() *ChainDescriptor {
 type GetCodecDescriptorRequest struct {
 }
 
-func (m *GetCodecDescriptorRequest) Reset()         { *m = GetCodecDescriptorRequest{} }
-func (m *GetCodecDescriptorRequest) String() string { return proto.CompactTextString(m) }
-func (*GetCodecDescriptorRequest) ProtoMessage()    {}
+func (m *GetCodecDescriptorRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetCodecDescriptorRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetCodecDescriptorRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetCodecDescriptorRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{15}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetCodecDescriptorRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetCodecDescriptorRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetCodecDescriptorRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetCodecDescriptorRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetCodecDescriptorRequest.Merge(m, src)
-}
-func (m *GetCodecDescriptorRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetCodecDescriptorRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetCodecDescriptorRequest.DiscardUnknown(m)
-}
+
+func (m *GetCodecDescriptorRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetCodecDescriptorRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetCodecDescriptorRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetCodecDescriptorRequest proto.InternalMessageInfo
 
@@ -866,43 +638,37 @@ type GetCodecDescriptorResponse struct {
 	Codec *CodecDescriptor `protobuf:"bytes,1,opt,name=codec,proto3" json:"codec,omitempty"`
 }
 
-func (m *GetCodecDescriptorResponse) Reset()         { *m = GetCodecDescriptorResponse{} }
-func (m *GetCodecDescriptorResponse) String() string { return proto.CompactTextString(m) }
-func (*GetCodecDescriptorResponse) ProtoMessage()    {}
+func (m *GetCodecDescriptorResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetCodecDescriptorResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetCodecDescriptorResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetCodecDescriptorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{16}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetCodecDescriptorResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetCodecDescriptorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetCodecDescriptorResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetCodecDescriptorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetCodecDescriptorResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetCodecDescriptorResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetCodecDescriptorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetCodecDescriptorResponse.DiscardUnknown(m)
-}
+
+func (m *GetCodecDescriptorResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetCodecDescriptorResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetCodecDescriptorResponse proto.InternalMessageInfo
 
 func (m *GetCodecDescriptorResponse) GetCodec() *CodecDescriptor {
-	if m != nil {
-		return m.Codec
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -910,36 +676,32 @@ func (m *GetCodecDescriptorResponse) GetCodec() *CodecDescriptor {
 type GetConfigurationDescriptorRequest struct {
 }
 
-func (m *GetConfigurationDescriptorRequest) Reset()         { *m = GetConfigurationDescriptorRequest{} }
-func (m *GetConfigurationDescriptorRequest) String() string { return proto.CompactTextString(m) }
-func (*GetConfigurationDescriptorRequest) ProtoMessage()    {}
+func (m *GetConfigurationDescriptorRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetConfigurationDescriptorRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetConfigurationDescriptorRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetConfigurationDescriptorRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{17}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetConfigurationDescriptorRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetConfigurationDescriptorRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetConfigurationDescriptorRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetConfigurationDescriptorRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetConfigurationDescriptorRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetConfigurationDescriptorRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetConfigurationDescriptorRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetConfigurationDescriptorRequest.DiscardUnknown(m)
-}
+
+func (m *GetConfigurationDescriptorRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetConfigurationDescriptorRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetConfigurationDescriptorRequest proto.InternalMessageInfo
 
@@ -949,43 +711,40 @@ type GetConfigurationDescriptorResponse struct {
 	Config *ConfigurationDescriptor `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
 }
 
-func (m *GetConfigurationDescriptorResponse) Reset()         { *m = GetConfigurationDescriptorResponse{} }
-func (m *GetConfigurationDescriptorResponse) String() string { return proto.CompactTextString(m) }
-func (*GetConfigurationDescriptorResponse) ProtoMessage()    {}
+func (m *GetConfigurationDescriptorResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetConfigurationDescriptorResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetConfigurationDescriptorResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetConfigurationDescriptorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{18}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetConfigurationDescriptorResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetConfigurationDescriptorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetConfigurationDescriptorResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetConfigurationDescriptorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetConfigurationDescriptorResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetConfigurationDescriptorResponse) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *GetConfigurationDescriptorResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *GetConfigurationDescriptorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetConfigurationDescriptorResponse.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_GetConfigurationDescriptorResponse proto.InternalMessageInfo
 
 func (m *GetConfigurationDescriptorResponse) GetConfig() *ConfigurationDescriptor {
-	if m != nil {
-		return m.Config
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -993,36 +752,32 @@ func (m *GetConfigurationDescriptorResponse) GetConfig() *ConfigurationDescripto
 type GetQueryServicesDescriptorRequest struct {
 }
 
-func (m *GetQueryServicesDescriptorRequest) Reset()         { *m = GetQueryServicesDescriptorRequest{} }
-func (m *GetQueryServicesDescriptorRequest) String() string { return proto.CompactTextString(m) }
-func (*GetQueryServicesDescriptorRequest) ProtoMessage()    {}
+func (m *GetQueryServicesDescriptorRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetQueryServicesDescriptorRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetQueryServicesDescriptorRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetQueryServicesDescriptorRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{19}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetQueryServicesDescriptorRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetQueryServicesDescriptorRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetQueryServicesDescriptorRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetQueryServicesDescriptorRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetQueryServicesDescriptorRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetQueryServicesDescriptorRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetQueryServicesDescriptorRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetQueryServicesDescriptorRequest.DiscardUnknown(m)
-}
+
+func (m *GetQueryServicesDescriptorRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetQueryServicesDescriptorRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetQueryServicesDescriptorRequest proto.InternalMessageInfo
 
@@ -1032,43 +787,40 @@ type GetQueryServicesDescriptorResponse struct {
 	Queries *QueryServicesDescriptor `protobuf:"bytes,1,opt,name=queries,proto3" json:"queries,omitempty"`
 }
 
-func (m *GetQueryServicesDescriptorResponse) Reset()         { *m = GetQueryServicesDescriptorResponse{} }
-func (m *GetQueryServicesDescriptorResponse) String() string { return proto.CompactTextString(m) }
-func (*GetQueryServicesDescriptorResponse) ProtoMessage()    {}
+func (m *GetQueryServicesDescriptorResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetQueryServicesDescriptorResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetQueryServicesDescriptorResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetQueryServicesDescriptorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{20}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetQueryServicesDescriptorResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetQueryServicesDescriptorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetQueryServicesDescriptorResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetQueryServicesDescriptorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetQueryServicesDescriptorResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *GetQueryServicesDescriptorResponse) XXX_Size() int {
-	return m.Size()
-}
+
+func (m *GetQueryServicesDescriptorResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
 func (m *GetQueryServicesDescriptorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetQueryServicesDescriptorResponse.DiscardUnknown(m)
+	_ = "STUB: not implemented"
+	return
 }
 
 var xxx_messageInfo_GetQueryServicesDescriptorResponse proto.InternalMessageInfo
 
 func (m *GetQueryServicesDescriptorResponse) GetQueries() *QueryServicesDescriptor {
-	if m != nil {
-		return m.Queries
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -1076,36 +828,29 @@ func (m *GetQueryServicesDescriptorResponse) GetQueries() *QueryServicesDescript
 type GetTxDescriptorRequest struct {
 }
 
-func (m *GetTxDescriptorRequest) Reset()         { *m = GetTxDescriptorRequest{} }
-func (m *GetTxDescriptorRequest) String() string { return proto.CompactTextString(m) }
-func (*GetTxDescriptorRequest) ProtoMessage()    {}
+func (m *GetTxDescriptorRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetTxDescriptorRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetTxDescriptorRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetTxDescriptorRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{21}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetTxDescriptorRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetTxDescriptorRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetTxDescriptorRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetTxDescriptorRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetTxDescriptorRequest.Merge(m, src)
-}
-func (m *GetTxDescriptorRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetTxDescriptorRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetTxDescriptorRequest.DiscardUnknown(m)
-}
+
+func (m *GetTxDescriptorRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetTxDescriptorRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetTxDescriptorRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetTxDescriptorRequest proto.InternalMessageInfo
 
@@ -1116,45 +861,33 @@ type GetTxDescriptorResponse struct {
 	Tx *TxDescriptor `protobuf:"bytes,1,opt,name=tx,proto3" json:"tx,omitempty"`
 }
 
-func (m *GetTxDescriptorResponse) Reset()         { *m = GetTxDescriptorResponse{} }
-func (m *GetTxDescriptorResponse) String() string { return proto.CompactTextString(m) }
-func (*GetTxDescriptorResponse) ProtoMessage()    {}
+func (m *GetTxDescriptorResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *GetTxDescriptorResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*GetTxDescriptorResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*GetTxDescriptorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{22}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *GetTxDescriptorResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *GetTxDescriptorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GetTxDescriptorResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GetTxDescriptorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GetTxDescriptorResponse.Merge(m, src)
-}
-func (m *GetTxDescriptorResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *GetTxDescriptorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_GetTxDescriptorResponse.DiscardUnknown(m)
-}
+
+func (m *GetTxDescriptorResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GetTxDescriptorResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GetTxDescriptorResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GetTxDescriptorResponse proto.InternalMessageInfo
 
-func (m *GetTxDescriptorResponse) GetTx() *TxDescriptor {
-	if m != nil {
-		return m.Tx
-	}
-	return nil
-}
+func (m *GetTxDescriptorResponse) GetTx() *TxDescriptor { _ = "STUB: not implemented"; return nil }
 
 // QueryServicesDescriptor contains the list of cosmos-sdk queriable services
 type QueryServicesDescriptor struct {
@@ -1162,43 +895,34 @@ type QueryServicesDescriptor struct {
 	QueryServices []*QueryServiceDescriptor `protobuf:"bytes,1,rep,name=query_services,json=queryServices,proto3" json:"query_services,omitempty"`
 }
 
-func (m *QueryServicesDescriptor) Reset()         { *m = QueryServicesDescriptor{} }
-func (m *QueryServicesDescriptor) String() string { return proto.CompactTextString(m) }
-func (*QueryServicesDescriptor) ProtoMessage()    {}
+func (m *QueryServicesDescriptor) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryServicesDescriptor) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryServicesDescriptor) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryServicesDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{23}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryServicesDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryServicesDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryServicesDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryServicesDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryServicesDescriptor.Merge(m, src)
-}
-func (m *QueryServicesDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryServicesDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryServicesDescriptor.DiscardUnknown(m)
-}
+
+func (m *QueryServicesDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryServicesDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryServicesDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryServicesDescriptor proto.InternalMessageInfo
 
 func (m *QueryServicesDescriptor) GetQueryServices() []*QueryServiceDescriptor {
-	if m != nil {
-		return m.QueryServices
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -1212,57 +936,38 @@ type QueryServiceDescriptor struct {
 	Methods []*QueryMethodDescriptor `protobuf:"bytes,3,rep,name=methods,proto3" json:"methods,omitempty"`
 }
 
-func (m *QueryServiceDescriptor) Reset()         { *m = QueryServiceDescriptor{} }
-func (m *QueryServiceDescriptor) String() string { return proto.CompactTextString(m) }
-func (*QueryServiceDescriptor) ProtoMessage()    {}
+func (m *QueryServiceDescriptor) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryServiceDescriptor) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryServiceDescriptor) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryServiceDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{24}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryServiceDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryServiceDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryServiceDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryServiceDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryServiceDescriptor.Merge(m, src)
-}
-func (m *QueryServiceDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryServiceDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryServiceDescriptor.DiscardUnknown(m)
-}
+
+func (m *QueryServiceDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryServiceDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryServiceDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryServiceDescriptor proto.InternalMessageInfo
 
-func (m *QueryServiceDescriptor) GetFullname() string {
-	if m != nil {
-		return m.Fullname
-	}
-	return ""
-}
+func (m *QueryServiceDescriptor) GetFullname() string { _ = "STUB: not implemented"; return "" }
 
-func (m *QueryServiceDescriptor) GetIsModule() bool {
-	if m != nil {
-		return m.IsModule
-	}
-	return false
-}
+func (m *QueryServiceDescriptor) GetIsModule() bool { _ = "STUB: not implemented"; return false }
 
 func (m *QueryServiceDescriptor) GetMethods() []*QueryMethodDescriptor {
-	if m != nil {
-		return m.Methods
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -1277,52 +982,35 @@ type QueryMethodDescriptor struct {
 	FullQueryPath string `protobuf:"bytes,2,opt,name=full_query_path,json=fullQueryPath,proto3" json:"full_query_path,omitempty"`
 }
 
-func (m *QueryMethodDescriptor) Reset()         { *m = QueryMethodDescriptor{} }
-func (m *QueryMethodDescriptor) String() string { return proto.CompactTextString(m) }
-func (*QueryMethodDescriptor) ProtoMessage()    {}
+func (m *QueryMethodDescriptor) Reset()         { _ = "STUB: not implemented"; return }
+func (m *QueryMethodDescriptor) String() string { _ = "STUB: not implemented"; return "" }
+func (*QueryMethodDescriptor) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*QueryMethodDescriptor) Descriptor() ([]byte, []int) {
-	return fileDescriptor_15c91f0b8d6bf3d0, []int{25}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *QueryMethodDescriptor) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *QueryMethodDescriptor) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_QueryMethodDescriptor.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *QueryMethodDescriptor) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryMethodDescriptor.Merge(m, src)
-}
-func (m *QueryMethodDescriptor) XXX_Size() int {
-	return m.Size()
-}
-func (m *QueryMethodDescriptor) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryMethodDescriptor.DiscardUnknown(m)
-}
+
+func (m *QueryMethodDescriptor) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *QueryMethodDescriptor) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *QueryMethodDescriptor) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_QueryMethodDescriptor proto.InternalMessageInfo
 
-func (m *QueryMethodDescriptor) GetName() string {
-	if m != nil {
-		return m.Name
-	}
-	return ""
-}
+func (m *QueryMethodDescriptor) GetName() string { _ = "STUB: not implemented"; return "" }
 
-func (m *QueryMethodDescriptor) GetFullQueryPath() string {
-	if m != nil {
-		return m.FullQueryPath
-	}
-	return ""
-}
+func (m *QueryMethodDescriptor) GetFullQueryPath() string { _ = "STUB: not implemented"; return "" }
 
 func init() {
 	proto.RegisterType((*AppDescriptor)(nil), "cosmos.base.reflection.v2alpha1.AppDescriptor")
@@ -1467,61 +1155,38 @@ type reflectionServiceClient struct {
 }
 
 func NewReflectionServiceClient(cc grpc1.ClientConn) ReflectionServiceClient {
-	return &reflectionServiceClient{cc}
+	_ = "STUB: not implemented"
+	return *new(ReflectionServiceClient)
 }
 
 func (c *reflectionServiceClient) GetAuthnDescriptor(ctx context.Context, in *GetAuthnDescriptorRequest, opts ...grpc.CallOption) (*GetAuthnDescriptorResponse, error) {
-	out := new(GetAuthnDescriptorResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.reflection.v2alpha1.ReflectionService/GetAuthnDescriptor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *reflectionServiceClient) GetChainDescriptor(ctx context.Context, in *GetChainDescriptorRequest, opts ...grpc.CallOption) (*GetChainDescriptorResponse, error) {
-	out := new(GetChainDescriptorResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.reflection.v2alpha1.ReflectionService/GetChainDescriptor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *reflectionServiceClient) GetCodecDescriptor(ctx context.Context, in *GetCodecDescriptorRequest, opts ...grpc.CallOption) (*GetCodecDescriptorResponse, error) {
-	out := new(GetCodecDescriptorResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.reflection.v2alpha1.ReflectionService/GetCodecDescriptor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *reflectionServiceClient) GetConfigurationDescriptor(ctx context.Context, in *GetConfigurationDescriptorRequest, opts ...grpc.CallOption) (*GetConfigurationDescriptorResponse, error) {
-	out := new(GetConfigurationDescriptorResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.reflection.v2alpha1.ReflectionService/GetConfigurationDescriptor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *reflectionServiceClient) GetQueryServicesDescriptor(ctx context.Context, in *GetQueryServicesDescriptorRequest, opts ...grpc.CallOption) (*GetQueryServicesDescriptorResponse, error) {
-	out := new(GetQueryServicesDescriptorResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.reflection.v2alpha1.ReflectionService/GetQueryServicesDescriptor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *reflectionServiceClient) GetTxDescriptor(ctx context.Context, in *GetTxDescriptorRequest, opts ...grpc.CallOption) (*GetTxDescriptorResponse, error) {
-	out := new(GetTxDescriptorResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.reflection.v2alpha1.ReflectionService/GetTxDescriptor", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ReflectionServiceServer is the server API for ReflectionService service.
@@ -1547,134 +1212,68 @@ type UnimplementedReflectionServiceServer struct {
 }
 
 func (*UnimplementedReflectionServiceServer) GetAuthnDescriptor(ctx context.Context, req *GetAuthnDescriptorRequest) (*GetAuthnDescriptorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetAuthnDescriptor not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedReflectionServiceServer) GetChainDescriptor(ctx context.Context, req *GetChainDescriptorRequest) (*GetChainDescriptorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetChainDescriptor not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedReflectionServiceServer) GetCodecDescriptor(ctx context.Context, req *GetCodecDescriptorRequest) (*GetCodecDescriptorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetCodecDescriptor not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedReflectionServiceServer) GetConfigurationDescriptor(ctx context.Context, req *GetConfigurationDescriptorRequest) (*GetConfigurationDescriptorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetConfigurationDescriptor not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedReflectionServiceServer) GetQueryServicesDescriptor(ctx context.Context, req *GetQueryServicesDescriptorRequest) (*GetQueryServicesDescriptorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetQueryServicesDescriptor not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedReflectionServiceServer) GetTxDescriptor(ctx context.Context, req *GetTxDescriptorRequest) (*GetTxDescriptorResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetTxDescriptor not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func RegisterReflectionServiceServer(s grpc1.Server, srv ReflectionServiceServer) {
-	s.RegisterService(&_ReflectionService_serviceDesc, srv)
+	_ = "STUB: not implemented"
+	return
 }
 
 func _ReflectionService_GetAuthnDescriptor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetAuthnDescriptorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReflectionServiceServer).GetAuthnDescriptor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.reflection.v2alpha1.ReflectionService/GetAuthnDescriptor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReflectionServiceServer).GetAuthnDescriptor(ctx, req.(*GetAuthnDescriptorRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _ReflectionService_GetChainDescriptor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetChainDescriptorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReflectionServiceServer).GetChainDescriptor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.reflection.v2alpha1.ReflectionService/GetChainDescriptor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReflectionServiceServer).GetChainDescriptor(ctx, req.(*GetChainDescriptorRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _ReflectionService_GetCodecDescriptor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetCodecDescriptorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReflectionServiceServer).GetCodecDescriptor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.reflection.v2alpha1.ReflectionService/GetCodecDescriptor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReflectionServiceServer).GetCodecDescriptor(ctx, req.(*GetCodecDescriptorRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _ReflectionService_GetConfigurationDescriptor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetConfigurationDescriptorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReflectionServiceServer).GetConfigurationDescriptor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.reflection.v2alpha1.ReflectionService/GetConfigurationDescriptor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReflectionServiceServer).GetConfigurationDescriptor(ctx, req.(*GetConfigurationDescriptorRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _ReflectionService_GetQueryServicesDescriptor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetQueryServicesDescriptorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReflectionServiceServer).GetQueryServicesDescriptor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.reflection.v2alpha1.ReflectionService/GetQueryServicesDescriptor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReflectionServiceServer).GetQueryServicesDescriptor(ctx, req.(*GetQueryServicesDescriptorRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _ReflectionService_GetTxDescriptor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetTxDescriptorRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReflectionServiceServer).GetTxDescriptor(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.reflection.v2alpha1.ReflectionService/GetTxDescriptor",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReflectionServiceServer).GetTxDescriptor(ctx, req.(*GetTxDescriptorRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _ReflectionService_serviceDesc = grpc.ServiceDesc{
@@ -1711,3900 +1310,560 @@ var _ReflectionService_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *AppDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *AppDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *AppDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Tx != nil {
-		{
-			size, err := m.Tx.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.QueryServices != nil {
-		{
-			size, err := m.QueryServices.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x2a
-	}
-	if m.Configuration != nil {
-		{
-			size, err := m.Configuration.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.Codec != nil {
-		{
-			size, err := m.Codec.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Chain != nil {
-		{
-			size, err := m.Chain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
-	if m.Authn != nil {
-		{
-			size, err := m.Authn.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *TxDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *TxDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *TxDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Msgs) > 0 {
-		for iNdEx := len(m.Msgs) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Msgs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintReflection(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Fullname) > 0 {
-		i -= len(m.Fullname)
-		copy(dAtA[i:], m.Fullname)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Fullname)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *AuthnDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *AuthnDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *AuthnDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.SignModes) > 0 {
-		for iNdEx := len(m.SignModes) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.SignModes[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintReflection(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SigningModeDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *SigningModeDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *SigningModeDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.AuthnInfoProviderMethodFullname) > 0 {
-		i -= len(m.AuthnInfoProviderMethodFullname)
-		copy(dAtA[i:], m.AuthnInfoProviderMethodFullname)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.AuthnInfoProviderMethodFullname)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.Number != 0 {
-		i = encodeVarintReflection(dAtA, i, uint64(m.Number))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ChainDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ChainDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ChainDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Id) > 0 {
-		i -= len(m.Id)
-		copy(dAtA[i:], m.Id)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Id)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CodecDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CodecDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CodecDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Interfaces) > 0 {
-		for iNdEx := len(m.Interfaces) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Interfaces[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintReflection(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *InterfaceDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *InterfaceDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *InterfaceDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.InterfaceImplementers) > 0 {
-		for iNdEx := len(m.InterfaceImplementers) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.InterfaceImplementers[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintReflection(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.InterfaceAcceptingMessages) > 0 {
-		for iNdEx := len(m.InterfaceAcceptingMessages) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.InterfaceAcceptingMessages[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintReflection(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Fullname) > 0 {
-		i -= len(m.Fullname)
-		copy(dAtA[i:], m.Fullname)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Fullname)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *InterfaceImplementerDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *InterfaceImplementerDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *InterfaceImplementerDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.TypeUrl) > 0 {
-		i -= len(m.TypeUrl)
-		copy(dAtA[i:], m.TypeUrl)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.TypeUrl)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Fullname) > 0 {
-		i -= len(m.Fullname)
-		copy(dAtA[i:], m.Fullname)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Fullname)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *InterfaceAcceptingMessageDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *InterfaceAcceptingMessageDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *InterfaceAcceptingMessageDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.FieldDescriptorNames) > 0 {
-		for iNdEx := len(m.FieldDescriptorNames) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.FieldDescriptorNames[iNdEx])
-			copy(dAtA[i:], m.FieldDescriptorNames[iNdEx])
-			i = encodeVarintReflection(dAtA, i, uint64(len(m.FieldDescriptorNames[iNdEx])))
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Fullname) > 0 {
-		i -= len(m.Fullname)
-		copy(dAtA[i:], m.Fullname)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Fullname)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ConfigurationDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ConfigurationDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ConfigurationDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Bech32AccountAddressPrefix) > 0 {
-		i -= len(m.Bech32AccountAddressPrefix)
-		copy(dAtA[i:], m.Bech32AccountAddressPrefix)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Bech32AccountAddressPrefix)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.MsgTypeUrl) > 0 {
-		i -= len(m.MsgTypeUrl)
-		copy(dAtA[i:], m.MsgTypeUrl)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.MsgTypeUrl)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetAuthnDescriptorRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetAuthnDescriptorRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetAuthnDescriptorRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetAuthnDescriptorResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetAuthnDescriptorResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetAuthnDescriptorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Authn != nil {
-		{
-			size, err := m.Authn.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetChainDescriptorRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetChainDescriptorRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetChainDescriptorRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetChainDescriptorResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetChainDescriptorResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetChainDescriptorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Chain != nil {
-		{
-			size, err := m.Chain.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetCodecDescriptorRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetCodecDescriptorRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetCodecDescriptorRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetCodecDescriptorResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetCodecDescriptorResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetCodecDescriptorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Codec != nil {
-		{
-			size, err := m.Codec.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetConfigurationDescriptorRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetConfigurationDescriptorRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetConfigurationDescriptorRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetConfigurationDescriptorResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetConfigurationDescriptorResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetConfigurationDescriptorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Config != nil {
-		{
-			size, err := m.Config.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetQueryServicesDescriptorRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetQueryServicesDescriptorRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetQueryServicesDescriptorRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetQueryServicesDescriptorResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetQueryServicesDescriptorResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetQueryServicesDescriptorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Queries != nil {
-		{
-			size, err := m.Queries.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetTxDescriptorRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetTxDescriptorRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetTxDescriptorRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetTxDescriptorResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GetTxDescriptorResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GetTxDescriptorResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Tx != nil {
-		{
-			size, err := m.Tx.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintReflection(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryServicesDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryServicesDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryServicesDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.QueryServices) > 0 {
-		for iNdEx := len(m.QueryServices) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.QueryServices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintReflection(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryServiceDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryServiceDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryServiceDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Methods) > 0 {
-		for iNdEx := len(m.Methods) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Methods[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintReflection(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if m.IsModule {
-		i--
-		if m.IsModule {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Fullname) > 0 {
-		i -= len(m.Fullname)
-		copy(dAtA[i:], m.Fullname)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Fullname)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryMethodDescriptor) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *QueryMethodDescriptor) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *QueryMethodDescriptor) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.FullQueryPath) > 0 {
-		i -= len(m.FullQueryPath)
-		copy(dAtA[i:], m.FullQueryPath)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.FullQueryPath)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Name) > 0 {
-		i -= len(m.Name)
-		copy(dAtA[i:], m.Name)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.Name)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintReflection(dAtA []byte, offset int, v uint64) int {
-	offset -= sovReflection(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *AppDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Authn != nil {
-		l = m.Authn.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if m.Chain != nil {
-		l = m.Chain.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if m.Codec != nil {
-		l = m.Codec.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if m.Configuration != nil {
-		l = m.Configuration.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if m.QueryServices != nil {
-		l = m.QueryServices.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if m.Tx != nil {
-		l = m.Tx.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *TxDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Fullname)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if len(m.Msgs) > 0 {
-		for _, e := range m.Msgs {
-			l = e.Size()
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *AppDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *AuthnDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.SignModes) > 0 {
-		for _, e := range m.SignModes {
-			l = e.Size()
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *TxDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *SigningModeDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if m.Number != 0 {
-		n += 1 + sovReflection(uint64(m.Number))
-	}
-	l = len(m.AuthnInfoProviderMethodFullname)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *AuthnDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ChainDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Id)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *SigningModeDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *CodecDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Interfaces) > 0 {
-		for _, e := range m.Interfaces {
-			l = e.Size()
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ChainDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *InterfaceDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Fullname)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if len(m.InterfaceAcceptingMessages) > 0 {
-		for _, e := range m.InterfaceAcceptingMessages {
-			l = e.Size()
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	if len(m.InterfaceImplementers) > 0 {
-		for _, e := range m.InterfaceImplementers {
-			l = e.Size()
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *CodecDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *InterfaceImplementerDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Fullname)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	l = len(m.TypeUrl)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *InterfaceDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *InterfaceAcceptingMessageDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Fullname)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if len(m.FieldDescriptorNames) > 0 {
-		for _, s := range m.FieldDescriptorNames {
-			l = len(s)
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *InterfaceImplementerDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ConfigurationDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Bech32AccountAddressPrefix)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *InterfaceAcceptingMessageDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.MsgTypeUrl)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *ConfigurationDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetAuthnDescriptorRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetAuthnDescriptorResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Authn != nil {
-		l = m.Authn.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *GetAuthnDescriptorRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetChainDescriptorRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *GetAuthnDescriptorResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetChainDescriptorResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Chain != nil {
-		l = m.Chain.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *GetChainDescriptorRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetCodecDescriptorRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *GetChainDescriptorResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetCodecDescriptorResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Codec != nil {
-		l = m.Codec.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *GetCodecDescriptorRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetConfigurationDescriptorRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *GetCodecDescriptorResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetConfigurationDescriptorResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Config != nil {
-		l = m.Config.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *GetConfigurationDescriptorRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetQueryServicesDescriptorRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *GetConfigurationDescriptorResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetQueryServicesDescriptorResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Queries != nil {
-		l = m.Queries.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *GetQueryServicesDescriptorRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetTxDescriptorRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *GetQueryServicesDescriptorResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GetTxDescriptorResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Tx != nil {
-		l = m.Tx.Size()
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *GetTxDescriptorRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryServicesDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.QueryServices) > 0 {
-		for _, e := range m.QueryServices {
-			l = e.Size()
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *GetTxDescriptorResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryServiceDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Fullname)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	if m.IsModule {
-		n += 2
-	}
-	if len(m.Methods) > 0 {
-		for _, e := range m.Methods {
-			l = e.Size()
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *QueryServicesDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *QueryMethodDescriptor) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Name)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	l = len(m.FullQueryPath)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *QueryServiceDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovReflection(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozReflection(x uint64) (n int) {
-	return sovReflection(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *AppDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AppDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AppDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Authn", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Authn == nil {
-				m.Authn = &AuthnDescriptor{}
-			}
-			if err := m.Authn.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Chain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Chain == nil {
-				m.Chain = &ChainDescriptor{}
-			}
-			if err := m.Chain.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Codec", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Codec == nil {
-				m.Codec = &CodecDescriptor{}
-			}
-			if err := m.Codec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Configuration", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Configuration == nil {
-				m.Configuration = &ConfigurationDescriptor{}
-			}
-			if err := m.Configuration.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field QueryServices", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.QueryServices == nil {
-				m.QueryServices = &QueryServicesDescriptor{}
-			}
-			if err := m.QueryServices.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Tx", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Tx == nil {
-				m.Tx = &TxDescriptor{}
-			}
-			if err := m.Tx.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *QueryMethodDescriptor) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *TxDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: TxDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: TxDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Fullname", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Fullname = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Msgs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Msgs = append(m.Msgs, &MsgDescriptor{})
-			if err := m.Msgs[len(m.Msgs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovReflection(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *AuthnDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: AuthnDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AuthnDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SignModes", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.SignModes = append(m.SignModes, &SigningModeDescriptor{})
-			if err := m.SignModes[len(m.SignModes)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sozReflection(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *SigningModeDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: SigningModeDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: SigningModeDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Number", wireType)
-			}
-			m.Number = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Number |= int32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AuthnInfoProviderMethodFullname", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AuthnInfoProviderMethodFullname = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *AppDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ChainDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ChainDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ChainDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Id = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *TxDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CodecDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CodecDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CodecDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Interfaces", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Interfaces = append(m.Interfaces, &InterfaceDescriptor{})
-			if err := m.Interfaces[len(m.Interfaces)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *AuthnDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *InterfaceDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InterfaceDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InterfaceDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Fullname", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Fullname = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceAcceptingMessages", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.InterfaceAcceptingMessages = append(m.InterfaceAcceptingMessages, &InterfaceAcceptingMessageDescriptor{})
-			if err := m.InterfaceAcceptingMessages[len(m.InterfaceAcceptingMessages)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceImplementers", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.InterfaceImplementers = append(m.InterfaceImplementers, &InterfaceImplementerDescriptor{})
-			if err := m.InterfaceImplementers[len(m.InterfaceImplementers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *SigningModeDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *ChainDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *CodecDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *InterfaceDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *InterfaceImplementerDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InterfaceImplementerDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InterfaceImplementerDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Fullname", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Fullname = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TypeUrl", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TypeUrl = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *InterfaceAcceptingMessageDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: InterfaceAcceptingMessageDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: InterfaceAcceptingMessageDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Fullname", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Fullname = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FieldDescriptorNames", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FieldDescriptorNames = append(m.FieldDescriptorNames, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *ConfigurationDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ConfigurationDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ConfigurationDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Bech32AccountAddressPrefix", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Bech32AccountAddressPrefix = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MsgTypeUrl", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MsgTypeUrl = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GetAuthnDescriptorRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAuthnDescriptorRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAuthnDescriptorRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetAuthnDescriptorResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetAuthnDescriptorResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetAuthnDescriptorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Authn", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Authn == nil {
-				m.Authn = &AuthnDescriptor{}
-			}
-			if err := m.Authn.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetChainDescriptorRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetChainDescriptorRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetChainDescriptorRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetChainDescriptorResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetChainDescriptorResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetChainDescriptorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Chain", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Chain == nil {
-				m.Chain = &ChainDescriptor{}
-			}
-			if err := m.Chain.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetCodecDescriptorRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetCodecDescriptorRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetCodecDescriptorRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetCodecDescriptorResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetCodecDescriptorResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetCodecDescriptorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Codec", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Codec == nil {
-				m.Codec = &CodecDescriptor{}
-			}
-			if err := m.Codec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetConfigurationDescriptorRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetConfigurationDescriptorRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetConfigurationDescriptorRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetConfigurationDescriptorResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetConfigurationDescriptorResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetConfigurationDescriptorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Config == nil {
-				m.Config = &ConfigurationDescriptor{}
-			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetQueryServicesDescriptorRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetQueryServicesDescriptorRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetQueryServicesDescriptorRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetQueryServicesDescriptorResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetQueryServicesDescriptorResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetQueryServicesDescriptorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Queries", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Queries == nil {
-				m.Queries = &QueryServicesDescriptor{}
-			}
-			if err := m.Queries.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetTxDescriptorRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetTxDescriptorRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetTxDescriptorRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *GetTxDescriptorResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GetTxDescriptorResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GetTxDescriptorResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Tx", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Tx == nil {
-				m.Tx = &TxDescriptor{}
-			}
-			if err := m.Tx.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryServicesDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryServicesDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryServicesDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field QueryServices", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.QueryServices = append(m.QueryServices, &QueryServiceDescriptor{})
-			if err := m.QueryServices[len(m.QueryServices)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *QueryServiceDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryServiceDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryServiceDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Fullname", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Fullname = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field IsModule", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.IsModule = bool(v != 0)
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Methods", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Methods = append(m.Methods, &QueryMethodDescriptor{})
-			if err := m.Methods[len(m.Methods)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *QueryMethodDescriptor) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: QueryMethodDescriptor: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryMethodDescriptor: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Name = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FullQueryPath", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.FullQueryPath = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipReflection(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthReflection
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupReflection
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthReflection
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *QueryMethodDescriptor) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipReflection(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthReflection        = fmt.Errorf("proto: negative length found during unmarshaling")

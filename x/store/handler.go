@@ -5,7 +5,6 @@ import (
 )
 
 func GetCachedContext(ctx sdk.Context) (sdk.Context, sdk.CacheMultiStore) {
-	ms := ctx.MultiStore()
-	msCache := ms.CacheMultiStore()
-	return ctx.WithMultiStore(msCache), msCache
+	_ = "STUB: not implemented"
+	return *new(sdk.Context), *new(sdk.CacheMultiStore)
 }

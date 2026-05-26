@@ -7,10 +7,11 @@ import (
 
 // GetParams get all parameters as types.Params
 func (k Keeper) GetParams(_ sdk.Context) types.Params {
-	return types.NewParams()
+	_ = "STUB: not implemented"
+	return *
+
+	// SetParams set the params
+	new(types.Params)
 }
 
-// SetParams set the params
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramstore.SetParamSet(ctx, &params)
-}
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) { _ = "STUB: not implemented"; return }

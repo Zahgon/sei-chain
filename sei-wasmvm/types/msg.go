@@ -2,7 +2,6 @@ package types
 
 import (
 	"encoding/json"
-	"fmt"
 )
 
 //------- Results / Msgs -------------
@@ -35,25 +34,12 @@ type Response struct {
 type Events []Event
 
 // MarshalJSON ensures that we get [] for empty arrays
-func (e Events) MarshalJSON() ([]byte, error) {
-	if len(e) == 0 {
-		return []byte("[]"), nil
-	}
-	var raw []Event = e
-	return json.Marshal(raw)
-}
+func (e Events) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON ensures that we get [] for empty arrays
 func (e *Events) UnmarshalJSON(data []byte) error {
+	_ = "STUB: not implemented"
 	// make sure we deserialize [] back to null
-	if isEmptyOrNull(data) {
-		return nil
-	}
-	var raw []Event
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-	*e = raw
 	return nil
 }
 
@@ -66,25 +52,12 @@ type Event struct {
 type EventAttributes []EventAttribute
 
 // MarshalJSON ensures that we get [] for empty arrays
-func (a EventAttributes) MarshalJSON() ([]byte, error) {
-	if len(a) == 0 {
-		return []byte("[]"), nil
-	}
-	var raw []EventAttribute = a
-	return json.Marshal(raw)
-}
+func (a EventAttributes) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalJSON ensures that we get [] for empty arrays
 func (a *EventAttributes) UnmarshalJSON(data []byte) error {
+	_ = "STUB: not implemented"
 	// make sure we deserialize [] back to null
-	if isEmptyOrNull(data) {
-		return nil
-	}
-	var raw []EventAttribute
-	if err := json.Unmarshal(data, &raw); err != nil {
-		return err
-	}
-	*a = raw
 	return nil
 }
 
@@ -183,28 +156,11 @@ var toVoteOption = map[string]voteOption{
 	"no_with_veto": NoWithVeto,
 }
 
-func (v voteOption) String() string {
-	return fromVoteOption[v]
-}
+func (v voteOption) String() string { _ = "STUB: not implemented"; return "" }
 
-func (v voteOption) MarshalJSON() ([]byte, error) {
-	return json.Marshal(v.String())
-}
+func (v voteOption) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (s *voteOption) UnmarshalJSON(b []byte) error {
-	var j string
-	err := json.Unmarshal(b, &j)
-	if err != nil {
-		return err
-	}
-
-	voteOption, ok := toVoteOption[j]
-	if !ok {
-		return fmt.Errorf("invalid vote option '%v'", j)
-	}
-	*s = voteOption
-	return nil
-}
+func (s *voteOption) UnmarshalJSON(b []byte) error { _ = "STUB: not implemented"; return nil }
 
 type TransferMsg struct {
 	ChannelID string     `json:"channel_id"`

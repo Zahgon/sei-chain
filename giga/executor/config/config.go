@@ -2,7 +2,6 @@ package config
 
 import (
 	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
-	"github.com/spf13/cast"
 )
 
 // Config defines configuration for the Giga Executor
@@ -24,19 +23,9 @@ const (
 )
 
 func ReadConfig(opts servertypes.AppOptions) (Config, error) {
-	cfg := DefaultConfig // copy
-	var err error
-	if v := opts.Get(FlagEnabled); v != nil {
-		if cfg.Enabled, err = cast.ToBoolE(v); err != nil {
-			return cfg, err
-		}
-	}
-	if v := opts.Get(FlagOCCEnabled); v != nil {
-		if cfg.OCCEnabled, err = cast.ToBoolE(v); err != nil {
-			return cfg, err
-		}
-	}
-	return cfg, nil
+	_ = "STUB: not implemented"
+	// copy
+	return *new(Config), nil
 }
 
 // ConfigTemplate defines the TOML configuration template for Giga Executor

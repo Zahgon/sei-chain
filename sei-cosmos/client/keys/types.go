@@ -13,13 +13,8 @@ type AddNewKey struct {
 
 // NewAddNewKey constructs a new AddNewKey request structure.
 func NewAddNewKey(name, password, mnemonic string, account, index int) AddNewKey {
-	return AddNewKey{
-		Name:     name,
-		Password: password,
-		Mnemonic: mnemonic,
-		Account:  account,
-		Index:    index,
-	}
+	_ = "STUB: not implemented"
+	return *new(AddNewKey)
 }
 
 // RecoverKeyBody recovers a key
@@ -32,7 +27,8 @@ type RecoverKey struct {
 
 // NewRecoverKey constructs a new RecoverKey request structure.
 func NewRecoverKey(password, mnemonic string, account, index int) RecoverKey {
-	return RecoverKey{Password: password, Mnemonic: mnemonic, Account: account, Index: index}
+	_ = "STUB: not implemented"
+	return *new(RecoverKey)
 }
 
 // UpdateKeyReq requests updating a key
@@ -43,7 +39,8 @@ type UpdateKeyReq struct {
 
 // NewUpdateKeyReq constructs a new UpdateKeyReq structure.
 func NewUpdateKeyReq(old, new string) UpdateKeyReq {
-	return UpdateKeyReq{OldPassword: old, NewPassword: new}
+	_ = "STUB: not implemented"
+	return *new(UpdateKeyReq)
 }
 
 // DeleteKeyReq requests deleting a key
@@ -52,4 +49,7 @@ type DeleteKeyReq struct {
 }
 
 // NewDeleteKeyReq constructs a new DeleteKeyReq structure.
-func NewDeleteKeyReq(password string) DeleteKeyReq { return DeleteKeyReq{Password: password} }
+func NewDeleteKeyReq(password string) DeleteKeyReq {
+	_ = "STUB: not implemented"
+	return *new(DeleteKeyReq)
+}

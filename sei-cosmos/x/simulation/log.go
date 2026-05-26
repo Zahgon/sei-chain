@@ -1,11 +1,7 @@
 package simulation
 
 import (
-	"fmt"
 	"os"
-	"path"
-	"path/filepath"
-	"time"
 )
 
 // log writter
@@ -15,13 +11,7 @@ type LogWriter interface {
 }
 
 // LogWriter - return a dummy or standard log writer given the testingmode
-func NewLogWriter(testingmode bool) LogWriter {
-	if !testingmode {
-		return &DummyLogWriter{}
-	}
-
-	return &StandardLogWriter{}
-}
+func NewLogWriter(testingmode bool) LogWriter { _ = "STUB: not implemented"; return *new(LogWriter) }
 
 // log writter
 type StandardLogWriter struct {
@@ -29,51 +19,22 @@ type StandardLogWriter struct {
 }
 
 // add an entry to the log writter
-func (lw *StandardLogWriter) AddEntry(opEntry OperationEntry) {
-	lw.OpEntries = append(lw.OpEntries, opEntry)
-}
+func (lw *StandardLogWriter) AddEntry(opEntry OperationEntry) { _ = "STUB: not implemented"; return }
 
 // PrintLogs - print the logs to a simulation file
-func (lw *StandardLogWriter) PrintLogs() {
-	f := createLogFile()
-	defer func() { _ = f.Close() }()
+func (lw *StandardLogWriter) PrintLogs() { _ = "STUB: not implemented"; return }
 
-	for i := 0; i < len(lw.OpEntries); i++ {
-		writeEntry := fmt.Sprintf("%s\n", (lw.OpEntries[i]).MustMarshal())
-		_, err := f.WriteString(writeEntry)
-
-		if err != nil {
-			panic("Failed to write logs to file")
-		}
-	}
-}
-
-func createLogFile() *os.File {
-	var f *os.File
-
-	fileName := fmt.Sprintf("%s.log", time.Now().Format("2006-01-02_15:04:05"))
-	folderPath := path.Join(os.ExpandEnv("$HOME"), ".simapp", "simulations")
-	filePath := filepath.Clean(filepath.Join(folderPath, fileName))
-
-	err := os.MkdirAll(folderPath, 0750)
-	if err != nil {
-		panic(err)
-	}
-
-	f, err = os.Create(filePath)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Printf("Logs to writing to %s\n", filePath)
-
-	return f
-}
+func createLogFile() *os.File { _ = "STUB: not implemented"; return nil }
 
 // dummy log writter
 type DummyLogWriter struct{}
 
 // do nothing
-func (lw *DummyLogWriter) AddEntry(_ OperationEntry) {}
+func (lw *DummyLogWriter) AddEntry(_ OperationEntry) {
+	_ = "STUB: not implemented"
 
-// do nothing
-func (lw *DummyLogWriter) PrintLogs() {}
+	// do nothing
+	return
+}
+
+func (lw *DummyLogWriter) PrintLogs() { _ = "STUB: not implemented"; return }

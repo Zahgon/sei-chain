@@ -14,7 +14,6 @@ import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/vesting/client/cli"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/vesting/types"
 )
 
@@ -29,60 +28,67 @@ var (
 type AppModuleBasic struct{}
 
 // Name returns the module's name.
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterCodec registers the module's types with the given codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterLegacyAminoCodec(cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterInterfaces registers the module's interfaces and implementations with
 // the given interface registry.
 func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	types.RegisterInterfaces(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // DefaultGenesis returns the module's default genesis state as raw bytes.
 func (AppModuleBasic) DefaultGenesis(_ codec.JSONCodec) json.RawMessage {
-	return []byte("{}")
+	_ = "STUB: not implemented"
+	return *
+
+	// ValidateGenesis performs genesis state validation. Currently, this is a no-op.
+	new(json.RawMessage)
 }
 
-// ValidateGenesis performs genesis state validation. Currently, this is a no-op.
 func (AppModuleBasic) ValidateGenesis(_ codec.JSONCodec, _ client.TxEncodingConfig, bz json.RawMessage) error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes registers module's REST handlers. Currently, this is a no-op.
-func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {}
+func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes registers the module's gRPC Gateway routes. Currently, this
-// is a no-op.
-func (a AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {}
-
-// GetTxCmd returns the root tx command for the auth module.
-func (AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
+	// RegisterGRPCGatewayRoutes registers the module's gRPC Gateway routes. Currently, this
+	// is a no-op.
+	return
 }
+
+func (a AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {
+	_ = "STUB: not implemented"
+
+	// GetTxCmd returns the root tx command for the auth module.
+	return
+}
+
+func (AppModuleBasic) GetTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // GetQueryCmd returns the module's root query command. Currently, this is a no-op.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// AppModule extends the AppModuleBasic implementation by implementing the
+	// AppModule interface.
 	return nil
 }
 
-// AppModule extends the AppModuleBasic implementation by implementing the
-// AppModule interface.
 type AppModule struct {
 	AppModuleBasic
 
@@ -91,53 +97,54 @@ type AppModule struct {
 }
 
 func NewAppModule(ak keeper.AccountKeeper, bk types.BankKeeper) AppModule {
-	return AppModule{
-		AppModuleBasic: AppModuleBasic{},
-		accountKeeper:  ak,
-		bankKeeper:     bk,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // RegisterInvariants performs a no-op; there are no invariants to enforce.
-func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 
-// Route returns the module's message router and handler.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(am.accountKeeper, am.bankKeeper))
+	// Route returns the module's message router and handler.
+	return
 }
+
+func (am AppModule) Route() sdk.Route { _ = "STUB: not implemented"; return *new(sdk.Route) }
 
 // QuerierRoute returns an empty string as the module contains no query
 // functionality.
-func (AppModule) QuerierRoute() string { return "" }
+func (AppModule) QuerierRoute() string {
+	_ = "STUB: not implemented"
 
-// RegisterServices registers module services.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterMsgServer(cfg.MsgServer(), NewMsgServerImpl(am.accountKeeper, am.bankKeeper))
+	// RegisterServices registers module services.
+	return ""
 }
+
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // LegacyQuerierHandler performs a no-op.
 func (am AppModule) LegacyQuerierHandler(_ *codec.LegacyAmino) sdk.Querier {
-	return nil
+	_ = "STUB: not implemented"
+
+	// InitGenesis performs a no-op.
+	return *new(sdk.Querier)
 }
 
-// InitGenesis performs a no-op.
 func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMessage) []abci.ValidatorUpdate {
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ExportGenesis is always empty, as InitGenesis does nothing either.
 func (am AppModule) ExportGenesis(_ sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	return am.DefaultGenesis(cdc)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 { _ = "STUB: not implemented"; return 0 }

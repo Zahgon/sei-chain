@@ -20,63 +20,43 @@ type MockChannelKeeper struct {
 }
 
 func (m *MockChannelKeeper) GetChannel(ctx sdk.Context, srcPort, srcChan string) (channel channeltypes.Channel, found bool) {
-	if m.GetChannelFn == nil {
-		panic("not supposed to be called!")
-	}
-	return m.GetChannelFn(ctx, srcPort, srcChan)
+	_ = "STUB: not implemented"
+	return *new(channeltypes.Channel), false
 }
 
 func (m *MockChannelKeeper) GetAllChannels(ctx sdk.Context) []channeltypes.IdentifiedChannel {
-	if m.GetAllChannelsFn == nil {
-		panic("not supposed to be called!")
-	}
-	return m.GetAllChannelsFn(ctx)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (m *MockChannelKeeper) GetNextSequenceSend(ctx sdk.Context, portID, channelID string) (uint64, bool) {
-	if m.GetNextSequenceSendFn == nil {
-		panic("not supposed to be called!")
-	}
-	return m.GetNextSequenceSendFn(ctx, portID, channelID)
+	_ = "STUB: not implemented"
+	return 0, false
 }
 
 func (m *MockChannelKeeper) SendPacket(ctx sdk.Context, channelCap *capabilitytypes.Capability, packet ibcexported.PacketI) error {
-	if m.SendPacketFn == nil {
-		panic("not supposed to be called!")
-	}
-	return m.SendPacketFn(ctx, channelCap, packet)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (m *MockChannelKeeper) ChanCloseInit(ctx sdk.Context, portID, channelID string, chanCap *capabilitytypes.Capability) error {
-	if m.ChanCloseInitFn == nil {
-		panic("not supposed to be called!")
-	}
-	return m.ChanCloseInitFn(ctx, portID, channelID, chanCap)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (m *MockChannelKeeper) IterateChannels(ctx sdk.Context, cb func(channeltypes.IdentifiedChannel) bool) {
-	if m.IterateChannelsFn == nil {
-		panic("not expected to be called")
-	}
-	m.IterateChannelsFn(ctx, cb)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (m *MockChannelKeeper) SetChannel(ctx sdk.Context, portID, channelID string, channel channeltypes.Channel) {
-	if m.GetChannelFn == nil {
-		panic("not supposed to be called!")
-	}
-	m.SetChannelFn(ctx, portID, channelID, channel)
+	_ = "STUB: not implemented"
+	return
 }
 
 func MockChannelKeeperIterator(s []channeltypes.IdentifiedChannel) func(ctx sdk.Context, cb func(channeltypes.IdentifiedChannel) bool) {
-	return func(ctx sdk.Context, cb func(channeltypes.IdentifiedChannel) bool) {
-		for _, channel := range s {
-			stop := cb(channel)
-			if stop {
-				break
-			}
-		}
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type MockCapabilityKeeper struct {
@@ -86,24 +66,18 @@ type MockCapabilityKeeper struct {
 }
 
 func (m MockCapabilityKeeper) GetCapability(ctx sdk.Context, name string) (*capabilitytypes.Capability, bool) {
-	if m.GetCapabilityFn == nil {
-		panic("not supposed to be called!")
-	}
-	return m.GetCapabilityFn(ctx, name)
+	_ = "STUB: not implemented"
+	return nil, false
 }
 
 func (m MockCapabilityKeeper) ClaimCapability(ctx sdk.Context, cap *capabilitytypes.Capability, name string) error {
-	if m.ClaimCapabilityFn == nil {
-		panic("not supposed to be called!")
-	}
-	return m.ClaimCapabilityFn(ctx, cap, name)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (m MockCapabilityKeeper) AuthenticateCapability(ctx sdk.Context, capability *capabilitytypes.Capability, name string) bool {
-	if m.AuthenticateCapabilityFn == nil {
-		panic("not supposed to be called!")
-	}
-	return m.AuthenticateCapabilityFn(ctx, capability, name)
+	_ = "STUB: not implemented"
+	return false
 }
 
 var _ types.ICS20TransferPortSource = &MockIBCTransferKeeper{}
@@ -113,8 +87,6 @@ type MockIBCTransferKeeper struct {
 }
 
 func (m MockIBCTransferKeeper) GetPort(ctx sdk.Context) string {
-	if m.GetPortFn == nil {
-		panic("not expected to be called")
-	}
-	return m.GetPortFn(ctx)
+	_ = "STUB: not implemented"
+	return ""
 }

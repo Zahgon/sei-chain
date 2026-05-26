@@ -1,9 +1,6 @@
 package evmrpc
 
 import (
-	"sort"
-	"strings"
-
 	"github.com/ethereum/go-ethereum/rpc"
 )
 
@@ -20,17 +17,11 @@ type errSeiLegacyNotEnabled struct {
 	method string
 }
 
-func (e *errSeiLegacyNotEnabled) Error() string {
-	return seiLegacyMethodDisabledMessage(e.method)
-}
+func (e *errSeiLegacyNotEnabled) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e *errSeiLegacyNotEnabled) ErrorCode() int {
-	return seiLegacyNotEnabled
-}
+func (e *errSeiLegacyNotEnabled) ErrorCode() int { _ = "STUB: not implemented"; return 0 }
 
-func (e *errSeiLegacyNotEnabled) ErrorData() interface{} {
-	return "legacy_sei_deprecated"
-}
+func (e *errSeiLegacyNotEnabled) ErrorData() interface{} { _ = "STUB: not implemented"; return nil }
 
 var (
 	_ rpc.Error     = (*errSeiLegacyNotEnabled)(nil)
@@ -81,104 +72,37 @@ var seiLegacyGatedMethods = map[string]struct{}{
 
 // SeiLegacyAllExtraMethodNames returns gated sei_* methods other than the usual default trio
 // (sei_getSeiAddress, sei_getEVMAddress, sei_getCosmosTx). Used to compose full test configs.
-func SeiLegacyAllExtraMethodNames() []string {
-	out := make([]string, 0, len(seiLegacyGatedMethods))
-	for m := range seiLegacyGatedMethods {
-		switch strings.ToLower(m) {
-		case "sei_getseiaddress", "sei_getevmaddress", "sei_getcosmostx":
-			continue
-		default:
-			out = append(out, m)
-		}
-	}
-	sort.Strings(out)
-	return out
-}
+func SeiLegacyAllExtraMethodNames() []string { _ = "STUB: not implemented"; return nil }
 
 // SeiLegacyAllGatedMethodNames returns every gated sei_* and sei2_* method (sorted). Use when tests need full parity.
-func SeiLegacyAllGatedMethodNames() []string {
-	out := make([]string, 0, len(seiLegacyGatedMethods))
-	for m := range seiLegacyGatedMethods {
-		out = append(out, m)
-	}
-	sort.Strings(out)
-	return out
-}
+func SeiLegacyAllGatedMethodNames() []string { _ = "STUB: not implemented"; return nil }
 
 // BuildSeiLegacyEnabledSet returns the set of allowed gated sei_* / sei2_* JSON-RPC methods from
 // config only ([evm].enabled_legacy_sei_apis). Names are matched case-insensitively to canonical RPC names.
 func BuildSeiLegacyEnabledSet(enabledLegacySeiApis []string) map[string]struct{} {
-	enabled := make(map[string]struct{}, len(enabledLegacySeiApis))
-	for _, raw := range enabledLegacySeiApis {
-		name := strings.TrimSpace(raw)
-		if name == "" {
-			continue
-		}
-		canonical := canonicalizeSeiLegacyMethodName(name)
-		if canonical == "" {
-			continue
-		}
-		if _, ok := seiLegacyGatedMethods[canonical]; ok {
-			enabled[canonical] = struct{}{}
-		}
-	}
-	return enabled
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func canonicalizeSeiLegacyMethodName(name string) string {
-	lower := strings.ToLower(strings.TrimSpace(name))
-	for m := range seiLegacyGatedMethods {
-		if strings.ToLower(m) == lower {
-			return m
-		}
-	}
-	return ""
-}
+func canonicalizeSeiLegacyMethodName(name string) string { _ = "STUB: not implemented"; return "" }
 
-func seiLegacyMethodDisabledMessage(method string) string {
-	return method + " is not enabled on this node. The sei_* and sei2_* JSON-RPC surfaces are deprecated, scheduled for removal, and should not be used for new integrations - " +
-		"prefer standard eth_* (and debug_*) methods and official migration guidance. " +
-		"To allow this legacy method, add it to enabled_legacy_sei_apis under [evm] in app.toml."
-}
+func seiLegacyMethodDisabledMessage(method string) string { _ = "STUB: not implemented"; return "" }
 
-func seiLegacyIsGatedNamespaceMethod(method string) bool {
-	return strings.HasPrefix(method, "sei2_") || strings.HasPrefix(method, "sei_")
-}
+func seiLegacyIsGatedNamespaceMethod(method string) bool { _ = "STUB: not implemented"; return false }
 
 // seiLegacyGateError enforces [evm].enabled_legacy_sei_apis when allowlist is non-nil.
 // allowlist nil means ungated (HTTP middleware disabled, or non-enforcing paths).
 func seiLegacyGateError(method string, allowlist map[string]struct{}) error {
-	if allowlist == nil {
-		return nil
-	}
-	if !seiLegacyIsGatedNamespaceMethod(method) {
-		return nil
-	}
-	canon := canonicalizeSeiLegacyMethodName(method)
-	if canon == "" {
-		// Fail closed: sei_* / sei2_* names not in seiLegacyGatedMethods must not bypass the allowlist
-		// (e.g. future handlers or typos would otherwise reach the inner server).
-		return &errSeiLegacyNotEnabled{method: strings.TrimSpace(method)}
-	}
-	if _, ok := allowlist[canon]; ok {
-		return nil
-	}
-	return &errSeiLegacyNotEnabled{method: canon}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Fail closed: sei_* / sei2_* names not in seiLegacyGatedMethods must not bypass the allowlist
+// (e.g. future handlers or typos would otherwise reach the inner server).
 
 // seiLegacyForwardedGatedMethod is true when the request method is a gated sei_* / sei2_* name listed
 // in the allowlist (the call was forwarded to the inner JSON-RPC server). Used only for optional HTTP metadata.
 func seiLegacyForwardedGatedMethod(method string, allowlist map[string]struct{}) bool {
-	if allowlist == nil {
-		return false
-	}
-	if !seiLegacyIsGatedNamespaceMethod(method) {
-		return false
-	}
-	canon := canonicalizeSeiLegacyMethodName(method)
-	if canon == "" {
-		return false
-	}
-	_, ok := allowlist[canon]
-	return ok
+	_ = "STUB: not implemented"
+	return false
 }

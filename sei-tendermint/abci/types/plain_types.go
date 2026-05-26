@@ -88,24 +88,13 @@ const (
 	ResponseOfferSnapshot_REJECT_SENDER
 )
 
-func (r ResponseOfferSnapshot_Result) String() string {
-	switch r {
-	case ResponseOfferSnapshot_UNKNOWN:
-		return "UNKNOWN" //nolint:goconst
-	case ResponseOfferSnapshot_ACCEPT:
-		return "ACCEPT" //nolint:goconst
-	case ResponseOfferSnapshot_ABORT:
-		return "ABORT"
-	case ResponseOfferSnapshot_REJECT:
-		return "REJECT"
-	case ResponseOfferSnapshot_REJECT_FORMAT:
-		return "REJECT_FORMAT"
-	case ResponseOfferSnapshot_REJECT_SENDER:
-		return "REJECT_SENDER"
-	default:
-		return "UNKNOWN" //nolint:goconst
-	}
-}
+func (r ResponseOfferSnapshot_Result) String() string { _ = "STUB: not implemented"; return "" }
+
+//nolint:goconst
+
+//nolint:goconst
+
+//nolint:goconst
 
 // RequestLoadSnapshotChunk asks the application to load a specific chunk from
 // the accepted snapshot so Tendermint can forward it to peers.
@@ -149,24 +138,13 @@ const (
 	ResponseApplySnapshotChunk_REJECT_SNAPSHOT
 )
 
-func (r ResponseApplySnapshotChunk_Result) String() string {
-	switch r {
-	case ResponseApplySnapshotChunk_UNKNOWN:
-		return "UNKNOWN" //nolint:goconst
-	case ResponseApplySnapshotChunk_ACCEPT:
-		return "ACCEPT" //nolint:goconst
-	case ResponseApplySnapshotChunk_ABORT:
-		return "ABORT"
-	case ResponseApplySnapshotChunk_RETRY:
-		return "RETRY"
-	case ResponseApplySnapshotChunk_RETRY_SNAPSHOT:
-		return "RETRY_SNAPSHOT"
-	case ResponseApplySnapshotChunk_REJECT_SNAPSHOT:
-		return "REJECT_SNAPSHOT"
-	default:
-		return "UNKNOWN" //nolint:goconst
-	}
-}
+func (r ResponseApplySnapshotChunk_Result) String() string { _ = "STUB: not implemented"; return "" }
+
+//nolint:goconst
+
+//nolint:goconst
+
+//nolint:goconst
 
 // ResponseProcessProposal communicates the application's decision after
 // evaluating a proposed block before votes are cast in the ProcessProposal step.
@@ -189,17 +167,15 @@ const (
 )
 
 func (s ResponseProcessProposal_ProposalStatus) String() string {
-	switch s {
-	case ResponseProcessProposal_UNKNOWN:
-		return "UNKNOWN" //nolint:goconst
-	case ResponseProcessProposal_ACCEPT:
-		return "ACCEPT" //nolint:goconst
-	case ResponseProcessProposal_REJECT:
-		return "REJECT"
-	default:
-		return "UNKNOWN" //nolint:goconst
-	}
+	_ = "STUB: not implemented"
+	return ""
 }
+
+//nolint:goconst
+
+//nolint:goconst
+
+//nolint:goconst
 
 // RequestProcessProposal bundles all of the proposed block data that the
 // application can inspect to decide whether the block should move forward in

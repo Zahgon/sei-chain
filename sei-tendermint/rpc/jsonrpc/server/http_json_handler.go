@@ -1,12 +1,8 @@
 package server
 
 import (
-	"bytes"
-	"encoding/json"
 	"html/template"
-	"io"
 	"net/http"
-	"strings"
 
 	rpctypes "github.com/sei-protocol/sei-chain/sei-tendermint/rpc/jsonrpc/types"
 )
@@ -17,132 +13,40 @@ const REQUEST_BATCH_SIZE_LIMIT = 10
 
 // jsonrpc calls grab the given method's function info and runs reflect.Call
 func makeJSONRPCHandler(funcMap map[string]*RPCFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, hreq *http.Request) {
-		// For POST requests, reject a non-root URL path. This should not happen
-		// in the standard configuration, since the wrapper checks the path.
-		if hreq.URL.Path != "/" {
-			writeRPCResponse(w, rpctypes.RPCRequest{}.MakeErrorf(
-				rpctypes.CodeInvalidRequest, "invalid path: %q", hreq.URL.Path))
-			return
-		}
-
-		b, err := io.ReadAll(hreq.Body)
-		if err != nil {
-			writeRPCResponse(w, rpctypes.RPCRequest{}.MakeErrorf(
-				rpctypes.CodeInvalidRequest, "reading request body: %v", err))
-			return
-		}
-
-		// if its an empty request (like from a browser), just display a list of
-		// functions
-		if len(b) == 0 {
-			writeListOfEndpoints(w, funcMap)
-			return
-		}
-
-		requests, err := parseRequests(b)
-		if len(requests) > REQUEST_BATCH_SIZE_LIMIT {
-			writeRPCResponse(w, rpctypes.RPCRequest{}.MakeErrorf(
-				rpctypes.CodeParseError, "Batch size limit exceeded."))
-			return
-		}
-		if err != nil {
-			writeRPCResponse(w, rpctypes.RPCRequest{}.MakeErrorf(
-				rpctypes.CodeParseError, "decoding request: %v", err))
-			return
-		}
-
-		var responses []rpctypes.RPCResponse
-		for _, req := range requests {
-			// Ignore notifications, which this service does not support.
-			if req.IsNotification() {
-				logger.Debug("Ignoring notification", "req", req)
-				continue
-			}
-
-			rpcFunc, ok := funcMap[req.Method]
-			if !ok || rpcFunc.ws {
-				responses = append(responses, req.MakeErrorf(rpctypes.CodeMethodNotFound, "method %s not found", req.Method))
-				continue
-			}
-
-			req := req
-			ctx := rpctypes.WithCallInfo(hreq.Context(), &rpctypes.CallInfo{
-				RPCRequest:  &req,
-				HTTPRequest: hreq,
-			})
-			result, err := rpcFunc.Call(ctx, req.Params)
-			if err != nil {
-				responses = append(responses, req.MakeError(result, err))
-			} else {
-				responses = append(responses, req.MakeResponse(result))
-			}
-		}
-
-		if len(responses) == 0 {
-			return
-		}
-		writeRPCResponse(w, responses...)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
+// For POST requests, reject a non-root URL path. This should not happen
+// in the standard configuration, since the wrapper checks the path.
+
+// if its an empty request (like from a browser), just display a list of
+// functions
+
+// Ignore notifications, which this service does not support.
+
 func ensureBodyClose(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		defer func() { _ = r.Body.Close() }()
-		next(w, r)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 func handleInvalidJSONRPCPaths(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		//  we check whether the path is indeed "/", otherwise return a 404 error
-		if r.URL.Path != "/" {
-			http.NotFound(w, r)
-			return
-		}
-
-		next(w, r)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
+
+//  we check whether the path is indeed "/", otherwise return a 404 error
 
 // parseRequests parses a JSON-RPC request or request batch from data.
 func parseRequests(data []byte) ([]rpctypes.RPCRequest, error) {
-	var reqs []rpctypes.RPCRequest
-	var err error
-
-	isArray := bytes.HasPrefix(bytes.TrimSpace(data), []byte("["))
-	if isArray {
-		err = json.Unmarshal(data, &reqs)
-	} else {
-		reqs = append(reqs, rpctypes.RPCRequest{})
-		err = json.Unmarshal(data, &reqs[0])
-	}
-	if err != nil {
-		return nil, err
-	}
-	return reqs, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // writes a list of available rpc endpoints as an html page
 func writeListOfEndpoints(w http.ResponseWriter, funcMap map[string]*RPCFunc) {
-	hasArgs := make(map[string]string)
-	noArgs := make(map[string]string)
-	for name, rf := range funcMap {
-		if len(rf.args) == 0 {
-			noArgs[name] = name
-			continue
-		}
-		query := make([]string, 0, len(rf.args))
-		for _, arg := range rf.args {
-			query = append(query, arg.name+"=_")
-		}
-		hasArgs[name] = name + "?" + strings.Join(query, "&")
-	}
-	w.Header().Set("Content-Type", "text/html")
-	_ = listOfEndpoints.Execute(w, map[string]map[string]string{
-		"NoArgs":  noArgs,
-		"HasArgs": hasArgs,
-	})
+	_ = "STUB: not implemented"
+	return
 }
 
 var listOfEndpoints = template.Must(template.New("list").Parse(`<html>

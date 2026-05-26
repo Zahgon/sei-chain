@@ -2,7 +2,6 @@ package provider
 
 import (
 	"errors"
-	"fmt"
 )
 
 var (
@@ -27,21 +26,21 @@ type ErrBadLightBlock struct {
 	Reason error
 }
 
-func (e ErrBadLightBlock) Error() string {
-	return fmt.Sprintf("client provided bad signed header: %v", e.Reason)
+func (e ErrBadLightBlock) Error() string { _ = "STUB: not implemented"; return "" }
+
+func (e ErrBadLightBlock) Unwrap() error {
+	_ = "STUB: not implemented"
+
+	// ErrUnreliableProvider is a generic error that indicates that the provider isn't
+	// behaving in a reliable manner to the light client. The light client will
+	// remove the provider
+	return nil
 }
 
-func (e ErrBadLightBlock) Unwrap() error { return e.Reason }
-
-// ErrUnreliableProvider is a generic error that indicates that the provider isn't
-// behaving in a reliable manner to the light client. The light client will
-// remove the provider
 type ErrUnreliableProvider struct {
 	Reason error
 }
 
-func (e ErrUnreliableProvider) Error() string {
-	return fmt.Sprintf("client deemed unreliable: %v", e.Reason)
-}
+func (e ErrUnreliableProvider) Error() string { _ = "STUB: not implemented"; return "" }
 
-func (e ErrUnreliableProvider) Unwrap() error { return e.Reason }
+func (e ErrUnreliableProvider) Unwrap() error { _ = "STUB: not implemented"; return nil }

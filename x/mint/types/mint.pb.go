@@ -5,12 +5,11 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_sei_protocol_sei_chain_sei_cosmos_types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -36,94 +35,41 @@ type Minter struct {
 	LastMintHeight      uint64 `protobuf:"varint,8,opt,name=last_mint_height,json=lastMintHeight,proto3" json:"last_mint_height,omitempty"`
 }
 
-func (m *Minter) Reset()         { *m = Minter{} }
-func (m *Minter) String() string { return proto.CompactTextString(m) }
-func (*Minter) ProtoMessage()    {}
-func (*Minter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_06339c129491fd39, []int{0}
-}
-func (m *Minter) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Minter) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *Minter) String() string            { _ = "STUB: not implemented"; return "" }
+func (*Minter) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Minter) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Minter) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Minter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Minter.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Minter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Minter.Merge(m, src)
-}
-func (m *Minter) XXX_Size() int {
-	return m.Size()
-}
-func (m *Minter) XXX_DiscardUnknown() {
-	xxx_messageInfo_Minter.DiscardUnknown(m)
-}
+
+func (m *Minter) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Minter) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Minter) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Minter proto.InternalMessageInfo
 
-func (m *Minter) GetStartDate() string {
-	if m != nil {
-		return m.StartDate
-	}
-	return ""
-}
+func (m *Minter) GetStartDate() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Minter) GetEndDate() string {
-	if m != nil {
-		return m.EndDate
-	}
-	return ""
-}
+func (m *Minter) GetEndDate() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Minter) GetDenom() string {
-	if m != nil {
-		return m.Denom
-	}
-	return ""
-}
+func (m *Minter) GetDenom() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Minter) GetTotalMintAmount() uint64 {
-	if m != nil {
-		return m.TotalMintAmount
-	}
-	return 0
-}
+func (m *Minter) GetTotalMintAmount() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Minter) GetRemainingMintAmount() uint64 {
-	if m != nil {
-		return m.RemainingMintAmount
-	}
-	return 0
-}
+func (m *Minter) GetRemainingMintAmount() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Minter) GetLastMintAmount() uint64 {
-	if m != nil {
-		return m.LastMintAmount
-	}
-	return 0
-}
+func (m *Minter) GetLastMintAmount() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Minter) GetLastMintDate() string {
-	if m != nil {
-		return m.LastMintDate
-	}
-	return ""
-}
+func (m *Minter) GetLastMintDate() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Minter) GetLastMintHeight() uint64 {
-	if m != nil {
-		return m.LastMintHeight
-	}
-	return 0
-}
+func (m *Minter) GetLastMintHeight() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type ScheduledTokenRelease struct {
 	StartDate          string `protobuf:"bytes,1,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`
@@ -131,59 +77,37 @@ type ScheduledTokenRelease struct {
 	TokenReleaseAmount uint64 `protobuf:"varint,3,opt,name=token_release_amount,json=tokenReleaseAmount,proto3" json:"token_release_amount,omitempty"`
 }
 
-func (m *ScheduledTokenRelease) Reset()         { *m = ScheduledTokenRelease{} }
-func (m *ScheduledTokenRelease) String() string { return proto.CompactTextString(m) }
-func (*ScheduledTokenRelease) ProtoMessage()    {}
+func (m *ScheduledTokenRelease) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ScheduledTokenRelease) String() string { _ = "STUB: not implemented"; return "" }
+func (*ScheduledTokenRelease) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ScheduledTokenRelease) Descriptor() ([]byte, []int) {
-	return fileDescriptor_06339c129491fd39, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ScheduledTokenRelease) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ScheduledTokenRelease) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ScheduledTokenRelease.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ScheduledTokenRelease) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ScheduledTokenRelease.Merge(m, src)
-}
-func (m *ScheduledTokenRelease) XXX_Size() int {
-	return m.Size()
-}
-func (m *ScheduledTokenRelease) XXX_DiscardUnknown() {
-	xxx_messageInfo_ScheduledTokenRelease.DiscardUnknown(m)
-}
+
+func (m *ScheduledTokenRelease) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ScheduledTokenRelease) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ScheduledTokenRelease) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ScheduledTokenRelease proto.InternalMessageInfo
 
-func (m *ScheduledTokenRelease) GetStartDate() string {
-	if m != nil {
-		return m.StartDate
-	}
-	return ""
-}
+func (m *ScheduledTokenRelease) GetStartDate() string { _ = "STUB: not implemented"; return "" }
 
-func (m *ScheduledTokenRelease) GetEndDate() string {
-	if m != nil {
-		return m.EndDate
-	}
-	return ""
-}
+func (m *ScheduledTokenRelease) GetEndDate() string { _ = "STUB: not implemented"; return "" }
 
-func (m *ScheduledTokenRelease) GetTokenReleaseAmount() uint64 {
-	if m != nil {
-		return m.TokenReleaseAmount
-	}
-	return 0
-}
+func (m *ScheduledTokenRelease) GetTokenReleaseAmount() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // Params holds parameters for the mint module.
 type Params struct {
@@ -193,49 +117,29 @@ type Params struct {
 	TokenReleaseSchedule []ScheduledTokenRelease `protobuf:"bytes,2,rep,name=token_release_schedule,json=tokenReleaseSchedule,proto3" json:"token_release_schedule" yaml:"token_release_schedule"`
 }
 
-func (m *Params) Reset()      { *m = Params{} }
-func (*Params) ProtoMessage() {}
-func (*Params) Descriptor() ([]byte, []int) {
-	return fileDescriptor_06339c129491fd39, []int{2}
-}
-func (m *Params) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Params) Reset()                    { _ = "STUB: not implemented"; return }
+func (*Params) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Params) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Params) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Params) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Params.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Params) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Params.Merge(m, src)
-}
-func (m *Params) XXX_Size() int {
-	return m.Size()
-}
-func (m *Params) XXX_DiscardUnknown() {
-	xxx_messageInfo_Params.DiscardUnknown(m)
-}
+
+func (m *Params) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Params) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Params) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Params proto.InternalMessageInfo
 
-func (m *Params) GetMintDenom() string {
-	if m != nil {
-		return m.MintDenom
-	}
-	return ""
-}
+func (m *Params) GetMintDenom() string { _ = "STUB: not implemented"; return "" }
 
 func (m *Params) GetTokenReleaseSchedule() []ScheduledTokenRelease {
-	if m != nil {
-		return m.TokenReleaseSchedule
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -247,109 +151,70 @@ type Version2Minter struct {
 	Denom          string                                                 `protobuf:"bytes,4,opt,name=denom,proto3" json:"denom,omitempty" yaml:"denom"`
 }
 
-func (m *Version2Minter) Reset()         { *m = Version2Minter{} }
-func (m *Version2Minter) String() string { return proto.CompactTextString(m) }
-func (*Version2Minter) ProtoMessage()    {}
-func (*Version2Minter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_06339c129491fd39, []int{3}
-}
-func (m *Version2Minter) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Version2Minter) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *Version2Minter) String() string            { _ = "STUB: not implemented"; return "" }
+func (*Version2Minter) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Version2Minter) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Version2Minter) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Version2Minter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Version2Minter.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Version2Minter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Version2Minter.Merge(m, src)
-}
-func (m *Version2Minter) XXX_Size() int {
-	return m.Size()
-}
-func (m *Version2Minter) XXX_DiscardUnknown() {
-	xxx_messageInfo_Version2Minter.DiscardUnknown(m)
-}
+
+func (m *Version2Minter) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Version2Minter) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Version2Minter) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Version2Minter proto.InternalMessageInfo
 
-func (m *Version2Minter) GetLastMintDate() string {
-	if m != nil {
-		return m.LastMintDate
-	}
-	return ""
-}
+func (m *Version2Minter) GetLastMintDate() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Version2Minter) GetLastMintHeight() int64 {
-	if m != nil {
-		return m.LastMintHeight
-	}
-	return 0
-}
+func (m *Version2Minter) GetLastMintHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Version2Minter) GetDenom() string {
-	if m != nil {
-		return m.Denom
-	}
-	return ""
-}
+func (m *Version2Minter) GetDenom() string { _ = "STUB: not implemented"; return "" }
 
 type Version2ScheduledTokenRelease struct {
 	Date               string `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
 	TokenReleaseAmount int64  `protobuf:"varint,2,opt,name=token_release_amount,json=tokenReleaseAmount,proto3" json:"token_release_amount,omitempty"`
 }
 
-func (m *Version2ScheduledTokenRelease) Reset()         { *m = Version2ScheduledTokenRelease{} }
-func (m *Version2ScheduledTokenRelease) String() string { return proto.CompactTextString(m) }
-func (*Version2ScheduledTokenRelease) ProtoMessage()    {}
+func (m *Version2ScheduledTokenRelease) Reset()         { _ = "STUB: not implemented"; return }
+func (m *Version2ScheduledTokenRelease) String() string { _ = "STUB: not implemented"; return "" }
+func (*Version2ScheduledTokenRelease) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*Version2ScheduledTokenRelease) Descriptor() ([]byte, []int) {
-	return fileDescriptor_06339c129491fd39, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *Version2ScheduledTokenRelease) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *Version2ScheduledTokenRelease) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Version2ScheduledTokenRelease.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *Version2ScheduledTokenRelease) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Version2ScheduledTokenRelease.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *Version2ScheduledTokenRelease) XXX_Size() int {
-	return m.Size()
-}
-func (m *Version2ScheduledTokenRelease) XXX_DiscardUnknown() {
-	xxx_messageInfo_Version2ScheduledTokenRelease.DiscardUnknown(m)
-}
+
+func (m *Version2ScheduledTokenRelease) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Version2ScheduledTokenRelease) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Version2ScheduledTokenRelease proto.InternalMessageInfo
 
-func (m *Version2ScheduledTokenRelease) GetDate() string {
-	if m != nil {
-		return m.Date
-	}
-	return ""
-}
+func (m *Version2ScheduledTokenRelease) GetDate() string { _ = "STUB: not implemented"; return "" }
 
 func (m *Version2ScheduledTokenRelease) GetTokenReleaseAmount() int64 {
-	if m != nil {
-		return m.TokenReleaseAmount
-	}
+	_ = "STUB: not implemented"
 	return 0
 }
 
@@ -361,49 +226,29 @@ type Version2Params struct {
 	TokenReleaseSchedule []Version2ScheduledTokenRelease `protobuf:"bytes,2,rep,name=token_release_schedule,json=tokenReleaseSchedule,proto3" json:"token_release_schedule" yaml:"token_release_schedule"`
 }
 
-func (m *Version2Params) Reset()      { *m = Version2Params{} }
-func (*Version2Params) ProtoMessage() {}
-func (*Version2Params) Descriptor() ([]byte, []int) {
-	return fileDescriptor_06339c129491fd39, []int{5}
-}
-func (m *Version2Params) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Version2Params) Reset()                    { _ = "STUB: not implemented"; return }
+func (*Version2Params) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Version2Params) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Version2Params) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Version2Params) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Version2Params.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Version2Params) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Version2Params.Merge(m, src)
-}
-func (m *Version2Params) XXX_Size() int {
-	return m.Size()
-}
-func (m *Version2Params) XXX_DiscardUnknown() {
-	xxx_messageInfo_Version2Params.DiscardUnknown(m)
-}
+
+func (m *Version2Params) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Version2Params) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Version2Params) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Version2Params proto.InternalMessageInfo
 
-func (m *Version2Params) GetMintDenom() string {
-	if m != nil {
-		return m.MintDenom
-	}
-	return ""
-}
+func (m *Version2Params) GetMintDenom() string { _ = "STUB: not implemented"; return "" }
 
 func (m *Version2Params) GetTokenReleaseSchedule() []Version2ScheduledTokenRelease {
-	if m != nil {
-		return m.TokenReleaseSchedule
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -460,1409 +305,118 @@ var fileDescriptor_06339c129491fd39 = []byte{
 	0x4e, 0x97, 0x05, 0x00, 0x00,
 }
 
-func (m *Minter) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Minter) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Minter) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Minter) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Minter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.LastMintHeight != 0 {
-		i = encodeVarintMint(dAtA, i, uint64(m.LastMintHeight))
-		i--
-		dAtA[i] = 0x40
-	}
-	if len(m.LastMintDate) > 0 {
-		i -= len(m.LastMintDate)
-		copy(dAtA[i:], m.LastMintDate)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.LastMintDate)))
-		i--
-		dAtA[i] = 0x3a
-	}
-	if m.LastMintAmount != 0 {
-		i = encodeVarintMint(dAtA, i, uint64(m.LastMintAmount))
-		i--
-		dAtA[i] = 0x30
-	}
-	if m.RemainingMintAmount != 0 {
-		i = encodeVarintMint(dAtA, i, uint64(m.RemainingMintAmount))
-		i--
-		dAtA[i] = 0x28
-	}
-	if m.TotalMintAmount != 0 {
-		i = encodeVarintMint(dAtA, i, uint64(m.TotalMintAmount))
-		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.EndDate) > 0 {
-		i -= len(m.EndDate)
-		copy(dAtA[i:], m.EndDate)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.EndDate)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.StartDate) > 0 {
-		i -= len(m.StartDate)
-		copy(dAtA[i:], m.StartDate)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.StartDate)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ScheduledTokenRelease) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ScheduledTokenRelease) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ScheduledTokenRelease) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.TokenReleaseAmount != 0 {
-		i = encodeVarintMint(dAtA, i, uint64(m.TokenReleaseAmount))
-		i--
-		dAtA[i] = 0x18
-	}
-	if len(m.EndDate) > 0 {
-		i -= len(m.EndDate)
-		copy(dAtA[i:], m.EndDate)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.EndDate)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.StartDate) > 0 {
-		i -= len(m.StartDate)
-		copy(dAtA[i:], m.StartDate)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.StartDate)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *Params) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Params) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Params) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Params) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.TokenReleaseSchedule) > 0 {
-		for iNdEx := len(m.TokenReleaseSchedule) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.TokenReleaseSchedule[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMint(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.MintDenom) > 0 {
-		i -= len(m.MintDenom)
-		copy(dAtA[i:], m.MintDenom)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.MintDenom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *Version2Minter) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *Version2Minter) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *Version2Minter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Denom) > 0 {
-		i -= len(m.Denom)
-		copy(dAtA[i:], m.Denom)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.Denom)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if m.LastMintHeight != 0 {
-		i = encodeVarintMint(dAtA, i, uint64(m.LastMintHeight))
-		i--
-		dAtA[i] = 0x18
-	}
-	if len(m.LastMintDate) > 0 {
-		i -= len(m.LastMintDate)
-		copy(dAtA[i:], m.LastMintDate)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.LastMintDate)))
-		i--
-		dAtA[i] = 0x12
-	}
-	{
-		size := m.LastMintAmount.Size()
-		i -= size
-		if _, err := m.LastMintAmount.MarshalTo(dAtA[i:]); err != nil {
-			return 0, err
-		}
-		i = encodeVarintMint(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *Version2ScheduledTokenRelease) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *Version2ScheduledTokenRelease) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *Version2ScheduledTokenRelease) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.TokenReleaseAmount != 0 {
-		i = encodeVarintMint(dAtA, i, uint64(m.TokenReleaseAmount))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Date) > 0 {
-		i -= len(m.Date)
-		copy(dAtA[i:], m.Date)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.Date)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *Version2Params) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *Version2Params) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *Version2Params) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.TokenReleaseSchedule) > 0 {
-		for iNdEx := len(m.TokenReleaseSchedule) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.TokenReleaseSchedule[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintMint(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.MintDenom) > 0 {
-		i -= len(m.MintDenom)
-		copy(dAtA[i:], m.MintDenom)
-		i = encodeVarintMint(dAtA, i, uint64(len(m.MintDenom)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintMint(dAtA []byte, offset int, v uint64) int {
-	offset -= sovMint(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *Minter) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.StartDate)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	l = len(m.EndDate)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	if m.TotalMintAmount != 0 {
-		n += 1 + sovMint(uint64(m.TotalMintAmount))
-	}
-	if m.RemainingMintAmount != 0 {
-		n += 1 + sovMint(uint64(m.RemainingMintAmount))
-	}
-	if m.LastMintAmount != 0 {
-		n += 1 + sovMint(uint64(m.LastMintAmount))
-	}
-	l = len(m.LastMintDate)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	if m.LastMintHeight != 0 {
-		n += 1 + sovMint(uint64(m.LastMintHeight))
-	}
-	return n
-}
+func encodeVarintMint(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *ScheduledTokenRelease) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.StartDate)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	l = len(m.EndDate)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	if m.TokenReleaseAmount != 0 {
-		n += 1 + sovMint(uint64(m.TokenReleaseAmount))
-	}
-	return n
-}
+func (m *Minter) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *Params) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.MintDenom)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	if len(m.TokenReleaseSchedule) > 0 {
-		for _, e := range m.TokenReleaseSchedule {
-			l = e.Size()
-			n += 1 + l + sovMint(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ScheduledTokenRelease) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *Version2Minter) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.LastMintAmount.Size()
-	n += 1 + l + sovMint(uint64(l))
-	l = len(m.LastMintDate)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	if m.LastMintHeight != 0 {
-		n += 1 + sovMint(uint64(m.LastMintHeight))
-	}
-	l = len(m.Denom)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	return n
-}
+func (m *Params) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *Version2ScheduledTokenRelease) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Date)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	if m.TokenReleaseAmount != 0 {
-		n += 1 + sovMint(uint64(m.TokenReleaseAmount))
-	}
-	return n
-}
+func (m *Version2Minter) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *Version2Params) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.MintDenom)
-	if l > 0 {
-		n += 1 + l + sovMint(uint64(l))
-	}
-	if len(m.TokenReleaseSchedule) > 0 {
-		for _, e := range m.TokenReleaseSchedule {
-			l = e.Size()
-			n += 1 + l + sovMint(uint64(l))
-		}
-	}
-	return n
-}
+func (m *Version2ScheduledTokenRelease) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovMint(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozMint(x uint64) (n int) {
-	return sovMint(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *Minter) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMint
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Minter: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Minter: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StartDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.StartDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EndDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TotalMintAmount", wireType)
-			}
-			m.TotalMintAmount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.TotalMintAmount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field RemainingMintAmount", wireType)
-			}
-			m.RemainingMintAmount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.RemainingMintAmount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastMintAmount", wireType)
-			}
-			m.LastMintAmount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LastMintAmount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastMintDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LastMintDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastMintHeight", wireType)
-			}
-			m.LastMintHeight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LastMintHeight |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMint(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMint
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *Version2Params) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *ScheduledTokenRelease) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMint
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ScheduledTokenRelease: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ScheduledTokenRelease: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StartDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.StartDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.EndDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TokenReleaseAmount", wireType)
-			}
-			m.TokenReleaseAmount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.TokenReleaseAmount |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMint(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMint
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovMint(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Params) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMint
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Params: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Params: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MintDenom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MintDenom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TokenReleaseSchedule", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TokenReleaseSchedule = append(m.TokenReleaseSchedule, ScheduledTokenRelease{})
-			if err := m.TokenReleaseSchedule[len(m.TokenReleaseSchedule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMint(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMint
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sozMint(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Version2Minter) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMint
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Version2Minter: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Version2Minter: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastMintAmount", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.LastMintAmount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastMintDate", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LastMintDate = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LastMintHeight", wireType)
-			}
-			m.LastMintHeight = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.LastMintHeight |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Denom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Denom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMint(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMint
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *Minter) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *ScheduledTokenRelease) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *Params) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *Version2Minter) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Version2ScheduledTokenRelease) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMint
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Version2ScheduledTokenRelease: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Version2ScheduledTokenRelease: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Date", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Date = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TokenReleaseAmount", wireType)
-			}
-			m.TokenReleaseAmount = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.TokenReleaseAmount |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMint(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMint
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *Version2Params) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMint
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Version2Params: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Version2Params: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field MintDenom", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.MintDenom = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TokenReleaseSchedule", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthMint
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthMint
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TokenReleaseSchedule = append(m.TokenReleaseSchedule, Version2ScheduledTokenRelease{})
-			if err := m.TokenReleaseSchedule[len(m.TokenReleaseSchedule)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMint(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMint
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipMint(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowMint
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowMint
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthMint
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupMint
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthMint
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *Version2Params) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipMint(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthMint        = fmt.Errorf("proto: negative length found during unmarshaling")

@@ -4,7 +4,6 @@ import (
 	"github.com/gogo/protobuf/grpc"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 // Configurator provides the hooks to allow modules to configure and register
@@ -44,71 +43,39 @@ type configurator struct {
 
 // NewConfigurator returns a new Configurator instance
 func NewConfigurator(cdc codec.Codec, msgServer grpc.Server, queryServer grpc.Server) Configurator {
-	return configurator{
-		cdc:         cdc,
-		msgServer:   msgServer,
-		queryServer: queryServer,
-		migrations:  map[string]map[uint64]MigrationHandler{},
-	}
+	_ = "STUB: not implemented"
+	return *new(Configurator)
 }
 
 var _ Configurator = configurator{}
 
 // MsgServer implements the Configurator.MsgServer method
 func (c configurator) MsgServer() grpc.Server {
-	return c.msgServer
+	_ = "STUB: not implemented"
+
+	// QueryServer implements the Configurator.QueryServer method
+	return *new(grpc.Server)
 }
 
-// QueryServer implements the Configurator.QueryServer method
 func (c configurator) QueryServer() grpc.Server {
-	return c.queryServer
+	_ = "STUB: not implemented"
+	return *
+
+	// RegisterMigration implements the Configurator.RegisterMigration method
+	new(grpc.Server)
 }
 
-// RegisterMigration implements the Configurator.RegisterMigration method
 func (c configurator) RegisterMigration(moduleName string, forVersion uint64, handler MigrationHandler) error {
-	if forVersion == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidVersion, "module migration versions should start at 1")
-	}
-
-	if c.migrations[moduleName] == nil {
-		c.migrations[moduleName] = map[uint64]MigrationHandler{}
-	}
-
-	if c.migrations[moduleName][forVersion] != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrLogic, "another migration for module %s and version %d already exists", moduleName, forVersion)
-	}
-
-	c.migrations[moduleName][forVersion] = handler
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // runModuleMigrations runs all in-place store migrations for one given module from a
 // version to another version.
 func (c configurator) runModuleMigrations(ctx sdk.Context, moduleName string, fromVersion, toVersion uint64) error {
+	_ = "STUB: not implemented"
 	// No-op if toVersion is the initial version or if the version is unchanged.
-	if toVersion <= 1 || fromVersion == toVersion {
-		return nil
-	}
-
-	moduleMigrationsMap, found := c.migrations[moduleName]
-	if !found {
-		return sdkerrors.Wrapf(sdkerrors.ErrNotFound, "no migrations found for module %s", moduleName)
-	}
-
-	// Run in-place migrations for the module sequentially until toVersion.
-	for i := fromVersion; i < toVersion; i++ {
-		migrateFn, found := moduleMigrationsMap[i]
-		if !found {
-			return sdkerrors.Wrapf(sdkerrors.ErrNotFound, "no migration found for module %s from version %d to version %d", moduleName, i, i+1)
-		}
-		logger.Info("migrating module from version to version", "module", moduleName, "from-version", i, "to-version", i+1)
-
-		err := migrateFn(ctx)
-		if err != nil {
-			return err
-		}
-	}
-
 	return nil
 }
+
+// Run in-place migrations for the module sequentially until toVersion.

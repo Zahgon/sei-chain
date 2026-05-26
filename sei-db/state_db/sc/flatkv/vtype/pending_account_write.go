@@ -14,96 +14,46 @@ type PendingAccountWrite struct {
 }
 
 // NewPendingAccountWrite creates a new PendingAccountWrite with no fields set.
-func NewPendingAccountWrite() *PendingAccountWrite {
-	return &PendingAccountWrite{}
-}
+func NewPendingAccountWrite() *PendingAccountWrite { _ = "STUB: not implemented"; return nil }
 
 // GetBalance returns the pending balance value, or nil if not set.
-func (p *PendingAccountWrite) GetBalance() *Balance {
-	if p == nil {
-		zero := Balance{}
-		return &zero
-	}
-	return p.balance
-}
+func (p *PendingAccountWrite) GetBalance() *Balance { _ = "STUB: not implemented"; return nil }
 
 // IsBalanceSet reports whether the balance has been set in this pending write.
-func (p *PendingAccountWrite) IsBalanceSet() bool {
-	if p == nil {
-		return false
-	}
-	return p.balance != nil
-}
+func (p *PendingAccountWrite) IsBalanceSet() bool { _ = "STUB: not implemented"; return false }
 
 // GetNonce returns the pending nonce value.
-func (p *PendingAccountWrite) GetNonce() uint64 {
-	if p == nil {
-		return 0
-	}
-	return p.nonce
-}
+func (p *PendingAccountWrite) GetNonce() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // IsNonceSet reports whether the nonce has been set in this pending write.
-func (p *PendingAccountWrite) IsNonceSet() bool {
-	if p == nil {
-		return false
-	}
-	return p.nonceSet
-}
+func (p *PendingAccountWrite) IsNonceSet() bool { _ = "STUB: not implemented"; return false }
 
 // GetCodeHash returns the pending code hash value, or nil if not set.
-func (p *PendingAccountWrite) GetCodeHash() *CodeHash {
-	if p == nil {
-		zero := CodeHash{}
-		return &zero
-	}
-	return p.codeHash
-}
+func (p *PendingAccountWrite) GetCodeHash() *CodeHash { _ = "STUB: not implemented"; return nil }
 
 // IsCodeHashSet reports whether the code hash has been set in this pending write.
-func (p *PendingAccountWrite) IsCodeHashSet() bool {
-	if p == nil {
-		return false
-	}
-	return p.codeHash != nil
-}
+func (p *PendingAccountWrite) IsCodeHashSet() bool { _ = "STUB: not implemented"; return false }
 
 // SetBalance marks the balance as changed. A nil balance is treated as all zeros.
 // The pointer is stored directly; the caller must not modify the underlying array
 // after calling SetBalance. Returns self.
 func (p *PendingAccountWrite) SetBalance(balance *Balance) *PendingAccountWrite {
-	if p == nil {
-		p = NewPendingAccountWrite()
-	}
-	if balance == nil {
-		balance = &Balance{}
-	}
-	p.balance = balance
-	return p
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetNonce marks the nonce as changed. Returns self.
 func (p *PendingAccountWrite) SetNonce(nonce uint64) *PendingAccountWrite {
-	if p == nil {
-		p = NewPendingAccountWrite()
-	}
-	p.nonce = nonce
-	p.nonceSet = true
-	return p
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetCodeHash marks the code hash as changed. A nil code hash is treated as all zeros.
 // The pointer is stored directly; the caller must not modify the underlying array
 // after calling SetCodeHash. Returns self.
 func (p *PendingAccountWrite) SetCodeHash(codeHash *CodeHash) *PendingAccountWrite {
-	if p == nil {
-		p = NewPendingAccountWrite()
-	}
-	if codeHash == nil {
-		codeHash = &CodeHash{}
-	}
-	p.codeHash = codeHash
-	return p
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Merge applies the pending field changes onto a copy of the base AccountData, updating the
@@ -111,26 +61,6 @@ func (p *PendingAccountWrite) SetCodeHash(codeHash *CodeHash) *PendingAccountWri
 // fields are carried over from the base. The base is not modified. If a nil base is provided,
 // the pending writes are applied to a new AccountData instantiated to all 0s.
 func (p *PendingAccountWrite) Merge(base *AccountData, blockHeight int64) *AccountData {
-	var result *AccountData
-	if base == nil {
-		result = NewAccountData()
-	} else {
-		result = base.Copy()
-	}
-
-	result.SetBlockHeight(blockHeight)
-
-	if p != nil {
-		if p.balance != nil {
-			result.SetBalance(p.balance)
-		}
-		if p.nonceSet {
-			result.SetNonce(p.nonce)
-		}
-		if p.codeHash != nil {
-			result.SetCodeHash(p.codeHash)
-		}
-	}
-
-	return result
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -2,8 +2,6 @@ package types
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/address"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
 )
 
 const (
@@ -35,25 +33,20 @@ var (
 )
 
 // ValidatorSigningInfoKey - stored by *Consensus* address (not operator address)
-func ValidatorSigningInfoKey(v sdk.ConsAddress) []byte {
-	return append(ValidatorSigningInfoKeyPrefix, address.MustLengthPrefix(v.Bytes())...)
-}
+func ValidatorSigningInfoKey(v sdk.ConsAddress) []byte { _ = "STUB: not implemented"; return nil }
 
 // ValidatorSigningInfoAddress - extract the address from a validator signing info key
 func ValidatorSigningInfoAddress(key []byte) (v sdk.ConsAddress) {
+	_ = "STUB: not implemented"
 	// Remove prefix and address length.
-	kv.AssertKeyAtLeastLength(key, 3)
-	addr := key[2:]
-
-	return sdk.ConsAddress(addr)
+	return *new(sdk.ConsAddress)
 }
 
 // ValidatorMissedBlockBitArrayKey - stored by *Consensus* address (not operator address)
 func ValidatorMissedBlockBitArrayKey(v sdk.ConsAddress) []byte {
-	return append(ValidatorMissedBlockBitArrayKeyPrefix, address.MustLengthPrefix(v.Bytes())...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // AddrPubkeyRelationKey gets pubkey relation key used to get the pubkey from the address
-func AddrPubkeyRelationKey(addr []byte) []byte {
-	return append(AddrPubkeyRelationKeyPrefix, address.MustLengthPrefix(addr)...)
-}
+func AddrPubkeyRelationKey(addr []byte) []byte { _ = "STUB: not implemented"; return nil }

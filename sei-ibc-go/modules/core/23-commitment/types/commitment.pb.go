@@ -5,12 +5,11 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_go "github.com/confio/ics23/go"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -30,36 +29,23 @@ type MerkleRoot struct {
 	Hash []byte `protobuf:"bytes,1,opt,name=hash,proto3" json:"hash,omitempty"`
 }
 
-func (m *MerkleRoot) Reset()         { *m = MerkleRoot{} }
-func (m *MerkleRoot) String() string { return proto.CompactTextString(m) }
-func (*MerkleRoot) ProtoMessage()    {}
-func (*MerkleRoot) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7921d88972a41469, []int{0}
-}
-func (m *MerkleRoot) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MerkleRoot) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MerkleRoot) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MerkleRoot) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MerkleRoot) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MerkleRoot) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MerkleRoot) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MerkleRoot.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MerkleRoot) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MerkleRoot.Merge(m, src)
-}
-func (m *MerkleRoot) XXX_Size() int {
-	return m.Size()
-}
-func (m *MerkleRoot) XXX_DiscardUnknown() {
-	xxx_messageInfo_MerkleRoot.DiscardUnknown(m)
-}
+
+func (m *MerkleRoot) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MerkleRoot) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MerkleRoot) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MerkleRoot proto.InternalMessageInfo
 
@@ -70,45 +56,27 @@ type MerklePrefix struct {
 	KeyPrefix []byte `protobuf:"bytes,1,opt,name=key_prefix,json=keyPrefix,proto3" json:"key_prefix,omitempty" yaml:"key_prefix"`
 }
 
-func (m *MerklePrefix) Reset()         { *m = MerklePrefix{} }
-func (m *MerklePrefix) String() string { return proto.CompactTextString(m) }
-func (*MerklePrefix) ProtoMessage()    {}
-func (*MerklePrefix) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7921d88972a41469, []int{1}
-}
-func (m *MerklePrefix) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MerklePrefix) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MerklePrefix) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MerklePrefix) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MerklePrefix) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MerklePrefix) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MerklePrefix) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MerklePrefix.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MerklePrefix) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MerklePrefix.Merge(m, src)
-}
-func (m *MerklePrefix) XXX_Size() int {
-	return m.Size()
-}
-func (m *MerklePrefix) XXX_DiscardUnknown() {
-	xxx_messageInfo_MerklePrefix.DiscardUnknown(m)
-}
+
+func (m *MerklePrefix) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MerklePrefix) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MerklePrefix) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MerklePrefix proto.InternalMessageInfo
 
-func (m *MerklePrefix) GetKeyPrefix() []byte {
-	if m != nil {
-		return m.KeyPrefix
-	}
-	return nil
-}
+func (m *MerklePrefix) GetKeyPrefix() []byte { _ = "STUB: not implemented"; return nil }
 
 // MerklePath is the path used to verify commitment proofs, which can be an
 // arbitrary structured object (defined by a commitment type).
@@ -117,44 +85,26 @@ type MerklePath struct {
 	KeyPath []string `protobuf:"bytes,1,rep,name=key_path,json=keyPath,proto3" json:"key_path,omitempty" yaml:"key_path"`
 }
 
-func (m *MerklePath) Reset()      { *m = MerklePath{} }
-func (*MerklePath) ProtoMessage() {}
-func (*MerklePath) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7921d88972a41469, []int{2}
-}
-func (m *MerklePath) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MerklePath) Reset()                    { _ = "STUB: not implemented"; return }
+func (*MerklePath) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MerklePath) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MerklePath) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MerklePath) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MerklePath.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MerklePath) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MerklePath.Merge(m, src)
-}
-func (m *MerklePath) XXX_Size() int {
-	return m.Size()
-}
-func (m *MerklePath) XXX_DiscardUnknown() {
-	xxx_messageInfo_MerklePath.DiscardUnknown(m)
-}
+
+func (m *MerklePath) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MerklePath) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MerklePath) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MerklePath proto.InternalMessageInfo
 
-func (m *MerklePath) GetKeyPath() []string {
-	if m != nil {
-		return m.KeyPath
-	}
-	return nil
-}
+func (m *MerklePath) GetKeyPath() []string { _ = "STUB: not implemented"; return nil }
 
 // MerkleProof is a wrapper type over a chain of CommitmentProofs.
 // It demonstrates membership or non-membership for an element or set of
@@ -165,45 +115,27 @@ type MerkleProof struct {
 	Proofs []*_go.CommitmentProof `protobuf:"bytes,1,rep,name=proofs,proto3" json:"proofs,omitempty"`
 }
 
-func (m *MerkleProof) Reset()         { *m = MerkleProof{} }
-func (m *MerkleProof) String() string { return proto.CompactTextString(m) }
-func (*MerkleProof) ProtoMessage()    {}
-func (*MerkleProof) Descriptor() ([]byte, []int) {
-	return fileDescriptor_7921d88972a41469, []int{3}
-}
-func (m *MerkleProof) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MerkleProof) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MerkleProof) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MerkleProof) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MerkleProof) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MerkleProof) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MerkleProof) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MerkleProof.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MerkleProof) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MerkleProof.Merge(m, src)
-}
-func (m *MerkleProof) XXX_Size() int {
-	return m.Size()
-}
-func (m *MerkleProof) XXX_DiscardUnknown() {
-	xxx_messageInfo_MerkleProof.DiscardUnknown(m)
-}
+
+func (m *MerkleProof) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MerkleProof) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MerkleProof) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MerkleProof proto.InternalMessageInfo
 
-func (m *MerkleProof) GetProofs() []*_go.CommitmentProof {
-	if m != nil {
-		return m.Proofs
-	}
-	return nil
-}
+func (m *MerkleProof) GetProofs() []*_go.CommitmentProof { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	proto.RegisterType((*MerkleRoot)(nil), "ibc.core.commitment.v1.MerkleRoot")
@@ -242,620 +174,77 @@ var fileDescriptor_7921d88972a41469 = []byte{
 	0x01, 0x00, 0x00,
 }
 
-func (m *MerkleRoot) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *MerkleRoot) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *MerkleRoot) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *MerkleRoot) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *MerkleRoot) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Hash) > 0 {
-		i -= len(m.Hash)
-		copy(dAtA[i:], m.Hash)
-		i = encodeVarintCommitment(dAtA, i, uint64(len(m.Hash)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MerklePrefix) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MerklePrefix) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MerklePrefix) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.KeyPrefix) > 0 {
-		i -= len(m.KeyPrefix)
-		copy(dAtA[i:], m.KeyPrefix)
-		i = encodeVarintCommitment(dAtA, i, uint64(len(m.KeyPrefix)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *MerklePath) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *MerklePath) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *MerklePath) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *MerklePath) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *MerklePath) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.KeyPath) > 0 {
-		for iNdEx := len(m.KeyPath) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.KeyPath[iNdEx])
-			copy(dAtA[i:], m.KeyPath[iNdEx])
-			i = encodeVarintCommitment(dAtA, i, uint64(len(m.KeyPath[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MerkleProof) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *MerkleProof) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *MerkleProof) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *MerkleProof) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Proofs) > 0 {
-		for iNdEx := len(m.Proofs) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Proofs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintCommitment(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintCommitment(dAtA []byte, offset int, v uint64) int {
-	offset -= sovCommitment(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *MerkleRoot) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Hash)
-	if l > 0 {
-		n += 1 + l + sovCommitment(uint64(l))
-	}
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *MerklePrefix) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.KeyPrefix)
-	if l > 0 {
-		n += 1 + l + sovCommitment(uint64(l))
-	}
-	return n
-}
+func (m *MerkleRoot) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MerklePath) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.KeyPath) > 0 {
-		for _, s := range m.KeyPath {
-			l = len(s)
-			n += 1 + l + sovCommitment(uint64(l))
-		}
-	}
-	return n
-}
+func (m *MerklePrefix) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MerkleProof) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.Proofs) > 0 {
-		for _, e := range m.Proofs {
-			l = e.Size()
-			n += 1 + l + sovCommitment(uint64(l))
-		}
-	}
-	return n
-}
+func (m *MerklePath) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovCommitment(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozCommitment(x uint64) (n int) {
-	return sovCommitment(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *MerkleRoot) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowCommitment
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MerkleRoot: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MerkleRoot: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Hash", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowCommitment
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Hash = append(m.Hash[:0], dAtA[iNdEx:postIndex]...)
-			if m.Hash == nil {
-				m.Hash = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipCommitment(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MerkleProof) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MerklePrefix) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowCommitment
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MerklePrefix: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MerklePrefix: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field KeyPrefix", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowCommitment
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.KeyPrefix = append(m.KeyPrefix[:0], dAtA[iNdEx:postIndex]...)
-			if m.KeyPrefix == nil {
-				m.KeyPrefix = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipCommitment(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovCommitment(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MerklePath) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowCommitment
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MerklePath: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MerklePath: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field KeyPath", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowCommitment
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.KeyPath = append(m.KeyPath, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipCommitment(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sozCommitment(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MerkleProof) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowCommitment
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MerkleProof: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MerkleProof: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Proofs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowCommitment
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Proofs = append(m.Proofs, &_go.CommitmentProof{})
-			if err := m.Proofs[len(m.Proofs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipCommitment(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthCommitment
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MerkleRoot) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipCommitment(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowCommitment
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowCommitment
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowCommitment
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthCommitment
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupCommitment
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthCommitment
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *MerklePrefix) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *MerklePath) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *MerkleProof) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipCommitment(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthCommitment        = fmt.Errorf("proto: negative length found during unmarshaling")

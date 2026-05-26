@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	stdlog "log"
 	"net/http"
 	"os"
@@ -20,7 +19,8 @@ var routes = map[string]*rpcserver.RPCFunc{
 }
 
 func HelloWorld(ctx context.Context, name string, num int) (Result, error) {
-	return Result{fmt.Sprintf("hi %s %d", name, num)}, nil
+	_ = "STUB: not implemented"
+	return *new(Result), nil
 }
 
 type Result struct {

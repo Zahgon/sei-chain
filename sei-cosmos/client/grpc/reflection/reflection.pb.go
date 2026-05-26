@@ -6,15 +6,12 @@ package reflection
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -32,36 +29,29 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 type ListAllInterfacesRequest struct {
 }
 
-func (m *ListAllInterfacesRequest) Reset()         { *m = ListAllInterfacesRequest{} }
-func (m *ListAllInterfacesRequest) String() string { return proto.CompactTextString(m) }
-func (*ListAllInterfacesRequest) ProtoMessage()    {}
+func (m *ListAllInterfacesRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ListAllInterfacesRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*ListAllInterfacesRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ListAllInterfacesRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d48c054165687f5c, []int{0}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ListAllInterfacesRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ListAllInterfacesRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ListAllInterfacesRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ListAllInterfacesRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListAllInterfacesRequest.Merge(m, src)
-}
-func (m *ListAllInterfacesRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *ListAllInterfacesRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListAllInterfacesRequest.DiscardUnknown(m)
-}
+
+func (m *ListAllInterfacesRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ListAllInterfacesRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ListAllInterfacesRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ListAllInterfacesRequest proto.InternalMessageInfo
 
@@ -71,43 +61,34 @@ type ListAllInterfacesResponse struct {
 	InterfaceNames []string `protobuf:"bytes,1,rep,name=interface_names,json=interfaceNames,proto3" json:"interface_names,omitempty"`
 }
 
-func (m *ListAllInterfacesResponse) Reset()         { *m = ListAllInterfacesResponse{} }
-func (m *ListAllInterfacesResponse) String() string { return proto.CompactTextString(m) }
-func (*ListAllInterfacesResponse) ProtoMessage()    {}
+func (m *ListAllInterfacesResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ListAllInterfacesResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*ListAllInterfacesResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ListAllInterfacesResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d48c054165687f5c, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ListAllInterfacesResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ListAllInterfacesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ListAllInterfacesResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ListAllInterfacesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListAllInterfacesResponse.Merge(m, src)
-}
-func (m *ListAllInterfacesResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *ListAllInterfacesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListAllInterfacesResponse.DiscardUnknown(m)
-}
+
+func (m *ListAllInterfacesResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ListAllInterfacesResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ListAllInterfacesResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ListAllInterfacesResponse proto.InternalMessageInfo
 
 func (m *ListAllInterfacesResponse) GetInterfaceNames() []string {
-	if m != nil {
-		return m.InterfaceNames
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -118,43 +99,37 @@ type ListImplementationsRequest struct {
 	InterfaceName string `protobuf:"bytes,1,opt,name=interface_name,json=interfaceName,proto3" json:"interface_name,omitempty"`
 }
 
-func (m *ListImplementationsRequest) Reset()         { *m = ListImplementationsRequest{} }
-func (m *ListImplementationsRequest) String() string { return proto.CompactTextString(m) }
-func (*ListImplementationsRequest) ProtoMessage()    {}
+func (m *ListImplementationsRequest) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ListImplementationsRequest) String() string { _ = "STUB: not implemented"; return "" }
+func (*ListImplementationsRequest) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ListImplementationsRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d48c054165687f5c, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ListImplementationsRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ListImplementationsRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ListImplementationsRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ListImplementationsRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListImplementationsRequest.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *ListImplementationsRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *ListImplementationsRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListImplementationsRequest.DiscardUnknown(m)
-}
+
+func (m *ListImplementationsRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ListImplementationsRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ListImplementationsRequest proto.InternalMessageInfo
 
 func (m *ListImplementationsRequest) GetInterfaceName() string {
-	if m != nil {
-		return m.InterfaceName
-	}
+	_ = "STUB: not implemented"
 	return ""
 }
 
@@ -164,43 +139,37 @@ type ListImplementationsResponse struct {
 	ImplementationMessageNames []string `protobuf:"bytes,1,rep,name=implementation_message_names,json=implementationMessageNames,proto3" json:"implementation_message_names,omitempty"`
 }
 
-func (m *ListImplementationsResponse) Reset()         { *m = ListImplementationsResponse{} }
-func (m *ListImplementationsResponse) String() string { return proto.CompactTextString(m) }
-func (*ListImplementationsResponse) ProtoMessage()    {}
+func (m *ListImplementationsResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *ListImplementationsResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*ListImplementationsResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*ListImplementationsResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d48c054165687f5c, []int{3}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ListImplementationsResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ListImplementationsResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ListImplementationsResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ListImplementationsResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ListImplementationsResponse.Merge(m, src)
+	_ = "STUB: not implemented"
+	return
 }
-func (m *ListImplementationsResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *ListImplementationsResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_ListImplementationsResponse.DiscardUnknown(m)
-}
+
+func (m *ListImplementationsResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ListImplementationsResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ListImplementationsResponse proto.InternalMessageInfo
 
 func (m *ListImplementationsResponse) GetImplementationMessageNames() []string {
-	if m != nil {
-		return m.ImplementationMessageNames
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -270,25 +239,18 @@ type reflectionServiceClient struct {
 }
 
 func NewReflectionServiceClient(cc grpc1.ClientConn) ReflectionServiceClient {
-	return &reflectionServiceClient{cc}
+	_ = "STUB: not implemented"
+	return *new(ReflectionServiceClient)
 }
 
 func (c *reflectionServiceClient) ListAllInterfaces(ctx context.Context, in *ListAllInterfacesRequest, opts ...grpc.CallOption) (*ListAllInterfacesResponse, error) {
-	out := new(ListAllInterfacesResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.reflection.v1beta1.ReflectionService/ListAllInterfaces", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *reflectionServiceClient) ListImplementations(ctx context.Context, in *ListImplementationsRequest, opts ...grpc.CallOption) (*ListImplementationsResponse, error) {
-	out := new(ListImplementationsResponse)
-	err := c.cc.Invoke(ctx, "/cosmos.base.reflection.v1beta1.ReflectionService/ListImplementations", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ReflectionServiceServer is the server API for ReflectionService service.
@@ -306,50 +268,28 @@ type UnimplementedReflectionServiceServer struct {
 }
 
 func (*UnimplementedReflectionServiceServer) ListAllInterfaces(ctx context.Context, req *ListAllInterfacesRequest) (*ListAllInterfacesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListAllInterfaces not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedReflectionServiceServer) ListImplementations(ctx context.Context, req *ListImplementationsRequest) (*ListImplementationsResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method ListImplementations not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func RegisterReflectionServiceServer(s grpc1.Server, srv ReflectionServiceServer) {
-	s.RegisterService(&_ReflectionService_serviceDesc, srv)
+	_ = "STUB: not implemented"
+	return
 }
 
 func _ReflectionService_ListAllInterfaces_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListAllInterfacesRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReflectionServiceServer).ListAllInterfaces(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.reflection.v1beta1.ReflectionService/ListAllInterfaces",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReflectionServiceServer).ListAllInterfaces(ctx, req.(*ListAllInterfacesRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _ReflectionService_ListImplementations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ListImplementationsRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ReflectionServiceServer).ListImplementations(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/cosmos.base.reflection.v1beta1.ReflectionService/ListImplementations",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ReflectionServiceServer).ListImplementations(ctx, req.(*ListImplementationsRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _ReflectionService_serviceDesc = grpc.ServiceDesc{
@@ -370,565 +310,103 @@ var _ReflectionService_serviceDesc = grpc.ServiceDesc{
 }
 
 func (m *ListAllInterfacesRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ListAllInterfacesRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListAllInterfacesRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListAllInterfacesResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ListAllInterfacesResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListAllInterfacesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.InterfaceNames) > 0 {
-		for iNdEx := len(m.InterfaceNames) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.InterfaceNames[iNdEx])
-			copy(dAtA[i:], m.InterfaceNames[iNdEx])
-			i = encodeVarintReflection(dAtA, i, uint64(len(m.InterfaceNames[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListImplementationsRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ListImplementationsRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListImplementationsRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.InterfaceName) > 0 {
-		i -= len(m.InterfaceName)
-		copy(dAtA[i:], m.InterfaceName)
-		i = encodeVarintReflection(dAtA, i, uint64(len(m.InterfaceName)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListImplementationsResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ListImplementationsResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ListImplementationsResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.ImplementationMessageNames) > 0 {
-		for iNdEx := len(m.ImplementationMessageNames) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.ImplementationMessageNames[iNdEx])
-			copy(dAtA[i:], m.ImplementationMessageNames[iNdEx])
-			i = encodeVarintReflection(dAtA, i, uint64(len(m.ImplementationMessageNames[iNdEx])))
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintReflection(dAtA []byte, offset int, v uint64) int {
-	offset -= sovReflection(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *ListAllInterfacesRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *ListAllInterfacesResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.InterfaceNames) > 0 {
-		for _, s := range m.InterfaceNames {
-			l = len(s)
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ListAllInterfacesRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ListImplementationsRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.InterfaceName)
-	if l > 0 {
-		n += 1 + l + sovReflection(uint64(l))
-	}
-	return n
-}
+func (m *ListAllInterfacesResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *ListImplementationsResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.ImplementationMessageNames) > 0 {
-		for _, s := range m.ImplementationMessageNames {
-			l = len(s)
-			n += 1 + l + sovReflection(uint64(l))
-		}
-	}
-	return n
-}
+func (m *ListImplementationsRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovReflection(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozReflection(x uint64) (n int) {
-	return sovReflection(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
+func (m *ListImplementationsResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sovReflection(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozReflection(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
 func (m *ListAllInterfacesRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ListAllInterfacesRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListAllInterfacesRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *ListAllInterfacesResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ListAllInterfacesResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListAllInterfacesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceNames", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.InterfaceNames = append(m.InterfaceNames, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *ListImplementationsRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ListImplementationsRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListImplementationsRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field InterfaceName", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.InterfaceName = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *ListImplementationsResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ListImplementationsResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ListImplementationsResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ImplementationMessageNames", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReflection
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ImplementationMessageNames = append(m.ImplementationMessageNames, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReflection(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReflection
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipReflection(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowReflection
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowReflection
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthReflection
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupReflection
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthReflection
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipReflection(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthReflection        = fmt.Errorf("proto: negative length found during unmarshaling")

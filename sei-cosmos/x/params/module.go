@@ -1,9 +1,7 @@
 package params
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 	"math/rand"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -18,11 +16,7 @@ import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
 	simtypes "github.com/sei-protocol/sei-chain/sei-cosmos/types/simulation"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/params/client/cli"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/params/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/params/simulation"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types/proposal"
 )
 
 var (
@@ -35,59 +29,58 @@ var (
 type AppModuleBasic struct{}
 
 // Name returns the params module's name.
-func (AppModuleBasic) Name() string {
-	return proposal.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterLegacyAminoCodec registers the params module's types on the given LegacyAmino codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	proposal.RegisterLegacyAminoCodec(cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // DefaultGenesis returns default genesis state as raw bytes for the params
 // module.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesis())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the params module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var data types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &data); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-
-	return data.Validate()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes registers the REST routes for the params module.
-func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {}
+func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the params module.
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the params module.
+	return
+}
+
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	_ = proposal.RegisterQueryHandlerClient(context.Background(), mux, proposal.NewQueryClient(clientCtx))
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetTxCmd returns no root tx command for the params module.
-func (AppModuleBasic) GetTxCmd() *cobra.Command { return nil }
+func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	_ = "STUB: not implemented"
 
-// GetQueryCmd returns no root query command for the params module.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.NewQueryCmd()
+	// GetQueryCmd returns no root query command for the params module.
+	return nil
 }
 
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
+
 func (am AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	proposal.RegisterInterfaces(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // AppModule implements an application module for the distribution module.
@@ -98,76 +91,81 @@ type AppModule struct {
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(k keeper.Keeper) AppModule {
-	return AppModule{
-		AppModuleBasic: AppModuleBasic{},
-		keeper:         k,
-	}
-}
+func NewAppModule(k keeper.Keeper) AppModule { _ = "STUB: not implemented"; return *new(AppModule) }
 
-func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) { _ = "STUB: not implemented"; return }
 
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
-	var genesisState types.GenesisState
-	cdc.MustUnmarshalJSON(gs, &genesisState)
-
-	am.keeper.InitGenesis(ctx, &genesisState)
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	gs := am.keeper.ExportGenesis(ctx)
-	return cdc.MustMarshalJSON(gs)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (AppModule) Route() sdk.Route { return sdk.Route{} }
+func (AppModule) Route() sdk.Route {
+	_ = "STUB: not implemented"
 
-// QuerierRoute returns the x/param module's querier route name.
-func (AppModule) QuerierRoute() string { return types.QuerierRoute }
+	// QuerierRoute returns the x/param module's querier route name.
+	return *new(sdk.Route)
+}
+
+func (AppModule) QuerierRoute() string { _ = "STUB: not implemented"; return "" }
 
 // LegacyQuerierHandler returns the x/params querier handler.
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
+	_ = "STUB: not implemented"
+	return *new(sdk.Querier)
 }
 
 // RegisterServices registers a gRPC query service to respond to the
 // module-specific gRPC queries.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	proposal.RegisterQueryServer(cfg.QueryServer(), am.keeper)
-	m := keeper.NewMigrator(am.keeper)
-	_ = cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1to2)
-}
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 2 }
+func (AppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
 
-// ProposalContents returns all the params content functions used to
-// simulate governance proposals.
+	// ProposalContents returns all the params content functions used to
+	// simulate governance proposals.
+	return 0
+}
+
 func (am AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
-	return simulation.ProposalContents(simState.ParamChanges)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // RandomizedParams creates randomized distribution param changes for the simulator.
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+	_ = "STUB: not implemented"
+
+	// RegisterStoreDecoder doesn't register any type.
 	return nil
 }
 
-// RegisterStoreDecoder doesn't register any type.
-func (AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}
+func (AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
+	_ = "STUB: not implemented"
 
-// WeightedOperations returns the all the gov module operations with their respective weights.
+	// WeightedOperations returns the all the gov module operations with their respective weights.
+	return
+}
+
 func (am AppModule) WeightedOperations(_ module.SimulationState) []simtypes.WeightedOperation {
+	_ = "STUB: not implemented"
+
+	// GenerateGenesisState performs a no-op.
 	return nil
 }
 
-// GenerateGenesisState performs a no-op.
-func (AppModule) GenerateGenesisState(simState *module.SimulationState) {}
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
+	_ = "STUB: not implemented"
+	return
+}

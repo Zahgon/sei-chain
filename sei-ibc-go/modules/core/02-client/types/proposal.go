@@ -1,10 +1,7 @@
 package types
 
 import (
-	"fmt"
-
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 	upgradetypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/types"
 
@@ -30,113 +27,67 @@ func init() {
 
 // NewClientUpdateProposal creates a new client update proposal.
 func NewClientUpdateProposal(title, description, subjectClientID, substituteClientID string) govtypes.Content {
-	return &ClientUpdateProposal{
-		Title:              title,
-		Description:        description,
-		SubjectClientId:    subjectClientID,
-		SubstituteClientId: substituteClientID,
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content)
 }
 
 // GetTitle returns the title of a client update proposal.
-func (cup *ClientUpdateProposal) GetTitle() string { return cup.Title }
+func (cup *ClientUpdateProposal) GetTitle() string {
+	_ = "STUB: not implemented"
 
-// GetDescription returns the description of a client update proposal.
-func (cup *ClientUpdateProposal) GetDescription() string { return cup.Description }
+	// GetDescription returns the description of a client update proposal.
+	return ""
+}
+
+func (cup *ClientUpdateProposal) GetDescription() string { _ = "STUB: not implemented"; return "" }
 
 // ProposalRoute returns the routing key of a client update proposal.
-func (cup *ClientUpdateProposal) ProposalRoute() string { return RouterKey }
+func (cup *ClientUpdateProposal) ProposalRoute() string {
+	_ = "STUB: not implemented"
 
-// ProposalType returns the type of a client update proposal.
-func (cup *ClientUpdateProposal) ProposalType() string { return ProposalTypeClientUpdate }
+	// ProposalType returns the type of a client update proposal.
+	return ""
+}
+
+func (cup *ClientUpdateProposal) ProposalType() string { _ = "STUB: not implemented"; return "" }
 
 // ValidateBasic runs basic stateless validity checks
-func (cup *ClientUpdateProposal) ValidateBasic() error {
-	err := govtypes.ValidateAbstract(cup)
-	if err != nil {
-		return err
-	}
-
-	if cup.SubjectClientId == cup.SubstituteClientId {
-		return sdkerrors.Wrap(ErrInvalidSubstitute, "subject and substitute client identifiers are equal")
-	}
-	if _, _, err := ParseClientIdentifier(cup.SubjectClientId); err != nil {
-		return err
-	}
-	if _, _, err := ParseClientIdentifier(cup.SubstituteClientId); err != nil {
-		return err
-	}
-
-	return nil
-}
+func (cup *ClientUpdateProposal) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // NewUpgradeProposal creates a new IBC breaking upgrade proposal.
 func NewUpgradeProposal(title, description string, plan upgradetypes.Plan, upgradedClientState exported.ClientState) (govtypes.Content, error) {
-	any, err := PackClientState(upgradedClientState)
-	if err != nil {
-		return nil, err
-	}
-
-	return &UpgradeProposal{
-		Title:               title,
-		Description:         description,
-		Plan:                plan,
-		UpgradedClientState: any,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(govtypes.Content), nil
 }
 
 // GetTitle returns the title of a upgrade proposal.
-func (up *UpgradeProposal) GetTitle() string { return up.Title }
+func (up *UpgradeProposal) GetTitle() string {
+	_ = "STUB: not implemented"
 
-// GetDescription returns the description of a upgrade proposal.
-func (up *UpgradeProposal) GetDescription() string { return up.Description }
+	// GetDescription returns the description of a upgrade proposal.
+	return ""
+}
+
+func (up *UpgradeProposal) GetDescription() string { _ = "STUB: not implemented"; return "" }
 
 // ProposalRoute returns the routing key of a upgrade proposal.
-func (up *UpgradeProposal) ProposalRoute() string { return RouterKey }
+func (up *UpgradeProposal) ProposalRoute() string {
+	_ = "STUB: not implemented"
 
-// ProposalType returns the upgrade proposal type.
-func (up *UpgradeProposal) ProposalType() string { return ProposalTypeUpgrade }
+	// ProposalType returns the upgrade proposal type.
+	return ""
+}
+
+func (up *UpgradeProposal) ProposalType() string { _ = "STUB: not implemented"; return "" }
 
 // ValidateBasic runs basic stateless validity checks
-func (up *UpgradeProposal) ValidateBasic() error {
-	if err := govtypes.ValidateAbstract(up); err != nil {
-		return err
-	}
-
-	if err := up.Plan.ValidateBasic(); err != nil {
-		return err
-	}
-
-	if up.UpgradedClientState == nil {
-		return sdkerrors.Wrap(ErrInvalidUpgradeProposal, "upgraded client state cannot be nil")
-	}
-
-	_, err := UnpackClientState(up.UpgradedClientState)
-	if err != nil {
-		return sdkerrors.Wrap(err, "failed to unpack upgraded client state")
-	}
-
-	return nil
-}
+func (up *UpgradeProposal) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // String returns the string representation of the UpgradeProposal.
-func (up UpgradeProposal) String() string {
-	var upgradedClientStr string
-	upgradedClient, err := UnpackClientState(up.UpgradedClientState)
-	if err != nil {
-		upgradedClientStr = "invalid IBC Client State"
-	} else {
-		upgradedClientStr = upgradedClient.String()
-	}
-
-	return fmt.Sprintf(`IBC Upgrade Proposal
-  Title: %s
-  Description: %s
-  %s
-  Upgraded IBC Client: %s`, up.Title, up.Description, up.Plan, upgradedClientStr)
-}
+func (up UpgradeProposal) String() string { _ = "STUB: not implemented"; return "" }
 
 // UnpackInterfaces implements UnpackInterfacesMessage.UnpackInterfaces
 func (up UpgradeProposal) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(up.UpgradedClientState, new(exported.ClientState))
+	_ = "STUB: not implemented"
+	return nil
 }

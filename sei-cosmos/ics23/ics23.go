@@ -23,11 +23,6 @@ and determine neighbors
 */
 package ics23
 
-import (
-	"bytes"
-	"fmt"
-)
-
 // CommitmentRoot is a byte slice that represents the merkle root of a tree that can be used to validate proofs
 type CommitmentRoot []byte
 
@@ -35,14 +30,9 @@ type CommitmentRoot []byte
 // proof is (contains) an ExistenceProof for the given key and value AND
 // calculating the root for the ExistenceProof matches the provided CommitmentRoot
 func VerifyMembership(spec *ProofSpec, root CommitmentRoot, proof *CommitmentProof, key []byte, value []byte) bool {
+	_ = "STUB: not implemented"
 	// decompress it before running code (no-op if not compressed)
-	proof = Decompress(proof)
-	ep := getExistProofForKey(proof, key)
-	if ep == nil {
-		return false
-	}
-	err := ep.Verify(spec, root, key, value)
-	return err == nil
+	return false
 }
 
 // VerifyNonMembership returns true iff
@@ -51,42 +41,25 @@ func VerifyMembership(spec *ProofSpec, root CommitmentRoot, proof *CommitmentPro
 // left and right proofs are neighbors (or left/right most if one is nil)
 // provided key is between the keys of the two proofs
 func VerifyNonMembership(spec *ProofSpec, root CommitmentRoot, proof *CommitmentProof, key []byte) bool {
+	_ = "STUB: not implemented"
 	// decompress it before running code (no-op if not compressed)
-	proof = Decompress(proof)
-	np := getNonExistProofForKey(proof, key)
-	if np == nil {
-		return false
-	}
-	err := np.Verify(spec, root, key)
-	return err == nil
+	return false
 }
 
 // BatchVerifyMembership will ensure all items are also proven by the CommitmentProof (which should be a BatchProof,
 // unless there is one item, when a ExistenceProof may work)
 func BatchVerifyMembership(spec *ProofSpec, root CommitmentRoot, proof *CommitmentProof, items map[string][]byte) bool {
+	_ = "STUB: not implemented"
 	// decompress it before running code (no-op if not compressed) - once for batch
-	proof = Decompress(proof)
-	for k, v := range items {
-		valid := VerifyMembership(spec, root, proof, []byte(k), v)
-		if !valid {
-			return false
-		}
-	}
-	return true
+	return false
 }
 
 // BatchVerifyNonMembership will ensure all items are also proven to not be in the Commitment by the CommitmentProof
 // (which should be a BatchProof, unless there is one item, when a NonExistenceProof may work)
 func BatchVerifyNonMembership(spec *ProofSpec, root CommitmentRoot, proof *CommitmentProof, keys [][]byte) bool {
+	_ = "STUB: not implemented"
 	// decompress it before running code (no-op if not compressed) - once for batch
-	proof = Decompress(proof)
-	for _, k := range keys {
-		valid := VerifyNonMembership(spec, root, proof, k)
-		if !valid {
-			return false
-		}
-	}
-	return true
+	return false
 }
 
 // CombineProofs takes a number of commitment proofs (simple or batch) and
@@ -94,82 +67,20 @@ func BatchVerifyNonMembership(spec *ProofSpec, root CommitmentRoot, proof *Commi
 //
 // This is designed for proof generation libraries to create efficient batches
 func CombineProofs(proofs []*CommitmentProof) (*CommitmentProof, error) {
-	var entries []*BatchEntry
-
-	for _, proof := range proofs {
-		if ex := proof.GetExist(); ex != nil {
-			entry := &BatchEntry{
-				Proof: &BatchEntry_Exist{
-					Exist: ex,
-				},
-			}
-			entries = append(entries, entry)
-		} else if non := proof.GetNonexist(); non != nil {
-			entry := &BatchEntry{
-				Proof: &BatchEntry_Nonexist{
-					Nonexist: non,
-				},
-			}
-			entries = append(entries, entry)
-		} else if batch := proof.GetBatch(); batch != nil {
-			entries = append(entries, batch.Entries...)
-		} else if comp := proof.GetCompressed(); comp != nil {
-			decomp := Decompress(proof)
-			entries = append(entries, decomp.GetBatch().Entries...)
-		} else {
-			return nil, fmt.Errorf("proof neither exist or nonexist: %#v", proof.GetProof())
-		}
-	}
-
-	batch := &CommitmentProof{
-		Proof: &CommitmentProof_Batch{
-			Batch: &BatchProof{
-				Entries: entries,
-			},
-		},
-	}
-
-	return Compress(batch), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func getExistProofForKey(proof *CommitmentProof, key []byte) *ExistenceProof {
-	switch p := proof.Proof.(type) {
-	case *CommitmentProof_Exist:
-		ep := p.Exist
-		if bytes.Equal(ep.Key, key) {
-			return ep
-		}
-	case *CommitmentProof_Batch:
-		for _, sub := range p.Batch.Entries {
-			if ep := sub.GetExist(); ep != nil && bytes.Equal(ep.Key, key) {
-				return ep
-			}
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func getNonExistProofForKey(proof *CommitmentProof, key []byte) *NonExistenceProof {
-	switch p := proof.Proof.(type) {
-	case *CommitmentProof_Nonexist:
-		np := p.Nonexist
-		if isLeft(np.Left, key) && isRight(np.Right, key) {
-			return np
-		}
-	case *CommitmentProof_Batch:
-		for _, sub := range p.Batch.Entries {
-			if np := sub.GetNonexist(); np != nil && isLeft(np.Left, key) && isRight(np.Right, key) {
-				return np
-			}
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func isLeft(left *ExistenceProof, key []byte) bool {
-	return left == nil || bytes.Compare(left.Key, key) < 0
-}
+func isLeft(left *ExistenceProof, key []byte) bool { _ = "STUB: not implemented"; return false }
 
-func isRight(right *ExistenceProof, key []byte) bool {
-	return right == nil || bytes.Compare(right.Key, key) > 0
-}
+func isRight(right *ExistenceProof, key []byte) bool { _ = "STUB: not implemented"; return false }

@@ -24,19 +24,14 @@ type Address = bytes.HexBytes
 // a peer address.
 //
 // See: https://docs.tendermint.com/master/spec/core/data_structures.html#address
-func AddressHash(bz []byte) Address {
-	h := sha256.Sum256(bz)
-	return Address(h[:AddressSize])
-}
+func AddressHash(bz []byte) Address { _ = "STUB: not implemented"; return *new(Address) }
 
 type Hash [sha256.Size]byte
 
-func (h Hash) Bytes() bytes.HexBytes {
-	return bytes.HexBytes(h[:])
-}
+func (h Hash) Bytes() bytes.HexBytes { _ = "STUB: not implemented"; return *new(bytes.HexBytes) }
 
 // Checksum returns the SHA256 of the bz.
-func Checksum(bz []byte) Hash { return Hash(sha256.Sum256(bz)) }
+func Checksum(bz []byte) Hash { _ = "STUB: not implemented"; return *new(Hash) }
 
 type PubKey = ed25519.PublicKey
 type PrivKey = ed25519.SecretKey
@@ -44,10 +39,6 @@ type Sig = ed25519.Signature
 type BatchVerifier = ed25519.BatchVerifier
 type ErrBadSig = ed25519.ErrBadSig
 
-func SigFromBytes(raw []byte) (Sig, error) {
-	return ed25519.SignatureFromBytes(raw)
-}
+func SigFromBytes(raw []byte) (Sig, error) { _ = "STUB: not implemented"; return *new(Sig), nil }
 
-func NewBatchVerifier() *BatchVerifier {
-	return ed25519.NewBatchVerifier()
-}
+func NewBatchVerifier() *BatchVerifier { _ = "STUB: not implemented"; return nil }

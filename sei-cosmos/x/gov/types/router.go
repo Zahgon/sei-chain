@@ -1,11 +1,5 @@
 package types
 
-import (
-	"fmt"
-
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-)
-
 var _ Router = (*router)(nil)
 
 // Router implements a governance Handler router.
@@ -24,49 +18,21 @@ type router struct {
 }
 
 // NewRouter creates a new Router interface instance
-func NewRouter() Router {
-	return &router{
-		routes: make(map[string]Handler),
-	}
-}
+func NewRouter() Router { _ = "STUB: not implemented"; return *new(Router) }
 
 // Seal seals the router which prohibits any subsequent route handlers to be
 // added. Seal will panic if called more than once.
-func (rtr *router) Seal() {
-	if rtr.sealed {
-		panic("router already sealed")
-	}
-	rtr.sealed = true
-}
+func (rtr *router) Seal() { _ = "STUB: not implemented"; return }
 
 // AddRoute adds a governance handler for a given path. It returns the Router
 // so AddRoute calls can be linked. It will panic if the router is sealed.
 func (rtr *router) AddRoute(path string, h Handler) Router {
-	if rtr.sealed {
-		panic("router sealed; cannot add route handler")
-	}
-
-	if !sdk.IsAlphaNumeric(path) {
-		panic("route expressions can only contain alphanumeric characters")
-	}
-	if rtr.HasRoute(path) {
-		panic(fmt.Sprintf("route %s has already been initialized", path))
-	}
-
-	rtr.routes[path] = h
-	return rtr
+	_ = "STUB: not implemented"
+	return *new(Router)
 }
 
 // HasRoute returns true if the router has a path registered or false otherwise.
-func (rtr *router) HasRoute(path string) bool {
-	return rtr.routes[path] != nil
-}
+func (rtr *router) HasRoute(path string) bool { _ = "STUB: not implemented"; return false }
 
 // GetRoute returns a Handler for a given path.
-func (rtr *router) GetRoute(path string) Handler {
-	if !rtr.HasRoute(path) {
-		panic(fmt.Sprintf("route \"%s\" does not exist", path))
-	}
-
-	return rtr.routes[path]
-}
+func (rtr *router) GetRoute(path string) Handler { _ = "STUB: not implemented"; return *new(Handler) }

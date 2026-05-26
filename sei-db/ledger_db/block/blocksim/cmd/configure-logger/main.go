@@ -10,11 +10,6 @@ package main
 import (
 	"fmt"
 	"os"
-	"path/filepath"
-	"strings"
-
-	"github.com/sei-protocol/sei-chain/sei-db/common/utils"
-	"github.com/sei-protocol/sei-chain/sei-db/ledger_db/block/blocksim"
 )
 
 func main() {
@@ -24,29 +19,6 @@ func main() {
 	}
 }
 
-func run() error {
-	if len(os.Args) != 2 {
-		return fmt.Errorf("usage: configure-logger <config-file>")
-	}
+func run() error { _ = "STUB: not implemented"; return nil }
 
-	cfg := blocksim.DefaultBlocksimConfig()
-	if err := utils.LoadConfigFromFile(os.Args[1], cfg); err != nil {
-		return fmt.Errorf("load config: %w", err)
-	}
-
-	logDir, err := utils.ResolveAndCreateDir(cfg.LogDir)
-	if err != nil {
-		return fmt.Errorf("resolve log dir: %w", err)
-	}
-
-	logFile := filepath.Join(logDir, "blocksim.log")
-
-	fmt.Printf("export SEI_LOG_OUTPUT=%s\n", shellQuote(logFile))
-	fmt.Printf("export SEI_LOG_LEVEL=%s\n", shellQuote(strings.ToLower(cfg.LogLevel)))
-
-	return nil
-}
-
-func shellQuote(s string) string {
-	return "'" + strings.ReplaceAll(s, "'", "'\\''") + "'"
-}
+func shellQuote(s string) string { _ = "STUB: not implemented"; return "" }

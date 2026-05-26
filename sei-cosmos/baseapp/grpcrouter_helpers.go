@@ -2,10 +2,8 @@ package baseapp
 
 import (
 	gocontext "context"
-	"fmt"
 
 	gogogrpc "github.com/gogo/protobuf/grpc"
-	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"google.golang.org/grpc"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
@@ -29,40 +27,18 @@ var (
 // NewQueryServerTestHelper creates a new QueryServiceTestHelper that wraps
 // the provided sdk.Context
 func NewQueryServerTestHelper(ctx sdk.Context, interfaceRegistry types.InterfaceRegistry) *QueryServiceTestHelper {
-	qrt := NewGRPCQueryRouter()
-	qrt.SetInterfaceRegistry(interfaceRegistry)
-	return &QueryServiceTestHelper{GRPCQueryRouter: qrt, Ctx: ctx}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Invoke implements the grpc ClientConn.Invoke method
 func (q *QueryServiceTestHelper) Invoke(_ gocontext.Context, method string, args, reply interface{}, _ ...grpc.CallOption) error {
-	querier := q.Route(method)
-	if querier == nil {
-		return fmt.Errorf("handler not found for %s", method)
-	}
-	reqBz, err := protoCodec.Marshal(args)
-	if err != nil {
-		return err
-	}
-
-	res, err := querier(q.Ctx, abci.RequestQuery{Data: reqBz})
-	if err != nil {
-		return err
-	}
-
-	err = protoCodec.Unmarshal(res.Value, reply)
-	if err != nil {
-		return err
-	}
-
-	if q.interfaceRegistry != nil {
-		return types.UnpackInterfaces(reply, q.interfaceRegistry)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // NewStream implements the grpc ClientConn.NewStream method
 func (q *QueryServiceTestHelper) NewStream(gocontext.Context, *grpc.StreamDesc, string, ...grpc.CallOption) (grpc.ClientStream, error) {
-	return nil, fmt.Errorf("not supported")
+	_ = "STUB: not implemented"
+	return *new(grpc.ClientStream), nil
 }

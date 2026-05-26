@@ -1,8 +1,6 @@
 package migration
 
 import (
-	"fmt"
-
 	ics23 "github.com/confio/ics23/go"
 	"github.com/sei-protocol/sei-chain/sei-db/proto"
 	dbm "github.com/tendermint/tm-db"
@@ -20,18 +18,7 @@ const (
 	MigrationComplete MigrationStatus = 2
 )
 
-func (s MigrationStatus) String() string {
-	switch s {
-	case MigrationNotStarted:
-		return "not_started"
-	case MigrationInProgress:
-		return "in_progress"
-	case MigrationComplete:
-		return "complete"
-	default:
-		return fmt.Sprintf("unknown(%d)", int(s))
-	}
-}
+func (s MigrationStatus) String() string { _ = "STUB: not implemented"; return "" }
 
 // Write a batch of values to the database.
 //

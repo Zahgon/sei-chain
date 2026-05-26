@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	wasmvm "github.com/sei-protocol/sei-chain/sei-wasmvm"
 	wasmvmtypes "github.com/sei-protocol/sei-chain/sei-wasmvm/types"
 )
@@ -26,15 +25,13 @@ var (
 )
 
 func humanAddress(canon []byte) (string, uint64, error) {
-	if err := sdk.VerifyAddressFormat(canon); err != nil {
-		return "", costHumanize, err
-	}
-	return sdk.AccAddress(canon).String(), costHumanize, nil
+	_ = "STUB: not implemented"
+	return "", 0, nil
 }
 
 func canonicalAddress(human string) ([]byte, uint64, error) {
-	bz, err := sdk.AccAddressFromBech32(human)
-	return bz, costCanonical, err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 var cosmwasmAPI = wasmvm.GoAPI{

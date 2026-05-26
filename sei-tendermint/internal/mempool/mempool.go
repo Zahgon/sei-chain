@@ -1,12 +1,9 @@
 package mempool
 
 import (
-	"bytes"
 	"context"
 	"crypto/sha256"
 	"errors"
-	"fmt"
-	"math/big"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -17,7 +14,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/libs/reservoir"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/proxy"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/scope"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/sei-protocol/seilog"
 )
@@ -141,25 +137,20 @@ type Config struct {
 }
 
 func DefaultConfig() *Config {
-	return &Config{
-		// Each signature verification takes .5ms, Size reduced until we implement
-		// ABCI Recheck
-		Size:                      5000,
-		MaxTxsBytes:               1024 * 1024 * 1024, // 1GB
-		CacheSize:                 10000,
-		DuplicateTxsCacheSize:     100000,
-		MaxTxBytes:                1024 * 1024,     // 1MB
-		TTLDuration:               5 * time.Second, // prevent stale txs from filling mempool
-		TTLNumBlocks:              10,              // remove txs after 10 blocks
-		TxNotifyThreshold:         0,
-		PendingSize:               5000,
-		MaxPendingTxsBytes:        1024 * 1024 * 1024, // 1GB
-		RemoveExpiredTxsFromQueue: true,
-		DropPriorityThreshold:     0.1,
-		DropUtilisationThreshold:  1.0,
-		DropPriorityReservoirSize: 10_240,
-	}
+	_ = "STUB: not implemented"
+
+	// Each signature verification takes .5ms, Size reduced until we implement
+	// ABCI Recheck
+	return nil
 }
+
+// 1GB
+
+// 1MB
+// prevent stale txs from filling mempool
+// remove txs after 10 blocks
+
+// 1GB
 
 type evmAddrNonce struct {
 	Address common.Address
@@ -243,147 +234,79 @@ func NewTxMempool(
 	metrics *Metrics,
 	txConstraintsFetcher TxConstraintsFetcher,
 ) *TxMempool {
-
-	txmp := &TxMempool{
-		config:               cfg,
-		app:                  app,
-		txsAvailable:         make(chan struct{}, 1),
-		height:               -1,
-		cache:                NopTxCache{},
-		blockFailedTxs:       NopTxCache{},
-		metrics:              metrics,
-		txStore:              NewTxStore(),
-		gossipIndex:          clist.New[*WrappedTx](),
-		priorityIndex:        NewTxPriorityQueue(),
-		pendingTxs:           NewPendingTxs(cfg),
-		byAddrNonce:          utils.NewMutex(map[evmAddrNonce]*WrappedTx{}),
-		txConstraintsFetcher: txConstraintsFetcher,
-		priorityReservoir:    reservoir.New[int64](cfg.DropPriorityReservoirSize, cfg.DropPriorityThreshold, nil), // Use non-deterministic RNG
-	}
-
-	if cfg.CacheSize > 0 {
-		txmp.cache = NewLRUTxCache(cfg.CacheSize, maxCacheKeySize)
-		txmp.blockFailedTxs = NewLRUTxCache(cfg.CacheSize, maxCacheKeySize)
-	}
-
-	if cfg.DuplicateTxsCacheSize > 0 {
-		txmp.duplicateTxsCache = utils.Some(NewDuplicateTxCache(cfg.DuplicateTxsCacheSize, 1*time.Minute, maxCacheKeySize))
-	}
-
-	return txmp
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (txmp *TxMempool) Config() *Config { return txmp.config }
+// Use non-deterministic RNG
 
-func (txmp *TxMempool) App() *proxy.Proxy { return txmp.app }
+func (txmp *TxMempool) Config() *Config { _ = "STUB: not implemented"; return nil }
+
+func (txmp *TxMempool) App() *proxy.Proxy { _ = "STUB: not implemented"; return nil }
 
 func (txmp *TxMempool) EvmNextPendingNonce(addr common.Address) uint64 {
-	an := evmAddrNonce{addr, txmp.app.EvmNonce(addr)}
-	for byAddrNonce := range txmp.byAddrNonce.Lock() {
-		for {
-			if _, ok := byAddrNonce[an]; !ok {
-				break
-			}
-			an.Nonce += 1
-		}
-	}
-	return an.Nonce
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (txmp *TxMempool) addNonce(wtx *WrappedTx) {
-	evm, ok := wtx.evm.Get()
-	if !ok {
-		return
-	}
-	an := evmAddrNonce{evm.address, evm.nonce}
-	for byAddrNonce := range txmp.byAddrNonce.Lock() {
-		if old, ok := byAddrNonce[an]; ok && old.priority >= wtx.priority {
-			return
-		}
-		byAddrNonce[an] = wtx
-	}
+func (txmp *TxMempool) addNonce(wtx *WrappedTx) { _ = "STUB: not implemented"; return }
+
+func (txmp *TxMempool) removeNonce(wtx *WrappedTx) { _ = "STUB: not implemented"; return }
+
+func (txmp *TxMempool) TxStore() *TxStore {
+	_ = "STUB: not implemented"
+
+	// Lock obtains a write-lock on the mempool. A caller must be sure to explicitly
+	// release the lock when finished.
+	return nil
 }
 
-func (txmp *TxMempool) removeNonce(wtx *WrappedTx) {
-	evm, ok := wtx.evm.Get()
-	if !ok {
-		return
-	}
-	an := evmAddrNonce{evm.address, evm.nonce}
-	for byAddrNonce := range txmp.byAddrNonce.Lock() {
-		if byAddrNonce[an] == wtx {
-			delete(byAddrNonce, an)
-		}
-	}
+func (txmp *TxMempool) Lock() {
+	_ = "STUB: not implemented"
+
+	// Unlock releases a write-lock on the mempool.
+	return
 }
 
-func (txmp *TxMempool) TxStore() *TxStore { return txmp.txStore }
+func (txmp *TxMempool) Unlock() {
+	_ = "STUB: not implemented"
 
-// Lock obtains a write-lock on the mempool. A caller must be sure to explicitly
-// release the lock when finished.
-func (txmp *TxMempool) Lock() { txmp.mtx.Lock() }
-
-// Unlock releases a write-lock on the mempool.
-func (txmp *TxMempool) Unlock() { txmp.mtx.Unlock() }
-
-// Size returns the number of valid transactions in the mempool. It is
-// thread-safe.
-func (txmp *TxMempool) Size() int {
-	return txmp.NumTxsNotPending() + txmp.PendingSize()
+	// Size returns the number of valid transactions in the mempool. It is
+	// thread-safe.
+	return
 }
 
-func (txmp *TxMempool) utilisation() float64 {
-	return float64(txmp.NumTxsNotPending()) / float64(txmp.config.Size)
-}
+func (txmp *TxMempool) Size() int { _ = "STUB: not implemented"; return 0 }
 
-func (txmp *TxMempool) NumTxsNotPending() int {
-	return txmp.txStore.Size()
-}
+func (txmp *TxMempool) utilisation() float64 { _ = "STUB: not implemented"; return 0 }
 
-func (txmp *TxMempool) BytesNotPending() int64 {
-	return txmp.txStore.AllTxsBytes()
-}
+func (txmp *TxMempool) NumTxsNotPending() int { _ = "STUB: not implemented"; return 0 }
 
-func (txmp *TxMempool) TotalTxsBytesSize() int64 {
-	return txmp.BytesNotPending() + txmp.pendingTxs.SizeBytes()
-}
+func (txmp *TxMempool) BytesNotPending() int64 { _ = "STUB: not implemented"; return 0 }
+
+func (txmp *TxMempool) TotalTxsBytesSize() int64 { _ = "STUB: not implemented"; return 0 }
 
 // PendingSize returns the number of pending transactions in the mempool.
-func (txmp *TxMempool) PendingSize() int        { return txmp.pendingTxs.Size() }
-func (txmp *TxMempool) PendingSizeBytes() int64 { return txmp.pendingTxs.SizeBytes() }
+func (txmp *TxMempool) PendingSize() int        { _ = "STUB: not implemented"; return 0 }
+func (txmp *TxMempool) PendingSizeBytes() int64 { _ = "STUB: not implemented"; return 0 }
 
 // SizeBytes return the total sum in bytes of all the valid transactions in the
 // mempool. It is thread-safe.
-func (txmp *TxMempool) SizeBytes() int64 { return txmp.txStore.AllTxsBytes() }
+func (txmp *TxMempool) SizeBytes() int64 { _ = "STUB: not implemented"; return 0 }
 
 // WaitForNextTx waits until the next transaction is available for gossip.
 // Returns the next valid transaction to gossip.
 func (txmp *TxMempool) WaitForNextTx(ctx context.Context) (*clist.CElement[*WrappedTx], error) {
-	return txmp.gossipIndex.WaitFront(ctx)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // TxsAvailable returns a channel which fires once for every height, and only
 // when transactions are available in the mempool. It is thread-safe.
-func (txmp *TxMempool) TxsAvailable() <-chan struct{} {
-	return txmp.txsAvailable
-}
+func (txmp *TxMempool) TxsAvailable() <-chan struct{} { _ = "STUB: not implemented"; return nil }
 
 func (txmp *TxMempool) checkResponseState(wtx *WrappedTx) error {
-	constraints, err := txmp.txConstraintsFetcher()
-	if err != nil {
-		return err
-	}
-
-	if constraints.MaxGas == -1 {
-		return nil
-	}
-	if wtx.gasWanted < 0 {
-		return fmt.Errorf("negative gas wanted: %d", wtx.gasWanted)
-	}
-	if wtx.gasWanted > constraints.MaxGas {
-		return fmt.Errorf("gas wanted exceeds max gas: gas wanted %d is greater than max gas %d", wtx.gasWanted, constraints.MaxGas)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -409,150 +332,41 @@ func (txmp *TxMempool) checkResponseState(wtx *WrappedTx) error {
 // - The applications' CheckTx implementation may panic.
 // - The caller is not to explicitly require any locks for executing CheckTx.
 func (txmp *TxMempool) CheckTx(ctx context.Context, tx types.Tx, txInfo TxInfo) (*abci.ResponseCheckTx, error) {
-	txmp.mtx.RLock()
-	defer txmp.mtx.RUnlock()
-
-	if txSize := len(tx); txSize > txmp.config.MaxTxBytes {
-		return nil, fmt.Errorf("%w: max size is %d, but got %d", ErrTxTooLarge, txmp.config.MaxTxBytes, txSize)
-	}
-	constraints, err := txmp.txConstraintsFetcher()
-	if err != nil {
-		return nil, fmt.Errorf("txmp.txConstraintsFetcher(): %w", err)
-	}
-	if txSize := types.ComputeProtoSizeForTxs([]types.Tx{tx}); txSize > constraints.MaxDataBytes {
-		return nil, fmt.Errorf("%w: tx size is too big: %d, max: %d", ErrTxTooLarge, txSize, constraints.MaxDataBytes)
-	}
-
-	// Reject low priority transactions when the mempool is more than
-	// DropUtilisationThreshold full.
-	if txmp.config.DropUtilisationThreshold > 0 && txmp.utilisation() >= txmp.config.DropUtilisationThreshold {
-		txmp.metrics.CheckTxMetDropUtilisationThreshold.Add(1)
-
-		hint, err := txmp.app.GetTxPriorityHint(ctx, &abci.RequestGetTxPriorityHintV2{Tx: tx})
-		if err != nil {
-			txmp.metrics.observeCheckTxPriorityDistribution(0, true, txInfo.SenderNodeID, true)
-			logger.Error("failed to get tx priority hint", "err", err)
-			return nil, err
-		}
-		txmp.metrics.observeCheckTxPriorityDistribution(hint.Priority, true, txInfo.SenderNodeID, false)
-
-		cutoff, found := txmp.priorityReservoir.Percentile()
-		if found && hint.Priority <= cutoff {
-			txmp.metrics.CheckTxDroppedByPriorityHint.Add(1)
-			return nil, errors.New("priority not high enough for mempool")
-		}
-	}
-	txHash := tx.Hash()
-
-	// We add the transaction to the mempool's cache and if the
-	// transaction is already present in the cache, i.e. false is returned, then we
-	// check if we've seen this transaction and error if we have.
-	if !txmp.cache.Push(txHash) {
-		txmp.txStore.GetOrSetPeerByTxHash(txHash, txInfo.SenderID)
-		return nil, ErrTxInCache
-	}
-	txmp.metrics.CacheSize.Set(float64(txmp.cache.Size()))
-
-	// Check TTL cache to see if we've recently processed this transaction
-	// Only execute TTL cache logic if we're using a real TTL cache (not NOP)
-	if c, ok := txmp.duplicateTxsCache.Get(); ok {
-		c.Increment(txHash)
-	}
-
-	if len(txInfo.SenderNodeID) == 0 {
-		txmp.metrics.NumberOfLocalCheckTx.Add(1)
-	}
-	res, err := txmp.app.CheckTxSafe(ctx, &abci.RequestCheckTxV2{Tx: tx})
-	if err != nil || !res.IsOK() {
-		txmp.metrics.NumberOfFailedCheckTxs.Add(1)
-		txmp.metrics.observeCheckTxPriorityDistribution(0, false, txInfo.SenderNodeID, true)
-		txmp.cache.Remove(txHash)
-	}
-	if err != nil {
-		return nil, err
-	}
-	if !res.IsOK() {
-		return res.ResponseCheckTx, nil
-	}
-	txmp.metrics.NumberOfSuccessfulCheckTxs.Add(1)
-	txmp.metrics.observeCheckTxPriorityDistribution(res.Priority, false, txInfo.SenderNodeID, false)
-
-	wtx := &WrappedTx{
-		hashedTx:     newHashedTx(tx),
-		timestamp:    time.Now().UTC(),
-		height:       txmp.height,
-		priority:     res.Priority,
-		estimatedGas: res.GasEstimated,
-		gasWanted:    res.GasWanted,
-		peers:        map[uint16]struct{}{txInfo.SenderID: {}},
-	}
-	if res.IsEVM {
-		wtx.evm = utils.Some(evmTx{
-			address:         res.EVMSenderAddress,
-			seiAddress:      res.SeiSenderAddress,
-			nonce:           res.EVMNonce,
-			requiredBalance: res.EVMRequiredBalance,
-		})
-	}
-
-	// only add new transaction if checkTx passes and is not pending
-	if !txmp.isPending(wtx) {
-		if err := txmp.addNewTransaction(wtx); err != nil {
-			return nil, err
-		}
-	} else {
-		// otherwise add to pending txs store
-		if err := txmp.canAddPendingTx(wtx); err != nil {
-			// TODO: eviction strategy for pending transactions
-			txmp.cache.Remove(txHash)
-			return nil, err
-		}
-		if err := txmp.pendingTxs.Insert(wtx); err != nil {
-			txmp.cache.Remove(txHash)
-			return nil, err
-		}
-	}
-	txmp.addNonce(wtx)
-	return res.ResponseCheckTx, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// Reject low priority transactions when the mempool is more than
+// DropUtilisationThreshold full.
+
+// We add the transaction to the mempool's cache and if the
+// transaction is already present in the cache, i.e. false is returned, then we
+// check if we've seen this transaction and error if we have.
+
+// Check TTL cache to see if we've recently processed this transaction
+// Only execute TTL cache logic if we're using a real TTL cache (not NOP)
+
+// only add new transaction if checkTx passes and is not pending
+
+// otherwise add to pending txs store
+
+// TODO: eviction strategy for pending transactions
 
 func (txmp *TxMempool) isInMempool(txHash types.TxHash) bool {
-	return !txmp.txStore.IsTxRemovedByHash(txHash)
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (txmp *TxMempool) HasTx(txHash types.TxHash) bool {
-	txmp.mtx.RLock()
-	defer txmp.mtx.RUnlock()
-	return txmp.txStore.GetTxByHash(txHash) != nil
-}
+func (txmp *TxMempool) HasTx(txHash types.TxHash) bool { _ = "STUB: not implemented"; return false }
 
 func (txmp *TxMempool) GetTxsForHashes(txHashes []types.TxHash) types.Txs {
-	txmp.mtx.RLock()
-	defer txmp.mtx.RUnlock()
-
-	txs := make([]types.Tx, 0, len(txHashes))
-	for _, txHash := range txHashes {
-		wtx := txmp.txStore.GetTxByHash(txHash)
-		txs = append(txs, wtx.Tx())
-	}
-	return txs
+	_ = "STUB: not implemented"
+	return *new(types.Txs)
 }
 
 func (txmp *TxMempool) SafeGetTxsForHashes(txHashes []types.TxHash) (types.Txs, []types.TxHash) {
-	txmp.mtx.RLock()
-	defer txmp.mtx.RUnlock()
-
-	txs := make([]types.Tx, 0, len(txHashes))
-	missing := []types.TxHash{}
-	for _, txHash := range txHashes {
-		wtx := txmp.txStore.GetTxByHash(txHash)
-		if wtx == nil {
-			missing = append(missing, txHash)
-			continue
-		}
-		txs = append(txs, wtx.Tx())
-	}
-	return txs, missing
+	_ = "STUB: not implemented"
+	return *new(types.Txs), nil
 }
 
 // Flush empties the mempool. It acquires a read-lock, fetches all the
@@ -561,14 +375,7 @@ func (txmp *TxMempool) SafeGetTxsForHashes(txHashes []types.TxHash) (types.Txs, 
 //
 // NOTE:
 // - Flushing the mempool may leave the mempool in an inconsistent state.
-func (txmp *TxMempool) Flush() {
-	txmp.mtx.Lock()
-	defer txmp.mtx.Unlock()
-	for _, wtx := range txmp.txStore.GetAllTxs() {
-		txmp.removeTx(wtx, false, false, true)
-	}
-	txmp.cache.Reset()
-}
+func (txmp *TxMempool) Flush() { _ = "STUB: not implemented"; return }
 
 // ReapMaxBytesMaxGas returns a list of transactions within the provided size
 // and gas constraints. The returned list starts with EVM transactions (in priority order),
@@ -584,14 +391,8 @@ func (txmp *TxMempool) Flush() {
 //   - Transactions returned are not removed from the mempool transaction
 //     store or indexes.
 func (txmp *TxMempool) ReapMaxBytesMaxGas(maxBytes, maxGasWanted, maxGasEstimated int64) types.Txs {
-	txmp.mtx.Lock()
-	defer txmp.mtx.Unlock()
-	txs, _ := txmp.reapTxs(ReapLimits{
-		MaxBytes:        utils.Some(maxBytes),
-		MaxGasWanted:    utils.Some(maxGasWanted),
-		MaxGasEstimated: utils.Some(maxGasEstimated),
-	})
-	return txs
+	_ = "STUB: not implemented"
+	return *new(types.Txs)
 }
 
 type ReapLimits struct {
@@ -609,98 +410,27 @@ type ReapLimits struct {
 // overflow, gas limit enforcement no longer works correctly. This preserves the
 // historical behavior for backward compatibility.
 func (txmp *TxMempool) reapTxs(l ReapLimits) (types.Txs, int64) {
-	maxTxs := l.MaxTxs.Or(utils.Max[uint64]())
-	maxBytes := l.MaxBytes.Or(utils.Max[int64]())
-	maxGasWanted := l.MaxGasWanted.Or(utils.Max[int64]())
-	maxGasEstimated := l.MaxGasEstimated.Or(utils.Max[int64]())
-	if maxBytes < 0 {
-		maxBytes = utils.Max[int64]()
-	}
-	if maxGasWanted < 0 {
-		maxGasWanted = utils.Max[int64]()
-	}
-	if maxGasEstimated < 0 {
-		maxGasEstimated = utils.Max[int64]()
-	}
-	var (
-		totalGasWanted    int64
-		totalGasEstimated int64
-		totalSize         int64
-	)
-
-	numTxs := uint64(0)
-	encounteredGasUnfit := false
-	if uint64(txmp.NumTxsNotPending()) < txmp.config.TxNotifyThreshold { //nolint:gosec // NumTxsNotPending returns non-negative value
-		// do not reap anything if threshold is not met
-		return []types.Tx{}, 0
-	}
-	totalTxs := txmp.priorityIndex.NumTxs()
-	evmTxs := make([]types.Tx, 0, totalTxs)
-	nonEvmTxs := make([]types.Tx, 0, totalTxs)
-	txmp.priorityIndex.ForEachTx(func(wtx *WrappedTx) bool {
-		size := types.ComputeProtoSizeForTxs([]types.Tx{wtx.Tx()})
-
-		// bytes limit is a hard stop
-		if totalSize+size > maxBytes || numTxs+1 > maxTxs {
-			return false
-		}
-
-		// if the tx doesn't have a gas estimate, fallback to gas wanted
-		var txGasEstimate int64
-		if wtx.estimatedGas >= MinGasEVMTx && wtx.estimatedGas <= wtx.gasWanted {
-			txGasEstimate = wtx.estimatedGas
-		} else {
-			wtx.estimatedGas = wtx.gasWanted
-			txGasEstimate = wtx.gasWanted
-		}
-
-		// prospective totals
-		prospectiveGasWanted := totalGasWanted + wtx.gasWanted
-		prospectiveGasEstimated := totalGasEstimated + txGasEstimate
-
-		maxGasWantedExceeded := prospectiveGasWanted > maxGasWanted
-		maxGasEstimatedExceeded := prospectiveGasEstimated > maxGasEstimated
-
-		if maxGasWantedExceeded || maxGasEstimatedExceeded {
-			// skip this unfit-by-gas tx once and attempt to pull up to 10 smaller ones
-			if !encounteredGasUnfit && numTxs < MinTxsToPeek {
-				encounteredGasUnfit = true
-				return true
-			}
-			return false
-		}
-
-		// include tx and update totals
-		numTxs += 1
-		totalSize += size
-		totalGasWanted = prospectiveGasWanted
-		totalGasEstimated = prospectiveGasEstimated
-
-		if wtx.evm.IsPresent() {
-			evmTxs = append(evmTxs, wtx.Tx())
-		} else {
-			nonEvmTxs = append(nonEvmTxs, wtx.Tx())
-		}
-		if encounteredGasUnfit && numTxs >= MinTxsToPeek {
-			return false
-		}
-		return true
-	})
-
-	return append(evmTxs, nonEvmTxs...), totalGasEstimated
+	_ = "STUB: not implemented"
+	return *new(types.Txs), 0
 }
+
+//nolint:gosec // NumTxsNotPending returns non-negative value
+// do not reap anything if threshold is not met
+
+// bytes limit is a hard stop
+
+// if the tx doesn't have a gas estimate, fallback to gas wanted
+
+// prospective totals
+
+// skip this unfit-by-gas tx once and attempt to pull up to 10 smaller ones
+
+// include tx and update totals
 
 // RemoveTxs removes the provided transactions from the mempool if present.
 func (txmp *TxMempool) PopTxs(l ReapLimits) (types.Txs, int64) {
-	txmp.Lock()
-	defer txmp.Unlock()
-	txs, gasEstimated := txmp.reapTxs(l)
-	for _, tx := range txs {
-		if wtx := txmp.txStore.GetTxByHash(tx.Hash()); wtx != nil {
-			txmp.removeTx(wtx, false, false, true)
-		}
-	}
-	return txs, gasEstimated
+	_ = "STUB: not implemented"
+	return *new(types.Txs), 0
 }
 
 // ReapMaxTxs returns a list of transactions within the provided number of
@@ -710,23 +440,11 @@ func (txmp *TxMempool) PopTxs(l ReapLimits) (types.Txs, int64) {
 //   - Transactions returned are not removed from the mempool transaction
 //     store or indexes.
 func (txmp *TxMempool) ReapMaxTxs(max int) types.Txs {
-	txmp.mtx.Lock()
-	defer txmp.mtx.Unlock()
-
-	wTxs := txmp.priorityIndex.PeekTxs(max)
-	txs := make([]types.Tx, 0, len(wTxs))
-	for _, wtx := range wTxs {
-		txs = append(txs, wtx.Tx())
-	}
-	if len(txs) < max {
-		// retrieve more from pending txs
-		pending := txmp.pendingTxs.Peek(max - len(txs))
-		for _, ptx := range pending {
-			txs = append(txs, ptx.Tx())
-		}
-	}
-	return txs
+	_ = "STUB: not implemented"
+	return *new(types.Txs)
 }
+
+// retrieve more from pending txs
 
 // Update iterates over all the transactions provided by the block producer,
 // removes them from the cache (if applicable), and removes
@@ -790,64 +508,24 @@ func (txmp *TxMempool) Update(
 	txConstraintsFetcher TxConstraintsFetcher,
 	recheck bool,
 ) error {
-	txmp.height = blockHeight
-	txmp.notifiedTxsAvailable.Store(false)
-	txmp.txConstraintsFetcher = txConstraintsFetcher
-
-	for i, tx := range blockTxs {
-		txHash := tx.Hash()
-		if execTxResult[i].Code == abci.CodeTypeOK {
-			// add the valid committed transaction to the cache (if missing)
-			_ = txmp.cache.Push(txHash)
-			txmp.blockFailedTxs.Remove(txHash)
-		} else if !txmp.config.KeepInvalidTxsInCache {
-			if txmp.blockFailedTxs.Push(txHash) {
-				// First block failure: allow one retry
-				txmp.cache.Remove(txHash)
-			}
-			// Subsequent failures: leave in cache to prevent infinite re-entry
-		}
-
-		// remove the committed transaction from the transaction store and indexes
-		if wtx := txmp.txStore.GetTxByHash(txHash); wtx != nil {
-			txmp.removeTx(wtx, false, false, true)
-		}
-		if execTxResult[i].EvmTxInfo != nil {
-			// remove any tx that has the same nonce (because the committed tx
-			// may be from block proposal and is never in the local mempool)
-			if wtx, _ := txmp.priorityIndex.TxByAddrNonce(
-				common.HexToAddress(execTxResult[i].EvmTxInfo.SenderAddress),
-				execTxResult[i].EvmTxInfo.Nonce,
-			); wtx != nil {
-				txmp.removeTx(wtx, false, false, true)
-			}
-		}
-	}
-
-	txmp.purgeExpiredTxs(blockHeight)
-	txmp.handlePendingTransactions()
-
-	// If there any uncommitted transactions left in the mempool, we either
-	// initiate re-CheckTx per remaining transaction or notify that remaining
-	// transactions are left.
-	if txmp.Size() > 0 {
-		if recheck {
-			logger.Debug(
-				"executing re-CheckTx for all remaining transactions",
-				"num_txs", txmp.Size(),
-				"height", blockHeight,
-			)
-			txmp.updateReCheckTxs(ctx)
-		} else {
-			txmp.notifyTxsAvailable()
-		}
-	}
-
-	txmp.metrics.Size.Set(float64(txmp.NumTxsNotPending()))
-	txmp.metrics.TotalTxsSizeBytes.Set(float64(txmp.TotalTxsBytesSize()))
-	txmp.metrics.PendingSize.Set(float64(txmp.PendingSize()))
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// add the valid committed transaction to the cache (if missing)
+
+// First block failure: allow one retry
+
+// Subsequent failures: leave in cache to prevent infinite re-entry
+
+// remove the committed transaction from the transaction store and indexes
+
+// remove any tx that has the same nonce (because the committed tx
+// may be from block proposal and is never in the local mempool)
+
+// If there any uncommitted transactions left in the mempool, we either
+// initiate re-CheckTx per remaining transaction or notify that remaining
+// transactions are left.
 
 // addNewTransaction is invoked for a new unique transaction after CheckTx
 // has been executed by the ABCI application for the first time on that transaction.
@@ -870,6 +548,7 @@ func (txmp *TxMempool) Update(
 // NOTE:
 // - An explicit lock is NOT required.
 func (txmp *TxMempool) addNewTransaction(wtx *WrappedTx) error {
+	_ = "STUB: not implemented"
 	// Update transaction priority reservoir with the true Tx priority
 	// as determined by the application.
 	//
@@ -884,77 +563,19 @@ func (txmp *TxMempool) addNewTransaction(wtx *WrappedTx) error {
 	// We do not use the priority hint here as it may be misleading and
 	// inaccurate. The true priority as determined by the application is the
 	// most accurate.
-	txmp.priorityReservoir.Add(wtx.priority)
-	err := txmp.checkResponseState(wtx)
-	if err != nil {
-		// ignore bad transactions
-		logger.Info(
-			"rejected bad transaction",
-			"priority", wtx.priority,
-			"tx", wtx.Hash(),
-			"post_check_err", err,
-		)
-		txmp.metrics.FailedTxs.Add(1)
-		if !txmp.config.KeepInvalidTxsInCache {
-			txmp.cache.Remove(wtx.Hash())
-		}
-		return err
-	}
-	if err := txmp.canAddTx(wtx); err != nil {
-		evictTxs := txmp.priorityIndex.GetEvictableTxs(
-			wtx.priority,
-			int64(wtx.Size()),
-			txmp.SizeBytes(),
-			txmp.config.MaxTxsBytes,
-		)
-		if len(evictTxs) == 0 {
-			// No room for the new incoming transaction so we just remove it from
-			// the cache.
-			txmp.cache.Remove(wtx.Hash())
-			logger.Error(
-				"rejected incoming good transaction; mempool full",
-				"tx", wtx.Hash(),
-				"err", err,
-			)
-			txmp.metrics.RejectedTxs.Add(1)
-			return nil
-		}
-
-		// evict an existing transaction(s)
-		//
-		// NOTE:
-		// - The transaction, toEvict, can be removed while a concurrent
-		//   reCheckTx callback is being executed for the same transaction.
-		for _, toEvict := range evictTxs {
-			txmp.removeTx(toEvict, true, true, true)
-			logger.Debug(
-				"evicted existing good transaction; mempool full",
-				"old_tx", fmt.Sprintf("%X", toEvict.Hash()),
-				"old_priority", toEvict.priority,
-				"new_tx", wtx.Hash(),
-				"new_priority", wtx.priority,
-			)
-			txmp.metrics.EvictedTxs.Add(1)
-		}
-	}
-
-	if txmp.isInMempool(wtx.Hash()) {
-		return nil
-	}
-
-	if txmp.insertTx(wtx) {
-		logger.Debug(
-			"inserted good transaction",
-			"priority", wtx.priority,
-			"tx", wtx.Hash(),
-			"height", txmp.height,
-			"num_txs", txmp.NumTxsNotPending(),
-		)
-		txmp.notifyTxsAvailable()
-	}
-
 	return nil
 }
+
+// ignore bad transactions
+
+// No room for the new incoming transaction so we just remove it from
+// the cache.
+
+// evict an existing transaction(s)
+//
+// NOTE:
+// - The transaction, toEvict, can be removed while a concurrent
+//   reCheckTx callback is being executed for the same transaction.
 
 // handleRecheckResult handles the responses from ABCI CheckTx calls issued
 // during the recheck phase of a block Update.  It removes any transactions
@@ -969,85 +590,24 @@ func (txmp *TxMempool) addNewTransaction(wtx *WrappedTx) error {
 // This method is NOT executed for the initial CheckTx on a new transaction;
 // that case is handled by addNewTransaction instead.
 func (txmp *TxMempool) handleRecheckResult(tx types.Tx, res *abci.ResponseCheckTxV2) {
-	if txmp.recheckCursor == nil {
-		return
-	}
-
-	txmp.metrics.RecheckTimes.Add(1)
-
-	wtx := txmp.recheckCursor.Value()
-
-	// Search through the remaining list of tx to recheck for a transaction that matches
-	// the one we received from the ABCI application.
-	for !bytes.Equal(tx, wtx.Tx()) {
-
-		logger.Debug(
-			"re-CheckTx transaction mismatch",
-			"got", wtx.Hash(),
-			"expected", tx.Hash(),
-		)
-
-		if txmp.recheckCursor == txmp.recheckEnd {
-			// we reached the end of the recheckTx list without finding a tx
-			// matching the one we received from the ABCI application.
-			// Return without processing any tx.
-			txmp.recheckCursor = nil
-			return
-		}
-
-		txmp.recheckCursor = txmp.recheckCursor.Next()
-		wtx = txmp.recheckCursor.Value()
-	}
-
-	// Only evaluate transactions that have not been removed. This can happen
-	// if an existing transaction is evicted during CheckTx and while this
-	// callback is being executed for the same evicted transaction.
-	if !txmp.txStore.IsTxRemoved(wtx) {
-		err := txmp.checkResponseState(wtx)
-		if evm, ok := wtx.evm.Get(); ok {
-			evm.requiredBalance = new(big.Int).Set(res.EVMRequiredBalance)
-			wtx.evm = utils.Some(evm)
-		}
-
-		// we will treat a transaction that turns pending in a recheck as invalid and evict it
-		if res.Code == abci.CodeTypeOK && err == nil && !txmp.isPending(wtx) {
-			wtx.priority = res.Priority
-		} else {
-			logger.Debug(
-				"existing transaction no longer valid; failed re-CheckTx callback",
-				"priority", wtx.priority,
-				"tx", wtx.Hash(),
-				"err", err,
-				"code", res.Code,
-			)
-
-			if wtx.gossipEl != txmp.recheckCursor {
-				panic("corrupted reCheckTx cursor")
-			}
-
-			txmp.removeTx(wtx, !txmp.config.KeepInvalidTxsInCache, true, true)
-		}
-	}
-
-	// move reCheckTx cursor to next element
-	if txmp.recheckCursor == txmp.recheckEnd {
-		txmp.recheckCursor = nil
-	} else {
-		txmp.recheckCursor = txmp.recheckCursor.Next()
-	}
-
-	if txmp.recheckCursor == nil {
-		logger.Debug("finished rechecking transactions")
-
-		if txmp.NumTxsNotPending() > 0 {
-			txmp.notifyTxsAvailable()
-		}
-	}
-
-	txmp.metrics.Size.Set(float64(txmp.NumTxsNotPending()))
-	txmp.metrics.PendingSize.Set(float64(txmp.PendingSize()))
-	txmp.metrics.TotalTxsSizeBytes.Set(float64(txmp.TotalTxsBytesSize()))
+	_ = "STUB: not implemented"
+	return
 }
+
+// Search through the remaining list of tx to recheck for a transaction that matches
+// the one we received from the ABCI application.
+
+// we reached the end of the recheckTx list without finding a tx
+// matching the one we received from the ABCI application.
+// Return without processing any tx.
+
+// Only evaluate transactions that have not been removed. This can happen
+// if an existing transaction is evicted during CheckTx and while this
+// callback is being executed for the same evicted transaction.
+
+// we will treat a transaction that turns pending in a recheck as invalid and evict it
+
+// move reCheckTx cursor to next element
 
 // updateReCheckTxs updates the recheck cursors using the gossipIndex. For
 // each transaction, it executes CheckTx. The global callback defined on
@@ -1056,177 +616,40 @@ func (txmp *TxMempool) handleRecheckResult(tx types.Tx, res *abci.ResponseCheckT
 //
 // NOTE:
 // - The caller must have a write-lock when executing updateReCheckTxs.
-func (txmp *TxMempool) updateReCheckTxs(ctx context.Context) {
-	if txmp.Size() == 0 {
-		panic("attempted to update re-CheckTx txs when mempool is empty")
-	}
-	logger.Debug(
-		"executing re-CheckTx for all remaining transactions",
-		"num_txs", txmp.Size(),
-		"height", txmp.height,
-	)
+func (txmp *TxMempool) updateReCheckTxs(ctx context.Context) { _ = "STUB: not implemented"; return }
 
-	txmp.recheckCursor = txmp.gossipIndex.Front()
-	txmp.recheckEnd = txmp.gossipIndex.Back()
+// Only execute CheckTx if the transaction is not marked as removed which
+// could happen if the transaction was evicted.
 
-	for e := txmp.gossipIndex.Front(); e != nil; e = e.Next() {
-		wtx := e.Value()
-
-		// Only execute CheckTx if the transaction is not marked as removed which
-		// could happen if the transaction was evicted.
-		if !txmp.txStore.IsTxRemoved(wtx) {
-			res, err := txmp.app.CheckTxSafe(ctx, &abci.RequestCheckTxV2{
-				Tx:   wtx.Tx(),
-				Type: abci.CheckTxTypeV2Recheck,
-			})
-			if err == nil {
-				err = res.Err()
-			}
-			if err != nil {
-				// no need in retrying since the tx will be rechecked after the next block
-
-				logger.Debug("failed to execute CheckTx during recheck", "err", err, "hash", wtx.Hash())
-				continue
-			}
-			txmp.handleRecheckResult(wtx.Tx(), res)
-		}
-	}
-}
+// no need in retrying since the tx will be rechecked after the next block
 
 // canAddTx returns an error if we cannot insert the provided *WrappedTx into
 // the mempool due to mempool configured constraints. If it returns nil,
 // the transaction can be inserted into the mempool.
-func (txmp *TxMempool) canAddTx(wtx *WrappedTx) error {
-	var (
-		numTxs    = txmp.NumTxsNotPending()
-		sizeBytes = txmp.SizeBytes()
-	)
+func (txmp *TxMempool) canAddTx(wtx *WrappedTx) error { _ = "STUB: not implemented"; return nil }
 
-	if numTxs >= txmp.config.Size || int64(wtx.Size())+sizeBytes > txmp.config.MaxTxsBytes {
-		return fmt.Errorf("mempool is full: number of txs %d (max: %d), total txs bytes %d (max: %d)",
-			numTxs,
-			txmp.config.Size,
-			sizeBytes,
-			txmp.config.MaxTxsBytes,
-		)
-	}
+func (txmp *TxMempool) canAddPendingTx(wtx *WrappedTx) error { _ = "STUB: not implemented"; return nil }
 
-	return nil
-}
+func (txmp *TxMempool) insertTx(wtx *WrappedTx) bool { _ = "STUB: not implemented"; return false }
 
-func (txmp *TxMempool) canAddPendingTx(wtx *WrappedTx) error {
-	var (
-		numTxs    = txmp.PendingSize()
-		sizeBytes = txmp.PendingSizeBytes()
-	)
-
-	if numTxs >= txmp.config.PendingSize || int64(wtx.Size())+sizeBytes > txmp.config.MaxPendingTxsBytes {
-		return fmt.Errorf("mempool pending set is full: number of txs %d (max: %d), total txs bytes %d (max: %d)",
-			numTxs,
-			txmp.config.PendingSize,
-			sizeBytes,
-			txmp.config.MaxPendingTxsBytes,
-		)
-	}
-
-	return nil
-}
-
-func (txmp *TxMempool) insertTx(wtx *WrappedTx) bool {
-	replacedTx, inserted := txmp.priorityIndex.PushTx(wtx)
-	if !inserted {
-		return false
-	}
-	txmp.metrics.TxSizeBytes.Add(float64(wtx.Size()))
-	txmp.metrics.Size.Set(float64(txmp.NumTxsNotPending()))
-	txmp.metrics.PendingSize.Set(float64(txmp.PendingSize()))
-	txmp.metrics.TotalTxsSizeBytes.Set(float64(txmp.TotalTxsBytesSize()))
-
-	if replacedTx != nil {
-		txmp.removeTx(replacedTx, true, false, false)
-	}
-
-	txmp.txStore.SetTx(wtx)
-
-	// Insert the transaction into the gossip index and mark the reference to the
-	// linked-list element, which will be needed at a later point when the
-	// transaction is removed.
-	gossipEl := txmp.gossipIndex.PushBack(wtx)
-	wtx.gossipEl = gossipEl
-
-	txmp.metrics.InsertedTxs.Add(1)
-	return true
-}
+// Insert the transaction into the gossip index and mark the reference to the
+// linked-list element, which will be needed at a later point when the
+// transaction is removed.
 
 func (txmp *TxMempool) removeTx(wtx *WrappedTx, removeFromCache bool, shouldReenqueue bool, updatePriorityIndex bool) {
-	if txmp.txStore.IsTxRemoved(wtx) {
-		return
-	}
-
-	txmp.removeNonce(wtx)
-	txmp.txStore.RemoveTx(wtx)
-	toBeReenqueued := []*WrappedTx{}
-	if updatePriorityIndex {
-		toBeReenqueued = txmp.priorityIndex.RemoveTx(wtx, shouldReenqueue)
-	}
-
-	// Remove the transaction from the gossip index and cleanup the linked-list
-	// element so it can be garbage collected.
-	txmp.gossipIndex.Remove(wtx.gossipEl)
-	wtx.gossipEl.DetachPrev()
-
-	txmp.metrics.RemovedTxs.Add(1)
-	if removeFromCache {
-		txmp.cache.Remove(wtx.Hash())
-	}
-
-	if shouldReenqueue {
-		for _, reenqueue := range toBeReenqueued {
-			txmp.removeTx(reenqueue, removeFromCache, false, true)
-		}
-		for _, reenqueue := range toBeReenqueued {
-			rtx := reenqueue.Tx()
-			go func() {
-				if _, err := txmp.CheckTx(context.Background(), rtx, TxInfo{}); err != nil {
-					logger.Error("failed to reenqueue transaction", "tx-hash", rtx.Hash(), "err", err)
-				}
-			}()
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (txmp *TxMempool) expire(blockHeight int64, wtx *WrappedTx) {
-	txmp.metrics.ExpiredTxs.Add(1)
-	txmp.logExpiredTx(blockHeight, wtx)
-	if !txmp.config.KeepInvalidTxsInCache {
-		txmp.cache.Remove(wtx.Hash())
-	}
-}
+// Remove the transaction from the gossip index and cleanup the linked-list
+// element so it can be garbage collected.
+
+func (txmp *TxMempool) expire(blockHeight int64, wtx *WrappedTx) { _ = "STUB: not implemented"; return }
 
 func (txmp *TxMempool) logExpiredTx(blockHeight int64, wtx *WrappedTx) {
+	_ = "STUB: not implemented"
 	// defensive check
-	if wtx == nil {
-		return
-	}
-
-	logger.Info(
-		"transaction expired",
-		"priority", wtx.priority,
-		"tx", wtx.Hash(),
-		"address", func() string {
-			evm, ok := wtx.evm.Get()
-			if !ok {
-				return ""
-			}
-			return evm.address.Hex()
-		}(),
-		"evm", wtx.evm.IsPresent(),
-		"nonce", wtx.EVMNonce(),
-		"height", blockHeight,
-		"tx_height", wtx.height,
-		"tx_timestamp", wtx.timestamp,
-		"age", time.Since(wtx.timestamp),
-	)
+	return
 }
 
 // purgeExpiredTxs removes all transactions that have exceeded their respective
@@ -1236,104 +659,20 @@ func (txmp *TxMempool) logExpiredTx(blockHeight int64, wtx *WrappedTx) {
 // NOTE: purgeExpiredTxs must only be called during TxMempool#Update in which
 // the caller has a write-lock on the mempool and so we can safely iterate over
 // the height and time based indexes.
-func (txmp *TxMempool) purgeExpiredTxs(blockHeight int64) {
-	now := time.Now()
+func (txmp *TxMempool) purgeExpiredTxs(blockHeight int64) { _ = "STUB: not implemented"; return }
 
-	minHeight := utils.None[int64]()
-	if n := txmp.config.TTLNumBlocks; n > 0 && blockHeight > n {
-		minHeight = utils.Some(blockHeight - n)
-	}
-	minTime := utils.None[time.Time]()
-	if d := txmp.config.TTLDuration; d > 0 {
-		minTime = utils.Some(time.Now().Add(-d))
-	}
-	expiredTxs := txmp.txStore.GetOlderThan(minTime, minHeight)
+// remove pending txs that have expired
 
-	for _, wtx := range expiredTxs {
-		if txmp.config.RemoveExpiredTxsFromQueue {
-			txmp.removeTx(wtx, !txmp.config.KeepInvalidTxsInCache, false, true)
-		} else {
-			txmp.expire(blockHeight, wtx)
-		}
-	}
+func (txmp *TxMempool) notifyTxsAvailable() { _ = "STUB: not implemented"; return }
 
-	// remove pending txs that have expired
-	txmp.pendingTxs.PurgeExpired(blockHeight, now, func(wtx *WrappedTx) {
-		txmp.removeNonce(wtx)
-		txmp.expire(blockHeight, wtx)
-	})
-}
+// channel cap is 1, so this will send once
 
-func (txmp *TxMempool) notifyTxsAvailable() {
-	if txmp.NumTxsNotPending() == 0 || txmp.notifiedTxsAvailable.Swap(true) {
-		return
-	}
-	// channel cap is 1, so this will send once
-	select {
-	case txmp.txsAvailable <- struct{}{}:
-	default:
-	}
-}
+func (txmp *TxMempool) isPending(wtx *WrappedTx) bool { _ = "STUB: not implemented"; return false }
 
-func (txmp *TxMempool) isPending(wtx *WrappedTx) bool {
-	evm, ok := wtx.evm.Get()
-	if !ok {
-		return false
-	}
-	if evm.nonce > txmp.EvmNextPendingNonce(evm.address) {
-		return true
-	}
-	balance := txmp.app.EvmBalance(evm.address, evm.seiAddress)
-	return balance.Cmp(evm.requiredBalance) < 0
-}
-
-func (txmp *TxMempool) handlePendingTransactions() {
-	accepted, rejected := txmp.pendingTxs.EvaluatePendingTransactions(func(wtx *WrappedTx) abci.PendingTxCheckerResponse {
-		evm, ok := wtx.evm.Get()
-		if !ok {
-			return abci.Accepted
-		}
-		if evm.nonce < txmp.app.EvmNonce(evm.address) {
-			return abci.Rejected
-		}
-		if txmp.isPending(wtx) {
-			return abci.Pending
-		}
-		return abci.Accepted
-	})
-	for _, tx := range accepted {
-		if err := txmp.addNewTransaction(tx); err != nil {
-			txmp.removeNonce(tx)
-			logger.Error("error adding pending transaction", "err", err)
-		}
-	}
-	for _, tx := range rejected {
-		txmp.removeNonce(tx)
-		if !txmp.config.KeepInvalidTxsInCache {
-			txmp.cache.Remove(tx.Hash())
-		}
-	}
-}
+func (txmp *TxMempool) handlePendingTransactions() { _ = "STUB: not implemented"; return }
 
 // Run executes mempool background tasks.
-func (txmp *TxMempool) Run(ctx context.Context) error {
-	c, ok := txmp.duplicateTxsCache.Get()
-	if !ok {
-		return nil
-	}
-	return scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		s.Spawn(func() error { return c.Run(ctx, time.Minute) })
-		for {
-			if err := utils.Sleep(ctx, 10*time.Second); err != nil {
-				return err
-			}
-			// TODO(gprusak): instead of actively updating stats,
-			// TxMempool should implement prometheus.Collector.
-			maxOccurrence, totalOccurrence, duplicateCount, nonDuplicateCount := c.GetForMetrics()
-			txmp.metrics.DuplicateTxMaxOccurrences.Set(float64(maxOccurrence))
-			txmp.metrics.DuplicateTxTotalOccurrences.Set(float64(totalOccurrence))
-			txmp.metrics.NumberOfDuplicateTxs.Set(float64(duplicateCount))
-			txmp.metrics.NumberOfNonDuplicateTxs.Set(float64(nonDuplicateCount))
-		}
-	})
-}
+func (txmp *TxMempool) Run(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
+
+// TODO(gprusak): instead of actively updating stats,
+// TxMempool should implement prometheus.Collector.

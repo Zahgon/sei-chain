@@ -1,10 +1,6 @@
 package flatkv
 
 import (
-	"bytes"
-	"fmt"
-
-	errorutils "github.com/sei-protocol/sei-chain/sei-db/common/errors"
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/types"
 )
 
@@ -25,49 +21,10 @@ type KVExporter struct {
 }
 
 func NewKVExporter(store *CommitStore, version int64) *KVExporter {
-	return &KVExporter{
-		store:   store,
-		version: version,
-	}
-}
-
-func (e *KVExporter) Next() (interface{}, error) {
-	if e.iter == nil {
-		e.iter = e.store.RawGlobalIterator()
-		if !e.iter.First() {
-			if err := e.iter.Error(); err != nil {
-				return nil, fmt.Errorf("iterator seek error: %w", err)
-			}
-			return nil, errorutils.ErrorExportDone
-		}
-	}
-
-	if !e.iter.Valid() {
-		if err := e.iter.Error(); err != nil {
-			return nil, fmt.Errorf("iterator error: %w", err)
-		}
-		return nil, errorutils.ErrorExportDone
-	}
-
-	node := &types.SnapshotNode{
-		Key:     bytes.Clone(e.iter.Key()),
-		Value:   bytes.Clone(e.iter.Value()),
-		Version: e.version,
-		Height:  0,
-	}
-	e.iter.Next()
-	return node, nil
-}
-
-func (e *KVExporter) Close() error {
-	if e.iter != nil {
-		_ = e.iter.Close()
-		e.iter = nil
-	}
-	if e.store != nil {
-		err := e.store.Close()
-		e.store = nil
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+func (e *KVExporter) Next() (interface{}, error) { _ = "STUB: not implemented"; return nil, nil }
+
+func (e *KVExporter) Close() error { _ = "STUB: not implemented"; return nil }

@@ -1,7 +1,6 @@
 package v552
 
 import (
-	"bytes"
 	"embed"
 	"math/big"
 
@@ -13,7 +12,6 @@ import (
 	"github.com/ethereum/go-ethereum/core/vm"
 	pcommon "github.com/sei-protocol/sei-chain/precompiles/common/legacy/v552"
 	"github.com/sei-protocol/sei-chain/precompiles/utils"
-	"github.com/sei-protocol/sei-chain/x/oracle/types"
 )
 
 const (
@@ -32,18 +30,7 @@ var _ vm.PrecompiledContract = &Precompile{}
 //go:embed abi.json
 var f embed.FS
 
-func GetABI() abi.ABI {
-	abiBz, err := f.ReadFile("abi.json")
-	if err != nil {
-		panic(err)
-	}
-
-	newAbi, err := abi.JSON(bytes.NewReader(abiBz))
-	if err != nil {
-		panic(err)
-	}
-	return newAbi
-}
+func GetABI() abi.ABI { _ = "STUB: not implemented"; return *new(abi.ABI) }
 
 type Precompile struct {
 	pcommon.Precompile
@@ -74,104 +61,37 @@ type OracleTwap struct {
 }
 
 func NewPrecompile(keepers utils.Keepers) (*Precompile, error) {
-	newAbi := GetABI()
-
-	p := &Precompile{
-		Precompile:   pcommon.Precompile{ABI: newAbi},
-		evmKeeper:    keepers.EVMK(),
-		address:      common.HexToAddress(OracleAddress),
-		oracleKeeper: keepers.OracleK(),
-	}
-
-	for name, m := range newAbi.Methods {
-		switch name {
-		case GetExchangeRatesMethod:
-			p.GetExchangeRatesId = m.ID
-		case GetOracleTwapsMethod:
-			p.GetOracleTwapsId = m.ID
-		}
-	}
-
-	return p, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // RequiredGas returns the required bare minimum gas to execute the precompile.
-func (p Precompile) RequiredGas(input []byte) uint64 {
-	methodID, err := pcommon.ExtractMethodID(input)
-	if err != nil {
-		return pcommon.UnknownMethodCallGas
-	}
+func (p Precompile) RequiredGas(input []byte) uint64 { _ = "STUB: not implemented"; return 0 }
 
-	method, err := p.MethodById(methodID)
-	if err != nil {
-		// This should never happen since this method is going to fail during Run
-		return pcommon.UnknownMethodCallGas
-	}
-
-	return p.Precompile.RequiredGas(input, p.IsTransaction(method.Name))
-}
+// This should never happen since this method is going to fail during Run
 
 func (p Precompile) Address() common.Address {
-	return p.address
+	_ = "STUB: not implemented"
+	return *new(common.Address)
 }
 
-func (p Precompile) GetName() string {
-	return "oracle"
-}
+func (p Precompile) GetName() string { _ = "STUB: not implemented"; return "" }
 
 func (p Precompile) Run(evm *vm.EVM, _ common.Address, _ common.Address, input []byte, value *big.Int, _ bool, _ bool, hooks *tracing.Hooks) (bz []byte, err error) {
-	ctx, method, args, err := p.Prepare(evm, input)
-	if err != nil {
-		return nil, err
-	}
-
-	switch method.Name {
-	case GetExchangeRatesMethod:
-		return p.getExchangeRates(ctx, method, args, value)
-	case GetOracleTwapsMethod:
-		return p.getOracleTwaps(ctx, method, args, value)
-	}
-	return
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (p Precompile) getExchangeRates(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 0); err != nil {
-		return nil, err
-	}
-	exchangeRates := []DenomOracleExchangeRatePair{}
-	p.oracleKeeper.IterateBaseExchangeRates(ctx, func(denom string, rate types.OracleExchangeRate) (stop bool) {
-		exchangeRates = append(exchangeRates, DenomOracleExchangeRatePair{Denom: denom, OracleExchangeRateVal: OracleExchangeRate{ExchangeRate: rate.ExchangeRate.String(), LastUpdate: rate.LastUpdate.String(), LastUpdateTimestamp: rate.LastUpdateTimestamp}})
-		return false
-	})
-
-	return method.Outputs.Pack(exchangeRates)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (p Precompile) getOracleTwaps(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, err
-	}
-	lookbackSeconds := args[0].(uint64)
-	twaps, err := p.oracleKeeper.CalculateTwaps(ctx, lookbackSeconds)
-	if err != nil {
-		return nil, err
-	}
-	// Convert twap to string
-	oracleTwaps := make([]OracleTwap, 0, len(twaps))
-	for _, twap := range twaps {
-		oracleTwaps = append(oracleTwaps, OracleTwap{Denom: twap.Denom, Twap: twap.Twap.String(), LookbackSeconds: twap.LookbackSeconds})
-	}
-	return method.Outputs.Pack(oracleTwaps)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (Precompile) IsTransaction(string) bool {
-	return false
-}
+// Convert twap to string
+
+func (Precompile) IsTransaction(string) bool { _ = "STUB: not implemented"; return false }

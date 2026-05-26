@@ -3,7 +3,6 @@ package keeper
 import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/ante"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/feegrant"
 )
@@ -20,66 +19,21 @@ var _ ante.FeegrantKeeper = &Keeper{}
 
 // NewKeeper creates a fee grant Keeper
 func NewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey, ak feegrant.AccountKeeper) Keeper {
-	return Keeper{
-		cdc:        cdc,
-		storeKey:   storeKey,
-		authKeeper: ak,
-	}
+	_ = "STUB: not implemented"
+	return *new(Keeper)
 }
 
 // GrantAllowance creates a new grant
 func (k Keeper) GrantAllowance(ctx sdk.Context, granter, grantee sdk.AccAddress, feeAllowance feegrant.FeeAllowanceI) error {
+	_ = "STUB: not implemented"
 
 	// create the account if it is not in account state
-	granteeAcc := k.authKeeper.GetAccount(ctx, grantee)
-	if granteeAcc == nil {
-		granteeAcc = k.authKeeper.NewAccountWithAddress(ctx, grantee)
-		k.authKeeper.SetAccount(ctx, granteeAcc)
-	}
-
-	store := ctx.KVStore(k.storeKey)
-	key := feegrant.FeeAllowanceKey(granter, grantee)
-	grant, err := feegrant.NewGrant(granter, grantee, feeAllowance)
-	if err != nil {
-		return err
-	}
-
-	bz, err := k.cdc.Marshal(&grant)
-	if err != nil {
-		return err
-	}
-
-	store.Set(key, bz)
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			feegrant.EventTypeSetFeeGrant,
-			sdk.NewAttribute(feegrant.AttributeKeyGranter, grant.Granter),
-			sdk.NewAttribute(feegrant.AttributeKeyGrantee, grant.Grantee),
-		),
-	)
-
 	return nil
 }
 
 // revokeAllowance removes an existing grant
 func (k Keeper) revokeAllowance(ctx sdk.Context, granter, grantee sdk.AccAddress) error {
-	_, err := k.getGrant(ctx, granter, grantee)
-	if err != nil {
-		return err
-	}
-
-	store := ctx.KVStore(k.storeKey)
-	key := feegrant.FeeAllowanceKey(granter, grantee)
-	store.Delete(key)
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			feegrant.EventTypeRevokeFeeGrant,
-			sdk.NewAttribute(feegrant.AttributeKeyGranter, granter.String()),
-			sdk.NewAttribute(feegrant.AttributeKeyGrantee, grantee.String()),
-		),
-	)
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -87,132 +41,44 @@ func (k Keeper) revokeAllowance(ctx sdk.Context, granter, grantee sdk.AccAddress
 // If there is none, it returns nil, nil.
 // Returns an error on parsing issues
 func (k Keeper) GetAllowance(ctx sdk.Context, granter, grantee sdk.AccAddress) (feegrant.FeeAllowanceI, error) {
-	grant, err := k.getGrant(ctx, granter, grantee)
-	if err != nil {
-		return nil, err
-	}
-
-	return grant.GetGrant()
+	_ = "STUB: not implemented"
+	return *new(feegrant.FeeAllowanceI), nil
 }
 
 // getGrant returns entire grant between both accounts
 func (k Keeper) getGrant(ctx sdk.Context, granter sdk.AccAddress, grantee sdk.AccAddress) (*feegrant.Grant, error) {
-	store := ctx.KVStore(k.storeKey)
-	key := feegrant.FeeAllowanceKey(granter, grantee)
-	bz := store.Get(key)
-	if len(bz) == 0 {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrUnauthorized, "fee-grant not found")
-	}
-
-	var feegrant feegrant.Grant
-	if err := k.cdc.Unmarshal(bz, &feegrant); err != nil {
-		return nil, err
-	}
-
-	return &feegrant, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // IterateAllFeeAllowances iterates over all the grants in the store.
 // Callback to get all data, returns true to stop, false to keep reading
 // Calling this without pagination is very expensive and only designed for export genesis
 func (k Keeper) IterateAllFeeAllowances(ctx sdk.Context, cb func(grant feegrant.Grant) bool) error {
-	store := ctx.KVStore(k.storeKey)
-	iter := sdk.KVStorePrefixIterator(store, feegrant.FeeAllowanceKeyPrefix)
-	defer func() { _ = iter.Close() }()
-
-	stop := false
-	for ; iter.Valid() && !stop; iter.Next() {
-		bz := iter.Value()
-		var feeGrant feegrant.Grant
-		if err := k.cdc.Unmarshal(bz, &feeGrant); err != nil {
-			return err
-		}
-
-		stop = cb(feeGrant)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // UseGrantedFees will try to pay the given fee from the granter's account as requested by the grantee
 func (k Keeper) UseGrantedFees(ctx sdk.Context, granter, grantee sdk.AccAddress, fee sdk.Coins, msgs []sdk.Msg) error {
-	f, err := k.getGrant(ctx, granter, grantee)
-	if err != nil {
-		return err
-	}
-
-	grant, err := f.GetGrant()
-	if err != nil {
-		return err
-	}
-
-	remove, err := grant.Accept(ctx, fee, msgs)
-
-	if remove {
-		// Ignoring the `revokeFeeAllowance` error, because the user has enough grants to perform this transaction.
-		_ = k.revokeAllowance(ctx, granter, grantee)
-		if err != nil {
-			return err
-		}
-
-		emitUseGrantEvent(ctx, granter.String(), grantee.String())
-
-		return nil
-	}
-	if err != nil {
-		return err
-	}
-	emitUseGrantEvent(ctx, granter.String(), grantee.String())
-
-	// if fee allowance is accepted, store the updated state of the allowance
-	return k.GrantAllowance(ctx, granter, grantee, grant)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func emitUseGrantEvent(ctx sdk.Context, granter, grantee string) {
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			feegrant.EventTypeUseFeeGrant,
-			sdk.NewAttribute(feegrant.AttributeKeyGranter, granter),
-			sdk.NewAttribute(feegrant.AttributeKeyGrantee, grantee),
-		),
-	)
-}
+// Ignoring the `revokeFeeAllowance` error, because the user has enough grants to perform this transaction.
+
+// if fee allowance is accepted, store the updated state of the allowance
+
+func emitUseGrantEvent(ctx sdk.Context, granter, grantee string) { _ = "STUB: not implemented"; return }
 
 // InitGenesis will initialize the keeper from a *previously validated* GenesisState
 func (k Keeper) InitGenesis(ctx sdk.Context, data *feegrant.GenesisState) error {
-	for _, f := range data.Allowances {
-		granter, err := sdk.AccAddressFromBech32(f.Granter)
-		if err != nil {
-			return err
-		}
-		grantee, err := sdk.AccAddressFromBech32(f.Grantee)
-		if err != nil {
-			return err
-		}
-
-		grant, err := f.GetGrant()
-		if err != nil {
-			return err
-		}
-
-		err = k.GrantAllowance(ctx, granter, grantee, grant)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // ExportGenesis will dump the contents of the keeper into a serializable GenesisState.
 func (k Keeper) ExportGenesis(ctx sdk.Context) (*feegrant.GenesisState, error) {
-	var grants []feegrant.Grant
-
-	err := k.IterateAllFeeAllowances(ctx, func(grant feegrant.Grant) bool {
-		grants = append(grants, grant)
-		return false
-	})
-
-	return &feegrant.GenesisState{
-		Allowances: grants,
-	}, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }

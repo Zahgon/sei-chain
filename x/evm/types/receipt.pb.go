@@ -5,11 +5,10 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -31,73 +30,35 @@ type Log struct {
 	Synthetic bool     `protobuf:"varint,5,opt,name=synthetic,proto3" json:"synthetic,omitempty"`
 }
 
-func (m *Log) Reset()         { *m = Log{} }
-func (m *Log) String() string { return proto.CompactTextString(m) }
-func (*Log) ProtoMessage()    {}
-func (*Log) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d864f6bdca684f52, []int{0}
-}
-func (m *Log) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Log) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *Log) String() string            { _ = "STUB: not implemented"; return "" }
+func (*Log) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Log) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Log) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Log) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Log.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Log) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Log.Merge(m, src)
-}
-func (m *Log) XXX_Size() int {
-	return m.Size()
-}
-func (m *Log) XXX_DiscardUnknown() {
-	xxx_messageInfo_Log.DiscardUnknown(m)
-}
+
+func (m *Log) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Log) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Log) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Log proto.InternalMessageInfo
 
-func (m *Log) GetAddress() string {
-	if m != nil {
-		return m.Address
-	}
-	return ""
-}
+func (m *Log) GetAddress() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Log) GetTopics() []string {
-	if m != nil {
-		return m.Topics
-	}
-	return nil
-}
+func (m *Log) GetTopics() []string { _ = "STUB: not implemented"; return nil }
 
-func (m *Log) GetData() []byte {
-	if m != nil {
-		return m.Data
-	}
-	return nil
-}
+func (m *Log) GetData() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *Log) GetIndex() uint32 {
-	if m != nil {
-		return m.Index
-	}
-	return 0
-}
+func (m *Log) GetIndex() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Log) GetSynthetic() bool {
-	if m != nil {
-		return m.Synthetic
-	}
-	return false
-}
+func (m *Log) GetSynthetic() bool { _ = "STUB: not implemented"; return false }
 
 type Receipt struct {
 	TxType            uint32 `protobuf:"varint,1,opt,name=tx_type,json=txType,proto3" json:"tx_type,omitempty" yaml:"tx_type"`
@@ -117,136 +78,53 @@ type Receipt struct {
 	LogsBloom []byte `protobuf:"bytes,14,opt,name=logsBloom,proto3" json:"logsBloom,omitempty"`
 }
 
-func (m *Receipt) Reset()         { *m = Receipt{} }
-func (m *Receipt) String() string { return proto.CompactTextString(m) }
-func (*Receipt) ProtoMessage()    {}
-func (*Receipt) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d864f6bdca684f52, []int{1}
-}
-func (m *Receipt) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Receipt) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *Receipt) String() string            { _ = "STUB: not implemented"; return "" }
+func (*Receipt) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Receipt) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Receipt) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Receipt) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Receipt.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Receipt) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Receipt.Merge(m, src)
-}
-func (m *Receipt) XXX_Size() int {
-	return m.Size()
-}
-func (m *Receipt) XXX_DiscardUnknown() {
-	xxx_messageInfo_Receipt.DiscardUnknown(m)
-}
+
+func (m *Receipt) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Receipt) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Receipt) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Receipt proto.InternalMessageInfo
 
-func (m *Receipt) GetTxType() uint32 {
-	if m != nil {
-		return m.TxType
-	}
-	return 0
-}
+func (m *Receipt) GetTxType() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Receipt) GetCumulativeGasUsed() uint64 {
-	if m != nil {
-		return m.CumulativeGasUsed
-	}
-	return 0
-}
+func (m *Receipt) GetCumulativeGasUsed() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Receipt) GetContractAddress() string {
-	if m != nil {
-		return m.ContractAddress
-	}
-	return ""
-}
+func (m *Receipt) GetContractAddress() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Receipt) GetTxHashHex() string {
-	if m != nil {
-		return m.TxHashHex
-	}
-	return ""
-}
+func (m *Receipt) GetTxHashHex() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Receipt) GetGasUsed() uint64 {
-	if m != nil {
-		return m.GasUsed
-	}
-	return 0
-}
+func (m *Receipt) GetGasUsed() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Receipt) GetEffectiveGasPrice() uint64 {
-	if m != nil {
-		return m.EffectiveGasPrice
-	}
-	return 0
-}
+func (m *Receipt) GetEffectiveGasPrice() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Receipt) GetBlockNumber() uint64 {
-	if m != nil {
-		return m.BlockNumber
-	}
-	return 0
-}
+func (m *Receipt) GetBlockNumber() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Receipt) GetTransactionIndex() uint32 {
-	if m != nil {
-		return m.TransactionIndex
-	}
-	return 0
-}
+func (m *Receipt) GetTransactionIndex() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Receipt) GetStatus() uint32 {
-	if m != nil {
-		return m.Status
-	}
-	return 0
-}
+func (m *Receipt) GetStatus() uint32 { _ = "STUB: not implemented"; return 0 }
 
-func (m *Receipt) GetFrom() string {
-	if m != nil {
-		return m.From
-	}
-	return ""
-}
+func (m *Receipt) GetFrom() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Receipt) GetTo() string {
-	if m != nil {
-		return m.To
-	}
-	return ""
-}
+func (m *Receipt) GetTo() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Receipt) GetVmError() string {
-	if m != nil {
-		return m.VmError
-	}
-	return ""
-}
+func (m *Receipt) GetVmError() string { _ = "STUB: not implemented"; return "" }
 
-func (m *Receipt) GetLogs() []*Log {
-	if m != nil {
-		return m.Logs
-	}
-	return nil
-}
+func (m *Receipt) GetLogs() []*Log { _ = "STUB: not implemented"; return nil }
 
-func (m *Receipt) GetLogsBloom() []byte {
-	if m != nil {
-		return m.LogsBloom
-	}
-	return nil
-}
+func (m *Receipt) GetLogsBloom() []byte { _ = "STUB: not implemented"; return nil }
 
 func init() {
 	proto.RegisterType((*Log)(nil), "seiprotocol.seichain.evm.Log")
@@ -299,963 +177,42 @@ var fileDescriptor_d864f6bdca684f52 = []byte{
 	0x15, 0x04, 0x00, 0x00,
 }
 
-func (m *Log) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Log) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Log) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Log) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Log) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Synthetic {
-		i--
-		if m.Synthetic {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x28
-	}
-	if m.Index != 0 {
-		i = encodeVarintReceipt(dAtA, i, uint64(m.Index))
-		i--
-		dAtA[i] = 0x20
-	}
-	if len(m.Data) > 0 {
-		i -= len(m.Data)
-		copy(dAtA[i:], m.Data)
-		i = encodeVarintReceipt(dAtA, i, uint64(len(m.Data)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Topics) > 0 {
-		for iNdEx := len(m.Topics) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.Topics[iNdEx])
-			copy(dAtA[i:], m.Topics[iNdEx])
-			i = encodeVarintReceipt(dAtA, i, uint64(len(m.Topics[iNdEx])))
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.Address) > 0 {
-		i -= len(m.Address)
-		copy(dAtA[i:], m.Address)
-		i = encodeVarintReceipt(dAtA, i, uint64(len(m.Address)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *Receipt) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Receipt) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Receipt) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Receipt) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Receipt) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.LogsBloom) > 0 {
-		i -= len(m.LogsBloom)
-		copy(dAtA[i:], m.LogsBloom)
-		i = encodeVarintReceipt(dAtA, i, uint64(len(m.LogsBloom)))
-		i--
-		dAtA[i] = 0x72
-	}
-	if len(m.Logs) > 0 {
-		for iNdEx := len(m.Logs) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Logs[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintReceipt(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x6a
-		}
-	}
-	if len(m.VmError) > 0 {
-		i -= len(m.VmError)
-		copy(dAtA[i:], m.VmError)
-		i = encodeVarintReceipt(dAtA, i, uint64(len(m.VmError)))
-		i--
-		dAtA[i] = 0x62
-	}
-	if len(m.To) > 0 {
-		i -= len(m.To)
-		copy(dAtA[i:], m.To)
-		i = encodeVarintReceipt(dAtA, i, uint64(len(m.To)))
-		i--
-		dAtA[i] = 0x5a
-	}
-	if len(m.From) > 0 {
-		i -= len(m.From)
-		copy(dAtA[i:], m.From)
-		i = encodeVarintReceipt(dAtA, i, uint64(len(m.From)))
-		i--
-		dAtA[i] = 0x52
-	}
-	if m.Status != 0 {
-		i = encodeVarintReceipt(dAtA, i, uint64(m.Status))
-		i--
-		dAtA[i] = 0x48
-	}
-	if m.TransactionIndex != 0 {
-		i = encodeVarintReceipt(dAtA, i, uint64(m.TransactionIndex))
-		i--
-		dAtA[i] = 0x40
-	}
-	if m.BlockNumber != 0 {
-		i = encodeVarintReceipt(dAtA, i, uint64(m.BlockNumber))
-		i--
-		dAtA[i] = 0x38
-	}
-	if m.EffectiveGasPrice != 0 {
-		i = encodeVarintReceipt(dAtA, i, uint64(m.EffectiveGasPrice))
-		i--
-		dAtA[i] = 0x30
-	}
-	if m.GasUsed != 0 {
-		i = encodeVarintReceipt(dAtA, i, uint64(m.GasUsed))
-		i--
-		dAtA[i] = 0x28
-	}
-	if len(m.TxHashHex) > 0 {
-		i -= len(m.TxHashHex)
-		copy(dAtA[i:], m.TxHashHex)
-		i = encodeVarintReceipt(dAtA, i, uint64(len(m.TxHashHex)))
-		i--
-		dAtA[i] = 0x22
-	}
-	if len(m.ContractAddress) > 0 {
-		i -= len(m.ContractAddress)
-		copy(dAtA[i:], m.ContractAddress)
-		i = encodeVarintReceipt(dAtA, i, uint64(len(m.ContractAddress)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if m.CumulativeGasUsed != 0 {
-		i = encodeVarintReceipt(dAtA, i, uint64(m.CumulativeGasUsed))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.TxType != 0 {
-		i = encodeVarintReceipt(dAtA, i, uint64(m.TxType))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintReceipt(dAtA []byte, offset int, v uint64) int {
-	offset -= sovReceipt(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *Log) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Address)
-	if l > 0 {
-		n += 1 + l + sovReceipt(uint64(l))
-	}
-	if len(m.Topics) > 0 {
-		for _, s := range m.Topics {
-			l = len(s)
-			n += 1 + l + sovReceipt(uint64(l))
-		}
-	}
-	l = len(m.Data)
-	if l > 0 {
-		n += 1 + l + sovReceipt(uint64(l))
-	}
-	if m.Index != 0 {
-		n += 1 + sovReceipt(uint64(m.Index))
-	}
-	if m.Synthetic {
-		n += 2
-	}
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *Receipt) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.TxType != 0 {
-		n += 1 + sovReceipt(uint64(m.TxType))
-	}
-	if m.CumulativeGasUsed != 0 {
-		n += 1 + sovReceipt(uint64(m.CumulativeGasUsed))
-	}
-	l = len(m.ContractAddress)
-	if l > 0 {
-		n += 1 + l + sovReceipt(uint64(l))
-	}
-	l = len(m.TxHashHex)
-	if l > 0 {
-		n += 1 + l + sovReceipt(uint64(l))
-	}
-	if m.GasUsed != 0 {
-		n += 1 + sovReceipt(uint64(m.GasUsed))
-	}
-	if m.EffectiveGasPrice != 0 {
-		n += 1 + sovReceipt(uint64(m.EffectiveGasPrice))
-	}
-	if m.BlockNumber != 0 {
-		n += 1 + sovReceipt(uint64(m.BlockNumber))
-	}
-	if m.TransactionIndex != 0 {
-		n += 1 + sovReceipt(uint64(m.TransactionIndex))
-	}
-	if m.Status != 0 {
-		n += 1 + sovReceipt(uint64(m.Status))
-	}
-	l = len(m.From)
-	if l > 0 {
-		n += 1 + l + sovReceipt(uint64(l))
-	}
-	l = len(m.To)
-	if l > 0 {
-		n += 1 + l + sovReceipt(uint64(l))
-	}
-	l = len(m.VmError)
-	if l > 0 {
-		n += 1 + l + sovReceipt(uint64(l))
-	}
-	if len(m.Logs) > 0 {
-		for _, e := range m.Logs {
-			l = e.Size()
-			n += 1 + l + sovReceipt(uint64(l))
-		}
-	}
-	l = len(m.LogsBloom)
-	if l > 0 {
-		n += 1 + l + sovReceipt(uint64(l))
-	}
-	return n
-}
+func (m *Log) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovReceipt(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozReceipt(x uint64) (n int) {
-	return sovReceipt(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *Log) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReceipt
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Log: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Log: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Address", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Address = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Topics", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Topics = append(m.Topics, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Data", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Data = append(m.Data[:0], dAtA[iNdEx:postIndex]...)
-			if m.Data == nil {
-				m.Data = []byte{}
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Index", wireType)
-			}
-			m.Index = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Index |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Synthetic", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Synthetic = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReceipt(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *Receipt) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Receipt) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowReceipt
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Receipt: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Receipt: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TxType", wireType)
-			}
-			m.TxType = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.TxType |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CumulativeGasUsed", wireType)
-			}
-			m.CumulativeGasUsed = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CumulativeGasUsed |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ContractAddress", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.ContractAddress = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TxHashHex", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.TxHashHex = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GasUsed", wireType)
-			}
-			m.GasUsed = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.GasUsed |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 6:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EffectiveGasPrice", wireType)
-			}
-			m.EffectiveGasPrice = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.EffectiveGasPrice |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BlockNumber", wireType)
-			}
-			m.BlockNumber = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.BlockNumber |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 8:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field TransactionIndex", wireType)
-			}
-			m.TransactionIndex = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.TransactionIndex |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 9:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Status", wireType)
-			}
-			m.Status = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Status |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 10:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field From", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.From = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 11:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field To", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.To = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 12:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VmError", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.VmError = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 13:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Logs", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Logs = append(m.Logs, &Log{})
-			if err := m.Logs[len(m.Logs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 14:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field LogsBloom", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.LogsBloom = append(m.LogsBloom[:0], dAtA[iNdEx:postIndex]...)
-			if m.LogsBloom == nil {
-				m.LogsBloom = []byte{}
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipReceipt(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthReceipt
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovReceipt(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipReceipt(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowReceipt
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowReceipt
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthReceipt
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupReceipt
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthReceipt
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func sozReceipt(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *Log) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *Receipt) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipReceipt(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthReceipt        = fmt.Errorf("proto: negative length found during unmarshaling")

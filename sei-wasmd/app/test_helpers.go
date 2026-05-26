@@ -1,13 +1,6 @@
 package app
 
 import (
-	"bytes"
-	"context"
-	"encoding/hex"
-	"encoding/json"
-	"fmt"
-	"path/filepath"
-	"strconv"
 	"testing"
 	"time"
 
@@ -16,38 +9,19 @@ import (
 
 	bam "github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	cryptocodec "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/codec"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/ed25519"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/snapshots"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 	bankkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/keeper"
 	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/capability"
 	capabilitykeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution"
 	distrkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence"
 	evidencekeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/evidence/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/slashing"
 	slashingkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/slashing/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/staking"
 	stakingkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/keeper"
-	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
-	ibcclient "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client"
-	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
-	minttypes "github.com/sei-protocol/sei-chain/x/mint/types"
-	"github.com/stretchr/testify/require"
-	dbm "github.com/tendermint/tm-db"
 
-	seiapp "github.com/sei-protocol/sei-chain/app"
-	storev2rootmulti "github.com/sei-protocol/sei-chain/sei-cosmos/storev2/rootmulti"
-	seidbconfig "github.com/sei-protocol/sei-chain/sei-db/config"
 	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm"
 )
 
@@ -71,30 +45,8 @@ var DefaultConsensusParams = &tmproto.ConsensusParams{
 }
 
 func setup(t testing.TB, withGenesis bool, invCheckPeriod uint, opts ...wasm.Option) (*WasmApp, GenesisState) {
-	nodeHome := t.TempDir()
-	snapshotDir := filepath.Join(nodeHome, "data", "snapshots")
-	snapshotDB, err := sdk.NewLevelDB("metadata", snapshotDir)
-	require.NoError(t, err)
-	snapshotStore, err := snapshots.NewStore(snapshotDB, snapshotDir)
-	require.NoError(t, err)
-
-	scConfig := seidbconfig.DefaultStateCommitConfig()
-	scConfig.MemIAVLConfig.SnapshotInterval = 1
-	scConfig.MemIAVLConfig.SnapshotMinTimeInterval = 0
-	scConfig.MemIAVLConfig.AsyncCommitBuffer = 0
-	scConfig.HistoricalProofRateLimit = 0
-	scConfig.HistoricalProofMaxInFlight = 100
-	ssConfig := seidbconfig.StateStoreConfig{}
-	cms := storev2rootmulti.NewStore(nodeHome, scConfig, ssConfig, nil)
-	cmsOpt := func(baseApp *bam.BaseApp) { baseApp.SetCMS(cms) }
-
-	baseAppOpts := []func(*bam.BaseApp){cmsOpt, bam.SetSnapshotStore(snapshotStore), bam.SetSnapshotKeepRecent(2)}
-	db := dbm.NewMemDB()
-	app := NewWasmApp(db, nil, true, map[int64]bool{}, nodeHome, invCheckPeriod, nil, MakeEncodingConfig(), wasm.EnableAllProposals, EmptyBaseAppOptions{}, opts, baseAppOpts...)
-	if withGenesis {
-		return app, NewDefaultGenesisState()
-	}
-	return app, GenesisState{}
+	_ = "STUB: not implemented"
+	return nil, *new(GenesisState)
 }
 
 // SetupWithGenesisValSet initializes a new WasmApp with a validator set and genesis accounts
@@ -102,224 +54,93 @@ func setup(t testing.TB, withGenesis bool, invCheckPeriod uint, opts ...wasm.Opt
 // of one consensus engine unit (10^6) in the default token of the WasmApp from first genesis
 // account. A Nop logger is set in WasmApp.
 func SetupWithGenesisValSet(t *testing.T, chainID string, valSet *tmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount, opts []wasm.Option, balances ...banktypes.Balance) *WasmApp {
-	app, genesisState := setup(t, true, 5, opts...)
-	// set genesis accounts
-	authGenesis := authtypes.NewGenesisState(authtypes.DefaultParams(), genAccs)
-	genesisState[authtypes.ModuleName] = app.appCodec.MustMarshalJSON(authGenesis)
-
-	validators := make([]stakingtypes.Validator, 0, len(valSet.Validators))
-	delegations := make([]stakingtypes.Delegation, 0, len(valSet.Validators))
-
-	bondAmt := sdk.NewInt(1000000)
-
-	for _, val := range valSet.Validators {
-		pk, err := cryptocodec.FromTmPubKeyInterface(val.PubKey)
-		require.NoError(t, err)
-		pkAny, err := codectypes.NewAnyWithValue(pk)
-		require.NoError(t, err)
-		validator := stakingtypes.Validator{
-			OperatorAddress:   sdk.ValAddress(val.Address).String(),
-			ConsensusPubkey:   pkAny,
-			Jailed:            false,
-			Status:            stakingtypes.Bonded,
-			Tokens:            bondAmt,
-			DelegatorShares:   sdk.OneDec(),
-			Description:       stakingtypes.Description{},
-			UnbondingHeight:   int64(0),
-			UnbondingTime:     time.Unix(0, 0).UTC(),
-			Commission:        stakingtypes.NewCommission(sdk.ZeroDec(), sdk.ZeroDec(), sdk.ZeroDec()),
-			MinSelfDelegation: sdk.ZeroInt(),
-		}
-		validators = append(validators, validator)
-		delegations = append(delegations, stakingtypes.NewDelegation(genAccs[0].GetAddress(), val.Address.Bytes(), sdk.OneDec()))
-
-	}
-
-	// set validators and delegations
-	stakingGenesis := stakingtypes.NewGenesisState(stakingtypes.DefaultParams(), validators, delegations)
-	genesisState[stakingtypes.ModuleName] = app.appCodec.MustMarshalJSON(stakingGenesis)
-
-	totalSupply := sdk.NewCoins()
-	for _, b := range balances {
-		// add genesis acc tokens and delegated tokens to total supply
-		totalSupply = totalSupply.Add(b.Coins.Add(sdk.NewCoin(sdk.DefaultBondDenom, bondAmt))...)
-	}
-
-	// add bonded amount to bonded pool module account
-	balances = append(balances, banktypes.Balance{
-		Address: authtypes.NewModuleAddress(stakingtypes.BondedPoolName).String(),
-		Coins:   sdk.Coins{sdk.NewCoin(sdk.DefaultBondDenom, bondAmt)},
-	})
-
-	// update total supply
-	bankGenesis := banktypes.NewGenesisState(banktypes.DefaultGenesisState().Params, balances, totalSupply, []banktypes.Metadata{}, []banktypes.WeiBalance{})
-	genesisState[banktypes.ModuleName] = app.appCodec.MustMarshalJSON(bankGenesis)
-
-	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
-	require.NoError(t, err)
-
-	// init chain will set the validator set and initialize the genesis accounts
-	_, err = app.InitChain(
-		context.Background(),
-		&abci.RequestInitChain{
-			ConsensusParams: DefaultConsensusParams,
-			AppStateBytes:   stateBytes,
-			ChainId:         chainID,
-		},
-	)
-	require.NoError(t, err)
-	// This line is necessary due to the capability module which has a map as well as store usages,
-	// and because the initChain runs 3 times (deliver, prepare, process proposal),
-	// we need to make sure to first commit the last one so the proper values are persisted from the
-	// memory map into the store.
-	app.SetProcessProposalStateToCommit()
-
-	// commit genesis changes
-	_, err = app.Commit(context.Background())
-	require.NoError(t, err)
-	_, err = app.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
-		Hash: app.LastCommitID().Hash,
-		Header: &tmproto.Header{
-			ChainID:            chainID,
-			Height:             app.LastBlockHeight() + 1,
-			ValidatorsHash:     valSet.Hash(),
-			NextValidatorsHash: valSet.Hash(),
-		},
-	})
-	require.NoError(t, err)
-
-	return app
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// set genesis accounts
+
+// set validators and delegations
+
+// add genesis acc tokens and delegated tokens to total supply
+
+// add bonded amount to bonded pool module account
+
+// update total supply
+
+// init chain will set the validator set and initialize the genesis accounts
+
+// This line is necessary due to the capability module which has a map as well as store usages,
+// and because the initChain runs 3 times (deliver, prepare, process proposal),
+// we need to make sure to first commit the last one so the proper values are persisted from the
+// memory map into the store.
+
+// commit genesis changes
 
 // SetupWithEmptyStore setup a wasmd app instance with empty DB
-func SetupWithEmptyStore(t testing.TB) *WasmApp {
-	app, _ := setup(t, false, 0)
-	return app
-}
+func SetupWithEmptyStore(t testing.TB) *WasmApp { _ = "STUB: not implemented"; return nil }
 
 type GenerateAccountStrategy func(int) []sdk.AccAddress
 
 // createRandomAccounts is a strategy used by addTestAddrs() in order to generated addresses in random order.
-func createRandomAccounts(accNum int) []sdk.AccAddress {
-	testAddrs := make([]sdk.AccAddress, accNum)
-	for i := 0; i < accNum; i++ {
-		pk := ed25519.GenPrivKey().PubKey()
-		testAddrs[i] = sdk.AccAddress(pk.Address())
-	}
-
-	return testAddrs
-}
+func createRandomAccounts(accNum int) []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 // createIncrementalAccounts is a strategy used by addTestAddrs() in order to generated addresses in ascending order.
-func createIncrementalAccounts(accNum int) []sdk.AccAddress {
-	addresses := make([]sdk.AccAddress, 0, accNum)
-	var buffer bytes.Buffer
+func createIncrementalAccounts(accNum int) []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
-	// start at 100 so we can make up to 999 test addresses with valid test addresses
-	for i := 100; i < (accNum + 100); i++ {
-		numString := strconv.Itoa(i)
-		buffer.WriteString("A58856F0FD53BF058B4909A21AEC019107BA6") // base address string
+// start at 100 so we can make up to 999 test addresses with valid test addresses
 
-		buffer.WriteString(numString) // adding on final two digits to make addresses unique
-		res, err := sdk.AccAddressFromHex(buffer.String())
-		if err != nil {
-			panic(err)
-		}
-		bech := res.String()
-		addr, err := TestAddr(buffer.String(), bech)
-		if err != nil {
-			panic(err)
-		}
+// base address string
 
-		addresses = append(addresses, addr)
-		buffer.Reset()
-	}
-
-	return addresses
-}
+// adding on final two digits to make addresses unique
 
 // AddTestAddrsFromPubKeys adds the addresses into the WasmApp providing only the public keys.
 func AddTestAddrsFromPubKeys(app *WasmApp, ctx sdk.Context, pubKeys []cryptotypes.PubKey, accAmt sdk.Int) {
-	initCoins := sdk.NewCoins(sdk.NewCoin(app.stakingKeeper.BondDenom(ctx), accAmt))
-
-	for _, pk := range pubKeys {
-		initAccountWithCoins(app, ctx, sdk.AccAddress(pk.Address()), initCoins)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // AddTestAddrs constructs and returns accNum amount of accounts with an
 // initial balance of accAmt in random order
 func AddTestAddrs(app *WasmApp, ctx sdk.Context, accNum int, accAmt sdk.Int) []sdk.AccAddress {
-	return addTestAddrs(app, ctx, accNum, accAmt, createRandomAccounts)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // AddTestAddrs constructs and returns accNum amount of accounts with an
 // initial balance of accAmt in random order
 func AddTestAddrsIncremental(app *WasmApp, ctx sdk.Context, accNum int, accAmt sdk.Int) []sdk.AccAddress {
-	return addTestAddrs(app, ctx, accNum, accAmt, createIncrementalAccounts)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func addTestAddrs(app *WasmApp, ctx sdk.Context, accNum int, accAmt sdk.Int, strategy GenerateAccountStrategy) []sdk.AccAddress {
-	testAddrs := strategy(accNum)
-
-	initCoins := sdk.NewCoins(sdk.NewCoin(app.stakingKeeper.BondDenom(ctx), accAmt))
-
-	// fill all the addresses with some coins, set the loose pool tokens simultaneously
-	for _, addr := range testAddrs {
-		initAccountWithCoins(app, ctx, addr, initCoins)
-	}
-
-	return testAddrs
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func initAccountWithCoins(app *WasmApp, ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) {
-	err := app.bankKeeper.MintCoins(ctx, minttypes.ModuleName, coins)
-	if err != nil {
-		panic(err)
-	}
+// fill all the addresses with some coins, set the loose pool tokens simultaneously
 
-	err = app.bankKeeper.SendCoinsFromModuleToAccount(ctx, minttypes.ModuleName, addr, coins)
-	if err != nil {
-		panic(err)
-	}
+func initAccountWithCoins(app *WasmApp, ctx sdk.Context, addr sdk.AccAddress, coins sdk.Coins) {
+	_ = "STUB: not implemented"
+	return
 }
 
 // ConvertAddrsToValAddrs converts the provided addresses to ValAddress.
 func ConvertAddrsToValAddrs(addrs []sdk.AccAddress) []sdk.ValAddress {
-	valAddrs := make([]sdk.ValAddress, len(addrs))
-
-	for i, addr := range addrs {
-		valAddrs[i] = sdk.ValAddress(addr)
-	}
-
-	return valAddrs
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func TestAddr(addr string, bech string) (sdk.AccAddress, error) {
-	res, err := sdk.AccAddressFromHex(addr)
-	if err != nil {
-		return nil, err
-	}
-	bechexpected := res.String()
-	if bech != bechexpected {
-		return nil, fmt.Errorf("bech encoding doesn't match reference")
-	}
-
-	bechres, err := sdk.AccAddressFromBech32(bech)
-	if err != nil {
-		return nil, err
-	}
-	if !bytes.Equal(bechres, res) {
-		return nil, err
-	}
-
-	return res, nil
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), nil
 }
 
 // CheckBalance checks the balance of an account.
 func CheckBalance(t *testing.T, app *WasmApp, addr sdk.AccAddress, balances sdk.Coins) {
-	ctxCheck := app.NewContext(true, tmproto.Header{})
-	require.True(t, balances.IsEqual(app.bankKeeper.GetAllBalances(ctxCheck, addr)))
+	_ = "STUB: not implemented"
+	return
 }
 
 const DefaultGas = 1200000
@@ -332,49 +153,13 @@ func SignCheckDeliver(
 	t *testing.T, txCfg client.TxConfig, app *bam.BaseApp, header tmproto.Header, msgs []sdk.Msg,
 	chainID string, accNums, accSeqs []uint64, expSimPass, expPass bool, priv ...cryptotypes.PrivKey,
 ) (sdk.GasInfo, *sdk.Result, error) {
-	tx, err := seiapp.GenTx(
-		txCfg,
-		msgs,
-		sdk.Coins{sdk.NewInt64Coin(sdk.DefaultBondDenom, 0)},
-		2*DefaultGas,
-		chainID,
-		accNums,
-		accSeqs,
-		priv...,
-	)
-	require.NoError(t, err)
-	txBytes, err := txCfg.TxEncoder()(tx)
-	require.Nil(t, err)
-
-	// Must simulate now as CheckTx doesn't run Msgs anymore
-	_, res, err := app.Simulate(txBytes)
-
-	if expSimPass {
-		require.NoError(t, err)
-		require.NotNil(t, res)
-	} else {
-		require.Error(t, err)
-		require.Nil(t, res)
-	}
-
-	// Simulate a sending a transaction and committing a block
-	gInfo, res, err := app.Deliver(txCfg.TxEncoder(), tx)
-
-	if expPass {
-		require.NoError(t, err)
-		require.NotNil(t, res)
-	} else {
-		require.Error(t, err)
-		require.Nil(t, res)
-	}
-
-	app.EndBlock(app.GetContextForDeliverTx([]byte{}), abci.RequestEndBlock{})
-	app.SetDeliverStateToCommit()
-	_, err = app.Commit(context.Background())
-	require.NoError(t, err)
-
-	return gInfo, res, err
+	_ = "STUB: not implemented"
+	return *new(sdk.GasInfo), nil, nil
 }
+
+// Must simulate now as CheckTx doesn't run Msgs anymore
+
+// Simulate a sending a transaction and committing a block
 
 // SignAndDeliver signs and delivers a transaction. No simulation occurs as the
 // ibc testing package causes checkState and deliverState to diverge in block time.
@@ -383,103 +168,34 @@ func SignAndDeliver(
 	ibcKeeper *ibckeeper.Keeper, stakingKeeper stakingkeeper.Keeper, capabilityKeeper *capabilitykeeper.Keeper, distrKeeper *distrkeeper.Keeper, slashingKeeper *slashingkeeper.Keeper, evidenceKeeper *evidencekeeper.Keeper, header tmproto.Header, msgs []sdk.Msg,
 	chainID string, accNums, accSeqs []uint64, expSimPass, expPass bool, priv ...cryptotypes.PrivKey,
 ) (sdk.GasInfo, *sdk.Result, error) {
-	tx, err := seiapp.GenTx(
-		txCfg,
-		msgs,
-		sdk.Coins{sdk.NewInt64Coin(sdk.DefaultBondDenom, 0)},
-		2*DefaultGas,
-		chainID,
-		accNums,
-		accSeqs,
-		priv...,
-	)
-	require.NoError(t, err)
-
-	// Simulate a sending a transaction and committing a block
-	ctx := app.GetContextForDeliverTx([]byte{}).WithBlockHeader(header)
-	capability.BeginBlocker(ctx, *capabilityKeeper)
-	distribution.BeginBlocker(ctx, []abci.VoteInfo{}, *distrKeeper)
-	slashing.BeginBlocker(ctx, []abci.VoteInfo{}, *slashingKeeper)
-	evidence.BeginBlocker(ctx, []abci.Misbehavior{}, *evidenceKeeper)
-	staking.BeginBlocker(ctx, stakingKeeper)
-	ibcclient.BeginBlocker(ctx, ibcKeeper.ClientKeeper)
-	gInfo, res, err := app.Deliver(txCfg.TxEncoder(), tx)
-
-	if expPass {
-		require.NoError(t, err)
-		require.NotNil(t, res)
-	} else {
-		require.Error(t, err)
-		require.Nil(t, res)
-	}
-
-	app.EndBlock(app.GetContextForDeliverTx([]byte{}), abci.RequestEndBlock{})
-	app.SetDeliverStateToCommit()
-	_, err = app.Commit(context.Background())
-	require.NoError(t, err)
-
-	return gInfo, res, err
+	_ = "STUB: not implemented"
+	return *new(sdk.GasInfo), nil, nil
 }
+
+// Simulate a sending a transaction and committing a block
 
 // GenSequenceOfTxs generates a set of signed transactions of messages, such
 // that they differ only by having the sequence numbers incremented between
 // every transaction.
 func GenSequenceOfTxs(txGen client.TxConfig, msgs []sdk.Msg, accNums []uint64, initSeqNums []uint64, numToGenerate int, priv ...cryptotypes.PrivKey) ([]sdk.Tx, error) {
-	txs := make([]sdk.Tx, numToGenerate)
-	var err error
-	for i := 0; i < numToGenerate; i++ {
-		txs[i], err = seiapp.GenTx(
-			txGen,
-			msgs,
-			sdk.Coins{sdk.NewInt64Coin(sdk.DefaultBondDenom, 0)},
-			seiapp.DefaultGenTxGas,
-			"",
-			accNums,
-			initSeqNums,
-			priv...,
-		)
-		if err != nil {
-			break
-		}
-		incrementAllSequenceNumbers(initSeqNums)
-	}
-
-	return txs, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func incrementAllSequenceNumbers(initSeqNums []uint64) {
-	for i := 0; i < len(initSeqNums); i++ {
-		initSeqNums[i]++
-	}
-}
+func incrementAllSequenceNumbers(initSeqNums []uint64) { _ = "STUB: not implemented"; return }
 
 // CreateTestPubKeys returns a total of numPubKeys public keys in ascending order.
-func CreateTestPubKeys(numPubKeys int) []cryptotypes.PubKey {
-	publicKeys := make([]cryptotypes.PubKey, 0, numPubKeys)
-	var buffer bytes.Buffer
+func CreateTestPubKeys(numPubKeys int) []cryptotypes.PubKey { _ = "STUB: not implemented"; return nil }
 
-	// start at 10 to avoid changing 1 to 01, 2 to 02, etc
-	for i := 100; i < (numPubKeys + 100); i++ {
-		numString := strconv.Itoa(i)
-		buffer.WriteString("0B485CFC0EECC619440448436F8FC9DF40566F2369E72400281454CB552AF") // base pubkey string
-		buffer.WriteString(numString)                                                       // adding on final two digits to make pubkeys unique
-		publicKeys = append(publicKeys, NewPubKeyFromHex(buffer.String()))
-		buffer.Reset()
-	}
+// start at 10 to avoid changing 1 to 01, 2 to 02, etc
 
-	return publicKeys
-}
+// base pubkey string
+// adding on final two digits to make pubkeys unique
 
 // NewPubKeyFromHex returns a PubKey from a hex string.
 func NewPubKeyFromHex(pk string) (res cryptotypes.PubKey) {
-	pkBytes, err := hex.DecodeString(pk)
-	if err != nil {
-		panic(err)
-	}
-	if len(pkBytes) != ed25519.PubKeySize {
-		panic(errors.Wrap(errors.ErrInvalidPubKey, "invalid pubkey size"))
-	}
-	return &ed25519.PubKey{Key: pkBytes}
+	_ = "STUB: not implemented"
+	return *new(cryptotypes.PubKey)
 }
 
 // EmptyBaseAppOptions is a stub implementing AppOptions
@@ -492,11 +208,8 @@ type EmptyBaseAppOptions = testutil.TestAppOpts
 // Instead of using the mint module account, which has the
 // permission of minting, create a "faucet" account. (@fdymylja)
 func FundAccount(bankKeeper bankkeeper.Keeper, ctx sdk.Context, addr sdk.AccAddress, amounts sdk.Coins) error {
-	if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
-		return err
-	}
-
-	return bankKeeper.SendCoinsFromModuleToAccount(ctx, minttypes.ModuleName, addr, amounts)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // FundModuleAccount is a utility function that funds a module account by
@@ -506,9 +219,6 @@ func FundAccount(bankKeeper bankkeeper.Keeper, ctx sdk.Context, addr sdk.AccAddr
 // Instead of using the mint module account, which has the
 // permission of minting, create a "faucet" account. (@fdymylja)
 func FundModuleAccount(bankKeeper bankkeeper.Keeper, ctx sdk.Context, recipientMod string, amounts sdk.Coins) error {
-	if err := bankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
-		return err
-	}
-
-	return bankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, recipientMod, amounts)
+	_ = "STUB: not implemented"
+	return nil
 }

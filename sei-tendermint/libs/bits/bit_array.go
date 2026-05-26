@@ -1,15 +1,9 @@
 package bits
 
 import (
-	"errors"
-	"fmt"
-	"math"
-	"math/rand"
 	"regexp"
-	"strings"
 	"sync"
 
-	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
 	tmprotobits "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/libs/bits"
 )
 
@@ -22,256 +16,98 @@ type BitArray struct {
 
 // NewBitArray returns a new bit array.
 // It returns nil if the number of bits is zero.
-func NewBitArray(bits int) *BitArray {
-	if bits <= 0 {
-		return nil
-	}
-	bA := &BitArray{}
-	bA.reset(bits)
-	return bA
-}
+func NewBitArray(bits int) *BitArray { _ = "STUB: not implemented"; return nil }
 
 // reset changes size of BitArray to `bits` and re-allocates (zeroed) data buffer
-func (bA *BitArray) reset(bits int) {
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-
-	bA.Bits = bits
-	if bits == 0 {
-		bA.Elems = nil
-	} else {
-		bA.Elems = make([]uint64, numElems(bits))
-	}
-}
+func (bA *BitArray) reset(bits int) { _ = "STUB: not implemented"; return }
 
 // Size returns the number of bits in the bitarray
-func (bA *BitArray) Size() int {
-	if bA == nil {
-		return 0
-	}
-	return bA.Bits
-}
+func (bA *BitArray) Size() int { _ = "STUB: not implemented"; return 0 }
 
 // GetIndex returns the bit at index i within the bit array.
 // The behavior is undefined if i >= bA.Bits
-func (bA *BitArray) GetIndex(i int) bool {
-	if bA == nil {
-		return false
-	}
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-	return bA.getIndex(i)
-}
+func (bA *BitArray) GetIndex(i int) bool { _ = "STUB: not implemented"; return false }
 
-func (bA *BitArray) getIndex(i int) bool {
-	if i < 0 || i >= bA.Bits {
-		return false
-	}
-	return bA.Elems[i/64]&(uint64(1)<<uint(i%64)) > 0 //nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
-}
+func (bA *BitArray) getIndex(i int) bool { _ = "STUB: not implemented"; return false }
+
+//nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
 
 // SetIndex sets the bit at index i within the bit array.
 // This method returns false if i is out of range of the BitArray.
-func (bA *BitArray) SetIndex(i int, v bool) bool {
-	if bA == nil {
-		return false
-	}
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-	return bA.setIndex(i, v)
-}
+func (bA *BitArray) SetIndex(i int, v bool) bool { _ = "STUB: not implemented"; return false }
 
-func (bA *BitArray) setIndex(i int, v bool) bool {
-	if i < 0 || i >= bA.Bits {
-		return false
-	}
-	if v {
-		bA.Elems[i/64] |= (uint64(1) << uint(i%64)) //nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
-	} else {
-		bA.Elems[i/64] &= ^(uint64(1) << uint(i%64)) //nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
-	}
-	return true
-}
+func (bA *BitArray) setIndex(i int, v bool) bool { _ = "STUB: not implemented"; return false }
+
+//nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
+
+//nolint:gosec // i is bounds-checked above; i%64 is always in [0, 63]
 
 // Copy returns a copy of the provided bit array.
-func (bA *BitArray) Copy() *BitArray {
-	if bA == nil {
-		return nil
-	}
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-	return bA.copy()
-}
+func (bA *BitArray) Copy() *BitArray { _ = "STUB: not implemented"; return nil }
 
-func (bA *BitArray) copy() *BitArray {
-	c := make([]uint64, len(bA.Elems))
-	copy(c, bA.Elems)
-	return &BitArray{
-		Bits:  bA.Bits,
-		Elems: c,
-	}
-}
+func (bA *BitArray) copy() *BitArray { _ = "STUB: not implemented"; return nil }
 
-func (bA *BitArray) copyBits(bits int) *BitArray {
-	c := make([]uint64, numElems(bits))
-	copy(c, bA.Elems)
-	return &BitArray{
-		Bits:  bits,
-		Elems: c,
-	}
-}
+func (bA *BitArray) copyBits(bits int) *BitArray { _ = "STUB: not implemented"; return nil }
 
 // Or returns a bit array resulting from a bitwise OR of the two bit arrays.
 // If the two bit-arrys have different lengths, Or right-pads the smaller of the two bit-arrays with zeroes.
 // Thus the size of the return value is the maximum of the two provided bit arrays.
-func (bA *BitArray) Or(o *BitArray) *BitArray {
-	if bA == nil && o == nil {
-		return nil
-	}
-	if bA == nil && o != nil {
-		return o.Copy()
-	}
-	if o == nil {
-		return bA.Copy()
-	}
-	bA.mtx.Lock()
-	o.mtx.Lock()
-	c := bA.copyBits(tmmath.MaxInt(bA.Bits, o.Bits))
-	smaller := tmmath.MinInt(len(bA.Elems), len(o.Elems))
-	for i := range smaller {
-		c.Elems[i] |= o.Elems[i]
-	}
-	bA.mtx.Unlock()
-	o.mtx.Unlock()
-	return c
-}
+func (bA *BitArray) Or(o *BitArray) *BitArray { _ = "STUB: not implemented"; return nil }
 
 // And returns a bit array resulting from a bitwise AND of the two bit arrays.
 // If the two bit-arrys have different lengths, this truncates the larger of the two bit-arrays from the right.
 // Thus the size of the return value is the minimum of the two provided bit arrays.
-func (bA *BitArray) And(o *BitArray) *BitArray {
-	if bA == nil || o == nil {
-		return nil
-	}
-	bA.mtx.Lock()
-	o.mtx.Lock()
-	defer func() {
-		bA.mtx.Unlock()
-		o.mtx.Unlock()
-	}()
-	return bA.and(o)
-}
+func (bA *BitArray) And(o *BitArray) *BitArray { _ = "STUB: not implemented"; return nil }
 
-func (bA *BitArray) and(o *BitArray) *BitArray {
-	c := bA.copyBits(tmmath.MinInt(bA.Bits, o.Bits))
-	for i := 0; i < len(c.Elems); i++ {
-		c.Elems[i] &= o.Elems[i]
-	}
-	return c
-}
+func (bA *BitArray) and(o *BitArray) *BitArray { _ = "STUB: not implemented"; return nil }
 
 // Not returns a bit array resulting from a bitwise Not of the provided bit array.
-func (bA *BitArray) Not() *BitArray {
-	if bA == nil {
-		return nil // Degenerate
-	}
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-	return bA.not()
-}
+func (bA *BitArray) Not() *BitArray { _ = "STUB: not implemented"; return nil }
 
-func (bA *BitArray) not() *BitArray {
-	c := bA.copy()
-	for i := 0; i < len(c.Elems); i++ {
-		c.Elems[i] = ^c.Elems[i]
-	}
-	return c
-}
+// Degenerate
+
+func (bA *BitArray) not() *BitArray { _ = "STUB: not implemented"; return nil }
 
 // Sub subtracts the two bit-arrays bitwise, without carrying the bits.
 // Note that carryless subtraction of a - b is (a and not b).
 // The output is the same as bA, regardless of o's size.
 // If bA is longer than o, o is right padded with zeroes
-func (bA *BitArray) Sub(o *BitArray) *BitArray {
-	if bA == nil || o == nil {
-		// TODO: Decide if we should do 1's complement here?
-		return nil
-	}
-	bA.mtx.Lock()
-	o.mtx.Lock()
-	// output is the same size as bA
-	c := bA.copyBits(bA.Bits)
-	// Only iterate to the minimum size between the two.
-	// If o is longer, those bits are ignored.
-	// If bA is longer, then skipping those iterations is equivalent
-	// to right padding with 0's
-	smaller := tmmath.MinInt(len(bA.Elems), len(o.Elems))
-	for i := range smaller {
-		// &^ is and not in golang
-		c.Elems[i] &^= o.Elems[i]
-	}
-	bA.mtx.Unlock()
-	o.mtx.Unlock()
-	return c
-}
+func (bA *BitArray) Sub(o *BitArray) *BitArray { _ = "STUB: not implemented"; return nil }
+
+// TODO: Decide if we should do 1's complement here?
+
+// output is the same size as bA
+
+// Only iterate to the minimum size between the two.
+// If o is longer, those bits are ignored.
+// If bA is longer, then skipping those iterations is equivalent
+// to right padding with 0's
+
+// &^ is and not in golang
 
 // PickRandom returns a random index for a set bit in the bit array.
 // If there is no such value, it returns 0, false.
 // It uses math/rand's global randomness Source to get this index.
-func (bA *BitArray) PickRandom() (int, bool) {
-	if bA == nil {
-		return 0, false
-	}
+func (bA *BitArray) PickRandom() (int, bool) { _ = "STUB: not implemented"; return 0, false }
 
-	bA.mtx.Lock()
-	trueIndices := bA.getTrueIndices()
-	bA.mtx.Unlock()
+// no bits set to true
 
-	if len(trueIndices) == 0 { // no bits set to true
-		return 0, false
-	}
+// NOTE: using the default math/rand might result in somewhat
+// amount of determinism here. It would be possible to use
+// rand.New(rand.NewSeed(time.Now().Unix())).Intn() to
+// counteract this possibility if it proved to be material.
+//
+// nolint:gosec // G404: Use of weak random number generator
 
-	// NOTE: using the default math/rand might result in somewhat
-	// amount of determinism here. It would be possible to use
-	// rand.New(rand.NewSeed(time.Now().Unix())).Intn() to
-	// counteract this possibility if it proved to be material.
-	//
-	// nolint:gosec // G404: Use of weak random number generator
-	return trueIndices[rand.Intn(len(trueIndices))], true
-}
+func (bA *BitArray) getTrueIndices() []int { _ = "STUB: not implemented"; return nil }
 
-func (bA *BitArray) getTrueIndices() []int {
-	if bA.Size() == 0 {
-		return nil
-	}
-	trueIndices := make([]int, 0, bA.Bits)
-	curBit := 0
-	numElems := len(bA.Elems)
-	// set all true indices
-	for i := 0; i < numElems-1; i++ {
-		elem := bA.Elems[i]
-		if elem == 0 {
-			curBit += 64
-			continue
-		}
-		for j := range 64 {
-			if (elem & (uint64(1) << uint64(j))) > 0 { //nolint:gosec // j is in [0, 63]; always safe for uint64
-				trueIndices = append(trueIndices, curBit)
-			}
-			curBit++
-		}
-	}
-	// handle last element
-	lastElem := bA.Elems[numElems-1]
-	numFinalBits := bA.Bits - curBit
-	for i := range numFinalBits {
-		if (lastElem & (uint64(1) << uint64(i))) > 0 { //nolint:gosec // i is in [0, 63]; always safe for uint64
-			trueIndices = append(trueIndices, curBit)
-		}
-		curBit++
-	}
-	return trueIndices
-}
+// set all true indices
+
+//nolint:gosec // j is in [0, 63]; always safe for uint64
+
+// handle last element
+
+//nolint:gosec // i is in [0, 63]; always safe for uint64
 
 // String returns a string representation of BitArray: BA{<bit-string>},
 // where <bit-string> is a sequence of 'x' (1) and '_' (0).
@@ -279,159 +115,49 @@ func (bA *BitArray) getTrueIndices() []int {
 // For a simple sequence of 'x' and '_' characters with no spaces or newlines,
 // see the MarshalJSON() method.
 // Example: "BA{_x_}" or "nil-BitArray" for nil.
-func (bA *BitArray) String() string {
-	return bA.StringIndented("")
-}
+func (bA *BitArray) String() string { _ = "STUB: not implemented"; return "" }
 
 // StringIndented returns the same thing as String(), but applies the indent
 // at every 10th bit, and twice at every 50th bit.
-func (bA *BitArray) StringIndented(indent string) string {
-	if bA == nil {
-		return "nil-BitArray"
-	}
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-	return bA.stringIndented(indent)
-}
+func (bA *BitArray) StringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
-func (bA *BitArray) stringIndented(indent string) string {
-	lines := []string{}
-	bits := ""
-	for i := 0; i < bA.Bits; i++ {
-		if bA.getIndex(i) {
-			bits += "x"
-		} else {
-			bits += "_"
-		}
-		if i%100 == 99 {
-			lines = append(lines, bits)
-			bits = ""
-		}
-		if i%10 == 9 {
-			bits += indent
-		}
-		if i%50 == 49 {
-			bits += indent
-		}
-	}
-	if len(bits) > 0 {
-		lines = append(lines, bits)
-	}
-	return fmt.Sprintf("BA{%v:%v}", bA.Bits, strings.Join(lines, indent))
-}
+func (bA *BitArray) stringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
 // Update sets the bA's bits to be that of the other bit array.
 // The copying begins from the begin of both bit arrays.
-func (bA *BitArray) Update(o *BitArray) {
-	if bA == nil || o == nil {
-		return
-	}
-
-	bA.mtx.Lock()
-	o.mtx.Lock()
-	copy(bA.Elems, o.Elems)
-	o.mtx.Unlock()
-	bA.mtx.Unlock()
-}
+func (bA *BitArray) Update(o *BitArray) { _ = "STUB: not implemented"; return }
 
 // MarshalJSON implements json.Marshaler interface by marshaling bit array
 // using a custom format: a string of '-' or 'x' where 'x' denotes the 1 bit.
-func (bA *BitArray) MarshalJSON() ([]byte, error) {
-	if bA == nil {
-		return []byte("null"), nil
-	}
-
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-
-	bits := `"`
-	for i := 0; i < bA.Bits; i++ {
-		if bA.getIndex(i) {
-			bits += `x`
-		} else {
-			bits += `_`
-		}
-	}
-	bits += `"`
-	return []byte(bits), nil
-}
+func (bA *BitArray) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 var bitArrayJSONRegexp = regexp.MustCompile(`\A"([_x]*)"\z`)
 
 // UnmarshalJSON implements json.Unmarshaler interface by unmarshaling a custom
 // JSON description.
-func (bA *BitArray) UnmarshalJSON(bz []byte) error {
-	b := string(bz)
-	if b == "null" {
-		// This is required e.g. for encoding/json when decoding
-		// into a pointer with pre-allocated BitArray.
-		bA.reset(0)
-		return nil
-	}
+func (bA *BitArray) UnmarshalJSON(bz []byte) error { _ = "STUB: not implemented"; return nil }
 
-	// Validate 'b'.
-	match := bitArrayJSONRegexp.FindStringSubmatch(b)
-	if match == nil {
-		return fmt.Errorf("bitArray in JSON should be a string of format %q but got %s", bitArrayJSONRegexp.String(), b)
-	}
-	bits := match[1]
-	numBits := len(bits)
+// This is required e.g. for encoding/json when decoding
+// into a pointer with pre-allocated BitArray.
 
-	bA.reset(numBits)
-	for i := range numBits {
-		if bits[i] == 'x' {
-			bA.SetIndex(i, true)
-		}
-	}
-
-	return nil
-}
+// Validate 'b'.
 
 // ToProto converts BitArray to protobuf. It returns nil if BitArray is
 // nil/empty.
-func (bA *BitArray) ToProto() *tmprotobits.BitArray {
-	if bA == nil ||
-		(len(bA.Elems) == 0 && bA.Bits == 0) { // empty
-		return nil
-	}
+func (bA *BitArray) ToProto() *tmprotobits.BitArray { _ = "STUB: not implemented"; return nil }
 
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-
-	bc := bA.copy()
-	return &tmprotobits.BitArray{Bits: int64(bc.Bits), Elems: bc.Elems}
-}
+// empty
 
 // FromProto sets BitArray to the given protoBitArray. It returns an error if
 // protoBitArray is invalid.
 func (bA *BitArray) FromProto(protoBitArray *tmprotobits.BitArray) error {
-	if protoBitArray == nil {
-		return nil
-	}
-
-	// Validate protoBitArray.
-	if protoBitArray.Bits < 0 {
-		return errors.New("negative Bits")
-	}
-	// #[32bit]
-	if protoBitArray.Bits > math.MaxInt32 { // prevent overflow on 32bit systems
-		return errors.New("too many Bits")
-	}
-	if got, exp := len(protoBitArray.Elems), numElems(int(protoBitArray.Bits)); got != exp {
-		return fmt.Errorf("invalid number of Elems: got %d, but exp %d", got, exp)
-	}
-
-	bA.mtx.Lock()
-	defer bA.mtx.Unlock()
-
-	ec := make([]uint64, len(protoBitArray.Elems))
-	copy(ec, protoBitArray.Elems)
-
-	bA.Bits = int(protoBitArray.Bits)
-	bA.Elems = ec
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func numElems(bits int) int {
-	return (bits + 63) / 64
-}
+// Validate protoBitArray.
+
+// #[32bit]
+// prevent overflow on 32bit systems
+
+func numElems(bits int) int { _ = "STUB: not implemented"; return 0 }

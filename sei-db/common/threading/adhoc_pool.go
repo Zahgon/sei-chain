@@ -12,25 +12,8 @@ type adHocPool struct {
 }
 
 // NewAdHocPool creates a Pool that runs each submitted task in a one-off goroutine.
-func NewAdHocPool() Pool {
-	return &adHocPool{}
-}
+func NewAdHocPool() Pool { _ = "STUB: not implemented"; return *new(Pool) }
 
-func (p *adHocPool) Submit(task func()) {
-	if task == nil {
-		return
-	}
-	if p.closed {
-		panic("threading: submit on closed pool")
-	}
-	p.wg.Add(1)
-	go func() {
-		defer p.wg.Done()
-		task()
-	}()
-}
+func (p *adHocPool) Submit(task func()) { _ = "STUB: not implemented"; return }
 
-func (p *adHocPool) Close() {
-	p.closed = true
-	p.wg.Wait()
-}
+func (p *adHocPool) Close() { _ = "STUB: not implemented"; return }

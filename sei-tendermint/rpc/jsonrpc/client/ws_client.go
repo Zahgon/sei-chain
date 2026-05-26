@@ -2,11 +2,7 @@ package client
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
-	mrand "math/rand"
 	"net"
-	"net/http"
 	"sync"
 	"time"
 
@@ -84,384 +80,137 @@ type WSClient struct {
 // NewWS returns a new client with default options. The endpoint argument must
 // begin with a `/`. An error is returned on invalid remote.
 func NewWS(remoteAddr, endpoint string) (*WSClient, error) {
-	opts := defaultWSOptions
-	parsedURL, err := newParsedURL(remoteAddr)
-	if err != nil {
-		return nil, err
-	}
-	// default to ws protocol, unless wss or https is specified
-	if parsedURL.Scheme == protoHTTPS {
-		parsedURL.Scheme = protoWSS
-	} else if parsedURL.Scheme != protoWSS {
-		parsedURL.Scheme = protoWS
-	}
-
-	dialFn, err := makeHTTPDialer(remoteAddr)
-	if err != nil {
-		return nil, err
-	}
-
-	c := &WSClient{
-		Address:              parsedURL.GetTrimmedHostWithPath(),
-		Dialer:               dialFn,
-		Endpoint:             endpoint,
-		maxReconnectAttempts: opts.MaxReconnectAttempts,
-		readWait:             opts.ReadWait,
-		writeWait:            opts.WriteWait,
-		pingPeriod:           opts.PingPeriod,
-		protocol:             parsedURL.Scheme,
-
-		// sentIDs: make(map[types.JSONRPCIntID]bool),
-	}
-	return c, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// default to ws protocol, unless wss or https is specified
+
+// sentIDs: make(map[types.JSONRPCIntID]bool),
 
 // OnReconnect sets the callback, which will be called every time after
 // successful reconnect.
 // Could only be set before Start.
 func (c *WSClient) OnReconnect(cb func()) {
-	c.onReconnect = cb
+	_ = "STUB: not implemented"
+
+	// String returns WS client full address.
+	return
 }
 
-// String returns WS client full address.
-func (c *WSClient) String() string {
-	return fmt.Sprintf("WSClient{%s (%s)}", c.Address, c.Endpoint)
-}
+func (c *WSClient) String() string { _ = "STUB: not implemented"; return "" }
 
 // Start dials the specified service address and starts the I/O routines.  The
 // service routines run until ctx terminates. To wait for the client to exit
 // after ctx ends, call Stop.
-func (c *WSClient) Start(ctx context.Context) error {
-	if err := c.dial(); err != nil {
-		return err
-	}
+func (c *WSClient) Start(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-	c.ResponsesCh = make(chan rpctypes.RPCResponse)
+// 1 additional error may come from the read/write
+// goroutine depending on which failed first.
 
-	c.send = make(chan rpctypes.RPCRequest)
-	// 1 additional error may come from the read/write
-	// goroutine depending on which failed first.
-	c.reconnectAfter = make(chan error, 1)
-	// capacity for 1 request. a user won't be able to send more because the send
-	// channel is unbuffered.
-	c.backlog = make(chan rpctypes.RPCRequest, 1)
-
-	c.startReadWriteRoutines(ctx)
-	go c.reconnectRoutine(ctx)
-
-	return nil
-}
+// capacity for 1 request. a user won't be able to send more because the send
+// channel is unbuffered.
 
 // Stop blocks until the client is shut down and returns nil.
 //
 // TODO(creachadair): This method exists for compatibility with the original
 // service plumbing. Give it a better name (e.g., Wait).
 func (c *WSClient) Stop() error {
+	_ = "STUB: not implemented"
 	// only close user-facing channels when we can't write to them
-	c.wg.Wait()
-	close(c.ResponsesCh)
 	return nil
 }
 
 // IsReconnecting returns true if the client is reconnecting right now.
-func (c *WSClient) IsReconnecting() bool {
-	c.mtx.RLock()
-	defer c.mtx.RUnlock()
-	return c.reconnecting
-}
+func (c *WSClient) IsReconnecting() bool { _ = "STUB: not implemented"; return false }
 
 // Send the given RPC request to the server. Results will be available on
 // ResponsesCh, errors, if any, on ErrorsCh. Will block until send succeeds or
 // ctx.Done is closed.
 func (c *WSClient) Send(ctx context.Context, request rpctypes.RPCRequest) error {
-	select {
-	case c.send <- request:
-		logger.Info("sent a request", "method", request.Method, "id", request.ID())
-		// c.mtx.Lock()
-		// c.sentIDs[request.ID.(types.JSONRPCIntID)] = true
-		// c.mtx.Unlock()
-		return nil
-	case <-ctx.Done():
-		return ctx.Err()
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// c.mtx.Lock()
+// c.sentIDs[request.ID.(types.JSONRPCIntID)] = true
+// c.mtx.Unlock()
 
 // Call enqueues a call request onto the Send queue. Requests are JSON encoded.
 func (c *WSClient) Call(ctx context.Context, method string, params map[string]interface{}) error {
-	req := rpctypes.NewRequest(c.nextRequestID())
-	if err := req.SetMethodAndParams(method, params); err != nil {
-		return err
-	}
-	return c.Send(ctx, req)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Private methods
 
-func (c *WSClient) nextRequestID() int {
-	c.mtx.Lock()
-	defer c.mtx.Unlock()
-	id := c.nextReqID
-	c.nextReqID++
-	return id
-}
+func (c *WSClient) nextRequestID() int { _ = "STUB: not implemented"; return 0 }
 
-func (c *WSClient) dial() error {
-	dialer := &websocket.Dialer{
-		NetDial: c.Dialer,
-		Proxy:   http.ProxyFromEnvironment,
-	}
-	rHeader := http.Header{}
-	conn, _, err := dialer.Dial(c.protocol+"://"+c.Address+c.Endpoint, rHeader) // nolint:bodyclose
-	if err != nil {
-		return err
-	}
-	c.conn = conn
-	return nil
-}
+func (c *WSClient) dial() error { _ = "STUB: not implemented"; return nil }
+
+// nolint:bodyclose
 
 // reconnect tries to redial up to maxReconnectAttempts with exponential
 // backoff.
-func (c *WSClient) reconnect(ctx context.Context) error {
-	attempt := uint(0)
+func (c *WSClient) reconnect(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
-	c.mtx.Lock()
-	c.reconnecting = true
-	c.mtx.Unlock()
-	defer func() {
-		c.mtx.Lock()
-		c.reconnecting = false
-		c.mtx.Unlock()
-	}()
+// nolint:gosec // G404: Use of weak random number generator
+// 1s == (1e9 ns)
 
-	timer := time.NewTimer(0)
-	defer timer.Stop()
+func (c *WSClient) startReadWriteRoutines(ctx context.Context) { _ = "STUB: not implemented"; return }
 
-	for {
-		// nolint:gosec // G404: Use of weak random number generator
-		jitter := time.Duration(mrand.Float64() * float64(time.Second)) // 1s == (1e9 ns)
-		backoffDuration := jitter + ((1 << attempt) * time.Second)
+func (c *WSClient) processBacklog() error { _ = "STUB: not implemented"; return nil }
 
-		logger.Info("reconnecting", "attempt", attempt+1, "backoff_duration", backoffDuration)
-		timer.Reset(backoffDuration)
-		select {
-		case <-ctx.Done():
-			return nil
-		case <-timer.C:
-		}
+// requeue request
 
-		err := c.dial()
-		if err != nil {
-			logger.Error("failed to redial", "err", err)
-		} else {
-			logger.Info("reconnected")
-			if c.onReconnect != nil {
-				go c.onReconnect()
-			}
-			return nil
-		}
+func (c *WSClient) reconnectRoutine(ctx context.Context) { _ = "STUB: not implemented"; return }
 
-		attempt++
+// wait until writeRoutine and readRoutine finish
 
-		if attempt > c.maxReconnectAttempts {
-			return fmt.Errorf("reached maximum reconnect attempts: %w", err)
-		}
-	}
-}
-
-func (c *WSClient) startReadWriteRoutines(ctx context.Context) {
-	c.wg.Add(2)
-	c.readRoutineQuit = make(chan struct{})
-	go c.readRoutine(ctx)
-	go c.writeRoutine(ctx)
-}
-
-func (c *WSClient) processBacklog() error {
-	select {
-	case request := <-c.backlog:
-		if c.writeWait > 0 {
-			if err := c.conn.SetWriteDeadline(time.Now().Add(c.writeWait)); err != nil {
-				logger.Error("failed to set write deadline", "err", err)
-			}
-		}
-		if err := c.conn.WriteJSON(request); err != nil {
-			logger.Error("failed to resend request", "err", err)
-			c.reconnectAfter <- err
-			// requeue request
-			c.backlog <- request
-			return err
-		}
-		logger.Info("resend a request", "method", request.Method, "id", request.ID())
-	default:
-	}
-	return nil
-}
-
-func (c *WSClient) reconnectRoutine(ctx context.Context) {
-	for {
-		select {
-		case <-ctx.Done():
-			return
-		case originalError := <-c.reconnectAfter:
-			// wait until writeRoutine and readRoutine finish
-			c.wg.Wait()
-			if err := c.reconnect(ctx); err != nil {
-				logger.Error("failed to reconnect", "err", err, "original_err", originalError)
-				if err = c.Stop(); err != nil {
-					logger.Error("failed to stop conn", "error", err)
-				}
-
-				return
-			}
-			// drain reconnectAfter
-		LOOP:
-			for {
-				select {
-				case <-ctx.Done():
-					return
-				case <-c.reconnectAfter:
-				default:
-					break LOOP
-				}
-			}
-			err := c.processBacklog()
-			if err == nil {
-				c.startReadWriteRoutines(ctx)
-			}
-		}
-	}
-}
+// drain reconnectAfter
 
 // The client ensures that there is at most one writer to a connection by
 // executing all writes from this goroutine.
-func (c *WSClient) writeRoutine(ctx context.Context) {
-	var ticker *time.Ticker
-	if c.pingPeriod > 0 {
-		// ticker with a predefined period
-		ticker = time.NewTicker(c.pingPeriod)
-	} else {
-		// ticker that never fires
-		ticker = &time.Ticker{C: make(<-chan time.Time)}
-	}
+func (c *WSClient) writeRoutine(ctx context.Context) { _ = "STUB: not implemented"; return }
 
-	defer func() {
-		ticker.Stop()
-		_ = c.conn.Close()
-		c.wg.Done()
-	}()
+// ticker with a predefined period
 
-	for {
-		select {
-		case request := <-c.send:
-			if c.writeWait > 0 {
-				if err := c.conn.SetWriteDeadline(time.Now().Add(c.writeWait)); err != nil {
-					logger.Error("failed to set write deadline", "err", err)
-				}
-			}
-			if err := c.conn.WriteJSON(request); err != nil {
-				logger.Error("failed to send request", "err", err)
-				c.reconnectAfter <- err
-				// add request to the backlog, so we don't lose it
-				c.backlog <- request
-				return
-			}
-		case <-ticker.C:
-			if c.writeWait > 0 {
-				if err := c.conn.SetWriteDeadline(time.Now().Add(c.writeWait)); err != nil {
-					logger.Error("failed to set write deadline", "err", err)
-				}
-			}
-			if err := c.conn.WriteMessage(websocket.PingMessage, []byte{}); err != nil {
-				logger.Error("failed to write ping", "err", err)
-				c.reconnectAfter <- err
-				return
-			}
-		case <-c.readRoutineQuit:
-			return
-		case <-ctx.Done():
-			if err := c.conn.WriteMessage(
-				websocket.CloseMessage,
-				websocket.FormatCloseMessage(websocket.CloseNormalClosure, ""),
-			); err != nil {
-				logger.Error("failed to write message", "err", err)
-			}
-			return
-		}
-	}
-}
+// ticker that never fires
+
+// add request to the backlog, so we don't lose it
 
 // The client ensures that there is at most one reader to a connection by
 // executing all reads from this goroutine.
-func (c *WSClient) readRoutine(ctx context.Context) {
-	defer func() {
-		_ = c.conn.Close()
-		c.wg.Done()
-	}()
+func (c *WSClient) readRoutine(ctx context.Context) { _ = "STUB: not implemented"; return }
 
-	for {
-		// reset deadline for every message type (control or data)
-		if c.readWait > 0 {
-			if err := c.conn.SetReadDeadline(time.Now().Add(c.readWait)); err != nil {
-				logger.Error("failed to set read deadline", "err", err)
-			}
-		}
-		_, data, err := c.conn.ReadMessage()
-		if err != nil {
-			if !websocket.IsUnexpectedCloseError(err, websocket.CloseNormalClosure) {
-				return
-			}
+// reset deadline for every message type (control or data)
 
-			logger.Error("failed to read response", "err", err)
-			close(c.readRoutineQuit)
-			c.reconnectAfter <- err
-			return
-		}
-
-		var response rpctypes.RPCResponse
-		err = json.Unmarshal(data, &response)
-		if err != nil {
-			logger.Error("failed to parse response", "data_len", len(data), "err", err)
-			continue
-		}
-
-		// TODO: events resulting from /subscribe do not work with ->
-		// because they are implemented as responses with the subscribe request's
-		// ID. According to the spec, they should be notifications (requests
-		// without IDs).
-		// https://github.com/tendermint/tendermint/issues/2949
-		//
-		// Combine a non-blocking read on BaseService.Quit with a non-blocking write on ResponsesCh to avoid blocking
-		// c.wg.Wait() in c.Stop(). Note we rely on Quit being closed so that it sends unlimited Quit signals to stop
-		// both readRoutine and writeRoutine
-
-		logger.Info("got response", "id", response.ID)
-
-		select {
-		case <-ctx.Done():
-			return
-		case c.ResponsesCh <- response:
-		}
-	}
-}
+// TODO: events resulting from /subscribe do not work with ->
+// because they are implemented as responses with the subscribe request's
+// ID. According to the spec, they should be notifications (requests
+// without IDs).
+// https://github.com/tendermint/tendermint/issues/2949
+//
+// Combine a non-blocking read on BaseService.Quit with a non-blocking write on ResponsesCh to avoid blocking
+// c.wg.Wait() in c.Stop(). Note we rely on Quit being closed so that it sends unlimited Quit signals to stop
+// both readRoutine and writeRoutine
 
 // Predefined methods
 
 // Subscribe to a query. Note the server must have a "subscribe" route
 // defined.
 func (c *WSClient) Subscribe(ctx context.Context, query string) error {
-	params := map[string]interface{}{"query": query}
-	return c.Call(ctx, "subscribe", params)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Unsubscribe from a query. Note the server must have a "unsubscribe" route
 // defined.
 func (c *WSClient) Unsubscribe(ctx context.Context, query string) error {
-	params := map[string]interface{}{"query": query}
-	return c.Call(ctx, "unsubscribe", params)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnsubscribeAll from all. Note the server must have a "unsubscribe_all" route
 // defined.
-func (c *WSClient) UnsubscribeAll(ctx context.Context) error {
-	params := map[string]interface{}{}
-	return c.Call(ctx, "unsubscribe_all", params)
-}
+func (c *WSClient) UnsubscribeAll(ctx context.Context) error { _ = "STUB: not implemented"; return nil }

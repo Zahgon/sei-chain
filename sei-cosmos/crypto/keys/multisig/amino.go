@@ -1,12 +1,7 @@
 package multisig
 
 import (
-	"fmt"
-	"math"
-
-	types "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 // tmMultisig implements a K of N threshold multisig. It is used for
@@ -34,81 +29,36 @@ type tmMultisig struct {
 
 // protoToTm converts a LegacyAminoPubKey into a tmMultisig.
 func protoToTm(protoPk *LegacyAminoPubKey) (tmMultisig, error) {
-	var ok bool
-	pks := make([]cryptotypes.PubKey, len(protoPk.PubKeys))
-	for i, pk := range protoPk.PubKeys {
-		pks[i], ok = pk.GetCachedValue().(cryptotypes.PubKey)
-		if !ok {
-			return tmMultisig{}, sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "expected %T, got %T", (cryptotypes.PubKey)(nil), pk.GetCachedValue())
-		}
-	}
-
-	return tmMultisig{
-		K:       uint(protoPk.Threshold),
-		PubKeys: pks,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(tmMultisig), nil
 }
 
 // tmToProto converts a tmMultisig into a LegacyAminoPubKey.
 func tmToProto(tmPk tmMultisig) (*LegacyAminoPubKey, error) {
-	if tmPk.K > math.MaxUint32 {
-		return nil, fmt.Errorf("threshold %d out of uint32 range", tmPk.K)
-	}
-
-	var err error
-	pks := make([]*types.Any, len(tmPk.PubKeys))
-	for i, pk := range tmPk.PubKeys {
-		pks[i], err = types.NewAnyWithValue(pk)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	return &LegacyAminoPubKey{
-		Threshold: uint32(tmPk.K), //nolint:gosec // bounds checked above
-		PubKeys:   pks,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
+//nolint:gosec // bounds checked above
+
 // MarshalAminoJSON overrides amino JSON unmarshaling.
-func (m LegacyAminoPubKey) MarshalAminoJSON() (tmMultisig, error) { //nolint:revive
-	return protoToTm(&m)
+func (m LegacyAminoPubKey) MarshalAminoJSON() (tmMultisig, error) {
+	_ = "STUB: not implemented" //nolint:revive
+	return *new(tmMultisig), nil
 }
 
 // UnmarshalAminoJSON overrides amino JSON unmarshaling.
 func (m *LegacyAminoPubKey) UnmarshalAminoJSON(tmPk tmMultisig) error {
-	protoPk, err := tmToProto(tmPk)
-	if err != nil {
-		return err
-	}
-
-	// Instead of just doing `*m = *protoPk`, we prefer to modify in-place the
-	// existing Anys inside `m` (instead of allocating new Anys), as so not to
-	// break the `.compat` fields in the existing Anys.
-	if m.PubKeys == nil {
-		m.PubKeys = make([]*types.Any, len(tmPk.PubKeys))
-	}
-	for i := range m.PubKeys {
-		if m.PubKeys[i] == nil {
-			// create the compat jsonBz value
-			bz, err := AminoCdc.MarshalAsJSON(tmPk.PubKeys[i])
-			if err != nil {
-				return err
-			}
-
-			m.PubKeys[i] = protoPk.PubKeys[i]
-			// UnmarshalJSON():
-			// just sets the compat.jsonBz value.
-			// always succeeds: err == nil
-			if err := m.PubKeys[i].UnmarshalJSON(bz); err != nil {
-				return err
-			}
-		} else {
-			m.PubKeys[i].TypeUrl = protoPk.PubKeys[i].TypeUrl
-			m.PubKeys[i].Value = protoPk.PubKeys[i].Value
-		}
-	}
-	m.Threshold = protoPk.Threshold
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// Instead of just doing `*m = *protoPk`, we prefer to modify in-place the
+// existing Anys inside `m` (instead of allocating new Anys), as so not to
+// break the `.compat` fields in the existing Anys.
+
+// create the compat jsonBz value
+
+// UnmarshalJSON():
+// just sets the compat.jsonBz value.
+// always succeeds: err == nil

@@ -2,24 +2,13 @@ package inspect
 
 import (
 	"context"
-	"errors"
-	"fmt"
-	"net"
-	"net/http"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/eventbus"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/inspect/rpc"
 	rpccore "github.com/sei-protocol/sei-chain/sei-tendermint/internal/rpc/core"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/state/indexer/sink"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/store"
-	tmstrings "github.com/sei-protocol/sei-chain/sei-tendermint/libs/strings"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 	"github.com/sei-protocol/seilog"
-
-	"golang.org/x/sync/errgroup"
 )
 
 var logger = seilog.NewLogger("tendermint", "internal", "inspect")
@@ -44,96 +33,21 @@ type Inspector struct {
 // The sinks are used to enable block and transaction querying via the RPC server.
 // The caller is responsible for starting and stopping the Inspector service.
 func New(cfg *config.RPCConfig, bs state.BlockStore, ss state.Store, es []indexer.EventSink) *Inspector {
-	eb := eventbus.NewDefault()
-
-	return &Inspector{
-		routes:   rpc.Routes(*cfg, ss, bs, es),
-		config:   cfg,
-		eventBus: eb,
-		indexerService: indexer.NewService(indexer.ServiceArgs{
-			Sinks:    es,
-			EventBus: eb,
-		}),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewFromConfig constructs an Inspector using the values defined in the passed in config.
 func NewFromConfig(cfg *config.Config) (*Inspector, error) {
-	bsDB, err := config.DefaultDBProvider(&config.DBContext{ID: "blockstore", Config: cfg})
-	if err != nil {
-		return nil, err
-	}
-	bs := store.NewBlockStore(bsDB)
-	sDB, err := config.DefaultDBProvider(&config.DBContext{ID: "state", Config: cfg})
-	if err != nil {
-		return nil, err
-	}
-	genDoc, err := types.GenesisDocFromFile(cfg.GenesisFile())
-	if err != nil {
-		return nil, err
-	}
-	sinks, err := sink.EventSinksFromConfig(cfg, config.DefaultDBProvider, genDoc.ChainID)
-	if err != nil {
-		return nil, err
-	}
-	ss := state.NewStore(sDB)
-	return New(cfg.RPC, bs, ss, sinks), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Run starts the Inspector servers and blocks until the servers shut down. The passed
 // in context is used to control the lifecycle of the servers.
-func (ins *Inspector) Run(ctx context.Context) error {
-	err := ins.eventBus.Start(ctx)
-	if err != nil {
-		return fmt.Errorf("error starting event bus: %s", err)
-	}
-	defer ins.eventBus.Wait()
-
-	err = ins.indexerService.Start(ctx)
-	if err != nil {
-		return fmt.Errorf("error starting indexer service: %s", err)
-	}
-	defer ins.indexerService.Wait()
-
-	return startRPCServers(ctx, ins.config, ins.routes)
-}
+func (ins *Inspector) Run(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
 
 func startRPCServers(ctx context.Context, cfg *config.RPCConfig, routes rpccore.RoutesMap) error {
-	g, tctx := errgroup.WithContext(ctx)
-	listenAddrs := tmstrings.SplitAndTrimEmpty(cfg.ListenAddress, ",", " ")
-	rh := rpc.Handler(cfg, routes)
-	for _, listenerAddr := range listenAddrs {
-		server := rpc.Server{
-			Config:  cfg,
-			Handler: rh,
-			Addr:    listenerAddr,
-		}
-		if cfg.IsTLSEnabled() {
-			keyFile := cfg.KeyFile()
-			certFile := cfg.CertFile()
-			listenerAddr := listenerAddr
-			g.Go(func() error {
-				logger.Info("RPC HTTPS server starting", "address", listenerAddr,
-					"certfile", certFile, "keyfile", keyFile)
-				err := server.ListenAndServeTLS(tctx, certFile, keyFile)
-				if !errors.Is(err, net.ErrClosed) && !errors.Is(err, http.ErrServerClosed) {
-					return err
-				}
-				logger.Info("RPC HTTPS server stopped", "address", listenerAddr)
-				return nil
-			})
-		} else {
-			listenerAddr := listenerAddr
-			g.Go(func() error {
-				logger.Info("RPC HTTP server starting", "address", listenerAddr)
-				err := server.ListenAndServe(tctx)
-				if !errors.Is(err, net.ErrClosed) && !errors.Is(err, http.ErrServerClosed) {
-					return err
-				}
-				logger.Info("RPC HTTP server stopped", "address", listenerAddr)
-				return nil
-			})
-		}
-	}
-	return g.Wait()
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils/scope"
 )
 
 // TimeoutTicker is a timer that schedules timeouts
@@ -27,68 +26,32 @@ type timeoutTicker struct {
 }
 
 // NewTimeoutTicker returns a new TimeoutTicker.
-func NewTimeoutTicker() TimeoutTicker {
-	tt := &timeoutTicker{
-		tick:     utils.NewMutex(utils.Alloc(utils.NewAtomicSend(utils.None[timeoutInfo]()))),
-		tockChan: make(chan timeoutInfo),
-	}
-	return tt
-}
+func NewTimeoutTicker() TimeoutTicker { _ = "STUB: not implemented"; return *new(TimeoutTicker) }
 
 // Chan returns a channel on which timeouts are sent.
 func (t *timeoutTicker) Chan() <-chan timeoutInfo {
-	return t.tockChan
+	_ = "STUB: not implemented"
+
+	// ScheduleTimeout schedules a new timeout, which replaces the previous one.
+	// Noop if a timeout for a later height/round/step has been already scheduled.
+	return nil
 }
 
-// ScheduleTimeout schedules a new timeout, which replaces the previous one.
-// Noop if a timeout for a later height/round/step has been already scheduled.
-func (t *timeoutTicker) ScheduleTimeout(newti timeoutInfo) {
-	for tick := range t.tick.Lock() {
-		old := tick.Load()
-		if oldti, ok := old.Get(); !ok || oldti.Less(&newti) {
-			tick.Store(utils.Some(newti))
-		}
-	}
-}
+func (t *timeoutTicker) ScheduleTimeout(newti timeoutInfo) { _ = "STUB: not implemented"; return }
 
 func (t *timeoutTicker) tickSubscribe() utils.AtomicRecv[utils.Option[timeoutInfo]] {
-	for tick := range t.tick.Lock() {
-		return tick.Subscribe()
-	}
-	panic("unreachable")
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // timers are interupted and replaced by new ticks from later steps
 // timeouts of 0 on the tickChan will be immediately relayed to the tockChan
-func (t *timeoutTicker) Run(ctx context.Context) error {
-	tockSend := utils.NewAtomicSend(utils.None[timeoutInfo]()) // last fired timeout
-	tockRecv := tockSend.Subscribe()
-	return scope.Run(ctx, func(ctx context.Context, s scope.Scope) error {
-		s.Spawn(func() error {
-			// Task measuring timeouts. Owns tockSend.
-			return t.tickSubscribe().Iter(ctx, func(ctx context.Context, mti utils.Option[timeoutInfo]) error {
-				ti, ok := mti.Get()
-				if !ok {
-					return nil
-				}
-				logger.Debug("Internal state machine timeout scheduled", "duration", ti.Duration, "height", ti.Height, "round", ti.Round, "step", ti.Step)
-				if err := utils.Sleep(ctx, ti.Duration); err != nil {
-					return err
-				}
-				logger.Debug("Internal state machine timeout elapsed ", "duration", ti.Duration, "height", ti.Height, "round", ti.Round, "step", ti.Step)
-				tockSend.Store(utils.Some(ti))
-				return nil
-			})
-		})
-		// Task reporting timeouts via channel. Owns tockRecv.
-		// TODO(gprusak): it would be better to expose t.tock directly,
-		// however the receiving task doesn't support receiving from AtomicWatch yet.
-		return tockRecv.Iter(ctx, func(ctx context.Context, mto utils.Option[timeoutInfo]) error {
-			to, ok := mto.Get()
-			if !ok {
-				return nil
-			}
-			return utils.Send(ctx, t.tockChan, to)
-		})
-	})
-}
+func (t *timeoutTicker) Run(ctx context.Context) error { _ = "STUB: not implemented"; return nil }
+
+// last fired timeout
+
+// Task measuring timeouts. Owns tockSend.
+
+// Task reporting timeouts via channel. Owns tockRecv.
+// TODO(gprusak): it would be better to expose t.tock directly,
+// however the receiving task doesn't support receiving from AtomicWatch yet.

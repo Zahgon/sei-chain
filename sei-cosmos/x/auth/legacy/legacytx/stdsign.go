@@ -2,17 +2,11 @@ package legacytx
 
 import (
 	"encoding/json"
-	"fmt"
-
-	"gopkg.in/yaml.v2"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types/multisig"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/tx/signing"
 )
 
@@ -51,30 +45,8 @@ type StdSignDoc struct {
 
 // StdSignBytes returns the bytes to sign for a transaction.
 func StdSignBytes(chainID string, accnum, sequence, timeout uint64, fee StdFee, msgs []sdk.Msg, memo string) []byte {
-	msgsBytes := make([]json.RawMessage, 0, len(msgs))
-	for _, msg := range msgs {
-		legacyMsg, ok := msg.(LegacyMsg)
-		if !ok {
-			panic(fmt.Errorf("expected %T when using amino JSON", (*LegacyMsg)(nil)))
-		}
-
-		msgsBytes = append(msgsBytes, json.RawMessage(legacyMsg.GetSignBytes()))
-	}
-
-	bz, err := legacy.Cdc.MarshalAsJSON(StdSignDoc{
-		AccountNumber: accnum,
-		ChainID:       chainID,
-		Fee:           json.RawMessage(fee.Bytes()),
-		Memo:          memo,
-		Msgs:          msgsBytes,
-		Sequence:      sequence,
-		TimeoutHeight: timeout,
-	})
-	if err != nil {
-		panic(err)
-	}
-
-	return sdk.MustSortJSON(bz)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Deprecated: StdSignature represents a sig
@@ -85,92 +57,39 @@ type StdSignature struct {
 
 // Deprecated
 func NewStdSignature(pk cryptotypes.PubKey, sig []byte) StdSignature {
-	return StdSignature{PubKey: pk, Signature: sig}
+	_ = "STUB: not implemented"
+	return *new(StdSignature)
 }
 
 // GetSignature returns the raw signature bytes.
-func (ss StdSignature) GetSignature() []byte {
-	return ss.Signature
-}
+func (ss StdSignature) GetSignature() []byte { _ = "STUB: not implemented"; return nil }
 
 // GetPubKey returns the public key of a signature as a cryptotypes.PubKey using the
 // Amino codec.
 func (ss StdSignature) GetPubKey() cryptotypes.PubKey {
-	return ss.PubKey
+	_ = "STUB: not implemented"
+
+	// MarshalYAML returns the YAML representation of the signature.
+	return *new(cryptotypes.PubKey)
 }
 
-// MarshalYAML returns the YAML representation of the signature.
 func (ss StdSignature) MarshalYAML() (interface{}, error) {
-	pk := ""
-	if ss.PubKey != nil {
-		pk = ss.String()
-	}
-
-	bz, err := yaml.Marshal(struct {
-		PubKey    string
-		Signature string
-	}{
-		pk,
-		fmt.Sprintf("%X", ss.Signature),
-	})
-	if err != nil {
-		return nil, err
-	}
-
-	return string(bz), err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (ss StdSignature) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return codectypes.UnpackInterfaces(ss.PubKey, unpacker)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // StdSignatureToSignatureV2 converts a StdSignature to a SignatureV2
 func StdSignatureToSignatureV2(cdc *codec.LegacyAmino, sig StdSignature) (signing.SignatureV2, error) {
-	pk := sig.GetPubKey()
-	data, err := pubKeySigToSigData(cdc, pk, sig.Signature)
-	if err != nil {
-		return signing.SignatureV2{}, err
-	}
-
-	return signing.SignatureV2{
-		PubKey: pk,
-		Data:   data,
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(signing.SignatureV2), nil
 }
 
 func pubKeySigToSigData(cdc *codec.LegacyAmino, key cryptotypes.PubKey, sig []byte) (signing.SignatureData, error) {
-	multiPK, ok := key.(multisig.PubKey)
-	if !ok {
-		return &signing.SingleSignatureData{
-			SignMode:  signing.SignMode_SIGN_MODE_LEGACY_AMINO_JSON,
-			Signature: sig,
-		}, nil
-	}
-	var multiSig multisig.AminoMultisignature
-	err := cdc.Unmarshal(sig, &multiSig)
-	if err != nil {
-		return nil, err
-	}
-
-	sigs := multiSig.Sigs
-	sigDatas := make([]signing.SignatureData, len(sigs))
-	pubKeys := multiPK.GetPubKeys()
-	bitArray := multiSig.BitArray
-	n := multiSig.BitArray.Count()
-	signatures := multisig.NewMultisig(n)
-	sigIdx := 0
-	for i := 0; i < n; i++ {
-		if bitArray.GetIndex(i) {
-			data, err := pubKeySigToSigData(cdc, pubKeys[i], multiSig.Sigs[sigIdx])
-			if err != nil {
-				return nil, sdkerrors.Wrapf(err, "Unable to convert Signature to SigData %d", sigIdx)
-			}
-
-			sigDatas[sigIdx] = data
-			multisig.AddSignature(signatures, data, sigIdx)
-			sigIdx++
-		}
-	}
-
-	return signatures, nil
+	_ = "STUB: not implemented"
+	return *new(signing.SignatureData), nil
 }

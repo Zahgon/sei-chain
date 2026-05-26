@@ -3,7 +3,6 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/slashing/types"
 )
 
@@ -14,7 +13,8 @@ type msgServer struct {
 // NewMsgServerImpl returns an implementation of the slashing MsgServer interface
 // for the provided Keeper.
 func NewMsgServerImpl(keeper Keeper) types.MsgServer {
-	return &msgServer{Keeper: keeper}
+	_ = "STUB: not implemented"
+	return *new(types.MsgServer)
 }
 
 var _ types.MsgServer = msgServer{}
@@ -23,24 +23,6 @@ var _ types.MsgServer = msgServer{}
 // Validators must submit a transaction to unjail itself after
 // having been jailed (and thus unbonded) for downtime
 func (k msgServer) Unjail(goCtx context.Context, msg *types.MsgUnjail) (*types.MsgUnjailResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-
-	valAddr, valErr := sdk.ValAddressFromBech32(msg.ValidatorAddr)
-	if valErr != nil {
-		return nil, valErr
-	}
-	err := k.Keeper.Unjail(ctx, valAddr)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.ValidatorAddr),
-		),
-	)
-
-	return &types.MsgUnjailResponse{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

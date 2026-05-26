@@ -18,19 +18,13 @@ var (
 )
 
 func (m *StatusMock) Status(ctx context.Context) (*coretypes.ResultStatus, error) {
-	res, err := m.GetResponse(nil)
-	if err != nil {
-		return nil, err
-	}
-	return res.(*coretypes.ResultStatus), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *StatusMock) LagStatus(ctx context.Context) (*coretypes.ResultLagStatus, error) {
-	res, err := m.GetResponse(nil)
-	if err != nil {
-		return nil, err
-	}
-	return res.(*coretypes.ResultLagStatus), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // StatusRecorder can wrap another type (StatusMock, full client)
@@ -41,32 +35,18 @@ type StatusRecorder struct {
 }
 
 func NewStatusRecorder(client client.StatusClient) *StatusRecorder {
-	return &StatusRecorder{
-		Client: client,
-		Calls:  []Call{},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (r *StatusRecorder) addCall(call Call) {
-	r.Calls = append(r.Calls, call)
-}
+func (r *StatusRecorder) addCall(call Call) { _ = "STUB: not implemented"; return }
 
 func (r *StatusRecorder) Status(ctx context.Context) (*coretypes.ResultStatus, error) {
-	res, err := r.Client.Status(ctx)
-	r.addCall(Call{
-		Name:     "status",
-		Response: res,
-		Error:    err,
-	})
-	return res, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (r *StatusRecorder) LagStatus(ctx context.Context) (*coretypes.ResultLagStatus, error) {
-	res, err := r.Client.LagStatus(ctx)
-	r.addCall(Call{
-		Name:     "lag_status",
-		Response: res,
-		Error:    err,
-	})
-	return res, err
+	_ = "STUB: not implemented"
+	return nil, nil
 }

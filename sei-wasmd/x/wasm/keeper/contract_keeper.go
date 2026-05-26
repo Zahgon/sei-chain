@@ -28,59 +28,73 @@ type PermissionedKeeper struct {
 }
 
 func NewPermissionedKeeper(nested decoratedKeeper, authZPolicy AuthorizationPolicy) *PermissionedKeeper {
-	return &PermissionedKeeper{authZPolicy: authZPolicy, nested: nested}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func NewGovPermissionKeeper(nested decoratedKeeper) *PermissionedKeeper {
-	return NewPermissionedKeeper(nested, GovAuthorizationPolicy{})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func NewDefaultPermissionKeeper(nested decoratedKeeper) *PermissionedKeeper {
-	return NewPermissionedKeeper(nested, DefaultAuthorizationPolicy{})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (p PermissionedKeeper) Create(ctx sdk.Context, creator sdk.AccAddress, wasmCode []byte, instantiateAccess *types.AccessConfig) (codeID uint64, err error) {
-	return p.nested.create(ctx, creator, wasmCode, instantiateAccess, p.authZPolicy)
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (p PermissionedKeeper) Instantiate(ctx sdk.Context, codeID uint64, creator, admin sdk.AccAddress, initMsg []byte, label string, deposit sdk.Coins) (sdk.AccAddress, []byte, error) {
-	return p.nested.instantiate(ctx, codeID, creator, admin, initMsg, label, deposit, p.authZPolicy)
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), nil, nil
 }
 
 func (p PermissionedKeeper) Execute(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress, msg []byte, coins sdk.Coins) ([]byte, error) {
-	return p.nested.execute(ctx, contractAddress, caller, msg, coins)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (p PermissionedKeeper) Migrate(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress, newCodeID uint64, msg []byte) ([]byte, error) {
-	return p.nested.migrate(ctx, contractAddress, caller, newCodeID, msg, p.authZPolicy)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (p PermissionedKeeper) Sudo(ctx sdk.Context, contractAddress sdk.AccAddress, msg []byte) ([]byte, error) {
-	return p.nested.Sudo(ctx, contractAddress, msg)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (p PermissionedKeeper) UpdateContractAdmin(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress, newAdmin sdk.AccAddress) error {
-	return p.nested.setContractAdmin(ctx, contractAddress, caller, newAdmin, p.authZPolicy)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (p PermissionedKeeper) ClearContractAdmin(ctx sdk.Context, contractAddress sdk.AccAddress, caller sdk.AccAddress) error {
-	return p.nested.setContractAdmin(ctx, contractAddress, caller, nil, p.authZPolicy)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (p PermissionedKeeper) PinCode(ctx sdk.Context, codeID uint64) error {
-	return p.nested.pinCode(ctx, codeID)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (p PermissionedKeeper) UnpinCode(ctx sdk.Context, codeID uint64) error {
-	return p.nested.unpinCode(ctx, codeID)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetExtraContractAttributes updates the extra attributes that can be stored with the contract info
 func (p PermissionedKeeper) SetContractInfoExtension(ctx sdk.Context, contract sdk.AccAddress, extra types.ContractInfoExtension) error {
-	return p.nested.setContractInfoExtension(ctx, contract, extra)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // SetAccessConfig updates the access config of a code id.
 func (p PermissionedKeeper) SetAccessConfig(ctx sdk.Context, codeID uint64, config types.AccessConfig) error {
-	return p.nested.setAccessConfig(ctx, codeID, config)
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -1,7 +1,6 @@
 package utils
 
 import (
-	crand "crypto/rand"
 	mrand "math/rand"
 	"sync"
 )
@@ -22,11 +21,7 @@ func init() {
 	grand.init()
 }
 
-func NewRand() *Rand {
-	rand := &Rand{}
-	rand.init()
-	return rand
-}
+func NewRand() *Rand { _ = "STUB: not implemented"; return nil }
 
 func (r *Rand) init() {
 	bz := cRandBytes(8)
@@ -38,60 +33,19 @@ func (r *Rand) init() {
 	r.reset(int64(seed)) //#nosec G115 -- intentional conversion; full uint64 entropy is desired, sign bit is irrelevant for seeding
 }
 
-func (r *Rand) reset(seed int64) {
-	r.rand = mrand.New(mrand.NewSource(seed)) //nolint:gosec // G404: seeded from crypto/rand, used for non-security purposes
-}
+func (r *Rand) reset(seed int64) { _ = "STUB: not implemented"; return }
 
-func (r *Rand) Int() int {
-	r.Lock()
-	i := r.rand.Int()
-	r.Unlock()
-	return i
-}
+//nolint:gosec // G404: seeded from crypto/rand, used for non-security purposes
 
-func (r *Rand) Int63() int64 {
-	r.Lock()
-	i63 := r.rand.Int63()
-	r.Unlock()
-	return i63
-}
+func (r *Rand) Int() int { _ = "STUB: not implemented"; return 0 }
 
-func (r *Rand) Str(length int) string {
-	if length <= 0 {
-		return ""
-	}
+func (r *Rand) Int63() int64 { _ = "STUB: not implemented"; return 0 }
 
-	chars := make([]byte, 0, length)
-MAIN_LOOP:
-	for {
-		val := r.Int63()
-		for i := 0; i < 10; i++ {
-			v := int(val & 0x3f) // rightmost 6 bits
-			if v >= 62 {         // only 62 characters in strChars
-				val >>= 6
-				continue
-			} else {
-				chars = append(chars, strChars[v])
-				if len(chars) == length {
-					break MAIN_LOOP
-				}
-				val >>= 6
-			}
-		}
-	}
+func (r *Rand) Str(length int) string { _ = "STUB: not implemented"; return "" }
 
-	return string(chars)
-}
+// rightmost 6 bits
+// only 62 characters in strChars
 
-func Int() int {
-	return grand.Int()
-}
+func Int() int { _ = "STUB: not implemented"; return 0 }
 
-func cRandBytes(numBytes int) []byte {
-	b := make([]byte, numBytes)
-	_, err := crand.Read(b)
-	if err != nil {
-		panic(err)
-	}
-	return b
-}
+func cRandBytes(numBytes int) []byte { _ = "STUB: not implemented"; return nil }

@@ -32,5 +32,5 @@ type MultiSignatureData struct {
 
 var _, _ SignatureData = &SingleSignatureData{}, &MultiSignatureData{}
 
-func (m *SingleSignatureData) isSignatureData() {}
-func (m *MultiSignatureData) isSignatureData()  {}
+func (m *SingleSignatureData) isSignatureData() { _ = "STUB: not implemented"; return }
+func (m *MultiSignatureData) isSignatureData()  { _ = "STUB: not implemented"; return }

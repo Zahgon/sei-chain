@@ -1,97 +1,30 @@
 package kv
 
 import (
-	"encoding/binary"
-	"fmt"
-	"strconv"
-
-	"github.com/google/orderedcode"
-
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/pubsub/query/syntax"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
-func intInSlice(a int, list []int) bool {
-	for _, b := range list {
-		if b == a {
-			return true
-		}
-	}
+func intInSlice(a int, list []int) bool { _ = "STUB: not implemented"; return false }
 
-	return false
-}
+func int64FromBytes(bz []byte) int64 { _ = "STUB: not implemented"; return 0 }
 
-func int64FromBytes(bz []byte) int64 {
-	v, _ := binary.Varint(bz)
-	return v
-}
+func int64ToBytes(i int64) []byte { _ = "STUB: not implemented"; return nil }
 
-func int64ToBytes(i int64) []byte {
-	buf := make([]byte, binary.MaxVarintLen64)
-	n := binary.PutVarint(buf, i)
-	return buf[:n]
-}
-
-func heightKey(height int64) ([]byte, error) {
-	return orderedcode.Append(
-		nil,
-		types.BlockHeightKey,
-		height,
-	)
-}
+func heightKey(height int64) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 func eventKey(compositeKey, typ, eventValue string, height int64) ([]byte, error) {
-	return orderedcode.Append(
-		nil,
-		compositeKey,
-		eventValue,
-		height,
-		typ,
-	)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func parseValueFromPrimaryKey(key []byte) (string, error) {
-	var (
-		compositeKey string
-		height       int64
-	)
-
-	remaining, err := orderedcode.Parse(string(key), &compositeKey, &height)
-	if err != nil {
-		return "", fmt.Errorf("failed to parse event key: %w", err)
-	}
-
-	if len(remaining) != 0 {
-		return "", fmt.Errorf("unexpected remainder in key: %s", remaining)
-	}
-
-	return strconv.FormatInt(height, 10), nil
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
-func parseValueFromEventKey(key []byte) (string, error) {
-	var (
-		compositeKey, typ, eventValue string
-		height                        int64
-	)
-
-	remaining, err := orderedcode.Parse(string(key), &compositeKey, &eventValue, &height, &typ)
-	if err != nil {
-		return "", fmt.Errorf("failed to parse event key: %w", err)
-	}
-
-	if len(remaining) != 0 {
-		return "", fmt.Errorf("unexpected remainder in key: %s", remaining)
-	}
-
-	return eventValue, nil
-}
+func parseValueFromEventKey(key []byte) (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 func lookForHeight(conditions []syntax.Condition) (int64, bool) {
-	for _, c := range conditions {
-		if c.Tag == types.BlockHeightKey && c.Op == syntax.TEq {
-			return int64(c.Arg.Number()), true
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return 0, false
 }

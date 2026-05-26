@@ -3,10 +3,6 @@ package grpc
 import (
 	context "context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
 	privvalproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/privval"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
@@ -19,10 +15,8 @@ type SignerServer struct {
 }
 
 func NewSignerServer(chainID string, privVal types.PrivValidator) *SignerServer {
-	return &SignerServer{
-		chainID: chainID,
-		privVal: privVal,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 var _ privvalproto.PrivValidatorAPIServer = (*SignerServer)(nil)
@@ -31,42 +25,20 @@ var _ privvalproto.PrivValidatorAPIServer = (*SignerServer)(nil)
 // returns the pubkey on success and error on failure
 func (ss *SignerServer) GetPubKey(ctx context.Context, req *privvalproto.PubKeyRequest) (
 	*privvalproto.PubKeyResponse, error) {
-	var pubKey crypto.PubKey
-
-	pubKey, err := ss.privVal.GetPubKey(ctx)
-	if err != nil {
-		return nil, status.Errorf(codes.NotFound, "error getting pubkey: %v", err)
-	}
-	logger.Info("SignerServer: GetPubKey Success")
-	return &privvalproto.PubKeyResponse{PubKey: crypto.PubKeyToProto(pubKey)}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SignVote receives a vote sign requests, attempts to sign it
 // returns SignedVoteResponse on success and error on failure
 func (ss *SignerServer) SignVote(ctx context.Context, req *privvalproto.SignVoteRequest) (*privvalproto.SignedVoteResponse, error) {
-	vote := req.Vote
-
-	err := ss.privVal.SignVote(ctx, req.ChainId, vote)
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "error signing vote: %v", err)
-	}
-
-	logger.Info("SignerServer: SignVote Success", "height", req.Vote.Height)
-
-	return &privvalproto.SignedVoteResponse{Vote: *vote}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SignProposal receives a proposal sign requests, attempts to sign it
 // returns SignedProposalResponse on success and error on failure
 func (ss *SignerServer) SignProposal(ctx context.Context, req *privvalproto.SignProposalRequest) (*privvalproto.SignedProposalResponse, error) {
-	proposal := req.Proposal
-
-	err := ss.privVal.SignProposal(ctx, req.ChainId, proposal)
-	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, "error signing proposal: %v", err)
-	}
-
-	logger.Info("SignerServer: SignProposal Success", "height", req.Proposal.Height)
-
-	return &privvalproto.SignedProposalResponse{Proposal: *proposal}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

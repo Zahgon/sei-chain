@@ -1,10 +1,5 @@
 package types
 
-import (
-	"encoding/json"
-	"fmt"
-)
-
 type replyOn int
 
 const (
@@ -29,28 +24,11 @@ var toReplyOn = map[string]replyOn{
 	"never":   ReplyNever,
 }
 
-func (r replyOn) String() string {
-	return fromReplyOn[r]
-}
+func (r replyOn) String() string { _ = "STUB: not implemented"; return "" }
 
-func (s replyOn) MarshalJSON() ([]byte, error) {
-	return json.Marshal(s.String())
-}
+func (s replyOn) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (s *replyOn) UnmarshalJSON(b []byte) error {
-	var j string
-	err := json.Unmarshal(b, &j)
-	if err != nil {
-		return err
-	}
-
-	voteOption, ok := toReplyOn[j]
-	if !ok {
-		return fmt.Errorf("invalid reply_on value '%v'", j)
-	}
-	*s = voteOption
-	return nil
-}
+func (s *replyOn) UnmarshalJSON(b []byte) error { _ = "STUB: not implemented"; return nil }
 
 // SubMsg wraps a CosmosMsg with some metadata for handling replies (ID) and optionally
 // limiting the gas usage (GasLimit)

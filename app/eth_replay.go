@@ -1,266 +1,30 @@
 package app
 
 import (
-	"context"
-	"encoding/binary"
-	"fmt"
-	"math/big"
-	"path/filepath"
-	"strings"
-	"time"
-
 	"github.com/ethereum/go-ethereum/common"
-	ethcore "github.com/ethereum/go-ethereum/core"
-	"github.com/ethereum/go-ethereum/core/tracing"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/ethereum/go-ethereum/params"
 	ethtests "github.com/ethereum/go-ethereum/tests"
-	"github.com/holiman/uint256"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
-	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
-	tmtypes "github.com/sei-protocol/sei-chain/sei-tendermint/types"
-	"github.com/sei-protocol/sei-chain/utils"
-	"github.com/sei-protocol/sei-chain/x/evm/state"
-	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
-	"github.com/sei-protocol/sei-chain/x/evm/types/ethtx"
 )
 
-func Replay(a *App) {
-	h := a.EvmKeeper.GetReplayedHeight(a.GetCheckCtx()) + 1
-	initHeight := a.EvmKeeper.GetReplayInitialHeight(a.GetCheckCtx())
-	if h == 1 {
-		gendoc, err := tmtypes.GenesisDocFromFile(filepath.Join(DefaultNodeHome, "config/genesis.json"))
-		if err != nil {
-			panic(err)
-		}
-		_, err = a.InitChain(context.Background(), &abci.RequestInitChain{
-			Time:          time.Now(),
-			ChainId:       gendoc.ChainID,
-			AppStateBytes: gendoc.AppState,
-		})
-		if err != nil {
-			panic(err)
-		}
-		initHeight = a.EvmKeeper.GetReplayInitialHeight(a.GetContextForDeliverTx([]byte{}))
-	} else {
-		a.EvmKeeper.OpenEthDatabase()
-	}
-	for {
-		latestBlock, err := a.EvmKeeper.EthClient.BlockNumber(context.Background())
-		if err != nil {
-			panic(err)
-		}
-		if latestBlock < uint64(h+initHeight) { //nolint:gosec
-			logger.Info("latest block behind target, sleeping", "latest-block", latestBlock)
-			time.Sleep(1 * time.Minute)
-			continue
-		}
-		logger.Info("replaying block height", "height", h+initHeight)
-		if h+initHeight >= 19426587 && evmtypes.DefaultChainConfig().CancunTime < 0 {
-			logger.Error("Reaching Cancun upgrade height. Turn on Cancun by setting CancunTime in x/evm/types/config.go:DefaultChainConfig() to 0")
-			break
-		} else if h+initHeight < 19426587 && evmtypes.DefaultChainConfig().CancunTime >= 0 {
-			logger.Error("Haven't reached Cancun upgrade height. Turn off Cancun by setting CancunTime in x/evm/types/config.go:DefaultChainConfig() to -1")
-			break
-		}
-		b, err := a.EvmKeeper.EthClient.BlockByNumber(context.Background(), big.NewInt(h+initHeight))
-		if err != nil {
-			panic(err)
-		}
-		a.EvmKeeper.ReplayBlock = b
-		hash := make([]byte, 8)
-		binary.BigEndian.PutUint64(hash, uint64(h)) //nolint:gosec
-		_, err = a.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
-			Txs:               utils.Map(b.Txs, func(tx *ethtypes.Transaction) []byte { return encodeTx(tx, a.GetTxConfig()) }),
-			DecidedLastCommit: abci.CommitInfo{Votes: []abci.VoteInfo{}},
-			Hash:              hash,
-			Header: &tmproto.Header{
-				ChainID: a.ChainID,
-				Height:  h,
-				Time:    time.Now(),
-			},
-		})
-		if err != nil {
-			panic(err)
-		}
-		ctx := a.GetContextForDeliverTx([]byte{})
-		s := state.NewDBImpl(ctx, &a.EvmKeeper, false)
-		for _, w := range b.Withdrawals() {
-			amount := new(big.Int).SetUint64(w.Amount)
-			amount = amount.Mul(amount, big.NewInt(params.GWei))
-			s.AddBalance(w.Address, uint256.MustFromBig(amount), tracing.BalanceIncreaseWithdrawal)
-		}
-		_, _ = s.Finalize()
-		for _, tx := range b.Txs {
-			logger.Info("verifying tx", "tx-hash", tx.Hash())
-			if tx.To() != nil {
-				a.EvmKeeper.VerifyBalance(ctx, *tx.To())
-				if a.EvmKeeper.EthReplayConfig.ContractStateChecks {
-					a.EvmKeeper.VerifyState(ctx, *tx.To())
-				}
-			}
-			a.EvmKeeper.VerifyTxResult(ctx, tx.Hash())
-		}
-		_, err = a.Commit(context.Background())
-		if err != nil {
-			panic(err)
-		}
-		h++
-	}
-}
+func Replay(a *App) { _ = "STUB: not implemented"; return }
 
-func BlockTest(a *App, bt *ethtests.BlockTest) {
-	a.EvmKeeper.BlockTest = bt
-	a.EvmKeeper.EthBlockTestConfig.Enabled = true
+//nolint:gosec
 
-	gendoc, err := tmtypes.GenesisDocFromFile(filepath.Join(DefaultNodeHome, "config/genesis.json"))
-	if err != nil {
-		panic(err)
-	}
-	_, err = a.InitChain(context.Background(), &abci.RequestInitChain{
-		Time:          time.Now(),
-		ChainId:       gendoc.ChainID,
-		AppStateBytes: gendoc.AppState,
-	})
-	if err != nil {
-		panic(err)
-	}
+//nolint:gosec
 
-	ethblocks := make([]*ethtypes.Block, len(bt.Json.Blocks))
-	for i, btBlock := range bt.Json.Blocks {
-		b, err := btBlock.Decode()
-		if err != nil {
-			panic(err)
-		}
-		ethblocks[i] = b
-	}
-	if bf := ethblocks[0].BaseFee(); bf != nil {
-		a.EvmKeeper.SetCurrBaseFeePerGas(a.GetContextForDeliverTx([]byte{}), sdk.NewDecFromBigInt(bf))
-	} else {
-		a.EvmKeeper.SetCurrBaseFeePerGas(a.GetContextForDeliverTx([]byte{}), sdk.ZeroDec())
-	}
-	for addr, genesisAccount := range a.EvmKeeper.BlockTest.Json.Pre {
-		usei, wei := state.SplitUseiWeiAmount(genesisAccount.Balance)
-		seiAddr := a.EvmKeeper.GetSeiAddressOrDefault(a.GetContextForDeliverTx([]byte{}), addr)
-		err := a.EvmKeeper.BankKeeper().AddCoins(a.GetContextForDeliverTx([]byte{}), seiAddr, sdk.NewCoins(sdk.NewCoin("usei", usei)), true)
-		if err != nil {
-			panic(err)
-		}
-		err = a.EvmKeeper.BankKeeper().AddWei(a.GetContextForDeliverTx([]byte{}), a.EvmKeeper.GetSeiAddressOrDefault(a.GetContextForDeliverTx([]byte{}), addr), wei)
-		if err != nil {
-			panic(err)
-		}
-		a.EvmKeeper.SetNonce(a.GetContextForDeliverTx([]byte{}), addr, genesisAccount.Nonce)
-		a.EvmKeeper.SetCode(a.GetContextForDeliverTx([]byte{}), addr, genesisAccount.Code)
-		for key, value := range genesisAccount.Storage {
-			a.EvmKeeper.SetState(a.GetContextForDeliverTx([]byte{}), addr, key, value)
-		}
-		params := a.EvmKeeper.GetParams(a.GetContextForDeliverTx([]byte{}))
-		params.MinimumFeePerGas = sdk.NewDecFromInt(sdk.NewInt(0))
-		a.EvmKeeper.SetParams(a.GetContextForDeliverTx([]byte{}), params)
-	}
+func BlockTest(a *App, bt *ethtests.BlockTest) { _ = "STUB: not implemented"; return }
 
-	if len(bt.Json.Blocks) == 0 {
-		panic("no blocks found")
-	}
+// Check post-state after all blocks are run
 
-	for i, btBlock := range bt.Json.Blocks {
-		h := int64(i + 1)
-		b, err := btBlock.Decode()
-		if err != nil {
-			panic(err)
-		}
-		blockHash := b.Hash()
-		parentHash := b.ParentHash()
-		txs := utils.Map(b.Txs, func(tx *ethtypes.Transaction) []byte { return encodeTx(tx, a.GetTxConfig()) })
-		_, err = a.FinalizeBlock(context.Background(), &abci.RequestFinalizeBlock{
-			Txs:               txs,
-			Hash:              blockHash[:],
-			DecidedLastCommit: abci.CommitInfo{Votes: []abci.VoteInfo{}},
-			Header: &tmproto.Header{
-				ChainID:         gendoc.ChainID,
-				ProposerAddress: a.EvmKeeper.GetSeiAddressOrDefault(a.GetCheckCtx(), b.Coinbase()),
-				LastBlockId:     tmproto.BlockID{Hash: parentHash[:]},
-				Height:          h,
-				Time:            time.Now(),
-			},
-		})
-		if err != nil {
-			panic(err)
-		}
-		if i+1 < len(ethblocks) {
-			if bf := ethblocks[i+1].BaseFee(); bf != nil {
-				a.EvmKeeper.SetCurrBaseFeePerGas(a.GetContextForDeliverTx([]byte{}), sdk.NewDecFromBigInt(bf))
-			} else {
-				a.EvmKeeper.SetCurrBaseFeePerGas(a.GetContextForDeliverTx([]byte{}), sdk.ZeroDec())
-			}
-		}
-		_, err = a.Commit(context.Background())
-		if err != nil {
-			panic(err)
-		}
-	}
-
-	// Check post-state after all blocks are run
-	ctx := a.GetCheckCtx()
-	for addr, accountData := range bt.Json.Post {
-		if IsWithdrawalAddress(addr, ethblocks) {
-			fmt.Println("Skipping withdrawal address: ", addr)
-			continue
-		}
-		// Not checking compliance with EIP-4788
-		if addr == params.BeaconRootsAddress {
-			fmt.Println("Skipping beacon roots storage address: ", addr)
-			continue
-		}
-		a.EvmKeeper.VerifyAccount(ctx, addr, accountData)
-		fmt.Println("Successfully verified account: ", addr)
-	}
-}
+// Not checking compliance with EIP-4788
 
 func encodeTx(tx *ethtypes.Transaction, txConfig client.TxConfig) []byte {
-	var txData ethtx.TxData
-	var err error
-	switch tx.Type() {
-	case ethtypes.LegacyTxType:
-		txData, err = ethtx.NewLegacyTx(tx)
-	case ethtypes.DynamicFeeTxType:
-		txData, err = ethtx.NewDynamicFeeTx(tx)
-	case ethtypes.AccessListTxType:
-		txData, err = ethtx.NewAccessListTx(tx)
-	case ethtypes.BlobTxType:
-		txData, err = ethtx.NewBlobTx(tx)
-	}
-	if err != nil {
-		if strings.Contains(err.Error(), ethcore.ErrTipAboveFeeCap.Error()) {
-			return nil
-		}
-		panic(err)
-	}
-	msg, err := evmtypes.NewMsgEVMTransaction(txData)
-	if err != nil {
-		panic(err)
-	}
-	txBuilder := txConfig.NewTxBuilder()
-	if err = txBuilder.SetMsgs(msg); err != nil {
-		panic(err)
-	}
-	txbz, encodeErr := txConfig.TxEncoder()(txBuilder.GetTx())
-	if encodeErr != nil {
-		panic(encodeErr)
-	}
-	return txbz
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func IsWithdrawalAddress(addr common.Address, blocks []*ethtypes.Block) bool {
-	for _, block := range blocks {
-		for _, w := range block.Withdrawals() {
-			if w.Address == addr {
-				return true
-			}
-		}
-	}
+	_ = "STUB: not implemented"
 	return false
 }

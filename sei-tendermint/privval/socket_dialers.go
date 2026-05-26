@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	tmnet "github.com/sei-protocol/sei-chain/sei-tendermint/libs/net"
 )
 
 // Socket errors.
@@ -20,23 +19,9 @@ type SocketDialer func() (net.Conn, error)
 // DialTCPFn dials the given tcp addr, using the given timeoutReadWrite and
 // privKey for the authenticated encryption handshake.
 func DialTCPFn(addr string, timeoutReadWrite time.Duration, privKey crypto.PrivKey) SocketDialer {
-	return func() (net.Conn, error) {
-		conn, err := tmnet.Connect(addr)
-		if err == nil {
-			deadline := time.Now().Add(timeoutReadWrite)
-			err = conn.SetDeadline(deadline)
-		}
-		if err == nil {
-			conn, err = MakeSecretConnection(conn, privKey)
-		}
-		return conn, err
-	}
+	_ = "STUB: not implemented"
+	return *new(SocketDialer)
 }
 
 // DialUnixFn dials the given unix socket.
-func DialUnixFn(addr string) SocketDialer {
-	return func() (net.Conn, error) {
-		unixAddr := &net.UnixAddr{Name: addr, Net: "unix"}
-		return net.DialUnix("unix", nil, unixAddr)
-	}
-}
+func DialUnixFn(addr string) SocketDialer { _ = "STUB: not implemented"; return *new(SocketDialer) }

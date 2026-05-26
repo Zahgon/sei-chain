@@ -1,16 +1,12 @@
 package cryptosim
 
 import (
-	"encoding/binary"
-	"errors"
-	"fmt"
 	"hash"
 
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/sei-protocol/sei-chain/sei-db/common/keys"
 	crand "github.com/sei-protocol/sei-chain/sei-db/common/rand"
 	evmtypes "github.com/sei-protocol/sei-chain/x/evm/types"
-	"golang.org/x/crypto/sha3"
 )
 
 const (
@@ -64,9 +60,9 @@ var erc20TransferEventSignatureBytes = [hashLen]byte{
 // The hash automatically becomes invalid (returns no result) once the corresponding
 // parquet file is pruned, so readers never need to track which hashes are live.
 func SyntheticTxHash(crand *crand.CannedRandom, blockNumber uint64, txIndex uint32) []byte {
+	_ = "STUB: not implemented"
 	//nolint:gosec // block numbers and tx indices won't exceed int64 in benchmarks
-	txID := int64(blockNumber)*syntheticTxIDBlockStride + int64(txIndex)
-	return crand.SeededBytes(hashLen, txID)
+	return nil
 }
 
 // BuildERC20TransferReceiptFromTxn produces a plausible successful ERC20 transfer receipt from a transaction.
@@ -77,16 +73,8 @@ func BuildERC20TransferReceiptFromTxn(
 	txIndex uint32,
 	txn *transaction,
 ) (*evmtypes.Receipt, error) {
-	return BuildERC20TransferReceipt(
-		crand,
-		feeCollectionAccount,
-		txn.srcAccount,
-		txn.dstAccount,
-		txn.srcAccountSlot,
-		txn.dstAccountSlot,
-		txn.erc20Contract,
-		blockNumber,
-		txIndex)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // BuildERC20TransferReceipt produces a plausible successful ERC20 transfer receipt.
@@ -105,128 +93,40 @@ func BuildERC20TransferReceipt(
 	blockNumber uint64,
 	txIndex uint32,
 ) (*evmtypes.Receipt, error) {
-	if crand == nil {
-		return nil, errors.New("canned random is required")
-	}
-
-	if err := validateAccountKey("fee collection account", feeCollectionAccount); err != nil {
-		return nil, err
-	}
-	srcAddressBytes, err := extractAccountKeyBytes("src account", srcAccount)
-	if err != nil {
-		return nil, err
-	}
-	if err := validateAccountKey("dst account", dstAccount); err != nil {
-		return nil, err
-	}
-	senderAddressBytes, err := extractStorageKeyAddressBytes("sender slot", senderSlot)
-	if err != nil {
-		return nil, err
-	}
-	receiverAddressBytes, err := extractStorageKeyAddressBytes("receiver slot", receiverSlot)
-	if err != nil {
-		return nil, err
-	}
-	contractAddressBytes, err := extractCodeKeyBytes("erc20 contract code", erc20ContractCode)
-	if err != nil {
-		return nil, err
-	}
-	txType := uint32(ethtypes.DynamicFeeTxType)
-	if crand.Int64Range(0, 5) == 0 {
-		txType = uint32(ethtypes.LegacyTxType)
-	}
-
-	gasUsed := syntheticReceiptGasUsedBase +
-		uint64(crand.Int64Range(0, int64(syntheticReceiptGasUsedSpan))) //nolint:gosec // constants fit in int64
-	previousGas := syntheticReceiptPreviousGasBase +
-		uint64(crand.Int64Range(0, int64(syntheticReceiptPreviousGasSpan))) //nolint:gosec // constants fit in int64
-	cumulativeGasUsed := gasUsed + uint64(txIndex)*previousGas
-	effectiveGasPrice := syntheticReceiptGasPriceBase +
-		uint64(crand.Int64Range(0, int64(syntheticReceiptGasPriceSpan))) //nolint:gosec // constants fit in int64
-	transferAmount := syntheticReceiptTransferBase +
-		uint64(crand.Int64Range(0, int64(syntheticReceiptTransferSpan))) //nolint:gosec // constants fit in int64
-
-	var senderTopic [hashLen]byte
-	copy(senderTopic[indexedAddressBase:], senderAddressBytes)
-	var receiverTopic [hashLen]byte
-	copy(receiverTopic[indexedAddressBase:], receiverAddressBytes)
-
-	contractAddressHex := BytesToHex(contractAddressBytes)
-	amountData := encodeUint256FromUint64(transferAmount)
-	var bloom ethtypes.Bloom
-	hasher := sha3.NewLegacyKeccak256()
-	var bloomDigest [hashLen]byte
-	addToBloom(hasher, &bloomDigest, &bloom, contractAddressBytes)
-	addToBloom(hasher, &bloomDigest, &bloom, erc20TransferEventSignatureBytes[:])
-	addToBloom(hasher, &bloomDigest, &bloom, senderTopic[:])
-	addToBloom(hasher, &bloomDigest, &bloom, receiverTopic[:])
-
-	return &evmtypes.Receipt{
-		TxType:            txType,
-		CumulativeGasUsed: cumulativeGasUsed,
-		ContractAddress:   contractAddressHex,
-		TxHashHex:         BytesToHex(SyntheticTxHash(crand, blockNumber, txIndex)),
-		GasUsed:           gasUsed,
-		EffectiveGasPrice: effectiveGasPrice,
-		BlockNumber:       blockNumber,
-		TransactionIndex:  txIndex,
-		Status:            uint32(ethtypes.ReceiptStatusSuccessful),
-		From:              BytesToHex(srcAddressBytes),
-		To:                contractAddressHex,
-		Logs: []*evmtypes.Log{{
-			Address: contractAddressHex,
-			Topics: []string{
-				erc20TransferEventSignatureHex,
-				BytesToHex(senderTopic[:]),
-				BytesToHex(receiverTopic[:]),
-			},
-			Data:  amountData,
-			Index: 0,
-		}},
-		LogsBloom: bloom[:],
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func validateAccountKey(name string, key []byte) error {
-	_, err := extractAccountKeyBytes(name, key)
-	return err
-}
+//nolint:gosec // constants fit in int64
+
+//nolint:gosec // constants fit in int64
+
+//nolint:gosec // constants fit in int64
+
+//nolint:gosec // constants fit in int64
+
+func validateAccountKey(name string, key []byte) error { _ = "STUB: not implemented"; return nil }
 
 // extractAccountKeyBytes accepts keys with either EVMKeyCode (0x07) or EVMKeyCodeHash (0x08) prefix,
 // since cryptosim uses EVMKeyCodeHash for accounts while ERC20 contracts use EVMKeyCode.
 func extractAccountKeyBytes(name string, key []byte) ([]byte, error) {
-	if len(key) != 1+keys.AddressLen || (key[0] != evmCodeKeyPrefixByte && key[0] != evmCodeHashKeyPrefixByte) {
-		return nil, fmt.Errorf("%s must be an EVM code key with %d address bytes", name, keys.AddressLen)
-	}
-	return key[1:], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func extractCodeKeyBytes(name string, key []byte) ([]byte, error) {
-	if len(key) != 1+keys.AddressLen || key[0] != evmCodeKeyPrefixByte {
-		return nil, fmt.Errorf("%s must be an EVM code key with %d address bytes", name, keys.AddressLen)
-	}
-	return key[1:], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func extractStorageKeyAddressBytes(name string, key []byte) ([]byte, error) {
-	if len(key) != 1+StorageKeyLen || key[0] != evmStorageKeyPrefixByte {
-		return nil, fmt.Errorf("%s must be an EVM storage key with %d address+slot bytes", name, StorageKeyLen)
-	}
-	return key[1 : 1+keys.AddressLen], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func addToBloom(hasher hash.Hash, digest *[hashLen]byte, bloom *ethtypes.Bloom, value []byte) {
-	hasher.Reset()
-	_, _ = hasher.Write(value)
-	hash := hasher.Sum(digest[:0])
-	for i := 0; i < 6; i += 2 {
-		bit := (uint(hash[i])<<8)&2047 + uint(hash[i+1])
-		bloom[ethtypes.BloomByteLength-1-bit/8] |= byte(1 << (bit % 8))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func encodeUint256FromUint64(value uint64) []byte {
-	encoded := make([]byte, hashLen)
-	binary.BigEndian.PutUint64(encoded[hashLen-8:], value)
-	return encoded
-}
+func encodeUint256FromUint64(value uint64) []byte { _ = "STUB: not implemented"; return nil }

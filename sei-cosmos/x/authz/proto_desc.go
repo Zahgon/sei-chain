@@ -3,6 +3,4 @@ package authz
 import grpc "google.golang.org/grpc"
 
 // MsgServiceDesc return ServiceDesc for Msg server
-func MsgServiceDesc() *grpc.ServiceDesc {
-	return &_Msg_serviceDesc
-}
+func MsgServiceDesc() *grpc.ServiceDesc { _ = "STUB: not implemented"; return nil }

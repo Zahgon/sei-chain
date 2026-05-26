@@ -27,12 +27,6 @@ var (
 )
 
 // AddressStoreKey turn an address to key used to get it from the account store
-func AddressStoreKey(addr sdk.AccAddress) []byte {
-	return append(AddressStoreKeyPrefix, addr.Bytes()...)
-}
+func AddressStoreKey(addr sdk.AccAddress) []byte { _ = "STUB: not implemented"; return nil }
 
-func CreateAddressStoreKeyFromBech32(addr string) []byte {
-	accAdrr, _ := sdk.AccAddressFromBech32(addr)
-	accAdrrWithPrefix := AddressStoreKey(accAdrr)
-	return accAdrrWithPrefix
-}
+func CreateAddressStoreKeyFromBech32(addr string) []byte { _ = "STUB: not implemented"; return nil }

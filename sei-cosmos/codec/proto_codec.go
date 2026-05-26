@@ -1,12 +1,6 @@
 package codec
 
 import (
-	"encoding/binary"
-	"errors"
-	"fmt"
-	"strings"
-
-	"github.com/gogo/protobuf/jsonpb"
 	"github.com/gogo/protobuf/proto"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
@@ -30,62 +24,44 @@ var _ ProtoCodecMarshaler = &ProtoCodec{}
 
 // NewProtoCodec returns a reference to a new ProtoCodec
 func NewProtoCodec(interfaceRegistry types.InterfaceRegistry) *ProtoCodec {
-	return &ProtoCodec{interfaceRegistry: interfaceRegistry}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Marshal implements BinaryMarshaler.Marshal method.
 // NOTE: this function must be used with a concrete type which
 // implements proto.Message. For interface please use the codec.MarshalInterface
 func (pc *ProtoCodec) Marshal(o ProtoMarshaler) ([]byte, error) {
-	return o.Marshal()
+	_ = "STUB: not implemented"
+	return nil,
+
+		// MustMarshal implements BinaryMarshaler.MustMarshal method.
+		// NOTE: this function must be used with a concrete type which
+		// implements proto.Message. For interface please use the codec.MarshalInterface
+		nil
 }
 
-// MustMarshal implements BinaryMarshaler.MustMarshal method.
-// NOTE: this function must be used with a concrete type which
-// implements proto.Message. For interface please use the codec.MarshalInterface
-func (pc *ProtoCodec) MustMarshal(o ProtoMarshaler) []byte {
-	bz, err := pc.Marshal(o)
-	if err != nil {
-		panic(err)
-	}
-
-	return bz
-}
+func (pc *ProtoCodec) MustMarshal(o ProtoMarshaler) []byte { _ = "STUB: not implemented"; return nil }
 
 // MarshalLengthPrefixed implements BinaryMarshaler.MarshalLengthPrefixed method.
 func (pc *ProtoCodec) MarshalLengthPrefixed(o ProtoMarshaler) ([]byte, error) {
-	bz, err := pc.Marshal(o)
-	if err != nil {
-		return nil, err
-	}
-
-	var sizeBuf [binary.MaxVarintLen64]byte
-	n := binary.PutUvarint(sizeBuf[:], uint64(o.Size())) //nolint:gosec // Size() returns the serialized size which is always non-negative
-	return append(sizeBuf[:n], bz...), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec // Size() returns the serialized size which is always non-negative
 
 // MustMarshalLengthPrefixed implements BinaryMarshaler.MustMarshalLengthPrefixed method.
 func (pc *ProtoCodec) MustMarshalLengthPrefixed(o ProtoMarshaler) []byte {
-	bz, err := pc.MarshalLengthPrefixed(o)
-	if err != nil {
-		panic(err)
-	}
-
-	return bz
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Unmarshal implements BinaryMarshaler.Unmarshal method.
 // NOTE: this function must be used with a concrete type which
 // implements proto.Message. For interface please use the codec.UnmarshalInterface
 func (pc *ProtoCodec) Unmarshal(bz []byte, ptr ProtoMarshaler) error {
-	err := ptr.Unmarshal(bz)
-	if err != nil {
-		return err
-	}
-	err = types.UnpackInterfaces(ptr, pc.interfaceRegistry)
-	if err != nil {
-		return err
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -93,38 +69,24 @@ func (pc *ProtoCodec) Unmarshal(bz []byte, ptr ProtoMarshaler) error {
 // NOTE: this function must be used with a concrete type which
 // implements proto.Message. For interface please use the codec.UnmarshalInterface
 func (pc *ProtoCodec) MustUnmarshal(bz []byte, ptr ProtoMarshaler) {
-	if err := pc.Unmarshal(bz, ptr); err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // UnmarshalLengthPrefixed implements BinaryMarshaler.UnmarshalLengthPrefixed method.
 func (pc *ProtoCodec) UnmarshalLengthPrefixed(bz []byte, ptr ProtoMarshaler) error {
-	size, n := binary.Uvarint(bz)
-	if n < 0 {
-		return fmt.Errorf("invalid number of bytes read from length-prefixed encoding: %d", n)
-	}
-
-	remaining := len(bz) - n
-	if remaining < 0 {
-		return fmt.Errorf("length prefix exceeds buffer size")
-	}
-
-	if size > uint64(remaining) { //nolint:gosec // remaining is validated non-negative above
-		return fmt.Errorf("not enough bytes to read; want: %v, got: %v", size, remaining)
-	} else if size < uint64(remaining) { //nolint:gosec // remaining is validated non-negative above
-		return fmt.Errorf("too many bytes to read; want: %v, got: %v", size, remaining)
-	}
-
-	bz = bz[n:]
-	return pc.Unmarshal(bz, ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
+
+//nolint:gosec // remaining is validated non-negative above
+
+//nolint:gosec // remaining is validated non-negative above
 
 // MustUnmarshalLengthPrefixed implements BinaryMarshaler.MustUnmarshalLengthPrefixed method.
 func (pc *ProtoCodec) MustUnmarshalLengthPrefixed(bz []byte, ptr ProtoMarshaler) {
-	if err := pc.UnmarshalLengthPrefixed(bz, ptr); err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MarshalJSON implements JSONCodec.MarshalJSON method,
@@ -132,12 +94,8 @@ func (pc *ProtoCodec) MustUnmarshalLengthPrefixed(bz []byte, ptr ProtoMarshaler)
 // NOTE: this function must be used with a concrete type which
 // implements proto.Message. For interface please use the codec.MarshalInterfaceJSON
 func (pc *ProtoCodec) MarshalAsJSON(o proto.Message) ([]byte, error) {
-	m, ok := o.(ProtoMarshaler)
-	if !ok {
-		return nil, fmt.Errorf("cannot protobuf JSON encode unsupported type: %T", o)
-	}
-
-	return ProtoMarshalJSON(m, pc.interfaceRegistry)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // MustMarshalJSON implements JSONCodec.MustMarshalJSON method,
@@ -145,12 +103,8 @@ func (pc *ProtoCodec) MarshalAsJSON(o proto.Message) ([]byte, error) {
 // NOTE: this function must be used with a concrete type which
 // implements proto.Message. For interface please use the codec.MarshalInterfaceJSON
 func (pc *ProtoCodec) MustMarshalJSON(o proto.Message) []byte {
-	bz, err := pc.MarshalAsJSON(o)
-	if err != nil {
-		panic(err)
-	}
-
-	return bz
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnmarshalJSON implements JSONCodec.UnmarshalJSON method,
@@ -158,18 +112,8 @@ func (pc *ProtoCodec) MustMarshalJSON(o proto.Message) []byte {
 // NOTE: this function must be used with a concrete type which
 // implements proto.Message. For interface please use the codec.UnmarshalInterfaceJSON
 func (pc *ProtoCodec) UnmarshalAsJSON(bz []byte, ptr proto.Message) error {
-	m, ok := ptr.(ProtoMarshaler)
-	if !ok {
-		return fmt.Errorf("cannot protobuf JSON decode unsupported type: %T", ptr)
-	}
-
-	unmarshaler := jsonpb.Unmarshaler{AnyResolver: pc.interfaceRegistry}
-	err := unmarshaler.Unmarshal(strings.NewReader(string(bz)), m)
-	if err != nil {
-		return err
-	}
-
-	return types.UnpackInterfaces(ptr, pc.interfaceRegistry)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MustUnmarshalJSON implements JSONCodec.MustUnmarshalJSON method,
@@ -177,24 +121,16 @@ func (pc *ProtoCodec) UnmarshalAsJSON(bz []byte, ptr proto.Message) error {
 // NOTE: this function must be used with a concrete type which
 // implements proto.Message. For interface please use the codec.UnmarshalInterfaceJSON
 func (pc *ProtoCodec) MustUnmarshalJSON(bz []byte, ptr proto.Message) {
-	if err := pc.UnmarshalAsJSON(bz, ptr); err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MarshalInterface is a convenience function for proto marshalling interfaces. It packs
 // the provided value, which must be an interface, in an Any and then marshals it to bytes.
 // NOTE: to marshal a concrete type, you should use Marshal instead
 func (pc *ProtoCodec) MarshalInterface(i proto.Message) ([]byte, error) {
-	if err := assertNotNil(i); err != nil {
-		return nil, err
-	}
-	any, err := types.NewAnyWithValue(i)
-	if err != nil {
-		return nil, err
-	}
-
-	return pc.Marshal(any)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UnmarshalInterface is a convenience function for proto unmarshaling interfaces. It
@@ -207,24 +143,16 @@ func (pc *ProtoCodec) MarshalInterface(i proto.Message) ([]byte, error) {
 //	var x MyInterface
 //	err := cdc.UnmarshalInterface(bz, &x)
 func (pc *ProtoCodec) UnmarshalInterface(bz []byte, ptr interface{}) error {
-	any := &types.Any{}
-	err := pc.Unmarshal(bz, any)
-	if err != nil {
-		return err
-	}
-
-	return pc.UnpackAny(any, ptr)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MarshalInterfaceJSON is a convenience function for proto marshalling interfaces. It
 // packs the provided value in an Any and then marshals it to bytes.
 // NOTE: to marshal a concrete type, you should use MarshalJSON instead
 func (pc *ProtoCodec) MarshalInterfaceJSON(x proto.Message) ([]byte, error) {
-	any, err := types.NewAnyWithValue(x)
-	if err != nil {
-		return nil, err
-	}
-	return pc.MarshalAsJSON(any)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // UnmarshalInterfaceJSON is a convenience function for proto unmarshaling interfaces.
@@ -237,29 +165,22 @@ func (pc *ProtoCodec) MarshalInterfaceJSON(x proto.Message) ([]byte, error) {
 //	var x MyInterface  // must implement proto.Message
 //	err := cdc.UnmarshalInterfaceJSON(&x, bz)
 func (pc *ProtoCodec) UnmarshalInterfaceJSON(bz []byte, iface interface{}) error {
-	any := &types.Any{}
-	err := pc.UnmarshalAsJSON(bz, any)
-	if err != nil {
-		return err
-	}
-	return pc.UnpackAny(any, iface)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // UnpackAny implements AnyUnpacker.UnpackAny method,
 // it unpacks the value in any to the interface pointer passed in as
 // iface.
 func (pc *ProtoCodec) UnpackAny(any *types.Any, iface interface{}) error {
-	return pc.interfaceRegistry.UnpackAny(any, iface)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // InterfaceRegistry returns InterfaceRegistry
 func (pc *ProtoCodec) InterfaceRegistry() types.InterfaceRegistry {
-	return pc.interfaceRegistry
+	_ = "STUB: not implemented"
+	return *new(types.InterfaceRegistry)
 }
 
-func assertNotNil(i interface{}) error {
-	if i == nil {
-		return errors.New("can't marshal <nil> value")
-	}
-	return nil
-}
+func assertNotNil(i interface{}) error { _ = "STUB: not implemented"; return nil }

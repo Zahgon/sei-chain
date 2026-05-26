@@ -1,8 +1,6 @@
 package types
 
 import (
-	"fmt"
-
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
 )
 
@@ -11,36 +9,21 @@ const DefaultDenomAllowListMaxSize = 2000
 
 // ParamKeyTable ParamTable for tokenfactory module.
 func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&Params{})
+	_ = "STUB: not implemented"
+	return *new(paramtypes.KeyTable)
 }
 
 // DefaultParams default tokenfactory module parameters.
-func DefaultParams() Params {
-	return Params{
-		DenomAllowlistMaxSize: DefaultDenomAllowListMaxSize,
-	}
-}
+func DefaultParams() Params { _ = "STUB: not implemented"; return *new(Params) }
 
 // Validate validate params.
-func (p Params) Validate() error {
-	if err := validateDenomAllowListMaxSize(p.DenomAllowlistMaxSize); err != nil {
-		return err
-	}
-	return nil
-}
+func (p Params) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // ParamSetPairs Implements params.ParamSet.
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(DenomAllowListMaxSizeKey, &p.DenomAllowlistMaxSize, validateDenomAllowListMaxSize),
-	}
+	_ = "STUB: not implemented"
+	return *new(paramtypes.ParamSetPairs)
 }
 
 // validateDenomAllowListMaxSize validates a parameter value is within a valid range.
-func validateDenomAllowListMaxSize(i interface{}) error {
-	_, ok := i.(uint32)
-	if !ok {
-		return fmt.Errorf("invalid parameter type: %T", i)
-	}
-	return nil
-}
+func validateDenomAllowListMaxSize(i interface{}) error { _ = "STUB: not implemented"; return nil }

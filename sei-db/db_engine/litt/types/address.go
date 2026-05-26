@@ -1,10 +1,5 @@
 package types
 
-import (
-	"encoding/binary"
-	"fmt"
-)
-
 // AddressSerializedSize is the on-disk size of a serialized Address in bytes.
 // Layout: index(4) | offset(4) | shardID(1) | valueSize(4)
 const AddressSerializedSize = 13
@@ -30,58 +25,46 @@ type Address struct {
 
 // NewAddress creates a new Address.
 func NewAddress(index uint32, offset uint32, shardID uint8, valueSize uint32) Address {
-	return Address{
-		index:     index,
-		offset:    offset,
-		shardID:   shardID,
-		valueSize: valueSize,
-	}
+	_ = "STUB: not implemented"
+	return *new(Address)
 }
 
 // DeserializeAddress converts a byte slice to an Address. The slice must be exactly AddressSerializedSize bytes.
 func DeserializeAddress(bytes []byte) (Address, error) {
-	if len(bytes) != AddressSerializedSize {
-		return Address{}, fmt.Errorf("invalid address length: %d", len(bytes))
-	}
-	return Address{
-		index:     binary.BigEndian.Uint32(bytes[0:4]),
-		offset:    binary.BigEndian.Uint32(bytes[4:8]),
-		shardID:   bytes[8],
-		valueSize: binary.BigEndian.Uint32(bytes[9:13]),
-	}, nil
+	_ = "STUB: not implemented"
+	return *new(Address), nil
 }
 
 // Index returns the segment index of the value.
 func (a Address) Index() uint32 {
-	return a.index
+	_ = "STUB: not implemented"
+
+	// Offset returns the byte offset of the value within its shard's value file.
+	return 0
 }
 
-// Offset returns the byte offset of the value within its shard's value file.
 func (a Address) Offset() uint32 {
-	return a.offset
+	_ = "STUB: not implemented"
+
+	// ShardID returns the shard within the segment that owns the value.
+	return 0
 }
 
-// ShardID returns the shard within the segment that owns the value.
 func (a Address) ShardID() uint8 {
-	return a.shardID
+	_ = "STUB: not implemented"
+
+	// ValueSize returns the size of the value in bytes.
+	return 0
 }
 
-// ValueSize returns the size of the value in bytes.
 func (a Address) ValueSize() uint32 {
-	return a.valueSize
+	_ = "STUB: not implemented"
+
+	// String returns a string representation of the address.
+	return 0
 }
 
-// String returns a string representation of the address.
-func (a Address) String() string {
-	return fmt.Sprintf("(%d:%d@%d, %d)", a.index, a.offset, a.shardID, a.valueSize)
-}
+func (a Address) String() string { _ = "STUB: not implemented"; return "" }
 
 // Serialize converts the address to a byte slice of length AddressSerializedSize.
-func (a Address) Serialize() []byte {
-	bytes := make([]byte, AddressSerializedSize)
-	binary.BigEndian.PutUint32(bytes[0:4], a.index)
-	binary.BigEndian.PutUint32(bytes[4:8], a.offset)
-	bytes[8] = a.shardID
-	binary.BigEndian.PutUint32(bytes[9:13], a.valueSize)
-	return bytes
-}
+func (a Address) Serialize() []byte { _ = "STUB: not implemented"; return nil }

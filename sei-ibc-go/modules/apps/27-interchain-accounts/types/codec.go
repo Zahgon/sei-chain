@@ -4,8 +4,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
-	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 )
 
 // ModuleCdc references the global interchain accounts module codec. Note, the codec
@@ -17,67 +15,22 @@ var ModuleCdc = codec.NewProtoCodec(codectypes.NewInterfaceRegistry())
 
 // RegisterInterfaces registers the concrete InterchainAccount implementation against the associated
 // x/auth AccountI and GenesisAccount interfaces
-func RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	registry.RegisterImplementations((*authtypes.AccountI)(nil), &InterchainAccount{})
-	registry.RegisterImplementations((*authtypes.GenesisAccount)(nil), &InterchainAccount{})
-}
+func RegisterInterfaces(registry codectypes.InterfaceRegistry) { _ = "STUB: not implemented"; return }
 
 // SerializeCosmosTx serializes a slice of sdk.Msg's using the CosmosTx type. The sdk.Msg's are
 // packed into Any's and inserted into the Messages field of a CosmosTx. The proto marshaled CosmosTx
 // bytes are returned. Only the ProtoCodec is supported for serializing messages.
 func SerializeCosmosTx(cdc codec.BinaryCodec, msgs []sdk.Msg) (bz []byte, err error) {
+	_ = "STUB: not implemented"
 	// only ProtoCodec is supported
-	if _, ok := cdc.(*codec.ProtoCodec); !ok {
-		return nil, sdkerrors.Wrap(ErrInvalidCodec, "only ProtoCodec is supported for receiving messages on the host chain")
-	}
-
-	msgAnys := make([]*codectypes.Any, len(msgs))
-
-	for i, msg := range msgs {
-		msgAnys[i], err = codectypes.NewAnyWithValue(msg)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	cosmosTx := &CosmosTx{
-		Messages: msgAnys,
-	}
-
-	bz, err = cdc.Marshal(cosmosTx)
-	if err != nil {
-		return nil, err
-	}
-
-	return bz, nil
+	return nil, nil
 }
 
 // DeserializeCosmosTx unmarshals and unpacks a slice of transaction bytes
 // into a slice of sdk.Msg's. Only the ProtoCodec is supported for message
 // deserialization.
 func DeserializeCosmosTx(cdc codec.BinaryCodec, data []byte) ([]sdk.Msg, error) {
+	_ = "STUB: not implemented"
 	// only ProtoCodec is supported
-	if _, ok := cdc.(*codec.ProtoCodec); !ok {
-		return nil, sdkerrors.Wrap(ErrInvalidCodec, "only ProtoCodec is supported for receiving messages on the host chain")
-	}
-
-	var cosmosTx CosmosTx
-	if err := cdc.Unmarshal(data, &cosmosTx); err != nil {
-		return nil, err
-	}
-
-	msgs := make([]sdk.Msg, len(cosmosTx.Messages))
-
-	for i, any := range cosmosTx.Messages {
-		var msg sdk.Msg
-
-		err := cdc.UnpackAny(any, &msg)
-		if err != nil {
-			return nil, err
-		}
-
-		msgs[i] = msg
-	}
-
-	return msgs, nil
+	return nil, nil
 }

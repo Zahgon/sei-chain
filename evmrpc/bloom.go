@@ -12,9 +12,11 @@ type BloomIndexes = ethbloom.BloomIndexes
 var BitMasks = [8]uint8{1, 2, 4, 8, 16, 32, 64, 128}
 
 func EncodeFilters(addresses []common.Address, topics [][]common.Hash) [][]BloomIndexes {
-	return ethbloom.EncodeFilters(addresses, topics)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func MatchFilters(bloom ethtypes.Bloom, filters [][]BloomIndexes) bool {
-	return ethbloom.MatchFilters(bloom, filters)
+	_ = "STUB: not implemented"
+	return false
 }

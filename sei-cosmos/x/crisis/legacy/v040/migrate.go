@@ -10,7 +10,6 @@ import (
 //
 // - Re-encode in v0.40 GenesisState.
 func Migrate(crisisGenState v039crisis.GenesisState) *v040crisis.GenesisState {
-	return &v040crisis.GenesisState{
-		ConstantFee: crisisGenState.ConstantFee,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }

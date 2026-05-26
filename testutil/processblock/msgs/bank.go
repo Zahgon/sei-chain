@@ -6,9 +6,6 @@ import (
 )
 
 func Send(from sdk.AccAddress, to sdk.AccAddress, amount int64) *banktypes.MsgSend {
-	return &banktypes.MsgSend{
-		FromAddress: from.String(),
-		ToAddress:   to.String(),
-		Amount:      sdk.NewCoins(sdk.NewCoin("usei", sdk.NewInt(amount))),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }

@@ -1,9 +1,6 @@
 package blocksim
 
 import (
-	"fmt"
-	"strings"
-
 	"github.com/sei-protocol/sei-chain/sei-db/common/unit"
 	"github.com/sei-protocol/sei-chain/sei-db/common/utils"
 )
@@ -111,86 +108,7 @@ type BlocksimConfig struct {
 }
 
 // Returns the default configuration for the blocksim benchmark.
-func DefaultBlocksimConfig() *BlocksimConfig {
-	return &BlocksimConfig{
-		BytesPerTransaction:             1024,
-		TransactionsPerBlock:            1024,
-		ExtraBytesPerBlock:              256,
-		BlockHashSize:                   32,
-		TransactionHashSize:             32,
-		StagedBlockQueueSize:            8,
-		CannedRandomSize:                unit.GB,
-		UnprunedBlocks:                  100_000,
-		Seed:                            1337,
-		DataDir:                         "data",
-		Backend:                         "mem",
-		ConsoleUpdateIntervalSeconds:    1,
-		ConsoleUpdateIntervalBlocks:     10_000,
-		MaxRuntimeSeconds:               0,
-		MetricsAddr:                     ":9090",
-		EnableSuspension:                true,
-		FlushIntervalBlocks:             1024,
-		BackgroundMetricsScrapeInterval: 60,
-		LogDir:                          "logs",
-		LogLevel:                        "info",
-		CleanDataOnStart:                false,
-		CleanLogsOnStart:                false,
-		CleanDataOnExit:                 false,
-		CleanLogsOnExit:                 false,
-		MaxBlocksPerSecond:              0,
-		PruneIntervalBlocks:             1000,
-	}
-}
+func DefaultBlocksimConfig() *BlocksimConfig { _ = "STUB: not implemented"; return nil }
 
 // Validate checks that the configuration is sane and returns an error if not.
-func (c *BlocksimConfig) Validate() error {
-	if c.BytesPerTransaction < 1 {
-		return fmt.Errorf("BytesPerTransaction must be at least 1 (got %d)", c.BytesPerTransaction)
-	}
-	if c.TransactionsPerBlock < 1 {
-		return fmt.Errorf("TransactionsPerBlock must be at least 1 (got %d)", c.TransactionsPerBlock)
-	}
-	if c.BlockHashSize < minHashSize {
-		return fmt.Errorf("BlockHashSize must be at least %d (got %d)", minHashSize, c.BlockHashSize)
-	}
-	if c.TransactionHashSize < minHashSize {
-		return fmt.Errorf("TransactionHashSize must be at least %d (got %d)", minHashSize, c.TransactionHashSize)
-	}
-	if c.StagedBlockQueueSize < 1 {
-		return fmt.Errorf("StagedBlockQueueSize must be at least 1 (got %d)", c.StagedBlockQueueSize)
-	}
-	if c.CannedRandomSize < minCannedRandomSize {
-		return fmt.Errorf("CannedRandomSize must be at least %d (got %d)",
-			minCannedRandomSize, c.CannedRandomSize)
-	}
-	if c.UnprunedBlocks < 1 {
-		return fmt.Errorf("UnprunedBlocks must be at least 1 (got %d)", c.UnprunedBlocks)
-	}
-	if c.DataDir == "" {
-		return fmt.Errorf("DataDir is required")
-	}
-	if c.LogDir == "" {
-		return fmt.Errorf("LogDir is required")
-	}
-	if c.ConsoleUpdateIntervalSeconds < 0 {
-		return fmt.Errorf("ConsoleUpdateIntervalSeconds must be non-negative (got %f)", c.ConsoleUpdateIntervalSeconds)
-	}
-	if c.MaxRuntimeSeconds < 0 {
-		return fmt.Errorf("MaxRuntimeSeconds must be non-negative (got %d)", c.MaxRuntimeSeconds)
-	}
-	if c.BackgroundMetricsScrapeInterval < 0 {
-		return fmt.Errorf("BackgroundMetricsScrapeInterval must be non-negative (got %d)", c.BackgroundMetricsScrapeInterval)
-	}
-	if c.MaxBlocksPerSecond < 0 {
-		return fmt.Errorf("MaxBlocksPerSecond must be non-negative (got %f)", c.MaxBlocksPerSecond)
-	}
-	if c.PruneIntervalBlocks < 1 {
-		return fmt.Errorf("PruneIntervalBlocks must be at least 1 (got %d)", c.PruneIntervalBlocks)
-	}
-	switch strings.ToLower(c.LogLevel) {
-	case "debug", "info", "warn", "error":
-	default:
-		return fmt.Errorf("LogLevel must be one of debug, info, warn, error (got %q)", c.LogLevel)
-	}
-	return nil
-}
+func (c *BlocksimConfig) Validate() error { _ = "STUB: not implemented"; return nil }

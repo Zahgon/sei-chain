@@ -5,13 +5,11 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_sei_protocol_sei_chain_sei_cosmos_types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -31,102 +29,65 @@ type FeesParams struct {
 	AllowedFeeDenoms       []string                                                    `protobuf:"bytes,2,rep,name=allowed_fee_denoms,json=allowedFeeDenoms,proto3" json:"allowed_fee_denoms,omitempty"`
 }
 
-func (m *FeesParams) Reset()         { *m = FeesParams{} }
-func (m *FeesParams) String() string { return proto.CompactTextString(m) }
-func (*FeesParams) ProtoMessage()    {}
-func (*FeesParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56d782f42fecdb16, []int{0}
-}
-func (m *FeesParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *FeesParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *FeesParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*FeesParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*FeesParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *FeesParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *FeesParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_FeesParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *FeesParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_FeesParams.Merge(m, src)
-}
-func (m *FeesParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *FeesParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_FeesParams.DiscardUnknown(m)
-}
+
+func (m *FeesParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *FeesParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *FeesParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_FeesParams proto.InternalMessageInfo
 
 func (m *FeesParams) GetGlobalMinimumGasPrices() github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins {
-	if m != nil {
-		return m.GlobalMinimumGasPrices
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_cosmos_types.DecCoins)
 }
 
-func (m *FeesParams) GetAllowedFeeDenoms() []string {
-	if m != nil {
-		return m.AllowedFeeDenoms
-	}
-	return nil
-}
+func (m *FeesParams) GetAllowedFeeDenoms() []string { _ = "STUB: not implemented"; return nil }
 
 type CosmosGasParams struct {
 	CosmosGasMultiplierNumerator   uint64 `protobuf:"varint,1,opt,name=cosmos_gas_multiplier_numerator,json=cosmosGasMultiplierNumerator,proto3" json:"cosmos_gas_multiplier_numerator,string,omitempty"`
 	CosmosGasMultiplierDenominator uint64 `protobuf:"varint,2,opt,name=cosmos_gas_multiplier_denominator,json=cosmosGasMultiplierDenominator,proto3" json:"cosmos_gas_multiplier_denominator,string,omitempty"`
 }
 
-func (m *CosmosGasParams) Reset()         { *m = CosmosGasParams{} }
-func (m *CosmosGasParams) String() string { return proto.CompactTextString(m) }
-func (*CosmosGasParams) ProtoMessage()    {}
-func (*CosmosGasParams) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56d782f42fecdb16, []int{1}
-}
-func (m *CosmosGasParams) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *CosmosGasParams) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *CosmosGasParams) String() string            { _ = "STUB: not implemented"; return "" }
+func (*CosmosGasParams) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*CosmosGasParams) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *CosmosGasParams) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *CosmosGasParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_CosmosGasParams.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *CosmosGasParams) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CosmosGasParams.Merge(m, src)
-}
-func (m *CosmosGasParams) XXX_Size() int {
-	return m.Size()
-}
-func (m *CosmosGasParams) XXX_DiscardUnknown() {
-	xxx_messageInfo_CosmosGasParams.DiscardUnknown(m)
-}
+
+func (m *CosmosGasParams) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *CosmosGasParams) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *CosmosGasParams) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_CosmosGasParams proto.InternalMessageInfo
 
 func (m *CosmosGasParams) GetCosmosGasMultiplierNumerator() uint64 {
-	if m != nil {
-		return m.CosmosGasMultiplierNumerator
-	}
+	_ = "STUB: not implemented"
 	return 0
 }
 
 func (m *CosmosGasParams) GetCosmosGasMultiplierDenominator() uint64 {
-	if m != nil {
-		return m.CosmosGasMultiplierDenominator
-	}
+	_ = "STUB: not implemented"
 	return 0
 }
 
@@ -135,51 +96,34 @@ type GenesisState struct {
 	CosmosGasParams CosmosGasParams `protobuf:"bytes,2,opt,name=cosmos_gas_params,json=cosmosGasParams,proto3" json:"cosmos_gas_params"`
 }
 
-func (m *GenesisState) Reset()         { *m = GenesisState{} }
-func (m *GenesisState) String() string { return proto.CompactTextString(m) }
-func (*GenesisState) ProtoMessage()    {}
-func (*GenesisState) Descriptor() ([]byte, []int) {
-	return fileDescriptor_56d782f42fecdb16, []int{2}
-}
-func (m *GenesisState) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *GenesisState) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *GenesisState) String() string            { _ = "STUB: not implemented"; return "" }
+func (*GenesisState) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*GenesisState) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *GenesisState) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *GenesisState) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_GenesisState.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *GenesisState) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_GenesisState.Merge(m, src)
-}
-func (m *GenesisState) XXX_Size() int {
-	return m.Size()
-}
-func (m *GenesisState) XXX_DiscardUnknown() {
-	xxx_messageInfo_GenesisState.DiscardUnknown(m)
-}
+
+func (m *GenesisState) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *GenesisState) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *GenesisState) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_GenesisState proto.InternalMessageInfo
 
 func (m *GenesisState) GetFeesParams() FeesParams {
-	if m != nil {
-		return m.FeesParams
-	}
-	return FeesParams{}
+	_ = "STUB: not implemented"
+	return *new(FeesParams)
 }
 
 func (m *GenesisState) GetCosmosGasParams() CosmosGasParams {
-	if m != nil {
-		return m.CosmosGasParams
-	}
-	return CosmosGasParams{}
+	_ = "STUB: not implemented"
+	return *new(CosmosGasParams)
 }
 
 func init() {
@@ -224,683 +168,70 @@ var fileDescriptor_56d782f42fecdb16 = []byte{
 	0x00, 0x00, 0xff, 0xff, 0x56, 0x9c, 0x40, 0xbe, 0x77, 0x03, 0x00, 0x00,
 }
 
-func (this *FeesParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *FeesParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*FeesParams)
-	if !ok {
-		that2, ok := that.(FeesParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if len(this.GlobalMinimumGasPrices) != len(that1.GlobalMinimumGasPrices) {
-		return false
-	}
-	for i := range this.GlobalMinimumGasPrices {
-		if !this.GlobalMinimumGasPrices[i].Equal(&that1.GlobalMinimumGasPrices[i]) {
-			return false
-		}
-	}
-	if len(this.AllowedFeeDenoms) != len(that1.AllowedFeeDenoms) {
-		return false
-	}
-	for i := range this.AllowedFeeDenoms {
-		if this.AllowedFeeDenoms[i] != that1.AllowedFeeDenoms[i] {
-			return false
-		}
-	}
-	return true
-}
-func (this *CosmosGasParams) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *CosmosGasParams) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*CosmosGasParams)
-	if !ok {
-		that2, ok := that.(CosmosGasParams)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if this.CosmosGasMultiplierNumerator != that1.CosmosGasMultiplierNumerator {
-		return false
-	}
-	if this.CosmosGasMultiplierDenominator != that1.CosmosGasMultiplierDenominator {
-		return false
-	}
-	return true
-}
-func (this *GenesisState) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
+func (this *GenesisState) Equal(that interface{}) bool { _ = "STUB: not implemented"; return false }
 
-	that1, ok := that.(*GenesisState)
-	if !ok {
-		that2, ok := that.(GenesisState)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.FeesParams.Equal(&that1.FeesParams) {
-		return false
-	}
-	if !this.CosmosGasParams.Equal(&that1.CosmosGasParams) {
-		return false
-	}
-	return true
-}
-func (m *FeesParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *FeesParams) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *FeesParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *FeesParams) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *FeesParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.AllowedFeeDenoms) > 0 {
-		for iNdEx := len(m.AllowedFeeDenoms) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.AllowedFeeDenoms[iNdEx])
-			copy(dAtA[i:], m.AllowedFeeDenoms[iNdEx])
-			i = encodeVarintTypes(dAtA, i, uint64(len(m.AllowedFeeDenoms[iNdEx])))
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if len(m.GlobalMinimumGasPrices) > 0 {
-		for iNdEx := len(m.GlobalMinimumGasPrices) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.GlobalMinimumGasPrices[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintTypes(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0xa
-		}
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CosmosGasParams) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *CosmosGasParams) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *CosmosGasParams) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.CosmosGasMultiplierDenominator != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.CosmosGasMultiplierDenominator))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.CosmosGasMultiplierNumerator != 0 {
-		i = encodeVarintTypes(dAtA, i, uint64(m.CosmosGasMultiplierNumerator))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GenesisState) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *GenesisState) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *GenesisState) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	{
-		size, err := m.CosmosGasParams.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTypes(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0x12
-	{
-		size, err := m.FeesParams.MarshalToSizedBuffer(dAtA[:i])
-		if err != nil {
-			return 0, err
-		}
-		i -= size
-		i = encodeVarintTypes(dAtA, i, uint64(size))
-	}
-	i--
-	dAtA[i] = 0xa
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintTypes(dAtA []byte, offset int, v uint64) int {
-	offset -= sovTypes(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *FeesParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if len(m.GlobalMinimumGasPrices) > 0 {
-		for _, e := range m.GlobalMinimumGasPrices {
-			l = e.Size()
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	if len(m.AllowedFeeDenoms) > 0 {
-		for _, s := range m.AllowedFeeDenoms {
-			l = len(s)
-			n += 1 + l + sovTypes(uint64(l))
-		}
-	}
-	return n
-}
+func encodeVarintTypes(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func (m *CosmosGasParams) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.CosmosGasMultiplierNumerator != 0 {
-		n += 1 + sovTypes(uint64(m.CosmosGasMultiplierNumerator))
-	}
-	if m.CosmosGasMultiplierDenominator != 0 {
-		n += 1 + sovTypes(uint64(m.CosmosGasMultiplierDenominator))
-	}
-	return n
-}
+func (m *FeesParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *GenesisState) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = m.FeesParams.Size()
-	n += 1 + l + sovTypes(uint64(l))
-	l = m.CosmosGasParams.Size()
-	n += 1 + l + sovTypes(uint64(l))
-	return n
-}
+func (m *CosmosGasParams) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovTypes(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozTypes(x uint64) (n int) {
-	return sovTypes(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *FeesParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: FeesParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: FeesParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GlobalMinimumGasPrices", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.GlobalMinimumGasPrices = append(m.GlobalMinimumGasPrices, types.DecCoin{})
-			if err := m.GlobalMinimumGasPrices[len(m.GlobalMinimumGasPrices)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AllowedFeeDenoms", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.AllowedFeeDenoms = append(m.AllowedFeeDenoms, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *GenesisState) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *CosmosGasParams) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: CosmosGasParams: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: CosmosGasParams: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CosmosGasMultiplierNumerator", wireType)
-			}
-			m.CosmosGasMultiplierNumerator = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CosmosGasMultiplierNumerator |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CosmosGasMultiplierDenominator", wireType)
-			}
-			m.CosmosGasMultiplierDenominator = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CosmosGasMultiplierDenominator |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovTypes(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *GenesisState) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: GenesisState: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: GenesisState: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FeesParams", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.FeesParams.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CosmosGasParams", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthTypes
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if err := m.CosmosGasParams.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipTypes(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthTypes
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sozTypes(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipTypes(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowTypes
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowTypes
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthTypes
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupTypes
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthTypes
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func (m *FeesParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *CosmosGasParams) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *GenesisState) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipTypes(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthTypes        = fmt.Errorf("proto: negative length found during unmarshaling")

@@ -7,10 +7,6 @@ import (
 )
 
 func HandleUpdateMinterProposal(ctx sdk.Context, k *keeper.Keeper, p *types.UpdateMinterProposal) error {
-	err := types.ValidateMinter(*p.Minter)
-	if err != nil {
-		return err
-	}
-	k.SetMinter(ctx, *p.Minter)
+	_ = "STUB: not implemented"
 	return nil
 }

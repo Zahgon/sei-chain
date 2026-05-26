@@ -1,8 +1,6 @@
 package rootmulti
 
 import (
-	"fmt"
-
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/dbadapter"
@@ -21,44 +19,29 @@ type commitDBStoreAdapter struct {
 }
 
 func (cdsa commitDBStoreAdapter) Commit(_ bool) types.CommitID {
-	return types.CommitID{
-		Version: -1,
-		Hash:    commithash,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.CommitID)
 }
 
 func (cdsa commitDBStoreAdapter) LastCommitID() types.CommitID {
-	return types.CommitID{
-		Version: -1,
-		Hash:    commithash,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.CommitID)
 }
 
-func (cdsa commitDBStoreAdapter) SetPruning(_ types.PruningOptions) {}
+func (cdsa commitDBStoreAdapter) SetPruning(_ types.PruningOptions) {
+	_ = "STUB: not implemented"
 
-// GetPruning is a no-op as pruning options cannot be directly set on this store.
-// They must be set on the root commit multi-store.
-func (cdsa commitDBStoreAdapter) GetPruning() types.PruningOptions { return types.PruningOptions{} }
+	// GetPruning is a no-op as pruning options cannot be directly set on this store.
+	// They must be set on the root commit multi-store.
+	return
+}
+
+func (cdsa commitDBStoreAdapter) GetPruning() types.PruningOptions {
+	_ = "STUB: not implemented"
+	return *new(types.PruningOptions)
+}
 
 func (cdsa commitDBStoreAdapter) Query(req abci.RequestQuery) abci.ResponseQuery {
-	if len(req.Data) == 0 {
-		return abci.ResponseQuery{
-			Code: 1,
-			Log:  "query data must not be empty",
-		}
-	}
-
-	switch req.Path {
-	case "/key":
-		val := cdsa.Get(req.Data)
-		return abci.ResponseQuery{
-			Key:   req.Data,
-			Value: val,
-		}
-	default:
-		return abci.ResponseQuery{
-			Code: 1,
-			Log:  fmt.Sprintf("unexpected query path: %s", req.Path),
-		}
-	}
+	_ = "STUB: not implemented"
+	return *new(abci.ResponseQuery)
 }

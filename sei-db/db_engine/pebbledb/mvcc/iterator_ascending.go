@@ -1,15 +1,9 @@
 package mvcc
 
 import (
-	"bytes"
-	"context"
-	"fmt"
 	"sync"
 
 	"github.com/cockroachdb/pebble/v2"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/metric"
-	"golang.org/x/exp/slices"
 
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/types"
 )
@@ -40,359 +34,133 @@ type ascendingIterator struct {
 }
 
 func newAscendingIterator(src *pebble.Iterator, prefix, mvccStart, mvccEnd []byte, version int64, earliestVersion int64, reverse bool, storeKey string) *ascendingIterator {
+	_ = "STUB: not implemented"
 	// Return invalid iterator if requested iterator height is lower than earliest version after pruning
-	if version < earliestVersion {
-		return &ascendingIterator{
-			source:   src,
-			prefix:   prefix,
-			start:    mvccStart,
-			end:      mvccEnd,
-			version:  version,
-			valid:    false,
-			reverse:  reverse,
-			storeKey: storeKey,
-		}
-	}
-
-	// move the underlying PebbleDB iterator to the first key
-	var valid bool
-	if reverse {
-		valid = src.Last()
-	} else {
-		valid = src.First()
-	}
-
-	itr := &ascendingIterator{
-		source:   src,
-		prefix:   prefix,
-		start:    mvccStart,
-		end:      mvccEnd,
-		version:  version,
-		valid:    valid,
-		reverse:  reverse,
-		storeKey: storeKey,
-	}
-
-	if valid {
-		currKey, currKeyVersion, ok := SplitMVCCKey(itr.source.Key())
-		if !ok {
-			// XXX: This should not happen as that would indicate we have a malformed MVCC key.
-			panic(fmt.Sprintf("invalid PebbleDB MVCC key: %s", itr.source.Key()))
-		}
-
-		curKeyVersionDecoded, err := decodeUint64Ascending(currKeyVersion)
-		if err != nil {
-			itr.valid = false
-			return itr
-		}
-
-		// We need to check whether initial key iterator visits has a version <= requested version
-		// If larger version, call next to find another key which does
-		if curKeyVersionDecoded > itr.version {
-			itr.Next()
-		} else {
-			// If version is less, seek to the largest version of that key <= requested iterator version
-			// It is guaranteed this won't move the iterator to a key that is invalid since
-			// curKeyVersionDecoded <= requested iterator version, so there exists at least one version of currKey SeekLT may move to
-			itr.valid = itr.source.SeekLT(MVCCEncodeAscending(currKey, itr.version+1))
-		}
-	}
-
-	// Make sure we skip to the next key if the current one is tombstone
-	// Only check if iterator is still valid after the seek/next operations above
-	if itr.valid && valTombstoned(itr.source.Value()) {
-		if reverse {
-			itr.nextReverse()
-		} else {
-			itr.nextForward()
-		}
-	}
-
-	return itr
-}
-
-// Domain returns the domain of the iterator. The caller must not modify the
-// return values.
-func (itr *ascendingIterator) Domain() ([]byte, []byte) {
-	return itr.start, itr.end
-}
-
-func (itr *ascendingIterator) Key() []byte {
-	itr.assertIsValid()
-
-	key, _, ok := SplitMVCCKey(itr.source.Key())
-	if !ok {
-		// XXX: This should not happen as that would indicate we have a malformed
-		// MVCC key.
-		panic(fmt.Sprintf("invalid PebbleDB MVCC key: %s", itr.source.Key()))
-	}
-
-	keyCopy := slices.Clone(key)
-	return keyCopy[len(itr.prefix):]
-}
-
-func (itr *ascendingIterator) Value() []byte {
-	itr.assertIsValid()
-
-	val, _, ok := SplitMVCCKey(itr.source.Value())
-	if !ok {
-		// XXX: This should not happen as that would indicate we have a malformed
-		// MVCC value.
-		panic(fmt.Sprintf("invalid PebbleDB MVCC value: %s", itr.source.Key()))
-	}
-
-	return slices.Clone(val)
-}
-
-func (itr *ascendingIterator) nextForward() {
-	if !itr.source.Valid() {
-		itr.valid = false
-		return
-	}
-
-	currKey, _, ok := SplitMVCCKey(itr.source.Key())
-	if !ok {
-		// XXX: This should not happen as that would indicate we have a malformed
-		// MVCC key.
-		panic(fmt.Sprintf("invalid PebbleDB MVCC key: %s", itr.source.Key()))
-	}
-
-	next := itr.source.NextPrefix()
-
-	// First move the iterator to the next prefix, which may not correspond to the
-	// desired version for that key, e.g. if the key was written at a later version,
-	// so we seek back to the latest desired version, s.t. the version is <= itr.version.
-	if next {
-		nextKey, _, ok := SplitMVCCKey(itr.source.Key())
-		if !ok {
-			// XXX: This should not happen as that would indicate we have a malformed
-			// MVCC key.
-			itr.valid = false
-			return
-		}
-		if !bytes.HasPrefix(nextKey, itr.prefix) {
-			// the next key must have itr.prefix as the prefix
-			itr.valid = false
-			return
-		}
-
-		// Move the iterator to the closest version to the desired version, so we
-		// append the current iterator key to the prefix and seek to that key.
-		itr.valid = itr.source.SeekLT(MVCCEncodeAscending(nextKey, itr.version+1))
-
-		tmpKey, tmpKeyVersion, ok := SplitMVCCKey(itr.source.Key())
-		if !ok {
-			// XXX: This should not happen as that would indicate we have a malformed
-			// MVCC key.
-			itr.valid = false
-			return
-		}
-
-		// There exists cases where the SeekLT() call moved us back to the same key
-		// we started at, so we must move to next key, i.e. two keys forward.
-		if bytes.Equal(tmpKey, currKey) {
-			if itr.source.NextPrefix() {
-				itr.nextForward()
-
-				_, tmpKeyVersion, ok = SplitMVCCKey(itr.source.Key())
-				if !ok {
-					// XXX: This should not happen as that would indicate we have a malformed
-					// MVCC key.
-					itr.valid = false
-					return
-				}
-
-			} else {
-				itr.valid = false
-				return
-			}
-		}
-
-		// We need to verify that every Next call either moves the iterator to a key whose version
-		// is less than or equal to requested iterator version, or exhausts the iterator
-		tmpKeyVersionDecoded, err := decodeUint64Ascending(tmpKeyVersion)
-		if err != nil {
-			itr.valid = false
-			return
-		}
-
-		// If iterator is at a entry whose version is higher than requested version, call nextForward again
-		if tmpKeyVersionDecoded > itr.version {
-			itr.nextForward()
-		}
-
-		// The cursor might now be pointing at a key/value pair that is tombstoned.
-		// If so, we must move the cursor.
-		if itr.valid && itr.cursorTombstoned() {
-			itr.nextForward()
-		}
-
-		return
-	}
-
-	itr.valid = false
-}
-
-func (itr *ascendingIterator) nextReverse() {
-	if !itr.source.Valid() {
-		itr.valid = false
-		return
-	}
-
-	currKey, _, ok := SplitMVCCKey(itr.source.Key())
-	if !ok {
-		// XXX: This should not happen as that would indicate we have a malformed
-		// MVCC key.
-		panic(fmt.Sprintf("invalid PebbleDB MVCC key: %s", itr.source.Key()))
-	}
-
-	next := itr.source.SeekLT(MVCCEncodeAscending(currKey, 0))
-
-	// First move the iterator to the next prefix, which may not correspond to the
-	// desired version for that key, e.g. if the key was written at a later version,
-	// so we seek back to the latest desired version, s.t. the version is <= itr.version.
-	if next {
-		nextKey, _, ok := SplitMVCCKey(itr.source.Key())
-		if !ok {
-			// XXX: This should not happen as that would indicate we have a malformed
-			// MVCC key.
-			itr.valid = false
-			return
-		}
-		if !bytes.HasPrefix(nextKey, itr.prefix) {
-			// the next key must have itr.prefix as the prefix
-			itr.valid = false
-			return
-		}
-
-		// Move the iterator to the closest version to the desired version, so we
-		// append the current iterator key to the prefix and seek to that key.
-		itr.valid = itr.source.SeekLT(MVCCEncodeAscending(nextKey, itr.version+1))
-
-		_, tmpKeyVersion, ok := SplitMVCCKey(itr.source.Key())
-		if !ok {
-			// XXX: This should not happen as that would indicate we have a malformed
-			// MVCC key.
-			itr.valid = false
-			return
-		}
-
-		// We need to verify that every Next call either moves the iterator to a key whose version
-		// is less than or equal to requested iterator version, or exhausts the iterator
-		tmpKeyVersionDecoded, err := decodeUint64Ascending(tmpKeyVersion)
-		if err != nil {
-			itr.valid = false
-			return
-		}
-
-		// If iterator is at a entry whose version is higher than requested version, call nextReverse again
-		if tmpKeyVersionDecoded > itr.version {
-			itr.nextReverse()
-		}
-
-		// The cursor might now be pointing at a key/value pair that is tombstoned.
-		// If so, we must move the cursor.
-		if itr.valid && itr.cursorTombstoned() {
-			itr.nextReverse()
-		}
-
-		return
-	}
-
-	itr.valid = false
-}
-
-func (itr *ascendingIterator) Next() {
-	itr.iterationCount++
-
-	if itr.reverse {
-		itr.nextReverse()
-	} else {
-		itr.nextForward()
-	}
-}
-
-func (itr *ascendingIterator) Valid() bool {
-	// once invalid, forever invalid
-	if !itr.valid || !itr.source.Valid() {
-		itr.valid = false
-		return itr.valid
-	}
-
-	// if source has error, consider it invalid
-	if err := itr.source.Error(); err != nil {
-		itr.valid = false
-		return itr.valid
-	}
-
-	// if key is at the end or past it, consider it invalid
-	if end := itr.end; end != nil {
-		if bytes.Compare(end, itr.Key()) <= 0 {
-			itr.valid = false
-			return itr.valid
-		}
-	}
-
-	return true
-}
-
-func (itr *ascendingIterator) Error() error {
-	return itr.source.Error()
-}
-
-func (itr *ascendingIterator) Close() error {
-	itr.closeSync.Do(func() {
-		_ = itr.source.Close()
-		itr.source = nil
-		itr.valid = false
-
-		// Record the number of iterations performed by this iterator
-		otelMetrics.iteratorIterations.Record(
-			context.Background(),
-			float64(itr.iterationCount),
-			metric.WithAttributes(
-				attribute.Bool("reverse", itr.reverse),
-				attribute.String("store", itr.storeKey),
-			),
-		)
-	})
 	return nil
 }
 
-func (itr *ascendingIterator) assertIsValid() {
-	if !itr.valid {
-		panic("iterator is invalid")
-	}
+// move the underlying PebbleDB iterator to the first key
+
+// XXX: This should not happen as that would indicate we have a malformed MVCC key.
+
+// We need to check whether initial key iterator visits has a version <= requested version
+// If larger version, call next to find another key which does
+
+// If version is less, seek to the largest version of that key <= requested iterator version
+// It is guaranteed this won't move the iterator to a key that is invalid since
+// curKeyVersionDecoded <= requested iterator version, so there exists at least one version of currKey SeekLT may move to
+
+// Make sure we skip to the next key if the current one is tombstone
+// Only check if iterator is still valid after the seek/next operations above
+
+// Domain returns the domain of the iterator. The caller must not modify the
+// return values.
+func (itr *ascendingIterator) Domain() ([]byte, []byte) { _ = "STUB: not implemented"; return nil, nil }
+
+func (itr *ascendingIterator) Key() []byte { _ = "STUB: not implemented"; return nil }
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC key.
+
+func (itr *ascendingIterator) Value() []byte { _ = "STUB: not implemented"; return nil }
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC value.
+
+func (itr *ascendingIterator) nextForward() { _ = "STUB: not implemented"; return }
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC key.
+
+// First move the iterator to the next prefix, which may not correspond to the
+// desired version for that key, e.g. if the key was written at a later version,
+// so we seek back to the latest desired version, s.t. the version is <= itr.version.
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC key.
+
+// the next key must have itr.prefix as the prefix
+
+// Move the iterator to the closest version to the desired version, so we
+// append the current iterator key to the prefix and seek to that key.
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC key.
+
+// There exists cases where the SeekLT() call moved us back to the same key
+// we started at, so we must move to next key, i.e. two keys forward.
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC key.
+
+// We need to verify that every Next call either moves the iterator to a key whose version
+// is less than or equal to requested iterator version, or exhausts the iterator
+
+// If iterator is at a entry whose version is higher than requested version, call nextForward again
+
+// The cursor might now be pointing at a key/value pair that is tombstoned.
+// If so, we must move the cursor.
+
+func (itr *ascendingIterator) nextReverse() { _ = "STUB: not implemented"; return }
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC key.
+
+// First move the iterator to the next prefix, which may not correspond to the
+// desired version for that key, e.g. if the key was written at a later version,
+// so we seek back to the latest desired version, s.t. the version is <= itr.version.
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC key.
+
+// the next key must have itr.prefix as the prefix
+
+// Move the iterator to the closest version to the desired version, so we
+// append the current iterator key to the prefix and seek to that key.
+
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC key.
+
+// We need to verify that every Next call either moves the iterator to a key whose version
+// is less than or equal to requested iterator version, or exhausts the iterator
+
+// If iterator is at a entry whose version is higher than requested version, call nextReverse again
+
+// The cursor might now be pointing at a key/value pair that is tombstoned.
+// If so, we must move the cursor.
+
+func (itr *ascendingIterator) Next() { _ = "STUB: not implemented"; return }
+
+func (itr *ascendingIterator) Valid() bool {
+	_ = "STUB: not implemented"
+	// once invalid, forever invalid
+	return false
 }
+
+// if source has error, consider it invalid
+
+// if key is at the end or past it, consider it invalid
+
+func (itr *ascendingIterator) Error() error { _ = "STUB: not implemented"; return nil }
+
+func (itr *ascendingIterator) Close() error { _ = "STUB: not implemented"; return nil }
+
+// Record the number of iterations performed by this iterator
+
+func (itr *ascendingIterator) assertIsValid() { _ = "STUB: not implemented"; return }
 
 // cursorTombstoned checks if the current cursor is pointing at a key/value pair
 // that is tombstoned. If the cursor is tombstoned, <true> is returned, otherwise
 // <false> is returned. In the case where the iterator is valid but the key/value
 // pair is tombstoned, the caller should call Next(). Note, this method assumes
 // the caller assures the iterator is valid first!
-func (itr *ascendingIterator) cursorTombstoned() bool {
-	_, tombBz, ok := SplitMVCCKey(itr.source.Value())
-	if !ok {
-		// XXX: This should not happen as that would indicate we have a malformed
-		// MVCC value.
-		panic(fmt.Sprintf("invalid PebbleDB MVCC value: %s", itr.source.Key()))
-	}
+func (itr *ascendingIterator) cursorTombstoned() bool { _ = "STUB: not implemented"; return false }
 
-	// If the tombstone suffix is empty, we consider this a zero value and thus it
-	// is not tombstoned.
-	if len(tombBz) == 0 {
-		return false
-	}
+// XXX: This should not happen as that would indicate we have a malformed
+// MVCC value.
 
-	// If the tombstone suffix is non-empty and greater than the target version,
-	// the value is not tombstoned.
-	tombstone, err := decodeUint64Ascending(tombBz)
-	if err != nil {
-		panic(fmt.Errorf("failed to decode value tombstone: %w", err))
-	}
-	if tombstone > itr.version {
-		return false
-	}
+// If the tombstone suffix is empty, we consider this a zero value and thus it
+// is not tombstoned.
 
-	return true
-}
+// If the tombstone suffix is non-empty and greater than the target version,
+// the value is not tombstoned.

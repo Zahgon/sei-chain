@@ -2,10 +2,4 @@
 
 package v152
 
-import (
-	"fmt"
-)
-
-func libwasmvmVersionImpl() (string, error) {
-	return "", fmt.Errorf("libwasmvm unavailable since cgo is disabled")
-}
+func libwasmvmVersionImpl() (string, error) { _ = "STUB: not implemented"; return "", nil }

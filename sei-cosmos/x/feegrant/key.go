@@ -2,8 +2,6 @@ package feegrant
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/address"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
 )
 
 const (
@@ -28,24 +26,21 @@ var (
 // FeeAllowanceKey is the canonical key to store a grant from granter to grantee
 // We store by grantee first to allow searching by everyone who granted to you
 func FeeAllowanceKey(granter sdk.AccAddress, grantee sdk.AccAddress) []byte {
-	return append(FeeAllowancePrefixByGrantee(grantee), address.MustLengthPrefix(granter.Bytes())...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // FeeAllowancePrefixByGrantee returns a prefix to scan for all grants to this given address.
 func FeeAllowancePrefixByGrantee(grantee sdk.AccAddress) []byte {
-	return append(FeeAllowanceKeyPrefix, address.MustLengthPrefix(grantee.Bytes())...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func ParseAddressesFromFeeAllowanceKey(key []byte) (granter, grantee sdk.AccAddress) {
+	_ = "STUB: not implemented"
 	// key is of format:
 	// 0x00<granteeAddressLen (1 Byte)><granteeAddress_Bytes><granterAddressLen (1 Byte)><granterAddress_Bytes><msgType_Bytes>
-	kv.AssertKeyAtLeastLength(key, 2)
-	granteeAddrLen := key[1] // remove prefix key
-	kv.AssertKeyAtLeastLength(key, int(2+granteeAddrLen))
-	grantee = sdk.AccAddress(key[2 : 2+granteeAddrLen])
-	granterAddrLen := int(key[2+granteeAddrLen])
-	kv.AssertKeyAtLeastLength(key, 3+int(granteeAddrLen+byte(granterAddrLen)))
-	granter = sdk.AccAddress(key[3+granterAddrLen : 3+granteeAddrLen+byte(granterAddrLen)])
-
-	return granter, grantee
+	return *new(sdk.AccAddress), *new(sdk.AccAddress)
 }
+
+// remove prefix key

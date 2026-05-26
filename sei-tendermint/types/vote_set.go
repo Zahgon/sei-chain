@@ -1,10 +1,6 @@
 package types
 
 import (
-	"bytes"
-	"encoding/json"
-	"fmt"
-	"strings"
 	"sync"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bits"
@@ -72,59 +68,23 @@ type VoteSet struct {
 // that no vote extension data be present on the votes that are added to the set.
 func NewVoteSet(chainID string, height int64, round int32,
 	signedMsgType tmproto.SignedMsgType, valSet *ValidatorSet) *VoteSet {
-	if height == 0 {
-		panic("Cannot make VoteSet for height == 0, doesn't make sense.")
-	}
-	return &VoteSet{
-		chainID:       chainID,
-		height:        height,
-		round:         round,
-		signedMsgType: signedMsgType,
-		valSet:        valSet,
-		votesBitArray: bits.NewBitArray(valSet.Size()),
-		votes:         make([]*Vote, valSet.Size()),
-		sum:           0,
-		maj23:         nil,
-		votesByBlock:  make(map[string]*blockVotes, valSet.Size()),
-		peerMaj23s:    make(map[string]BlockID),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (voteSet *VoteSet) ChainID() string {
-	return voteSet.chainID
-}
+func (voteSet *VoteSet) ChainID() string { _ = "STUB: not implemented"; return "" }
 
 // Implements VoteSetReader.
-func (voteSet *VoteSet) GetHeight() int64 {
-	if voteSet == nil {
-		return 0
-	}
-	return voteSet.height
-}
+func (voteSet *VoteSet) GetHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Implements VoteSetReader.
-func (voteSet *VoteSet) GetRound() int32 {
-	if voteSet == nil {
-		return -1
-	}
-	return voteSet.round
-}
+func (voteSet *VoteSet) GetRound() int32 { _ = "STUB: not implemented"; return 0 }
 
 // Implements VoteSetReader.
-func (voteSet *VoteSet) Type() byte {
-	if voteSet == nil {
-		return 0x00
-	}
-	return byte(voteSet.signedMsgType)
-}
+func (voteSet *VoteSet) Type() byte { _ = "STUB: not implemented"; return 0 }
 
 // Implements VoteSetReader.
-func (voteSet *VoteSet) Size() int {
-	if voteSet == nil {
-		return 0
-	}
-	return voteSet.valSet.Size()
-}
+func (voteSet *VoteSet) Size() int { _ = "STUB: not implemented"; return 0 }
 
 // Returns added=true if vote is valid and new.
 // Otherwise returns err=ErrVote[
@@ -138,81 +98,35 @@ func (voteSet *VoteSet) Size() int {
 // NOTE: VoteSet must not be nil
 // NOTE: Vote must not be nil
 func (voteSet *VoteSet) AddVote(vote *Vote) (added bool, err error) {
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return voteSet.addVote(vote)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
 // NOTE: Validates as much as possible before attempting to verify the signature.
 func (voteSet *VoteSet) addVote(vote *Vote) (added bool, err error) {
-	valIndex := vote.ValidatorIndex
-	valAddr := vote.ValidatorAddress
-	blockKey := vote.BlockID.Key()
-
-	// Ensure that validator index was set
-	if valIndex < 0 {
-		return false, fmt.Errorf("index < 0: %w", ErrVoteInvalidValidatorIndex)
-	} else if len(valAddr) == 0 {
-		return false, fmt.Errorf("empty address: %w", ErrVoteInvalidValidatorAddress)
-	}
-
-	// Make sure the step matches.
-	if (vote.Height != voteSet.height) ||
-		(vote.Round != voteSet.round) ||
-		(vote.Type != voteSet.signedMsgType) {
-		return false, fmt.Errorf("expected %d/%d/%d, but got %d/%d/%d: %w",
-			voteSet.height, voteSet.round, voteSet.signedMsgType,
-			vote.Height, vote.Round, vote.Type, ErrVoteUnexpectedStep)
-	}
-
-	// Ensure that signer is a validator.
-	lookupAddr, val, ok := voteSet.valSet.GetByIndex(valIndex)
-	if !ok {
-		return false, fmt.Errorf(
-			"cannot find validator %d in valSet of size %d: %w",
-			valIndex, voteSet.valSet.Size(), ErrVoteInvalidValidatorIndex)
-	}
-
-	// Ensure that the signer has the right address.
-	if !bytes.Equal(valAddr, lookupAddr) {
-		return false, fmt.Errorf(
-			"vote.ValidatorAddress (%X) does not match address (%X) for vote.ValidatorIndex (%d)\n"+
-				"Ensure the genesis file is correct across all validators: %w",
-			valAddr, lookupAddr, valIndex, ErrVoteInvalidValidatorAddress)
-	}
-
-	// If we already know of this vote, return false.
-	if existing, ok := voteSet.getVote(valIndex, blockKey); ok {
-		if existing.Signature == vote.Signature {
-			return false, nil // duplicate
-		}
-		return false, fmt.Errorf("existing vote: %v; new vote: %v: %w", existing, vote, ErrVoteNonDeterministicSignature)
-	}
-
-	// Check signature.
-	if err := vote.Verify(voteSet.chainID, val.PubKey); err != nil {
-		return false, fmt.Errorf("failed to verify vote with ChainID %s and PubKey %s: %w", voteSet.chainID, val.PubKey, err)
-	}
-
-	// Add vote and get conflicting vote if any.
-	added, conflicting := voteSet.addVerifiedVote(vote, blockKey, val.VotingPower)
-	if conflicting != nil {
-		return added, NewConflictingVoteError(conflicting, vote)
-	}
-	if !added {
-		panic("Expected to add non-conflicting vote")
-	}
-	return added, nil
+	_ = "STUB: not implemented"
+	return false, nil
 }
+
+// Ensure that validator index was set
+
+// Make sure the step matches.
+
+// Ensure that signer is a validator.
+
+// Ensure that the signer has the right address.
+
+// If we already know of this vote, return false.
+
+// duplicate
+
+// Check signature.
+
+// Add vote and get conflicting vote if any.
 
 // Returns (vote, true) if vote exists for valIndex and blockKey.
 func (voteSet *VoteSet) getVote(valIndex int32, blockKey string) (vote *Vote, ok bool) {
-	if existing := voteSet.votes[valIndex]; existing != nil && existing.BlockID.Key() == blockKey {
-		return existing, true
-	}
-	if existing := voteSet.votesByBlock[blockKey].getByIndex(valIndex); existing != nil {
-		return existing, true
-	}
+	_ = "STUB: not implemented"
 	return nil, false
 }
 
@@ -223,73 +137,41 @@ func (voteSet *VoteSet) addVerifiedVote(
 	blockKey string,
 	votingPower int64,
 ) (added bool, conflicting *Vote) {
-	valIndex := vote.ValidatorIndex
+	_ = "STUB: not implemented"
+	return false, nil
 
 	// Already exists in voteSet.votes?
-	if existing := voteSet.votes[valIndex]; existing != nil {
-		if existing.BlockID.Equals(vote.BlockID) {
-			panic("addVerifiedVote does not expect duplicate votes")
-		} else {
-			conflicting = existing
-		}
-		// Replace vote if blockKey matches voteSet.maj23.
-		if voteSet.maj23 != nil && voteSet.maj23.Key() == blockKey {
-			voteSet.votes[valIndex] = vote
-			voteSet.votesBitArray.SetIndex(int(valIndex), true)
-		}
-		// Otherwise don't add it to voteSet.votes
-	} else {
-		// Add to voteSet.votes and incr .sum
-		voteSet.votes[valIndex] = vote
-		voteSet.votesBitArray.SetIndex(int(valIndex), true)
-		voteSet.sum += votingPower
-	}
-
-	votesByBlock, ok := voteSet.votesByBlock[blockKey]
-	if ok {
-		if conflicting != nil && !votesByBlock.peerMaj23 {
-			// There's a conflict and no peer claims that this block is special.
-			return false, conflicting
-		}
-		// We'll add the vote in a bit.
-	} else {
-		// .votesByBlock doesn't exist...
-		if conflicting != nil {
-			// ... and there's a conflicting vote.
-			// We're not even tracking this blockKey, so just forget it.
-			return false, conflicting
-		}
-		// ... and there's no conflicting vote.
-		// Start tracking this blockKey
-		votesByBlock = newBlockVotes(false, voteSet.valSet.Size())
-		voteSet.votesByBlock[blockKey] = votesByBlock
-		// We'll add the vote in a bit.
-	}
-
-	// Before adding to votesByBlock, see if we'll exceed quorum
-	origSum := votesByBlock.sum
-	quorum := voteSet.valSet.TotalVotingPower()*2/3 + 1
-
-	// Add vote to votesByBlock
-	votesByBlock.addVerifiedVote(vote, votingPower)
-
-	// If we just crossed the quorum threshold and have 2/3 majority...
-	if origSum < quorum && quorum <= votesByBlock.sum {
-		// Only consider the first quorum reached
-		if voteSet.maj23 == nil {
-			maj23BlockID := vote.BlockID
-			voteSet.maj23 = &maj23BlockID
-			// And also copy votes over to voteSet.votes
-			for i, vote := range votesByBlock.votes {
-				if vote != nil {
-					voteSet.votes[i] = vote
-				}
-			}
-		}
-	}
-
-	return true, conflicting
 }
+
+// Replace vote if blockKey matches voteSet.maj23.
+
+// Otherwise don't add it to voteSet.votes
+
+// Add to voteSet.votes and incr .sum
+
+// There's a conflict and no peer claims that this block is special.
+
+// We'll add the vote in a bit.
+
+// .votesByBlock doesn't exist...
+
+// ... and there's a conflicting vote.
+// We're not even tracking this blockKey, so just forget it.
+
+// ... and there's no conflicting vote.
+// Start tracking this blockKey
+
+// We'll add the vote in a bit.
+
+// Before adding to votesByBlock, see if we'll exceed quorum
+
+// Add vote to votesByBlock
+
+// If we just crossed the quorum threshold and have 2/3 majority...
+
+// Only consider the first quorum reached
+
+// And also copy votes over to voteSet.votes
 
 // If a peer claims that it has 2/3 majority for given blockKey, call this.
 // NOTE: if there are too many peers, or too much peer churn,
@@ -297,162 +179,59 @@ func (voteSet *VoteSet) addVerifiedVote(
 // TODO: implement ability to remove peers too
 // NOTE: VoteSet must not be nil
 func (voteSet *VoteSet) SetPeerMaj23(peerID string, blockID BlockID) error {
-	if voteSet == nil {
-		panic("SetPeerMaj23() on nil VoteSet")
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-
-	blockKey := blockID.Key()
-
-	// Make sure peer hasn't already told us something.
-	if existing, ok := voteSet.peerMaj23s[peerID]; ok {
-		if existing.Equals(blockID) {
-			return nil // Nothing to do
-		}
-		return fmt.Errorf("setPeerMaj23: Received conflicting blockID from peer %v. Got %v, expected %v",
-			peerID, blockID, existing)
-	}
-	voteSet.peerMaj23s[peerID] = blockID
-
-	// Create .votesByBlock entry if needed.
-	votesByBlock, ok := voteSet.votesByBlock[blockKey]
-	if ok {
-		if votesByBlock.peerMaj23 {
-			return nil // Nothing to do
-		}
-		votesByBlock.peerMaj23 = true
-		// No need to copy votes, already there.
-	} else {
-		votesByBlock = newBlockVotes(true, voteSet.valSet.Size())
-		voteSet.votesByBlock[blockKey] = votesByBlock
-		// No need to copy votes, no votes to copy over.
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// Make sure peer hasn't already told us something.
+
+// Nothing to do
+
+// Create .votesByBlock entry if needed.
+
+// Nothing to do
+
+// No need to copy votes, already there.
+
+// No need to copy votes, no votes to copy over.
+
 // Implements VoteSetReader.
-func (voteSet *VoteSet) BitArray() *bits.BitArray {
-	if voteSet == nil {
-		return nil
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return voteSet.votesBitArray.Copy()
-}
+func (voteSet *VoteSet) BitArray() *bits.BitArray { _ = "STUB: not implemented"; return nil }
 
 func (voteSet *VoteSet) BitArrayByBlockID(blockID BlockID) *bits.BitArray {
-	if voteSet == nil {
-		return nil
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	votesByBlock, ok := voteSet.votesByBlock[blockID.Key()]
-	if ok {
-		return votesByBlock.bitArray.Copy()
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // NOTE: if validator has conflicting votes, returns "canonical" vote
 // Implements VoteSetReader.
 func (voteSet *VoteSet) GetByIndex(valIndex int32) (*Vote, bool) {
-	if voteSet == nil {
-		return nil, false
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	if int(valIndex) >= len(voteSet.votes) {
-		return nil, false
-	}
-	if vote := voteSet.votes[valIndex]; vote != nil {
-		return vote, true
-	}
+	_ = "STUB: not implemented"
 	return nil, false
 }
 
 // List returns a copy of the list of votes stored by the VoteSet.
-func (voteSet *VoteSet) List() []Vote {
-	if voteSet == nil || voteSet.votes == nil {
-		return nil
-	}
-	votes := make([]Vote, 0, len(voteSet.votes))
-	for i := range voteSet.votes {
-		if voteSet.votes[i] != nil {
-			votes = append(votes, *voteSet.votes[i])
-		}
-	}
-	return votes
-}
+func (voteSet *VoteSet) List() []Vote { _ = "STUB: not implemented"; return nil }
 
 func (voteSet *VoteSet) GetByAddress(address []byte) (*Vote, bool) {
-	if voteSet == nil {
-		return nil, false
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	valIndex, _, ok := voteSet.valSet.GetByAddress(address)
-	if !ok {
-		return nil, false
-	}
-	if vote := voteSet.votes[valIndex]; vote != nil {
-		return vote, true
-	}
+	_ = "STUB: not implemented"
 	return nil, false
 }
 
-func (voteSet *VoteSet) HasTwoThirdsMajority() bool {
-	if voteSet == nil {
-		return false
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return voteSet.maj23 != nil
-}
+func (voteSet *VoteSet) HasTwoThirdsMajority() bool { _ = "STUB: not implemented"; return false }
 
 // Implements VoteSetReader.
-func (voteSet *VoteSet) IsCommit() bool {
-	if voteSet == nil {
-		return false
-	}
-	if voteSet.signedMsgType != tmproto.PrecommitType {
-		return false
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return voteSet.maj23 != nil
-}
+func (voteSet *VoteSet) IsCommit() bool { _ = "STUB: not implemented"; return false }
 
-func (voteSet *VoteSet) HasTwoThirdsAny() bool {
-	if voteSet == nil {
-		return false
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return voteSet.sum > voteSet.valSet.TotalVotingPower()*2/3
-}
+func (voteSet *VoteSet) HasTwoThirdsAny() bool { _ = "STUB: not implemented"; return false }
 
-func (voteSet *VoteSet) HasAll() bool {
-	if voteSet == nil {
-		return false
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return voteSet.sum == voteSet.valSet.TotalVotingPower()
-}
+func (voteSet *VoteSet) HasAll() bool { _ = "STUB: not implemented"; return false }
 
 // If there was a +2/3 majority for blockID, return blockID and true.
 // Else, return the empty BlockID{} and false.
 func (voteSet *VoteSet) TwoThirdsMajority() (blockID BlockID, ok bool) {
-	if voteSet == nil {
-		return BlockID{}, false
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	if voteSet.maj23 != nil {
-		return *voteSet.maj23, true
-	}
-	return BlockID{}, false
+	_ = "STUB: not implemented"
+	return *new(BlockID), false
 }
 
 //--------------------------------------------------------------------------------
@@ -463,12 +242,7 @@ const nilVoteSetString = "nil-VoteSet"
 // String returns a string representation of VoteSet.
 //
 // See StringIndented.
-func (voteSet *VoteSet) String() string {
-	if voteSet == nil {
-		return nilVoteSetString
-	}
-	return voteSet.StringIndented("")
-}
+func (voteSet *VoteSet) String() string { _ = "STUB: not implemented"; return "" }
 
 // StringIndented returns an indented String.
 //
@@ -478,42 +252,11 @@ func (voteSet *VoteSet) String() string {
 // 2/3+ majority
 //
 // See Vote#String.
-func (voteSet *VoteSet) StringIndented(indent string) string {
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-
-	voteStrings := make([]string, len(voteSet.votes))
-	for i, vote := range voteSet.votes {
-		if vote == nil {
-			voteStrings[i] = nilVoteStr
-		} else {
-			voteStrings[i] = vote.String()
-		}
-	}
-	return fmt.Sprintf(`VoteSet{
-%s  H:%v R:%v T:%v
-%s  %v
-%s  %v
-%s  %v
-%s}`,
-		indent, voteSet.height, voteSet.round, voteSet.signedMsgType,
-		indent, strings.Join(voteStrings, "\n"+indent+"  "),
-		indent, voteSet.votesBitArray,
-		indent, voteSet.peerMaj23s,
-		indent)
-}
+func (voteSet *VoteSet) StringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
 // Marshal the VoteSet to JSON. Same as String(), just in JSON,
 // and without the height/round/signedMsgType (since its already included in the votes).
-func (voteSet *VoteSet) MarshalJSON() ([]byte, error) {
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return json.Marshal(VoteSetJSON{
-		voteSet.voteStrings(),
-		voteSet.bitArrayString(),
-		voteSet.peerMaj23s,
-	})
-}
+func (voteSet *VoteSet) MarshalJSON() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // More human readable JSON of the vote set
 // NOTE: insufficient for unmarshaling from (compressed votes)
@@ -527,36 +270,14 @@ type VoteSetJSON struct {
 // Return the bit-array of votes including
 // the fraction of power that has voted like:
 // "BA{29:xx__x__x_x___x__x_______xxx__} 856/1304 = 0.66"
-func (voteSet *VoteSet) BitArrayString() string {
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return voteSet.bitArrayString()
-}
+func (voteSet *VoteSet) BitArrayString() string { _ = "STUB: not implemented"; return "" }
 
-func (voteSet *VoteSet) bitArrayString() string {
-	bAString := voteSet.votesBitArray.String()
-	voted, total, fracVoted := voteSet.sumTotalFrac()
-	return fmt.Sprintf("%s %d/%d = %.2f", bAString, voted, total, fracVoted)
-}
+func (voteSet *VoteSet) bitArrayString() string { _ = "STUB: not implemented"; return "" }
 
 // Returns a list of votes compressed to more readable strings.
-func (voteSet *VoteSet) VoteStrings() []string {
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	return voteSet.voteStrings()
-}
+func (voteSet *VoteSet) VoteStrings() []string { _ = "STUB: not implemented"; return nil }
 
-func (voteSet *VoteSet) voteStrings() []string {
-	voteStrings := make([]string, len(voteSet.votes))
-	for i, vote := range voteSet.votes {
-		if vote == nil {
-			voteStrings[i] = nilVoteStr
-		} else {
-			voteStrings[i] = vote.String()
-		}
-	}
-	return voteStrings
-}
+func (voteSet *VoteSet) voteStrings() []string { _ = "STUB: not implemented"; return nil }
 
 // StringShort returns a short representation of VoteSet.
 //
@@ -567,35 +288,16 @@ func (voteSet *VoteSet) voteStrings() []string {
 // 5. fraction of voted power
 // 6. votes bit array
 // 7. 2/3+ majority for each peer
-func (voteSet *VoteSet) StringShort() string {
-	if voteSet == nil {
-		return nilVoteSetString
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	_, _, frac := voteSet.sumTotalFrac()
-	return fmt.Sprintf(`VoteSet{H:%v R:%v T:%v +2/3:%v(%v) %v %v}`,
-		voteSet.height, voteSet.round, voteSet.signedMsgType, voteSet.maj23, frac, voteSet.votesBitArray, voteSet.peerMaj23s)
-}
+func (voteSet *VoteSet) StringShort() string { _ = "STUB: not implemented"; return "" }
 
 // LogString produces a logging suitable string representation of the
 // vote set.
-func (voteSet *VoteSet) LogString() string {
-	if voteSet == nil {
-		return nilVoteSetString
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
-	voted, total, frac := voteSet.sumTotalFrac()
-
-	return fmt.Sprintf("Votes:%d/%d(%.3f)", voted, total, frac)
-}
+func (voteSet *VoteSet) LogString() string { _ = "STUB: not implemented"; return "" }
 
 // return the power voted, the total, and the fraction
 func (voteSet *VoteSet) sumTotalFrac() (int64, int64, float64) {
-	voted, total := voteSet.sum, voteSet.valSet.TotalVotingPower()
-	fracVoted := float64(voted) / float64(total)
-	return voted, total, fracVoted
+	_ = "STUB: not implemented"
+	return 0, 0, 0
 }
 
 //--------------------------------------------------------------------------------
@@ -606,37 +308,13 @@ func (voteSet *VoteSet) sumTotalFrac() (int64, int64, float64) {
 //
 // Panics if the vote type is not PrecommitType or if there's no +2/3 votes for
 // a single block.
-func (voteSet *VoteSet) MakeCommit() *Commit {
-	if voteSet.signedMsgType != tmproto.PrecommitType {
-		panic("Cannot MakeCommit() unless VoteSet.Type is PrecommitType")
-	}
-	voteSet.mtx.Lock()
-	defer voteSet.mtx.Unlock()
+func (voteSet *VoteSet) MakeCommit() *Commit { _ = "STUB: not implemented"; return nil }
 
-	// Make sure we have a 2/3 majority
-	if voteSet.maj23 == nil {
-		panic("Cannot MakeCommit() unless a blockhash has +2/3")
-	}
+// Make sure we have a 2/3 majority
 
-	// For every validator, get the precommit with extensions
-	sigs := make([]CommitSig, len(voteSet.votes))
-	for i, v := range voteSet.votes {
-		sig := v.CommitSig()
-		// if block ID exists but doesn't match, exclude sig
-		if sig.BlockIDFlag == BlockIDFlagCommit && !v.BlockID.Equals(*voteSet.maj23) {
-			sig = NewCommitSigAbsent()
-		}
+// For every validator, get the precommit with extensions
 
-		sigs[i] = sig
-	}
-
-	return &Commit{
-		Height:     voteSet.GetHeight(),
-		Round:      voteSet.GetRound(),
-		BlockID:    *voteSet.maj23,
-		Signatures: sigs,
-	}
-}
+// if block ID exists but doesn't match, exclude sig
 
 //--------------------------------------------------------------------------------
 
@@ -654,29 +332,16 @@ type blockVotes struct {
 }
 
 func newBlockVotes(peerMaj23 bool, numValidators int) *blockVotes {
-	return &blockVotes{
-		peerMaj23: peerMaj23,
-		bitArray:  bits.NewBitArray(numValidators),
-		votes:     make([]*Vote, numValidators),
-		sum:       0,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (vs *blockVotes) addVerifiedVote(vote *Vote, votingPower int64) {
-	valIndex := vote.ValidatorIndex
-	if existing := vs.votes[valIndex]; existing == nil {
-		vs.bitArray.SetIndex(int(valIndex), true)
-		vs.votes[valIndex] = vote
-		vs.sum += votingPower
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (vs *blockVotes) getByIndex(index int32) *Vote {
-	if vs == nil {
-		return nil
-	}
-	return vs.votes[index]
-}
+func (vs *blockVotes) getByIndex(index int32) *Vote { _ = "STUB: not implemented"; return nil }
 
 //--------------------------------------------------------------------------------
 

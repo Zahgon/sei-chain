@@ -1,7 +1,6 @@
 package types
 
 import (
-	"cmp"
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bits"
@@ -16,13 +15,7 @@ type HRS struct {
 	Step   RoundStepType // Step peer is at
 }
 
-func (a HRS) Cmp(b HRS) int {
-	return cmp.Or(
-		cmp.Compare(a.Height, b.Height),
-		cmp.Compare(a.Round, b.Round),
-		cmp.Compare(a.Step, b.Step),
-	)
-}
+func (a HRS) Cmp(b HRS) int { _ = "STUB: not implemented"; return 0 }
 
 // PeerRoundState contains the known state of a peer.
 // NOTE: Read-only when returned by PeerState.GetRoundState().
@@ -50,23 +43,8 @@ type PeerRoundState struct {
 // the PeerRound struct are pointers, we need an explicit deep copy
 // operation to avoid a non-obvious shared data situation.
 func (prs PeerRoundState) Copy() PeerRoundState {
+	_ = "STUB: not implemented"
 	// this works because it's not a pointer receiver so it's
 	// already, effectively a copy.
-
-	headerHash := prs.ProposalBlockPartSetHeader.Hash.Bytes()
-
-	hashCopy := make([]byte, len(headerHash))
-	copy(hashCopy, headerHash)
-	prs.ProposalBlockPartSetHeader = types.PartSetHeader{
-		Total: prs.ProposalBlockPartSetHeader.Total,
-		Hash:  hashCopy,
-	}
-	prs.ProposalBlockParts = prs.ProposalBlockParts.Copy()
-	prs.ProposalPOL = prs.ProposalPOL.Copy()
-	prs.Prevotes = prs.Prevotes.Copy()
-	prs.Precommits = prs.Precommits.Copy()
-	prs.LastCommit = prs.LastCommit.Copy()
-	prs.CatchupCommit = prs.CatchupCommit.Copy()
-
-	return prs
+	return *new(PeerRoundState)
 }

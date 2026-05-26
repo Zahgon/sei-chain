@@ -1,8 +1,6 @@
 package types
 
 import (
-	"errors"
-	"fmt"
 	"math/big"
 )
 
@@ -14,265 +12,185 @@ type Uint struct {
 }
 
 // BigInt converts Uint to big.Int
-func (u Uint) BigInt() *big.Int {
-	return new(big.Int).Set(u.i)
-}
+func (u Uint) BigInt() *big.Int { _ = "STUB: not implemented"; return nil }
 
 // NewUintFromBigUint constructs Uint from big.Uint
-func NewUintFromBigInt(i *big.Int) Uint {
-	u, err := checkNewUint(i)
-	if err != nil {
-		panic(fmt.Errorf("overflow: %s", err))
-	}
-	return u
-}
+func NewUintFromBigInt(i *big.Int) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // NewUint constructs Uint from uint64.
-func NewUint(n uint64) Uint {
-	i := new(big.Int)
-	i.SetUint64(n)
-	return NewUintFromBigInt(i)
-}
+func NewUint(n uint64) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // NewUintFromString constructs Uint from string
-func NewUintFromString(s string) Uint {
-	u, err := ParseUint(s)
-	if err != nil {
-		panic(err)
-	}
-	return u
-}
+func NewUintFromString(s string) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // ZeroUint returns unsigned zero.
-func ZeroUint() Uint { return Uint{big.NewInt(0)} }
+func ZeroUint() Uint {
+	_ = "STUB: not implemented"
+	return *
 
-// OneUint returns Uint value with one.
-func OneUint() Uint { return Uint{big.NewInt(1)} }
+	// OneUint returns Uint value with one.
+	new(Uint)
+}
+
+func OneUint() Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 var _ CustomProtobufType = (*Uint)(nil)
 
 // Uint64 converts Uint to uint64
 // Panics if the value is out of range
-func (u Uint) Uint64() uint64 {
-	if !u.i.IsUint64() {
-		panic("Uint64() out of bound")
-	}
-	return u.i.Uint64()
-}
+func (u Uint) Uint64() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // IsZero returns 1 if the uint equals to 0.
-func (u Uint) IsZero() bool { return u.Equal(ZeroUint()) }
+func (u Uint) IsZero() bool { _ = "STUB: not implemented"; return false }
 
 // Equal compares two Uints
-func (u Uint) Equal(u2 Uint) bool { return equal(u.i, u2.i) }
+func (u Uint) Equal(u2 Uint) bool { _ = "STUB: not implemented"; return false }
 
 // GT returns true if first Uint is greater than second
-func (u Uint) GT(u2 Uint) bool { return gt(u.i, u2.i) }
+func (u Uint) GT(u2 Uint) bool { _ = "STUB: not implemented"; return false }
 
 // GTE returns true if first Uint is greater than second
-func (u Uint) GTE(u2 Uint) bool { return u.GT(u2) || u.Equal(u2) }
+func (u Uint) GTE(u2 Uint) bool { _ = "STUB: not implemented"; return false }
 
 // LT returns true if first Uint is lesser than second
-func (u Uint) LT(u2 Uint) bool { return lt(u.i, u2.i) }
+func (u Uint) LT(u2 Uint) bool { _ = "STUB: not implemented"; return false }
 
 // LTE returns true if first Uint is lesser than or equal to the second
-func (u Uint) LTE(u2 Uint) bool { return !u.GT(u2) }
+func (u Uint) LTE(u2 Uint) bool {
+	_ = "STUB: not implemented"
 
-// Add adds Uint from another
-func (u Uint) Add(u2 Uint) Uint { return NewUintFromBigInt(new(big.Int).Add(u.i, u2.i)) }
+	// Add adds Uint from another
+	return false
+}
+
+func (u Uint) Add(u2 Uint) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // Add convert uint64 and add it to Uint
-func (u Uint) AddUint64(u2 uint64) Uint { return u.Add(NewUint(u2)) }
+func (u Uint) AddUint64(u2 uint64) Uint {
+	_ = "STUB: not implemented"
+	return *
 
-// Sub subtracts another Uint.
-func (u Uint) Sub(u2 Uint) Uint { return NewUintFromBigInt(new(big.Int).Sub(u.i, u2.i)) }
+	// Sub subtracts another Uint.
+	new(Uint)
+}
+
+func (u Uint) Sub(u2 Uint) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // SubUint64 subtracts a uint64 from Uint.
-func (u Uint) SubUint64(u2 uint64) Uint { return u.Sub(NewUint(u2)) }
+func (u Uint) SubUint64(u2 uint64) Uint {
+	_ = "STUB: not implemented"
+	return *
 
-// Mul multiplies two Uints
-func (u Uint) Mul(u2 Uint) (res Uint) {
-	return NewUintFromBigInt(new(big.Int).Mul(u.i, u2.i))
+	// Mul multiplies two Uints
+	new(Uint)
 }
 
-// Mul multiplies two Uints
-func (u Uint) MulUint64(u2 uint64) (res Uint) { return u.Mul(NewUint(u2)) }
+func (u Uint) Mul(u2 Uint) (res Uint) { _ = "STUB: not implemented"; return *new(Uint) }
 
-// Quo divides Uint with Uint
-func (u Uint) Quo(u2 Uint) Uint { return NewUintFromBigInt(div(u.i, u2.i)) }
+// Mul multiplies two Uints
+func (u Uint) MulUint64(u2 uint64) (res Uint) {
+	_ = "STUB: not implemented"
+	return *
+
+	// Quo divides Uint with Uint
+	new(Uint)
+}
+
+func (u Uint) Quo(u2 Uint) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // Mod returns remainder after dividing with Uint
-func (u Uint) Mod(u2 Uint) Uint {
-	if u2.IsZero() {
-		panic("division-by-zero")
-	}
-	return Uint{mod(u.i, u2.i)}
-}
+func (u Uint) Mod(u2 Uint) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // Incr increments the Uint by one.
 func (u Uint) Incr() Uint {
-	return u.Add(OneUint())
+	_ = "STUB: not implemented"
+	return *
+
+	// Decr decrements the Uint by one.
+	// Decr will panic if the Uint is zero.
+	new(Uint)
 }
 
-// Decr decrements the Uint by one.
-// Decr will panic if the Uint is zero.
 func (u Uint) Decr() Uint {
-	return u.Sub(OneUint())
+	_ = "STUB: not implemented"
+	return *
+
+	// QuoUint64 divides Uint by a uint64.
+	new(Uint)
 }
 
-// QuoUint64 divides Uint by a uint64.
-func (u Uint) QuoUint64(u2 uint64) Uint { return u.Quo(NewUint(u2)) }
+func (u Uint) QuoUint64(u2 uint64) Uint {
+	_ = "STUB: not implemented"
+	return *
 
-// MinUint returns the minimum of the Uints.
-func MinUint(u1, u2 Uint) Uint { return NewUintFromBigInt(min(u1.i, u2.i)) }
+	// MinUint returns the minimum of the Uints.
+	new(Uint)
+}
+
+func MinUint(u1, u2 Uint) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // Return the maximum of the Uints
-func MaxUint(u1, u2 Uint) Uint { return NewUintFromBigInt(max(u1.i, u2.i)) }
+func MaxUint(u1, u2 Uint) Uint { _ = "STUB: not implemented"; return *new(Uint) }
 
 // String returns the string representation of Uint.
-func (u Uint) String() string { return u.i.String() }
+func (u Uint) String() string {
+	_ = "STUB: not implemented"
 
-// MarshalJSON defines custom encoding scheme
+	// MarshalJSON defines custom encoding scheme
+	return ""
+}
+
 func (u Uint) MarshalJSON() ([]byte, error) {
-	if u.i == nil { // Necessary since default Uint initialization has i.i as nil
-		u.i = new(big.Int)
-	}
-	return marshalJSON(u.i)
+	_ = "STUB: not implemented"
+	// Necessary since default Uint initialization has i.i as nil
+	return nil, nil
 }
 
 // UnmarshalJSON defines custom decoding scheme
 func (u *Uint) UnmarshalJSON(bz []byte) error {
-	if u.i == nil { // Necessary since default Uint initialization has i.i as nil
-		u.i = new(big.Int)
-	}
-	return unmarshalJSON(u.i, bz)
+	_ = "STUB: not implemented"
+	// Necessary since default Uint initialization has i.i as nil
+	return nil
 }
 
 // Marshal implements the gogo proto custom type interface.
-func (u Uint) Marshal() ([]byte, error) {
-	if u.i == nil {
-		u.i = new(big.Int)
-	}
-	return u.i.MarshalText()
-}
+func (u Uint) Marshal() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // MarshalTo implements the gogo proto custom type interface.
-func (u *Uint) MarshalTo(data []byte) (n int, err error) {
-	if u.i == nil {
-		u.i = new(big.Int)
-	}
-	if u.i.BitLen() == 0 { // The value 0
-		copy(data, []byte{0x30})
-		return 1, nil
-	}
+func (u *Uint) MarshalTo(data []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
-	bz, err := u.Marshal()
-	if err != nil {
-		return 0, err
-	}
-
-	copy(data, bz)
-	return len(bz), nil
-}
+// The value 0
 
 // Unmarshal implements the gogo proto custom type interface.
 func (u *Uint) Unmarshal(data []byte) error {
+	_ = "STUB: not implemented"
 	// maxBitLen is 256, which requires ~78 decimal digits, so 100 is a safe upper
 	// bound.
-	if len(data) > 100 {
-		return fmt.Errorf("unsigned integer string too long: got %d, max 100", len(data))
-	}
-	if len(data) == 0 {
-		// Use ZeroUint, not Uint{}: a nil *big.Int breaks String(), BigInt(), etc.
-		*u = ZeroUint()
-		return nil
-	}
-
-	if u.i == nil {
-		u.i = new(big.Int)
-	}
-
-	if err := u.i.UnmarshalText(data); err != nil {
-		return err
-	}
-
-	if u.i.BitLen() > maxBitLen {
-		return fmt.Errorf("integer out of range; got: %d, max: %d", u.i.BitLen(), maxBitLen)
-	}
-
 	return nil
 }
 
+// Use ZeroUint, not Uint{}: a nil *big.Int breaks String(), BigInt(), etc.
+
 // Size implements the gogo proto custom type interface.
-func (u *Uint) Size() int {
-	bz, _ := u.Marshal()
-	return len(bz)
-}
+func (u *Uint) Size() int { _ = "STUB: not implemented"; return 0 }
 
 // Override Amino binary serialization by proxying to protobuf.
-func (u Uint) MarshalAmino() ([]byte, error)   { return u.Marshal() }
-func (u *Uint) UnmarshalAmino(bz []byte) error { return u.Unmarshal(bz) }
+func (u Uint) MarshalAmino() ([]byte, error)   { _ = "STUB: not implemented"; return nil, nil }
+func (u *Uint) UnmarshalAmino(bz []byte) error { _ = "STUB: not implemented"; return nil }
 
 // UintOverflow returns true if a given unsigned integer overflows and false
 // otherwise.
-func UintOverflow(i *big.Int) error {
-	if i.Sign() < 0 {
-		return errors.New("non-positive integer")
-	}
-	if i.BitLen() > 256 {
-		return fmt.Errorf("bit length %d greater than 256", i.BitLen())
-	}
-	return nil
-}
+func UintOverflow(i *big.Int) error { _ = "STUB: not implemented"; return nil }
 
 // ParseUint reads a string-encoded Uint value and return a Uint.
-func ParseUint(s string) (Uint, error) {
-	i, ok := new(big.Int).SetString(s, 0)
-	if !ok {
-		return Uint{}, fmt.Errorf("cannot convert %q to big.Int", s)
-	}
-	return checkNewUint(i)
-}
+func ParseUint(s string) (Uint, error) { _ = "STUB: not implemented"; return *new(Uint), nil }
 
-func checkNewUint(i *big.Int) (Uint, error) {
-	if err := UintOverflow(i); err != nil {
-		return Uint{}, err
-	}
-	return Uint{i}, nil
-}
+func checkNewUint(i *big.Int) (Uint, error) { _ = "STUB: not implemented"; return *new(Uint), nil }
 
 // RelativePow raises x to the power of n, where x (and the result, z) are scaled by factor b
 // for example, RelativePow(210, 2, 100) = 441 (2.1^2 = 4.41)
-func RelativePow(x Uint, n Uint, b Uint) (z Uint) {
-	if x.IsZero() {
-		if n.IsZero() {
-			z = b // 0^0 = 1
-			return
-		}
-		z = ZeroUint() // otherwise 0^a = 0
-		return
-	}
+func RelativePow(x Uint, n Uint, b Uint) (z Uint) { _ = "STUB: not implemented"; return *new(Uint) }
 
-	z = x
-	if n.Mod(NewUint(2)).Equal(ZeroUint()) {
-		z = b
-	}
+// 0^0 = 1
 
-	halfOfB := b.Quo(NewUint(2))
-	n = n.Quo(NewUint(2))
-
-	for n.GT(ZeroUint()) {
-		xSquared := x.Mul(x)
-		xSquaredRounded := xSquared.Add(halfOfB)
-
-		x = xSquaredRounded.Quo(b)
-
-		if n.Mod(NewUint(2)).Equal(OneUint()) {
-			zx := z.Mul(x)
-			zxRounded := zx.Add(halfOfB)
-			z = zxRounded.Quo(b)
-		}
-		n = n.Quo(NewUint(2))
-	}
-	return z
-}
+// otherwise 0^a = 0

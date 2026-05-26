@@ -6,11 +6,10 @@ package privval
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -69,34 +68,23 @@ type privValidatorAPIClient struct {
 }
 
 func NewPrivValidatorAPIClient(cc *grpc.ClientConn) PrivValidatorAPIClient {
-	return &privValidatorAPIClient{cc}
+	_ = "STUB: not implemented"
+	return *new(PrivValidatorAPIClient)
 }
 
 func (c *privValidatorAPIClient) GetPubKey(ctx context.Context, in *PubKeyRequest, opts ...grpc.CallOption) (*PubKeyResponse, error) {
-	out := new(PubKeyResponse)
-	err := c.cc.Invoke(ctx, "/tendermint.privval.PrivValidatorAPI/GetPubKey", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *privValidatorAPIClient) SignVote(ctx context.Context, in *SignVoteRequest, opts ...grpc.CallOption) (*SignedVoteResponse, error) {
-	out := new(SignedVoteResponse)
-	err := c.cc.Invoke(ctx, "/tendermint.privval.PrivValidatorAPI/SignVote", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (c *privValidatorAPIClient) SignProposal(ctx context.Context, in *SignProposalRequest, opts ...grpc.CallOption) (*SignedProposalResponse, error) {
-	out := new(SignedProposalResponse)
-	err := c.cc.Invoke(ctx, "/tendermint.privval.PrivValidatorAPI/SignProposal", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // PrivValidatorAPIServer is the server API for PrivValidatorAPI service.
@@ -111,71 +99,38 @@ type UnimplementedPrivValidatorAPIServer struct {
 }
 
 func (*UnimplementedPrivValidatorAPIServer) GetPubKey(ctx context.Context, req *PubKeyRequest) (*PubKeyResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetPubKey not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedPrivValidatorAPIServer) SignVote(ctx context.Context, req *SignVoteRequest) (*SignedVoteResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SignVote not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (*UnimplementedPrivValidatorAPIServer) SignProposal(ctx context.Context, req *SignProposalRequest) (*SignedProposalResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SignProposal not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func RegisterPrivValidatorAPIServer(s *grpc.Server, srv PrivValidatorAPIServer) {
-	s.RegisterService(&_PrivValidatorAPI_serviceDesc, srv)
+	_ = "STUB: not implemented"
+	return
 }
 
 func _PrivValidatorAPI_GetPubKey_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(PubKeyRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PrivValidatorAPIServer).GetPubKey(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/tendermint.privval.PrivValidatorAPI/GetPubKey",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PrivValidatorAPIServer).GetPubKey(ctx, req.(*PubKeyRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _PrivValidatorAPI_SignVote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SignVoteRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PrivValidatorAPIServer).SignVote(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/tendermint.privval.PrivValidatorAPI/SignVote",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PrivValidatorAPIServer).SignVote(ctx, req.(*SignVoteRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func _PrivValidatorAPI_SignProposal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SignProposalRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(PrivValidatorAPIServer).SignProposal(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/tendermint.privval.PrivValidatorAPI/SignProposal",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PrivValidatorAPIServer).SignProposal(ctx, req.(*SignProposalRequest))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _PrivValidatorAPI_serviceDesc = grpc.ServiceDesc{

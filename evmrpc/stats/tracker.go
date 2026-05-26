@@ -42,18 +42,10 @@ type methodStats struct {
 }
 
 // InitRPCTracker initializes the HTTP/RPC tracker.
-func InitRPCTracker(ctx context.Context, interval time.Duration) {
-	if interval > 0 {
-		httpTracker = newTracker(ctx, "http", interval)
-	}
-}
+func InitRPCTracker(ctx context.Context, interval time.Duration) { _ = "STUB: not implemented"; return }
 
 // InitWSTracker initializes the WebSocket tracker.
-func InitWSTracker(ctx context.Context, interval time.Duration) {
-	if interval > 0 {
-		wsTracker = newTracker(ctx, "ws", interval)
-	}
-}
+func InitWSTracker(ctx context.Context, interval time.Duration) { _ = "STUB: not implemented"; return }
 
 type tracker struct {
 	logger   *slog.Logger
@@ -72,208 +64,91 @@ type tracker struct {
 // newTracker creates a new stats tracker.
 func newTracker(ctx context.Context,
 	connType string, interval time.Duration) *tracker {
-	trackerCtx, cancel := context.WithCancel(ctx)
-
-	t := &tracker{
-		ch:       make(chan apiEvent, 10000),
-		interval: interval,
-		ctx:      trackerCtx,
-		cancel:   cancel,
-		connType: connType,
-		logger:   logger.With("connType", connType),
-	}
-
-	t.wg.Add(1)
-	go t.run()
-	return t
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // run processes events continuously and reports periods on interval
 func (t *tracker) run() {
-	defer t.wg.Done()
+	_ = "STUB: not implemented"
 
 	// Report stats every interval.
-	ticker := time.NewTicker(t.interval)
-	defer ticker.Stop()
-
-	t.logger.Info("stats tracker started", "interval", t.interval.String())
-
-	for {
-		select {
-		case <-t.ctx.Done():
-			t.logger.Info("stats tracker stopping", "reason", t.ctx.Err())
-			// Report current period before stopping
-			t.reportCurrentPeriod()
-			return
-		case event := <-t.ch:
-			// Process event immediately
-			t.processEvent(event)
-		case <-ticker.C:
-			// Report current period and start fresh
-			t.reportCurrentPeriod()
-		}
-	}
+	return
 }
+
+// Report current period before stopping
+
+// Process event immediately
+
+// Report current period and start fresh
 
 // processEvent aggregates an event into the current period
-func (t *tracker) processEvent(event apiEvent) {
-	t.mu.Lock()
-	defer t.mu.Unlock()
+func (t *tracker) processEvent(event apiEvent) { _ = "STUB: not implemented"; return }
 
-	// Truncate event end time to period boundary (use completion time for period attribution)
-	eventPeriod := event.EndTime.Truncate(t.interval)
+// Truncate event end time to period boundary (use completion time for period attribution)
 
-	// Check if we need to rotate periods
-	if t.currentPeriod != nil && eventPeriod.After(t.currentPeriod.periodStart) {
-		// apiEvent is in a new period, so report the current period and start fresh
-		t.reportPeriodLocked(t.currentPeriod)
-		t.currentPeriod = nil
-	}
+// Check if we need to rotate periods
 
-	// Initialize current period if needed (using event timestamp)
-	if t.currentPeriod == nil {
-		t.currentPeriod = &periodStats{
-			periodStart:  eventPeriod,
-			methodData:   make(map[string]*methodStats),
-			totalEvents:  0,
-			totalSuccess: 0,
-		}
-	}
+// apiEvent is in a new period, so report the current period and start fresh
 
-	// Update overall stats
-	t.currentPeriod.totalEvents++
-	if event.Success {
-		t.currentPeriod.totalSuccess++
-	}
+// Initialize current period if needed (using event timestamp)
 
-	// Get or create method stats
-	method := t.currentPeriod.methodData[event.Method]
-	if method == nil {
-		method = &methodStats{}
-		t.currentPeriod.methodData[event.Method] = method
-	}
+// Update overall stats
 
-	// Update method stats
-	method.count++
-	method.totalLatency += event.Duration
-	if event.Success {
-		method.successCount++
-	}
-	if event.Duration > method.maxLatency {
-		method.maxLatency = event.Duration
-	}
-}
+// Get or create method stats
+
+// Update method stats
 
 // reportCurrentPeriod reports the current period and starts a new one
-func (t *tracker) reportCurrentPeriod() {
-	t.mu.Lock()
-	defer t.mu.Unlock()
+func (t *tracker) reportCurrentPeriod() { _ = "STUB: not implemented"; return }
 
-	// If no current period, create an empty one for this interval
-	if t.currentPeriod == nil {
-		t.currentPeriod = &periodStats{
-			periodStart:  time.Now().Truncate(t.interval),
-			methodData:   make(map[string]*methodStats),
-			totalEvents:  0,
-			totalSuccess: 0,
-		}
-	}
+// If no current period, create an empty one for this interval
 
-	// Report the current period
-	t.reportPeriodLocked(t.currentPeriod)
+// Report the current period
 
-	// Start a new period
-	t.currentPeriod = nil
-}
+// Start a new period
 
 // reportPeriodLocked logs the stats for a completed period (assumes lock is held)
 func (t *tracker) reportPeriodLocked(period *periodStats) {
+	_ = "STUB: not implemented"
 	// Always log overall stats, even for periods with no events
-	if period.totalEvents == 0 {
-		// Log overall stats for periods with no requests
-		t.logger.Info("stats",
-			"period", period.periodStart.Format("2006-01-02T15:04:05Z"),
-			"count", 0,
-			"interval", t.interval.String(),
-		)
-		return // No method stats to report
-	}
-
-	// Calculate overall success rate
-	overallSuccessRate := float64(period.totalSuccess) / float64(period.totalEvents) * 100
-
-	// Log overall stats for this period
-	t.logger.Info("stats",
-		"period", period.periodStart.Format("2006-01-02T15:04:05Z"),
-		"count", period.totalEvents,
-		"success_rate_pct", overallSuccessRate,
-		"interval", t.interval.String(),
-	)
-
-	// Log per-method stats for this period
-	for method, stats := range period.methodData {
-
-		// Calculate average latency in milliseconds with 2 decimal places
-		avgLatencyMs := float64(stats.totalLatency.Nanoseconds()) / float64(stats.count) / 1000000.0
-		maxLatencyMs := float64(stats.maxLatency.Nanoseconds()) / 1000000.0
-
-		t.logger.Info("method stats",
-			"period", period.periodStart.Format("2006-01-02T15:04:05Z"),
-			"method", method,
-			"count", stats.count,
-			"success", stats.successCount,
-			"fails", stats.count-stats.successCount,
-			"latency_avg", avgLatencyMs,
-			"latency_max", maxLatencyMs,
-		)
-	}
+	return
 }
+
+// Log overall stats for periods with no requests
+
+// No method stats to report
+
+// Calculate overall success rate
+
+// Log overall stats for this period
+
+// Log per-method stats for this period
+
+// Calculate average latency in milliseconds with 2 decimal places
 
 // TrackMessage tracks a JSON-RPC method call with timing information
 func (t *tracker) TrackMessage(method string, connectionType string, startTime time.Time, success bool) {
-	if t == nil {
-		return // Gracefully handle nil tracker
-	}
+	_ = "STUB: not implemented"
+	return
 
-	endTime := time.Now()
-	event := apiEvent{
-		Method:    method,
-		Duration:  endTime.Sub(startTime),
-		Success:   success,
-		StartTime: startTime,
-		EndTime:   endTime,
-	}
-
-	select {
-	case t.ch <- event:
-	default:
-		// Drop on overflow to not block RPC - log at debug level to avoid spam
-		t.logger.Debug("event channel full, dropping event",
-			"method", method,
-			"connection", connectionType)
-	}
+	// Gracefully handle nil tracker
 }
+
+// Drop on overflow to not block RPC - log at debug level to avoid spam
 
 func (t *tracker) Stop() {
-	t.cancel()  // Cancel context to stop the goroutine
-	t.wg.Wait() // Wait for goroutine to finish
-	t.logger.Info("stats tracker stopped")
+	_ = "STUB: not implemented"
+	// Cancel context to stop the goroutine
+	return
 }
+
+// Wait for goroutine to finish
 
 // RecordAPIInvocation is a simple entry point for recording API calls.
 // It uses the appropriate tracker based on connection type.
 // InitRPCTracker and InitWSTracker must be called first from server creation.
 func RecordAPIInvocation(method string, connectionType string, startTime time.Time, success bool) {
-	switch connectionType {
-	case "http":
-		if httpTracker == nil {
-			return
-		}
-		httpTracker.TrackMessage(method, connectionType, startTime, success)
-	case "websocket":
-		if wsTracker == nil {
-			return
-		}
-		wsTracker.TrackMessage(method, connectionType, startTime, success)
-	}
+	_ = "STUB: not implemented"
+	return
 }

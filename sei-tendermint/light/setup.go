@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/light/provider"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/light/provider/http"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/light/store"
 )
 
@@ -24,31 +23,11 @@ func NewHTTPClient(
 	trustedStore store.Store,
 	blacklistTTL time.Duration,
 	options ...Option) (*Client, error) {
-
-	providers, err := providersFromAddresses(append(witnessesAddresses, primaryAddress), chainID)
-	if err != nil {
-		return nil, err
-	}
-
-	return NewClient(
-		ctx,
-		chainID,
-		trustOptions,
-		providers[len(providers)-1],
-		providers[:len(providers)-1],
-		trustedStore,
-		blacklistTTL,
-		options...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func providersFromAddresses(addrs []string, chainID string) ([]provider.Provider, error) {
-	providers := make([]provider.Provider, len(addrs))
-	for idx, address := range addrs {
-		p, err := http.New(chainID, address)
-		if err != nil {
-			return nil, err
-		}
-		providers[idx] = p
-	}
-	return providers, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

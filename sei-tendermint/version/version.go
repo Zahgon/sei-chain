@@ -30,10 +30,8 @@ type Consensus struct {
 }
 
 func (c Consensus) ToProto() tmversion.Consensus {
-	return tmversion.Consensus{
-		Block: c.Block,
-		App:   c.App,
-	}
+	_ = "STUB: not implemented"
+	return *new(tmversion.Consensus)
 }
 
 // RequestInfo contains all the information for sending

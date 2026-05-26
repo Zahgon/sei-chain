@@ -1,11 +1,9 @@
 package reactor
 
 import (
-	"fmt"
 	"math"
 	"sync"
 
-	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/mempool"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
 )
 
@@ -18,70 +16,22 @@ type IDs struct {
 	activeIDs map[uint16]struct{} // used to check if a given peerID key is used
 }
 
-func NewMempoolIDs() *IDs {
-	return &IDs{
-		peerMap: make(map[types.NodeID]uint16),
+func NewMempoolIDs() *IDs { _ = "STUB: not implemented"; return nil }
 
-		// reserve UnknownPeerID for mempoolReactor.BroadcastTx
-		activeIDs: map[uint16]struct{}{mempool.UnknownPeerID: {}},
-		nextID:    1,
-	}
-}
+// reserve UnknownPeerID for mempoolReactor.BroadcastTx
 
 // ReserveForPeer searches for the next unused ID and assigns it to the provided
 // peer.
-func (ids *IDs) ReserveForPeer(peerID types.NodeID) {
-	ids.mtx.Lock()
-	defer ids.mtx.Unlock()
+func (ids *IDs) ReserveForPeer(peerID types.NodeID) { _ = "STUB: not implemented"; return }
 
-	if _, ok := ids.peerMap[peerID]; ok {
-		// the peer has been reserved
-		return
-	}
-
-	curID := ids.nextPeerID()
-	ids.peerMap[peerID] = curID
-	ids.activeIDs[curID] = struct{}{}
-}
+// the peer has been reserved
 
 // Reclaim returns the ID reserved for the peer back to unused pool.
-func (ids *IDs) Reclaim(peerID types.NodeID) {
-	ids.mtx.Lock()
-	defer ids.mtx.Unlock()
-
-	removedID, ok := ids.peerMap[peerID]
-	if ok {
-		delete(ids.activeIDs, removedID)
-		delete(ids.peerMap, peerID)
-		if removedID < ids.nextID {
-			ids.nextID = removedID
-		}
-	}
-}
+func (ids *IDs) Reclaim(peerID types.NodeID) { _ = "STUB: not implemented"; return }
 
 // GetForPeer returns an ID reserved for the peer.
-func (ids *IDs) GetForPeer(peerID types.NodeID) uint16 {
-	ids.mtx.RLock()
-	defer ids.mtx.RUnlock()
-
-	return ids.peerMap[peerID]
-}
+func (ids *IDs) GetForPeer(peerID types.NodeID) uint16 { _ = "STUB: not implemented"; return 0 }
 
 // nextPeerID returns the next unused peer ID to use. We assume that the mutex
 // is already held.
-func (ids *IDs) nextPeerID() uint16 {
-	if len(ids.activeIDs) == MaxActiveIDs {
-		panic(fmt.Sprintf("node has maximum %d active IDs and wanted to get one more", MaxActiveIDs))
-	}
-
-	_, idExists := ids.activeIDs[ids.nextID]
-	for idExists {
-		ids.nextID++
-		_, idExists = ids.activeIDs[ids.nextID]
-	}
-
-	curID := ids.nextID
-	ids.nextID++
-
-	return curID
-}
+func (ids *IDs) nextPeerID() uint16 { _ = "STUB: not implemented"; return 0 }

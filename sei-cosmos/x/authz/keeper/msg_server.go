@@ -3,8 +3,6 @@ package keeper
 import (
 	"context"
 
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/authz"
 )
 
@@ -12,72 +10,18 @@ var _ authz.MsgServer = Keeper{}
 
 // GrantAuthorization implements the MsgServer.Grant method to create a new grant.
 func (k Keeper) Grant(goCtx context.Context, msg *authz.MsgGrant) (*authz.MsgGrantResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	grantee, err := sdk.AccAddressFromBech32(msg.Grantee)
-	if err != nil {
-		return nil, err
-	}
-
-	granter, err := sdk.AccAddressFromBech32(msg.Granter)
-	if err != nil {
-		return nil, err
-	}
-
-	authorization := msg.GetAuthorization()
-	if authorization == nil {
-		return nil, sdkerrors.ErrUnpackAny.Wrap("Authorization is not present in the msg")
-	}
-
-	t := authorization.MsgTypeURL()
-	if k.router.HandlerByTypeURL(t) == nil {
-		return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidType, "%s doesn't exist.", t)
-	}
-
-	err = k.SaveGrant(ctx, grantee, granter, authorization, msg.Grant.Expiration)
-	if err != nil {
-		return nil, err
-	}
-
-	return &authz.MsgGrantResponse{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // RevokeAuthorization implements the MsgServer.Revoke method.
 func (k Keeper) Revoke(goCtx context.Context, msg *authz.MsgRevoke) (*authz.MsgRevokeResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	grantee, err := sdk.AccAddressFromBech32(msg.Grantee)
-	if err != nil {
-		return nil, err
-	}
-	granter, err := sdk.AccAddressFromBech32(msg.Granter)
-	if err != nil {
-		return nil, err
-	}
-
-	err = k.DeleteGrant(ctx, grantee, granter, msg.MsgTypeUrl)
-	if err != nil {
-		return nil, err
-	}
-
-	return &authz.MsgRevokeResponse{}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Exec implements the MsgServer.Exec method.
 func (k Keeper) Exec(goCtx context.Context, msg *authz.MsgExec) (*authz.MsgExecResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	grantee, err := sdk.AccAddressFromBech32(msg.Grantee)
-	if err != nil {
-		return nil, err
-	}
-
-	msgs, err := msg.GetMessages()
-	if err != nil {
-		return nil, err
-	}
-
-	results, err := k.DispatchActions(ctx, grantee, msgs)
-	if err != nil {
-		return nil, err
-	}
-
-	return &authz.MsgExecResponse{Results: results}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }

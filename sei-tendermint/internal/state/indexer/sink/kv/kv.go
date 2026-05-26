@@ -24,41 +24,43 @@ type EventSink struct {
 }
 
 func NewEventSink(store dbm.DB) indexer.EventSink {
-	return &EventSink{
-		txi:   kvt.NewTxIndex(store),
-		bi:    kvb.New(store),
-		store: store,
-	}
+	_ = "STUB: not implemented"
+	return *new(indexer.EventSink)
 }
 
 func (kves *EventSink) Type() indexer.EventSinkType {
-	return indexer.KV
+	_ = "STUB: not implemented"
+	return *new(indexer.EventSinkType)
 }
 
 func (kves *EventSink) IndexBlockEvents(bh types.EventDataNewBlockHeader) error {
-	return kves.bi.Index(bh)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (kves *EventSink) IndexTxEvents(results []*abci.TxResultV2) error {
-	return kves.txi.Index(results)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (kves *EventSink) SearchBlockEvents(ctx context.Context, q *query.Query) ([]int64, error) {
-	return kves.bi.Search(ctx, q)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (kves *EventSink) SearchTxEvents(ctx context.Context, q *query.Query) ([]*abci.TxResultV2, error) {
-	return kves.txi.Search(ctx, q)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (kves *EventSink) GetTxByHash(hash []byte) (*abci.TxResultV2, error) {
-	return kves.txi.Get(hash)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (kves *EventSink) HasBlock(h int64) (bool, error) {
-	return kves.bi.Has(h)
+	_ = "STUB: not implemented"
+	return false, nil
 }
 
-func (kves *EventSink) Stop() error {
-	return kves.store.Close()
-}
+func (kves *EventSink) Stop() error { _ = "STUB: not implemented"; return nil }

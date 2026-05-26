@@ -2,26 +2,13 @@ package types
 
 // NewGenesisState creates a new GenesisState object.
 func NewGenesisState(minter Minter, params Params) *GenesisState {
-	return &GenesisState{
-		Minter: minter,
-		Params: params,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // DefaultGenesisState creates a default GenesisState object.
-func DefaultGenesisState() *GenesisState {
-	return &GenesisState{
-		Minter: DefaultInitialMinter(),
-		Params: DefaultParams(),
-	}
-}
+func DefaultGenesisState() *GenesisState { _ = "STUB: not implemented"; return nil }
 
 // ValidateGenesis validates the provided genesis state to ensure the
 // expected invariants holds.
-func ValidateGenesis(data GenesisState) error {
-	if err := data.Params.Validate(); err != nil {
-		return err
-	}
-
-	return ValidateMinter(data.Minter)
-}
+func ValidateGenesis(data GenesisState) error { _ = "STUB: not implemented"; return nil }

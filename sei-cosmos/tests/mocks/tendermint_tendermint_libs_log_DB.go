@@ -5,8 +5,6 @@
 package mocks
 
 import (
-	reflect "reflect"
-
 	gomock "github.com/golang/mock/gomock"
 )
 
@@ -22,70 +20,44 @@ type MockLoggerMockRecorder struct {
 }
 
 // NewMockLogger creates a new mock instance.
-func NewMockLogger(ctrl *gomock.Controller) *MockLogger {
-	mock := &MockLogger{ctrl: ctrl}
-	mock.recorder = &MockLoggerMockRecorder{mock}
-	return mock
-}
+func NewMockLogger(ctrl *gomock.Controller) *MockLogger { _ = "STUB: not implemented"; return nil }
 
 // EXPECT returns an object that allows the caller to indicate expected use.
 func (m *MockLogger) EXPECT() *MockLoggerMockRecorder {
-	return m.recorder
+	_ = "STUB: not implemented"
+
+	// Debug mocks base method.
+	return nil
 }
 
-// Debug mocks base method.
-func (m *MockLogger) Debug(arg0 string, arg1 ...interface{}) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{arg0}
-	for _, a := range arg1 {
-		varargs = append(varargs, a)
-	}
-	m.ctrl.Call(m, "Debug", varargs...)
-}
+func (m *MockLogger) Debug(arg0 string, arg1 ...interface{}) { _ = "STUB: not implemented"; return }
 
 // Debug indicates an expected call of Debug.
 func (mr *MockLoggerMockRecorder) Debug(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{arg0}, arg1...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Debug", reflect.TypeOf((*MockLogger)(nil).Debug), varargs...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Error mocks base method.
-func (m *MockLogger) Error(arg0 string, arg1 ...interface{}) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{arg0}
-	for _, a := range arg1 {
-		varargs = append(varargs, a)
-	}
-	m.ctrl.Call(m, "Error", varargs...)
-}
+func (m *MockLogger) Error(arg0 string, arg1 ...interface{}) { _ = "STUB: not implemented"; return }
 
 // Error indicates an expected call of Error.
 func (mr *MockLoggerMockRecorder) Error(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{arg0}, arg1...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Error", reflect.TypeOf((*MockLogger)(nil).Error), varargs...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Info mocks base method.
-func (m *MockLogger) Info(arg0 string, arg1 ...interface{}) {
-	m.ctrl.T.Helper()
-	varargs := []interface{}{arg0}
-	for _, a := range arg1 {
-		varargs = append(varargs, a)
-	}
-	m.ctrl.Call(m, "Info", varargs...)
-}
+func (m *MockLogger) Info(arg0 string, arg1 ...interface{}) { _ = "STUB: not implemented"; return }
 
 // Info indicates an expected call of Info.
 func (mr *MockLoggerMockRecorder) Info(arg0 interface{}, arg1 ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	varargs := append([]interface{}{arg0}, arg1...)
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Info", reflect.TypeOf((*MockLogger)(nil).Info), varargs...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // With indicates an expected call of With.
 func (mr *MockLoggerMockRecorder) With(arg0 ...interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "With", reflect.TypeOf((*MockLogger)(nil)), arg0...)
+	_ = "STUB: not implemented"
+	return nil
 }

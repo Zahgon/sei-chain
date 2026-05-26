@@ -1,14 +1,7 @@
 package config
 
 import (
-	"encoding/json"
-	"fmt"
-	"os"
-	"strings"
-
-	"github.com/sei-protocol/sei-chain/sei-db/common/unit"
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt"
-	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
 )
 
 // BenchmarkConfig is a struct that holds the configuration for the benchmark.
@@ -88,64 +81,14 @@ type BenchmarkConfig struct {
 }
 
 // DefaultBenchmarkConfig returns a default BenchmarkConfig.
-func DefaultBenchmarkConfig() *BenchmarkConfig {
-
-	littConfig := litt.DefaultConfigNoPaths()
-	littConfig.MetricsEnabled = true
-
-	return &BenchmarkConfig{
-		LittConfig:                  littConfig,
-		MetadataDirectory:           "~/benchmark",
-		MaximumWriteThroughputMB:    10,
-		MaximumReadThroughputMB:     10,
-		WriterParallelism:           4,
-		ReaderParallelism:           32,
-		ValueSizeMB:                 2.0,
-		BatchSizeMB:                 32,
-		CohortGCPeriodSeconds:       10.0,
-		WriteInfoChanelSize:         1024,
-		ReadInfoChanelSize:          1024,
-		CohortSize:                  1024,
-		TTLHours:                    1.0,
-		ReadSafetyMarginMinutes:     5.0,
-		Seed:                        1337,
-		RandomPoolSize:              unit.GB,
-		StartupSleepFactorSeconds:   0.5,
-		MetricsLoggingPeriodSeconds: 60.0,
-		PanicOnReadFailure:          false,
-		TimeLimitSeconds:            0.0,
-	}
-}
+func DefaultBenchmarkConfig() *BenchmarkConfig { _ = "STUB: not implemented"; return nil }
 
 // LoadConfig loads the benchmark configuration from the json file at the given path.
-func LoadConfig(path string) (*BenchmarkConfig, error) {
-	config := DefaultBenchmarkConfig()
+func LoadConfig(path string) (*BenchmarkConfig, error) { _ = "STUB: not implemented"; return nil, nil }
 
-	path, err := util.SanitizePath(path)
-	if err != nil {
-		return nil, fmt.Errorf("failed to sanitize path: %w", err)
-	}
+// Read the file
+//nolint:gosec // caller-supplied config path
 
-	// Read the file
-	data, err := os.ReadFile(path) //nolint:gosec // caller-supplied config path
-	if err != nil {
-		return nil, fmt.Errorf("failed to read config file: %w", err)
-	}
+// Create a decoder that will return an error if there are unmatched fields
 
-	// Create a decoder that will return an error if there are unmatched fields
-	decoder := json.NewDecoder(strings.NewReader(string(data)))
-	decoder.DisallowUnknownFields()
-
-	// Unmarshal JSON into config struct
-	err = decoder.Decode(config)
-	if err != nil {
-		return nil, fmt.Errorf("failed to unmarshal config file: %w", err)
-	}
-
-	config.MetadataDirectory, err = util.SanitizePath(config.MetadataDirectory)
-	if err != nil {
-		return nil, fmt.Errorf("failed to sanitize metadata directory: %w", err)
-	}
-
-	return config, nil
-}
+// Unmarshal JSON into config struct

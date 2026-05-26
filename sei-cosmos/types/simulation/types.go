@@ -8,7 +8,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/baseapp"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/legacy/legacytx"
 )
 
 type WeightedProposalContent interface {
@@ -66,60 +65,35 @@ type OperationMsg struct {
 
 // NewOperationMsgBasic creates a new operation message from raw input.
 func NewOperationMsgBasic(route, name, comment string, ok bool, msg []byte) OperationMsg {
-	return OperationMsg{
-		Route:   route,
-		Name:    name,
-		Comment: comment,
-		OK:      ok,
-		Msg:     msg,
-	}
+	_ = "STUB: not implemented"
+	return *new(OperationMsg)
 }
 
 // NewOperationMsg - create a new operation message from sdk.Msg
 func NewOperationMsg(msg sdk.Msg, ok bool, comment string, cdc *codec.ProtoCodec) OperationMsg {
-	if legacyMsg, okType := msg.(legacytx.LegacyMsg); okType {
-		return NewOperationMsgBasic(legacyMsg.Route(), legacyMsg.Type(), comment, ok, legacyMsg.GetSignBytes())
-	}
-
-	bz := cdc.MustMarshalJSON(msg)
-
-	return NewOperationMsgBasic(sdk.MsgTypeURL(msg), sdk.MsgTypeURL(msg), comment, ok, bz)
-
+	_ = "STUB: not implemented"
+	return *new(OperationMsg)
 }
 
 // NoOpMsg - create a no-operation message
 func NoOpMsg(route, msgType, comment string) OperationMsg {
-	return NewOperationMsgBasic(route, msgType, comment, false, nil)
+	_ = "STUB: not implemented"
+	return *new(OperationMsg)
 }
 
 // log entry text for this operation msg
-func (om OperationMsg) String() string {
-	out, err := json.Marshal(om)
-	if err != nil {
-		panic(err)
-	}
-
-	return string(out)
-}
+func (om OperationMsg) String() string { _ = "STUB: not implemented"; return "" }
 
 // MustMarshal Marshals the operation msg, panic on error
 func (om OperationMsg) MustMarshal() json.RawMessage {
-	out, err := json.Marshal(om)
-	if err != nil {
-		panic(err)
-	}
-
-	return out
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // LogEvent adds an event for the events stats
 func (om OperationMsg) LogEvent(eventLogger func(route, op, evResult string)) {
-	pass := "ok"
-	if !om.OK {
-		pass = "failure"
-	}
-
-	eventLogger(om.Route, om.Name, pass)
+	_ = "STUB: not implemented"
+	return
 }
 
 // FutureOperation is an operation which will be ran at the beginning of the
@@ -142,15 +116,8 @@ type AppParams map[string]json.RawMessage
 // ParamSimulator is used to generate a random value or default value (eg: in the
 // case of operation weights where Rand is not used).
 func (sp AppParams) GetOrGenerate(_ codec.JSONCodec, key string, ptr interface{}, r *rand.Rand, ps ParamSimulator) {
-	if v, ok := sp[key]; ok && v != nil {
-		err := json.Unmarshal(v, ptr)
-		if err != nil {
-			panic(err)
-		}
-		return
-	}
-
-	ps(r)
+	_ = "STUB: not implemented"
+	return
 }
 
 type ParamSimulator func(r *rand.Rand)

@@ -6,11 +6,8 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/client/common"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/types"
 )
 
 type (
@@ -30,193 +27,62 @@ type (
 )
 
 func registerTxHandlers(clientCtx client.Context, r *mux.Router) {
+	_ = "STUB: not implemented"
 	// Withdraw all delegator rewards
-	r.HandleFunc(
-		"/distribution/delegators/{delegatorAddr}/rewards",
-		newWithdrawDelegatorRewardsHandlerFn(clientCtx),
-	).Methods("POST")
-
-	// Withdraw delegation rewards
-	r.HandleFunc(
-		"/distribution/delegators/{delegatorAddr}/rewards/{validatorAddr}",
-		newWithdrawDelegationRewardsHandlerFn(clientCtx),
-	).Methods("POST")
-
-	// Replace the rewards withdrawal address
-	r.HandleFunc(
-		"/distribution/delegators/{delegatorAddr}/withdraw_address",
-		newSetDelegatorWithdrawalAddrHandlerFn(clientCtx),
-	).Methods("POST")
-
-	// Withdraw validator rewards and commission
-	r.HandleFunc(
-		"/distribution/validators/{validatorAddr}/rewards",
-		newWithdrawValidatorRewardsHandlerFn(clientCtx),
-	).Methods("POST")
-
-	// Fund the community pool
-	r.HandleFunc(
-		"/distribution/community_pool",
-		newFundCommunityPoolHandlerFn(clientCtx),
-	).Methods("POST")
+	return
 }
+
+// Withdraw delegation rewards
+
+// Replace the rewards withdrawal address
+
+// Withdraw validator rewards and commission
+
+// Fund the community pool
 
 func newWithdrawDelegatorRewardsHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req withdrawRewardsReq
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		// read and validate URL's variables
-		delAddr, ok := checkDelegatorAddressVar(w, r)
-		if !ok {
-			return
-		}
-
-		msgs, err := common.WithdrawAllDelegatorRewards(clientCtx, delAddr)
-		if rest.CheckInternalServerError(w, err) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msgs...)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
+
+// read and validate URL's variables
 
 func newWithdrawDelegationRewardsHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req withdrawRewardsReq
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		// read and validate URL's variables
-		delAddr, ok := checkDelegatorAddressVar(w, r)
-		if !ok {
-			return
-		}
-
-		valAddr, ok := checkValidatorAddressVar(w, r)
-		if !ok {
-			return
-		}
-
-		msg := types.NewMsgWithdrawDelegatorReward(delAddr, valAddr)
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
+
+// read and validate URL's variables
 
 func newSetDelegatorWithdrawalAddrHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req setWithdrawalAddrReq
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		// read and validate URL's variables
-		delAddr, ok := checkDelegatorAddressVar(w, r)
-		if !ok {
-			return
-		}
-
-		msg := types.NewMsgSetWithdrawAddress(delAddr, req.WithdrawAddress)
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
+
+// read and validate URL's variables
 
 func newWithdrawValidatorRewardsHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req withdrawRewardsReq
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		// read and validate URL's variable
-		valAddr, ok := checkValidatorAddressVar(w, r)
-		if !ok {
-			return
-		}
-
-		// prepare multi-message transaction
-		msgs, err := common.WithdrawValidatorRewardsAndCommission(valAddr)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msgs...)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
+// read and validate URL's variable
+
+// prepare multi-message transaction
+
 func newFundCommunityPoolHandlerFn(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req fundCommunityPoolReq
-		if !rest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
-		if rest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		msg := types.NewMsgFundCommunityPool(req.Amount, fromAddr)
-		if rest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }
 
 // Auxiliary
 
 func checkDelegatorAddressVar(w http.ResponseWriter, r *http.Request) (sdk.AccAddress, bool) {
-	addr, err := sdk.AccAddressFromBech32(mux.Vars(r)["delegatorAddr"])
-	if rest.CheckBadRequestError(w, err) {
-		return nil, false
-	}
-
-	return addr, true
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), false
 }
 
 func checkValidatorAddressVar(w http.ResponseWriter, r *http.Request) (sdk.ValAddress, bool) {
-	addr, err := sdk.ValAddressFromBech32(mux.Vars(r)["validatorAddr"])
-	if rest.CheckBadRequestError(w, err) {
-		return nil, false
-	}
-
-	return addr, true
+	_ = "STUB: not implemented"
+	return *new(sdk.ValAddress), false
 }

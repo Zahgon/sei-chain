@@ -1,39 +1,21 @@
 package baseapp
 
 import (
-	"fmt"
 	"math/big"
-	"reflect"
-	"strings"
 	"sync"
-	"time"
 
-	"github.com/armon/go-metrics"
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/gogo/protobuf/proto"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/server/config"
 	servertypes "github.com/sei-protocol/sei-chain/sei-cosmos/server/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/snapshots"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/utils/tracing"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/legacy/legacytx"
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	tmcfg "github.com/sei-protocol/sei-chain/sei-tendermint/config"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
-	sdbm "github.com/sei-protocol/sei-tm-db/backends"
 	"github.com/sei-protocol/seilog"
-	"github.com/spf13/cast"
-	leveldbutils "github.com/syndtr/goleveldb/leveldb/util"
 	dbm "github.com/tendermint/tm-db"
-	"go.opentelemetry.io/otel"
-	"go.opentelemetry.io/otel/attribute"
-	"go.opentelemetry.io/otel/trace"
-	"go.opentelemetry.io/otel/trace/noop"
 )
 
 const (
@@ -81,15 +63,15 @@ type (
 	DeliverTxHook func(sdk.Context, sdk.Tx, [32]byte, sdk.DeliverTxHookInput)
 )
 
-func (app *BaseApp) EvmNonce(_ common.Address) uint64 {
-	return 0
-}
+func (app *BaseApp) EvmNonce(_ common.Address) uint64 { _ = "STUB: not implemented"; return 0 }
 
 func (app *BaseApp) EvmBalance(_ common.Address, _ []byte) *big.Int {
-	return big.NewInt(0)
+	_ = "STUB: not implemented"
+	return nil
+
+	// BaseApp reflects the ABCI application implementation.
 }
 
-// BaseApp reflects the ABCI application implementation.
 type BaseApp struct {
 	// initialized on creation
 	name              string // application name from abci.Info
@@ -237,242 +219,127 @@ type snapshotData struct {
 func NewBaseApp(
 	name string, db dbm.DB, txDecoder sdk.TxDecoder, tmConfig *tmcfg.Config, appOpts servertypes.AppOptions, options ...func(*BaseApp),
 ) *BaseApp {
-	cms := store.NewCommitMultiStore(db)
-	archivalVersion := cast.ToInt64(appOpts.Get(FlagArchivalVersion))
-	if archivalVersion > 0 {
-		switch cast.ToString(appOpts.Get(FlagArchivalDBType)) {
-		case "arweave":
-			indexDbPath := cast.ToString(appOpts.Get(FlagArchivalArweaveIndexDBFullPath))
-			arweaveNodeUrl := cast.ToString(appOpts.Get(FlagArchivalArweaveNodeURL))
-			arweaveDb, err := sdbm.NewArweaveDB(indexDbPath, arweaveNodeUrl)
-			if err != nil {
-				panic(err)
-			}
-			cms = store.NewCommitMultiStoreWithArchival(db, arweaveDb, archivalVersion)
-		}
-	}
-
-	// Enable Tracing
-	tp := noop.NewTracerProvider()
-	otel.SetTracerProvider(noop.NewTracerProvider())
-	tr := tp.Tracer("component-main")
-	tracingEnabled := cast.ToBool(appOpts.Get(tracing.FlagTracing))
-	if tracingEnabled {
-		tp, err := tracing.DefaultTracerProvider()
-		if err != nil {
-			panic(err)
-		}
-		otel.SetTracerProvider(tp)
-		tr = tp.Tracer("component-main")
-	}
-	app := &BaseApp{
-		name: name,
-		appStore: appStore{
-			db:             db,
-			cms:            cms,
-			storeLoader:    DefaultStoreLoader,
-			fauxMerkleMode: false,
-		},
-		moduleRouter: moduleRouter{
-			router:           NewRouter(),
-			queryRouter:      NewQueryRouter(),
-			grpcQueryRouter:  NewGRPCQueryRouter(),
-			msgServiceRouter: NewMsgServiceRouter(),
-		},
-		txDecoder:        txDecoder,
-		TmConfig:         tmConfig,
-		TracingInfo:      tracing.NewTracingInfo(tr, tracingEnabled),
-		commitLock:       &sync.Mutex{},
-		checkTxStateLock: &sync.RWMutex{},
-		deliverTxHooks:   []DeliverTxHook{},
-	}
-
-	for _, option := range options {
-		option(app)
-	}
-
-	if app.interBlockCache != nil {
-		app.cms.SetInterBlockCache(app.interBlockCache)
-	}
-
-	app.runTxRecoveryMiddleware = newDefaultRecoveryMiddleware()
-	app.ChainID = cast.ToString(appOpts.Get(FlagChainID))
-	if app.ChainID == "" {
-		panic("must pass --chain-id when calling 'seid start' or set in ~/.sei/config/client.toml")
-	}
-	app.startCompactionRoutine(db)
-
-	// if no option overrode already, initialize to the flags value
-	// this avoids forcing every implementation to pass an option, but allows it
-	if app.concurrencyWorkers == 0 {
-		app.concurrencyWorkers = cast.ToInt(appOpts.Get(FlagConcurrencyWorkers))
-	}
-	// safely default this to the default value if 0
-	if app.concurrencyWorkers == 0 {
-		app.concurrencyWorkers = config.DefaultConcurrencyWorkers
-	}
-
-	return app
+	_ = "STUB: not implemented"
+	return nil
 }
+
+// Enable Tracing
+
+// if no option overrode already, initialize to the flags value
+// this avoids forcing every implementation to pass an option, but allows it
+
+// safely default this to the default value if 0
 
 // Name returns the name of the BaseApp.
 func (app *BaseApp) Name() string {
-	return app.name
+	_ = "STUB: not implemented"
+
+	// AppVersion returns the application's protocol version.
+	return ""
 }
 
-// AppVersion returns the application's protocol version.
-func (app *BaseApp) AppVersion() uint64 {
-	return app.appVersion
-}
+func (app *BaseApp) AppVersion() uint64 { _ = "STUB: not implemented"; return 0 }
 
 // ConcurrencyWorkers returns the number of concurrent workers for the BaseApp.
-func (app *BaseApp) ConcurrencyWorkers() int {
-	return app.concurrencyWorkers
-}
+func (app *BaseApp) ConcurrencyWorkers() int { _ = "STUB: not implemented"; return 0 }
 
 // OccEnabled returns whether OCC is enabled for the BaseApp.
-func (app *BaseApp) OccEnabled() bool {
-	return app.occEnabled
-}
+func (app *BaseApp) OccEnabled() bool { _ = "STUB: not implemented"; return false }
 
 // Version returns the application's version string.
 func (app *BaseApp) Version() string {
-	return app.version
+	_ = "STUB: not implemented"
+
+	// Trace returns the boolean value for logging error stack traces.
+	return ""
 }
 
-// Trace returns the boolean value for logging error stack traces.
 func (app *BaseApp) Trace() bool {
-	return app.trace
+	_ = "STUB: not implemented"
+
+	// MsgServiceRouter returns the MsgServiceRouter of a BaseApp.
+	return false
 }
 
-// MsgServiceRouter returns the MsgServiceRouter of a BaseApp.
-func (app *BaseApp) MsgServiceRouter() *MsgServiceRouter { return app.msgServiceRouter }
+func (app *BaseApp) MsgServiceRouter() *MsgServiceRouter { _ = "STUB: not implemented"; return nil }
 
 // MountStores mounts all IAVL or DB stores to the provided keys in the BaseApp
 // multistore.
-func (app *BaseApp) MountStores(keys ...sdk.StoreKey) {
-	for _, key := range keys {
-		switch key.(type) {
-		case *sdk.KVStoreKey:
-			if !app.fauxMerkleMode {
-				app.MountStore(key, sdk.StoreTypeIAVL)
-			} else {
-				// StoreTypeDB doesn't do anything upon commit, and it doesn't
-				// retain history, but it's useful for faster simulation.
-				app.MountStore(key, sdk.StoreTypeDB)
-			}
+func (app *BaseApp) MountStores(keys ...sdk.StoreKey) { _ = "STUB: not implemented"; return }
 
-		case *sdk.TransientStoreKey:
-			app.MountStore(key, sdk.StoreTypeTransient)
-
-		default:
-			panic("Unrecognized store key type " + reflect.TypeOf(key).Name())
-		}
-	}
-}
+// StoreTypeDB doesn't do anything upon commit, and it doesn't
+// retain history, but it's useful for faster simulation.
 
 // MountKVStores mounts all IAVL or DB stores to the provided keys in the
 // BaseApp multistore.
 func (app *BaseApp) MountKVStores(keys map[string]*sdk.KVStoreKey) {
-	for _, key := range keys {
-		if !app.fauxMerkleMode {
-			app.MountStore(key, sdk.StoreTypeIAVL)
-		} else {
-			// StoreTypeDB doesn't do anything upon commit, and it doesn't
-			// retain history, but it's useful for faster simulation.
-			app.MountStore(key, sdk.StoreTypeDB)
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+// StoreTypeDB doesn't do anything upon commit, and it doesn't
+// retain history, but it's useful for faster simulation.
 
 // MountTransientStores mounts all transient stores to the provided keys in
 // the BaseApp multistore.
 func (app *BaseApp) MountTransientStores(keys map[string]*sdk.TransientStoreKey) {
-	for _, key := range keys {
-		app.MountStore(key, sdk.StoreTypeTransient)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MountMemoryStores mounts all in-memory KVStores with the BaseApp's internal
 // commit multi-store.
 func (app *BaseApp) MountMemoryStores(keys map[string]*sdk.MemoryStoreKey) {
-	for _, memKey := range keys {
-		app.MountStore(memKey, sdk.StoreTypeMemory)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // MountStore mounts a store to the provided key in the BaseApp multistore,
 // using the default DB.
 func (app *BaseApp) MountStore(key sdk.StoreKey, typ sdk.StoreType) {
-	app.cms.MountStoreWithDB(key, typ, nil)
-	if app.qms != nil {
-		app.qms.MountStoreWithDB(key, typ, nil)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // LoadLatestVersion loads the latest application version. It will panic if
 // called more than once on a running BaseApp.
-func (app *BaseApp) LoadLatestVersion() error {
-	err := app.storeLoader(app.cms)
-	if err != nil {
-		return fmt.Errorf("failed to load latest version: %w", err)
-	}
-
-	if app.qms != nil {
-		err = app.storeLoader(app.qms)
-		if err != nil {
-			return fmt.Errorf("failed to load latest version: %w", err)
-		}
-	}
-
-	return app.init()
-}
+func (app *BaseApp) LoadLatestVersion() error { _ = "STUB: not implemented"; return nil }
 
 // DefaultStoreLoader will be used by default and loads the latest version
-func DefaultStoreLoader(ms sdk.CommitMultiStore) error {
-	return ms.LoadLatestVersion()
-}
+func DefaultStoreLoader(ms sdk.CommitMultiStore) error { _ = "STUB: not implemented"; return nil }
 
 // CommitMultiStore returns the root multi-store.
 // App constructor can use this to access the `cms`.
 // UNSAFE: must not be used during the abci life cycle.
 func (app *BaseApp) CommitMultiStore() sdk.CommitMultiStore {
-	return app.cms
+	_ = "STUB: not implemented"
+
+	// SnapshotManager returns the snapshot manager.
+	// application use this to register extra extension snapshotters.
+	return *new(sdk.CommitMultiStore)
 }
 
-// SnapshotManager returns the snapshot manager.
-// application use this to register extra extension snapshotters.
-func (app *BaseApp) SnapshotManager() *snapshots.Manager {
-	return app.snapshotManager
-}
+func (app *BaseApp) SnapshotManager() *snapshots.Manager { _ = "STUB: not implemented"; return nil }
 
 // LoadVersion loads the BaseApp application version. It will panic if called
 // more than once on a running baseapp.
-func (app *BaseApp) LoadVersion(version int64) error {
-	err := app.cms.LoadVersion(version)
-	if err != nil {
-		return fmt.Errorf("failed to load version %d: %w", version, err)
-	}
-	return app.init()
-}
+func (app *BaseApp) LoadVersion(version int64) error { _ = "STUB: not implemented"; return nil }
 
 // LoadVersionWithoutInit loads the BaseApp application version, it doesn't call app.init any more,
 // specifically used by export genesis command.
 func (app *BaseApp) LoadVersionWithoutInit(version int64) error {
-	err := app.cms.LoadVersion(version)
-	app.setCheckState(tmproto.Header{})
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // LastCommitID returns the last CommitID of the multistore.
 func (app *BaseApp) LastCommitID() sdk.CommitID {
-	return app.cms.LastCommitID()
+	_ = "STUB: not implemented"
+	return *new(sdk.CommitID)
 }
 
 // LastBlockHeight returns the last committed block height.
-func (app *BaseApp) LastBlockHeight() int64 {
-	return app.cms.LastCommitID().Version
-}
+func (app *BaseApp) LastBlockHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (app *BaseApp) init() error {
 	if app.sealed {
@@ -486,346 +353,159 @@ func (app *BaseApp) init() error {
 	return nil
 }
 
-func (app *BaseApp) setMinGasPrices(gasPrices sdk.DecCoins) {
-	app.minGasPrices = gasPrices
-}
+func (app *BaseApp) setMinGasPrices(gasPrices sdk.DecCoins) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) setHaltHeight(haltHeight uint64) {
-	app.haltHeight = haltHeight
-}
+func (app *BaseApp) setHaltHeight(haltHeight uint64) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) setHaltTime(haltTime uint64) {
-	app.haltTime = haltTime
-}
+func (app *BaseApp) setHaltTime(haltTime uint64) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) setMinRetainBlocks(minRetainBlocks uint64) {
-	app.minRetainBlocks = minRetainBlocks
-}
+func (app *BaseApp) setMinRetainBlocks(minRetainBlocks uint64) { _ = "STUB: not implemented"; return }
 
 func (app *BaseApp) setInterBlockCache(cache sdk.MultiStorePersistentCache) {
-	app.interBlockCache = cache
+	_ = "STUB: not implemented"
+	return
 }
 
 func (app *BaseApp) setCompactionInterval(compactionInterval uint64) {
-	app.compactionInterval = compactionInterval
+	_ = "STUB: not implemented"
+	return
 }
 
-func (app *BaseApp) setTrace(trace bool) {
-	app.trace = trace
-}
+func (app *BaseApp) setTrace(trace bool) { _ = "STUB: not implemented"; return }
 
-func (app *BaseApp) setIndexEvents(ie []string) {
-	app.IndexEvents = make(map[string]struct{})
-
-	for _, e := range ie {
-		app.IndexEvents[e] = struct{}{}
-	}
-}
+func (app *BaseApp) setIndexEvents(ie []string) { _ = "STUB: not implemented"; return }
 
 // Router returns the router of the BaseApp.
 func (app *BaseApp) Router() sdk.Router {
-	if app.sealed {
-		// We cannot return a Router when the app is sealed because we can't have
-		// any routes modified which would cause unexpected routing behavior.
-		panic("Router() on sealed BaseApp")
-	}
+	_ = "STUB: not implemented"
 
-	return app.router
+	// We cannot return a Router when the app is sealed because we can't have
+	// any routes modified which would cause unexpected routing behavior.
+	return *new(sdk.Router)
 }
 
 // QueryRouter returns the QueryRouter of a BaseApp.
-func (app *BaseApp) QueryRouter() sdk.QueryRouter { return app.queryRouter }
+func (app *BaseApp) QueryRouter() sdk.QueryRouter {
+	_ = "STUB: not implemented"
+	return *
 
-// Seal seals a BaseApp. It prohibits any further modifications to a BaseApp.
-func (app *BaseApp) Seal() { app.sealed = true }
-
-// IsSealed returns true if the BaseApp is sealed and false otherwise.
-func (app *BaseApp) IsSealed() bool { return app.sealed }
-
-// setCheckState sets the BaseApp's checkState with a branched multi-store
-// (i.e. a CacheMultiStore) and a new Context with the same multi-store branch,
-// provided header, and minimum gas prices set. It is set on InitChain and reset
-// on Commit.
-func (app *BaseApp) setCheckState(header tmproto.Header) {
-	ms := app.cms.CacheMultiStore()
-	ctx := sdk.NewContext(ms, header, true).WithMinGasPrices(app.minGasPrices)
-	app.checkTxStateLock.Lock()
-	defer app.checkTxStateLock.Unlock()
-	if app.checkState == nil {
-		app.checkState = &state{
-			ms:  ms,
-			ctx: ctx,
-			mtx: &sync.RWMutex{},
-		}
-		return
-	}
-	app.checkState.SetMultiStore(ms)
-	app.checkState.SetContext(ctx)
+	// Seal seals a BaseApp. It prohibits any further modifications to a BaseApp.
+	new(sdk.QueryRouter)
 }
+
+func (app *BaseApp) Seal() {
+	_ = "STUB: not implemented"
+
+	// IsSealed returns true if the BaseApp is sealed and false otherwise.
+	return
+}
+
+func (app *BaseApp) IsSealed() bool {
+	_ = "STUB: not implemented"
+
+	// setCheckState sets the BaseApp's checkState with a branched multi-store
+	// (i.e. a CacheMultiStore) and a new Context with the same multi-store branch,
+	// provided header, and minimum gas prices set. It is set on InitChain and reset
+	// on Commit.
+	return false
+}
+
+func (app *BaseApp) setCheckState(header tmproto.Header) { _ = "STUB: not implemented"; return }
 
 // setDeliverState sets the BaseApp's deliverState with a branched multi-store
 // (i.e. a CacheMultiStore) and a new Context with the same multi-store branch,
 // and provided header. It is set on InitChain and BeginBlock and set to nil on
 // Commit.
-func (app *BaseApp) setDeliverState(header tmproto.Header) {
-	ms := app.cms.CacheMultiStore()
-	ctx := sdk.NewContext(ms, header, false)
-	if app.deliverState == nil {
-		app.deliverState = &state{
-			ms:  ms,
-			ctx: ctx,
-			mtx: &sync.RWMutex{},
-		}
-		return
-	}
-	app.deliverState.SetMultiStore(ms)
-	app.deliverState.SetContext(ctx)
-}
+func (app *BaseApp) setDeliverState(header tmproto.Header) { _ = "STUB: not implemented"; return }
 
 func (app *BaseApp) setProcessProposalState(header tmproto.Header) {
-	ms := app.cms.CacheMultiStore()
-	ctx := sdk.NewContext(ms, header, false)
-	if app.processProposalState == nil {
-		app.processProposalState = &state{
-			ms:  ms,
-			ctx: ctx,
-			mtx: &sync.RWMutex{},
-		}
-		return
-	}
-	app.processProposalState.SetMultiStore(ms)
-	app.processProposalState.SetContext(ctx)
+	_ = "STUB: not implemented"
+	return
 }
 
-func (app *BaseApp) resetStatesExceptCheckState() {
-	app.processProposalState = nil
-	app.deliverState = nil
-	app.stateToCommit = nil
-}
+func (app *BaseApp) resetStatesExceptCheckState() { _ = "STUB: not implemented"; return }
 
 func (app *BaseApp) setProcessProposalHeader(header tmproto.Header) {
-	app.processProposalState.SetContext(app.processProposalState.Context().WithBlockHeader(header))
+	_ = "STUB: not implemented"
+	return
 }
 
-func (app *BaseApp) setDeliverStateHeader(header tmproto.Header) {
-	app.deliverState.SetContext(app.deliverState.Context().WithBlockHeader(header).WithBlockHeight(header.Height))
-}
+func (app *BaseApp) setDeliverStateHeader(header tmproto.Header) { _ = "STUB: not implemented"; return }
 
 // GetProcessProposalCleanContext returns a context snapshotted at the start of
 // ProcessProposal, before the handler runs. It has the correct store state,
 // consensus params, and header, but is immune to speculative writes from
 // optimistic processing.
 func (app *BaseApp) GetProcessProposalCleanContext() sdk.Context {
-	return app.processProposalCleanCtx
+	_ = "STUB: not implemented"
+	return *new(sdk.Context)
 }
 
 func (app *BaseApp) prepareProcessProposalState(headerHash []byte) {
-	app.processProposalState.SetContext(app.processProposalState.Context().
-		WithHeaderHash(headerHash).
-		WithConsensusParams(app.GetConsensusParams(app.processProposalState.Context())))
-
-	if app.processProposalState.MultiStore().TracingEnabled() {
-		app.processProposalState.SetMultiStore(app.processProposalState.MultiStore().SetTracingContext(nil).(sdk.CacheMultiStore))
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (app *BaseApp) prepareDeliverState(headerHash []byte) {
-	app.deliverState.SetContext(app.deliverState.Context().
-		WithHeaderHash(headerHash).
-		WithConsensusParams(app.GetConsensusParams(app.deliverState.Context())))
-}
+func (app *BaseApp) prepareDeliverState(headerHash []byte) { _ = "STUB: not implemented"; return }
 
 // GetConsensusParams returns the current consensus parameters from the BaseApp's
 // ParamStore. If the BaseApp has no ParamStore defined, nil is returned.
 func (app *BaseApp) GetConsensusParams(ctx sdk.Context) *tmproto.ConsensusParams {
-	if app.paramStore == nil {
-		return nil
-	}
-
-	cp := new(tmproto.ConsensusParams)
-
-	if app.paramStore.Has(ctx, ParamStoreKeyBlockParams) {
-		var bp tmproto.BlockParams
-
-		app.paramStore.Get(ctx, ParamStoreKeyBlockParams, &bp)
-		cp.Block = &bp
-	}
-
-	if app.paramStore.Has(ctx, ParamStoreKeyEvidenceParams) {
-		var ep tmproto.EvidenceParams
-
-		app.paramStore.Get(ctx, ParamStoreKeyEvidenceParams, &ep)
-		cp.Evidence = &ep
-	}
-
-	if app.paramStore.Has(ctx, ParamStoreKeyValidatorParams) {
-		var vp tmproto.ValidatorParams
-
-		app.paramStore.Get(ctx, ParamStoreKeyValidatorParams, &vp)
-		cp.Validator = &vp
-	}
-
-	if app.paramStore.Has(ctx, ParamStoreKeyVersionParams) {
-		var vp tmproto.VersionParams
-
-		app.paramStore.Get(ctx, ParamStoreKeyVersionParams, &vp)
-		cp.Version = &vp
-	}
-
-	if app.paramStore.Has(ctx, ParamStoreKeySynchronyParams) {
-		var vp tmproto.SynchronyParams
-
-		app.paramStore.Get(ctx, ParamStoreKeySynchronyParams, &vp)
-		cp.Synchrony = &vp
-	}
-
-	if app.paramStore.Has(ctx, ParamStoreKeyTimeoutParams) {
-		var vp tmproto.TimeoutParams
-
-		app.paramStore.Get(ctx, ParamStoreKeyTimeoutParams, &vp)
-		cp.Timeout = &vp
-	}
-
-	if app.paramStore.Has(ctx, ParamStoreKeyABCIParams) {
-		var vp tmproto.ABCIParams
-
-		app.paramStore.Get(ctx, ParamStoreKeyABCIParams, &vp)
-		cp.Abci = &vp
-	}
-
-	return cp
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // AddRunTxRecoveryHandler adds custom app.runTx method panic handlers.
 func (app *BaseApp) AddRunTxRecoveryHandler(handlers ...RecoveryHandler) {
-	for _, h := range handlers {
-		app.runTxRecoveryMiddleware = newRecoveryMiddleware(h, app.runTxRecoveryMiddleware)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // StoreConsensusParams sets the consensus parameters to the baseapp's param store.
 func (app *BaseApp) StoreConsensusParams(ctx sdk.Context, cp *tmproto.ConsensusParams) {
-	if app.paramStore == nil {
-		panic("cannot store consensus params with no params store set")
-	}
-
-	if cp == nil {
-		return
-	}
-
-	app.paramStore.Set(ctx, ParamStoreKeyBlockParams, cp.Block)
-	app.paramStore.Set(ctx, ParamStoreKeyEvidenceParams, cp.Evidence)
-	app.paramStore.Set(ctx, ParamStoreKeyValidatorParams, cp.Validator)
-	app.paramStore.Set(ctx, ParamStoreKeyVersionParams, cp.Version)
-	app.paramStore.Set(ctx, ParamStoreKeySynchronyParams, cp.Synchrony)
-	app.paramStore.Set(ctx, ParamStoreKeyTimeoutParams, cp.Timeout)
-	app.paramStore.Set(ctx, ParamStoreKeyABCIParams, cp.Abci)
+	_ = "STUB: not implemented"
+	return
 }
 
-func (app *BaseApp) ValidateHeight(height int64) error {
-	if height < 1 {
-		return fmt.Errorf("invalid height: %d", height)
-	}
+func (app *BaseApp) ValidateHeight(height int64) error { _ = "STUB: not implemented"; return nil }
 
-	// expectedHeight holds the expected height to validate.
-	var expectedHeight int64
-	if app.LastBlockHeight() == 0 && app.initialHeight > 1 {
-		// In this case, we're validating the first block of the chain (no
-		// previous commit). The height we're expecting is the initial height.
-		expectedHeight = app.initialHeight
-	} else {
-		// This case can means two things:
-		// - either there was already a previous commit in the store, in which
-		// case we increment the version from there,
-		// - or there was no previous commit, and initial version was not set,
-		// in which case we start at version 1.
-		expectedHeight = app.LastBlockHeight() + 1
-	}
+// expectedHeight holds the expected height to validate.
 
-	if height != expectedHeight {
-		return fmt.Errorf("invalid height: %d; expected: %d", height, expectedHeight)
-	}
+// In this case, we're validating the first block of the chain (no
+// previous commit). The height we're expecting is the initial height.
 
-	return nil
-}
+// This case can means two things:
+// - either there was already a previous commit in the store, in which
+// case we increment the version from there,
+// - or there was no previous commit, and initial version was not set,
+// in which case we start at version 1.
 
 // validateBasicTxMsgs executes basic validator calls for messages.
-func validateBasicTxMsgs(msgs []sdk.Msg) error {
-	if len(msgs) == 0 {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "must contain at least one message")
-	}
-
-	for _, msg := range msgs {
-		err := msg.ValidateBasic()
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
+func validateBasicTxMsgs(msgs []sdk.Msg) error { _ = "STUB: not implemented"; return nil }
 
 // Returns the applications's deliverState if app is in runTxModeDeliver,
 // otherwise it returns the application's checkstate.
-func (app *BaseApp) getState(mode runTxMode) *state {
-	if mode == runTxModeDeliver {
-		return app.deliverState
-	}
-
-	return app.checkState
-}
+func (app *BaseApp) getState(mode runTxMode) *state { _ = "STUB: not implemented"; return nil }
 
 // retrieve the context for the tx w/ txBytes and other memoized values.
 func (app *BaseApp) getContextForTx(mode runTxMode, txBytes []byte) sdk.Context {
-	ctx := app.getState(mode).Context().
-		WithTxBytes(txBytes)
-
-	ctx = ctx.WithConsensusParams(app.GetConsensusParams(ctx))
-
-	if mode == runTxModeReCheck {
-		ctx = ctx.WithIsReCheckTx(true)
-	}
-
-	if mode == runTxModeSimulate {
-		ctx, _ = ctx.CacheContext()
-	}
-
-	return ctx
+	_ = "STUB: not implemented"
+	return *new(sdk.Context)
 }
 
 func (app *BaseApp) GetCheckTxContext(txBytes []byte, recheck bool) sdk.Context {
-	mode := runTxModeCheck
-	if recheck {
-		mode = runTxModeReCheck
-	}
-	ctx := app.getState(mode).Context().
-		WithTxBytes(txBytes)
-	if recheck {
-		ctx = ctx.WithIsReCheckTx(true)
-	} else {
-		ctx = ctx.WithIsCheckTx(true)
-	}
-
-	return ctx.WithConsensusParams(app.GetConsensusParams(ctx))
+	_ = "STUB: not implemented"
+	return *new(sdk.Context)
 }
 
 // CacheTxContext returns a new context based off of the provided context with
 // a branched multi-store.
 func (app *BaseApp) CacheTxContext(ctx sdk.Context, checksum [32]byte) (sdk.Context, sdk.CacheMultiStore) {
-	ms := ctx.MultiStore()
-	// TODO: https://github.com/cosmos/cosmos-sdk/issues/2824
-	msCache := ms.CacheMultiStore()
-	if msCache.TracingEnabled() {
-		msCache = msCache.SetTracingContext(
-			sdk.TraceContext(
-				map[string]interface{}{
-					"txHash": fmt.Sprintf("%X", checksum),
-				},
-			),
-		).(sdk.CacheMultiStore)
-	}
+	_ = "STUB: not implemented"
+	return *
 
-	return ctx.WithMultiStore(msCache), msCache
+	// TODO: https://github.com/cosmos/cosmos-sdk/issues/2824
+	new(sdk.Context), *new(sdk.CacheMultiStore)
 }
 
 type runTxResult struct {
@@ -843,152 +523,55 @@ type runTxResult struct {
 // returned if the tx does not run out of gas and if all the messages are valid
 // and execute successfully. An error is returned otherwise.
 func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [32]byte) (runTxRes runTxResult, err error) {
-	defer telemetry.MeasureThroughputSinceWithLabels(
-		telemetry.TxCount,
-		[]metrics.Label{
-			telemetry.NewLabel("mode", modeKeyToString[mode]),
-		},
-		time.Now(),
-	)
-
-	// check for existing parent tracer, and if applicable, use it
-	spanCtx, span := app.TracingInfo.StartWithContext("RunTx", ctx.TraceSpanContext())
-	defer span.End()
-	ctx = ctx.WithTraceSpanContext(spanCtx)
-	if mode == runTxModeSimulate {
-		ctx = ctx.WithIsSimulation(true)
-	}
-	span.SetAttributes(attribute.String("txHash", fmt.Sprintf("%X", checksum)))
-	runTxRes.ctx = ctx
-
-	// NOTE: GasWanted should be returned by the AnteHandler. GasUsed is
-	// determined by the GasMeter. We need access to the context to get the gas
-	// meter so we initialize upfront.
-	var gasWanted uint64
-	var gasEstimate uint64
-
-	ms := ctx.MultiStore()
-
-	blockGasMeter := ctx.GasMeter()
-	defer func() {
-		if r := recover(); r != nil {
-			recoveryMW := newOutOfGasRecoveryMiddleware(gasWanted, ctx, app.runTxRecoveryMiddleware)
-			recoveryMW = newOCCAbortRecoveryMiddleware(recoveryMW) // TODO: do we have to wrap with occ enabled check?
-			err, runTxRes.result = processRecovery(r, recoveryMW), nil
-		}
-		if ctx.GasMeter() == blockGasMeter {
-			return
-		}
-		runTxRes.gasInfo = sdk.GasInfo{GasWanted: gasWanted, GasUsed: ctx.GasMeter().GasConsumed(), GasEstimate: gasEstimate}
-	}()
-
-	if tx == nil {
-		return runTxRes, sdkerrors.Wrap(sdkerrors.ErrTxDecode, "tx decode error")
-	}
-
-	msgs := tx.GetMsgs()
-
-	if err := validateBasicTxMsgs(msgs); err != nil {
-		return runTxRes, err
-	}
-
-	if app.anteHandler != nil {
-		var anteSpan trace.Span
-		// trace AnteHandler
-		_, anteSpan = app.TracingInfo.StartWithContext("AnteHandler", ctx.TraceSpanContext())
-		defer anteSpan.End()
-		var (
-			anteCtx sdk.Context
-			msCache sdk.CacheMultiStore
-		)
-		// Branch context before AnteHandler call in case it aborts.
-		// This is required for both CheckTx and DeliverTx.
-		// Ref: https://github.com/cosmos/cosmos-sdk/issues/2772
-		//
-		// NOTE: Alternatively, we could require that AnteHandler ensures that
-		// writes do not happen if aborted/failed.  This may have some
-		// performance benefits, but it'll be more difficult to get right.
-		anteCtx, msCache = app.CacheTxContext(ctx, checksum)
-		anteCtx = anteCtx.WithEventManager(sdk.NewEventManager())
-		newCtx, err := app.anteHandler(anteCtx, tx, mode == runTxModeSimulate)
-
-		if !newCtx.IsZero() {
-			// At this point, newCtx.MultiStore() is a store branch, or something else
-			// replaced by the AnteHandler. We want the original multistore.
-			//
-			// Also, in the case of the tx aborting, we need to track gas consumed via
-			// the instantiated gas meter in the AnteHandler, so we update the context
-			// prior to returning.
-			//
-			// This also replaces the GasMeter in the context where GasUsed was initialized 0
-			// and updated with gas consumed in the ante handler runs
-			// The GasMeter is a pointer and its passed to the RunMsg and tracks the consumed
-			// gas there too.
-			ctx = newCtx.WithMultiStore(ms)
-			runTxRes.ctx = ctx
-		}
-		defer func() {
-			if newCtx.DeliverTxCallback() != nil {
-				newCtx.DeliverTxCallback()(ctx.WithGasMeter(sdk.NewInfiniteGasMeterWithMultiplier(ctx)))
-			}
-		}()
-
-		events := ctx.EventManager().Events()
-
-		if err != nil {
-			return runTxRes, err
-		}
-		// GasMeter expected to be set in AnteHandler
-		gasWanted = ctx.GasMeter().Limit()
-		gasEstimate = ctx.GasEstimate()
-
-		msCache.Write()
-		runTxRes.anteEvents = events.ToABCIEvents()
-		anteSpan.End()
-	}
-
-	// Create a new Context based off of the existing Context with a MultiStore branch
-	// in case message processing fails. At this point, the MultiStore
-	// is a branch of a branch.
-	runMsgCtx, msCache := app.CacheTxContext(ctx, checksum)
-
-	// Attempt to execute all messages and only update state if all messages pass
-	// and we're in DeliverTx. Note, RunMsgs will never return a reference to a
-	// Result if any single message fails or does not have a registered Handler.
-	runTxRes.result, err = app.RunMsgs(runMsgCtx, msgs)
-
-	if err == nil {
-		msCache.Write()
-	}
-	// we do this since we will only be looking at result in DeliverTx
-	if runTxRes.result != nil && len(runTxRes.anteEvents) > 0 {
-		// append the events in the order of occurrence
-		runTxRes.result.Events = append(runTxRes.anteEvents, runTxRes.result.Events...)
-	}
-	// only apply hooks if no error
-	if err == nil && (!ctx.IsEVM() || runTxRes.result.EvmError == "") {
-		var evmTxInfo *abci.EvmTxInfo
-		if ctx.IsEVM() {
-			evmTxInfo = &abci.EvmTxInfo{
-				SenderAddress: ctx.EVMSenderAddress().Hex(),
-				Nonce:         ctx.EVMNonce(),
-				TxHash:        ctx.EVMTxHash(),
-				VmError:       runTxRes.result.EvmError,
-			}
-		}
-		var events = []abci.Event{}
-		if runTxRes.result != nil {
-			events = sdk.MarkEventsToIndex(runTxRes.result.Events, app.IndexEvents)
-		}
-		for _, hook := range app.deliverTxHooks {
-			hook(ctx, tx, checksum, sdk.DeliverTxHookInput{
-				EvmTxInfo: evmTxInfo,
-				Events:    events,
-			})
-		}
-	}
-	return runTxRes, err
+	_ = "STUB: not implemented"
+	return *new(runTxResult), nil
 }
+
+// check for existing parent tracer, and if applicable, use it
+
+// NOTE: GasWanted should be returned by the AnteHandler. GasUsed is
+// determined by the GasMeter. We need access to the context to get the gas
+// meter so we initialize upfront.
+
+// TODO: do we have to wrap with occ enabled check?
+
+// trace AnteHandler
+
+// Branch context before AnteHandler call in case it aborts.
+// This is required for both CheckTx and DeliverTx.
+// Ref: https://github.com/cosmos/cosmos-sdk/issues/2772
+//
+// NOTE: Alternatively, we could require that AnteHandler ensures that
+// writes do not happen if aborted/failed.  This may have some
+// performance benefits, but it'll be more difficult to get right.
+
+// At this point, newCtx.MultiStore() is a store branch, or something else
+// replaced by the AnteHandler. We want the original multistore.
+//
+// Also, in the case of the tx aborting, we need to track gas consumed via
+// the instantiated gas meter in the AnteHandler, so we update the context
+// prior to returning.
+//
+// This also replaces the GasMeter in the context where GasUsed was initialized 0
+// and updated with gas consumed in the ante handler runs
+// The GasMeter is a pointer and its passed to the RunMsg and tracks the consumed
+// gas there too.
+
+// GasMeter expected to be set in AnteHandler
+
+// Create a new Context based off of the existing Context with a MultiStore branch
+// in case message processing fails. At this point, the MultiStore
+// is a branch of a branch.
+
+// Attempt to execute all messages and only update state if all messages pass
+// and we're in DeliverTx. Note, RunMsgs will never return a reference to a
+// Result if any single message fails or does not have a registered Handler.
+
+// we do this since we will only be looking at result in DeliverTx
+
+// append the events in the order of occurrence
+
+// only apply hooks if no error
 
 // RunMsgs iterates through a list of messages and executes them with the provided
 // Context and execution mode. Messages will only be executed during simulation
@@ -996,164 +579,45 @@ func (app *BaseApp) runTx(ctx sdk.Context, mode runTxMode, tx sdk.Tx, checksum [
 // Handler does not exist for a given message route. Otherwise, a reference to a
 // Result is returned. The caller must not commit state if an error is returned.
 func (app *BaseApp) RunMsgs(ctx sdk.Context, msgs []sdk.Msg) (*sdk.Result, error) {
-
-	defer telemetry.MeasureThroughputSinceWithLabels(
-		telemetry.MessageCount,
-		[]metrics.Label{
-			telemetry.NewLabel("mode", "deliver"),
-		},
-		time.Now(),
-	)
-
-	defer func() {
-		if err := recover(); err != nil {
-			fmt.Println(err)
-			panic(err)
-		}
-	}()
-	spanCtx, span := app.TracingInfo.StartWithContext("RunMsgs", ctx.TraceSpanContext())
-	defer span.End()
-	ctx = ctx.WithTraceSpanContext(spanCtx)
-	msgLogs := make(sdk.ABCIMessageLogs, 0, len(msgs))
-	events := sdk.EmptyEvents()
-	txMsgData := &sdk.TxMsgData{
-		Data: make([]*sdk.MsgData, 0, len(msgs)),
-	}
-	var evmError string
-
-	// NOTE: GasWanted is determined by the AnteHandler and GasUsed by the GasMeter.
-	for i, msg := range msgs {
-		var (
-			msgResult    *sdk.Result
-			eventMsgName string // name to use as value in event `message.action`
-			err          error
-		)
-
-		msgCtx, msgMsCache := app.CacheTxContext(ctx, [32]byte{})
-		msgCtx = msgCtx.WithMessageIndex(i)
-
-		startTime := time.Now()
-		if handler := app.msgServiceRouter.Handler(msg); handler != nil {
-			// ADR 031 request type routing
-			msgResult, err = handler(msgCtx, msg)
-			eventMsgName = sdk.MsgTypeURL(msg)
-			metrics.MeasureSinceWithLabels(
-				[]string{"sei", "cosmos", "run", "msg", "latency"},
-				startTime,
-				[]metrics.Label{{Name: "type", Value: eventMsgName}},
-			)
-		} else if legacyMsg, ok := msg.(legacytx.LegacyMsg); ok {
-			// legacy sdk.Msg routing
-			// Assuming that the app developer has migrated all their Msgs to
-			// proto messages and has registered all `Msg services`, then this
-			// path should never be called, because all those Msgs should be
-			// registered within the `msgServiceRouter` already.
-			msgRoute := legacyMsg.Route()
-			eventMsgName = legacyMsg.Type()
-			handler := app.router.Route(msgCtx, msgRoute)
-			if handler == nil {
-				return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized message route: %s; message index: %d", msgRoute, i)
-			}
-			msgResult, err = handler(msgCtx, msg)
-			metrics.MeasureSinceWithLabels(
-				[]string{"cosmos", "run", "msg", "latency"},
-				startTime,
-				[]metrics.Label{{Name: "type", Value: eventMsgName}},
-			)
-		} else {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "can't route message %+v", msg)
-		}
-
-		if err != nil {
-			return nil, sdkerrors.Wrapf(err, "failed to execute message; message index: %d", i)
-		}
-
-		msgEvents := sdk.Events{
-			sdk.NewEvent(sdk.EventTypeMessage, sdk.NewAttribute(sdk.AttributeKeyAction, eventMsgName)),
-		}
-		msgEvents = msgEvents.AppendEvents(msgResult.GetEvents())
-
-		// append message events, data and logs
-		//
-		// Note: Each message result's data must be length-prefixed in order to
-		// separate each result.
-		events = events.AppendEvents(msgEvents)
-
-		txMsgData.Data = append(txMsgData.Data, &sdk.MsgData{MsgType: sdk.MsgTypeURL(msg), Data: msgResult.Data})
-		msgLogs = append(msgLogs, sdk.NewABCIMessageLog(uint32(i), msgResult.Log, msgEvents)) //nolint:gosec // loop range index
-
-		msgMsCache.Write()
-
-		if msgResult.EvmError != "" {
-			evmError = msgResult.EvmError
-		}
-	}
-
-	data, err := proto.Marshal(txMsgData)
-	if err != nil {
-		return nil, sdkerrors.Wrap(err, "failed to marshal tx data")
-	}
-
-	return &sdk.Result{
-		Data:     data,
-		Log:      strings.TrimSpace(msgLogs.String()),
-		Events:   events.ToABCIEvents(),
-		EvmError: evmError,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (app *BaseApp) startCompactionRoutine(db dbm.DB) {
-	if app.compactionInterval == 0 {
-		return
-	}
-	go func() {
-		if goleveldb, ok := db.(*dbm.GoLevelDB); ok {
-			for {
-				time.Sleep(time.Duration(app.compactionInterval) * time.Second) //nolint:gosec // compactionInterval is a small config value
-				if err := goleveldb.DB().CompactRange(leveldbutils.Range{Start: nil, Limit: nil}); err != nil {
-					logger.Error("Failed to compact DB", "err", err)
-				}
-			}
-		} else {
-			logger.Info("Exit compaction routine because underlying DB does not support compaction")
-		}
-	}()
-}
+// NOTE: GasWanted is determined by the AnteHandler and GasUsed by the GasMeter.
+
+// name to use as value in event `message.action`
+
+// ADR 031 request type routing
+
+// legacy sdk.Msg routing
+// Assuming that the app developer has migrated all their Msgs to
+// proto messages and has registered all `Msg services`, then this
+// path should never be called, because all those Msgs should be
+// registered within the `msgServiceRouter` already.
+
+// append message events, data and logs
+//
+// Note: Each message result's data must be length-prefixed in order to
+// separate each result.
+
+//nolint:gosec // loop range index
+
+func (app *BaseApp) startCompactionRoutine(db dbm.DB) { _ = "STUB: not implemented"; return }
+
+//nolint:gosec // compactionInterval is a small config value
 
 func (app *BaseApp) Close() error {
+	_ = "STUB: not implemented"
 	// we do not want to close when a commit is ongoing since commit writes to stores
 	// and metadata in a non-atomic way
-	app.commitLock.Lock()
-	defer app.commitLock.Unlock()
-	if app.db != nil {
-		if err := app.db.Close(); err != nil {
-			return err
-		}
-	}
-	if err := app.cms.Close(); err != nil {
-		return err
-	}
-	if app.snapshotManager != nil {
-		if err := app.snapshotManager.Close(); err != nil {
-			return err
-		}
-	}
-	if app.closeHandler == nil {
-		return nil
-	}
-	return app.closeHandler()
+	return nil
 }
 
-func (app *BaseApp) GetCheckCtx() sdk.Context {
-	app.checkTxStateLock.RLock()
-	defer app.checkTxStateLock.RUnlock()
-	return app.checkState.ctx
-}
+func (app *BaseApp) GetCheckCtx() sdk.Context { _ = "STUB: not implemented"; return *new(sdk.Context) }
 
-func (app *BaseApp) RegisterDeliverTxHook(hook DeliverTxHook) {
-	app.deliverTxHooks = append(app.deliverTxHooks, hook)
-}
+func (app *BaseApp) RegisterDeliverTxHook(hook DeliverTxHook) { _ = "STUB: not implemented"; return }
 
 func (app *BaseApp) InplaceTestnetInitialize(pk cryptotypes.PubKey) {
-	_ = app.inplaceTestnetInitializer(pk)
+	_ = "STUB: not implemented"
+	return
 }

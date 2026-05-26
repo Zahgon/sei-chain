@@ -1,9 +1,7 @@
 package types
 
 import (
-	"bytes"
 	"encoding/json"
-	"sort"
 
 	"github.com/sei-protocol/sei-chain/giga/deps/xbank/exported"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
@@ -14,43 +12,33 @@ var _ exported.GenesisBalance = (*Balance)(nil)
 
 // GetAddress returns the account address of the Balance object.
 func (b Balance) GetAddress() sdk.AccAddress {
-	return sdk.MustAccAddressFromBech32(b.Address)
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
 
 // GetCoins returns the account coins of the Balance object.
 func (b Balance) GetCoins() sdk.Coins {
-	return b.Coins
+	_ = "STUB: not implemented"
+
+	// Validate checks for address and coins correctness.
+	return *new(sdk.Coins)
 }
 
-// Validate checks for address and coins correctness.
-func (b Balance) Validate() error {
-	if _, err := sdk.AccAddressFromBech32(b.Address); err != nil {
-		return err
-	}
-
-	if err := b.Coins.Validate(); err != nil {
-		return err
-	}
-
-	return nil
-}
+func (b Balance) Validate() error { _ = "STUB: not implemented"; return nil }
 
 type balanceByAddress struct {
 	addresses []sdk.AccAddress
 	balances  []Balance
 }
 
-func (b balanceByAddress) Len() int { return len(b.addresses) }
-func (b balanceByAddress) Less(i, j int) bool {
-	return bytes.Compare(b.addresses[i], b.addresses[j]) < 0
-}
-func (b balanceByAddress) Swap(i, j int) {
-	b.addresses[i], b.addresses[j] = b.addresses[j], b.addresses[i]
-	b.balances[i], b.balances[j] = b.balances[j], b.balances[i]
-}
+func (b balanceByAddress) Len() int           { _ = "STUB: not implemented"; return 0 }
+func (b balanceByAddress) Less(i, j int) bool { _ = "STUB: not implemented"; return false }
+
+func (b balanceByAddress) Swap(i, j int) { _ = "STUB: not implemented"; return }
 
 // SanitizeGenesisBalances sorts addresses and coin sets.
 func SanitizeGenesisBalances(balances []Balance) []Balance {
+	_ = "STUB: not implemented"
 	// Given that this function sorts balances, using the standard library's
 	// Quicksort based algorithms, we have algorithmic complexities of:
 	// * Best case: O(nlogn)
@@ -58,20 +46,14 @@ func SanitizeGenesisBalances(balances []Balance) []Balance {
 	// The comparator used MUST be cheap to use lest we incur expenses like we had
 	// before whereby sdk.AccAddressFromBech32, which is a very expensive operation
 	// compared n * n elements yet discarded computations each time, as per:
-	//  https://github.com/cosmos/cosmos-sdk/issues/7766#issuecomment-786671734
-
-	// 1. Retrieve the address equivalents for each Balance's address.
-	addresses := make([]sdk.AccAddress, len(balances))
-	for i := range balances {
-		addr, _ := sdk.AccAddressFromBech32(balances[i].Address)
-		addresses[i] = addr
-	}
-
-	// 2. Sort balances.
-	sort.Sort(balanceByAddress{addresses: addresses, balances: balances})
-
-	return balances
+	//
+	//	https://github.com/cosmos/cosmos-sdk/issues/7766#issuecomment-786671734
+	return nil
 }
+
+// 1. Retrieve the address equivalents for each Balance's address.
+
+// 2. Sort balances.
 
 // GenesisBalancesIterator implements genesis account iteration.
 type GenesisBalancesIterator struct{}
@@ -82,9 +64,6 @@ type GenesisBalancesIterator struct{}
 func (GenesisBalancesIterator) IterateGenesisBalances(
 	cdc codec.JSONCodec, appState map[string]json.RawMessage, cb func(exported.GenesisBalance) (stop bool),
 ) {
-	for _, balance := range GetGenesisStateFromAppState(cdc, appState).Balances {
-		if cb(balance) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }

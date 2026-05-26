@@ -1,7 +1,6 @@
 package config
 
 import (
-	"errors"
 	"net/url"
 
 	atypes "github.com/sei-protocol/sei-chain/sei-tendermint/internal/autobahn/types"
@@ -12,15 +11,8 @@ import (
 
 type URL struct{ *url.URL }
 
-func (u URL) MarshalText() ([]byte, error) { return []byte(u.String()), nil }
-func (u *URL) UnmarshalText(text []byte) error {
-	url, err := url.Parse(string(text))
-	if err != nil {
-		return err
-	}
-	u.URL = url
-	return nil
-}
+func (u URL) MarshalText() ([]byte, error)     { _ = "STUB: not implemented"; return nil, nil }
+func (u *URL) UnmarshalText(text []byte) error { _ = "STUB: not implemented"; return nil }
 
 // AutobahnValidator represents a validator entry in the autobahn config file.
 type AutobahnValidator struct {
@@ -34,10 +26,8 @@ type AutobahnValidator struct {
 }
 
 func (av *AutobahnValidator) GetEVMRPC() utils.Option[*url.URL] {
-	if u, ok := av.EVMRPC.Get(); ok {
-		return utils.Some(u.URL)
-	}
-	return utils.None[*url.URL]()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // AutobahnFileConfig is the JSON structure of the autobahn config file.
@@ -54,24 +44,4 @@ type AutobahnFileConfig struct {
 }
 
 // Validate performs basic validation of the autobahn file config.
-func (fc *AutobahnFileConfig) Validate() error {
-	if len(fc.Validators) == 0 {
-		return errors.New("validators must not be empty")
-	}
-	if fc.MaxTxsPerBlock == 0 {
-		return errors.New("max_txs_per_block must be > 0")
-	}
-	if fc.MempoolSize == 0 {
-		return errors.New("mempool_size must be > 0")
-	}
-	if fc.BlockInterval <= 0 {
-		return errors.New("block_interval must be > 0")
-	}
-	if fc.ViewTimeout <= 0 {
-		return errors.New("view_timeout must be > 0")
-	}
-	if fc.DialInterval <= 0 {
-		return errors.New("dial_interval must be > 0")
-	}
-	return nil
-}
+func (fc *AutobahnFileConfig) Validate() error { _ = "STUB: not implemented"; return nil }

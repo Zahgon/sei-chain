@@ -2,12 +2,9 @@ package mvcc
 
 import (
 	"bytes"
-	"encoding/binary"
 	"fmt"
-	"math"
 
 	"github.com/cockroachdb/pebble/v2"
-	"github.com/sei-protocol/sei-chain/sei-db/common/utils"
 )
 
 // MVCCComparer returns a PebbleDB Comparer with encoding and decoding routines
@@ -131,15 +128,7 @@ type mvccKeyFormatter struct {
 	key []byte
 }
 
-func (f mvccKeyFormatter) Format(s fmt.State, verb rune) {
-	k, vBz, ok := SplitMVCCKey(f.key)
-	if ok {
-		v, _ := decodeUint64Descending(vBz)
-		_, _ = fmt.Fprintf(s, "%s/%d", k, v)
-	} else {
-		_, _ = fmt.Fprintf(s, "%s", f.key)
-	}
-}
+func (f mvccKeyFormatter) Format(s fmt.State, verb rune) { _ = "STUB: not implemented"; return }
 
 // SplitMVCCKey accepts an MVCC key and returns the "user" key, the MVCC version,
 // and a boolean indicating if the provided key is an MVCC key.
@@ -147,76 +136,34 @@ func (f mvccKeyFormatter) Format(s fmt.State, verb rune) {
 // Note, internally, we must make a copy of the provided mvccKey argument, which
 // typically comes from the Key() method as it's not safe.
 func SplitMVCCKey(mvccKey []byte) (key, version []byte, ok bool) {
-	if len(mvccKey) == 0 {
-		return nil, nil, false
-	}
-
-	mvccKeyCopy := utils.Clone(mvccKey)
-
-	n := len(mvccKeyCopy) - 1
-	tsLen := int(mvccKeyCopy[n])
-	if n < tsLen {
-		return nil, nil, false
-	}
-
-	key = mvccKeyCopy[:n-tsLen]
-	if tsLen > 0 {
-		version = mvccKeyCopy[n-tsLen+1 : len(mvccKeyCopy)-1]
-	}
-
-	return key, version, true
+	_ = "STUB: not implemented"
+	return nil, nil, false
 }
 
 // MVCCKeyCompare compares two MVCC keys.
-func MVCCKeyCompare(a, b []byte) int {
-	aEnd := len(a) - 1
-	bEnd := len(b) - 1
-	if aEnd < 0 || bEnd < 0 {
-		// This should never happen unless there is some sort of corruption of
-		// the keys. This is a little bizarre, but the behavior exactly matches
-		// engine/db.cc:DBComparator.
-		return bytes.Compare(a, b)
-	}
+func MVCCKeyCompare(a, b []byte) int { _ = "STUB: not implemented"; return 0 }
 
-	// Compute the index of the separator between the key and the timestamp.
-	aSep := aEnd - int(a[aEnd])
-	bSep := bEnd - int(b[bEnd])
-	if aSep < 0 || bSep < 0 {
-		// This should never happen unless there is some sort of corruption of
-		// the keys. This is a little bizarre, but the behavior exactly matches
-		// engine/db.cc:DBComparator.
-		return bytes.Compare(a, b)
-	}
+// This should never happen unless there is some sort of corruption of
+// the keys. This is a little bizarre, but the behavior exactly matches
+// engine/db.cc:DBComparator.
 
-	// compare the "user key" part of the key
-	if c := bytes.Compare(a[:aSep], b[:bSep]); c != 0 {
-		return c
-	}
+// Compute the index of the separator between the key and the timestamp.
 
-	// compare the timestamp part of the key
-	aTS := a[aSep:aEnd]
-	bTS := b[bSep:bEnd]
-	if len(aTS) == 0 {
-		if len(bTS) == 0 {
-			return 0
-		}
-		return -1
-	} else if len(bTS) == 0 {
-		return 1
-	}
+// This should never happen unless there is some sort of corruption of
+// the keys. This is a little bizarre, but the behavior exactly matches
+// engine/db.cc:DBComparator.
 
-	return bytes.Compare(aTS, bTS)
-}
+// compare the "user key" part of the key
+
+// compare the timestamp part of the key
 
 // MVCCEncode dispatches between the descending and ascending encoders based on
 // the mode flag. Descending-mode is used for fresh DBs created by this build;
 // ascending-mode preserves compatibility with legacy DBs written by the
 // previous ascending-version build.
 func MVCCEncode(key []byte, version int64, descending bool) []byte {
-	if descending {
-		return MVCCEncodeDescending(key, version)
-	}
-	return MVCCEncodeAscending(key, version)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MVCCEncodeDescending encodes an MVCC key with the version encoded in
@@ -225,16 +172,8 @@ func MVCCEncode(key []byte, version int64, descending bool) []byte {
 //
 // <key>\x00[<version>]<#version-bytes>
 func MVCCEncodeDescending(key []byte, version int64) (dst []byte) {
-	dst = append(dst, key...)
-	dst = append(dst, 0)
-
-	if version > 0 {
-		extra := byte(1 + 8)
-		dst = encodeUint64Descending(dst, uint64(version))
-		dst = append(dst, extra)
-	}
-
-	return dst
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // MVCCEncodeAscending encodes an MVCC key with the version encoded in
@@ -242,68 +181,24 @@ func MVCCEncodeDescending(key []byte, version int64) (dst []byte) {
 //
 // <key>\x00[<version>]<#version-bytes>
 func MVCCEncodeAscending(key []byte, version int64) (dst []byte) {
-	dst = append(dst, key...)
-	dst = append(dst, 0)
-
-	if version > 0 {
-		extra := byte(1 + 8)
-		dst = encodeUint64Ascending(dst, uint64(version))
-		dst = append(dst, extra)
-	}
-
-	return dst
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // encodeUint64Descending encodes the uint64 value in descending order so newer
 // versions sort before older versions for the same logical key.
-func encodeUint64Descending(dst []byte, v uint64) []byte {
-	v = ^v
-	return append(
-		dst,
-		byte(v>>56), byte(v>>48), byte(v>>40), byte(v>>32),
-		byte(v>>24), byte(v>>16), byte(v>>8), byte(v),
-	)
-}
+func encodeUint64Descending(dst []byte, v uint64) []byte { _ = "STUB: not implemented"; return nil }
 
 // decodeUint64Descending decodes a descending-encoded int64 from the input
 // buffer and returns the original ascending version value.
-func decodeUint64Descending(b []byte) (int64, error) {
-	if len(b) < 8 {
-		return 0, fmt.Errorf("insufficient bytes to decode uint64 int value; expected 8; got %d", len(b))
-	}
-
-	uv := binary.BigEndian.Uint64(b)
-	uv = ^uv
-	if uv > math.MaxInt64 {
-		return 0, fmt.Errorf("uint64 value overflows int64: %d", uv)
-	}
-	v := int64(uv)
-	return v, nil
-}
+func decodeUint64Descending(b []byte) (int64, error) { _ = "STUB: not implemented"; return 0, nil }
 
 // encodeUint64Ascending encodes the uint64 value using a big-endian 8 byte
 // representation. The bytes are appended to the supplied buffer and
 // the final buffer is returned.
-func encodeUint64Ascending(dst []byte, v uint64) []byte {
-	return append(
-		dst,
-		byte(v>>56), byte(v>>48), byte(v>>40), byte(v>>32),
-		byte(v>>24), byte(v>>16), byte(v>>8), byte(v),
-	)
-}
+func encodeUint64Ascending(dst []byte, v uint64) []byte { _ = "STUB: not implemented"; return nil }
 
 // decodeUint64Ascending decodes a int64 from the input buffer, treating
 // the input as a big-endian 8 byte uint64 representation. The decoded int64 is
 // returned.
-func decodeUint64Ascending(b []byte) (int64, error) {
-	if len(b) < 8 {
-		return 0, fmt.Errorf("insufficient bytes to decode uint64 int value; expected 8; got %d", len(b))
-	}
-
-	uv := binary.BigEndian.Uint64(b)
-	if uv > math.MaxInt64 {
-		return 0, fmt.Errorf("uint64 value overflows int64: %d", uv)
-	}
-	v := int64(uv)
-	return v, nil
-}
+func decodeUint64Ascending(b []byte) (int64, error) { _ = "STUB: not implemented"; return 0, nil }

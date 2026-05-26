@@ -17,5 +17,6 @@ type QuerySigningInfosParams struct {
 
 // NewQuerySigningInfosParams creates a new QuerySigningInfosParams instance
 func NewQuerySigningInfosParams(page, limit int) QuerySigningInfosParams {
-	return QuerySigningInfosParams{page, limit}
+	_ = "STUB: not implemented"
+	return *new(QuerySigningInfosParams)
 }

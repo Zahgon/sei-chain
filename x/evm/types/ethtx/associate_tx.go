@@ -8,54 +8,48 @@ import (
 )
 
 func NewAssociateTx(tx *ethtypes.Transaction, customMessage string) (*AssociateTx, error) {
-	v, r, s := tx.RawSignatureValues()
-	txData := &AssociateTx{
-		V:             v.Bytes(),
-		R:             r.Bytes(),
-		S:             s.Bytes(),
-		CustomMessage: customMessage,
-	}
-	return txData, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (tx *AssociateTx) TxType() byte                       { panic("not implemented") }
-func (tx *AssociateTx) Copy() TxData                       { panic("not implemented") }
-func (tx *AssociateTx) GetChainID() *big.Int               { panic("not implemented") }
-func (tx *AssociateTx) GetAccessList() ethtypes.AccessList { panic("not implemented") }
-func (tx *AssociateTx) GetData() []byte                    { panic("not implemented") }
-func (tx *AssociateTx) GetNonce() uint64                   { panic("not implemented") }
-func (tx *AssociateTx) GetGas() uint64                     { panic("not implemented") }
-func (tx *AssociateTx) GetGasPrice() *big.Int              { panic("not implemented") }
-func (tx *AssociateTx) GetGasTipCap() *big.Int             { panic("not implemented") }
-func (tx *AssociateTx) GetGasFeeCap() *big.Int             { panic("not implemented") }
-func (tx *AssociateTx) GetValue() *big.Int                 { panic("not implemented") }
-func (tx *AssociateTx) GetTo() *common.Address             { panic("not implemented") }
+func (tx *AssociateTx) TxType() byte         { _ = "STUB: not implemented"; return 0 }
+func (tx *AssociateTx) Copy() TxData         { _ = "STUB: not implemented"; return *new(TxData) }
+func (tx *AssociateTx) GetChainID() *big.Int { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) GetAccessList() ethtypes.AccessList {
+	_ = "STUB: not implemented"
+	return *new(ethtypes.AccessList)
+}
+func (tx *AssociateTx) GetData() []byte        { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) GetNonce() uint64       { _ = "STUB: not implemented"; return 0 }
+func (tx *AssociateTx) GetGas() uint64         { _ = "STUB: not implemented"; return 0 }
+func (tx *AssociateTx) GetGasPrice() *big.Int  { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) GetGasTipCap() *big.Int { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) GetGasFeeCap() *big.Int { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) GetValue() *big.Int     { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) GetTo() *common.Address { _ = "STUB: not implemented"; return nil }
 
 func (tx *AssociateTx) GetRawSignatureValues() (v, r, s *big.Int) {
-	return rawSignatureValues(tx.V, tx.R, tx.S)
+	_ = "STUB: not implemented"
+	return nil, nil, nil
 }
-func (tx *AssociateTx) SetSignatureValues(_, _, _, _ *big.Int) { panic("not implemented") }
 
-func (tx *AssociateTx) AsEthereumData() ethtypes.TxData { panic("not implemented") }
-func (tx *AssociateTx) Validate() error {
-	if err := validateSignatureValue("v", tx.V, 32); err != nil {
-		return err
-	}
-	if err := validateSignatureValue("r", tx.R, 32); err != nil {
-		return err
-	}
-	if err := validateSignatureValue("s", tx.S, 32); err != nil {
-		return err
-	}
+func (tx *AssociateTx) SetSignatureValues(_, _, _, _ *big.Int) { _ = "STUB: not implemented"; return }
+
+func (tx *AssociateTx) AsEthereumData() ethtypes.TxData {
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
+}
+func (tx *AssociateTx) Validate() error { _ = "STUB: not implemented"; return nil }
+
+func (tx *AssociateTx) Fee() *big.Int  { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) Cost() *big.Int { _ = "STUB: not implemented"; return nil }
+
+func (tx *AssociateTx) EffectiveGasPrice(_ *big.Int) *big.Int {
+	_ = "STUB: not implemented"
 	return nil
 }
+func (tx *AssociateTx) EffectiveFee(_ *big.Int) *big.Int  { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) EffectiveCost(_ *big.Int) *big.Int { _ = "STUB: not implemented"; return nil }
 
-func (tx *AssociateTx) Fee() *big.Int  { panic("not implemented") }
-func (tx *AssociateTx) Cost() *big.Int { panic("not implemented") }
-
-func (tx *AssociateTx) EffectiveGasPrice(_ *big.Int) *big.Int { panic("not implemented") }
-func (tx *AssociateTx) EffectiveFee(_ *big.Int) *big.Int      { panic("not implemented") }
-func (tx *AssociateTx) EffectiveCost(_ *big.Int) *big.Int     { panic("not implemented") }
-
-func (tx *AssociateTx) GetBlobHashes() []common.Hash { panic("not implemented") }
-func (tx *AssociateTx) GetBlobFeeCap() *big.Int      { panic("not implemented") }
+func (tx *AssociateTx) GetBlobHashes() []common.Hash { _ = "STUB: not implemented"; return nil }
+func (tx *AssociateTx) GetBlobFeeCap() *big.Int      { _ = "STUB: not implemented"; return nil }

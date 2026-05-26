@@ -18,78 +18,61 @@ const (
 
 // NewLabel creates a new instance of Label with name and value
 func NewLabel(name, value string) metrics.Label {
-	return metrics.Label{Name: name, Value: value}
+	_ = "STUB: not implemented"
+	return *new(metrics.Label)
 }
 
 // ModuleMeasureSince provides a short hand method for emitting a time measure
 // metric for a module with a given set of keys. If any global labels are defined,
 // they will be added to the module label.
 func ModuleMeasureSince(module string, start time.Time, keys ...string) {
-	metrics.MeasureSinceWithLabels(
-		keys,
-		start.UTC(),
-		append([]metrics.Label{NewLabel(MetricLabelNameModule, module)}, globalLabels...),
-	)
+	_ = "STUB: not implemented"
+	return
 }
 
 // ModuleSetGauge provides a short hand method for emitting a gauge metric for a
 // module with a given set of keys. If any global labels are defined, they will
 // be added to the module label.
-func ModuleSetGauge(module string, val float32, keys ...string) {
-	metrics.SetGaugeWithLabels(
-		keys,
-		val,
-		append([]metrics.Label{NewLabel(MetricLabelNameModule, module)}, globalLabels...),
-	)
-}
+func ModuleSetGauge(module string, val float32, keys ...string) { _ = "STUB: not implemented"; return }
 
 // IncrCounter provides a wrapper functionality for emitting a counter metric with
 // global labels (if any).
-func IncrCounter(val float32, keys ...string) {
-	metrics.IncrCounterWithLabels(keys, val, globalLabels)
-}
+func IncrCounter(val float32, keys ...string) { _ = "STUB: not implemented"; return }
 
 // IncrCounterWithLabels provides a wrapper functionality for emitting a counter
 // metric with global labels (if any) along with the provided labels.
 func IncrCounterWithLabels(keys []string, val float32, labels []metrics.Label) {
-	metrics.IncrCounterWithLabels(keys, val, append(labels, globalLabels...))
+	_ = "STUB: not implemented"
+	return
 }
 
 // SetGauge provides a wrapper functionality for emitting a gauge metric with
 // global labels (if any).
-func SetGauge(val float32, keys ...string) {
-	metrics.SetGaugeWithLabels(keys, val, globalLabels)
-}
+func SetGauge(val float32, keys ...string) { _ = "STUB: not implemented"; return }
 
 // SetGaugeWithLabels provides a wrapper functionality for emitting a gauge
 // metric with global labels (if any) along with the provided labels.
 func SetGaugeWithLabels(keys []string, val float32, labels []metrics.Label) {
-	metrics.SetGaugeWithLabels(keys, val, append(labels, globalLabels...))
+	_ = "STUB: not implemented"
+	return
 }
 
 // MeasureSince provides a wrapper functionality for emitting a a time measure
 // metric with global labels (if any).
-func MeasureSince(start time.Time, keys ...string) {
-	metrics.MeasureSinceWithLabels(keys, start.UTC(), globalLabels)
-}
+func MeasureSince(start time.Time, keys ...string) { _ = "STUB: not implemented"; return }
 
 // MeasureSinceWithLabels provides a wrapper functionality for emitting a a time measure
 // metric with custom labels (if any)
 func MeasureSinceWithLabels(keys []string, start time.Time, labels []metrics.Label) {
-	metrics.MeasureSinceWithLabels(keys, start.UTC(), labels)
+	_ = "STUB: not implemented"
+	return
 }
 
 // Measure Validator slashing events
 // validator_slashed
 func IncrValidatorSlashedCounter(validator string, slashingType string) {
-	metrics.IncrCounterWithLabels(
-		[]string{"sei", "cosmos", "validator", "slashed"},
-		1,
-		[]metrics.Label{
-			NewLabel("type", slashingType),
-			NewLabel("validator", validator),
-		},
-	)
+	_ = "STUB: not implemented"
+	return
 }
 
 // Measures throughput
@@ -97,9 +80,6 @@ func IncrValidatorSlashedCounter(validator string, slashingType string) {
 //
 //	sei_throughput_<metric_name>
 func MeasureThroughputSinceWithLabels(metricName string, labels []metrics.Label, start time.Time) {
-	metrics.MeasureSinceWithLabels(
-		[]string{"sei", "cosmos", "throughput", metricName},
-		start.UTC(),
-		labels,
-	)
+	_ = "STUB: not implemented"
+	return
 }

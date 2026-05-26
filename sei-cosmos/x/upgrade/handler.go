@@ -2,7 +2,6 @@ package upgrade
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/keeper"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/types"
@@ -12,25 +11,16 @@ import (
 // It enables SoftwareUpgradeProposal to propose an Upgrade, and CancelSoftwareUpgradeProposal
 // to abort a previously voted upgrade.
 func NewSoftwareUpgradeProposalHandler(k keeper.Keeper) govtypes.Handler {
-	return func(ctx sdk.Context, content govtypes.Content) error {
-		switch c := content.(type) {
-		case *types.SoftwareUpgradeProposal:
-			return handleSoftwareUpgradeProposal(ctx, k, c)
-
-		case *types.CancelSoftwareUpgradeProposal:
-			return handleCancelSoftwareUpgradeProposal(ctx, k, c)
-
-		default:
-			return sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized software upgrade proposal content type: %T", c)
-		}
-	}
+	_ = "STUB: not implemented"
+	return *new(govtypes.Handler)
 }
 
 func handleSoftwareUpgradeProposal(ctx sdk.Context, k keeper.Keeper, p *types.SoftwareUpgradeProposal) error {
-	return k.ScheduleUpgrade(ctx, p.Plan)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func handleCancelSoftwareUpgradeProposal(ctx sdk.Context, k keeper.Keeper, _ *types.CancelSoftwareUpgradeProposal) error {
-	k.ClearUpgradePlan(ctx)
+	_ = "STUB: not implemented"
 	return nil
 }

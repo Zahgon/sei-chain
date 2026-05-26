@@ -1,11 +1,7 @@
 package types
 
 import (
-	"encoding/binary"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/address"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
 )
 
 const (
@@ -57,159 +53,120 @@ var (
 
 // GetValidatorOutstandingRewardsAddress creates an address from a validator's outstanding rewards key.
 func GetValidatorOutstandingRewardsAddress(key []byte) (valAddr sdk.ValAddress) {
+	_ = "STUB: not implemented"
 	// key is in the format:
 	// 0x02<valAddrLen (1 Byte)><valAddr_Bytes>
-
-	// Remove prefix and address length.
-	kv.AssertKeyAtLeastLength(key, 3)
-	addr := key[2:]
-	kv.AssertKeyLength(addr, int(key[1]))
-
-	return sdk.ValAddress(addr)
+	return *new(sdk.ValAddress)
 }
+
+// Remove prefix and address length.
 
 // GetDelegatorWithdrawInfoAddress creates an address from a delegator's withdraw info key.
 func GetDelegatorWithdrawInfoAddress(key []byte) (delAddr sdk.AccAddress) {
+	_ = "STUB: not implemented"
 	// key is in the format:
 	// 0x03<accAddrLen (1 Byte)><accAddr_Bytes>
-
-	// Remove prefix and address length.
-	kv.AssertKeyAtLeastLength(key, 3)
-	addr := key[2:]
-	kv.AssertKeyLength(addr, int(key[1]))
-
-	return sdk.AccAddress(addr)
+	return *new(sdk.AccAddress)
 }
+
+// Remove prefix and address length.
 
 // GetDelegatorStartingInfoAddresses creates the addresses from a delegator starting info key.
 func GetDelegatorStartingInfoAddresses(key []byte) (valAddr sdk.ValAddress, delAddr sdk.AccAddress) {
+	_ = "STUB: not implemented"
 	// key is in the format:
 	// 0x04<valAddrLen (1 Byte)><valAddr_Bytes><accAddrLen (1 Byte)><accAddr_Bytes>
-	kv.AssertKeyAtLeastLength(key, 2)
-	valAddrLen := int(key[1])
-	kv.AssertKeyAtLeastLength(key, 3+valAddrLen)
-	valAddr = sdk.ValAddress(key[2 : 2+valAddrLen])
-	delAddrLen := int(key[2+valAddrLen])
-	kv.AssertKeyAtLeastLength(key, 4+valAddrLen)
-	delAddr = sdk.AccAddress(key[3+valAddrLen:])
-	kv.AssertKeyLength(delAddr.Bytes(), delAddrLen)
-
-	return
+	return *new(sdk.ValAddress), *new(sdk.AccAddress)
 }
 
 // GetValidatorHistoricalRewardsAddressPeriod creates the address & period from a validator's historical rewards key.
 func GetValidatorHistoricalRewardsAddressPeriod(key []byte) (valAddr sdk.ValAddress, period uint64) {
+	_ = "STUB: not implemented"
 	// key is in the format:
 	// 0x05<valAddrLen (1 Byte)><valAddr_Bytes><period_Bytes>
-	kv.AssertKeyAtLeastLength(key, 2)
-	valAddrLen := int(key[1])
-	kv.AssertKeyAtLeastLength(key, 3+valAddrLen)
-	valAddr = sdk.ValAddress(key[2 : 2+valAddrLen])
-	b := key[2+valAddrLen:]
-	kv.AssertKeyLength(b, 8)
-	period = binary.LittleEndian.Uint64(b)
-	return
+	return *new(sdk.ValAddress), 0
 }
 
 // GetValidatorCurrentRewardsAddress creates the address from a validator's current rewards key.
 func GetValidatorCurrentRewardsAddress(key []byte) (valAddr sdk.ValAddress) {
+	_ = "STUB: not implemented"
 	// key is in the format:
 	// 0x06<valAddrLen (1 Byte)><valAddr_Bytes>: ValidatorCurrentRewards
-
-	// Remove prefix and address length.
-	kv.AssertKeyAtLeastLength(key, 3)
-	addr := key[2:]
-	kv.AssertKeyLength(addr, int(key[1]))
-
-	return sdk.ValAddress(addr)
+	return *new(sdk.ValAddress)
 }
+
+// Remove prefix and address length.
 
 // GetValidatorAccumulatedCommissionAddress creates the address from a validator's accumulated commission key.
 func GetValidatorAccumulatedCommissionAddress(key []byte) (valAddr sdk.ValAddress) {
+	_ = "STUB: not implemented"
 	// key is in the format:
 	// 0x07<valAddrLen (1 Byte)><valAddr_Bytes>: ValidatorCurrentRewards
-
-	// Remove prefix and address length.
-	kv.AssertKeyAtLeastLength(key, 3)
-	addr := key[2:]
-	kv.AssertKeyLength(addr, int(key[1]))
-
-	return sdk.ValAddress(addr)
+	return *new(sdk.ValAddress)
 }
+
+// Remove prefix and address length.
 
 // GetValidatorSlashEventAddressHeight creates the height from a validator's slash event key.
 func GetValidatorSlashEventAddressHeight(key []byte) (valAddr sdk.ValAddress, height uint64) {
+	_ = "STUB: not implemented"
 	// key is in the format:
 	// 0x08<valAddrLen (1 Byte)><valAddr_Bytes><height>: ValidatorSlashEvent
-	kv.AssertKeyAtLeastLength(key, 2)
-	valAddrLen := int(key[1])
-	kv.AssertKeyAtLeastLength(key, 3+valAddrLen)
-	valAddr = key[2 : 2+valAddrLen]
-	startB := 2 + valAddrLen
-	kv.AssertKeyAtLeastLength(key, startB+9)
-	b := key[startB : startB+8] // the next 8 bytes represent the height
-	height = binary.BigEndian.Uint64(b)
-	return
+	return *new(sdk.ValAddress), 0
 }
+
+// the next 8 bytes represent the height
 
 // GetValidatorOutstandingRewardsKey creates the outstanding rewards key for a validator.
 func GetValidatorOutstandingRewardsKey(valAddr sdk.ValAddress) []byte {
-	return append(ValidatorOutstandingRewardsPrefix, address.MustLengthPrefix(valAddr.Bytes())...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetDelegatorWithdrawAddrKey creates the key for a delegator's withdraw addr.
 func GetDelegatorWithdrawAddrKey(delAddr sdk.AccAddress) []byte {
-	return append(DelegatorWithdrawAddrPrefix, address.MustLengthPrefix(delAddr.Bytes())...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetDelegatorStartingInfoKey creates the key for a delegator's starting info.
 func GetDelegatorStartingInfoKey(v sdk.ValAddress, d sdk.AccAddress) []byte {
-	return append(append(DelegatorStartingInfoPrefix, address.MustLengthPrefix(v.Bytes())...), address.MustLengthPrefix(d.Bytes())...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetValidatorHistoricalRewardsPrefix creates the prefix key for a validator's historical rewards.
 func GetValidatorHistoricalRewardsPrefix(v sdk.ValAddress) []byte {
-	return append(ValidatorHistoricalRewardsPrefix, address.MustLengthPrefix(v.Bytes())...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetValidatorHistoricalRewardsKey creates the key for a validator's historical rewards.
 func GetValidatorHistoricalRewardsKey(v sdk.ValAddress, k uint64) []byte {
-	b := make([]byte, 8)
-	binary.LittleEndian.PutUint64(b, k)
-	return append(append(ValidatorHistoricalRewardsPrefix, address.MustLengthPrefix(v.Bytes())...), b...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetValidatorCurrentRewardsKey creates the key for a validator's current rewards.
-func GetValidatorCurrentRewardsKey(v sdk.ValAddress) []byte {
-	return append(ValidatorCurrentRewardsPrefix, address.MustLengthPrefix(v.Bytes())...)
-}
+func GetValidatorCurrentRewardsKey(v sdk.ValAddress) []byte { _ = "STUB: not implemented"; return nil }
 
 // GetValidatorAccumulatedCommissionKey creates the key for a validator's current commission.
 func GetValidatorAccumulatedCommissionKey(v sdk.ValAddress) []byte {
-	return append(ValidatorAccumulatedCommissionPrefix, address.MustLengthPrefix(v.Bytes())...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetValidatorSlashEventPrefix creates the prefix key for a validator's slash fractions.
-func GetValidatorSlashEventPrefix(v sdk.ValAddress) []byte {
-	return append(ValidatorSlashEventPrefix, address.MustLengthPrefix(v.Bytes())...)
-}
+func GetValidatorSlashEventPrefix(v sdk.ValAddress) []byte { _ = "STUB: not implemented"; return nil }
 
 // GetValidatorSlashEventKeyPrefix creates the prefix key for a validator's slash fraction (ValidatorSlashEventPrefix + height).
 func GetValidatorSlashEventKeyPrefix(v sdk.ValAddress, height uint64) []byte {
-	heightBz := make([]byte, 8)
-	binary.BigEndian.PutUint64(heightBz, height)
-
-	return append(
-		ValidatorSlashEventPrefix,
-		append(address.MustLengthPrefix(v.Bytes()), heightBz...)...,
-	)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetValidatorSlashEventKey creates the key for a validator's slash fraction.
 func GetValidatorSlashEventKey(v sdk.ValAddress, height, period uint64) []byte {
-	periodBz := make([]byte, 8)
-	binary.BigEndian.PutUint64(periodBz, period)
-	prefix := GetValidatorSlashEventKeyPrefix(v, height)
-
-	return append(prefix, periodBz...)
+	_ = "STUB: not implemented"
+	return nil
 }

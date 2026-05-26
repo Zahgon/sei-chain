@@ -1,8 +1,6 @@
 package keeper
 
 import (
-	"encoding/json"
-
 	fuzz "github.com/google/gofuzz"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 
@@ -11,67 +9,24 @@ import (
 
 var ModelFuzzers = []interface{}{FuzzAddr, FuzzAddrString, FuzzAbsoluteTxPosition, FuzzContractInfo, FuzzStateModel, FuzzAccessType, FuzzAccessConfig, FuzzContractCodeHistory}
 
-func FuzzAddr(m *sdk.AccAddress, c fuzz.Continue) {
-	*m = make([]byte, 20)
-	_, _ = c.Read(*m)
-}
+func FuzzAddr(m *sdk.AccAddress, c fuzz.Continue) { _ = "STUB: not implemented"; return }
 
-func FuzzAddrString(m *string, c fuzz.Continue) {
-	var x sdk.AccAddress
-	FuzzAddr(&x, c)
-	*m = x.String()
-}
+func FuzzAddrString(m *string, c fuzz.Continue) { _ = "STUB: not implemented"; return }
 
 func FuzzAbsoluteTxPosition(m *types.AbsoluteTxPosition, c fuzz.Continue) {
-	m.BlockHeight = c.RandUint64()
-	m.TxIndex = c.RandUint64()
+	_ = "STUB: not implemented"
+	return
 }
 
-func FuzzContractInfo(m *types.ContractInfo, c fuzz.Continue) {
-	m.CodeID = c.RandUint64()
-	FuzzAddrString(&m.Creator, c)
-	FuzzAddrString(&m.Admin, c)
-	m.Label = c.RandString()
-	c.Fuzz(&m.Created)
-}
+func FuzzContractInfo(m *types.ContractInfo, c fuzz.Continue) { _ = "STUB: not implemented"; return }
 
 func FuzzContractCodeHistory(m *types.ContractCodeHistoryEntry, c fuzz.Continue) {
-	const maxMsgSize = 128
-	m.CodeID = c.RandUint64()
-	msg := make([]byte, c.RandUint64()%maxMsgSize)
-	_, err := c.Read(msg)
-	if err != nil {
-		panic(err)
-	}
-	if m.Msg, err = json.Marshal(msg); err != nil {
-		panic(err)
-	}
-	c.Fuzz(&m.Updated)
-	m.Operation = types.AllCodeHistoryTypes[c.Int()%len(types.AllCodeHistoryTypes)]
+	_ = "STUB: not implemented"
+	return
 }
 
-func FuzzStateModel(m *types.Model, c fuzz.Continue) {
-	m.Key = types.HexBytes(c.RandString())
-	if len(m.Key) == 0 {
-		m.Key = types.HexBytes("non empty key")
-	}
-	c.Fuzz(&m.Value)
-}
+func FuzzStateModel(m *types.Model, c fuzz.Continue) { _ = "STUB: not implemented"; return }
 
-func FuzzAccessType(m *types.AccessType, c fuzz.Continue) {
-	pos := c.Int() % len(types.AllAccessTypes)
-	for _, v := range types.AllAccessTypes {
-		if pos == 0 {
-			*m = v
-			return
-		}
-		pos--
-	}
-}
+func FuzzAccessType(m *types.AccessType, c fuzz.Continue) { _ = "STUB: not implemented"; return }
 
-func FuzzAccessConfig(m *types.AccessConfig, c fuzz.Continue) {
-	FuzzAccessType(&m.Permission, c)
-	var add sdk.AccAddress
-	FuzzAddr(&add, c)
-	*m = m.Permission.With(add)
-}
+func FuzzAccessConfig(m *types.AccessConfig, c fuzz.Continue) { _ = "STUB: not implemented"; return }

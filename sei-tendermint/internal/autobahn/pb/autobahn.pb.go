@@ -7,12 +7,11 @@
 package pb
 
 import (
+	sync "sync"
+
 	_ "github.com/sei-protocol/sei-chain/sei-tendermint/internal/hashable/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	reflect "reflect"
-	sync "sync"
-	unsafe "unsafe"
 )
 
 const (
@@ -40,49 +39,23 @@ type Timestamp struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Timestamp) Reset() {
-	*x = Timestamp{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Timestamp) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Timestamp) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Timestamp) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Timestamp) ProtoMessage() {}
+func (*Timestamp) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Timestamp) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Timestamp.ProtoReflect.Descriptor instead.
-func (*Timestamp) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{0}
-}
+func (*Timestamp) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Timestamp) GetSeconds() int64 {
-	if x != nil && x.Seconds != nil {
-		return *x.Seconds
-	}
-	return 0
-}
+func (x *Timestamp) GetSeconds() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Timestamp) GetNanos() int32 {
-	if x != nil && x.Nanos != nil {
-		return *x.Nanos
-	}
-	return 0
-}
+func (x *Timestamp) GetNanos() int32 { _ = "STUB: not implemented"; return 0 }
 
 type Duration struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -92,49 +65,23 @@ type Duration struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Duration) Reset() {
-	*x = Duration{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Duration) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Duration) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Duration) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Duration) ProtoMessage() {}
+func (*Duration) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Duration) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Duration.ProtoReflect.Descriptor instead.
-func (*Duration) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{1}
-}
+func (*Duration) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Duration) GetSeconds() int64 {
-	if x != nil && x.Seconds != nil {
-		return *x.Seconds
-	}
-	return 0
-}
+func (x *Duration) GetSeconds() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Duration) GetNanos() int32 {
-	if x != nil && x.Nanos != nil {
-		return *x.Nanos
-	}
-	return 0
-}
+func (x *Duration) GetNanos() int32 { _ = "STUB: not implemented"; return 0 }
 
 type TransactionTimestamps struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -144,49 +91,26 @@ type TransactionTimestamps struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TransactionTimestamps) Reset() {
-	*x = TransactionTimestamps{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *TransactionTimestamps) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *TransactionTimestamps) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *TransactionTimestamps) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*TransactionTimestamps) ProtoMessage() {}
+func (*TransactionTimestamps) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *TransactionTimestamps) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use TransactionTimestamps.ProtoReflect.Descriptor instead.
 func (*TransactionTimestamps) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (x *TransactionTimestamps) GetCreatedAt() int64 {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return 0
-}
+func (x *TransactionTimestamps) GetCreatedAt() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *TransactionTimestamps) GetReceivedAt() int64 {
-	if x != nil {
-		return x.ReceivedAt
-	}
-	return 0
-}
+func (x *TransactionTimestamps) GetReceivedAt() int64 { _ = "STUB: not implemented"; return 0 }
 
 type TransactionHeader struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -197,54 +121,29 @@ type TransactionHeader struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TransactionHeader) Reset() {
-	*x = TransactionHeader{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *TransactionHeader) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *TransactionHeader) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *TransactionHeader) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*TransactionHeader) ProtoMessage() {}
+func (*TransactionHeader) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *TransactionHeader) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use TransactionHeader.ProtoReflect.Descriptor instead.
-func (*TransactionHeader) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{3}
-}
+func (*TransactionHeader) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 func (x *TransactionHeader) GetProperties() map[string]string {
-	if x != nil {
-		return x.Properties
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (x *TransactionHeader) GetEdgeNode() string {
-	if x != nil {
-		return x.EdgeNode
-	}
-	return ""
-}
+func (x *TransactionHeader) GetEdgeNode() string { _ = "STUB: not implemented"; return "" }
 
 func (x *TransactionHeader) GetTimestamps() *TransactionTimestamps {
-	if x != nil {
-		return x.Timestamps
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -258,63 +157,27 @@ type Transaction struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Transaction) Reset() {
-	*x = Transaction{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Transaction) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Transaction) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Transaction) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Transaction) ProtoMessage() {}
+func (*Transaction) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Transaction) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Transaction.ProtoReflect.Descriptor instead.
-func (*Transaction) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{4}
-}
+func (*Transaction) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Transaction) GetHash() string {
-	if x != nil {
-		return x.Hash
-	}
-	return ""
-}
+func (x *Transaction) GetHash() string { _ = "STUB: not implemented"; return "" }
 
-func (x *Transaction) GetPayload() []byte {
-	if x != nil {
-		return x.Payload
-	}
-	return nil
-}
+func (x *Transaction) GetPayload() []byte { _ = "STUB: not implemented"; return nil }
 
-func (x *Transaction) GetGasUsed() uint64 {
-	if x != nil {
-		return x.GasUsed
-	}
-	return 0
-}
+func (x *Transaction) GetGasUsed() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Transaction) GetHeader() *TransactionHeader {
-	if x != nil {
-		return x.Header
-	}
-	return nil
-}
+func (x *Transaction) GetHeader() *TransactionHeader { _ = "STUB: not implemented"; return nil }
 
 type TransactionResp struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -325,56 +188,25 @@ type TransactionResp struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TransactionResp) Reset() {
-	*x = TransactionResp{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[5]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *TransactionResp) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *TransactionResp) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *TransactionResp) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*TransactionResp) ProtoMessage() {}
+func (*TransactionResp) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *TransactionResp) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[5]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use TransactionResp.ProtoReflect.Descriptor instead.
-func (*TransactionResp) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{5}
-}
+func (*TransactionResp) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *TransactionResp) GetHash() string {
-	if x != nil {
-		return x.Hash
-	}
-	return ""
-}
+func (x *TransactionResp) GetHash() string { _ = "STUB: not implemented"; return "" }
 
-func (x *TransactionResp) GetSuccess() bool {
-	if x != nil {
-		return x.Success
-	}
-	return false
-}
+func (x *TransactionResp) GetSuccess() bool { _ = "STUB: not implemented"; return false }
 
-func (x *TransactionResp) GetMessage() string {
-	if x != nil {
-		return x.Message
-	}
-	return ""
-}
+func (x *TransactionResp) GetMessage() string { _ = "STUB: not implemented"; return "" }
 
 type PublicKey struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -383,42 +215,21 @@ type PublicKey struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PublicKey) Reset() {
-	*x = PublicKey{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[6]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *PublicKey) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *PublicKey) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *PublicKey) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*PublicKey) ProtoMessage() {}
+func (*PublicKey) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *PublicKey) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[6]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use PublicKey.ProtoReflect.Descriptor instead.
-func (*PublicKey) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{6}
-}
+func (*PublicKey) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *PublicKey) GetEd25519() []byte {
-	if x != nil {
-		return x.Ed25519
-	}
-	return nil
-}
+func (x *PublicKey) GetEd25519() []byte { _ = "STUB: not implemented"; return nil }
 
 type Signature struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -428,49 +239,23 @@ type Signature struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Signature) Reset() {
-	*x = Signature{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[7]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Signature) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Signature) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Signature) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Signature) ProtoMessage() {}
+func (*Signature) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Signature) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[7]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Signature.ProtoReflect.Descriptor instead.
-func (*Signature) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{7}
-}
+func (*Signature) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Signature) GetKey() *PublicKey {
-	if x != nil {
-		return x.Key
-	}
-	return nil
-}
+func (x *Signature) GetKey() *PublicKey { _ = "STUB: not implemented"; return nil }
 
-func (x *Signature) GetSig() []byte {
-	if x != nil {
-		return x.Sig
-	}
-	return nil
-}
+func (x *Signature) GetSig() []byte { _ = "STUB: not implemented"; return nil }
 
 type BlockHeader struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -482,63 +267,27 @@ type BlockHeader struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *BlockHeader) Reset() {
-	*x = BlockHeader{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[8]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *BlockHeader) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *BlockHeader) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *BlockHeader) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*BlockHeader) ProtoMessage() {}
+func (*BlockHeader) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *BlockHeader) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[8]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use BlockHeader.ProtoReflect.Descriptor instead.
-func (*BlockHeader) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{8}
-}
+func (*BlockHeader) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *BlockHeader) GetLane() *PublicKey {
-	if x != nil {
-		return x.Lane
-	}
-	return nil
-}
+func (x *BlockHeader) GetLane() *PublicKey { _ = "STUB: not implemented"; return nil }
 
-func (x *BlockHeader) GetBlockNumber() uint64 {
-	if x != nil && x.BlockNumber != nil {
-		return *x.BlockNumber
-	}
-	return 0
-}
+func (x *BlockHeader) GetBlockNumber() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *BlockHeader) GetParentHash() []byte {
-	if x != nil {
-		return x.ParentHash
-	}
-	return nil
-}
+func (x *BlockHeader) GetParentHash() []byte { _ = "STUB: not implemented"; return nil }
 
-func (x *BlockHeader) GetPayloadHash() []byte {
-	if x != nil {
-		return x.PayloadHash
-	}
-	return nil
-}
+func (x *BlockHeader) GetPayloadHash() []byte { _ = "STUB: not implemented"; return nil }
 
 type Payload struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -552,77 +301,31 @@ type Payload struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Payload) Reset() {
-	*x = Payload{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Payload) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Payload) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Payload) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Payload) ProtoMessage() {}
+func (*Payload) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Payload) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Payload.ProtoReflect.Descriptor instead.
-func (*Payload) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{9}
-}
+func (*Payload) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Payload) GetCreatedAt() *Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
+func (x *Payload) GetCreatedAt() *Timestamp { _ = "STUB: not implemented"; return nil }
 
-func (x *Payload) GetTotalGas() uint64 {
-	if x != nil && x.TotalGas != nil {
-		return *x.TotalGas
-	}
-	return 0
-}
+func (x *Payload) GetTotalGas() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Payload) GetEdgeCount() int64 {
-	if x != nil && x.EdgeCount != nil {
-		return *x.EdgeCount
-	}
-	return 0
-}
+func (x *Payload) GetEdgeCount() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Payload) GetCoinbase() []byte {
-	if x != nil {
-		return x.Coinbase
-	}
-	return nil
-}
+func (x *Payload) GetCoinbase() []byte { _ = "STUB: not implemented"; return nil }
 
-func (x *Payload) GetBasefee() int64 {
-	if x != nil && x.Basefee != nil {
-		return *x.Basefee
-	}
-	return 0
-}
+func (x *Payload) GetBasefee() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *Payload) GetTxs() [][]byte {
-	if x != nil {
-		return x.Txs
-	}
-	return nil
-}
+func (x *Payload) GetTxs() [][]byte { _ = "STUB: not implemented"; return nil }
 
 type Block struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -632,49 +335,23 @@ type Block struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Block) Reset() {
-	*x = Block{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Block) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Block) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Block) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Block) ProtoMessage() {}
+func (*Block) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Block) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Block.ProtoReflect.Descriptor instead.
-func (*Block) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{10}
-}
+func (*Block) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Block) GetHeader() *BlockHeader {
-	if x != nil {
-		return x.Header
-	}
-	return nil
-}
+func (x *Block) GetHeader() *BlockHeader { _ = "STUB: not implemented"; return nil }
 
-func (x *Block) GetPayload() *Payload {
-	if x != nil {
-		return x.Payload
-	}
-	return nil
-}
+func (x *Block) GetPayload() *Payload { _ = "STUB: not implemented"; return nil }
 
 type LaneQC struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -684,49 +361,23 @@ type LaneQC struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *LaneQC) Reset() {
-	*x = LaneQC{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[11]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *LaneQC) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *LaneQC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *LaneQC) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*LaneQC) ProtoMessage() {}
+func (*LaneQC) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *LaneQC) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[11]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use LaneQC.ProtoReflect.Descriptor instead.
-func (*LaneQC) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{11}
-}
+func (*LaneQC) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *LaneQC) GetVote() *BlockHeader {
-	if x != nil {
-		return x.Vote
-	}
-	return nil
-}
+func (x *LaneQC) GetVote() *BlockHeader { _ = "STUB: not implemented"; return nil }
 
-func (x *LaneQC) GetSigs() []*Signature {
-	if x != nil {
-		return x.Sigs
-	}
-	return nil
-}
+func (x *LaneQC) GetSigs() []*Signature { _ = "STUB: not implemented"; return nil }
 
 type LaneRange struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -738,63 +389,27 @@ type LaneRange struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *LaneRange) Reset() {
-	*x = LaneRange{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[12]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *LaneRange) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *LaneRange) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *LaneRange) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*LaneRange) ProtoMessage() {}
+func (*LaneRange) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *LaneRange) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[12]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use LaneRange.ProtoReflect.Descriptor instead.
-func (*LaneRange) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{12}
-}
+func (*LaneRange) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *LaneRange) GetLane() *PublicKey {
-	if x != nil {
-		return x.Lane
-	}
-	return nil
-}
+func (x *LaneRange) GetLane() *PublicKey { _ = "STUB: not implemented"; return nil }
 
-func (x *LaneRange) GetFirst() uint64 {
-	if x != nil && x.First != nil {
-		return *x.First
-	}
-	return 0
-}
+func (x *LaneRange) GetFirst() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *LaneRange) GetNext() uint64 {
-	if x != nil && x.Next != nil {
-		return *x.Next
-	}
-	return 0
-}
+func (x *LaneRange) GetNext() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *LaneRange) GetLastHash() []byte {
-	if x != nil {
-		return x.LastHash
-	}
-	return nil
-}
+func (x *LaneRange) GetLastHash() []byte { _ = "STUB: not implemented"; return nil }
 
 type View struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -804,49 +419,23 @@ type View struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *View) Reset() {
-	*x = View{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[13]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *View) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *View) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *View) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*View) ProtoMessage() {}
+func (*View) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *View) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[13]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use View.ProtoReflect.Descriptor instead.
-func (*View) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{13}
-}
+func (*View) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *View) GetIndex() uint64 {
-	if x != nil && x.Index != nil {
-		return *x.Index
-	}
-	return 0
-}
+func (x *View) GetIndex() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *View) GetNumber() uint64 {
-	if x != nil && x.Number != nil {
-		return *x.Number
-	}
-	return 0
-}
+func (x *View) GetNumber() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type Proposal struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -858,63 +447,27 @@ type Proposal struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Proposal) Reset() {
-	*x = Proposal{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[14]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Proposal) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Proposal) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Proposal) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Proposal) ProtoMessage() {}
+func (*Proposal) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Proposal) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[14]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Proposal.ProtoReflect.Descriptor instead.
-func (*Proposal) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{14}
-}
+func (*Proposal) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Proposal) GetView() *View {
-	if x != nil {
-		return x.View
-	}
-	return nil
-}
+func (x *Proposal) GetView() *View { _ = "STUB: not implemented"; return nil }
 
-func (x *Proposal) GetTimestamp() *Timestamp {
-	if x != nil {
-		return x.Timestamp
-	}
-	return nil
-}
+func (x *Proposal) GetTimestamp() *Timestamp { _ = "STUB: not implemented"; return nil }
 
-func (x *Proposal) GetLaneRanges() []*LaneRange {
-	if x != nil {
-		return x.LaneRanges
-	}
-	return nil
-}
+func (x *Proposal) GetLaneRanges() []*LaneRange { _ = "STUB: not implemented"; return nil }
 
-func (x *Proposal) GetApp() *AppProposal {
-	if x != nil {
-		return x.App
-	}
-	return nil
-}
+func (x *Proposal) GetApp() *AppProposal { _ = "STUB: not implemented"; return nil }
 
 type FullProposal struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -926,63 +479,27 @@ type FullProposal struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *FullProposal) Reset() {
-	*x = FullProposal{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[15]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *FullProposal) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *FullProposal) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *FullProposal) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*FullProposal) ProtoMessage() {}
+func (*FullProposal) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *FullProposal) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[15]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use FullProposal.ProtoReflect.Descriptor instead.
-func (*FullProposal) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{15}
-}
+func (*FullProposal) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *FullProposal) GetProposal() *SignedMsg {
-	if x != nil {
-		return x.Proposal
-	}
-	return nil
-}
+func (x *FullProposal) GetProposal() *SignedMsg { _ = "STUB: not implemented"; return nil }
 
-func (x *FullProposal) GetLaneQcs() []*LaneQC {
-	if x != nil {
-		return x.LaneQcs
-	}
-	return nil
-}
+func (x *FullProposal) GetLaneQcs() []*LaneQC { _ = "STUB: not implemented"; return nil }
 
-func (x *FullProposal) GetAppQc() *AppQC {
-	if x != nil {
-		return x.AppQc
-	}
-	return nil
-}
+func (x *FullProposal) GetAppQc() *AppQC { _ = "STUB: not implemented"; return nil }
 
-func (x *FullProposal) GetTimeoutQc() *TimeoutQC {
-	if x != nil {
-		return x.TimeoutQc
-	}
-	return nil
-}
+func (x *FullProposal) GetTimeoutQc() *TimeoutQC { _ = "STUB: not implemented"; return nil }
 
 type PrepareQC struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -992,49 +509,23 @@ type PrepareQC struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PrepareQC) Reset() {
-	*x = PrepareQC{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[16]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *PrepareQC) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *PrepareQC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *PrepareQC) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*PrepareQC) ProtoMessage() {}
+func (*PrepareQC) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *PrepareQC) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[16]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use PrepareQC.ProtoReflect.Descriptor instead.
-func (*PrepareQC) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{16}
-}
+func (*PrepareQC) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *PrepareQC) GetVote() *Proposal {
-	if x != nil {
-		return x.Vote
-	}
-	return nil
-}
+func (x *PrepareQC) GetVote() *Proposal { _ = "STUB: not implemented"; return nil }
 
-func (x *PrepareQC) GetSigs() []*Signature {
-	if x != nil {
-		return x.Sigs
-	}
-	return nil
-}
+func (x *PrepareQC) GetSigs() []*Signature { _ = "STUB: not implemented"; return nil }
 
 type CommitQC struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1044,49 +535,23 @@ type CommitQC struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *CommitQC) Reset() {
-	*x = CommitQC{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[17]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *CommitQC) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *CommitQC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *CommitQC) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*CommitQC) ProtoMessage() {}
+func (*CommitQC) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *CommitQC) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[17]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use CommitQC.ProtoReflect.Descriptor instead.
-func (*CommitQC) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{17}
-}
+func (*CommitQC) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *CommitQC) GetVote() *Proposal {
-	if x != nil {
-		return x.Vote
-	}
-	return nil
-}
+func (x *CommitQC) GetVote() *Proposal { _ = "STUB: not implemented"; return nil }
 
-func (x *CommitQC) GetSigs() []*Signature {
-	if x != nil {
-		return x.Sigs
-	}
-	return nil
-}
+func (x *CommitQC) GetSigs() []*Signature { _ = "STUB: not implemented"; return nil }
 
 type FullCommitQC struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1096,49 +561,23 @@ type FullCommitQC struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *FullCommitQC) Reset() {
-	*x = FullCommitQC{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[18]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *FullCommitQC) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *FullCommitQC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *FullCommitQC) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*FullCommitQC) ProtoMessage() {}
+func (*FullCommitQC) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *FullCommitQC) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[18]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use FullCommitQC.ProtoReflect.Descriptor instead.
-func (*FullCommitQC) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{18}
-}
+func (*FullCommitQC) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *FullCommitQC) GetQc() *CommitQC {
-	if x != nil {
-		return x.Qc
-	}
-	return nil
-}
+func (x *FullCommitQC) GetQc() *CommitQC { _ = "STUB: not implemented"; return nil }
 
-func (x *FullCommitQC) GetHeaders() []*BlockHeader {
-	if x != nil {
-		return x.Headers
-	}
-	return nil
-}
+func (x *FullCommitQC) GetHeaders() []*BlockHeader { _ = "STUB: not implemented"; return nil }
 
 type TimeoutVote struct {
 	state                     protoimpl.MessageState `protogen:"open.v1"`
@@ -1148,49 +587,23 @@ type TimeoutVote struct {
 	sizeCache                 protoimpl.SizeCache
 }
 
-func (x *TimeoutVote) Reset() {
-	*x = TimeoutVote{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[19]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *TimeoutVote) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *TimeoutVote) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *TimeoutVote) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*TimeoutVote) ProtoMessage() {}
+func (*TimeoutVote) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *TimeoutVote) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[19]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use TimeoutVote.ProtoReflect.Descriptor instead.
-func (*TimeoutVote) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{19}
-}
+func (*TimeoutVote) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *TimeoutVote) GetView() *View {
-	if x != nil {
-		return x.View
-	}
-	return nil
-}
+func (x *TimeoutVote) GetView() *View { _ = "STUB: not implemented"; return nil }
 
-func (x *TimeoutVote) GetLatestPrepareQcViewNumber() uint64 {
-	if x != nil && x.LatestPrepareQcViewNumber != nil {
-		return *x.LatestPrepareQcViewNumber
-	}
-	return 0
-}
+func (x *TimeoutVote) GetLatestPrepareQcViewNumber() uint64 { _ = "STUB: not implemented"; return 0 }
 
 type TimeoutQC struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
@@ -1200,49 +613,23 @@ type TimeoutQC struct {
 	sizeCache       protoimpl.SizeCache
 }
 
-func (x *TimeoutQC) Reset() {
-	*x = TimeoutQC{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[20]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *TimeoutQC) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *TimeoutQC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *TimeoutQC) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*TimeoutQC) ProtoMessage() {}
+func (*TimeoutQC) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *TimeoutQC) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[20]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use TimeoutQC.ProtoReflect.Descriptor instead.
-func (*TimeoutQC) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{20}
-}
+func (*TimeoutQC) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *TimeoutQC) GetVotes() []*SignedMsg {
-	if x != nil {
-		return x.Votes
-	}
-	return nil
-}
+func (x *TimeoutQC) GetVotes() []*SignedMsg { _ = "STUB: not implemented"; return nil }
 
-func (x *TimeoutQC) GetLatestPrepareQc() *PrepareQC {
-	if x != nil {
-		return x.LatestPrepareQc
-	}
-	return nil
-}
+func (x *TimeoutQC) GetLatestPrepareQc() *PrepareQC { _ = "STUB: not implemented"; return nil }
 
 type FullTimeoutVote struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
@@ -1252,49 +639,23 @@ type FullTimeoutVote struct {
 	sizeCache       protoimpl.SizeCache
 }
 
-func (x *FullTimeoutVote) Reset() {
-	*x = FullTimeoutVote{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[21]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *FullTimeoutVote) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *FullTimeoutVote) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *FullTimeoutVote) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*FullTimeoutVote) ProtoMessage() {}
+func (*FullTimeoutVote) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *FullTimeoutVote) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[21]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use FullTimeoutVote.ProtoReflect.Descriptor instead.
-func (*FullTimeoutVote) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{21}
-}
+func (*FullTimeoutVote) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *FullTimeoutVote) GetVote() *SignedMsg {
-	if x != nil {
-		return x.Vote
-	}
-	return nil
-}
+func (x *FullTimeoutVote) GetVote() *SignedMsg { _ = "STUB: not implemented"; return nil }
 
-func (x *FullTimeoutVote) GetLatestPrepareQc() *PrepareQC {
-	if x != nil {
-		return x.LatestPrepareQc
-	}
-	return nil
-}
+func (x *FullTimeoutVote) GetLatestPrepareQc() *PrepareQC { _ = "STUB: not implemented"; return nil }
 
 // Persisted consensus state (for crash recovery).
 // Only persist votes and QCs here - these are the canonical consensus artifacts.
@@ -1312,77 +673,31 @@ type PersistedInner struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PersistedInner) Reset() {
-	*x = PersistedInner{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[22]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *PersistedInner) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *PersistedInner) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *PersistedInner) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*PersistedInner) ProtoMessage() {}
+func (*PersistedInner) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *PersistedInner) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[22]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use PersistedInner.ProtoReflect.Descriptor instead.
-func (*PersistedInner) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{22}
-}
+func (*PersistedInner) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *PersistedInner) GetCommitQc() *CommitQC {
-	if x != nil {
-		return x.CommitQc
-	}
-	return nil
-}
+func (x *PersistedInner) GetCommitQc() *CommitQC { _ = "STUB: not implemented"; return nil }
 
-func (x *PersistedInner) GetPrepareQc() *PrepareQC {
-	if x != nil {
-		return x.PrepareQc
-	}
-	return nil
-}
+func (x *PersistedInner) GetPrepareQc() *PrepareQC { _ = "STUB: not implemented"; return nil }
 
-func (x *PersistedInner) GetTimeoutQc() *TimeoutQC {
-	if x != nil {
-		return x.TimeoutQc
-	}
-	return nil
-}
+func (x *PersistedInner) GetTimeoutQc() *TimeoutQC { _ = "STUB: not implemented"; return nil }
 
-func (x *PersistedInner) GetCommitVote() *SignedMsg {
-	if x != nil {
-		return x.CommitVote
-	}
-	return nil
-}
+func (x *PersistedInner) GetCommitVote() *SignedMsg { _ = "STUB: not implemented"; return nil }
 
-func (x *PersistedInner) GetPrepareVote() *SignedMsg {
-	if x != nil {
-		return x.PrepareVote
-	}
-	return nil
-}
+func (x *PersistedInner) GetPrepareVote() *SignedMsg { _ = "STUB: not implemented"; return nil }
 
-func (x *PersistedInner) GetTimeoutVote() *FullTimeoutVote {
-	if x != nil {
-		return x.TimeoutVote
-	}
-	return nil
-}
+func (x *PersistedInner) GetTimeoutVote() *FullTimeoutVote { _ = "STUB: not implemented"; return nil }
 
 // Persisted availability prune anchor (AppQC + matching CommitQC pair).
 // Stored atomically in an A/B file; used as the crash-recovery pruning watermark.
@@ -1394,49 +709,26 @@ type PersistedAvailPruneAnchor struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PersistedAvailPruneAnchor) Reset() {
-	*x = PersistedAvailPruneAnchor{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[23]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *PersistedAvailPruneAnchor) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *PersistedAvailPruneAnchor) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *PersistedAvailPruneAnchor) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*PersistedAvailPruneAnchor) ProtoMessage() {}
+func (*PersistedAvailPruneAnchor) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *PersistedAvailPruneAnchor) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[23]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use PersistedAvailPruneAnchor.ProtoReflect.Descriptor instead.
 func (*PersistedAvailPruneAnchor) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{23}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (x *PersistedAvailPruneAnchor) GetAppQc() *AppQC {
-	if x != nil {
-		return x.AppQc
-	}
-	return nil
-}
+func (x *PersistedAvailPruneAnchor) GetAppQc() *AppQC { _ = "STUB: not implemented"; return nil }
 
-func (x *PersistedAvailPruneAnchor) GetCommitQc() *CommitQC {
-	if x != nil {
-		return x.CommitQc
-	}
-	return nil
-}
+func (x *PersistedAvailPruneAnchor) GetCommitQc() *CommitQC { _ = "STUB: not implemented"; return nil }
 
 type AppQC struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1446,49 +738,23 @@ type AppQC struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AppQC) Reset() {
-	*x = AppQC{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[24]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *AppQC) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *AppQC) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *AppQC) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*AppQC) ProtoMessage() {}
+func (*AppQC) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *AppQC) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[24]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use AppQC.ProtoReflect.Descriptor instead.
-func (*AppQC) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{24}
-}
+func (*AppQC) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *AppQC) GetVote() *AppProposal {
-	if x != nil {
-		return x.Vote
-	}
-	return nil
-}
+func (x *AppQC) GetVote() *AppProposal { _ = "STUB: not implemented"; return nil }
 
-func (x *AppQC) GetSigs() []*Signature {
-	if x != nil {
-		return x.Sigs
-	}
-	return nil
-}
+func (x *AppQC) GetSigs() []*Signature { _ = "STUB: not implemented"; return nil }
 
 type AppProposal struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -1502,56 +768,25 @@ type AppProposal struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AppProposal) Reset() {
-	*x = AppProposal{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[25]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *AppProposal) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *AppProposal) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *AppProposal) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*AppProposal) ProtoMessage() {}
+func (*AppProposal) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *AppProposal) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[25]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use AppProposal.ProtoReflect.Descriptor instead.
-func (*AppProposal) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{25}
-}
+func (*AppProposal) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *AppProposal) GetGlobalNumber() uint64 {
-	if x != nil && x.GlobalNumber != nil {
-		return *x.GlobalNumber
-	}
-	return 0
-}
+func (x *AppProposal) GetGlobalNumber() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *AppProposal) GetRoadIndex() uint64 {
-	if x != nil && x.RoadIndex != nil {
-		return *x.RoadIndex
-	}
-	return 0
-}
+func (x *AppProposal) GetRoadIndex() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (x *AppProposal) GetAppHash() []byte {
-	if x != nil {
-		return x.AppHash
-	}
-	return nil
-}
+func (x *AppProposal) GetAppHash() []byte { _ = "STUB: not implemented"; return nil }
 
 // This is the signable message.
 // To sign ConsensusMsg/BlockMsg, you need to embed it in Msg first.
@@ -1571,105 +806,35 @@ type Msg struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *Msg) Reset() {
-	*x = Msg{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[26]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *Msg) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *Msg) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *Msg) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*Msg) ProtoMessage() {}
+func (*Msg) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *Msg) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[26]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use Msg.ProtoReflect.Descriptor instead.
-func (*Msg) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{26}
-}
+func (*Msg) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *Msg) GetT() isMsg_T {
-	if x != nil {
-		return x.T
-	}
-	return nil
-}
+func (x *Msg) GetT() isMsg_T { _ = "STUB: not implemented"; return *new(isMsg_T) }
 
-func (x *Msg) GetLaneProposal() *Block {
-	if x != nil {
-		if x, ok := x.T.(*Msg_LaneProposal); ok {
-			return x.LaneProposal
-		}
-	}
-	return nil
-}
+func (x *Msg) GetLaneProposal() *Block { _ = "STUB: not implemented"; return nil }
 
-func (x *Msg) GetLaneVote() *BlockHeader {
-	if x != nil {
-		if x, ok := x.T.(*Msg_LaneVote); ok {
-			return x.LaneVote
-		}
-	}
-	return nil
-}
+func (x *Msg) GetLaneVote() *BlockHeader { _ = "STUB: not implemented"; return nil }
 
-func (x *Msg) GetProposal() *Proposal {
-	if x != nil {
-		if x, ok := x.T.(*Msg_Proposal); ok {
-			return x.Proposal
-		}
-	}
-	return nil
-}
+func (x *Msg) GetProposal() *Proposal { _ = "STUB: not implemented"; return nil }
 
-func (x *Msg) GetPrepareVote() *Proposal {
-	if x != nil {
-		if x, ok := x.T.(*Msg_PrepareVote); ok {
-			return x.PrepareVote
-		}
-	}
-	return nil
-}
+func (x *Msg) GetPrepareVote() *Proposal { _ = "STUB: not implemented"; return nil }
 
-func (x *Msg) GetCommitVote() *Proposal {
-	if x != nil {
-		if x, ok := x.T.(*Msg_CommitVote); ok {
-			return x.CommitVote
-		}
-	}
-	return nil
-}
+func (x *Msg) GetCommitVote() *Proposal { _ = "STUB: not implemented"; return nil }
 
-func (x *Msg) GetTimeoutVote() *TimeoutVote {
-	if x != nil {
-		if x, ok := x.T.(*Msg_TimeoutVote); ok {
-			return x.TimeoutVote
-		}
-	}
-	return nil
-}
+func (x *Msg) GetTimeoutVote() *TimeoutVote { _ = "STUB: not implemented"; return nil }
 
-func (x *Msg) GetAppVote() *AppProposal {
-	if x != nil {
-		if x, ok := x.T.(*Msg_AppVote); ok {
-			return x.AppVote
-		}
-	}
-	return nil
-}
+func (x *Msg) GetAppVote() *AppProposal { _ = "STUB: not implemented"; return nil }
 
 type isMsg_T interface {
 	isMsg_T()
@@ -1706,19 +871,19 @@ type Msg_AppVote struct {
 	AppVote *AppProposal `protobuf:"bytes,7,opt,name=app_vote,json=appVote,proto3,oneof"`
 }
 
-func (*Msg_LaneProposal) isMsg_T() {}
+func (*Msg_LaneProposal) isMsg_T() { _ = "STUB: not implemented"; return }
 
-func (*Msg_LaneVote) isMsg_T() {}
+func (*Msg_LaneVote) isMsg_T() { _ = "STUB: not implemented"; return }
 
-func (*Msg_Proposal) isMsg_T() {}
+func (*Msg_Proposal) isMsg_T() { _ = "STUB: not implemented"; return }
 
-func (*Msg_PrepareVote) isMsg_T() {}
+func (*Msg_PrepareVote) isMsg_T() { _ = "STUB: not implemented"; return }
 
-func (*Msg_CommitVote) isMsg_T() {}
+func (*Msg_CommitVote) isMsg_T() { _ = "STUB: not implemented"; return }
 
-func (*Msg_TimeoutVote) isMsg_T() {}
+func (*Msg_TimeoutVote) isMsg_T() { _ = "STUB: not implemented"; return }
 
-func (*Msg_AppVote) isMsg_T() {}
+func (*Msg_AppVote) isMsg_T() { _ = "STUB: not implemented"; return }
 
 type SignedMsg struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -1728,49 +893,23 @@ type SignedMsg struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SignedMsg) Reset() {
-	*x = SignedMsg{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[27]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *SignedMsg) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *SignedMsg) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *SignedMsg) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*SignedMsg) ProtoMessage() {}
+func (*SignedMsg) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *SignedMsg) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[27]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use SignedMsg.ProtoReflect.Descriptor instead.
-func (*SignedMsg) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{27}
-}
+func (*SignedMsg) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
-func (x *SignedMsg) GetMsg() *Msg {
-	if x != nil {
-		return x.Msg
-	}
-	return nil
-}
+func (x *SignedMsg) GetMsg() *Msg { _ = "STUB: not implemented"; return nil }
 
-func (x *SignedMsg) GetSig() *Signature {
-	if x != nil {
-		return x.Sig
-	}
-	return nil
-}
+func (x *SignedMsg) GetSig() *Signature { _ = "STUB: not implemented"; return nil }
 
 // TODO(gprusak): rename to ConsensusMsg
 type ConsensusReq struct {
@@ -1787,87 +926,34 @@ type ConsensusReq struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ConsensusReq) Reset() {
-	*x = ConsensusReq{}
-	mi := &file_autobahn_autobahn_proto_msgTypes[28]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
+func (x *ConsensusReq) Reset() { _ = "STUB: not implemented"; return }
 
-func (x *ConsensusReq) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
+func (x *ConsensusReq) String() string { _ = "STUB: not implemented"; return "" }
 
-func (*ConsensusReq) ProtoMessage() {}
+func (*ConsensusReq) ProtoMessage() { _ = "STUB: not implemented"; return }
 
 func (x *ConsensusReq) ProtoReflect() protoreflect.Message {
-	mi := &file_autobahn_autobahn_proto_msgTypes[28]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
+	_ = "STUB: not implemented"
+	return *new(protoreflect.Message)
 }
 
 // Deprecated: Use ConsensusReq.ProtoReflect.Descriptor instead.
-func (*ConsensusReq) Descriptor() ([]byte, []int) {
-	return file_autobahn_autobahn_proto_rawDescGZIP(), []int{28}
-}
+func (*ConsensusReq) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
 
 func (x *ConsensusReq) GetT() isConsensusReq_T {
-	if x != nil {
-		return x.T
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(isConsensusReq_T)
 }
 
-func (x *ConsensusReq) GetProposal() *FullProposal {
-	if x != nil {
-		if x, ok := x.T.(*ConsensusReq_Proposal); ok {
-			return x.Proposal
-		}
-	}
-	return nil
-}
+func (x *ConsensusReq) GetProposal() *FullProposal { _ = "STUB: not implemented"; return nil }
 
-func (x *ConsensusReq) GetPrepareVote() *SignedMsg {
-	if x != nil {
-		if x, ok := x.T.(*ConsensusReq_PrepareVote); ok {
-			return x.PrepareVote
-		}
-	}
-	return nil
-}
+func (x *ConsensusReq) GetPrepareVote() *SignedMsg { _ = "STUB: not implemented"; return nil }
 
-func (x *ConsensusReq) GetCommitVote() *SignedMsg {
-	if x != nil {
-		if x, ok := x.T.(*ConsensusReq_CommitVote); ok {
-			return x.CommitVote
-		}
-	}
-	return nil
-}
+func (x *ConsensusReq) GetCommitVote() *SignedMsg { _ = "STUB: not implemented"; return nil }
 
-func (x *ConsensusReq) GetTimeoutVote() *FullTimeoutVote {
-	if x != nil {
-		if x, ok := x.T.(*ConsensusReq_TimeoutVote); ok {
-			return x.TimeoutVote
-		}
-	}
-	return nil
-}
+func (x *ConsensusReq) GetTimeoutVote() *FullTimeoutVote { _ = "STUB: not implemented"; return nil }
 
-func (x *ConsensusReq) GetTimeoutQc() *TimeoutQC {
-	if x != nil {
-		if x, ok := x.T.(*ConsensusReq_TimeoutQc); ok {
-			return x.TimeoutQc
-		}
-	}
-	return nil
-}
+func (x *ConsensusReq) GetTimeoutQc() *TimeoutQC { _ = "STUB: not implemented"; return nil }
 
 type isConsensusReq_T interface {
 	isConsensusReq_T()
@@ -1893,15 +979,15 @@ type ConsensusReq_TimeoutQc struct {
 	TimeoutQc *TimeoutQC `protobuf:"bytes,5,opt,name=timeout_qc,json=timeoutQc,proto3,oneof"`
 }
 
-func (*ConsensusReq_Proposal) isConsensusReq_T() {}
+func (*ConsensusReq_Proposal) isConsensusReq_T() { _ = "STUB: not implemented"; return }
 
-func (*ConsensusReq_PrepareVote) isConsensusReq_T() {}
+func (*ConsensusReq_PrepareVote) isConsensusReq_T() { _ = "STUB: not implemented"; return }
 
-func (*ConsensusReq_CommitVote) isConsensusReq_T() {}
+func (*ConsensusReq_CommitVote) isConsensusReq_T() { _ = "STUB: not implemented"; return }
 
-func (*ConsensusReq_TimeoutVote) isConsensusReq_T() {}
+func (*ConsensusReq_TimeoutVote) isConsensusReq_T() { _ = "STUB: not implemented"; return }
 
-func (*ConsensusReq_TimeoutQc) isConsensusReq_T() {}
+func (*ConsensusReq_TimeoutQc) isConsensusReq_T() { _ = "STUB: not implemented"; return }
 
 var File_autobahn_autobahn_proto protoreflect.FileDescriptor
 
@@ -2107,12 +1193,7 @@ var (
 	file_autobahn_autobahn_proto_rawDescData []byte
 )
 
-func file_autobahn_autobahn_proto_rawDescGZIP() []byte {
-	file_autobahn_autobahn_proto_rawDescOnce.Do(func() {
-		file_autobahn_autobahn_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_autobahn_autobahn_proto_rawDesc), len(file_autobahn_autobahn_proto_rawDesc)))
-	})
-	return file_autobahn_autobahn_proto_rawDescData
-}
+func file_autobahn_autobahn_proto_rawDescGZIP() []byte { _ = "STUB: not implemented"; return nil }
 
 var file_autobahn_autobahn_proto_msgTypes = make([]protoimpl.MessageInfo, 30)
 var file_autobahn_autobahn_proto_goTypes = []any{
@@ -2209,59 +1290,5 @@ var file_autobahn_autobahn_proto_depIdxs = []int32{
 	0,  // [0:54] is the sub-list for field type_name
 }
 
-func init() { file_autobahn_autobahn_proto_init() }
-func file_autobahn_autobahn_proto_init() {
-	if File_autobahn_autobahn_proto != nil {
-		return
-	}
-	file_autobahn_autobahn_proto_msgTypes[0].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[1].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[6].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[7].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[8].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[9].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[10].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[12].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[13].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[14].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[15].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[19].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[20].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[21].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[22].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[23].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[25].OneofWrappers = []any{}
-	file_autobahn_autobahn_proto_msgTypes[26].OneofWrappers = []any{
-		(*Msg_LaneProposal)(nil),
-		(*Msg_LaneVote)(nil),
-		(*Msg_Proposal)(nil),
-		(*Msg_PrepareVote)(nil),
-		(*Msg_CommitVote)(nil),
-		(*Msg_TimeoutVote)(nil),
-		(*Msg_AppVote)(nil),
-	}
-	file_autobahn_autobahn_proto_msgTypes[28].OneofWrappers = []any{
-		(*ConsensusReq_Proposal)(nil),
-		(*ConsensusReq_PrepareVote)(nil),
-		(*ConsensusReq_CommitVote)(nil),
-		(*ConsensusReq_TimeoutVote)(nil),
-		(*ConsensusReq_TimeoutQc)(nil),
-	}
-	type x struct{}
-	out := protoimpl.TypeBuilder{
-		File: protoimpl.DescBuilder{
-			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_autobahn_autobahn_proto_rawDesc), len(file_autobahn_autobahn_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   30,
-			NumExtensions: 0,
-			NumServices:   0,
-		},
-		GoTypes:           file_autobahn_autobahn_proto_goTypes,
-		DependencyIndexes: file_autobahn_autobahn_proto_depIdxs,
-		MessageInfos:      file_autobahn_autobahn_proto_msgTypes,
-	}.Build()
-	File_autobahn_autobahn_proto = out.File
-	file_autobahn_autobahn_proto_goTypes = nil
-	file_autobahn_autobahn_proto_depIdxs = nil
-}
+func init()                              { file_autobahn_autobahn_proto_init() }
+func file_autobahn_autobahn_proto_init() { _ = "STUB: not implemented"; return }

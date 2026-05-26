@@ -2,11 +2,9 @@ package keeper
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	capabilitytypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/types"
 
 	icatypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/types"
-	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
 	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
 )
 
@@ -16,30 +14,11 @@ import (
 // absolute timeoutTimestamp must be provided. If the packet is timed out, the channel will be closed.
 // In the case of channel closure, a new channel may be reopened to reconnect to the host chain.
 func (k Keeper) SendTx(ctx sdk.Context, chanCap *capabilitytypes.Capability, connectionID, portID string, icaPacketData icatypes.InterchainAccountPacketData, timeoutTimestamp uint64) (uint64, error) {
-	activeChannelID, found := k.GetOpenActiveChannel(ctx, connectionID, portID)
-	if !found {
-		return 0, sdkerrors.Wrapf(icatypes.ErrActiveChannelNotFound, "failed to retrieve active channel on connection %s for port %s", connectionID, portID)
-	}
-
-	sourceChannelEnd, found := k.channelKeeper.GetChannel(ctx, portID, activeChannelID)
-	if !found {
-		return 0, sdkerrors.Wrap(channeltypes.ErrChannelNotFound, activeChannelID)
-	}
-
-	destinationPort := sourceChannelEnd.GetCounterparty().GetPortID()
-	destinationChannel := sourceChannelEnd.GetCounterparty().GetChannelID()
-
-	blockTimeNano := ctx.BlockTime().UnixNano()
-	if blockTimeNano < 0 {
-		return 0, sdkerrors.Wrap(sdkerrors.ErrInvalidHeight, "block time is negative")
-	}
-	// #nosec G115 -- block time is checked above to be non-negative
-	if uint64(blockTimeNano) >= timeoutTimestamp {
-		return 0, icatypes.ErrInvalidTimeoutTimestamp
-	}
-
-	return k.createOutgoingPacket(ctx, portID, activeChannelID, destinationPort, destinationChannel, chanCap, icaPacketData, timeoutTimestamp)
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
+// #nosec G115 -- block time is checked above to be non-negative
 
 func (k Keeper) createOutgoingPacket(
 	ctx sdk.Context,
@@ -51,36 +30,15 @@ func (k Keeper) createOutgoingPacket(
 	icaPacketData icatypes.InterchainAccountPacketData,
 	timeoutTimestamp uint64,
 ) (uint64, error) {
-	if err := icaPacketData.ValidateBasic(); err != nil {
-		return 0, sdkerrors.Wrap(err, "invalid interchain account packet data")
-	}
-
-	// get the next sequence
-	sequence, found := k.channelKeeper.GetNextSequenceSend(ctx, sourcePort, sourceChannel)
-	if !found {
-		return 0, sdkerrors.Wrapf(channeltypes.ErrSequenceSendNotFound, "failed to retrieve next sequence send for channel %s on port %s", sourceChannel, sourcePort)
-	}
-
-	packet := channeltypes.NewPacket(
-		icaPacketData.GetBytes(),
-		sequence,
-		sourcePort,
-		sourceChannel,
-		destinationPort,
-		destinationChannel,
-		clienttypes.ZeroHeight(),
-		timeoutTimestamp,
-	)
-
-	if err := k.ics4Wrapper.SendPacket(ctx, chanCap, packet); err != nil {
-		return 0, err
-	}
-
-	return packet.Sequence, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
+
+// get the next sequence
 
 // OnTimeoutPacket removes the active channel associated with the provided packet, the underlying channel end is closed
 // due to the semantics of ORDERED channels
 func (k Keeper) OnTimeoutPacket(ctx sdk.Context, packet channeltypes.Packet) error {
+	_ = "STUB: not implemented"
 	return nil
 }

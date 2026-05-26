@@ -1,7 +1,6 @@
 package memiavl
 
 import (
-	"errors"
 	"time"
 )
 
@@ -35,43 +34,14 @@ type Options struct {
 // SnapshotMinTimeDuration returns the minimum time interval between snapshots as a Duration.
 // Call FillDefaults() before using this method.
 func (opts *Options) SnapshotMinTimeDuration() time.Duration {
-	return opts.snapshotMinTimeIntervalDuration
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
-func (opts Options) Validate() error {
-	if opts.ReadOnly && opts.CreateIfMissing {
-		return errors.New("can't create db in read-only mode")
-	}
+func (opts Options) Validate() error { _ = "STUB: not implemented"; return nil }
 
-	if opts.ReadOnly && opts.LoadForOverwriting {
-		return errors.New("can't rollback db in read-only mode")
-	}
+func (opts *Options) FillDefaults() { _ = "STUB: not implemented"; return }
 
-	return nil
-}
+// SnapshotWriterLimit controls tree concurrency but not I/O rate (use SnapshotWriteRateMBps for that)
 
-func (opts *Options) FillDefaults() {
-	if opts.SnapshotInterval <= 0 {
-		opts.SnapshotInterval = DefaultSnapshotInterval
-	}
-
-	// SnapshotWriterLimit controls tree concurrency but not I/O rate (use SnapshotWriteRateMBps for that)
-	if opts.SnapshotWriterLimit <= 0 {
-		opts.SnapshotWriterLimit = DefaultSnapshotWriterLimit
-	}
-
-	// Convert SnapshotMinTimeInterval (seconds) to Duration
-	if opts.SnapshotMinTimeInterval > 0 {
-		opts.snapshotMinTimeIntervalDuration = time.Duration(opts.SnapshotMinTimeInterval) * time.Second
-	} else {
-		opts.snapshotMinTimeIntervalDuration = 1 * time.Hour
-	}
-
-	if opts.SnapshotWriteRateMBps <= 0 {
-		opts.SnapshotWriteRateMBps = DefaultSnapshotWriteRateMBps
-	}
-
-	if opts.SnapshotPrefetchThreshold <= 0 || opts.SnapshotPrefetchThreshold > 1 {
-		opts.SnapshotPrefetchThreshold = DefaultSnapshotPrefetchThreshold
-	}
-}
+// Convert SnapshotMinTimeInterval (seconds) to Duration

@@ -2,44 +2,18 @@ package processblock
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	bankkeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/keeper"
-	minttypes "github.com/sei-protocol/sei-chain/x/mint/types"
 )
 
-func (a *App) FundAccount(acc sdk.AccAddress, amount int64) {
-	a.FundAccountWithDenom(acc, amount, "usei")
-}
+func (a *App) FundAccount(acc sdk.AccAddress, amount int64) { _ = "STUB: not implemented"; return }
 
-func (a *App) FundModule(moduleName string, amount int64) {
-	a.FundModuleWithDenom(moduleName, amount, "usei")
-}
+func (a *App) FundModule(moduleName string, amount int64) { _ = "STUB: not implemented"; return }
 
 func (a *App) FundAccountWithDenom(acc sdk.AccAddress, amount int64, denom string) {
-	ctx := a.Ctx()
-	amounts := sdk.NewCoins(sdk.NewCoin(denom, sdk.NewInt(amount)))
-	if err := a.BankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
-		panic(err)
-	}
-	if err := a.BankKeeper.SendCoinsFromModuleToAccount(ctx, minttypes.ModuleName, acc, amounts); err != nil {
-		panic(err)
-	}
-	m, b := bankkeeper.TotalSupply(a.BankKeeper)(ctx)
-	if b {
-		panic(m)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func (a *App) FundModuleWithDenom(moduleName string, amount int64, denom string) {
-	ctx := a.Ctx()
-	amounts := sdk.NewCoins(sdk.NewCoin(denom, sdk.NewInt(amount)))
-	if err := a.BankKeeper.MintCoins(ctx, minttypes.ModuleName, amounts); err != nil {
-		panic(err)
-	}
-	if err := a.BankKeeper.SendCoinsFromModuleToModule(ctx, minttypes.ModuleName, moduleName, amounts); err != nil {
-		panic(err)
-	}
-	m, b := bankkeeper.TotalSupply(a.BankKeeper)(ctx)
-	if b {
-		panic(m)
-	}
+	_ = "STUB: not implemented"
+	return
 }

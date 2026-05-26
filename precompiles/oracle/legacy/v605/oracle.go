@@ -2,7 +2,6 @@ package v605
 
 import (
 	"embed"
-	"fmt"
 	"math/big"
 
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
@@ -13,7 +12,6 @@ import (
 	"github.com/ethereum/go-ethereum/core/vm"
 	pcommon "github.com/sei-protocol/sei-chain/precompiles/common/legacy/v605"
 	"github.com/sei-protocol/sei-chain/precompiles/utils"
-	"github.com/sei-protocol/sei-chain/x/oracle/types"
 )
 
 const (
@@ -57,90 +55,37 @@ type OracleTwap struct {
 }
 
 func NewPrecompile(keepers utils.Keepers) (*pcommon.DynamicGasPrecompile, error) {
-	newAbi := pcommon.MustGetABI(f, "abi.json")
-
-	p := &PrecompileExecutor{
-		evmKeeper:    keepers.EVMK(),
-		oracleKeeper: keepers.OracleK(),
-	}
-
-	for name, m := range newAbi.Methods {
-		switch name {
-		case GetExchangeRatesMethod:
-			p.GetExchangeRatesId = m.ID
-		case GetOracleTwapsMethod:
-			p.GetOracleTwapsId = m.ID
-		}
-	}
-
-	return pcommon.NewDynamicGasPrecompile(newAbi, p, common.HexToAddress(OracleAddress), "oracle"), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // RequiredGas returns the required bare minimum gas to execute the precompile.
 func (p PrecompileExecutor) RequiredGas(input []byte, method *abi.Method) uint64 {
-	return pcommon.DefaultGasCost(input, p.IsTransaction(method.Name))
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func (p PrecompileExecutor) Execute(ctx sdk.Context, method *abi.Method, caller common.Address, callingContract common.Address, args []interface{}, value *big.Int, readOnly bool, evm *vm.EVM, suppliedGas uint64, hooks *tracing.Hooks) (bz []byte, remainingGas uint64, err error) {
+	_ = "STUB: not implemented"
 	// Needed to catch gas meter panics
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("execution reverted: %v", r)
-		}
-	}()
-	switch method.Name {
-	case GetExchangeRatesMethod:
-		return p.getExchangeRates(ctx, method, args, value)
-	case GetOracleTwapsMethod:
-		return p.getOracleTwaps(ctx, method, args, value)
-	}
-	return
+	return nil, 0, nil
 }
 
 func (p PrecompileExecutor) getExchangeRates(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, uint64, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 0); err != nil {
-		return nil, 0, err
-	}
-	exchangeRates := []DenomOracleExchangeRatePair{}
-	p.oracleKeeper.IterateBaseExchangeRates(ctx, func(denom string, rate types.OracleExchangeRate) (stop bool) {
-		exchangeRates = append(exchangeRates, DenomOracleExchangeRatePair{Denom: denom, OracleExchangeRateVal: OracleExchangeRate{ExchangeRate: rate.ExchangeRate.String(), LastUpdate: rate.LastUpdate.String(), LastUpdateTimestamp: rate.LastUpdateTimestamp}})
-		return false
-	})
-
-	bz, err := method.Outputs.Pack(exchangeRates)
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
 
 func (p PrecompileExecutor) getOracleTwaps(ctx sdk.Context, method *abi.Method, args []interface{}, value *big.Int) ([]byte, uint64, error) {
-	if err := pcommon.ValidateNonPayable(value); err != nil {
-		return nil, 0, err
-	}
-
-	if err := pcommon.ValidateArgsLength(args, 1); err != nil {
-		return nil, 0, err
-	}
-	lookbackSeconds := args[0].(uint64)
-	twaps, err := p.oracleKeeper.CalculateTwaps(ctx, lookbackSeconds)
-	if err != nil {
-		return nil, 0, err
-	}
-	// Convert twap to string
-	oracleTwaps := make([]OracleTwap, 0, len(twaps))
-	for _, twap := range twaps {
-		oracleTwaps = append(oracleTwaps, OracleTwap{Denom: twap.Denom, Twap: twap.Twap.String(), LookbackSeconds: twap.LookbackSeconds})
-	}
-	bz, err := method.Outputs.Pack(oracleTwaps)
-	return bz, pcommon.GetRemainingGas(ctx, p.evmKeeper), err
+	_ = "STUB: not implemented"
+	return nil, 0, nil
 }
+
+// Convert twap to string
 
 func (p PrecompileExecutor) EVMKeeper() utils.EVMKeeper {
-	return p.evmKeeper
+	_ = "STUB: not implemented"
+	return *new(utils.EVMKeeper)
 }
 
-func (PrecompileExecutor) IsTransaction(string) bool {
-	return false
-}
+func (PrecompileExecutor) IsTransaction(string) bool { _ = "STUB: not implemented"; return false }

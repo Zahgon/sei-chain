@@ -1,10 +1,6 @@
 package merkle
 
 import (
-	"bytes"
-	"errors"
-	"fmt"
-
 	tmcrypto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/crypto"
 )
 
@@ -33,38 +29,12 @@ type ProofOperator interface {
 type ProofOperators []ProofOperator
 
 func (poz ProofOperators) VerifyValue(root []byte, keypath string, value []byte) (err error) {
-	return poz.Verify(root, keypath, [][]byte{value})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (poz ProofOperators) Verify(root []byte, keypath string, args [][]byte) (err error) {
-	keys, err := KeyPathToKeys(keypath)
-	if err != nil {
-		return
-	}
-
-	for i, op := range poz {
-		key := op.GetKey()
-		if len(key) != 0 {
-			if len(keys) == 0 {
-				return fmt.Errorf("key path has insufficient # of parts: expected no more keys but got %+v", string(key))
-			}
-			lastKey := keys[len(keys)-1]
-			if !bytes.Equal(lastKey, key) {
-				return fmt.Errorf("key mismatch on operation #%d: expected %+v but got %+v", i, string(lastKey), string(key))
-			}
-			keys = keys[:len(keys)-1]
-		}
-		args, err = op.Run(args)
-		if err != nil {
-			return
-		}
-	}
-	if !bytes.Equal(root, args[0]) {
-		return fmt.Errorf("calculated root hash is invalid: expected %X but got %X", root, args[0])
-	}
-	if len(keys) != 0 {
-		return errors.New("keypath not consumed all")
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -77,63 +47,41 @@ type ProofRuntime struct {
 	decoders map[string]OpDecoder
 }
 
-func NewProofRuntime() *ProofRuntime {
-	return &ProofRuntime{
-		decoders: make(map[string]OpDecoder),
-	}
-}
+func NewProofRuntime() *ProofRuntime { _ = "STUB: not implemented"; return nil }
 
 func (prt *ProofRuntime) RegisterOpDecoder(typ string, dec OpDecoder) {
-	_, ok := prt.decoders[typ]
-	if ok {
-		panic("already registered for type " + typ)
-	}
-	prt.decoders[typ] = dec
+	_ = "STUB: not implemented"
+	return
 }
 
 func (prt *ProofRuntime) Decode(pop tmcrypto.ProofOp) (ProofOperator, error) {
-	decoder := prt.decoders[pop.Type]
-	if decoder == nil {
-		return nil, fmt.Errorf("unrecognized proof type %v", pop.Type)
-	}
-	return decoder(pop)
+	_ = "STUB: not implemented"
+	return *new(ProofOperator), nil
 }
 
 func (prt *ProofRuntime) DecodeProof(proof *tmcrypto.ProofOps) (ProofOperators, error) {
-	poz := make(ProofOperators, 0, len(proof.Ops))
-	for _, pop := range proof.Ops {
-		operator, err := prt.Decode(pop)
-		if err != nil {
-			return nil, fmt.Errorf("decoding a proof operator: %w", err)
-		}
-		poz = append(poz, operator)
-	}
-	return poz, nil
+	_ = "STUB: not implemented"
+	return *new(ProofOperators), nil
 }
 
 func (prt *ProofRuntime) VerifyValue(proof *tmcrypto.ProofOps, root []byte, keypath string, value []byte) (err error) {
-	return prt.Verify(proof, root, keypath, [][]byte{value})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // TODO In the long run we'll need a method of classifcation of ops,
 // whether existence or absence or perhaps a third?
 func (prt *ProofRuntime) VerifyAbsence(proof *tmcrypto.ProofOps, root []byte, keypath string) (err error) {
-	return prt.Verify(proof, root, keypath, nil)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (prt *ProofRuntime) Verify(proof *tmcrypto.ProofOps, root []byte, keypath string, args [][]byte) (err error) {
-	poz, err := prt.DecodeProof(proof)
-	if err != nil {
-		return fmt.Errorf("decoding proof: %w", err)
-	}
-	return poz.Verify(root, keypath, args)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // DefaultProofRuntime only knows about value proofs.
 // To use e.g. IAVL proofs, register op-decoders as
 // defined in the IAVL package.
-func DefaultProofRuntime() (prt *ProofRuntime) {
-	prt = NewProofRuntime()
-	prt.RegisterOpDecoder(ProofOpValue, ValueOpDecoder)
-	return
-}
+func DefaultProofRuntime() (prt *ProofRuntime) { _ = "STUB: not implemented"; return nil }

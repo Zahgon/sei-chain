@@ -5,10 +5,9 @@ package query
 
 import (
 	fmt "fmt"
-	proto "github.com/gogo/protobuf/proto"
-	io "io"
 	math "math"
-	math_bits "math/bits"
+
+	proto "github.com/gogo/protobuf/proto"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -52,73 +51,35 @@ type PageRequest struct {
 	Reverse bool `protobuf:"varint,5,opt,name=reverse,proto3" json:"reverse,omitempty"`
 }
 
-func (m *PageRequest) Reset()         { *m = PageRequest{} }
-func (m *PageRequest) String() string { return proto.CompactTextString(m) }
-func (*PageRequest) ProtoMessage()    {}
-func (*PageRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_53d6d609fe6828af, []int{0}
-}
-func (m *PageRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *PageRequest) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *PageRequest) String() string            { _ = "STUB: not implemented"; return "" }
+func (*PageRequest) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*PageRequest) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *PageRequest) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *PageRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PageRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *PageRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PageRequest.Merge(m, src)
-}
-func (m *PageRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *PageRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_PageRequest.DiscardUnknown(m)
-}
+
+func (m *PageRequest) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *PageRequest) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *PageRequest) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_PageRequest proto.InternalMessageInfo
 
-func (m *PageRequest) GetKey() []byte {
-	if m != nil {
-		return m.Key
-	}
-	return nil
-}
+func (m *PageRequest) GetKey() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *PageRequest) GetOffset() uint64 {
-	if m != nil {
-		return m.Offset
-	}
-	return 0
-}
+func (m *PageRequest) GetOffset() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *PageRequest) GetLimit() uint64 {
-	if m != nil {
-		return m.Limit
-	}
-	return 0
-}
+func (m *PageRequest) GetLimit() uint64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *PageRequest) GetCountTotal() bool {
-	if m != nil {
-		return m.CountTotal
-	}
-	return false
-}
+func (m *PageRequest) GetCountTotal() bool { _ = "STUB: not implemented"; return false }
 
-func (m *PageRequest) GetReverse() bool {
-	if m != nil {
-		return m.Reverse
-	}
-	return false
-}
+func (m *PageRequest) GetReverse() bool { _ = "STUB: not implemented"; return false }
 
 // PageResponse is to be embedded in gRPC response messages where the
 // corresponding request message has used PageRequest.
@@ -136,52 +97,29 @@ type PageResponse struct {
 	Total uint64 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 }
 
-func (m *PageResponse) Reset()         { *m = PageResponse{} }
-func (m *PageResponse) String() string { return proto.CompactTextString(m) }
-func (*PageResponse) ProtoMessage()    {}
-func (*PageResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_53d6d609fe6828af, []int{1}
-}
-func (m *PageResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *PageResponse) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *PageResponse) String() string            { _ = "STUB: not implemented"; return "" }
+func (*PageResponse) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*PageResponse) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *PageResponse) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *PageResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PageResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *PageResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PageResponse.Merge(m, src)
-}
-func (m *PageResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *PageResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_PageResponse.DiscardUnknown(m)
-}
+
+func (m *PageResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *PageResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *PageResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_PageResponse proto.InternalMessageInfo
 
-func (m *PageResponse) GetNextKey() []byte {
-	if m != nil {
-		return m.NextKey
-	}
-	return nil
-}
+func (m *PageResponse) GetNextKey() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *PageResponse) GetTotal() uint64 {
-	if m != nil {
-		return m.Total
-	}
-	return 0
-}
+func (m *PageResponse) GetTotal() uint64 { _ = "STUB: not implemented"; return 0 }
 
 func init() {
 	proto.RegisterType((*PageRequest)(nil), "cosmos.base.query.v1beta1.PageRequest")
@@ -216,501 +154,50 @@ var fileDescriptor_53d6d609fe6828af = []byte{
 }
 
 func (m *PageRequest) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *PageRequest) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *PageRequest) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *PageRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Reverse {
-		i--
-		if m.Reverse {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x28
-	}
-	if m.CountTotal {
-		i--
-		if m.CountTotal {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.Limit != 0 {
-		i = encodeVarintPagination(dAtA, i, uint64(m.Limit))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.Offset != 0 {
-		i = encodeVarintPagination(dAtA, i, uint64(m.Offset))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.Key) > 0 {
-		i -= len(m.Key)
-		copy(dAtA[i:], m.Key)
-		i = encodeVarintPagination(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PageResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *PageResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PageResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.Total != 0 {
-		i = encodeVarintPagination(dAtA, i, uint64(m.Total))
-		i--
-		dAtA[i] = 0x10
-	}
-	if len(m.NextKey) > 0 {
-		i -= len(m.NextKey)
-		copy(dAtA[i:], m.NextKey)
-		i = encodeVarintPagination(dAtA, i, uint64(len(m.NextKey)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintPagination(dAtA []byte, offset int, v uint64) int {
-	offset -= sovPagination(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *PageRequest) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Key)
-	if l > 0 {
-		n += 1 + l + sovPagination(uint64(l))
-	}
-	if m.Offset != 0 {
-		n += 1 + sovPagination(uint64(m.Offset))
-	}
-	if m.Limit != 0 {
-		n += 1 + sovPagination(uint64(m.Limit))
-	}
-	if m.CountTotal {
-		n += 2
-	}
-	if m.Reverse {
-		n += 2
-	}
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *PageResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.NextKey)
-	if l > 0 {
-		n += 1 + l + sovPagination(uint64(l))
-	}
-	if m.Total != 0 {
-		n += 1 + sovPagination(uint64(m.Total))
-	}
-	return n
-}
+func (m *PageRequest) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovPagination(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozPagination(x uint64) (n int) {
-	return sovPagination(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *PageRequest) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPagination
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PageRequest: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PageRequest: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthPagination
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPagination
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Key = append(m.Key[:0], dAtA[iNdEx:postIndex]...)
-			if m.Key == nil {
-				m.Key = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Offset", wireType)
-			}
-			m.Offset = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Offset |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Limit", wireType)
-			}
-			m.Limit = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Limit |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CountTotal", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.CountTotal = bool(v != 0)
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Reverse", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.Reverse = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPagination(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthPagination
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *PageResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *PageResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowPagination
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PageResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PageResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NextKey", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthPagination
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthPagination
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.NextKey = append(m.NextKey[:0], dAtA[iNdEx:postIndex]...)
-			if m.NextKey == nil {
-				m.NextKey = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Total", wireType)
-			}
-			m.Total = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Total |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipPagination(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthPagination
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovPagination(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipPagination(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowPagination
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowPagination
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthPagination
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupPagination
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthPagination
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func sozPagination(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *PageRequest) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *PageResponse) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipPagination(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthPagination        = fmt.Errorf("proto: negative length found during unmarshaling")

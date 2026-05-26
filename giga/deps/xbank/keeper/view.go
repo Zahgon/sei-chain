@@ -5,7 +5,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/prefix"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	vestexported "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/vesting/exported"
 )
 
 var _ ViewKeeper = (*BaseViewKeeper)(nil)
@@ -35,42 +34,29 @@ type BaseViewKeeper struct {
 
 // NewBaseViewKeeper returns a new BaseViewKeeper.
 func NewBaseViewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey, ak types.AccountKeeper) BaseViewKeeper {
-	return BaseViewKeeper{
-		cdc:      cdc,
-		storeKey: storeKey,
-		ak:       ak,
-	}
+	_ = "STUB: not implemented"
+	return *new(BaseViewKeeper)
 }
 
 // GetKVStore returns the appropriate KVStore based on the UseRegularStore flag.
 // When UseRegularStore is true (for debugging/testing), returns regular KVStore.
 // Otherwise returns GigaKVStore.
 func (k BaseViewKeeper) GetKVStore(ctx sdk.Context) sdk.KVStore {
-	if k.UseRegularStore {
-		return ctx.KVStore(k.storeKey)
-	}
-	return ctx.GigaKVStore(k.storeKey)
+	_ = "STUB: not implemented"
+	return *new(sdk.KVStore)
 }
 
 // HasBalance returns whether or not an account has at least amt balance.
 func (k BaseViewKeeper) HasBalance(ctx sdk.Context, addr sdk.AccAddress, amt sdk.Coin) bool {
-	return k.GetBalance(ctx, addr, amt.Denom).IsGTE(amt)
+	_ = "STUB: not implemented"
+	return false
 }
 
 // GetBalance returns the balance of a specific denomination for a given account
 // by address.
 func (k BaseViewKeeper) GetBalance(ctx sdk.Context, addr sdk.AccAddress, denom string) sdk.Coin {
-	accountStore := k.getAccountStore(ctx, addr)
-
-	bz := accountStore.Get([]byte(denom))
-	if bz == nil {
-		return sdk.NewCoin(denom, sdk.ZeroInt())
-	}
-
-	var balance sdk.Coin
-	k.cdc.MustUnmarshal(bz, &balance)
-
-	return balance
+	_ = "STUB: not implemented"
+	return *new(sdk.Coin)
 }
 
 // LockedCoins returns all the coins that are not spendable (i.e. locked) for an
@@ -78,48 +64,27 @@ func (k BaseViewKeeper) GetBalance(ctx sdk.Context, addr sdk.AccAddress, denom s
 // For vesting accounts, LockedCoins is delegated to the concrete vesting account
 // type.
 func (k BaseViewKeeper) LockedCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins {
-	acc := k.ak.GetAccount(ctx, addr)
-	if acc != nil {
-		vacc, ok := acc.(vestexported.VestingAccount)
-		if ok {
-			return vacc.LockedCoins(ctx.BlockTime())
-		}
-	}
-
-	return sdk.NewCoins()
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // SpendableCoins returns the total balances of spendable coins for an account
 // by address. If the account has no spendable coins, an empty Coins slice is
 // returned.
 func (k BaseViewKeeper) SpendableCoins(ctx sdk.Context, addr sdk.AccAddress) sdk.Coins {
-	total := k.GetBalance(ctx, addr, "usei").Amount
-	locked := k.LockedCoins(ctx, addr).AmountOf("usei")
-
-	spendable := total.Sub(locked)
-	if spendable.IsNegative() {
-		return sdk.NewCoins()
-	}
-	return sdk.NewCoins(sdk.NewCoin("usei", spendable))
+	_ = "STUB: not implemented"
+	return *new(sdk.Coins)
 }
 
 // getAccountStore gets the account store of the given address.
 func (k BaseViewKeeper) getAccountStore(ctx sdk.Context, addr sdk.AccAddress) prefix.Store {
-	store := k.GetKVStore(ctx)
-
-	return prefix.NewStore(store, types.CreateAccountBalancesPrefix(addr))
+	_ = "STUB: not implemented"
+	return *new(prefix.Store)
 }
 
 func (k BaseViewKeeper) GetWeiBalance(ctx sdk.Context, addr sdk.AccAddress) sdk.Int {
-	store := prefix.NewStore(k.GetKVStore(ctx), types.WeiBalancesPrefix)
-	val := store.Get(addr)
-	if val == nil {
-		return sdk.ZeroInt()
-	}
-	res := new(sdk.Int)
-	if err := res.Unmarshal(val); err != nil {
-		// should never happen
-		panic(err)
-	}
-	return *res
+	_ = "STUB: not implemented"
+	return *new(sdk.Int)
 }
+
+// should never happen

@@ -2,10 +2,6 @@
 package cursor
 
 import (
-	"errors"
-	"fmt"
-	"strconv"
-	"strings"
 	"time"
 )
 
@@ -21,25 +17,15 @@ type Source struct {
 	Counter int64
 }
 
-func (s *Source) timeIndex() int64 {
-	if s.TimeIndex == nil {
-		return time.Now().UnixNano()
-	}
-	return s.TimeIndex()
-}
+func (s *Source) timeIndex() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (s *Source) nextCounter() int64 {
-	s.Counter++
-	return s.Counter
-}
+func (s *Source) nextCounter() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Cursor produces a fresh cursor from s at the current time index and counter.
-func (s *Source) Cursor() Cursor {
-	return Cursor{
-		timestamp: uint64(s.timeIndex()),            //nolint:gosec // timeIndex returns a non-negative value
-		sequence:  uint16(s.nextCounter() & 0xffff), //nolint:gosec // masked
-	}
-}
+func (s *Source) Cursor() Cursor { _ = "STUB: not implemented"; return *new(Cursor) }
+
+//nolint:gosec // timeIndex returns a non-negative value
+//nolint:gosec // masked
 
 // A Cursor is a unique identifier for an item in a time-ordered event log.
 // It is safe to copy and compare cursors by value.
@@ -50,51 +36,26 @@ type Cursor struct {
 
 // Before reports whether c is prior to o in time ordering. This comparison
 // ignores sequence numbers.
-func (c Cursor) Before(o Cursor) bool { return c.timestamp < o.timestamp }
+func (c Cursor) Before(o Cursor) bool { _ = "STUB: not implemented"; return false }
 
 // Diff returns the time duration between c and o. The duration is negative if
 // c is before o in time order.
-func (c Cursor) Diff(o Cursor) time.Duration {
-	return time.Duration(c.timestamp) - time.Duration(o.timestamp) //nolint:gosec // timestamps are ns since epoch; values within valid range for time.Duration
-}
+func (c Cursor) Diff(o Cursor) time.Duration { _ = "STUB: not implemented"; return *new(time.Duration) }
+
+//nolint:gosec // timestamps are ns since epoch; values within valid range for time.Duration
 
 // IsZero reports whether c is the zero cursor.
-func (c Cursor) IsZero() bool { return c == Cursor{} }
+func (c Cursor) IsZero() bool { _ = "STUB: not implemented"; return false }
 
 // MarshalText implements the encoding.TextMarshaler interface.
 // A zero cursor marshals as "", otherwise the format used by the String method.
-func (c Cursor) MarshalText() ([]byte, error) {
-	if c.IsZero() {
-		return nil, nil
-	}
-	return []byte(c.String()), nil
-}
+func (c Cursor) MarshalText() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnmarshalText implements the encoding.TextUnmarshaler interface.
 // An empty text unmarshals without error to a zero cursor.
-func (c *Cursor) UnmarshalText(data []byte) error {
-	if len(data) == 0 {
-		*c = Cursor{} // set zero
-		return nil
-	}
-	ps := strings.SplitN(string(data), "-", 2)
-	if len(ps) != 2 {
-		return errors.New("invalid cursor format")
-	}
-	ts, err := strconv.ParseUint(ps[0], 16, 64)
-	if err != nil {
-		return fmt.Errorf("invalid timestamp: %w", err)
-	}
-	sn, err := strconv.ParseUint(ps[1], 16, 16)
-	if err != nil {
-		return fmt.Errorf("invalid sequence: %w", err)
-	}
-	c.timestamp = ts
-	c.sequence = uint16(sn)
-	return nil
-}
+func (c *Cursor) UnmarshalText(data []byte) error { _ = "STUB: not implemented"; return nil }
+
+// set zero
 
 // String returns a printable text representation of a cursor.
-func (c Cursor) String() string {
-	return fmt.Sprintf("%016x-%04x", c.timestamp, c.sequence)
-}
+func (c Cursor) String() string { _ = "STUB: not implemented"; return "" }

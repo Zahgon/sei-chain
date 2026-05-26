@@ -6,16 +6,13 @@ package testutil
 import (
 	context "context"
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	grpc1 "github.com/gogo/protobuf/grpc"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -34,138 +31,85 @@ type MsgCounter struct {
 	FailOnHandler bool  `protobuf:"varint,2,opt,name=fail_on_handler,json=failOnHandler,proto3" json:"fail_on_handler,omitempty"`
 }
 
-func (m *MsgCounter) Reset()         { *m = MsgCounter{} }
-func (m *MsgCounter) String() string { return proto.CompactTextString(m) }
-func (*MsgCounter) ProtoMessage()    {}
-func (*MsgCounter) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4dc296cbfe5ffcd5, []int{0}
-}
-func (m *MsgCounter) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgCounter) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgCounter) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgCounter) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgCounter) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgCounter) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgCounter) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgCounter.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgCounter) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCounter.Merge(m, src)
-}
-func (m *MsgCounter) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgCounter) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCounter.DiscardUnknown(m)
-}
+
+func (m *MsgCounter) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgCounter) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgCounter) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgCounter proto.InternalMessageInfo
 
-func (m *MsgCounter) GetCounter() int64 {
-	if m != nil {
-		return m.Counter
-	}
-	return 0
-}
+func (m *MsgCounter) GetCounter() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgCounter) GetFailOnHandler() bool {
-	if m != nil {
-		return m.FailOnHandler
-	}
-	return false
-}
+func (m *MsgCounter) GetFailOnHandler() bool { _ = "STUB: not implemented"; return false }
 
 type MsgCounter2 struct {
 	Counter       int64 `protobuf:"varint,1,opt,name=counter,proto3" json:"counter,omitempty"`
 	FailOnHandler bool  `protobuf:"varint,2,opt,name=fail_on_handler,json=failOnHandler,proto3" json:"fail_on_handler,omitempty"`
 }
 
-func (m *MsgCounter2) Reset()         { *m = MsgCounter2{} }
-func (m *MsgCounter2) String() string { return proto.CompactTextString(m) }
-func (*MsgCounter2) ProtoMessage()    {}
-func (*MsgCounter2) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4dc296cbfe5ffcd5, []int{1}
-}
-func (m *MsgCounter2) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgCounter2) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgCounter2) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgCounter2) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgCounter2) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgCounter2) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgCounter2) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgCounter2.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgCounter2) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCounter2.Merge(m, src)
-}
-func (m *MsgCounter2) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgCounter2) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCounter2.DiscardUnknown(m)
-}
+
+func (m *MsgCounter2) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgCounter2) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgCounter2) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgCounter2 proto.InternalMessageInfo
 
-func (m *MsgCounter2) GetCounter() int64 {
-	if m != nil {
-		return m.Counter
-	}
-	return 0
-}
+func (m *MsgCounter2) GetCounter() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgCounter2) GetFailOnHandler() bool {
-	if m != nil {
-		return m.FailOnHandler
-	}
-	return false
-}
+func (m *MsgCounter2) GetFailOnHandler() bool { _ = "STUB: not implemented"; return false }
 
 type MsgCreateCounterResponse struct {
 }
 
-func (m *MsgCreateCounterResponse) Reset()         { *m = MsgCreateCounterResponse{} }
-func (m *MsgCreateCounterResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgCreateCounterResponse) ProtoMessage()    {}
+func (m *MsgCreateCounterResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgCreateCounterResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgCreateCounterResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgCreateCounterResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4dc296cbfe5ffcd5, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgCreateCounterResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgCreateCounterResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgCreateCounterResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgCreateCounterResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCreateCounterResponse.Merge(m, src)
-}
-func (m *MsgCreateCounterResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgCreateCounterResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCreateCounterResponse.DiscardUnknown(m)
-}
+
+func (m *MsgCreateCounterResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgCreateCounterResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgCreateCounterResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgCreateCounterResponse proto.InternalMessageInfo
 
@@ -175,93 +119,58 @@ type MsgKeyValue struct {
 	Signer string `protobuf:"bytes,3,opt,name=signer,proto3" json:"signer,omitempty"`
 }
 
-func (m *MsgKeyValue) Reset()         { *m = MsgKeyValue{} }
-func (m *MsgKeyValue) String() string { return proto.CompactTextString(m) }
-func (*MsgKeyValue) ProtoMessage()    {}
-func (*MsgKeyValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4dc296cbfe5ffcd5, []int{3}
-}
-func (m *MsgKeyValue) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *MsgKeyValue) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *MsgKeyValue) String() string            { _ = "STUB: not implemented"; return "" }
+func (*MsgKeyValue) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*MsgKeyValue) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *MsgKeyValue) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgKeyValue) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgKeyValue.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgKeyValue) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgKeyValue.Merge(m, src)
-}
-func (m *MsgKeyValue) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgKeyValue) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgKeyValue.DiscardUnknown(m)
-}
+
+func (m *MsgKeyValue) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgKeyValue) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgKeyValue) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgKeyValue proto.InternalMessageInfo
 
-func (m *MsgKeyValue) GetKey() []byte {
-	if m != nil {
-		return m.Key
-	}
-	return nil
-}
+func (m *MsgKeyValue) GetKey() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *MsgKeyValue) GetValue() []byte {
-	if m != nil {
-		return m.Value
-	}
-	return nil
-}
+func (m *MsgKeyValue) GetValue() []byte { _ = "STUB: not implemented"; return nil }
 
-func (m *MsgKeyValue) GetSigner() string {
-	if m != nil {
-		return m.Signer
-	}
-	return ""
-}
+func (m *MsgKeyValue) GetSigner() string { _ = "STUB: not implemented"; return "" }
 
 type MsgCreateKeyValueResponse struct {
 }
 
-func (m *MsgCreateKeyValueResponse) Reset()         { *m = MsgCreateKeyValueResponse{} }
-func (m *MsgCreateKeyValueResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgCreateKeyValueResponse) ProtoMessage()    {}
+func (m *MsgCreateKeyValueResponse) Reset()         { _ = "STUB: not implemented"; return }
+func (m *MsgCreateKeyValueResponse) String() string { _ = "STUB: not implemented"; return "" }
+func (*MsgCreateKeyValueResponse) ProtoMessage()    { _ = "STUB: not implemented"; return }
 func (*MsgCreateKeyValueResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_4dc296cbfe5ffcd5, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *MsgCreateKeyValueResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *MsgCreateKeyValueResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_MsgCreateKeyValueResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *MsgCreateKeyValueResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgCreateKeyValueResponse.Merge(m, src)
-}
-func (m *MsgCreateKeyValueResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *MsgCreateKeyValueResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgCreateKeyValueResponse.DiscardUnknown(m)
-}
+
+func (m *MsgCreateKeyValueResponse) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *MsgCreateKeyValueResponse) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgCreateKeyValueResponse) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_MsgCreateKeyValueResponse proto.InternalMessageInfo
 
@@ -323,16 +232,13 @@ type counterClient struct {
 }
 
 func NewCounterClient(cc grpc1.ClientConn) CounterClient {
-	return &counterClient{cc}
+	_ = "STUB: not implemented"
+	return *new(CounterClient)
 }
 
 func (c *counterClient) IncrementCounter(ctx context.Context, in *MsgCounter, opts ...grpc.CallOption) (*MsgCreateCounterResponse, error) {
-	out := new(MsgCreateCounterResponse)
-	err := c.cc.Invoke(ctx, "/testdata.Counter/IncrementCounter", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // CounterServer is the server API for Counter service.
@@ -345,29 +251,15 @@ type UnimplementedCounterServer struct {
 }
 
 func (*UnimplementedCounterServer) IncrementCounter(ctx context.Context, req *MsgCounter) (*MsgCreateCounterResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IncrementCounter not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterCounterServer(s grpc1.Server, srv CounterServer) {
-	s.RegisterService(&_Counter_serviceDesc, srv)
-}
+func RegisterCounterServer(s grpc1.Server, srv CounterServer) { _ = "STUB: not implemented"; return }
 
 func _Counter_IncrementCounter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCounter)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(CounterServer).IncrementCounter(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/testdata.Counter/IncrementCounter",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CounterServer).IncrementCounter(ctx, req.(*MsgCounter))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Counter_serviceDesc = grpc.ServiceDesc{
@@ -395,16 +287,13 @@ type counter2Client struct {
 }
 
 func NewCounter2Client(cc grpc1.ClientConn) Counter2Client {
-	return &counter2Client{cc}
+	_ = "STUB: not implemented"
+	return *new(Counter2Client)
 }
 
 func (c *counter2Client) IncrementCounter(ctx context.Context, in *MsgCounter2, opts ...grpc.CallOption) (*MsgCreateCounterResponse, error) {
-	out := new(MsgCreateCounterResponse)
-	err := c.cc.Invoke(ctx, "/testdata.Counter2/IncrementCounter", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Counter2Server is the server API for Counter2 service.
@@ -417,29 +306,15 @@ type UnimplementedCounter2Server struct {
 }
 
 func (*UnimplementedCounter2Server) IncrementCounter(ctx context.Context, req *MsgCounter2) (*MsgCreateCounterResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method IncrementCounter not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterCounter2Server(s grpc1.Server, srv Counter2Server) {
-	s.RegisterService(&_Counter2_serviceDesc, srv)
-}
+func RegisterCounter2Server(s grpc1.Server, srv Counter2Server) { _ = "STUB: not implemented"; return }
 
 func _Counter2_IncrementCounter_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgCounter2)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(Counter2Server).IncrementCounter(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/testdata.Counter2/IncrementCounter",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(Counter2Server).IncrementCounter(ctx, req.(*MsgCounter2))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _Counter2_serviceDesc = grpc.ServiceDesc{
@@ -467,16 +342,13 @@ type keyValueClient struct {
 }
 
 func NewKeyValueClient(cc grpc1.ClientConn) KeyValueClient {
-	return &keyValueClient{cc}
+	_ = "STUB: not implemented"
+	return *new(KeyValueClient)
 }
 
 func (c *keyValueClient) Set(ctx context.Context, in *MsgKeyValue, opts ...grpc.CallOption) (*MsgCreateKeyValueResponse, error) {
-	out := new(MsgCreateKeyValueResponse)
-	err := c.cc.Invoke(ctx, "/testdata.KeyValue/Set", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // KeyValueServer is the server API for KeyValue service.
@@ -489,29 +361,15 @@ type UnimplementedKeyValueServer struct {
 }
 
 func (*UnimplementedKeyValueServer) Set(ctx context.Context, req *MsgKeyValue) (*MsgCreateKeyValueResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Set not implemented")
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func RegisterKeyValueServer(s grpc1.Server, srv KeyValueServer) {
-	s.RegisterService(&_KeyValue_serviceDesc, srv)
-}
+func RegisterKeyValueServer(s grpc1.Server, srv KeyValueServer) { _ = "STUB: not implemented"; return }
 
 func _KeyValue_Set_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgKeyValue)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(KeyValueServer).Set(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/testdata.KeyValue/Set",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(KeyValueServer).Set(ctx, req.(*MsgKeyValue))
-	}
-	return interceptor(ctx, in, info, handler)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 var _KeyValue_serviceDesc = grpc.ServiceDesc{
@@ -527,764 +385,105 @@ var _KeyValue_serviceDesc = grpc.ServiceDesc{
 	Metadata: "messages.proto",
 }
 
-func (m *MsgCounter) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *MsgCounter) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *MsgCounter) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *MsgCounter) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *MsgCounter) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.FailOnHandler {
-		i--
-		if m.FailOnHandler {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Counter != 0 {
-		i = encodeVarintMessages(dAtA, i, uint64(m.Counter))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgCounter2) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *MsgCounter2) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *MsgCounter2) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *MsgCounter2) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.FailOnHandler {
-		i--
-		if m.FailOnHandler {
-			dAtA[i] = 1
-		} else {
-			dAtA[i] = 0
-		}
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.Counter != 0 {
-		i = encodeVarintMessages(dAtA, i, uint64(m.Counter))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgCreateCounterResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgCreateCounterResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgCreateCounterResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgKeyValue) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *MsgKeyValue) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *MsgKeyValue) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *MsgKeyValue) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Signer) > 0 {
-		i -= len(m.Signer)
-		copy(dAtA[i:], m.Signer)
-		i = encodeVarintMessages(dAtA, i, uint64(len(m.Signer)))
-		i--
-		dAtA[i] = 0x1a
-	}
-	if len(m.Value) > 0 {
-		i -= len(m.Value)
-		copy(dAtA[i:], m.Value)
-		i = encodeVarintMessages(dAtA, i, uint64(len(m.Value)))
-		i--
-		dAtA[i] = 0x12
-	}
-	if len(m.Key) > 0 {
-		i -= len(m.Key)
-		copy(dAtA[i:], m.Key)
-		i = encodeVarintMessages(dAtA, i, uint64(len(m.Key)))
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgCreateKeyValueResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *MsgCreateKeyValueResponse) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *MsgCreateKeyValueResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintMessages(dAtA []byte, offset int, v uint64) int {
-	offset -= sovMessages(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *MsgCounter) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Counter != 0 {
-		n += 1 + sovMessages(uint64(m.Counter))
-	}
-	if m.FailOnHandler {
-		n += 2
-	}
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *MsgCounter2) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Counter != 0 {
-		n += 1 + sovMessages(uint64(m.Counter))
-	}
-	if m.FailOnHandler {
-		n += 2
-	}
-	return n
-}
+func (m *MsgCounter) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgCreateCounterResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgCounter2) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgKeyValue) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	l = len(m.Key)
-	if l > 0 {
-		n += 1 + l + sovMessages(uint64(l))
-	}
-	l = len(m.Value)
-	if l > 0 {
-		n += 1 + l + sovMessages(uint64(l))
-	}
-	l = len(m.Signer)
-	if l > 0 {
-		n += 1 + l + sovMessages(uint64(l))
-	}
-	return n
-}
+func (m *MsgCreateCounterResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *MsgCreateKeyValueResponse) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	return n
-}
+func (m *MsgKeyValue) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovMessages(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozMessages(x uint64) (n int) {
-	return sovMessages(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *MsgCounter) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCounter: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCounter: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Counter", wireType)
-			}
-			m.Counter = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Counter |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FailOnHandler", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.FailOnHandler = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *MsgCreateKeyValueResponse) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *MsgCounter2) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCounter2: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCounter2: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Counter", wireType)
-			}
-			m.Counter = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Counter |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field FailOnHandler", wireType)
-			}
-			var v int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				v |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			m.FailOnHandler = bool(v != 0)
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func sovMessages(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func sozMessages(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *MsgCounter) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (m *MsgCounter2) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgCreateCounterResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCreateCounterResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCreateCounterResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *MsgKeyValue) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgKeyValue: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgKeyValue: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Key", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthMessages
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Key = append(m.Key[:0], dAtA[iNdEx:postIndex]...)
-			if m.Key == nil {
-				m.Key = []byte{}
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Value", wireType)
-			}
-			var byteLen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				byteLen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if byteLen < 0 {
-				return ErrInvalidLengthMessages
-			}
-			postIndex := iNdEx + byteLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Value = append(m.Value[:0], dAtA[iNdEx:postIndex]...)
-			if m.Value == nil {
-				m.Value = []byte{}
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Signer", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthMessages
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Signer = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *MsgKeyValue) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *MsgCreateKeyValueResponse) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowMessages
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: MsgCreateKeyValueResponse: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgCreateKeyValueResponse: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		default:
-			iNdEx = preIndex
-			skippy, err := skipMessages(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthMessages
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipMessages(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowMessages
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowMessages
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthMessages
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupMessages
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthMessages
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipMessages(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthMessages        = fmt.Errorf("proto: negative length found during unmarshaling")

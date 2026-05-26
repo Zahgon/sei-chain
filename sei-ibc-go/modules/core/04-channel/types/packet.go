@@ -1,14 +1,9 @@
 package types
 
 import (
-	"crypto/sha256"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
 	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
@@ -17,28 +12,12 @@ import (
 // from a given packet. This results in a fixed length preimage.
 // NOTE: sdk.Uint64ToBigEndian sets the uint64 to a slice of length 8.
 func CommitPacket(cdc codec.BinaryCodec, packet exported.PacketI) []byte {
-	timeoutHeight := packet.GetTimeoutHeight()
-
-	buf := sdk.Uint64ToBigEndian(packet.GetTimeoutTimestamp())
-
-	revisionNumber := sdk.Uint64ToBigEndian(timeoutHeight.GetRevisionNumber())
-	buf = append(buf, revisionNumber...)
-
-	revisionHeight := sdk.Uint64ToBigEndian(timeoutHeight.GetRevisionHeight())
-	buf = append(buf, revisionHeight...)
-
-	dataHash := sha256.Sum256(packet.GetData())
-	buf = append(buf, dataHash[:]...)
-
-	hash := sha256.Sum256(buf)
-	return hash[:]
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // CommitAcknowledgement returns the hash of commitment bytes
-func CommitAcknowledgement(data []byte) []byte {
-	hash := sha256.Sum256(data)
-	return hash[:]
-}
+func CommitAcknowledgement(data []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 var _ exported.PacketI = (*Packet)(nil)
 
@@ -50,64 +29,50 @@ func NewPacket(
 	destinationPort, destinationChannel string,
 	timeoutHeight clienttypes.Height, timeoutTimestamp uint64,
 ) Packet {
-	return Packet{
-		Data:               data,
-		Sequence:           sequence,
-		SourcePort:         sourcePort,
-		SourceChannel:      sourceChannel,
-		DestinationPort:    destinationPort,
-		DestinationChannel: destinationChannel,
-		TimeoutHeight:      timeoutHeight,
-		TimeoutTimestamp:   timeoutTimestamp,
-	}
+	_ = "STUB: not implemented"
+	return *new(Packet)
 }
 
 // GetSequence implements PacketI interface
-func (p Packet) GetSequence() uint64 { return p.Sequence }
+func (p Packet) GetSequence() uint64 {
+	_ = "STUB: not implemented"
 
-// GetSourcePort implements PacketI interface
-func (p Packet) GetSourcePort() string { return p.SourcePort }
+	// GetSourcePort implements PacketI interface
+	return 0
+}
 
-// GetSourceChannel implements PacketI interface
-func (p Packet) GetSourceChannel() string { return p.SourceChannel }
+func (p Packet) GetSourcePort() string {
+	_ = "STUB: not implemented"
+
+	// GetSourceChannel implements PacketI interface
+	return ""
+}
+
+func (p Packet) GetSourceChannel() string { _ = "STUB: not implemented"; return "" }
 
 // GetDestPort implements PacketI interface
-func (p Packet) GetDestPort() string { return p.DestinationPort }
+func (p Packet) GetDestPort() string { _ = "STUB: not implemented"; return "" }
 
 // GetDestChannel implements PacketI interface
-func (p Packet) GetDestChannel() string { return p.DestinationChannel }
+func (p Packet) GetDestChannel() string { _ = "STUB: not implemented"; return "" }
 
 // GetData implements PacketI interface
-func (p Packet) GetData() []byte { return p.Data }
+func (p Packet) GetData() []byte {
+	_ = "STUB: not implemented"
 
-// GetTimeoutHeight implements PacketI interface
-func (p Packet) GetTimeoutHeight() exported.Height { return p.TimeoutHeight }
-
-// GetTimeoutTimestamp implements PacketI interface
-func (p Packet) GetTimeoutTimestamp() uint64 { return p.TimeoutTimestamp }
-
-// ValidateBasic implements PacketI interface
-func (p Packet) ValidateBasic() error {
-	if err := host.PortIdentifierValidator(p.SourcePort); err != nil {
-		return sdkerrors.Wrap(err, "invalid source port ID")
-	}
-	if err := host.PortIdentifierValidator(p.DestinationPort); err != nil {
-		return sdkerrors.Wrap(err, "invalid destination port ID")
-	}
-	if err := host.ChannelIdentifierValidator(p.SourceChannel); err != nil {
-		return sdkerrors.Wrap(err, "invalid source channel ID")
-	}
-	if err := host.ChannelIdentifierValidator(p.DestinationChannel); err != nil {
-		return sdkerrors.Wrap(err, "invalid destination channel ID")
-	}
-	if p.Sequence == 0 {
-		return sdkerrors.Wrap(ErrInvalidPacket, "packet sequence cannot be 0")
-	}
-	if p.TimeoutHeight.IsZero() && p.TimeoutTimestamp == 0 {
-		return sdkerrors.Wrap(ErrInvalidPacket, "packet timeout height and packet timeout timestamp cannot both be 0")
-	}
-	if len(p.Data) == 0 {
-		return sdkerrors.Wrap(ErrInvalidPacket, "packet data bytes cannot be empty")
-	}
+	// GetTimeoutHeight implements PacketI interface
 	return nil
 }
+
+func (p Packet) GetTimeoutHeight() exported.Height {
+	_ = "STUB: not implemented"
+	return *
+
+	// GetTimeoutTimestamp implements PacketI interface
+	new(exported.Height)
+}
+
+func (p Packet) GetTimeoutTimestamp() uint64 { _ = "STUB: not implemented"; return 0 }
+
+// ValidateBasic implements PacketI interface
+func (p Packet) ValidateBasic() error { _ = "STUB: not implemented"; return nil }

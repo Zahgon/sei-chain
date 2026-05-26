@@ -1,13 +1,10 @@
 package types
 
 import (
-	"encoding/hex"
 	"fmt"
-	"math/big"
 	"time"
 
 	"github.com/ethereum/go-ethereum/common"
-	ethtypes "github.com/ethereum/go-ethereum/core/types"
 
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/autobahn/pb"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/internal/hashable"
@@ -32,12 +29,12 @@ type GlobalBlockNumber uint64
 type BlockHeaderHash hashable.Hash[*pb.BlockHeader]
 
 // Bytes converts the BlockHeaderHash to a byte slice.
-func (h BlockHeaderHash) Bytes() []byte  { return h[:] }
-func (h BlockHeaderHash) String() string { return hex.EncodeToString(h.Bytes()) }
+func (h BlockHeaderHash) Bytes() []byte  { _ = "STUB: not implemented"; return nil }
+func (h BlockHeaderHash) String() string { _ = "STUB: not implemented"; return "" }
 
 func ParseBlockHeaderHash(bytes []byte) (BlockHeaderHash, error) {
-	h, err := hashable.ParseHash[*pb.BlockHeader](bytes)
-	return BlockHeaderHash(h), err
+	_ = "STUB: not implemented"
+	return *new(BlockHeaderHash), nil
 }
 
 // BlockHeader .
@@ -50,27 +47,46 @@ type BlockHeader struct {
 }
 
 // Lane .
-func (h *BlockHeader) Lane() LaneID { return h.lane }
+func (h *BlockHeader) Lane() LaneID {
+	_ = "STUB: not implemented"
 
-// BlockNumber .
-func (h *BlockHeader) BlockNumber() BlockNumber { return h.blockNumber }
-
-// ParentHash .
-func (h *BlockHeader) ParentHash() BlockHeaderHash { return h.parentHash }
-
-// PayloadHash .
-func (h *BlockHeader) PayloadHash() PayloadHash { return h.payloadHash }
-
-// Next return the block number of the next header.
-func (h *BlockHeader) Next() BlockNumber { return h.blockNumber + 1 }
-
-// Verify verifies the BlockHeader against the committee.
-func (h *BlockHeader) Verify(c *Committee) error {
-	if !c.Lanes().Has(h.lane) {
-		return fmt.Errorf("%q is not a lane", h.lane)
-	}
-	return nil
+	// BlockNumber .
+	return *new(LaneID)
 }
+
+func (h *BlockHeader) BlockNumber() BlockNumber {
+	_ = "STUB: not implemented"
+	return *
+
+	// ParentHash .
+	new(BlockNumber)
+}
+
+func (h *BlockHeader) ParentHash() BlockHeaderHash {
+	_ = "STUB: not implemented"
+	return *
+
+	// PayloadHash .
+	new(BlockHeaderHash)
+}
+
+func (h *BlockHeader) PayloadHash() PayloadHash {
+	_ = "STUB: not implemented"
+	return *
+
+	// Next return the block number of the next header.
+	new(PayloadHash)
+}
+
+func (h *BlockHeader) Next() BlockNumber {
+	_ = "STUB: not implemented"
+	return *
+
+	// Verify verifies the BlockHeader against the committee.
+	new(BlockNumber)
+}
+
+func (h *BlockHeader) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
 
 const standardTxBytes uint64 = 1024
 
@@ -120,37 +136,31 @@ func NewBlock(
 	parentHash BlockHeaderHash,
 	payload *Payload,
 ) *Block {
-	return &Block{
-		header: &BlockHeader{
-			lane:        lane,
-			blockNumber: blockNumber,
-			parentHash:  parentHash,
-			payloadHash: payload.Hash(),
-		},
-		payload: payload,
-	}
-}
-
-// Header .
-func (b *Block) Header() *BlockHeader { return b.header }
-
-// Payload .
-func (b *Block) Payload() *Payload { return b.payload }
-
-// Verify validates the Block.
-func (b *Block) Verify(c *Committee) error {
-	if err := b.Header().Verify(c); err != nil {
-		return fmt.Errorf("header.Verify(): %w", err)
-	}
-	if got, want := b.Payload().Hash(), b.Header().PayloadHash(); got != want {
-		return fmt.Errorf("payload.Hash() = %v, want %v", got, want)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
+// Header .
+func (b *Block) Header() *BlockHeader {
+	_ = "STUB: not implemented"
+
+	// Payload .
+	return nil
+}
+
+func (b *Block) Payload() *Payload {
+	_ = "STUB: not implemented"
+
+	// Verify validates the Block.
+	return nil
+}
+
+func (b *Block) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
+
 // Hash of the BlockHeader.
 func (h *BlockHeader) Hash() BlockHeaderHash {
-	return BlockHeaderHash(hashable.ToHash(BlockHeaderConv.Encode(h)))
+	_ = "STUB: not implemented"
+	return *new(BlockHeaderHash)
 }
 
 // PayloadHash is the hash of a Payload.
@@ -173,45 +183,56 @@ type Payload struct {
 }
 
 // Build builds the Payload.
-func (b PayloadBuilder) Build() (*Payload, error) {
-	if uint64(len(b.Txs)) > MaxTxsPerBlock {
-		return nil, fmt.Errorf("too many transactions")
-	}
-	total := uint64(0)
-	for _, tx := range b.Txs {
-		total += uint64(len(tx))
-	}
-	if total > MaxTxsBytesPerBlock {
-		return nil, fmt.Errorf("total txs bytes too large")
-	}
-	return &Payload{p: b}, nil
-}
+func (b PayloadBuilder) Build() (*Payload, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // ToBuilder converts the Payload to a PayloadBuilder.
-func (p *Payload) ToBuilder() PayloadBuilder { return p.p }
+func (p *Payload) ToBuilder() PayloadBuilder {
+	_ = "STUB: not implemented"
 
-// CreatedAt .
-func (p *Payload) CreatedAt() time.Time { return p.p.CreatedAt }
+	// CreatedAt .
+	return *new(PayloadBuilder)
+}
 
-// TotalGas .
-func (p *Payload) TotalGas() uint64 { return p.p.TotalGas }
+func (p *Payload) CreatedAt() time.Time {
+	_ = "STUB: not implemented"
+	return *
 
-// EdgeCount .
-func (p *Payload) EdgeCount() int64 { return p.p.EdgeCount }
+	// TotalGas .
+	new(time.Time)
+}
+
+func (p *Payload) TotalGas() uint64 {
+	_ = "STUB: not implemented"
+
+	// EdgeCount .
+	return 0
+}
+
+func (p *Payload) EdgeCount() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Coinbase .
-func (p *Payload) Coinbase() []byte { return p.p.Coinbase }
+func (p *Payload) Coinbase() []byte {
+	_ = "STUB: not implemented"
 
-// Basefee .
-func (p *Payload) Basefee() int64 { return p.p.Basefee }
-
-// Txs .
-func (p *Payload) Txs() [][]byte { return p.p.Txs }
-
-// Hash of the Payload.
-func (p *Payload) Hash() PayloadHash {
-	return PayloadHash(hashable.ToHash(PayloadConv.Encode(p)))
+	// Basefee .
+	return nil
 }
+
+func (p *Payload) Basefee() int64 {
+	_ = "STUB: not implemented"
+
+	// Txs .
+	return 0
+}
+
+func (p *Payload) Txs() [][]byte {
+	_ = "STUB: not implemented"
+
+	// Hash of the Payload.
+	return nil
+}
+
+func (p *Payload) Hash() PayloadHash { _ = "STUB: not implemented"; return *new(PayloadHash) }
 
 // BlockHeaderConv is a protobuf converter for BlockHeader.
 var BlockHeaderConv = protoutils.Conv[*BlockHeader, *pb.BlockHeader]{
@@ -308,12 +329,9 @@ var BlockConv = protoutils.Conv[*Block, *pb.Block]{
 
 // CalculateBlockHash calculates the hash of a block.
 func (b *GlobalBlock) CalculateBlockHash() common.Hash {
-	header := &ethtypes.Header{
-		Time:       uint64(b.Payload.CreatedAt().Unix()), //nolint:gosec // block timestamps are always positive post-epoch values
-		Number:     big.NewInt(int64(b.GlobalNumber)),    //nolint:gosec // block numbers are within int64 range for all practical chain heights
-		GasUsed:    b.Payload.TotalGas(),
-		Difficulty: big.NewInt(0),
-		BaseFee:    big.NewInt(0),
-	}
-	return header.Hash()
+	_ = "STUB: not implemented"
+	return *new(common.Hash)
 }
+
+//nolint:gosec // block timestamps are always positive post-epoch values
+//nolint:gosec // block numbers are within int64 range for all practical chain heights

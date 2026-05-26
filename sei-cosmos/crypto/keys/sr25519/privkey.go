@@ -16,32 +16,22 @@ type PrivKey struct {
 
 // type conversion
 func (m *PrivKey) PubKey() cryptotypes.PubKey {
-	return &PubKey{Key: m.PrivKey.PubKey()}
+	_ = "STUB: not implemented"
+	return *new(cryptotypes.PubKey)
 }
 
 // type conversion
 func (m *PrivKey) Equals(other cryptotypes.LedgerPrivKey) bool {
-	sk2, ok := other.(*PrivKey)
-	if !ok {
-		return false
-	}
-	return m.PrivKey.Equals(sk2.PrivKey)
+	_ = "STUB: not implemented"
+	return false
 }
 
-func (m *PrivKey) ProtoMessage() {}
+func (m *PrivKey) ProtoMessage() { _ = "STUB: not implemented"; return }
 
-func (m *PrivKey) Reset() {
-	m.PrivKey = internal.PrivKey{}
-}
+func (m *PrivKey) Reset() { _ = "STUB: not implemented"; return }
 
-func (m *PrivKey) String() string {
-	return string(m.Bytes())
-}
+func (m *PrivKey) String() string { _ = "STUB: not implemented"; return "" }
 
-func GenPrivKey() *PrivKey {
-	return &PrivKey{internal.GenPrivKey()}
-}
+func GenPrivKey() *PrivKey { _ = "STUB: not implemented"; return nil }
 
-func GenPrivKeyFromSecret(secret []byte) *PrivKey {
-	return &PrivKey{PrivKey: internal.GenPrivKeyFromSecret(secret)}
-}
+func GenPrivKeyFromSecret(secret []byte) *PrivKey { _ = "STUB: not implemented"; return nil }

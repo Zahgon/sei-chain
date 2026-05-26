@@ -10,5 +10,6 @@ import (
 
 // GenConnectionGenesis returns the default connection genesis state.
 func GenConnectionGenesis(_ *rand.Rand, _ []simtypes.Account) types.GenesisState {
-	return types.DefaultGenesisState()
+	_ = "STUB: not implemented"
+	return *new(types.GenesisState)
 }

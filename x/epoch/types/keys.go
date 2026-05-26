@@ -17,6 +17,4 @@ const (
 	MemStoreKey = "mem_epoch"
 )
 
-func KeyPrefix(p string) []byte {
-	return []byte(p)
-}
+func KeyPrefix(p string) []byte { _ = "STUB: not implemented"; return nil }

@@ -6,5 +6,5 @@ package types
 // constant false so the compiler DCEs the bypass branches.
 type ConsensusPolicy struct{}
 
-func (ConsensusPolicy) SkipAppHashValidation() bool  { return false }
-func (ConsensusPolicy) SkipDataHashValidation() bool { return false }
+func (ConsensusPolicy) SkipAppHashValidation() bool  { _ = "STUB: not implemented"; return false }
+func (ConsensusPolicy) SkipDataHashValidation() bool { _ = "STUB: not implemented"; return false }

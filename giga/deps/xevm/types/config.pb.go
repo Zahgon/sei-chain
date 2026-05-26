@@ -5,9 +5,7 @@ package types
 
 import (
 	fmt "fmt"
-	io "io"
 	math "math"
-	math_bits "math/bits"
 
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -35,66 +33,33 @@ type ChainConfig struct {
 	SeiSstoreSetGasEip2200 uint64 `protobuf:"varint,4,opt,name=sei_sstore_set_gas_eip2200,json=seiSstoreSetGasEip2200,proto3" json:"sei_sstore_set_gas_eip2200,omitempty"`
 }
 
-func (m *ChainConfig) Reset()         { *m = ChainConfig{} }
-func (m *ChainConfig) String() string { return proto.CompactTextString(m) }
-func (*ChainConfig) ProtoMessage()    {}
-func (*ChainConfig) Descriptor() ([]byte, []int) {
-	return fileDescriptor_95b591dca6bd862e, []int{0}
-}
-func (m *ChainConfig) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *ChainConfig) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *ChainConfig) String() string            { _ = "STUB: not implemented"; return "" }
+func (*ChainConfig) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*ChainConfig) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *ChainConfig) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ChainConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ChainConfig.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ChainConfig) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ChainConfig.Merge(m, src)
-}
-func (m *ChainConfig) XXX_Size() int {
-	return m.Size()
-}
-func (m *ChainConfig) XXX_DiscardUnknown() {
-	xxx_messageInfo_ChainConfig.DiscardUnknown(m)
-}
+
+func (m *ChainConfig) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ChainConfig) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ChainConfig) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ChainConfig proto.InternalMessageInfo
 
-func (m *ChainConfig) GetCancunTime() int64 {
-	if m != nil {
-		return m.CancunTime
-	}
-	return 0
-}
+func (m *ChainConfig) GetCancunTime() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *ChainConfig) GetPragueTime() int64 {
-	if m != nil {
-		return m.PragueTime
-	}
-	return 0
-}
+func (m *ChainConfig) GetPragueTime() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *ChainConfig) GetVerkleTime() int64 {
-	if m != nil {
-		return m.VerkleTime
-	}
-	return 0
-}
+func (m *ChainConfig) GetVerkleTime() int64 { _ = "STUB: not implemented"; return 0 }
 
-func (m *ChainConfig) GetSeiSstoreSetGasEip2200() uint64 {
-	if m != nil {
-		return m.SeiSstoreSetGasEip2200
-	}
-	return 0
-}
+func (m *ChainConfig) GetSeiSstoreSetGasEip2200() uint64 { _ = "STUB: not implemented"; return 0 }
 
 func init() {
 	proto.RegisterType((*ChainConfig)(nil), "seiprotocol.seichain.gigaevm.ChainConfig")
@@ -125,290 +90,28 @@ var fileDescriptor_95b591dca6bd862e = []byte{
 }
 
 func (m *ChainConfig) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (m *ChainConfig) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *ChainConfig) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *ChainConfig) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.SeiSstoreSetGasEip2200 != 0 {
-		i = encodeVarintConfig(dAtA, i, uint64(m.SeiSstoreSetGasEip2200))
-		i--
-		dAtA[i] = 0x20
-	}
-	if m.VerkleTime != 0 {
-		i = encodeVarintConfig(dAtA, i, uint64(m.VerkleTime))
-		i--
-		dAtA[i] = 0x18
-	}
-	if m.PragueTime != 0 {
-		i = encodeVarintConfig(dAtA, i, uint64(m.PragueTime))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.CancunTime != 0 {
-		i = encodeVarintConfig(dAtA, i, uint64(m.CancunTime))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintConfig(dAtA []byte, offset int, v uint64) int {
-	offset -= sovConfig(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *ChainConfig) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.CancunTime != 0 {
-		n += 1 + sovConfig(uint64(m.CancunTime))
-	}
-	if m.PragueTime != 0 {
-		n += 1 + sovConfig(uint64(m.PragueTime))
-	}
-	if m.VerkleTime != 0 {
-		n += 1 + sovConfig(uint64(m.VerkleTime))
-	}
-	if m.SeiSstoreSetGasEip2200 != 0 {
-		n += 1 + sovConfig(uint64(m.SeiSstoreSetGasEip2200))
-	}
-	return n
-}
+func encodeVarintConfig(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func sovConfig(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozConfig(x uint64) (n int) {
-	return sovConfig(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *ChainConfig) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowConfig
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ChainConfig: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ChainConfig: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CancunTime", wireType)
-			}
-			m.CancunTime = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CancunTime |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PragueTime", wireType)
-			}
-			m.PragueTime = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.PragueTime |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VerkleTime", wireType)
-			}
-			m.VerkleTime = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.VerkleTime |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 4:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field SeiSstoreSetGasEip2200", wireType)
-			}
-			m.SeiSstoreSetGasEip2200 = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.SeiSstoreSetGasEip2200 |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipConfig(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthConfig
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *ChainConfig) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipConfig(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowConfig
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowConfig
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthConfig
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupConfig
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthConfig
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func sovConfig(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozConfig(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *ChainConfig) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipConfig(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthConfig        = fmt.Errorf("proto: negative length found during unmarshaling")

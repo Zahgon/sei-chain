@@ -4,7 +4,6 @@ import (
 	"sync"
 
 	"github.com/google/btree"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 )
 
 const (
@@ -36,100 +35,52 @@ type multiVersionItem struct {
 
 var _ MultiVersionValue = (*multiVersionItem)(nil)
 
-func NewMultiVersionItem() *multiVersionItem {
-	return &multiVersionItem{
-		valueTree: btree.New(multiVersionBTreeDegree),
-	}
-}
+func NewMultiVersionItem() *multiVersionItem { _ = "STUB: not implemented"; return nil }
 
 // GetLatest returns the latest written value to the btree, and returns a boolean indicating whether it was found.
 func (item *multiVersionItem) GetLatest() (MultiVersionValueItem, bool) {
-	item.mtx.RLock()
-	defer item.mtx.RUnlock()
-
-	bTreeItem := item.valueTree.Max()
-	if bTreeItem == nil {
-		return nil, false
-	}
-	valueItem := bTreeItem.(*valueItem)
-	return valueItem, true
+	_ = "STUB: not implemented"
+	return *new(MultiVersionValueItem), false
 }
 
 // GetLatestNonEstimate returns the latest written value that isn't an ESTIMATE and returns a boolean indicating whether it was found.
 // This can be used when we want to write finalized values, since ESTIMATEs can be considered to be irrelevant at that point
 func (item *multiVersionItem) GetLatestNonEstimate() (MultiVersionValueItem, bool) {
-	item.mtx.RLock()
-	defer item.mtx.RUnlock()
-
-	var vItem *valueItem
-	var found bool
-	item.valueTree.Descend(func(bTreeItem btree.Item) bool {
-		// only return if non-estimate
-		item := bTreeItem.(*valueItem)
-		if item.IsEstimate() {
-			// if estimate, continue
-			return true
-		}
-		// else we want to return
-		vItem = item
-		found = true
-		return false
-	})
-	return vItem, found
+	_ = "STUB: not implemented"
+	return *new(MultiVersionValueItem), false
 }
+
+// only return if non-estimate
+
+// if estimate, continue
+
+// else we want to return
 
 // GetLatest returns the latest written value to the btree prior to the index passed in, and returns a boolean indicating whether it was found.
 //
 // A `nil` value along with `found=true` indicates a deletion that has occurred and the underlying parent store doesn't need to be hit.
 func (item *multiVersionItem) GetLatestBeforeIndex(index int) (MultiVersionValueItem, bool) {
-	item.mtx.RLock()
-	defer item.mtx.RUnlock()
-
-	// we want to find the value at the index that is LESS than the current index
-	pivot := &valueItem{index: index - 1}
-
-	var vItem *valueItem
-	var found bool
-	// start from pivot which contains our current index, and return on first item we hit.
-	// This will ensure we get the latest indexed value relative to our current index
-	item.valueTree.DescendLessOrEqual(pivot, func(bTreeItem btree.Item) bool {
-		vItem = bTreeItem.(*valueItem)
-		found = true
-		return false
-	})
-	return vItem, found
+	_ = "STUB: not implemented"
+	return *new(MultiVersionValueItem), false
 }
+
+// we want to find the value at the index that is LESS than the current index
+
+// start from pivot which contains our current index, and return on first item we hit.
+// This will ensure we get the latest indexed value relative to our current index
 
 func (item *multiVersionItem) Set(index int, incarnation int, value []byte) {
-	types.AssertValidValue(value)
-	item.mtx.Lock()
-	defer item.mtx.Unlock()
-
-	valueItem := NewValueItem(index, incarnation, value)
-	item.valueTree.ReplaceOrInsert(valueItem)
+	_ = "STUB: not implemented"
+	return
 }
 
-func (item *multiVersionItem) Delete(index int, incarnation int) {
-	item.mtx.Lock()
-	defer item.mtx.Unlock()
+func (item *multiVersionItem) Delete(index int, incarnation int) { _ = "STUB: not implemented"; return }
 
-	deletedItem := NewDeletedItem(index, incarnation)
-	item.valueTree.ReplaceOrInsert(deletedItem)
-}
-
-func (item *multiVersionItem) Remove(index int) {
-	item.mtx.Lock()
-	defer item.mtx.Unlock()
-
-	item.valueTree.Delete(&valueItem{index: index})
-}
+func (item *multiVersionItem) Remove(index int) { _ = "STUB: not implemented"; return }
 
 func (item *multiVersionItem) SetEstimate(index int, incarnation int) {
-	item.mtx.Lock()
-	defer item.mtx.Unlock()
-
-	estimateItem := NewEstimateItem(index, incarnation)
-	item.valueTree.ReplaceOrInsert(estimateItem)
+	_ = "STUB: not implemented"
+	return
 }
 
 type valueItem struct {
@@ -143,57 +94,39 @@ var _ MultiVersionValueItem = (*valueItem)(nil)
 
 // Index implements MultiVersionValueItem.
 func (v *valueItem) Index() int {
-	return v.index
+	_ = "STUB: not implemented"
+
+	// Incarnation implements MultiVersionValueItem.
+	return 0
 }
 
-// Incarnation implements MultiVersionValueItem.
-func (v *valueItem) Incarnation() int {
-	return v.incarnation
-}
+func (v *valueItem) Incarnation() int { _ = "STUB: not implemented"; return 0 }
 
 // IsDeleted implements MultiVersionValueItem.
-func (v *valueItem) IsDeleted() bool {
-	return v.value == nil && !v.estimate
-}
+func (v *valueItem) IsDeleted() bool { _ = "STUB: not implemented"; return false }
 
 // IsEstimate implements MultiVersionValueItem.
 func (v *valueItem) IsEstimate() bool {
-	return v.estimate
+	_ = "STUB: not implemented"
+
+	// Value implements MultiVersionValueItem.
+	return false
 }
 
-// Value implements MultiVersionValueItem.
 func (v *valueItem) Value() []byte {
-	return v.value
+	_ = "STUB: not implemented"
+
+	// implement Less for btree.Item for valueItem
+	return nil
 }
 
-// implement Less for btree.Item for valueItem
-func (i *valueItem) Less(other btree.Item) bool {
-	return i.index < other.(*valueItem).index
-}
+func (i *valueItem) Less(other btree.Item) bool { _ = "STUB: not implemented"; return false }
 
 func NewValueItem(index int, incarnation int, value []byte) *valueItem {
-	return &valueItem{
-		index:       index,
-		incarnation: incarnation,
-		value:       value,
-		estimate:    false,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func NewEstimateItem(index int, incarnation int) *valueItem {
-	return &valueItem{
-		index:       index,
-		incarnation: incarnation,
-		value:       nil,
-		estimate:    true,
-	}
-}
+func NewEstimateItem(index int, incarnation int) *valueItem { _ = "STUB: not implemented"; return nil }
 
-func NewDeletedItem(index int, incarnation int) *valueItem {
-	return &valueItem{
-		index:       index,
-		incarnation: incarnation,
-		value:       nil,
-		estimate:    false,
-	}
-}
+func NewDeletedItem(index int, incarnation int) *valueItem { _ = "STUB: not implemented"; return nil }

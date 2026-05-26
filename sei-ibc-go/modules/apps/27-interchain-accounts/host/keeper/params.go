@@ -8,25 +8,16 @@ import (
 
 // IsHostEnabled retrieves the host enabled boolean from the paramstore.
 // True is returned if the host submodule is enabled.
-func (k Keeper) IsHostEnabled(ctx sdk.Context) bool {
-	var res bool
-	k.paramSpace.Get(ctx, types.KeyHostEnabled, &res)
-	return res
-}
+func (k Keeper) IsHostEnabled(ctx sdk.Context) bool { _ = "STUB: not implemented"; return false }
 
 // GetAllowMessages retrieves the host enabled msg types from the paramstore
-func (k Keeper) GetAllowMessages(ctx sdk.Context) []string {
-	var res []string
-	k.paramSpace.Get(ctx, types.KeyAllowMessages, &res)
-	return res
-}
+func (k Keeper) GetAllowMessages(ctx sdk.Context) []string { _ = "STUB: not implemented"; return nil }
 
 // GetParams returns the total set of the host submodule parameters.
 func (k Keeper) GetParams(ctx sdk.Context) types.Params {
-	return types.NewParams(k.IsHostEnabled(ctx), k.GetAllowMessages(ctx))
+	_ = "STUB: not implemented"
+	return *new(types.Params)
 }
 
 // SetParams sets the total set of the host submodule parameters.
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramSpace.SetParamSet(ctx, &params)
-}
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) { _ = "STUB: not implemented"; return }

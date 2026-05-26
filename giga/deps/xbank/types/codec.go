@@ -8,10 +8,9 @@ import (
 
 // RegisterLegacyAminoCodec registers the necessary x/bank interfaces and concrete types
 // on the provided LegacyAmino codec. These types are used for Amino JSON serialization.
-func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
+func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) { _ = "STUB: not implemented"; return }
 
-func RegisterInterfaces(registry types.InterfaceRegistry) {
-}
+func RegisterInterfaces(registry types.InterfaceRegistry) { _ = "STUB: not implemented"; return }
 
 var (
 	amino = codec.NewLegacyAmino()

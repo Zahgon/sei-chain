@@ -2,36 +2,20 @@ package state
 
 import (
 	"github.com/ethereum/go-ethereum/common"
-	"github.com/sei-protocol/sei-chain/utils"
 )
 
 // Exist reports whether the given account exists in state.
 // Notably this should also return true for self-destructed accounts.
-func (s *DBImpl) Exist(addr common.Address) bool {
-	s.k.PrepareReplayedAddr(s.ctx, addr)
-	// check if the address exists as a contract
-	codeHash := s.GetCodeHash(addr)
-	if codeHash.Cmp(common.Hash{}) != 0 {
-		return true
-	}
+func (s *DBImpl) Exist(addr common.Address) bool { _ = "STUB: not implemented"; return false }
 
-	// check if the address exists as an EOA
-	if s.GetNonce(addr) > 0 {
-		return true
-	}
+// check if the address exists as a contract
 
-	// check if account has a balance
-	if s.GetBalance(addr).CmpBig(utils.Big0) > 0 {
-		return true
-	}
+// check if the address exists as an EOA
 
-	// go-ethereum impl considers just-deleted accounts as "exist" as well
-	return s.HasSelfDestructed(addr)
-}
+// check if account has a balance
+
+// go-ethereum impl considers just-deleted accounts as "exist" as well
 
 // Empty returns whether the given account is empty. Empty
 // is defined according to EIP161 (balance = nonce = code = 0).
-func (s *DBImpl) Empty(addr common.Address) bool {
-	s.k.PrepareReplayedAddr(s.ctx, addr)
-	return s.GetBalance(addr).CmpBig(utils.Big0) == 0 && s.GetNonce(addr) == 0 && s.GetCodeHash(addr).Cmp(common.Hash{}) == 0
-}
+func (s *DBImpl) Empty(addr common.Address) bool { _ = "STUB: not implemented"; return false }

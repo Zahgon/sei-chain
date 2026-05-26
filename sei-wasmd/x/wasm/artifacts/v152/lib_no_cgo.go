@@ -3,10 +3,6 @@
 package v152
 
 import (
-	"bytes"
-	"crypto/sha256"
-	"fmt"
-
 	"github.com/sei-protocol/sei-chain/sei-wasmvm/types"
 )
 
@@ -33,26 +29,16 @@ type GasMeter = types.GasMeter
 // matches the expected version.
 //
 // When cgo is disabled at build time, this returns an error at runtime.
-func LibwasmvmVersion() (string, error) {
-	return libwasmvmVersionImpl()
-}
+func LibwasmvmVersion() (string, error) { _ = "STUB: not implemented"; return "", nil }
 
 // CreateChecksum performs the hashing of Wasm bytes to obtain the CosmWasm checksum.
 //
 // Ony Wasm blobs are allowed as inputs and a magic byte check will be performed
 // to avoid accidental misusage.
 func CreateChecksum(wasm []byte) (Checksum, error) {
-	if len(wasm) == 0 {
-		return Checksum{}, fmt.Errorf("wasm bytes nil or empty")
-	}
-	if len(wasm) < 4 {
-		return Checksum{}, fmt.Errorf("wasm bytes shorter than 4 bytes")
-	}
-	// magic number for Wasm is "\0asm"
-	// See https://webassembly.github.io/spec/core/binary/modules.html#binary-module
-	if !bytes.Equal(wasm[:4], []byte("\x00\x61\x73\x6D")) {
-		return Checksum{}, fmt.Errorf("wasm bytes do not not start with Wasm magic number")
-	}
-	hash := sha256.Sum256(wasm)
-	return Checksum(hash[:]), nil
+	_ = "STUB: not implemented"
+	return *new(Checksum), nil
 }
+
+// magic number for Wasm is "\0asm"
+// See https://webassembly.github.io/spec/core/binary/modules.html#binary-module

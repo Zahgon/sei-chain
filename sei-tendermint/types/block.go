@@ -1,23 +1,14 @@
 package types
 
 import (
-	"bytes"
-	"errors"
-	"fmt"
-	"strings"
 	"sync"
 	"sync/atomic"
 	"time"
 
-	"github.com/gogo/protobuf/proto"
-	gogotypes "github.com/gogo/protobuf/types"
-
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto"
-	"github.com/sei-protocol/sei-chain/sei-tendermint/crypto/merkle"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/bits"
 	tmbytes "github.com/sei-protocol/sei-chain/sei-tendermint/libs/bytes"
-	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/libs/utils"
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/version"
@@ -57,146 +48,47 @@ type Block struct {
 	LastCommit *Commit      `json:"last_commit"`
 }
 
-func (b *Block) GetTxHashes() []TxHash {
-	txHashes := make([]TxHash, len(b.Txs))
-	for i := range b.Txs {
-		txHashes[i] = b.Data.Txs[i].Hash()
-	}
-	return txHashes
-}
+func (b *Block) GetTxHashes() []TxHash { _ = "STUB: not implemented"; return nil }
 
 // ValidateBasic performs basic validation that doesn't involve state data.
 // It checks the internal consistency of the block.
 // Further validation is done using state#ValidateBlock.
-func (b *Block) ValidateBasic(policy ConsensusPolicy) error {
-	if b == nil {
-		return errors.New("nil block")
-	}
+func (b *Block) ValidateBasic(policy ConsensusPolicy) error { _ = "STUB: not implemented"; return nil }
 
-	b.mtx.Lock()
-	defer b.mtx.Unlock()
+// Validate the last commit and its hash.
 
-	if err := b.Header.ValidateBasic(); err != nil {
-		return fmt.Errorf("invalid header: %w", err)
-	}
+// Fall back to legacy hash calculation pre-6.4.
 
-	// Validate the last commit and its hash.
-	if b.LastCommit == nil {
-		return errors.New("nil LastCommit")
-	}
-	if err := b.LastCommit.ValidateBasic(); err != nil {
-		return fmt.Errorf("wrong LastCommit: %w", err)
-	}
+// NOTE: b.Data.Txs may be nil, but b.Data.Hash() still works fine.
 
-	if w, g := b.LastCommit.Hash(), b.LastCommitHash; !bytes.Equal(w, g) {
-		// Fall back to legacy hash calculation pre-6.4.
-		if wLegacy := b.LastCommit.legacyHash(); !bytes.Equal(wLegacy, g) {
-			return fmt.Errorf("wrong Header.LastCommitHash. Expected %X, got %X", w, g)
-		}
-	}
-
-	if !policy.SkipDataHashValidation() {
-		// NOTE: b.Data.Txs may be nil, but b.Data.Hash() still works fine.
-		if w, g := b.Data.Hash(false), b.DataHash; !bytes.Equal(w, g) {
-			return fmt.Errorf("wrong Header.DataHash. Expected %X, got %X. Len of txs %d", w, g, len(b.Txs))
-		}
-	}
-
-	// NOTE: b.Evidence may be nil, but we're just looping.
-	for i, ev := range b.Evidence {
-		if err := ev.ValidateBasic(); err != nil {
-			return fmt.Errorf("invalid evidence (#%d): %v", i, err)
-		}
-	}
-
-	if w, g := b.Evidence.Hash(), b.EvidenceHash; !bytes.Equal(w, g) {
-		return fmt.Errorf("wrong Header.EvidenceHash. Expected %X, got %X", w, g)
-	}
-
-	return nil
-}
+// NOTE: b.Evidence may be nil, but we're just looping.
 
 // fillHeader fills in any remaining header fields that are a function of the block data
-func (b *Block) fillHeader() {
-	if b.LastCommitHash == nil {
-		b.LastCommitHash = b.LastCommit.Hash()
-	}
-	if b.DataHash == nil {
-		b.DataHash = b.Data.Hash(false)
-	}
-	if b.EvidenceHash == nil {
-		b.EvidenceHash = b.Evidence.Hash()
-	}
-}
+func (b *Block) fillHeader() { _ = "STUB: not implemented"; return }
 
 // Hash computes and returns the block hash.
 // If the block is incomplete, block hash is nil for safety.
-func (b *Block) Hash() tmbytes.HexBytes {
-	if b == nil {
-		return nil
-	}
-	b.mtx.Lock()
-	defer b.mtx.Unlock()
-
-	if b.LastCommit == nil {
-		return nil
-	}
-	b.fillHeader()
-	return b.Header.Hash()
-}
+func (b *Block) Hash() tmbytes.HexBytes { _ = "STUB: not implemented"; return *new(tmbytes.HexBytes) }
 
 // MakePartSet returns a PartSet containing parts of a serialized block.
 // This is the form in which the block is gossipped to peers.
 // CONTRACT: partSize is greater than zero.
 func (b *Block) MakePartSet(partSize uint32) (*PartSet, error) {
-	if b == nil {
-		return nil, errors.New("nil block")
-	}
-	if partSize == 0 {
-		return nil, errors.New("partSize must be greater than zero")
-	}
-	b.mtx.Lock()
-	defer b.mtx.Unlock()
-
-	pbb, err := b.ToProto()
-	if err != nil {
-		return nil, err
-	}
-	bz, err := proto.Marshal(pbb)
-	if err != nil {
-		return nil, err
-	}
-	return NewPartSetFromData(bz, partSize), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // HashesTo is a convenience function that checks if a block hashes to the given argument.
 // Returns false if the block is nil or the hash is empty.
-func (b *Block) HashesTo(hash []byte) bool {
-	if len(hash) == 0 {
-		return false
-	}
-	if b == nil {
-		return false
-	}
-	return bytes.Equal(b.Hash(), hash)
-}
+func (b *Block) HashesTo(hash []byte) bool { _ = "STUB: not implemented"; return false }
 
 // Size returns size of the block in bytes.
-func (b *Block) Size() int {
-	pbb, err := b.ToProto()
-	if err != nil {
-		return 0
-	}
-
-	return pbb.Size()
-}
+func (b *Block) Size() int { _ = "STUB: not implemented"; return 0 }
 
 // String returns a string representation of the block
 //
 // See StringIndented.
-func (b *Block) String() string {
-	return b.StringIndented("")
-}
+func (b *Block) String() string { _ = "STUB: not implemented"; return "" }
 
 // StringIndented returns an indented String.
 //
@@ -205,114 +97,24 @@ func (b *Block) String() string {
 // Evidence
 // LastCommit
 // Hash
-func (b *Block) StringIndented(indent string) string {
-	if b == nil {
-		return "nil-Block"
-	}
-	return fmt.Sprintf(`Block{
-%s  %v
-%s  %v
-%s  %v
-%s  %v
-%s}#%v`,
-		indent, b.Header.StringIndented(indent+"  "),
-		indent, b.Data.StringIndented(indent+"  "),
-		indent, b.Evidence.StringIndented(indent+"  "),
-		indent, b.LastCommit.StringIndented(indent+"  "),
-		indent, b.Hash())
-}
+func (b *Block) StringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
 // StringShort returns a shortened string representation of the block.
-func (b *Block) StringShort() string {
-	if b == nil {
-		return "nil-Block"
-	}
-	return fmt.Sprintf("Block#%X", b.Hash())
-}
+func (b *Block) StringShort() string { _ = "STUB: not implemented"; return "" }
 
 // ToProto converts Block to protobuf
-func (b *Block) ToProto() (*tmproto.Block, error) {
-	if b == nil {
-		return nil, errors.New("nil Block")
-	}
-
-	pb := new(tmproto.Block)
-
-	pb.Header = *b.Header.ToProto()
-	pb.LastCommit = b.LastCommit.ToProto()
-	pb.Data = b.Data.ToProto()
-
-	protoEvidence, err := b.Evidence.ToProto()
-	if err != nil {
-		return nil, err
-	}
-	pb.Evidence = *protoEvidence
-
-	return pb, nil
-}
+func (b *Block) ToProto() (*tmproto.Block, error) { _ = "STUB: not implemented"; return nil, nil }
 
 func (b *Block) ToReqBeginBlock(vals []*Validator) abci.RequestBeginBlock {
-	tmHeader := b.Header.ToProto()
-	// b.LastCommit.Signatures is only empty on the trace path.
-	var votes []abci.VoteInfo
-	if len(b.LastCommit.Signatures) > 0 {
-		votes = make([]abci.VoteInfo, 0, b.LastCommit.Size())
-		for i, val := range vals {
-			commitSig := b.LastCommit.Signatures[i]
-			votes = append(votes, abci.VoteInfo{
-				Validator:       TM2PB.Validator(val),
-				SignedLastBlock: commitSig.BlockIDFlag != BlockIDFlagAbsent,
-			})
-		}
-	}
-	abciEvidence := b.Evidence.ToABCI()
-	byzantineValidators := make([]abci.Evidence, 0, len(abciEvidence))
-	for _, e := range abciEvidence {
-		byzantineValidators = append(byzantineValidators, abci.Evidence(e))
-	}
-	return abci.RequestBeginBlock{
-		Hash:   b.hash,
-		Header: *tmHeader,
-		LastCommitInfo: abci.LastCommitInfo{
-			Round: b.LastCommit.Round,
-			Votes: votes,
-		},
-		ByzantineValidators: byzantineValidators,
-	}
+	_ = "STUB: not implemented"
+	return *new(abci.RequestBeginBlock)
 }
+
+// b.LastCommit.Signatures is only empty on the trace path.
 
 // FromProto sets a protobuf Block to the given pointer.
 // It returns an error if the block is invalid.
-func BlockFromProto(bp *tmproto.Block) (*Block, error) {
-	if bp == nil {
-		return nil, errors.New("nil block")
-	}
-
-	b := new(Block)
-	h, err := HeaderFromProto(&bp.Header)
-	if err != nil {
-		return nil, err
-	}
-	b.Header = h
-	data, err := DataFromProto(&bp.Data)
-	if err != nil {
-		return nil, err
-	}
-	b.Data = data
-	if err := b.Evidence.FromProto(&bp.Evidence); err != nil {
-		return nil, err
-	}
-
-	if bp.LastCommit != nil {
-		lc, err := CommitFromProto(bp.LastCommit)
-		if err != nil {
-			return nil, err
-		}
-		b.LastCommit = lc
-	}
-
-	return b, b.ValidateBasic(DefaultConsensusPolicy())
-}
+func BlockFromProto(bp *tmproto.Block) (*Block, error) { _ = "STUB: not implemented"; return nil, nil }
 
 //-----------------------------------------------------------------------------
 
@@ -320,21 +122,8 @@ func BlockFromProto(bp *tmproto.Block) (*Block, error) {
 //
 // XXX: Panics on negative result.
 func MaxDataBytes(maxBytes, evidenceBytes int64, valsCount int) int64 {
-	maxDataBytes := maxBytes -
-		MaxOverheadForBlock -
-		MaxHeaderBytes -
-		MaxCommitBytes(valsCount) -
-		evidenceBytes
-
-	if maxDataBytes < 0 {
-		panic(fmt.Sprintf(
-			"Negative MaxDataBytes. Block.MaxBytes=%d is too small to accommodate header&lastCommit&evidence=%d",
-			maxBytes,
-			-(maxDataBytes - maxBytes),
-		))
-	}
-
-	return maxDataBytes
+	_ = "STUB: not implemented"
+	return 0
 }
 
 // MaxDataBytesNoEvidence returns the maximum size of block's data when
@@ -343,39 +132,16 @@ func MaxDataBytes(maxBytes, evidenceBytes int64, valsCount int) int64 {
 //
 // XXX: Panics on negative result.
 func MaxDataBytesNoEvidence(maxBytes int64, valsCount int) int64 {
-	maxDataBytes := maxBytes -
-		MaxOverheadForBlock -
-		MaxHeaderBytes -
-		MaxCommitBytes(valsCount)
-
-	if maxDataBytes < 0 {
-		panic(fmt.Sprintf(
-			"Negative MaxDataBytesUnknownEvidence. Block.MaxBytes=%d is too small to accommodate header&lastCommit&evidence=%d",
-			maxBytes,
-			-(maxDataBytes - maxBytes),
-		))
-	}
-
-	return maxDataBytes
+	_ = "STUB: not implemented"
+	return 0
 }
 
 // MakeBlock returns a new block with an empty header, except what can be
 // computed from itself.
 // It populates the same set of fields validated by ValidateBasic.
 func MakeBlock(height int64, txs []Tx, lastCommit *Commit, evidence []Evidence) *Block {
-	block := &Block{
-		Header: Header{
-			Version: version.Consensus{Block: version.BlockProtocol, App: 0},
-			Height:  height,
-		},
-		Data: Data{
-			Txs: txs,
-		},
-		Evidence:   evidence,
-		LastCommit: lastCommit,
-	}
-	block.fillHeader()
-	return block
+	_ = "STUB: not implemented"
+	return nil
 }
 
 //-----------------------------------------------------------------------------
@@ -422,77 +188,20 @@ func (h *Header) Populate(
 	consensusHash, appHash, lastResultsHash []byte,
 	proposerAddress Address,
 ) {
-	h.Version = version
-	h.ChainID = chainID
-	h.Time = timestamp
-	h.LastBlockID = lastBlockID
-	h.ValidatorsHash = valHash
-	h.NextValidatorsHash = nextValHash
-	h.ConsensusHash = consensusHash
-	h.AppHash = appHash
-	h.LastResultsHash = lastResultsHash
-	h.ProposerAddress = proposerAddress
+	_ = "STUB: not implemented"
+	return
 }
 
 // ValidateBasic performs stateless validation on a Header returning an error
 // if any validation fails.
 //
 // NOTE: Timestamp validation is subtle and handled elsewhere.
-func (h Header) ValidateBasic() error {
-	if h.Version.Block != version.BlockProtocol {
-		return fmt.Errorf("block protocol is incorrect: got: %d, want: %d ", h.Version.Block, version.BlockProtocol)
-	}
-	if len(h.ChainID) > MaxChainIDLen {
-		return fmt.Errorf("chainID is too long; got: %d, max: %d", len(h.ChainID), MaxChainIDLen)
-	}
+func (h Header) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-	if h.Height < 0 {
-		return errors.New("negative Height")
-	} else if h.Height == 0 {
-		return errors.New("zero Height")
-	}
+// Basic validation of hashes related to application data.
+// Will validate fully against state in state#ValidateBlock.
 
-	if err := h.LastBlockID.ValidateBasic(); err != nil {
-		return fmt.Errorf("wrong LastBlockID: %w", err)
-	}
-
-	if err := ValidateHash(h.LastCommitHash); err != nil {
-		return fmt.Errorf("wrong LastCommitHash: %w", err)
-	}
-
-	if err := ValidateHash(h.DataHash); err != nil {
-		return fmt.Errorf("wrong DataHash: %w", err)
-	}
-
-	if err := ValidateHash(h.EvidenceHash); err != nil {
-		return fmt.Errorf("wrong EvidenceHash: %w", err)
-	}
-
-	if len(h.ProposerAddress) != crypto.AddressSize {
-		return fmt.Errorf(
-			"invalid ProposerAddress length; got: %d, expected: %d",
-			len(h.ProposerAddress), crypto.AddressSize,
-		)
-	}
-
-	// Basic validation of hashes related to application data.
-	// Will validate fully against state in state#ValidateBlock.
-	if err := ValidateHash(h.ValidatorsHash); err != nil {
-		return fmt.Errorf("wrong ValidatorsHash: %w", err)
-	}
-	if err := ValidateHash(h.NextValidatorsHash); err != nil {
-		return fmt.Errorf("wrong NextValidatorsHash: %w", err)
-	}
-	if err := ValidateHash(h.ConsensusHash); err != nil {
-		return fmt.Errorf("wrong ConsensusHash: %w", err)
-	}
-	// NOTE: AppHash is arbitrary length
-	if err := ValidateHash(h.LastResultsHash); err != nil {
-		return fmt.Errorf("wrong LastResultsHash: %w", err)
-	}
-
-	return nil
-}
+// NOTE: AppHash is arbitrary length
 
 // Hash returns the hash of the header.
 // It computes a Merkle tree from the header fields
@@ -500,138 +209,19 @@ func (h Header) ValidateBasic() error {
 // Returns nil if ValidatorHash is missing,
 // since a Header is not valid unless there is
 // a ValidatorsHash (corresponding to the validator set).
-func (h *Header) Hash() tmbytes.HexBytes {
-	if h == nil || len(h.ValidatorsHash) == 0 {
-		return nil
-	}
-	hpb := h.Version.ToProto()
-	hbz, err := hpb.Marshal()
-	if err != nil {
-		return nil
-	}
-
-	pbt, err := gogotypes.StdTimeMarshal(h.Time)
-	if err != nil {
-		return nil
-	}
-
-	pbbi := h.LastBlockID.ToProto()
-	bzbi, err := pbbi.Marshal()
-	if err != nil {
-		return nil
-	}
-	return merkle.HashFromByteSlices([][]byte{
-		hbz,
-		cdcEncode(h.ChainID),
-		cdcEncode(h.Height),
-		pbt,
-		bzbi,
-		cdcEncode(h.LastCommitHash),
-		cdcEncode(h.DataHash),
-		cdcEncode(h.ValidatorsHash),
-		cdcEncode(h.NextValidatorsHash),
-		cdcEncode(h.ConsensusHash),
-		cdcEncode(h.AppHash),
-		cdcEncode(h.LastResultsHash),
-		cdcEncode(h.EvidenceHash),
-		cdcEncode(h.ProposerAddress),
-	})
-}
+func (h *Header) Hash() tmbytes.HexBytes { _ = "STUB: not implemented"; return *new(tmbytes.HexBytes) }
 
 // StringIndented returns an indented string representation of the header.
-func (h *Header) StringIndented(indent string) string {
-	if h == nil {
-		return "nil-Header"
-	}
-	return fmt.Sprintf(`Header{
-%s  Version:        %v
-%s  ChainID:        %v
-%s  Height:         %v
-%s  Time:           %v
-%s  LastBlockID:    %v
-%s  LastCommit:     %v
-%s  Data:           %v
-%s  Validators:     %v
-%s  NextValidators: %v
-%s  App:            %v
-%s  Consensus:      %v
-%s  Results:        %v
-%s  Evidence:       %v
-%s  Proposer:       %v
-%s}#%v`,
-		indent, h.Version,
-		indent, h.ChainID,
-		indent, h.Height,
-		indent, h.Time,
-		indent, h.LastBlockID,
-		indent, h.LastCommitHash,
-		indent, h.DataHash,
-		indent, h.ValidatorsHash,
-		indent, h.NextValidatorsHash,
-		indent, h.AppHash,
-		indent, h.ConsensusHash,
-		indent, h.LastResultsHash,
-		indent, h.EvidenceHash,
-		indent, h.ProposerAddress,
-		indent, h.Hash(),
-	)
-}
+func (h *Header) StringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
 // ToProto converts Header to protobuf
-func (h *Header) ToProto() *tmproto.Header {
-	if h == nil {
-		return nil
-	}
-
-	return &tmproto.Header{
-		Version:            h.Version.ToProto(),
-		ChainID:            h.ChainID,
-		Height:             h.Height,
-		Time:               h.Time,
-		LastBlockId:        h.LastBlockID.ToProto(),
-		ValidatorsHash:     h.ValidatorsHash,
-		NextValidatorsHash: h.NextValidatorsHash,
-		ConsensusHash:      h.ConsensusHash,
-		AppHash:            h.AppHash,
-		DataHash:           h.DataHash,
-		EvidenceHash:       h.EvidenceHash,
-		LastResultsHash:    h.LastResultsHash,
-		LastCommitHash:     h.LastCommitHash,
-		ProposerAddress:    h.ProposerAddress,
-	}
-}
+func (h *Header) ToProto() *tmproto.Header { _ = "STUB: not implemented"; return nil }
 
 // FromProto sets a protobuf Header to the given pointer.
 // It returns an error if the header is invalid.
 func HeaderFromProto(ph *tmproto.Header) (Header, error) {
-	if ph == nil {
-		return Header{}, errors.New("nil Header")
-	}
-
-	h := new(Header)
-
-	bi, err := BlockIDFromProto(&ph.LastBlockId)
-	if err != nil {
-		return Header{}, err
-	}
-
-	h.Version = version.Consensus{Block: ph.Version.Block, App: ph.Version.App}
-	h.ChainID = ph.ChainID
-	h.Height = ph.Height
-	h.Time = ph.Time
-	h.Height = ph.Height
-	h.LastBlockID = *bi
-	h.ValidatorsHash = ph.ValidatorsHash
-	h.NextValidatorsHash = ph.NextValidatorsHash
-	h.ConsensusHash = ph.ConsensusHash
-	h.AppHash = ph.AppHash
-	h.DataHash = ph.DataHash
-	h.EvidenceHash = ph.EvidenceHash
-	h.LastResultsHash = ph.LastResultsHash
-	h.LastCommitHash = ph.LastCommitHash
-	h.ProposerAddress = ph.ProposerAddress
-
-	return *h, h.ValidateBasic()
+	_ = "STUB: not implemented"
+	return *new(Header), nil
 }
 
 //-------------------------------------
@@ -666,18 +256,14 @@ type CommitSig struct {
 }
 
 func MaxCommitBytes(valCount int) int64 {
+	_ = "STUB: not implemented"
 	// From the repeated commit sig field
-	var protoEncodingOverhead int64 = 2
-	return MaxCommitOverheadBytes + ((MaxCommitSigBytes + protoEncodingOverhead) * int64(valCount))
+	return 0
 }
 
 // NewCommitSigAbsent returns new CommitSig with BlockIDFlagAbsent. Other
 // fields are all empty.
-func NewCommitSigAbsent() CommitSig {
-	return CommitSig{
-		BlockIDFlag: BlockIDFlagAbsent,
-	}
-}
+func NewCommitSigAbsent() CommitSig { _ = "STUB: not implemented"; return *new(CommitSig) }
 
 // CommitSig returns a string representation of CommitSig.
 //
@@ -685,108 +271,26 @@ func NewCommitSigAbsent() CommitSig {
 // 2. first 6 bytes of validator address
 // 3. block ID flag
 // 4. timestamp
-func (cs CommitSig) String() string {
-	var sigBytes []byte
-	if sig, ok := cs.Signature.Get(); ok {
-		sigBytes = sig.Bytes()
-	}
-	return fmt.Sprintf("CommitSig{%X by %X on %v @ %s}",
-		tmbytes.Fingerprint(sigBytes),
-		tmbytes.Fingerprint(cs.ValidatorAddress),
-		cs.BlockIDFlag,
-		CanonicalTime(cs.Timestamp))
-}
+func (cs CommitSig) String() string { _ = "STUB: not implemented"; return "" }
 
 // BlockID returns the Commit's BlockID if CommitSig indicates signing,
 // otherwise - empty BlockID.
 func (cs CommitSig) BlockID(commitBlockID BlockID) BlockID {
-	var blockID BlockID
-	switch cs.BlockIDFlag {
-	case BlockIDFlagAbsent:
-		blockID = BlockID{}
-	case BlockIDFlagCommit:
-		blockID = commitBlockID
-	case BlockIDFlagNil:
-		blockID = BlockID{}
-	default:
-		panic(fmt.Sprintf("Unknown BlockIDFlag: %v", cs.BlockIDFlag))
-	}
-	return blockID
+	_ = "STUB: not implemented"
+	return *new(BlockID)
 }
 
 // ValidateBasic performs basic validation.
-func (cs CommitSig) ValidateBasic() error {
-	switch cs.BlockIDFlag {
-	case BlockIDFlagAbsent:
-	case BlockIDFlagCommit:
-	case BlockIDFlagNil:
-	default:
-		return fmt.Errorf("unknown BlockIDFlag: %v", cs.BlockIDFlag)
-	}
+func (cs CommitSig) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
-	switch cs.BlockIDFlag {
-	case BlockIDFlagAbsent:
-		if len(cs.ValidatorAddress) != 0 {
-			return errors.New("validator address is present")
-		}
-		if !cs.Timestamp.IsZero() {
-			return errors.New("time is present")
-		}
-		if cs.Signature.IsPresent() {
-			return errors.New("signature is present")
-		}
-	default:
-		if len(cs.ValidatorAddress) != crypto.AddressSize {
-			return fmt.Errorf("expected ValidatorAddress size to be %d bytes, got %d bytes",
-				crypto.AddressSize,
-				len(cs.ValidatorAddress),
-			)
-		}
-		if !cs.Signature.IsPresent() {
-			return errors.New("signature is missing")
-		}
-		// NOTE: Timestamp validation is subtle and handled elsewhere.
-	}
-
-	return nil
-}
+// NOTE: Timestamp validation is subtle and handled elsewhere.
 
 // ToProto converts CommitSig to protobuf
-func (cs *CommitSig) ToProto() *tmproto.CommitSig {
-	if cs == nil {
-		return nil
-	}
-	var signature []byte
-	if sig, ok := cs.Signature.Get(); ok {
-		signature = sig.Bytes()
-	}
-	return &tmproto.CommitSig{
-		BlockIdFlag:      tmproto.BlockIDFlag(cs.BlockIDFlag),
-		ValidatorAddress: cs.ValidatorAddress,
-		Timestamp:        cs.Timestamp,
-		Signature:        signature,
-	}
-}
+func (cs *CommitSig) ToProto() *tmproto.CommitSig { _ = "STUB: not implemented"; return nil }
 
 // FromProto sets a protobuf CommitSig to the given pointer.
 // It returns an error if the CommitSig is invalid.
-func (cs *CommitSig) FromProto(csp tmproto.CommitSig) error {
-	cs.BlockIDFlag = BlockIDFlag(csp.BlockIdFlag)
-	cs.ValidatorAddress = csp.ValidatorAddress
-	cs.Timestamp = csp.Timestamp
-
-	if len(csp.Signature) > 0 {
-		sig, err := crypto.SigFromBytes(csp.Signature)
-		if err != nil {
-			return fmt.Errorf("signature: %w", err)
-		}
-		cs.Signature = utils.Some(sig)
-	} else {
-		cs.Signature = utils.None[crypto.Sig]()
-	}
-
-	return cs.ValidateBasic()
-}
+func (cs *CommitSig) FromProto(csp tmproto.CommitSig) error { _ = "STUB: not implemented"; return nil }
 
 //-------------------------------------
 
@@ -815,20 +319,8 @@ type Commit struct {
 // Returns nil if the precommit at valIdx is nil.
 // Panics if valIdx >= commit.Size().
 func (commit *Commit) GetVote(valIdx int32) (*Vote, bool) {
-	if int(valIdx) >= len(commit.Signatures) {
-		return nil, false
-	}
-	commitSig := commit.Signatures[valIdx]
-	return &Vote{
-		Type:             tmproto.PrecommitType,
-		Height:           commit.Height,
-		Round:            commit.Round,
-		BlockID:          commitSig.BlockID(commit.BlockID),
-		Timestamp:        commitSig.Timestamp,
-		ValidatorAddress: commitSig.ValidatorAddress,
-		ValidatorIndex:   valIdx,
-		Signature:        commitSig.Signature,
-	}, true
+	_ = "STUB: not implemented"
+	return nil, false
 }
 
 // VoteSignBytes returns the bytes of the Vote corresponding to valIdx for
@@ -841,158 +333,42 @@ func (commit *Commit) GetVote(valIdx int32) (*Vote, bool) {
 //
 // See VoteSignBytes
 func (commit *Commit) VoteSignBytes(chainID string, valIdx int32) ([]byte, bool) {
-	v, ok := commit.GetVote(valIdx)
-	if !ok {
-		return nil, false
-	}
-	return VoteSignBytes(chainID, v.ToProto()), true
+	_ = "STUB: not implemented"
+	return nil, false
 }
 
 // Size returns the number of signatures in the commit.
-func (commit *Commit) Size() int {
-	if commit == nil {
-		return 0
-	}
-	return len(commit.Signatures)
-}
+func (commit *Commit) Size() int { _ = "STUB: not implemented"; return 0 }
 
 // ValidateBasic performs basic validation that doesn't involve state data.
 // Does not actually check the cryptographic signatures.
-func (commit *Commit) ValidateBasic() error {
-	if commit.Height < 0 {
-		return errors.New("negative Height")
-	}
-	if commit.Round < 0 {
-		return errors.New("negative Round")
-	}
-
-	if commit.Height >= 1 {
-		if commit.BlockID.IsNil() {
-			return errors.New("commit cannot be for nil block")
-		}
-
-		if len(commit.Signatures) == 0 {
-			return errors.New("no signatures in commit")
-		}
-		if len(commit.Signatures) > MaxVotesCount {
-			return fmt.Errorf("too many signatures: %d > %d", len(commit.Signatures), MaxVotesCount)
-		}
-		for i, commitSig := range commit.Signatures {
-			if err := commitSig.ValidateBasic(); err != nil {
-				return fmt.Errorf("wrong CommitSig #%d: %v", i, err)
-			}
-		}
-	}
-	return nil
-}
+func (commit *Commit) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // Hash returns the hash of the commit.
 // It computes a Merkle tree from all commit fields: Height, Round, BlockID, and Signatures.
 func (commit *Commit) Hash() tmbytes.HexBytes {
-	if commit == nil {
-		return nil
-	}
-	if commit.hash == nil {
-		// Encode BlockID
-		pbbi := commit.BlockID.ToProto()
-		bzbi, err := pbbi.Marshal()
-		if err != nil {
-			panic(err)
-		}
-
-		// Build slice with metadata fields first, then signatures
-		// Fields: Height, Round, BlockID, followed by each CommitSig
-		bs := make([][]byte, 3+len(commit.Signatures))
-		bs[0] = cdcEncode(commit.Height)
-		bs[1] = cdcEncode(int64(commit.Round)) // Cast to int64 for cdcEncode
-		bs[2] = bzbi
-
-		for i, commitSig := range commit.Signatures {
-			pbcs := commitSig.ToProto()
-			bz, err := pbcs.Marshal()
-			if err != nil {
-				panic(err)
-			}
-			bs[3+i] = bz
-		}
-		commit.hash = merkle.HashFromByteSlices(bs)
-	}
-	return commit.hash
+	_ = "STUB: not implemented"
+	return *new(tmbytes.HexBytes)
 }
+
+// Encode BlockID
+
+// Build slice with metadata fields first, then signatures
+// Fields: Height, Round, BlockID, followed by each CommitSig
+
+// Cast to int64 for cdcEncode
 
 // StringIndented returns a string representation of the commit.
-func (commit *Commit) StringIndented(indent string) string {
-	if commit == nil {
-		return "nil-Commit"
-	}
-	commitSigStrings := make([]string, len(commit.Signatures))
-	for i, commitSig := range commit.Signatures {
-		commitSigStrings[i] = commitSig.String()
-	}
-	return fmt.Sprintf(`Commit{
-%s  Height:     %d
-%s  Round:      %d
-%s  BlockID:    %v
-%s  Signatures:
-%s    %v
-%s}#%v`,
-		indent, commit.Height,
-		indent, commit.Round,
-		indent, commit.BlockID,
-		indent,
-		indent, strings.Join(commitSigStrings, "\n"+indent+"    "),
-		indent, commit.hash)
-}
+func (commit *Commit) StringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
 // ToProto converts Commit to protobuf
-func (commit *Commit) ToProto() *tmproto.Commit {
-	if commit == nil {
-		return nil
-	}
-
-	c := new(tmproto.Commit)
-	sigs := make([]tmproto.CommitSig, len(commit.Signatures))
-	for i := range commit.Signatures {
-		sigs[i] = *commit.Signatures[i].ToProto()
-	}
-	c.Signatures = sigs
-
-	c.Height = commit.Height
-	c.Round = commit.Round
-	c.BlockID = commit.BlockID.ToProto()
-
-	return c
-}
+func (commit *Commit) ToProto() *tmproto.Commit { _ = "STUB: not implemented"; return nil }
 
 // FromProto sets a protobuf Commit to the given pointer.
 // It returns an error if the commit is invalid.
 func CommitFromProto(cp *tmproto.Commit) (*Commit, error) {
-	if cp == nil {
-		return nil, errors.New("nil Commit")
-	}
-
-	var (
-		commit = new(Commit)
-	)
-
-	bi, err := BlockIDFromProto(&cp.BlockID)
-	if err != nil {
-		return nil, err
-	}
-
-	sigs := make([]CommitSig, len(cp.Signatures))
-	for i := range cp.Signatures {
-		if err := sigs[i].FromProto(cp.Signatures[i]); err != nil {
-			return nil, err
-		}
-	}
-	commit.Signatures = sigs
-
-	commit.Height = cp.Height
-	commit.Round = cp.Round
-	commit.BlockID = *bi
-
-	return commit, commit.ValidateBasic()
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 //-------------------------------------
@@ -1001,83 +377,60 @@ func CommitFromProto(cp *tmproto.Commit) (*Commit, error) {
 // Panics if signatures from the commit can't be added to the voteset.
 // Inverse of VoteSet.MakeCommit().
 func (commit *Commit) ToVoteSet(chainID string, vals *ValidatorSet) *VoteSet {
-	voteSet := NewVoteSet(chainID, commit.Height, commit.Round, tmproto.PrecommitType, vals)
-	for idx, cs := range commit.Signatures {
-		if cs.BlockIDFlag == BlockIDFlagAbsent {
-			continue // OK, some precommits can be missing.
-		}
-		vote, ok := commit.GetVote(int32(idx)) //nolint:gosec // idx is bounded by commit.Signatures length which fits in int32
-		if !ok {
-			panic(fmt.Errorf("too many signatures"))
-		}
-		if err := vote.ValidateBasic(); err != nil {
-			panic(fmt.Errorf("failed to validate vote reconstructed from commit: %w", err))
-		}
-		added, err := voteSet.AddVote(vote)
-		if !added || err != nil {
-			panic(fmt.Errorf("failed to reconstruct vote set from commit: %w", err))
-		}
-	}
-	return voteSet
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (ec *Commit) Type() byte {
-	return byte(tmproto.PrecommitType)
-}
+// OK, some precommits can be missing.
+
+//nolint:gosec // idx is bounded by commit.Signatures length which fits in int32
+
+func (ec *Commit) Type() byte { _ = "STUB: not implemented"; return 0 }
 
 // GetHeight returns height of the extended commit.
 // Implements VoteSetReader.
-func (ec *Commit) GetHeight() int64 { return ec.Height }
+func (ec *Commit) GetHeight() int64 {
+	_ = "STUB: not implemented"
 
-// GetRound returns height of the extended commit.
-// Implements VoteSetReader.
-func (ec *Commit) GetRound() int32 { return ec.Round }
-
-// BitArray returns a BitArray of which validators voted for BlockID or nil in
-// this extended commit.
-// Implements VoteSetReader.
-func (ec *Commit) BitArray() *bits.BitArray {
-	if ec.bitArray == nil {
-		ec.bitArray = bits.NewBitArray(len(ec.Signatures))
-		for i, extCommitSig := range ec.Signatures {
-			// TODO: need to check the BlockID otherwise we could be counting conflicts,
-			//       not just the one with +2/3 !
-			ec.bitArray.SetIndex(i, extCommitSig.BlockIDFlag != BlockIDFlagAbsent)
-		}
-	}
-	return ec.bitArray
+	// GetRound returns height of the extended commit.
+	// Implements VoteSetReader.
+	return 0
 }
+
+func (ec *Commit) GetRound() int32 {
+	_ = "STUB: not implemented"
+
+	// BitArray returns a BitArray of which validators voted for BlockID or nil in
+	// this extended commit.
+	// Implements VoteSetReader.
+	return 0
+}
+
+func (ec *Commit) BitArray() *bits.BitArray { _ = "STUB: not implemented"; return nil }
+
+// TODO: need to check the BlockID otherwise we could be counting conflicts,
+//       not just the one with +2/3 !
 
 // GetByIndex returns the vote corresponding to a given validator index.
 // Panics if `index >= extCommit.Size()`.
 // Implements VoteSetReader.
 func (ec *Commit) GetByIndex(valIdx int32) (*Vote, bool) {
-	return ec.GetVote(valIdx)
+	_ = "STUB: not implemented"
+	return nil,
+
+		// IsCommit returns true if there is at least one signature.
+		// Implements VoteSetReader.
+		false
 }
 
-// IsCommit returns true if there is at least one signature.
-// Implements VoteSetReader.
-func (ec *Commit) IsCommit() bool {
-	return len(ec.Signatures) != 0
-}
+func (ec *Commit) IsCommit() bool { _ = "STUB: not implemented"; return false }
 
 // legacyHash computes the commit hash using the pre-v6.4 algorithm, which
 // only includes signatures (not Height, Round, or BlockID). This is needed
 // to validate blocks that were created before the CommitHash change.
 func (commit *Commit) legacyHash() tmbytes.HexBytes {
-	if commit == nil {
-		return nil
-	}
-	bs := make([][]byte, len(commit.Signatures))
-	for i, commitSig := range commit.Signatures {
-		pbcs := commitSig.ToProto()
-		bz, err := pbcs.Marshal()
-		if err != nil {
-			panic(err)
-		}
-		bs[i] = bz
-	}
-	return merkle.HashFromByteSlices(bs)
+	_ = "STUB: not implemented"
+	return *new(tmbytes.HexBytes)
 }
 
 //-------------------------------------
@@ -1096,72 +449,23 @@ type Data struct {
 
 // Hash returns the hash of the data
 func (data *Data) Hash(overwrite bool) tmbytes.HexBytes {
-	if data == nil {
-		return (Txs{}).Hash()
-	}
-	if data.hash != nil && overwrite {
-		data.hash = data.Txs.Hash()
-	}
-	if data.hash == nil {
-		data.hash = data.Txs.Hash() // NOTE: leaves of merkle tree are TxIDs
-	}
-	return data.hash
+	_ = "STUB: not implemented"
+	return *new(tmbytes.HexBytes)
 }
+
+// NOTE: leaves of merkle tree are TxIDs
 
 // StringIndented returns an indented string representation of the transactions.
-func (data *Data) StringIndented(indent string) string {
-	if data == nil {
-		return "nil-Data"
-	}
-	txStrings := make([]string, tmmath.MinInt(len(data.Txs), 21))
-	for i, tx := range data.Txs {
-		if i == 20 {
-			txStrings[i] = fmt.Sprintf("... (%v total)", len(data.Txs))
-			break
-		}
-		txStrings[i] = fmt.Sprintf("%X (%d bytes)", tx.Hash(), len(tx))
-	}
-	return fmt.Sprintf(`Data{
-%s  %v
-%s}#%v`,
-		indent, strings.Join(txStrings, "\n"+indent+"  "),
-		indent, data.hash)
-}
+func (data *Data) StringIndented(indent string) string { _ = "STUB: not implemented"; return "" }
 
 // ToProto converts Data to protobuf
-func (data *Data) ToProto() tmproto.Data {
-	tp := new(tmproto.Data)
-
-	if len(data.Txs) > 0 {
-		txBzs := make([][]byte, len(data.Txs))
-		for i := range data.Txs {
-			txBzs[i] = data.Txs[i]
-		}
-		tp.Txs = txBzs
-	}
-
-	return *tp
-}
+func (data *Data) ToProto() tmproto.Data { _ = "STUB: not implemented"; return *new(tmproto.Data) }
 
 // DataFromProto takes a protobuf representation of Data &
 // returns the native type.
 func DataFromProto(dp *tmproto.Data) (Data, error) {
-	if dp == nil {
-		return Data{}, errors.New("nil data")
-	}
-	data := new(Data)
-
-	if len(dp.Txs) > 0 {
-		txBzs := make(Txs, len(dp.Txs))
-		for i := range dp.Txs {
-			txBzs[i] = Tx(dp.Txs[i])
-		}
-		data.Txs = txBzs
-	} else {
-		data.Txs = Txs{}
-	}
-
-	return *data, nil
+	_ = "STUB: not implemented"
+	return *new(Data), nil
 }
 
 //--------------------------------------------------------------------------------
@@ -1173,46 +477,23 @@ type BlockID struct {
 }
 
 // Equals returns true if the BlockID matches the given BlockID
-func (blockID BlockID) Equals(other BlockID) bool {
-	return bytes.Equal(blockID.Hash, other.Hash) &&
-		blockID.PartSetHeader.Equals(other.PartSetHeader)
-}
+func (blockID BlockID) Equals(other BlockID) bool { _ = "STUB: not implemented"; return false }
 
 // Key returns a machine-readable string representation of the BlockID
-func (blockID BlockID) Key() string {
-	pbph := blockID.PartSetHeader.ToProto()
-	bz, err := pbph.Marshal()
-	if err != nil {
-		panic(err)
-	}
-
-	return fmt.Sprint(string(blockID.Hash), string(bz))
-}
+func (blockID BlockID) Key() string { _ = "STUB: not implemented"; return "" }
 
 // ValidateBasic performs basic validation.
 func (blockID BlockID) ValidateBasic() error {
+	_ = "STUB: not implemented"
 	// Hash can be empty in case of POLBlockID in Proposal.
-	if err := ValidateHash(blockID.Hash); err != nil {
-		return fmt.Errorf("wrong Hash: %w", err)
-	}
-	if err := blockID.PartSetHeader.ValidateBasic(); err != nil {
-		return fmt.Errorf("wrong PartSetHeader: %w", err)
-	}
 	return nil
 }
 
 // IsNil returns true if this is the BlockID of a nil block.
-func (blockID BlockID) IsNil() bool {
-	return len(blockID.Hash) == 0 &&
-		blockID.PartSetHeader.IsZero()
-}
+func (blockID BlockID) IsNil() bool { _ = "STUB: not implemented"; return false }
 
 // IsComplete returns true if this is a valid BlockID of a non-nil block.
-func (blockID BlockID) IsComplete() bool {
-	return len(blockID.Hash) == crypto.HashSize &&
-		blockID.PartSetHeader.Total > 0 &&
-		len(blockID.PartSetHeader.Hash) == crypto.HashSize
-}
+func (blockID BlockID) IsComplete() bool { _ = "STUB: not implemented"; return false }
 
 // String returns a human readable string representation of the BlockID.
 //
@@ -1220,43 +501,21 @@ func (blockID BlockID) IsComplete() bool {
 // 2. part set header
 //
 // See PartSetHeader#String
-func (blockID BlockID) String() string {
-	return fmt.Sprintf(`%v:%v`, blockID.Hash, blockID.PartSetHeader)
-}
+func (blockID BlockID) String() string { _ = "STUB: not implemented"; return "" }
 
 // ToProto converts BlockID to protobuf
 func (blockID *BlockID) ToProto() tmproto.BlockID {
-	if blockID == nil {
-		return tmproto.BlockID{}
-	}
-
-	return tmproto.BlockID{
-		Hash:          blockID.Hash,
-		PartSetHeader: blockID.PartSetHeader.ToProto(),
-	}
+	_ = "STUB: not implemented"
+	return *new(tmproto.BlockID)
 }
 
 // FromProto sets a protobuf BlockID to the given pointer.
 // It returns an error if the block id is invalid.
 func BlockIDFromProto(bID *tmproto.BlockID) (*BlockID, error) {
-	if bID == nil {
-		return nil, errors.New("nil BlockID")
-	}
-
-	blockID := new(BlockID)
-	ph, err := PartSetHeaderFromProto(&bID.PartSetHeader)
-	if err != nil {
-		return nil, err
-	}
-
-	blockID.PartSetHeader = *ph
-	blockID.Hash = bID.Hash
-
-	return blockID, blockID.ValidateBasic()
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // ProtoBlockIDIsNil is similar to the IsNil function on BlockID, but for the
 // Protobuf representation.
-func ProtoBlockIDIsNil(bID *tmproto.BlockID) bool {
-	return len(bID.Hash) == 0 && ProtoPartSetHeaderIsZero(&bID.PartSetHeader)
-}
+func ProtoBlockIDIsNil(bID *tmproto.BlockID) bool { _ = "STUB: not implemented"; return false }

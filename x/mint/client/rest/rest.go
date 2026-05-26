@@ -6,20 +6,14 @@ import (
 	"github.com/gorilla/mux"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	govrest "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/client/rest"
-	govtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/gov/types"
 	"github.com/sei-protocol/sei-chain/x/mint/types"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	clientrest "github.com/sei-protocol/sei-chain/sei-cosmos/client/rest"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
 	typesrest "github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
 )
 
 // RegisterRoutes registers minting module REST handlers on the provided router.
-func RegisterRoutes(clientCtx client.Context, rtr *mux.Router) {
-	r := clientrest.WithHTTPDeprecationHeaders(rtr)
-	registerQueryRoutes(clientCtx, r)
-}
+func RegisterRoutes(clientCtx client.Context, rtr *mux.Router) { _ = "STUB: not implemented"; return }
 
 // PlanRequest defines a proposal for a new upgrade plan.
 type UpdateMinterRequest struct {
@@ -31,41 +25,11 @@ type UpdateMinterRequest struct {
 }
 
 func UpdateResourceDependencyProposalRESTHandler(clientCtx client.Context) govrest.ProposalRESTHandler {
-	return govrest.ProposalRESTHandler{
-		SubRoute: "update_minter",
-		Handler:  newUpdateMinterPostHandler(clientCtx),
-	}
+	_ = "STUB: not implemented"
+	return *new(govrest.ProposalRESTHandler)
 }
 
 func newUpdateMinterPostHandler(clientCtx client.Context) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		var req UpdateMinterRequest
-
-		if !typesrest.ReadRESTReq(w, r, clientCtx.LegacyAmino, &req) {
-			return
-		}
-
-		req.BaseReq = req.BaseReq.Sanitize()
-		if !req.BaseReq.ValidateBasic(w) {
-			return
-		}
-
-		fromAddr, err := sdk.AccAddressFromBech32(req.BaseReq.From)
-		if typesrest.CheckBadRequestError(w, err) {
-			return
-		}
-
-		content := types.NewUpdateMinterProposalHandler(
-			req.Title, req.Description, req.Minter,
-		)
-		msg, err := govtypes.NewMsgSubmitProposal(content, req.Deposit, fromAddr)
-		if typesrest.CheckBadRequestError(w, err) {
-			return
-		}
-		if typesrest.CheckBadRequestError(w, msg.ValidateBasic()) {
-			return
-		}
-
-		tx.WriteGeneratedTxResponse(clientCtx, w, req.BaseReq, msg)
-	}
+	_ = "STUB: not implemented"
+	return *new(http.HandlerFunc)
 }

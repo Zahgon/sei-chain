@@ -6,9 +6,7 @@ import (
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/crypto/keys/secp256k1"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	upgradekeeper "github.com/sei-protocol/sei-chain/sei-cosmos/x/upgrade/keeper"
 	"github.com/sei-protocol/sei-chain/x/evm/derived"
 	evmkeeper "github.com/sei-protocol/sei-chain/x/evm/keeper"
@@ -23,91 +21,25 @@ func EvmDeliverTxAnte(
 	upgradeKeeper *upgradekeeper.Keeper,
 	ek *evmkeeper.Keeper,
 ) (returnCtx sdk.Context, returnErr error) {
-	ctx = ctx.WithDeliverTxCallback(func(sdk.Context) {})
-	chainID := ek.ChainID(ctx)
-	if err := EvmStatelessChecks(ctx, tx, chainID); err != nil {
-		return ctx, err
-	}
-	msg := tx.GetMsgs()[0].(*evmtypes.MsgEVMTransaction)
-	txData, _ := evmtypes.UnpackTxData(msg.Data) // cached and validated
-	ctx = ctx.WithGasMeter(sdk.NewInfiniteGasMeterWithMultiplier(ctx))
-	if atx, ok := txData.(*ethtx.AssociateTx); ok {
-		return HandleAssociateTx(ctx, ek, atx, false)
-	}
-	etx := ethtypes.NewTx(txData.AsEthereumData())
-	evmAddr, seiAddr, version, err := EvmDeliverHandleSignatures(ctx, ek, txData, chainID, msg)
-	if err != nil {
-		return ctx, err
-	}
-	ctx = DecorateNonceCallback(ctx, ek, evmAddr, etx.Nonce())
-	if err := EvmDeliverChargeFees(ctx, ek, upgradeKeeper, txData, etx, msg, version, evmAddr); err != nil {
-		return ctx, err
-	}
-	return DecorateContext(ctx, ek, tx, txData, etx, evmAddr, seiAddr), nil
+	_ = "STUB: not implemented"
+	return *new(sdk.Context), nil
 }
 
-func EvmDeliverHandleSignatures(ctx sdk.Context, ek *evmkeeper.Keeper, txData ethtx.TxData, chainID *big.Int, msg *evmtypes.MsgEVMTransaction) (common.Address, sdk.AccAddress, derived.SignerVersion, error) {
-	if msg.Derived != nil {
-		if msg.Derived.PubKey == nil {
-			return common.Address{}, nil, 0, sdkerrors.ErrInvalidPubKey
-		}
-		evmAddr := msg.Derived.SenderEVMAddr
-		seiAddr := msg.Derived.SenderSeiAddr
-		version := msg.Derived.Version
-		if err := AssociateAddress(ctx, ek, evmAddr, seiAddr, msg.Derived.PubKey); err != nil {
-			return evmAddr, seiAddr, version, err
-		}
-		if ek.EthReplayConfig.Enabled {
-			ek.PrepareReplayedAddr(ctx, evmAddr)
-		}
-		return evmAddr, seiAddr, version, nil
-	}
+// cached and validated
 
-	evmAddr, seiAddr, seiPubkey, version, err := CheckAndDecodeSignature(ctx, txData, chainID, ek.EthBlockTestConfig.Enabled)
-	if err != nil {
-		return evmAddr, seiAddr, version, err
-	}
-	if err := AssociateAddress(ctx, ek, evmAddr, seiAddr, seiPubkey); err != nil {
-		return evmAddr, seiAddr, version, err
-	}
-	if ek.EthReplayConfig.Enabled {
-		ek.PrepareReplayedAddr(ctx, evmAddr)
-	}
-	msg.Derived = &derived.Derived{
-		SenderEVMAddr: evmAddr,
-		SenderSeiAddr: seiAddr,
-		PubKey:        &secp256k1.PubKey{Key: seiPubkey.Bytes()},
-		Version:       version,
-		IsAssociate:   false,
-	}
-	return evmAddr, seiAddr, version, nil
+func EvmDeliverHandleSignatures(ctx sdk.Context, ek *evmkeeper.Keeper, txData ethtx.TxData, chainID *big.Int, msg *evmtypes.MsgEVMTransaction) (common.Address, sdk.AccAddress, derived.SignerVersion, error) {
+	_ = "STUB: not implemented"
+	return *new(common.Address), *new(sdk.AccAddress), *new(derived.SignerVersion), nil
 }
 
 func EvmDeliverChargeFees(ctx sdk.Context, ek *evmkeeper.Keeper, upgradeKeeper *upgradekeeper.Keeper, txData ethtx.TxData, etx *ethtypes.Transaction, msg *evmtypes.MsgEVMTransaction, version derived.SignerVersion, evmAddr common.Address) error {
-	stateDB, err := EvmCheckAndChargeFees(ctx, evmAddr, ek, upgradeKeeper, txData, etx, msg, version, true)
-	if err != nil {
-		return err
-	}
-	surplus, err := stateDB.Finalize()
-	if err != nil {
-		return err
-	}
-	return ek.AddAnteSurplus(ctx, etx.Hash(), surplus)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func DecorateNonceCallback(ctx sdk.Context, ek *evmkeeper.Keeper, evmAddr common.Address, txNonce uint64) sdk.Context {
-	if ek.EthReplayConfig.Enabled || ek.EthBlockTestConfig.Enabled {
-		return ctx
-	}
-	startingNonce := ek.GetNonce(ctx, evmAddr)
-	if startingNonce != txNonce {
-		return ctx
-	}
-	return ctx.WithDeliverTxCallback(func(callCtx sdk.Context) {
-		// bump nonce if it is for some reason not incremented (e.g. ante failure)
-		if ek.GetNonce(callCtx, evmAddr) == startingNonce {
-			ek.SetNonce(callCtx, evmAddr, startingNonce+1)
-			ek.SetNonceBumped(callCtx)
-		}
-	})
+	_ = "STUB: not implemented"
+	return *new(sdk.Context)
 }
+
+// bump nonce if it is for some reason not incremented (e.g. ante failure)

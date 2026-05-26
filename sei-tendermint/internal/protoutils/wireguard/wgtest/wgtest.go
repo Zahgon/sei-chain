@@ -8,7 +8,6 @@ import (
 	"testing"
 
 	gogoproto "github.com/gogo/protobuf/proto"
-	"github.com/stretchr/testify/require"
 
 	tmproto "github.com/sei-protocol/sei-chain/sei-tendermint/proto/tendermint/types"
 	"github.com/sei-protocol/sei-chain/sei-tendermint/types"
@@ -21,37 +20,22 @@ import (
 const MaxCommitSignatures = types.MaxVotesCount
 
 // Marshal wraps gogoproto.Marshal with a test-fatal error.
-func Marshal(t *testing.T, m gogoproto.Message) []byte {
-	t.Helper()
-	bz, err := gogoproto.Marshal(m)
-	require.NoError(t, err)
-	return bz
-}
+func Marshal(t *testing.T, m gogoproto.Message) []byte { _ = "STUB: not implemented"; return nil }
 
 // CommitWith returns a Commit with n empty CommitSig entries.
-func CommitWith(n int) *tmproto.Commit {
-	return &tmproto.Commit{Signatures: make([]tmproto.CommitSig, n)}
-}
+func CommitWith(n int) *tmproto.Commit { _ = "STUB: not implemented"; return nil }
 
 // EvidenceWithCommit wraps a Commit in a LightClientAttackEvidence whose
 // ConflictingBlock's signed header carries the commit. This is the path
 // the wireguard schemas descend through to reach the Commit cap.
 func EvidenceWithCommit(c *tmproto.Commit) tmproto.Evidence {
-	return tmproto.Evidence{Sum: &tmproto.Evidence_LightClientAttackEvidence{
-		LightClientAttackEvidence: &tmproto.LightClientAttackEvidence{
-			ConflictingBlock: &tmproto.LightBlock{
-				SignedHeader: &tmproto.SignedHeader{Commit: c},
-			},
-		},
-	}}
+	_ = "STUB: not implemented"
+	return *new(tmproto.Evidence)
 }
 
 // EvidenceList wraps each Commit in a LightClientAttackEvidence and returns
 // the slice ready to drop into tmproto.EvidenceList.Evidence.
 func EvidenceList(commits ...*tmproto.Commit) []tmproto.Evidence {
-	out := make([]tmproto.Evidence, len(commits))
-	for i, c := range commits {
-		out[i] = EvidenceWithCommit(c)
-	}
-	return out
+	_ = "STUB: not implemented"
+	return nil
 }

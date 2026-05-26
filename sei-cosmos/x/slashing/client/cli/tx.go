@@ -2,51 +2,9 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/flags"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/client/tx"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/slashing/types"
 )
 
 // NewTxCmd returns a root CLI command handler for all x/slashing transaction commands.
-func NewTxCmd() *cobra.Command {
-	slashingTxCmd := &cobra.Command{
-		Use:                        types.ModuleName,
-		Short:                      "Slashing transaction subcommands",
-		DisableFlagParsing:         true,
-		SuggestionsMinimumDistance: 2,
-		RunE:                       client.ValidateCmd,
-	}
+func NewTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
-	slashingTxCmd.AddCommand(NewUnjailTxCmd())
-	return slashingTxCmd
-}
-
-func NewUnjailTxCmd() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:   "unjail",
-		Args:  cobra.NoArgs,
-		Short: "unjail validator previously jailed for downtime",
-		Long: `unjail a jailed validator:
-
-$ <appd> tx slashing unjail --from mykey
-`,
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-			valAddr := clientCtx.GetFromAddress()
-
-			msg := types.NewMsgUnjail(sdk.ValAddress(valAddr))
-
-			return tx.GenerateOrBroadcastTxCLI(cmd.Context(), clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
+func NewUnjailTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }

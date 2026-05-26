@@ -1,7 +1,5 @@
 package util
 
-import "fmt"
-
 // the name of a unit step
 type unitStep struct {
 	// name of the unit step
@@ -36,53 +34,19 @@ var timeSteps = []unitStep{
 // prettyPrintUnit formats a quantity in a human-readable way using the provided unit steps. The quantity
 // is assumed to be in the smallest supported unit (e.g., bytes, nanoseconds, etc.).
 func prettyPrintUnit(quantity uint64, steps []unitStep) string {
-
-	if quantity < steps[1].multiple {
-		// Edge case, print without a decimal point if we have the smallest unit.
-		return fmt.Sprintf("%d %s", quantity, steps[0].name)
-	}
-
-	unit := steps[0].name
-	floatQuantity := float64(quantity)
-
-	for i := 1; i < len(steps); i++ {
-		if floatQuantity >= float64(steps[i].multiple) {
-			floatQuantity /= float64(steps[i].multiple)
-			unit = steps[i].name
-		} else {
-			// We've found the appropriate unit.
-			break
-		}
-	}
-
-	return fmt.Sprintf("%.2f %s", floatQuantity, unit)
+	_ = "STUB: not implemented"
+	return ""
 }
+
+// Edge case, print without a decimal point if we have the smallest unit.
+
+// We've found the appropriate unit.
 
 // PrettyPrintBytes formats a byte count into a human-readable string with appropriate units.
-func PrettyPrintBytes(bytes uint64) string {
-	return prettyPrintUnit(bytes, byteSteps)
-}
+func PrettyPrintBytes(bytes uint64) string { _ = "STUB: not implemented"; return "" }
 
 // PrettyPrintTime formats a time duration in nanoseconds into a human-readable string with appropriate units.
-func PrettyPrintTime(nanoseconds uint64) string {
-	return prettyPrintUnit(nanoseconds, timeSteps)
-}
+func PrettyPrintTime(nanoseconds uint64) string { _ = "STUB: not implemented"; return "" }
 
 // CommaOMatic converts a number into string representation with commas for thousands, millions, etc.
-func CommaOMatic(value uint64) string {
-	stringifiedValue := fmt.Sprintf("%d", value)
-	digitCount := len(stringifiedValue)
-	if digitCount <= 3 {
-		return stringifiedValue
-	}
-
-	var result string
-	for i, c := range stringifiedValue {
-		if (digitCount-i)%3 == 0 && i != 0 {
-			result += ","
-		}
-		result += string(c)
-	}
-
-	return result
-}
+func CommaOMatic(value uint64) string { _ = "STUB: not implemented"; return "" }

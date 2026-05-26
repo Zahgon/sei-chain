@@ -3,12 +3,8 @@ package authz
 import (
 	"time"
 
-	"github.com/gogo/protobuf/proto"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
 	cdctypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/legacy/legacytx"
 )
 
@@ -28,217 +24,87 @@ var (
 
 // NewMsgGrant creates a new MsgGrant
 func NewMsgGrant(granter sdk.AccAddress, grantee sdk.AccAddress, a Authorization, expiration time.Time) (*MsgGrant, error) {
-	m := &MsgGrant{
-		Granter: granter.String(),
-		Grantee: grantee.String(),
-		Grant:   Grant{Expiration: expiration},
-	}
-	err := m.SetAuthorization(a)
-	if err != nil {
-		return nil, err
-	}
-	return m, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // GetSigners implements Msg
-func (msg MsgGrant) GetSigners() []sdk.AccAddress {
-	granter, err := sdk.AccAddressFromBech32(msg.Granter)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{granter}
-}
+func (msg MsgGrant) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 // ValidateBasic implements Msg
-func (msg MsgGrant) ValidateBasic() error {
-	granter, err := sdk.AccAddressFromBech32(msg.Granter)
-	if err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid granter address")
-	}
-	grantee, err := sdk.AccAddressFromBech32(msg.Grantee)
-	if err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid granter address")
-	}
-
-	if granter.Equals(grantee) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "granter and grantee cannot be same")
-	}
-	return msg.Grant.ValidateBasic()
-}
+func (msg MsgGrant) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // Type implements the LegacyMsg.Type method.
-func (msg MsgGrant) Type() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgGrant) Type() string { _ = "STUB: not implemented"; return "" }
 
 // Route implements the LegacyMsg.Route method.
-func (msg MsgGrant) Route() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgGrant) Route() string { _ = "STUB: not implemented"; return "" }
 
 // GetSignBytes implements the LegacyMsg.GetSignBytes method.
-func (msg MsgGrant) GetSignBytes() []byte {
-	return sdk.MustSortJSON(legacy.Cdc.MustMarshalJSON(&msg))
-}
+func (msg MsgGrant) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // GetAuthorization returns the cache value from the MsgGrant.Authorization if present.
 func (msg *MsgGrant) GetAuthorization() Authorization {
-	return msg.Grant.GetAuthorization()
+	_ = "STUB: not implemented"
+	return *new(Authorization)
 }
 
 // SetAuthorization converts Authorization to any and adds it to MsgGrant.Authorization.
-func (msg *MsgGrant) SetAuthorization(a Authorization) error {
-	m, ok := a.(proto.Message)
-	if !ok {
-		return sdkerrors.Wrapf(sdkerrors.ErrPackAny, "can't proto marshal %T", m)
-	}
-	any, err := cdctypes.NewAnyWithValue(m)
-	if err != nil {
-		return err
-	}
-	msg.Grant.Authorization = any
-	return nil
-}
+func (msg *MsgGrant) SetAuthorization(a Authorization) error { _ = "STUB: not implemented"; return nil }
 
 // UnpackInterfaces implements UnpackInterfacesMessage.UnpackInterfaces
 func (msg MsgExec) UnpackInterfaces(unpacker cdctypes.AnyUnpacker) error {
-	for _, x := range msg.Msgs {
-		var msgExecAuthorized sdk.Msg
-		err := unpacker.UnpackAny(x, &msgExecAuthorized)
-		if err != nil {
-			return err
-		}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // UnpackInterfaces implements UnpackInterfacesMessage.UnpackInterfaces
 func (msg MsgGrant) UnpackInterfaces(unpacker cdctypes.AnyUnpacker) error {
-	return msg.Grant.UnpackInterfaces(unpacker)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // NewMsgRevoke creates a new MsgRevoke
 func NewMsgRevoke(granter sdk.AccAddress, grantee sdk.AccAddress, msgTypeURL string) MsgRevoke {
-	return MsgRevoke{
-		Granter:    granter.String(),
-		Grantee:    grantee.String(),
-		MsgTypeUrl: msgTypeURL,
-	}
+	_ = "STUB: not implemented"
+	return *new(MsgRevoke)
 }
 
 // GetSigners implements Msg
-func (msg MsgRevoke) GetSigners() []sdk.AccAddress {
-	granter, err := sdk.AccAddressFromBech32(msg.Granter)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{granter}
-}
+func (msg MsgRevoke) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 // ValidateBasic implements MsgRequest.ValidateBasic
-func (msg MsgRevoke) ValidateBasic() error {
-	granter, err := sdk.AccAddressFromBech32(msg.Granter)
-	if err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid granter address")
-	}
-	grantee, err := sdk.AccAddressFromBech32(msg.Grantee)
-	if err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid grantee address")
-	}
-
-	if granter.Equals(grantee) {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "granter and grantee cannot be same")
-	}
-
-	if msg.MsgTypeUrl == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "missing method name")
-	}
-
-	return nil
-}
+func (msg MsgRevoke) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // Type implements the LegacyMsg.Type method.
-func (msg MsgRevoke) Type() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgRevoke) Type() string { _ = "STUB: not implemented"; return "" }
 
 // Route implements the LegacyMsg.Route method.
-func (msg MsgRevoke) Route() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgRevoke) Route() string { _ = "STUB: not implemented"; return "" }
 
 // GetSignBytes implements the LegacyMsg.GetSignBytes method.
-func (msg MsgRevoke) GetSignBytes() []byte {
-	return sdk.MustSortJSON(legacy.Cdc.MustMarshalJSON(&msg))
-}
+func (msg MsgRevoke) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
 // NewMsgExec creates a new MsgExecAuthorized
 func NewMsgExec(grantee sdk.AccAddress, msgs []sdk.Msg) MsgExec {
-	msgsAny := make([]*cdctypes.Any, len(msgs))
-	for i, msg := range msgs {
-		any, err := cdctypes.NewAnyWithValue(msg)
-		if err != nil {
-			panic(err)
-		}
-
-		msgsAny[i] = any
-	}
-
-	return MsgExec{
-		Grantee: grantee.String(),
-		Msgs:    msgsAny,
-	}
+	_ = "STUB: not implemented"
+	return *new(MsgExec)
 }
 
 // GetMessages returns the cache values from the MsgExecAuthorized.Msgs if present.
-func (msg MsgExec) GetMessages() ([]sdk.Msg, error) {
-	msgs := make([]sdk.Msg, len(msg.Msgs))
-	for i, msgAny := range msg.Msgs {
-		msg, ok := msgAny.GetCachedValue().(sdk.Msg)
-		if !ok {
-			return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "messages contains %T which is not a sdk.MsgRequest", msgAny)
-		}
-		msgs[i] = msg
-	}
-
-	return msgs, nil
-}
+func (msg MsgExec) GetMessages() ([]sdk.Msg, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // GetSigners implements Msg
-func (msg MsgExec) GetSigners() []sdk.AccAddress {
-	grantee, err := sdk.AccAddressFromBech32(msg.Grantee)
-	if err != nil {
-		panic(err)
-	}
-	return []sdk.AccAddress{grantee}
-}
+func (msg MsgExec) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
 // ValidateBasic implements Msg
-func (msg MsgExec) ValidateBasic() error {
-	_, err := sdk.AccAddressFromBech32(msg.Grantee)
-	if err != nil {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid grantee address")
-	}
-
-	if len(msg.Msgs) == 0 {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "messages cannot be empty")
-	}
-
-	return nil
-}
+func (msg MsgExec) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 // Type implements the LegacyMsg.Type method.
-func (msg MsgExec) Type() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgExec) Type() string { _ = "STUB: not implemented"; return "" }
 
 // Route implements the LegacyMsg.Route method.
-func (msg MsgExec) Route() string {
-	return sdk.MsgTypeURL(&msg)
-}
+func (msg MsgExec) Route() string { _ = "STUB: not implemented"; return "" }
 
 // GetSignBytes implements the LegacyMsg.GetSignBytes method.
-func (msg MsgExec) GetSignBytes() []byte {
-	return sdk.MustSortJSON(legacy.Cdc.MustMarshalJSON(&msg))
-}
+func (msg MsgExec) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }

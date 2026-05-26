@@ -2,29 +2,9 @@
 
 package eventlog
 
-import (
-	"github.com/go-kit/kit/metrics/discard"
-	prometheus "github.com/go-kit/kit/metrics/prometheus"
-	stdprometheus "github.com/prometheus/client_golang/prometheus"
-)
-
 func PrometheusMetrics(namespace string, labelsAndValues ...string) *Metrics {
-	labels := []string{}
-	for i := 0; i < len(labelsAndValues); i += 2 {
-		labels = append(labels, labelsAndValues[i])
-	}
-	return &Metrics{
-		numItems: prometheus.NewGaugeFrom(stdprometheus.GaugeOpts{
-			Namespace: namespace,
-			Subsystem: MetricsSubsystem,
-			Name:      "num_items",
-			Help:      "Number of items currently resident in the event log.",
-		}, labels).With(labelsAndValues...),
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func NopMetrics() *Metrics {
-	return &Metrics{
-		numItems: discard.NewGauge(),
-	}
-}
+func NopMetrics() *Metrics { _ = "STUB: not implemented"; return nil }

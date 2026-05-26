@@ -23,8 +23,6 @@ type (
 )
 
 func NewEvidenceHandler(cliHandler CLIHandlerFn, restHandler RESTHandlerFn) EvidenceHandler {
-	return EvidenceHandler{
-		CLIHandler:  cliHandler,
-		RESTHandler: restHandler,
-	}
+	_ = "STUB: not implemented"
+	return *new(EvidenceHandler)
 }

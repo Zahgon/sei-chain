@@ -5,7 +5,6 @@ import (
 	"github.com/gogo/protobuf/proto"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	"github.com/sei-protocol/sei-chain/x/evm/types/ethtx"
 )
 
@@ -18,108 +17,48 @@ var (
 )
 
 func NewMsgEVMTransaction(txData proto.Message) (*MsgEVMTransaction, error) {
-	txDataAny, err := codectypes.NewAnyWithValue(txData)
-	if err != nil {
-		return nil, err
-	}
-	return &MsgEVMTransaction{Data: txDataAny}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
-func (msg *MsgEVMTransaction) Route() string {
-	return RouterKey
-}
+func (msg *MsgEVMTransaction) Route() string { _ = "STUB: not implemented"; return "" }
 
-func (msg *MsgEVMTransaction) Type() string {
-	return TypeMsgEVMTransaction
-}
+func (msg *MsgEVMTransaction) Type() string { _ = "STUB: not implemented"; return "" }
 
-func (msg *MsgEVMTransaction) GetSigners() []sdk.AccAddress {
-	panic("signer should be accessed on EVM transaction level")
-}
+func (msg *MsgEVMTransaction) GetSigners() []sdk.AccAddress { _ = "STUB: not implemented"; return nil }
 
-func (msg *MsgEVMTransaction) GetSignBytes() []byte {
-	panic("sign bytes should be accessed on EVM transaction level")
-}
+func (msg *MsgEVMTransaction) GetSignBytes() []byte { _ = "STUB: not implemented"; return nil }
 
-func (msg *MsgEVMTransaction) ValidateBasic() error {
-	if msg.Derived != nil && msg.Derived.PubKey == nil {
-		return sdkerrors.ErrInvalidPubKey
-	}
-	txData, err := UnpackTxData(msg.Data)
-	if err != nil {
-		return err
-	}
-	if _, ok := txData.(*ethtx.AssociateTx); !ok {
-		if err := txData.Validate(); err != nil {
-			return err
-		}
-	}
-	amsg, isAssociate := msg.GetAssociateTx()
-	if isAssociate {
-		if len(amsg.CustomMessage) > MaxAssociateCustomMessageLength {
-			return sdkerrors.Wrapf(sdkerrors.ErrTxTooLarge, "custom message can have at most 64 characters")
-		}
-		return amsg.Validate()
-	}
-	return nil
-}
+func (msg *MsgEVMTransaction) ValidateBasic() error { _ = "STUB: not implemented"; return nil }
 
 func (msg *MsgEVMTransaction) AsTransaction() (*ethtypes.Transaction, ethtx.TxData) {
-	txData, err := UnpackTxData(msg.Data)
-	if err != nil {
-		return nil, nil
-	}
-
-	return ethtypes.NewTx(txData.AsEthereumData()), txData
+	_ = "STUB: not implemented"
+	return nil, *new(ethtx.TxData)
 }
 
 // UnpackInterfaces implements UnpackInterfacesMesssage.UnpackInterfaces
 func (msg *MsgEVMTransaction) UnpackInterfaces(unpacker codectypes.AnyUnpacker) error {
-	return unpacker.UnpackAny(msg.Data, new(ethtx.TxData))
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (msg *MsgEVMTransaction) IsAssociateTx() bool {
-	_, ok := msg.GetAssociateTx()
-	return ok
-}
+func (msg *MsgEVMTransaction) IsAssociateTx() bool { _ = "STUB: not implemented"; return false }
 
 func (msg *MsgEVMTransaction) GetAssociateTx() (*ethtx.AssociateTx, bool) {
-	txData, err := UnpackTxData(msg.Data)
-	if err != nil {
-		// should never happen
-		panic(err)
-	}
-	amsg, ok := txData.(*ethtx.AssociateTx)
-	return amsg, ok
+	_ = "STUB: not implemented"
+	return nil, false
 }
+
+// should never happen
 
 func MustGetEVMTransactionMessage(tx sdk.Tx) *MsgEVMTransaction {
-	if len(tx.GetMsgs()) != 1 {
-		panic("EVM transaction must have exactly 1 message")
-	}
-	msg, ok := tx.GetMsgs()[0].(*MsgEVMTransaction)
-	if !ok {
-		panic("not EVM message")
-	}
-	return msg
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func GetEVMTransactionMessage(tx sdk.Tx) *MsgEVMTransaction {
-	if len(tx.GetMsgs()) != 1 {
-		return nil
-	}
-	msg, ok := tx.GetMsgs()[0].(*MsgEVMTransaction)
-	if !ok {
-		return nil
-	}
-	return msg
-}
+func GetEVMTransactionMessage(tx sdk.Tx) *MsgEVMTransaction { _ = "STUB: not implemented"; return nil }
 
 func (res *MsgEVMTransactionResponse) DecorateSdkResult(sdkRes *sdk.Result) {
-	if res == nil {
-		return
-	}
-	if res.VmError != "" {
-		sdkRes.EvmError = res.VmError
-	}
+	_ = "STUB: not implemented"
+	return
 }

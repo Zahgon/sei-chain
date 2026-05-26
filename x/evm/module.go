@@ -1,9 +1,7 @@
 package evm
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 
 	// this line is used by starport scaffolding # 1
 
@@ -18,10 +16,7 @@ import (
 	cdctypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
-	"github.com/sei-protocol/sei-chain/x/evm/client/cli"
 	"github.com/sei-protocol/sei-chain/x/evm/keeper"
-	"github.com/sei-protocol/sei-chain/x/evm/migrations"
-	"github.com/sei-protocol/sei-chain/x/evm/types"
 )
 
 var (
@@ -34,80 +29,60 @@ type AppModuleBasic struct {
 }
 
 func NewAppModuleBasic(cdc codec.BinaryCodec) AppModuleBasic {
-	return AppModuleBasic{cdc: cdc}
+	_ = "STUB: not implemented"
+	return *new(AppModuleBasic)
 }
 
 // Name returns the capability module's name.
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterCodec(cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterInterfaces registers the module's interface types
 func (a AppModuleBasic) RegisterInterfaces(reg cdctypes.InterfaceRegistry) {
-	types.RegisterInterfaces(reg)
+	_ = "STUB: not implemented"
+	return
 }
 
 // DefaultGenesis returns the capability module's default genesis state.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesis())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the evm module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingConfig, bz json.RawMessage) error {
-	var genState types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &genState); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-	return genState.Validate()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateGenesisStream performs genesis state validation for the evm module in a streaming fashion.
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	genesisStateCh := make(chan types.GenesisState)
-	var err error
-	doneCh := make(chan struct{})
-	go func() {
-		err = types.ValidateStream(genesisStateCh)
-		doneCh <- struct{}{}
-	}()
-	go func() {
-		defer close(genesisStateCh)
-		for genesis := range genesisCh {
-			var data types.GenesisState
-			err_ := cdc.UnmarshalAsJSON(genesis, &data)
-			if err_ != nil {
-				err = err_
-				doneCh <- struct{}{}
-				return
-			}
-			genesisStateCh <- data
-		}
-	}()
-	<-doneCh
-	return err
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // RegisterRESTRoutes registers the capability module's REST service handlers.
-func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {}
+func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the module.
+	return
+}
+
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	_ = types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetTxCmd returns the capability module's root tx command.
-func (a AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.GetTxCmd()
-}
+func (a AppModuleBasic) GetTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // GetQueryCmd returns the capability module's root query command.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd(types.StoreKey)
-}
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // ----------------------------------------------------------------------------
 // AppModule
@@ -124,161 +99,57 @@ func NewAppModule(
 	cdc codec.Codec,
 	keeper *keeper.Keeper,
 ) AppModule {
-	return AppModule{
-		AppModuleBasic: NewAppModuleBasic(cdc),
-		keeper:         keeper,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // Name returns the capability module's name.
-func (am AppModule) Name() string {
-	return am.AppModuleBasic.Name()
-}
+func (am AppModule) Name() string { _ = "STUB: not implemented"; return "" }
 
 // Route returns the capability module's message routing key.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
-}
+func (am AppModule) Route() sdk.Route { _ = "STUB: not implemented"; return *new(sdk.Route) }
 
 // QuerierRoute returns the capability module's query routing key.
-func (AppModule) QuerierRoute() string { return types.QuerierRoute }
+func (AppModule) QuerierRoute() string { _ = "STUB: not implemented"; return "" }
 
 // LegacyQuerierHandler returns the capability module's Querier.
 func (am AppModule) LegacyQuerierHandler(_ *codec.LegacyAmino) sdk.Querier {
+	_ = "STUB: not implemented"
+
+	// RegisterServices registers a GRPC query service to respond to the
+	// module-specific GRPC queries.
+	return *new(sdk.Querier)
+}
+
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
+
+// RegisterInvariants registers the capability module's invariants.
+func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
+
+	// InitGenesis performs the capability module's genesis initialization It returns
+	// no validator updates.
+	return
+}
+
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
+	_ = "STUB: not implemented"
 	return nil
 }
 
-// RegisterServices registers a GRPC query service to respond to the
-// module-specific GRPC queries.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	types.RegisterQueryServer(cfg.QueryServer(), keeper.NewQuerier(am.keeper))
-
-	_ = cfg.RegisterMigration(types.ModuleName, 2, func(ctx sdk.Context) error {
-		return migrations.AddNewParamsAndSetAllToDefaults(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 3, func(ctx sdk.Context) error {
-		return migrations.AddNewParamsAndSetAllToDefaults(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 4, func(ctx sdk.Context) error {
-		return migrations.StoreCWPointerCode(ctx, am.keeper, true, true, false)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 5, func(ctx sdk.Context) error {
-		return migrations.FixTotalSupply(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 6, func(ctx sdk.Context) error {
-		return migrations.StoreCWPointerCode(ctx, am.keeper, false, true, false)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 7, func(ctx sdk.Context) error {
-		return migrations.StoreCWPointerCode(ctx, am.keeper, false, true, false)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 8, func(ctx sdk.Context) error {
-		if err := migrations.MigrateERCNativePointers(ctx, am.keeper); err != nil {
-			return err
-		}
-		if err := migrations.MigrateERCCW20Pointers(ctx, am.keeper); err != nil {
-			return err
-		}
-		return migrations.MigrateERCCW721Pointers(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 9, func(ctx sdk.Context) error {
-		if err := migrations.StoreCWPointerCode(ctx, am.keeper, true, true, false); err != nil {
-			return err
-		}
-		if err := migrations.MigrateCWERC20Pointers(ctx, am.keeper); err != nil {
-			return err
-		}
-		return migrations.MigrateCWERC721Pointers(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 10, func(ctx sdk.Context) error {
-		return migrations.MigrateCastAddressBalances(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 11, func(ctx sdk.Context) error {
-		return migrations.MigrateDeliverTxHookWasmGasLimitParam(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 12, func(ctx sdk.Context) error {
-		return migrations.MigrateBlockBloom(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 13, func(ctx sdk.Context) error {
-		return migrations.MigrateEip1559Params(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 14, func(ctx sdk.Context) error {
-		return migrations.MigrateEip1559MaxFeePerGas(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 15, func(ctx sdk.Context) error {
-		return migrations.StoreCWPointerCode(ctx, am.keeper, false, false, true)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 16, func(ctx sdk.Context) error {
-		return migrations.MigrateBaseFeeOffByOne(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 17, func(ctx sdk.Context) error {
-		if err := migrations.MigrateERCCW721Pointers(ctx, am.keeper); err != nil {
-			return err
-		}
-		return migrations.MigrateERCCW1155Pointers(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 18, func(ctx sdk.Context) error {
-		return migrations.MigrateDisableRegisterPointer(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 19, func(ctx sdk.Context) error {
-		return migrations.MigrateRemoveCurrBlockBaseFee(ctx, am.keeper)
-	})
-
-	_ = cfg.RegisterMigration(types.ModuleName, 20, func(ctx sdk.Context) error {
-		return migrations.MigrateSstoreGas(ctx, am.keeper)
-	})
-}
-
-// RegisterInvariants registers the capability module's invariants.
-func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
-
-// InitGenesis performs the capability module's genesis initialization It returns
-// no validator updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, gs json.RawMessage) []abci.ValidatorUpdate {
-	var genState types.GenesisState
-	// Initialize global index to index in genesis state
-	cdc.MustUnmarshalJSON(gs, &genState)
-
-	InitGenesis(ctx, am.keeper, genState)
-
-	return []abci.ValidatorUpdate{}
-}
+// Initialize global index to index in genesis state
 
 // ExportGenesis returns the capability module's exported genesis state as raw JSON bytes.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	genState := ExportGenesis(ctx, am.keeper)
-	return cdc.MustMarshalJSON(genState)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ExportGenesisStream returns the evm module's exported genesis state as raw JSON bytes in a streaming fashion.
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := ExportGenesisStream(ctx, am.keeper)
-	chRaw := make(chan json.RawMessage)
-	go func() {
-		for genState := range ch {
-			chRaw <- cdc.MustMarshalJSON(genState)
-		}
-		close(chRaw)
-	}()
-	return chRaw
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 21 }
+func (AppModule) ConsensusVersion() uint64 { _ = "STUB: not implemented"; return 0 }

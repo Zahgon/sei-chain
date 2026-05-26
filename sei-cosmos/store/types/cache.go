@@ -2,9 +2,6 @@ package types
 
 import (
 	"sync"
-
-	"github.com/armon/go-metrics"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
 )
 
 const DefaultCacheSizeLimit = 4000000 // TODO: revert back to 1000000 after paritioning r/w caches
@@ -16,20 +13,11 @@ type CValue struct {
 	dirty bool
 }
 
-func NewCValue(value []byte, dirty bool) *CValue {
-	return &CValue{
-		value: value,
-		dirty: dirty,
-	}
-}
+func NewCValue(value []byte, dirty bool) *CValue { _ = "STUB: not implemented"; return nil }
 
-func (v *CValue) Value() []byte {
-	return v.value
-}
+func (v *CValue) Value() []byte { _ = "STUB: not implemented"; return nil }
 
-func (v *CValue) Dirty() bool {
-	return v.dirty
-}
+func (v *CValue) Dirty() bool { _ = "STUB: not implemented"; return false }
 
 type CacheBackend interface {
 	Get(string) (*CValue, bool)
@@ -52,69 +40,18 @@ type BoundedCache struct {
 }
 
 func NewBoundedCache(backend CacheBackend, limit int) *BoundedCache {
-	if limit == 0 {
-		panic("cache limit must be at least 1")
-	}
-	return &BoundedCache{
-		CacheBackend: backend,
-		limit:        limit,
-		mu:           &sync.Mutex{},
-		// cosmos_bounded_cache
-		metricName: []string{"cosmos", "bounded", "cache"},
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (c *BoundedCache) emitKeysEvictedMetrics(keysToEvict int) {
-	telemetry.SetGaugeWithLabels(
-		c.metricName,
-		float32(keysToEvict),
-		[]metrics.Label{telemetry.NewLabel("type", "keys_evicted")},
-	)
-}
+// cosmos_bounded_cache
 
-func (c *BoundedCache) Set(key string, val *CValue) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+func (c *BoundedCache) emitKeysEvictedMetrics(keysToEvict int) { _ = "STUB: not implemented"; return }
 
-	if c.Len() >= c.limit {
-		numEntries := c.Len()
-		keysToEvict := []string{}
-		c.CacheBackend.Range(func(key string, val *CValue) bool {
-			if val.dirty {
-				return true
-			}
-			keysToEvict = append(keysToEvict, key)
-			numEntries--
-			return numEntries >= c.limit
-		})
-		for _, key := range keysToEvict {
-			c.CacheBackend.Delete(key)
-		}
-		c.emitKeysEvictedMetrics(len(keysToEvict))
-	}
-	c.CacheBackend.Set(key, val)
-}
+func (c *BoundedCache) Set(key string, val *CValue) { _ = "STUB: not implemented"; return }
 
-func (c *BoundedCache) Delete(key string) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
+func (c *BoundedCache) Delete(key string) { _ = "STUB: not implemented"; return }
 
-	c.CacheBackend.Delete(key)
-}
+func (c *BoundedCache) DeleteAll() { _ = "STUB: not implemented"; return }
 
-func (c *BoundedCache) DeleteAll() {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	c.CacheBackend.Range(func(key string, _ *CValue) bool {
-		c.CacheBackend.Delete(key)
-		return true
-	})
-}
-
-func (c *BoundedCache) Range(f func(string, *CValue) bool) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-
-	c.CacheBackend.Range(f)
-}
+func (c *BoundedCache) Range(f func(string, *CValue) bool) { _ = "STUB: not implemented"; return }

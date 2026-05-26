@@ -15,14 +15,16 @@ type CommitVote struct {
 }
 
 // NewCommitVote creates a new CommitVote.
-func NewCommitVote(proposal *Proposal) *CommitVote {
-	return &CommitVote{proposal: proposal}
-}
+func NewCommitVote(proposal *Proposal) *CommitVote { _ = "STUB: not implemented"; return nil }
 
 // Proposal .
-func (m *CommitVote) Proposal() *Proposal { return m.proposal }
+func (m *CommitVote) Proposal() *Proposal {
+	_ = "STUB: not implemented"
 
-// CommitVoteConv is the protobuf converter for CommitVote.
+	// CommitVoteConv is the protobuf converter for CommitVote.
+	return nil
+}
+
 var CommitVoteConv = protoutils.Conv[*CommitVote, *pb.Proposal]{
 	Encode: func(m *CommitVote) *pb.Proposal {
 		return ProposalConv.Encode(m.proposal)

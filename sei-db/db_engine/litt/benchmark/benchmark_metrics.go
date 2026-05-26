@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/benchmark/config"
-	"github.com/sei-protocol/sei-chain/sei-db/db_engine/litt/util"
 )
 
 // metrics is a struct that holds various performance metrics for the benchmark. If configured, periodically
@@ -63,155 +62,60 @@ func newMetrics(
 	logger *slog.Logger,
 	config *config.BenchmarkConfig,
 ) *metrics {
-
-	m := &metrics{
-		ctx:       ctx,
-		logger:    logger,
-		config:    config,
-		startTime: time.Now(),
-	}
-
-	go m.reportGenerator()
-	return m
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // reportWrite records a write operation.
 func (m *metrics) reportWrite(writeDuration time.Duration, bytesWritten uint64) {
-	m.writeCount.Add(1)
-	m.bytesWritten.Add(bytesWritten)
-	m.nanosecondsSpentWriting.Add(uint64(writeDuration.Nanoseconds())) //nolint:gosec // duration non-negative
-
-	// Update the longest write duration if this one is longer.
-	currentLongest := m.longestWriteDuration.Load()
-	for writeDuration.Nanoseconds() > int64(currentLongest) { //nolint:gosec // durations comfortably fit
-		swapped := m.longestWriteDuration.CompareAndSwap(currentLongest, uint64(writeDuration.Nanoseconds())) //nolint:gosec // duration non-negative
-		if swapped {
-			break
-		}
-		currentLongest = m.longestWriteDuration.Load()
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec // duration non-negative
+
+// Update the longest write duration if this one is longer.
+
+//nolint:gosec // durations comfortably fit
+//nolint:gosec // duration non-negative
 
 // reportRead records a read operation.
 func (m *metrics) reportRead(readDuration time.Duration, bytesRead uint64) {
-	m.readCount.Add(1)
-	m.bytesRead.Add(bytesRead)
-	m.nanosecondsSpentReading.Add(uint64(readDuration.Nanoseconds())) //nolint:gosec // duration non-negative
-
-	// Update the longest read duration if this one is longer.
-	currentLongest := m.longestReadDuration.Load()
-	for readDuration.Nanoseconds() > int64(currentLongest) { //nolint:gosec // durations comfortably fit
-		swapped := m.longestReadDuration.CompareAndSwap(currentLongest, uint64(readDuration.Nanoseconds())) //nolint:gosec // duration non-negative
-		if swapped {
-			break
-		}
-		currentLongest = m.longestReadDuration.Load()
-	}
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec // duration non-negative
+
+// Update the longest read duration if this one is longer.
+
+//nolint:gosec // durations comfortably fit
+//nolint:gosec // duration non-negative
 
 // reportFlush records a flush operation.
-func (m *metrics) reportFlush(flushDuration time.Duration) {
-	m.flushCount.Add(1)
-	m.nanosecondsSpentFlushing.Add(uint64(flushDuration.Nanoseconds())) //nolint:gosec // duration non-negative
+func (m *metrics) reportFlush(flushDuration time.Duration) { _ = "STUB: not implemented"; return }
 
-	// Update the longest flush duration if this one is longer.
-	currentLongest := m.longestFlushDuration.Load()
-	for flushDuration.Nanoseconds() > int64(currentLongest) { //nolint:gosec // durations comfortably fit
-		swapped := m.longestFlushDuration.CompareAndSwap(currentLongest, uint64(flushDuration.Nanoseconds())) //nolint:gosec // duration non-negative
-		if swapped {
-			break
-		}
-		currentLongest = m.longestFlushDuration.Load()
-	}
-}
+//nolint:gosec // duration non-negative
+
+// Update the longest flush duration if this one is longer.
+
+//nolint:gosec // durations comfortably fit
+//nolint:gosec // duration non-negative
 
 // reportGenerator runs in a goroutine and periodically logs the metrics to the console.
-func (m *metrics) reportGenerator() {
-	if m.config.MetricsLoggingPeriodSeconds <= 0 {
-		return // Metrics logging is disabled.
-	}
+func (m *metrics) reportGenerator() { _ = "STUB: not implemented"; return }
 
-	ticker := time.NewTicker(time.Duration(m.config.MetricsLoggingPeriodSeconds * float64(time.Second)))
-	defer ticker.Stop()
+// Metrics logging is disabled.
 
-	for {
-		select {
-		case <-m.ctx.Done():
-			return // Context cancelled, stop reporting.
-		case <-ticker.C:
-			m.logMetrics()
-		}
-	}
-}
+// Context cancelled, stop reporting.
 
 // logMetrics logs the current metrics to the console.
-func (m *metrics) logMetrics() {
+func (m *metrics) logMetrics() { _ = "STUB: not implemented"; return }
 
-	averageWriteLatency := uint64(0)
-	writeCount := m.writeCount.Load()
-	if writeCount > 0 {
-		averageWriteLatency =
-			uint64((time.Duration(m.nanosecondsSpentWriting.Load()) / time.Duration(writeCount)).Nanoseconds()) //nolint:gosec // duration non-negative
-	}
+//nolint:gosec // duration non-negative
 
-	averageReadLatency := uint64(0)
-	readCount := m.readCount.Load()
-	if readCount > 0 {
-		averageReadLatency =
-			uint64((time.Duration(m.nanosecondsSpentReading.Load()) / time.Duration(readCount)).Nanoseconds()) //nolint:gosec // duration non-negative
-	}
+//nolint:gosec // duration non-negative
 
-	averageFlushLatency := uint64(0)
-	flushCount := m.flushCount.Load()
-	if flushCount > 0 {
-		averageFlushLatency =
-			uint64((time.Duration(m.nanosecondsSpentFlushing.Load()) / time.Duration(flushCount)).Nanoseconds()) //nolint:gosec // duration non-negative
-	}
+//nolint:gosec // duration non-negative
 
-	elapsedTimeNanoseconds := uint64(time.Since(m.startTime).Nanoseconds()) //nolint:gosec // duration non-negative
-	elapsedTimeSeconds := float64(elapsedTimeNanoseconds) / float64(time.Second)
-
-	bytesWritten := m.bytesWritten.Load()
-	writeThroughput := uint64(0)
-	if elapsedTimeSeconds > 0 {
-		writeThroughput = uint64(float64(bytesWritten) / elapsedTimeSeconds)
-	}
-
-	readThroughput := uint64(0)
-	if elapsedTimeSeconds > 0 {
-		readThroughput = uint64(float64(m.bytesRead.Load()) / elapsedTimeSeconds)
-	}
-
-	if m.config.TimeLimitSeconds > 0 {
-		m.logger.Info("Benchmark progress",
-			"elapsed", util.PrettyPrintTime(elapsedTimeNanoseconds),
-			"limit", util.PrettyPrintTime(uint64(m.config.TimeLimitSeconds*float64(time.Second))),
-		)
-	} else {
-		m.logger.Info("Benchmark progress",
-			"elapsed", util.PrettyPrintTime(elapsedTimeNanoseconds),
-		)
-	}
-
-	m.logger.Info("Write metrics",
-		"throughput", util.PrettyPrintBytes(writeThroughput)+"/s",
-		"bytes", util.PrettyPrintBytes(bytesWritten),
-		"count", util.CommaOMatic(writeCount),
-		"average_latency", util.PrettyPrintTime(averageWriteLatency),
-		"longest_duration", util.PrettyPrintTime(m.longestWriteDuration.Load()),
-	)
-
-	m.logger.Info("Read metrics",
-		"throughput", util.PrettyPrintBytes(readThroughput)+"/s",
-		"bytes", util.PrettyPrintBytes(m.bytesRead.Load()),
-		"count", util.CommaOMatic(readCount),
-		"average_latency", util.PrettyPrintTime(averageReadLatency),
-		"longest_duration", util.PrettyPrintTime(m.longestReadDuration.Load()),
-	)
-
-	m.logger.Info("Flush metrics",
-		"count", util.CommaOMatic(flushCount),
-		"average_latency", util.PrettyPrintTime(averageFlushLatency),
-		"longest_duration", util.PrettyPrintTime(m.longestFlushDuration.Load()),
-	)
-}
+//nolint:gosec // duration non-negative

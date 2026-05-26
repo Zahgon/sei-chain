@@ -1,9 +1,6 @@
 package keeper
 
 import (
-	"fmt"
-	"time"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	paramtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
@@ -28,90 +25,60 @@ func NewKeeper(
 	sk types.StakingKeeper, ak types.AccountKeeper, bk types.BankKeeper,
 	_ types.EpochKeeper, feeCollectorName string,
 ) Keeper {
+	_ = "STUB: not implemented"
 	// ensure mint module account is set
-	if addr := ak.GetModuleAddress(types.ModuleName); addr == nil {
-		panic("the mint module account has not been set")
-	}
-
-	// set KeyTable if it has not already been set
-	if !paramSpace.HasKeyTable() {
-		paramSpace = paramSpace.WithKeyTable(types.ParamKeyTable())
-	}
-
-	return Keeper{
-		cdc:              cdc,
-		storeKey:         key,
-		paramSpace:       paramSpace,
-		stakingKeeper:    sk,
-		bankKeeper:       bk,
-		feeCollectorName: feeCollectorName,
-	}
+	return *new(Keeper)
 }
+
+// set KeyTable if it has not already been set
 
 // Set the mint hooks.
-func (k *Keeper) SetHooks(h types.MintHooks) *Keeper {
-	if k.hooks != nil {
-		panic("cannot set mint hooks twice")
-	}
-	k.hooks = h
-	return k
-}
+func (k *Keeper) SetHooks(h types.MintHooks) *Keeper { _ = "STUB: not implemented"; return nil }
 
 // get the minter
 func (k Keeper) GetMinter(ctx sdk.Context) (minter types.Minter) {
-	store := ctx.KVStore(k.storeKey)
-	b := store.Get(types.MinterKey)
-	if b == nil {
-		panic("stored minter should not have been nil")
-	}
-
-	k.cdc.MustUnmarshal(b, &minter)
-	return minter
+	_ = "STUB: not implemented"
+	return *new(types.Minter)
 }
 
 // set the minter
-func (k Keeper) SetMinter(ctx sdk.Context, minter types.Minter) {
-	store := ctx.KVStore(k.storeKey)
-	b := k.cdc.MustMarshal(&minter)
-	store.Set(types.MinterKey, b)
-}
+func (k Keeper) SetMinter(ctx sdk.Context, minter types.Minter) { _ = "STUB: not implemented"; return }
 
 // GetParams returns the total set of minting parameters.
 func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
-	k.paramSpace.GetParamSet(ctx, &params)
-	return params
+	_ = "STUB: not implemented"
+	return *new(types.Params)
 }
 
 // SetParams sets the total set of minting parameters.
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramSpace.SetParamSet(ctx, &params)
-}
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) { _ = "STUB: not implemented"; return }
 
 // StakingTokenSupply implements an alias call to the underlying staking keeper's
 func (k Keeper) StakingTokenSupply(ctx sdk.Context) sdk.Int {
-	return k.stakingKeeper.StakingTokenSupply(ctx)
+	_ = "STUB: not implemented"
+	return *new(sdk.Int)
 }
 
 // BondedRatio implements an alias call to the underlying staking keeper's
 func (k Keeper) BondedRatio(ctx sdk.Context) sdk.Dec {
-	return k.stakingKeeper.BondedRatio(ctx)
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
 }
 
 // MintCoins implements an alias call to the underlying supply keeper's
 // MintCoins to be used in BeginBlocker.
 func (k Keeper) MintCoins(ctx sdk.Context, newCoins sdk.Coins) error {
-	if newCoins.Empty() {
-		// skip as no coins need to be minted
-		return nil
-	}
+	_ = "STUB: not implemented"
+	return nil
 
-	return k.bankKeeper.MintCoins(ctx, types.ModuleName, newCoins)
+	// skip as no coins need to be minted
 }
 
 // AddCollectedFees implements an alias call to the underlying supply keeper's
 // AddCollectedFees to be used in BeginBlocker.
 func (k Keeper) AddCollectedFees(ctx sdk.Context, fees sdk.Coins) error {
-	return k.bankKeeper.SendCoinsFromModuleToModule(ctx, types.ModuleName, k.feeCollectorName, fees)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetProportions gets the balance of the `MintedDenom` from minted coins and returns coins according to the `AllocationRatio`.
@@ -119,59 +86,35 @@ func (k Keeper) GetOrUpdateLatestMinter(
 	ctx sdk.Context,
 	epoch epochTypes.Epoch,
 ) types.Minter {
-	params := k.GetParams(ctx)
-	currentReleaseMinter := k.GetMinter(ctx)
-	nextScheduledRelease := GetNextScheduledTokenRelease(epoch, params.TokenReleaseSchedule, currentReleaseMinter)
-
-	// There's still an ongoing release (> 0 remaining amount or same start date) or there's no release scheduled
-	if currentReleaseMinter.OngoingRelease() || nextScheduledRelease.GetStartDate() == currentReleaseMinter.GetStartDate() || nextScheduledRelease == nil {
-		logger.Debug("Ongoing token release or no nextScheduledRelease", "minter", currentReleaseMinter)
-		return currentReleaseMinter
-	}
-
-	return types.NewMinter(
-		nextScheduledRelease.GetStartDate(),
-		nextScheduledRelease.GetEndDate(),
-		params.GetMintDenom(),
-		nextScheduledRelease.GetTokenReleaseAmount(),
-	)
+	_ = "STUB: not implemented"
+	return *new(types.Minter)
 }
+
+// There's still an ongoing release (> 0 remaining amount or same start date) or there's no release scheduled
 
 func (k Keeper) GetCdc() codec.BinaryCodec {
-	return k.cdc
+	_ = "STUB: not implemented"
+	return *new(codec.BinaryCodec)
 }
 
-func (k Keeper) GetStoreKey() sdk.StoreKey {
-	return k.storeKey
-}
+func (k Keeper) GetStoreKey() sdk.StoreKey { _ = "STUB: not implemented"; return *new(sdk.StoreKey) }
 
 func (k Keeper) GetParamSpace() paramtypes.Subspace {
-	return k.paramSpace
+	_ = "STUB: not implemented"
+	return *new(paramtypes.Subspace)
 }
 
-func (k *Keeper) SetParamSpace(subspace paramtypes.Subspace) {
-	k.paramSpace = subspace
-}
+func (k *Keeper) SetParamSpace(subspace paramtypes.Subspace) { _ = "STUB: not implemented"; return }
 
 func GetNextScheduledTokenRelease(
 	epoch epochTypes.Epoch,
 	tokenReleaseSchedule []types.ScheduledTokenRelease,
 	currentMinter types.Minter,
 ) *types.ScheduledTokenRelease {
-	for _, scheduledRelease := range tokenReleaseSchedule {
-		scheduledStartDate, err := time.Parse(types.TokenReleaseDateFormat, scheduledRelease.GetStartDate())
-		if err != nil {
-			// This should not happen as the scheduled release date is validated when the param is updated
-			panic(fmt.Errorf("invalid scheduled release date: %s", err))
-		}
-		scheduledStartDateTime := scheduledStartDate.UTC()
-
-		// If epoch is after the currentScheduled date and it's after the current release
-		if epoch.GetCurrentEpochStartTime().After(scheduledStartDateTime) {
-			if scheduledStartDateTime.After(currentMinter.GetEndDateTime()) || scheduledStartDateTime.Equal(currentMinter.GetEndDateTime()) {
-				return &scheduledRelease
-			}
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// This should not happen as the scheduled release date is validated when the param is updated
+
+// If epoch is after the currentScheduled date and it's after the current release

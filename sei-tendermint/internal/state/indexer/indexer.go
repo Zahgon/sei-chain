@@ -46,21 +46,17 @@ type Batch struct {
 }
 
 // NewBatch creates a new Batch.
-func NewBatch(n int64) *Batch {
-	return &Batch{Ops: make([]*abci.TxResultV2, n), Pending: n}
-}
+func NewBatch(n int64) *Batch { _ = "STUB: not implemented"; return nil }
 
 // Add or update an entry for the given result.Index.
-func (b *Batch) Add(result *abci.TxResultV2) error {
-	if b.Ops[result.Index] == nil {
-		b.Pending--
-		b.Ops[result.Index] = result
-	}
-	return nil
-}
+func (b *Batch) Add(result *abci.TxResultV2) error { _ = "STUB: not implemented"; return nil }
 
 // Size returns the total number of operations inside the batch.
-func (b *Batch) Size() int { return len(b.Ops) }
+func (b *Batch) Size() int {
+	_ = "STUB: not implemented"
 
-// ErrorEmptyHash indicates empty hash
+	// ErrorEmptyHash indicates empty hash
+	return 0
+}
+
 var ErrorEmptyHash = errors.New("transaction hash cannot be empty")

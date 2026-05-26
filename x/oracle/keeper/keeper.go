@@ -1,22 +1,13 @@
 package keeper
 
 import (
-	"fmt"
-	"math"
-	"sort"
 	"sync"
 
-	"go.opentelemetry.io/otel/attribute"
-	otelmetric "go.opentelemetry.io/otel/metric"
-
 	"github.com/sei-protocol/sei-chain/utils/datastructures"
-	"github.com/sei-protocol/sei-chain/utils/metrics"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	paramstypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/params/types"
-	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 
 	"github.com/sei-protocol/sei-chain/x/oracle/types"
 )
@@ -44,146 +35,78 @@ func NewKeeper(cdc codec.BinaryCodec, storeKey sdk.StoreKey, memKey sdk.StoreKey
 	bankKeeper types.BankKeeper, distrKeeper types.DistributionKeeper,
 	stakingKeeper types.StakingKeeper, distrName string,
 ) Keeper {
+	_ = "STUB: not implemented"
 	// ensure oracle module account is set
-	if addr := accountKeeper.GetModuleAddress(types.ModuleName); addr == nil {
-		panic(fmt.Sprintf("%s module account has not been set", types.ModuleName))
-	}
-
-	// set KeyTable if it has not already been set
-	if !paramspace.HasKeyTable() {
-		paramspace = paramspace.WithKeyTable(types.ParamKeyTable())
-	}
-
-	return Keeper{
-		cdc:                         cdc,
-		storeKey:                    storeKey,
-		memKey:                      memKey,
-		paramSpace:                  paramspace,
-		accountKeeper:               accountKeeper,
-		bankKeeper:                  bankKeeper,
-		distrKeeper:                 distrKeeper,
-		StakingKeeper:               stakingKeeper,
-		distrName:                   distrName,
-		spamPreventionCounterMtxMap: datastructures.NewTypedSyncMap[string, *sync.Mutex](),
-	}
+	return *new(Keeper)
 }
+
+// set KeyTable if it has not already been set
 
 //-----------------------------------
 // ExchangeRate logic
 
 func (k Keeper) GetBaseExchangeRate(ctx sdk.Context, denom string) (sdk.Dec, sdk.Int, int64, error) {
-	store := ctx.KVStore(k.storeKey)
-	b := store.Get(types.GetExchangeRateKey(denom))
-	if b == nil {
-		return sdk.ZeroDec(), sdk.ZeroInt(), 0, sdkerrors.Wrap(types.ErrUnknownDenom, denom)
-	}
-
-	exchangeRate := types.OracleExchangeRate{}
-	k.cdc.MustUnmarshal(b, &exchangeRate)
-	return exchangeRate.ExchangeRate, exchangeRate.LastUpdate, exchangeRate.LastUpdateTimestamp, nil
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec), *new(sdk.Int), 0, nil
 }
 
 func (k Keeper) SetBaseExchangeRate(ctx sdk.Context, denom string, exchangeRate sdk.Dec) {
-	store := ctx.KVStore(k.storeKey)
-	currHeight := sdk.NewInt(ctx.BlockHeight())
-	blockTimestamp := ctx.BlockTime().UnixMilli()
-	rate := types.OracleExchangeRate{ExchangeRate: exchangeRate, LastUpdate: currHeight, LastUpdateTimestamp: blockTimestamp}
-	bz := k.cdc.MustMarshal(&rate)
-	store.Set(types.GetExchangeRateKey(denom), bz)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) SetBaseExchangeRateWithEvent(ctx sdk.Context, denom string, exchangeRate sdk.Dec) {
-	k.SetBaseExchangeRate(ctx, denom, exchangeRate)
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(types.EventTypeExchangeRateUpdate,
-			sdk.NewAttribute(types.AttributeKeyDenom, denom),
-			sdk.NewAttribute(types.AttributeKeyExchangeRate, exchangeRate.String()),
-		),
-	)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) DeleteBaseExchangeRate(ctx sdk.Context, denom string) {
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.GetExchangeRateKey(denom))
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) IterateBaseExchangeRates(ctx sdk.Context, handler func(denom string, exchangeRate types.OracleExchangeRate) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iter := sdk.KVStorePrefixIterator(store, types.ExchangeRateKey)
-	defer func() { _ = iter.Close() }()
-	for ; iter.Valid(); iter.Next() {
-		denom := string(iter.Key()[len(types.ExchangeRateKey):])
-		rate := types.OracleExchangeRate{}
-		k.cdc.MustUnmarshal(iter.Value(), &rate)
-		if handler(denom, rate) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) RemoveExcessFeeds(ctx sdk.Context) {
+	_ = "STUB: not implemented"
 	// get actives
-	excessActives := make(map[string]struct{})
-	k.IterateBaseExchangeRates(ctx, func(denom string, rate types.OracleExchangeRate) (stop bool) {
-		excessActives[denom] = struct{}{}
-		return false
-	})
-	// get vote targets
-	k.IterateVoteTargets(ctx, func(denom string, denomInfo types.Denom) (stop bool) {
-		// remove vote targets from actives
-		delete(excessActives, denom)
-		return false
-	})
-	// compare
-	activesToClear := make([]string, len(excessActives))
-	i := 0
-	for denom := range excessActives {
-		activesToClear[i] = denom
-		i++
-	}
-	sort.Strings(activesToClear)
-	for _, denom := range activesToClear {
-		// clear exchange rates
-		k.DeleteBaseExchangeRate(ctx, denom)
-	}
+	return
 }
+
+// get vote targets
+
+// remove vote targets from actives
+
+// compare
+
+// clear exchange rates
 
 //-----------------------------------
 // Oracle delegation logic
 
 // GetFeederDelegation gets the account address that the validator operator delegated oracle vote rights to
 func (k Keeper) GetFeederDelegation(ctx sdk.Context, operator sdk.ValAddress) sdk.AccAddress {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.GetFeederDelegationKey(operator))
-	if bz == nil {
-		// By default the right is delegated to the validator itself
-		return sdk.AccAddress(operator)
-	}
-
-	return sdk.AccAddress(bz)
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress)
 }
+
+// By default the right is delegated to the validator itself
 
 // SetFeederDelegation sets the account address that the validator operator delegated oracle vote rights to
 func (k Keeper) SetFeederDelegation(ctx sdk.Context, operator sdk.ValAddress, delegatedFeeder sdk.AccAddress) {
-	store := ctx.KVStore(k.storeKey)
-	store.Set(types.GetFeederDelegationKey(operator), delegatedFeeder.Bytes())
+	_ = "STUB: not implemented"
+	return
 }
 
 // IterateFeederDelegations iterates over the feed delegates and performs a callback function.
 func (k Keeper) IterateFeederDelegations(ctx sdk.Context,
 	handler func(delegator sdk.ValAddress, delegate sdk.AccAddress) (stop bool),
 ) {
-	store := ctx.KVStore(k.storeKey)
-	iter := sdk.KVStorePrefixIterator(store, types.FeederDelegationKey)
-	defer func() { _ = iter.Close() }()
-	for ; iter.Valid(); iter.Next() {
-		delegator := sdk.ValAddress(iter.Key()[2:])
-		delegate := sdk.AccAddress(iter.Value())
-
-		if handler(delegator, delegate) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 //-----------------------------------
@@ -191,100 +114,67 @@ func (k Keeper) IterateFeederDelegations(ctx sdk.Context,
 
 // GetVotePenaltyCounter retrieves the # of vote periods missed and abstained in this oracle slash window
 func (k Keeper) GetVotePenaltyCounter(ctx sdk.Context, operator sdk.ValAddress) types.VotePenaltyCounter {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.GetVotePenaltyCounterKey(operator))
-	if bz == nil {
-		// By default the empty counter has values of 0
-		return types.VotePenaltyCounter{}
-	}
-
-	var votePenaltyCounter types.VotePenaltyCounter
-	k.cdc.MustUnmarshal(bz, &votePenaltyCounter)
-	return votePenaltyCounter
+	_ = "STUB: not implemented"
+	return *new(types.VotePenaltyCounter)
 }
+
+// By default the empty counter has values of 0
 
 // SetVotePenaltyCounter updates the # of vote periods missed in this oracle slash window
 func (k Keeper) SetVotePenaltyCounter(ctx sdk.Context, operator sdk.ValAddress, missCount, abstainCount, successCount uint64) {
-	defer func() {
-		valLabel := attribute.String("validator", operator.String())
-		oracleKeeperMetrics.votePenaltyCount.Record(ctx.Context(), int64(missCount), otelmetric.WithAttributes(valLabel, missTypeAttribute))       //nolint:gosec
-		oracleKeeperMetrics.votePenaltyCount.Record(ctx.Context(), int64(abstainCount), otelmetric.WithAttributes(valLabel, abstainTypeAttribute)) //nolint:gosec
-		oracleKeeperMetrics.votePenaltyCount.Record(ctx.Context(), int64(successCount), otelmetric.WithAttributes(valLabel, successTypeAttribute)) //nolint:gosec
-		// TODO(PLT-336): remove once oracle_vote_penalty_count verified
-		metrics.SetOracleVotePenaltyCount(missCount, operator.String(), "miss")
-		metrics.SetOracleVotePenaltyCount(abstainCount, operator.String(), "abstain")
-		metrics.SetOracleVotePenaltyCount(successCount, operator.String(), "success")
-	}()
-
-	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&types.VotePenaltyCounter{MissCount: missCount, AbstainCount: abstainCount, SuccessCount: successCount})
-	store.Set(types.GetVotePenaltyCounterKey(operator), bz)
+	_ = "STUB: not implemented"
+	return
 }
 
+//nolint:gosec
+//nolint:gosec
+//nolint:gosec
+// TODO(PLT-336): remove once oracle_vote_penalty_count verified
+
 func (k Keeper) IncrementMissCount(ctx sdk.Context, operator sdk.ValAddress) {
-	votePenaltyCounter := k.GetVotePenaltyCounter(ctx, operator)
-	k.SetVotePenaltyCounter(ctx, operator, votePenaltyCounter.MissCount+1, votePenaltyCounter.AbstainCount, votePenaltyCounter.SuccessCount)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) IncrementAbstainCount(ctx sdk.Context, operator sdk.ValAddress) {
-	votePenaltyCounter := k.GetVotePenaltyCounter(ctx, operator)
-	k.SetVotePenaltyCounter(ctx, operator, votePenaltyCounter.MissCount, votePenaltyCounter.AbstainCount+1, votePenaltyCounter.SuccessCount)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) IncrementSuccessCount(ctx sdk.Context, operator sdk.ValAddress) {
-	votePenaltyCounter := k.GetVotePenaltyCounter(ctx, operator)
-	k.SetVotePenaltyCounter(ctx, operator, votePenaltyCounter.MissCount, votePenaltyCounter.AbstainCount, votePenaltyCounter.SuccessCount+1)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) GetMissCount(ctx sdk.Context, operator sdk.ValAddress) uint64 {
-	votePenaltyCounter := k.GetVotePenaltyCounter(ctx, operator)
-	return votePenaltyCounter.MissCount
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func (k Keeper) GetAbstainCount(ctx sdk.Context, operator sdk.ValAddress) uint64 {
-	votePenaltyCounter := k.GetVotePenaltyCounter(ctx, operator)
-	return votePenaltyCounter.AbstainCount
+	_ = "STUB: not implemented"
+	return 0
 }
 
 func (k Keeper) GetSuccessCount(ctx sdk.Context, operator sdk.ValAddress) uint64 {
-	votePenaltyCounter := k.GetVotePenaltyCounter(ctx, operator)
-	return votePenaltyCounter.SuccessCount
+	_ = "STUB: not implemented"
+	return 0
 }
 
 // DeleteVotePenaltyCounter removes miss counter for the validator
 func (k Keeper) DeleteVotePenaltyCounter(ctx sdk.Context, operator sdk.ValAddress) {
-	defer func() {
-		valLabel := attribute.String("validator", operator.String())
-		oracleKeeperMetrics.votePenaltyCount.Record(ctx.Context(), 0, otelmetric.WithAttributes(valLabel, missTypeAttribute))
-		oracleKeeperMetrics.votePenaltyCount.Record(ctx.Context(), 0, otelmetric.WithAttributes(valLabel, abstainTypeAttribute))
-		oracleKeeperMetrics.votePenaltyCount.Record(ctx.Context(), 0, otelmetric.WithAttributes(valLabel, successTypeAttribute))
-		// TODO(PLT-336): remove once oracle_vote_penalty_count verified
-		metrics.SetOracleVotePenaltyCount(0, operator.String(), "miss")
-		metrics.SetOracleVotePenaltyCount(0, operator.String(), "abstain")
-		metrics.SetOracleVotePenaltyCount(0, operator.String(), "success")
-	}()
-
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.GetVotePenaltyCounterKey(operator))
+	_ = "STUB: not implemented"
+	return
 }
+
+// TODO(PLT-336): remove once oracle_vote_penalty_count verified
 
 // IterateVotePenaltyCounters iterates over the miss counters and performs a callback function.
 func (k Keeper) IterateVotePenaltyCounters(ctx sdk.Context,
 	handler func(operator sdk.ValAddress, votePenaltyCounter types.VotePenaltyCounter) (stop bool),
 ) {
-	store := ctx.KVStore(k.storeKey)
-	iter := sdk.KVStorePrefixIterator(store, types.VotePenaltyCounterKey)
-	defer func() { _ = iter.Close() }()
-	for ; iter.Valid(); iter.Next() {
-		operator := sdk.ValAddress(iter.Key()[2:])
-
-		var votePenaltyCounter types.VotePenaltyCounter
-		k.cdc.MustUnmarshal(iter.Value(), &votePenaltyCounter)
-
-		if handler(operator, votePenaltyCounter) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 //-----------------------------------
@@ -292,339 +182,161 @@ func (k Keeper) IterateVotePenaltyCounters(ctx sdk.Context,
 
 // GetAggregateExchangeRateVote retrieves an oracle vote from the store
 func (k Keeper) GetAggregateExchangeRateVote(ctx sdk.Context, voter sdk.ValAddress) (aggregateVote types.AggregateExchangeRateVote, err error) {
-	store := ctx.KVStore(k.storeKey)
-	b := store.Get(types.GetAggregateExchangeRateVoteKey(voter))
-	if b == nil {
-		err = sdkerrors.Wrap(types.ErrNoAggregateVote, voter.String())
-		return
-	}
-	k.cdc.MustUnmarshal(b, &aggregateVote)
-	return
+	_ = "STUB: not implemented"
+	return *new(types.AggregateExchangeRateVote), nil
 }
 
 // SetAggregateExchangeRateVote adds an oracle aggregate vote to the store
 func (k Keeper) SetAggregateExchangeRateVote(ctx sdk.Context, voter sdk.ValAddress, vote types.AggregateExchangeRateVote) {
-	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&vote)
-	store.Set(types.GetAggregateExchangeRateVoteKey(voter), bz)
+	_ = "STUB: not implemented"
+	return
 }
 
 // DeleteAggregateExchangeRateVote deletes an oracle vote from the store
 func (k Keeper) DeleteAggregateExchangeRateVote(ctx sdk.Context, voter sdk.ValAddress) {
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.GetAggregateExchangeRateVoteKey(voter))
+	_ = "STUB: not implemented"
+	return
 }
 
 // IterateAggregateExchangeRateVotes iterates rate over votes in the store
 func (k Keeper) IterateAggregateExchangeRateVotes(ctx sdk.Context, handler func(voterAddr sdk.ValAddress, aggregateVote types.AggregateExchangeRateVote) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iter := sdk.KVStorePrefixIterator(store, types.AggregateExchangeRateVoteKey)
-	defer func() { _ = iter.Close() }()
-	for ; iter.Valid(); iter.Next() {
-		voterAddr := sdk.ValAddress(iter.Key()[2:])
-
-		var aggregateVote types.AggregateExchangeRateVote
-		k.cdc.MustUnmarshal(iter.Value(), &aggregateVote)
-		if handler(voterAddr, aggregateVote) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) GetVoteTarget(ctx sdk.Context, denom string) (types.Denom, error) {
-	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.GetVoteTargetKey(denom))
-	if bz == nil {
-		err := sdkerrors.Wrap(types.ErrNoVoteTarget, denom)
-		return types.Denom{}, err
-	}
-
-	voteTarget := types.Denom{}
-	k.cdc.MustUnmarshal(bz, &voteTarget)
-
-	return voteTarget, nil
+	_ = "STUB: not implemented"
+	return *new(types.Denom), nil
 }
 
-func (k Keeper) SetVoteTarget(ctx sdk.Context, denom string) {
-	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&types.Denom{Name: denom})
-	store.Set(types.GetVoteTargetKey(denom), bz)
-}
+func (k Keeper) SetVoteTarget(ctx sdk.Context, denom string) { _ = "STUB: not implemented"; return }
 
 func (k Keeper) IterateVoteTargets(ctx sdk.Context, handler func(denom string, denomInfo types.Denom) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iter := sdk.KVStorePrefixIterator(store, types.VoteTargetKey)
-	defer func() { _ = iter.Close() }()
-	for ; iter.Valid(); iter.Next() {
-		denom := types.ExtractDenomFromVoteTargetKey(iter.Key())
-
-		var denomInfo types.Denom
-		k.cdc.MustUnmarshal(iter.Value(), &denomInfo)
-		if handler(denom, denomInfo) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (k Keeper) ClearVoteTargets(ctx sdk.Context) {
-	store := ctx.KVStore(k.storeKey)
-	for _, key := range k.getAllKeysForPrefix(store, types.VoteTargetKey) {
-		store.Delete(key)
-	}
-}
+func (k Keeper) ClearVoteTargets(ctx sdk.Context) { _ = "STUB: not implemented"; return }
 
 func (k Keeper) getAllKeysForPrefix(store sdk.KVStore, prefix []byte) [][]byte {
-	keys := [][]byte{}
-	iter := sdk.KVStorePrefixIterator(store, prefix)
-	defer func() { _ = iter.Close() }()
-	for ; iter.Valid(); iter.Next() {
-		keys = append(keys, iter.Key())
-	}
-	return keys
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateFeeder return the given feeder is allowed to feed the message or not
 func (k Keeper) ValidateFeeder(ctx sdk.Context, feederAddr sdk.AccAddress, validatorAddr sdk.ValAddress) error {
-	if !feederAddr.Equals(validatorAddr) {
-		delegate := k.GetFeederDelegation(ctx, validatorAddr)
-		if !delegate.Equals(feederAddr) {
-			return sdkerrors.Wrap(types.ErrNoVotingPermission, feederAddr.String())
-		}
-	}
-
-	// Check that the given validator exists
-	if val := k.StakingKeeper.Validator(ctx, validatorAddr); val == nil || !val.IsBonded() {
-		return sdkerrors.Wrapf(stakingtypes.ErrNoValidatorFound, "validator %s is not active set", validatorAddr.String())
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (k Keeper) GetPriceSnapshot(ctx sdk.Context, timestamp int64) types.PriceSnapshot {
-	store := ctx.KVStore(k.storeKey)
-	snapshotBytes := store.Get(types.GetPriceSnapshotKey(uint64(timestamp))) //nolint:gosec
-	if snapshotBytes == nil {
-		return types.PriceSnapshot{}
-	}
+// Check that the given validator exists
 
-	priceSnapshot := types.PriceSnapshot{}
-	k.cdc.MustUnmarshal(snapshotBytes, &priceSnapshot)
-	return priceSnapshot
+func (k Keeper) GetPriceSnapshot(ctx sdk.Context, timestamp int64) types.PriceSnapshot {
+	_ = "STUB: not implemented"
+	return *new(types.PriceSnapshot)
 }
+
+//nolint:gosec
 
 func (k Keeper) SetPriceSnapshot(ctx sdk.Context, snapshot types.PriceSnapshot) {
+	_ = "STUB: not implemented"
 	// shouldn't be used directly, use "add" instead for individual price snapshots
-	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshal(&snapshot)
-	store.Set(types.GetPriceSnapshotKey(uint64(snapshot.SnapshotTimestamp)), bz) //nolint:gosec
+	return
 }
+
+//nolint:gosec
 
 func (k Keeper) AddPriceSnapshot(ctx sdk.Context, snapshot types.PriceSnapshot) {
-	params := k.GetParams(ctx)
-
-	// Sanity check to make sure LookbackDuration can be converted to int64
-	// Lookback duration should never get this large
-	if params.LookbackDuration > uint64(math.MaxInt64) {
-		panic(fmt.Sprintf("Lookback duration %d exceeds int64 bounds", params.LookbackDuration))
-	}
-	lookbackDuration := int64(params.LookbackDuration)
-
-	// Check
-	k.SetPriceSnapshot(ctx, snapshot)
-
-	var lastOutOfRangeSnapshotTimestamp int64 = -1
-	timestampsToDelete := []int64{}
-	// we need to evict old snapshots (except for one that is out of range)
-	k.IteratePriceSnapshots(ctx, func(snapshot types.PriceSnapshot) (stop bool) {
-		if snapshot.SnapshotTimestamp+lookbackDuration >= ctx.BlockTime().Unix() {
-			return true
-		}
-		// delete the previous out of range snapshot
-		if lastOutOfRangeSnapshotTimestamp >= 0 {
-			timestampsToDelete = append(timestampsToDelete, lastOutOfRangeSnapshotTimestamp)
-		}
-		// update last out of range snapshot
-		lastOutOfRangeSnapshotTimestamp = snapshot.SnapshotTimestamp
-		return false
-	})
-	for _, ts := range timestampsToDelete {
-		k.DeletePriceSnapshot(ctx, ts)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (k Keeper) IteratePriceSnapshots(ctx sdk.Context, handler func(snapshot types.PriceSnapshot) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := sdk.KVStorePrefixIterator(store, types.PriceSnapshotKey)
-	defer func() { _ = iterator.Close() }()
+// Sanity check to make sure LookbackDuration can be converted to int64
+// Lookback duration should never get this large
 
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.PriceSnapshot
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		if handler(val) {
-			break
-		}
-	}
+// Check
+
+// we need to evict old snapshots (except for one that is out of range)
+
+// delete the previous out of range snapshot
+
+// update last out of range snapshot
+
+func (k Keeper) IteratePriceSnapshots(ctx sdk.Context, handler func(snapshot types.PriceSnapshot) (stop bool)) {
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) IteratePriceSnapshotsReverse(ctx sdk.Context, keyPrefix []byte, handler func(snapshot types.PriceSnapshot) (stop bool)) {
-	store := ctx.KVStore(k.storeKey)
-	iterator := sdk.KVStoreReversePrefixIterator(store, keyPrefix)
-	defer func() { _ = iterator.Close() }()
-
-	for ; iterator.Valid(); iterator.Next() {
-		var val types.PriceSnapshot
-		k.cdc.MustUnmarshal(iterator.Value(), &val)
-		if handler(val) {
-			break
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 func (k Keeper) DeletePriceSnapshot(ctx sdk.Context, timestamp int64) {
-	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.GetPriceSnapshotKey(uint64(timestamp))) //nolint:gosec
+	_ = "STUB: not implemented"
+	return
 }
+
+//nolint:gosec
 
 func (k Keeper) CalculateTwaps(ctx sdk.Context, lookbackSeconds uint64) (types.OracleTwaps, error) {
-	oracleTwaps := types.OracleTwaps{}
-	currentTime := ctx.BlockTime().Unix()
-	err := k.ValidateLookbackSeconds(ctx, lookbackSeconds)
-	if err != nil {
-		return oracleTwaps, err
-	}
-	var timeTraversed int64
-	denomToTimeWeightedMap := make(map[string]sdk.Dec)
-	denomDurationMap := make(map[string]int64)
-
-	// get targets - only calculate for the targets
-	targetsMap := make(map[string]struct{})
-	k.IterateVoteTargets(ctx, func(denom string, denomInfo types.Denom) (stop bool) {
-		targetsMap[denom] = struct{}{}
-		return false
-	})
-
-	keyPrefix := types.GetPriceSnapshotKeyForIteration(uint64(currentTime), uint64(currentTime)-lookbackSeconds-1) //nolint:gosec
-	k.IteratePriceSnapshotsReverse(ctx, keyPrefix, func(snapshot types.PriceSnapshot) (stop bool) {
-		stop = false
-		snapshotTimestamp := snapshot.SnapshotTimestamp
-		loopback := int64(lookbackSeconds) //nolint:gosec
-		if currentTime-loopback > snapshotTimestamp {
-			snapshotTimestamp = currentTime - loopback
-			stop = true
-		}
-		// update time traversed to represent current snapshot
-		// replace SnapshotTimestamp with lookback duration bounding
-		timeTraversed = currentTime - snapshotTimestamp
-
-		// iterate through denoms in the snapshot
-		// if we find a new one, we have to setup the TWAP calc for that one
-		snapshotPriceItems := snapshot.PriceSnapshotItems
-		for _, priceItem := range snapshotPriceItems {
-			denom := priceItem.Denom
-			if _, ok := targetsMap[denom]; !ok {
-				continue
-			}
-
-			_, exists := denomToTimeWeightedMap[denom]
-			if !exists {
-				// set up the TWAP info for a denom
-				denomToTimeWeightedMap[denom] = sdk.ZeroDec()
-				denomDurationMap[denom] = 0
-			}
-			// get the denom specific TWAP data
-			denomTimeWeightedSum := denomToTimeWeightedMap[denom]
-			denomDuration := denomDurationMap[denom]
-
-			// calculate the new Time Weighted Sum for the denom exchange rate
-			// we calculate a weighted sum of exchange rates previously by multiplying each exchange rate by time interval that it was active
-			// then we divide by the overall time in the lookback window, which gives us the time weighted average
-			durationDifference := timeTraversed - denomDuration
-			exchangeRate := priceItem.OracleExchangeRate.ExchangeRate
-			denomTimeWeightedSum = denomTimeWeightedSum.Add(exchangeRate.MulInt64(durationDifference))
-
-			// set the denom TWAP data
-			denomToTimeWeightedMap[denom] = denomTimeWeightedSum
-			denomDurationMap[denom] = timeTraversed
-		}
-		return stop
-	})
-
-	denomKeys := make([]string, 0, len(denomToTimeWeightedMap))
-	for k := range denomToTimeWeightedMap {
-		denomKeys = append(denomKeys, k)
-	}
-	sort.Strings(denomKeys)
-
-	// iterate over all denoms with TWAP data
-	for _, denomKey := range denomKeys {
-		// divide the denom time weighed sum by denom duration
-		denomTimeWeightedSum := denomToTimeWeightedMap[denomKey]
-		denomDuration := denomDurationMap[denomKey]
-		var denomTwap sdk.Dec
-		if denomDuration == 0 {
-			denomTwap = sdk.ZeroDec()
-		} else {
-			denomTwap = denomTimeWeightedSum.QuoInt64(denomDuration)
-		}
-
-		denomOracleTwap := types.OracleTwap{
-			Denom:           denomKey,
-			Twap:            denomTwap,
-			LookbackSeconds: denomDuration,
-		}
-		oracleTwaps = append(oracleTwaps, denomOracleTwap)
-	}
-
-	if len(oracleTwaps) == 0 {
-		return oracleTwaps, types.ErrNoTwapData
-	}
-
-	return oracleTwaps, nil
+	_ = "STUB: not implemented"
+	return *new(types.OracleTwaps), nil
 }
 
-func (k Keeper) ValidateLookbackSeconds(ctx sdk.Context, lookbackSeconds uint64) error {
-	lookbackDuration := k.LookbackDuration(ctx)
-	if lookbackSeconds > lookbackDuration || lookbackSeconds == 0 {
-		return types.ErrInvalidTwapLookback
-	}
+// get targets - only calculate for the targets
 
+//nolint:gosec
+
+//nolint:gosec
+
+// update time traversed to represent current snapshot
+// replace SnapshotTimestamp with lookback duration bounding
+
+// iterate through denoms in the snapshot
+// if we find a new one, we have to setup the TWAP calc for that one
+
+// set up the TWAP info for a denom
+
+// get the denom specific TWAP data
+
+// calculate the new Time Weighted Sum for the denom exchange rate
+// we calculate a weighted sum of exchange rates previously by multiplying each exchange rate by time interval that it was active
+// then we divide by the overall time in the lookback window, which gives us the time weighted average
+
+// set the denom TWAP data
+
+// iterate over all denoms with TWAP data
+
+// divide the denom time weighed sum by denom duration
+
+func (k Keeper) ValidateLookbackSeconds(ctx sdk.Context, lookbackSeconds uint64) error {
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (k Keeper) CheckAndSetSpamPreventionCounter(ctx sdk.Context, validatorAddr sdk.ValAddress) error {
-	mtx, _ := k.spamPreventionCounterMtxMap.LoadOrStore(validatorAddr.String(), &sync.Mutex{})
-	mtx.Lock()
-	defer mtx.Unlock()
-	if k.getSpamPreventionCounter(ctx, validatorAddr) == ctx.BlockHeight() {
-		return sdkerrors.Wrap(sdkerrors.ErrAlreadyExists, fmt.Sprintf("the validator has already submitted a vote at the current height=%d", ctx.BlockHeight()))
-	}
-	k.setSpamPreventionCounter(ctx, validatorAddr)
+	_ = "STUB: not implemented"
 	return nil
 }
 
 func (k Keeper) getSpamPreventionCounter(ctx sdk.Context, validatorAddr sdk.ValAddress) int64 {
-	store := ctx.KVStore(k.memKey)
-	bz := store.Get(types.GetSpamPreventionCounterKey(validatorAddr))
-	if bz == nil {
-		return -1
-	}
-
-	return int64(sdk.BigEndianToUint64(bz)) //nolint:gosec
+	_ = "STUB: not implemented"
+	return 0
 }
+
+//nolint:gosec
 
 func (k Keeper) setSpamPreventionCounter(ctx sdk.Context, validatorAddr sdk.ValAddress) {
-	store := ctx.KVStore(k.memKey)
-
-	height := ctx.BlockHeight()
-	bz := sdk.Uint64ToBigEndian(uint64(height)) // nolint:gosec
-
-	store.Set(types.GetSpamPreventionCounterKey(validatorAddr), bz)
+	_ = "STUB: not implemented"
+	return
 }
 
-func (k Keeper) GetStoreKey() sdk.StoreKey {
-	return k.storeKey
-}
+// nolint:gosec
+
+func (k Keeper) GetStoreKey() sdk.StoreKey { _ = "STUB: not implemented"; return *new(sdk.StoreKey) }
 
 func (k Keeper) GetCdc() codec.BinaryCodec {
-	return k.cdc
+	_ = "STUB: not implemented"
+	return *new(codec.BinaryCodec)
 }

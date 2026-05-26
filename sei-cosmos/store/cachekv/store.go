@@ -1,13 +1,9 @@
 package cachekv
 
 import (
-	"bytes"
 	"io"
-	"sort"
 	"sync"
 
-	"github.com/sei-protocol/sei-chain/sei-cosmos/internal/conv"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/store/tracekv"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
 	dbm "github.com/tendermint/tm-db"
@@ -29,108 +25,59 @@ var _ types.CacheKVStore = (*Store)(nil)
 
 // NewStore creates a new Store object
 func NewStore(parent types.KVStore, storeKey types.StoreKey, cacheSize int) *Store {
-	return &Store{
-		cache:         &sync.Map{},
-		deleted:       &sync.Map{},
-		unsortedCache: &sync.Map{},
-		sortedCache:   nil,
-		parent:        parent,
-		storeKey:      storeKey,
-		cacheSize:     cacheSize,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (store *Store) GetWorkingHash() ([]byte, error) {
-	panic("should never attempt to get working hash from cache kv store")
-}
+func (store *Store) GetWorkingHash() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // GetStoreType implements Store.
 func (store *Store) GetStoreType() types.StoreType {
-	return store.parent.GetStoreType()
+	_ = "STUB: not implemented"
+	return *new(types.StoreType)
 }
 
 // getFromCache queries the write-through cache for a value by key.
-func (store *Store) getFromCache(key []byte) []byte {
-	if cv, ok := store.cache.Load(conv.UnsafeBytesToStr(key)); ok {
-		return cv.(*types.CValue).Value()
-	}
-	return store.parent.Get(key)
-}
+func (store *Store) getFromCache(key []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 // Get implements types.KVStore.
-func (store *Store) Get(key []byte) (value []byte) {
-	types.AssertValidKey(key)
-	return store.getFromCache(key)
-}
+func (store *Store) Get(key []byte) (value []byte) { _ = "STUB: not implemented"; return nil }
 
 // Set implements types.KVStore.
-func (store *Store) Set(key []byte, value []byte) {
-	types.AssertValidKey(key)
-	types.AssertValidValue(value)
-	store.setCacheValue(key, value, false, true)
-}
+func (store *Store) Set(key []byte, value []byte) { _ = "STUB: not implemented"; return }
 
 // Has implements types.KVStore.
-func (store *Store) Has(key []byte) bool {
-	value := store.Get(key)
-	return value != nil
-}
+func (store *Store) Has(key []byte) bool { _ = "STUB: not implemented"; return false }
 
 // Delete implements types.KVStore.
-func (store *Store) Delete(key []byte) {
-	types.AssertValidKey(key)
-	store.setCacheValue(key, nil, true, true)
-}
+func (store *Store) Delete(key []byte) { _ = "STUB: not implemented"; return }
 
 // Implements Cachetypes.KVStore.
-func (store *Store) Write() {
-	store.mtx.Lock()
-	defer store.mtx.Unlock()
+func (store *Store) Write() { _ = "STUB: not implemented"; return }
 
-	// We need a copy of all of the keys.
-	// Not the best, but probably not a bottleneck depending.
-	keys := []string{}
+// We need a copy of all of the keys.
+// Not the best, but probably not a bottleneck depending.
 
-	store.cache.Range(func(key, value any) bool {
-		if value.(*types.CValue).Dirty() {
-			keys = append(keys, key.(string))
-		}
-		return true
-	})
-	sort.Strings(keys)
-	// TODO: Consider allowing usage of Batch, which would allow the write to
-	// at least happen atomically.
-	for _, key := range keys {
-		if store.isDeleted(key) {
-			// We use []byte(key) instead of conv.UnsafeStrToBytes because we cannot
-			// be sure if the underlying store might do a save with the byteslice or
-			// not. Once we get confirmation that .Delete is guaranteed not to
-			// save the byteslice, then we can assume only a read-only copy is sufficient.
-			store.parent.Delete([]byte(key))
-			continue
-		}
+// TODO: Consider allowing usage of Batch, which would allow the write to
+// at least happen atomically.
 
-		cacheValue, ok := store.cache.Load(key)
-		if ok && cacheValue.(*types.CValue).Value() != nil {
-			// It already exists in the parent, hence delete it.
-			store.parent.Set([]byte(key), cacheValue.(*types.CValue).Value())
-		}
-	}
+// We use []byte(key) instead of conv.UnsafeStrToBytes because we cannot
+// be sure if the underlying store might do a save with the byteslice or
+// not. Once we get confirmation that .Delete is guaranteed not to
+// save the byteslice, then we can assume only a read-only copy is sufficient.
 
-	store.cache = &sync.Map{}
-	store.deleted = &sync.Map{}
-	store.unsortedCache = &sync.Map{}
-	store.sortedCache = nil
-}
+// It already exists in the parent, hence delete it.
 
 // CacheWrap implements CacheWrapper.
 func (store *Store) CacheWrap(storeKey types.StoreKey) types.CacheWrap {
-	return NewStore(store, storeKey, store.cacheSize)
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 // CacheWrapWithTrace implements the CacheWrapper interface.
 func (store *Store) CacheWrapWithTrace(storeKey types.StoreKey, w io.Writer, tc types.TraceContext) types.CacheWrap {
-	return NewStore(tracekv.NewStore(store, w, tc), storeKey, store.cacheSize)
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 //----------------------------------------
@@ -138,123 +85,52 @@ func (store *Store) CacheWrapWithTrace(storeKey types.StoreKey, w io.Writer, tc 
 
 // Iterator implements types.KVStore.
 func (store *Store) Iterator(start, end []byte) types.Iterator {
-	return store.iterator(start, end, true)
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // ReverseIterator implements types.KVStore.
 func (store *Store) ReverseIterator(start, end []byte) types.Iterator {
-	return store.iterator(start, end, false)
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
-func (store *Store) getOrInitSortedCache() *dbm.MemDB {
-	if store.sortedCache == nil {
-		store.sortedCache = dbm.NewMemDB()
-	}
-	return store.sortedCache
-}
+func (store *Store) getOrInitSortedCache() *dbm.MemDB { _ = "STUB: not implemented"; return nil }
 
 func (store *Store) iterator(start, end []byte, ascending bool) types.Iterator {
-	store.mtx.Lock()
-	defer store.mtx.Unlock()
-	// TODO: (occ) Note that for iterators, we'll need to have special handling (discussed in RFC) to ensure proper validation
-
-	var parent, cache types.Iterator
-
-	if ascending {
-		parent = store.parent.Iterator(start, end)
-	} else {
-		parent = store.parent.ReverseIterator(start, end)
-	}
-	defer func() {
-		if err := recover(); err != nil {
-			// close out parent iterator, then reraise panic
-			if parent != nil {
-				_ = parent.Close()
-			}
-			panic(err)
-		}
-	}()
-	store.dirtyItems(start, end)
-	cache = newMemIterator(start, end, store.getOrInitSortedCache(), store.deleted, ascending)
-	return NewCacheMergeIterator(parent, cache, ascending, store.storeKey)
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
-func (store *Store) VersionExists(version int64) bool {
-	return store.parent.VersionExists(version)
-}
+// TODO: (occ) Note that for iterators, we'll need to have special handling (discussed in RFC) to ensure proper validation
+
+// close out parent iterator, then reraise panic
+
+func (store *Store) VersionExists(version int64) bool { _ = "STUB: not implemented"; return false }
 
 func findStartIndex(strL []string, startQ string) int {
+	_ = "STUB: not implemented"
 	// Modified binary search to find the very first element in >=startQ.
-	if len(strL) == 0 {
-		return -1
-	}
-
-	var left, right, mid int
-	right = len(strL) - 1
-	for left <= right {
-		mid = (left + right) >> 1
-		midStr := strL[mid]
-		if midStr == startQ {
-			// Handle condition where there might be multiple values equal to startQ.
-			// We are looking for the very first value < midStL, that i+1 will be the first
-			// element >= midStr.
-			for i := mid - 1; i >= 0; i-- {
-				if strL[i] != midStr {
-					return i + 1
-				}
-			}
-			return 0
-		}
-		if midStr < startQ {
-			left = mid + 1
-		} else { // midStrL > startQ
-			right = mid - 1
-		}
-	}
-	if left >= 0 && left < len(strL) && strL[left] >= startQ {
-		return left
-	}
-	return -1
+	return 0
 }
 
-func findEndIndex(strL []string, endQ string) int {
-	if len(strL) == 0 {
-		return -1
-	}
+// Handle condition where there might be multiple values equal to startQ.
+// We are looking for the very first value < midStL, that i+1 will be the first
+// element >= midStr.
 
-	// Modified binary search to find the very first element <endQ.
-	var left, right, mid int
-	right = len(strL) - 1
-	for left <= right {
-		mid = (left + right) >> 1
-		midStr := strL[mid]
-		if midStr == endQ {
-			// Handle condition where there might be multiple values equal to startQ.
-			// We are looking for the very first value < midStL, that i+1 will be the first
-			// element >= midStr.
-			for i := mid - 1; i >= 0; i-- {
-				if strL[i] < midStr {
-					return i + 1
-				}
-			}
-			return 0
-		}
-		if midStr < endQ {
-			left = mid + 1
-		} else { // midStrL > startQ
-			right = mid - 1
-		}
-	}
+// midStrL > startQ
 
-	// Binary search failed, now let's find a value less than endQ.
-	for i := right; i >= 0; i-- {
-		if strL[i] < endQ {
-			return i
-		}
-	}
+func findEndIndex(strL []string, endQ string) int { _ = "STUB: not implemented"; return 0 }
 
-	return -1
-}
+// Modified binary search to find the very first element <endQ.
+
+// Handle condition where there might be multiple values equal to startQ.
+// We are looking for the very first value < midStL, that i+1 will be the first
+// element >= midStr.
+
+// midStrL > startQ
+
+// Binary search failed, now let's find a value less than endQ.
 
 type sortState int
 
@@ -264,64 +140,29 @@ const (
 )
 
 // Constructs a slice of dirty items, to use w/ memIterator.
-func (store *Store) dirtyItems(start, end []byte) {
-	startStr, endStr := conv.UnsafeBytesToStr(start), conv.UnsafeBytesToStr(end)
-	if end != nil && startStr > endStr {
-		// Nothing to do here.
-		return
-	}
+func (store *Store) dirtyItems(start, end []byte) { _ = "STUB: not implemented"; return }
 
-	unsorted := make([]*kv.Pair, 0)
-	// If the unsortedCache is too big, its costs too much to determine
-	// what's in the subset we are concerned about.
-	// If you are interleaving iterator calls with writes, this can easily become an
-	// O(N^2) overhead.
-	// Even without that, too many range checks eventually becomes more expensive
-	// than just not having the cache.
-	// store.emitUnsortedCacheSizeMetric()
-	store.unsortedCache.Range(func(key, value any) bool {
-		cKey := key.(string)
-		if dbm.IsKeyInDomain(conv.UnsafeStrToBytes(cKey), start, end) {
-			cacheValue, ok := store.cache.Load(key)
-			if ok {
-				unsorted = append(unsorted, &kv.Pair{Key: []byte(cKey), Value: cacheValue.(*types.CValue).Value()})
-			}
-		}
-		return true
-	})
-	store.clearUnsortedCacheSubset(unsorted, stateUnsorted)
-}
+// Nothing to do here.
+
+// If the unsortedCache is too big, its costs too much to determine
+// what's in the subset we are concerned about.
+// If you are interleaving iterator calls with writes, this can easily become an
+// O(N^2) overhead.
+// Even without that, too many range checks eventually becomes more expensive
+// than just not having the cache.
+// store.emitUnsortedCacheSizeMetric()
 
 func (store *Store) clearUnsortedCacheSubset(unsorted []*kv.Pair, sortState sortState) {
-	store.deleteKeysFromUnsortedCache(unsorted)
-
-	if sortState == stateUnsorted {
-		sort.Slice(unsorted, func(i, j int) bool {
-			return bytes.Compare(unsorted[i].Key, unsorted[j].Key) < 0
-		})
-	}
-
-	for _, item := range unsorted {
-		if item.Value == nil {
-			// deleted element, tracked by store.deleted
-			// setting arbitrary value
-			if err := store.getOrInitSortedCache().Set(item.Key, []byte{}); err != nil {
-				panic(err)
-			}
-
-			continue
-		}
-		if err := store.getOrInitSortedCache().Set(item.Key, item.Value); err != nil {
-			panic(err)
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
+// deleted element, tracked by store.deleted
+// setting arbitrary value
+
 func (store *Store) deleteKeysFromUnsortedCache(unsorted []*kv.Pair) {
-	for _, kv := range unsorted {
-		keyStr := conv.UnsafeBytesToStr(kv.Key)
-		store.unsortedCache.Delete(keyStr)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 //----------------------------------------
@@ -329,57 +170,22 @@ func (store *Store) deleteKeysFromUnsortedCache(unsorted []*kv.Pair) {
 
 // Only entrypoint to mutate store.cache.
 func (store *Store) setCacheValue(key, value []byte, deleted bool, dirty bool) {
-	types.AssertValidKey(key)
-
-	keyStr := conv.UnsafeBytesToStr(key)
-	store.cache.Store(keyStr, types.NewCValue(value, dirty))
-	if deleted {
-		store.deleted.Store(keyStr, struct{}{})
-	} else {
-		store.deleted.Delete(keyStr)
-	}
-	if dirty {
-		store.unsortedCache.Store(keyStr, struct{}{})
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
-func (store *Store) isDeleted(key string) bool {
-	_, ok := store.deleted.Load(key)
-	return ok
-}
+func (store *Store) isDeleted(key string) bool { _ = "STUB: not implemented"; return false }
 
 func (store *Store) GetParent() types.KVStore {
-	return store.parent
+	_ = "STUB: not implemented"
+	return *new(types.KVStore)
 }
 
-func (store *Store) DeleteAll(start, end []byte) error {
-	for _, k := range store.GetAllKeyStrsInRange(start, end) {
-		store.Delete([]byte(k))
-	}
+func (store *Store) DeleteAll(start, end []byte) error { _ = "STUB: not implemented"; return nil }
+
+func (store *Store) GetAllKeyStrsInRange(start, end []byte) (res []string) {
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func (store *Store) GetAllKeyStrsInRange(start, end []byte) (res []string) {
-	keyStrs := map[string]struct{}{}
-	for _, pk := range store.parent.GetAllKeyStrsInRange(start, end) {
-		keyStrs[pk] = struct{}{}
-	}
-	store.cache.Range(func(key, value any) bool {
-		kbz := []byte(key.(string))
-		if bytes.Compare(kbz, start) < 0 || bytes.Compare(kbz, end) >= 0 {
-			// we don't want to break out of the iteration since cache isn't sorted
-			return true
-		}
-		cv := value.(*types.CValue)
-		if cv.Value() == nil {
-			delete(keyStrs, key.(string))
-		} else {
-			keyStrs[key.(string)] = struct{}{}
-		}
-		return true
-	})
-	for k := range keyStrs {
-		res = append(res, k)
-	}
-	return res
-}
+// we don't want to break out of the iteration since cache isn't sorted

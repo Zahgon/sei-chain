@@ -3,10 +3,7 @@
 package legacybech32
 
 import (
-	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/legacy"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
-	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/bech32"
 )
 
 // TODO: when removing this package remove:
@@ -26,43 +23,21 @@ const (
 // Deprecated: MarshalPubKey returns a Bech32 encoded string containing the appropriate
 // prefix based on the key type provided for a given PublicKey.
 func MarshalPubKey(pkt Bech32PubKeyType, pubkey cryptotypes.PubKey) (string, error) {
-	bech32Prefix := getPrefix(pkt)
-	return bech32.ConvertAndEncode(bech32Prefix, legacy.Cdc.MustMarshal(pubkey))
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 // Deprecated: MustMarshalPubKey calls MarshalPubKey and panics on error.
 func MustMarshalPubKey(pkt Bech32PubKeyType, pubkey cryptotypes.PubKey) string {
-	res, err := MarshalPubKey(pkt, pubkey)
-	if err != nil {
-		panic(err)
-	}
-
-	return res
-}
-
-func getPrefix(pkt Bech32PubKeyType) string {
-	cfg := sdk.GetConfig()
-	switch pkt {
-	case AccPK:
-		return cfg.GetBech32AccountPubPrefix()
-
-	case ValPK:
-		return cfg.GetBech32ValidatorPubPrefix()
-	case ConsPK:
-		return cfg.GetBech32ConsensusPubPrefix()
-	}
-
+	_ = "STUB: not implemented"
 	return ""
 }
+
+func getPrefix(pkt Bech32PubKeyType) string { _ = "STUB: not implemented"; return "" }
 
 // Deprecated: UnmarshalPubKey returns a PublicKey from a bech32-encoded PublicKey with
 // a given key type.
 func UnmarshalPubKey(pkt Bech32PubKeyType, pubkeyStr string) (cryptotypes.PubKey, error) {
-	bech32Prefix := getPrefix(pkt)
-
-	bz, err := sdk.GetFromBech32(pubkeyStr, bech32Prefix)
-	if err != nil {
-		return nil, err
-	}
-	return legacy.PubKeyFromBytes(bz)
+	_ = "STUB: not implemented"
+	return *new(cryptotypes.PubKey), nil
 }

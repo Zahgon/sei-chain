@@ -1,9 +1,7 @@
 package ica
 
 import (
-	"context"
 	"encoding/json"
-	"fmt"
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -15,16 +13,13 @@ import (
 	abci "github.com/sei-protocol/sei-chain/sei-tendermint/abci/types"
 	"github.com/spf13/cobra"
 
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/client/cli"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/controller"
 	controllerkeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/controller/keeper"
 	controllertypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/controller/types"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/host"
 	hostkeeper "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/host/keeper"
 	hosttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/host/types"
-	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/apps/27-interchain-accounts/types"
 	porttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/05-port/types"
-	ibchost "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 )
 
 var (
@@ -39,70 +34,61 @@ var (
 type AppModuleBasic struct{}
 
 // Name implements AppModuleBasic interface
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterLegacyAminoCodec implements AppModuleBasic.
-func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {}
+func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
+	_ = "STUB: not implemented"
 
-// RegisterInterfaces registers module concrete types into protobuf Any
+	// RegisterInterfaces registers module concrete types into protobuf Any
+	return
+}
+
 func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	types.RegisterInterfaces(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // DefaultGenesis returns default genesis state as raw bytes for the IBC
 // interchain accounts module
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesis())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the IBC interchain acounts module
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var gs types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &gs); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-
-	return gs.Validate()
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes implements AppModuleBasic interface
 func (AppModuleBasic) RegisterRESTRoutes(ctx client.Context, rtr *mux.Router) {
+	_ = "STUB: not implemented"
+
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the interchain accounts module.
+	return
 }
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the interchain accounts module.
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	err := controllertypes.RegisterQueryHandlerClient(context.Background(), mux, controllertypes.NewQueryClient(clientCtx))
-	if err != nil {
-		panic(err)
-	}
-
-	err = hosttypes.RegisterQueryHandlerClient(context.Background(), mux, hosttypes.NewQueryClient(clientCtx))
-	if err != nil {
-		panic(err)
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // GetTxCmd implements AppModuleBasic interface
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// GetQueryCmd implements AppModuleBasic interface
 	return nil
 }
 
-// GetQueryCmd implements AppModuleBasic interface
-func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	return cli.GetQueryCmd()
-}
+func (AppModuleBasic) GetQueryCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
 
 // AppModule is the application module for the IBC interchain accounts module
 type AppModule struct {
@@ -113,118 +99,81 @@ type AppModule struct {
 
 // NewAppModule creates a new IBC interchain accounts module
 func NewAppModule(controllerKeeper *controllerkeeper.Keeper, hostKeeper *hostkeeper.Keeper) AppModule {
-	return AppModule{
-		controllerKeeper: controllerKeeper,
-		hostKeeper:       hostKeeper,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // InitModule will initialize the interchain accounts moudule. It should only be
 // called once and as an alternative to InitGenesis.
 func (am AppModule) InitModule(ctx sdk.Context, controllerParams controllertypes.Params, hostParams hosttypes.Params) {
-	if am.controllerKeeper != nil {
-		am.controllerKeeper.SetParams(ctx, controllerParams)
-	}
-
-	if am.hostKeeper != nil {
-		am.hostKeeper.SetParams(ctx, hostParams)
-
-		cap := am.hostKeeper.BindPort(ctx, types.PortID)
-		if err := am.hostKeeper.ClaimCapability(ctx, cap, ibchost.PortPath(types.PortID)); err != nil {
-			panic(fmt.Sprintf("could not claim port capability: %v", err))
-		}
-	}
+	_ = "STUB: not implemented"
+	return
 }
 
 // RegisterInvariants implements the AppModule interface
 func (AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
+
+	// Route implements the AppModule interface
+	return
 }
 
-// Route implements the AppModule interface
-func (AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, nil)
-}
+func (AppModule) Route() sdk.Route { _ = "STUB: not implemented"; return *new(sdk.Route) }
 
 // NewHandler implements the AppModule interface
 func (AppModule) NewHandler() sdk.Handler {
-	return nil
+	_ = "STUB: not implemented"
+
+	// QuerierRoute implements the AppModule interface
+	return *new(sdk.Handler)
 }
 
-// QuerierRoute implements the AppModule interface
-func (AppModule) QuerierRoute() string {
-	return types.QuerierRoute
-}
+func (AppModule) QuerierRoute() string { _ = "STUB: not implemented"; return "" }
 
 // LegacyQuerierHandler implements the AppModule interface
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return nil
+	_ = "STUB: not implemented"
+
+	// RegisterServices registers module services
+	return *new(sdk.Querier)
 }
 
-// RegisterServices registers module services
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	if am.controllerKeeper != nil {
-		controllertypes.RegisterQueryServer(cfg.QueryServer(), am.controllerKeeper)
-	}
-
-	if am.hostKeeper != nil {
-		hosttypes.RegisterQueryServer(cfg.QueryServer(), am.hostKeeper)
-	}
-}
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // InitGenesis performs genesis initialization for the interchain accounts module.
 // It returns no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
-	var genesisState types.GenesisState
-	cdc.MustUnmarshalJSON(data, &genesisState)
-
-	if am.controllerKeeper != nil {
-		controllerkeeper.InitGenesis(ctx, *am.controllerKeeper, genesisState.ControllerGenesisState)
-	}
-
-	if am.hostKeeper != nil {
-		hostkeeper.InitGenesis(ctx, *am.hostKeeper, genesisState.HostGenesisState)
-	}
-
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the interchain accounts module
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	var (
-		controllerGenesisState = types.DefaultControllerGenesis()
-		hostGenesisState       = types.DefaultHostGenesis()
-	)
-
-	if am.controllerKeeper != nil {
-		controllerGenesisState = controllerkeeper.ExportGenesis(ctx, *am.controllerKeeper)
-	}
-
-	if am.hostKeeper != nil {
-		hostGenesisState = hostkeeper.ExportGenesis(ctx, *am.hostKeeper)
-	}
-
-	gs := types.NewGenesisState(controllerGenesisState, hostGenesisState)
-
-	return cdc.MustMarshalJSON(gs)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 {
+	_ = "STUB: not implemented"
 
-// BeginBlock implements the AppModule interface
-func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
+	// BeginBlock implements the AppModule interface
+	return 0
 }
 
-// EndBlock implements the AppModule interface
+func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
+	_ = "STUB: not implemented"
+
+	// EndBlock implements the AppModule interface
+	return
+}
+
 func (am AppModule) EndBlock(ctx sdk.Context, req abci.RequestEndBlock) []abci.ValidatorUpdate {
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }

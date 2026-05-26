@@ -5,12 +5,11 @@ package multisig
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -32,36 +31,23 @@ type LegacyAminoPubKey struct {
 	PubKeys   []*types.Any `protobuf:"bytes,2,rep,name=public_keys,json=publicKeys,proto3" json:"public_keys,omitempty" yaml:"pubkeys"`
 }
 
-func (m *LegacyAminoPubKey) Reset()         { *m = LegacyAminoPubKey{} }
-func (m *LegacyAminoPubKey) String() string { return proto.CompactTextString(m) }
-func (*LegacyAminoPubKey) ProtoMessage()    {}
-func (*LegacyAminoPubKey) Descriptor() ([]byte, []int) {
-	return fileDescriptor_46b57537e097d47d, []int{0}
-}
-func (m *LegacyAminoPubKey) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *LegacyAminoPubKey) Reset()                    { _ = "STUB: not implemented"; return }
+func (m *LegacyAminoPubKey) String() string            { _ = "STUB: not implemented"; return "" }
+func (*LegacyAminoPubKey) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*LegacyAminoPubKey) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *LegacyAminoPubKey) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *LegacyAminoPubKey) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_LegacyAminoPubKey.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *LegacyAminoPubKey) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_LegacyAminoPubKey.Merge(m, src)
-}
-func (m *LegacyAminoPubKey) XXX_Size() int {
-	return m.Size()
-}
-func (m *LegacyAminoPubKey) XXX_DiscardUnknown() {
-	xxx_messageInfo_LegacyAminoPubKey.DiscardUnknown(m)
-}
+
+func (m *LegacyAminoPubKey) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *LegacyAminoPubKey) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *LegacyAminoPubKey) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_LegacyAminoPubKey proto.InternalMessageInfo
 
@@ -95,263 +81,31 @@ var fileDescriptor_46b57537e097d47d = []byte{
 }
 
 func (m *LegacyAminoPubKey) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *LegacyAminoPubKey) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *LegacyAminoPubKey) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.PubKeys) > 0 {
-		for iNdEx := len(m.PubKeys) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.PubKeys[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintKeys(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.Threshold != 0 {
-		i = encodeVarintKeys(dAtA, i, uint64(m.Threshold))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func encodeVarintKeys(dAtA []byte, offset int, v uint64) int {
-	offset -= sovKeys(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *LegacyAminoPubKey) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Threshold != 0 {
-		n += 1 + sovKeys(uint64(m.Threshold))
-	}
-	if len(m.PubKeys) > 0 {
-		for _, e := range m.PubKeys {
-			l = e.Size()
-			n += 1 + l + sovKeys(uint64(l))
-		}
-	}
-	return n
-}
+func encodeVarintKeys(dAtA []byte, offset int, v uint64) int { _ = "STUB: not implemented"; return 0 }
 
-func sovKeys(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozKeys(x uint64) (n int) {
-	return sovKeys(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *LegacyAminoPubKey) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowKeys
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: LegacyAminoPubKey: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: LegacyAminoPubKey: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Threshold", wireType)
-			}
-			m.Threshold = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Threshold |= uint32(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field PubKeys", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthKeys
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.PubKeys = append(m.PubKeys, &types.Any{})
-			if err := m.PubKeys[len(m.PubKeys)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipKeys(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthKeys
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *LegacyAminoPubKey) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func skipKeys(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowKeys
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowKeys
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthKeys
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupKeys
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthKeys
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+func sovKeys(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozKeys(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *LegacyAminoPubKey) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
+func skipKeys(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthKeys        = fmt.Errorf("proto: negative length found during unmarshaling")

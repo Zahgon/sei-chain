@@ -1,11 +1,7 @@
 package types
 
 import (
-	fmt "fmt"
-
 	"github.com/gogo/protobuf/proto"
-
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 )
 
 type Any struct {
@@ -60,78 +56,26 @@ type Any struct {
 // returns an error if that value couldn't be packed. This also caches
 // the packed value so that it can be retrieved from GetCachedValue without
 // unmarshaling
-func NewAnyWithValue(v proto.Message) (*Any, error) {
-	if v == nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrPackAny, "Expecting non nil value to create a new Any")
-	}
-
-	bz, err := proto.Marshal(v)
-	if err != nil {
-		return nil, err
-	}
-
-	return &Any{
-		TypeUrl:     "/" + proto.MessageName(v),
-		Value:       bz,
-		cachedValue: v,
-	}, nil
-}
+func NewAnyWithValue(v proto.Message) (*Any, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // UnsafePackAny packs the value x in the Any and instead of returning the error
 // in the case of a packing failure, keeps the cached value. This should only
 // be used in situations where compatibility is needed with amino. Amino-only
 // values can safely be packed using this method when they will only be
 // marshaled with amino and not protobuf.
-func UnsafePackAny(x interface{}) *Any {
-	if msg, ok := x.(proto.Message); ok {
-		any, err := NewAnyWithValue(msg)
-		if err == nil {
-			return any
-		}
-	}
-	return &Any{cachedValue: x}
-}
+func UnsafePackAny(x interface{}) *Any { _ = "STUB: not implemented"; return nil }
 
 // pack packs the value x in the Any or returns an error. This also caches
 // the packed value so that it can be retrieved from GetCachedValue without
 // unmarshaling
-func (any *Any) pack(x proto.Message) error {
-	any.TypeUrl = "/" + proto.MessageName(x)
-	bz, err := proto.Marshal(x)
-	if err != nil {
-		return err
-	}
-
-	any.Value = bz
-	any.cachedValue = x
-
-	return nil
-}
+func (any *Any) pack(x proto.Message) error { _ = "STUB: not implemented"; return nil }
 
 // GetCachedValue returns the cached value from the Any if present
-func (any *Any) GetCachedValue() interface{} {
-	return any.cachedValue
-}
+func (any *Any) GetCachedValue() interface{} { _ = "STUB: not implemented"; return nil }
 
 // GoString returns a string representing valid go code to reproduce the current state of
 // the struct.
-func (any *Any) GoString() string {
-	if any == nil {
-		return "nil"
-	}
-	extra := ""
-	if any.XXX_unrecognized != nil {
-		extra = fmt.Sprintf(",\n  XXX_unrecognized: %#v,\n", any.XXX_unrecognized)
-	}
-	return fmt.Sprintf("&Any{TypeUrl: %#v,\n  Value: %#v%s\n}",
-		any.TypeUrl, any.Value, extra)
-}
+func (any *Any) GoString() string { _ = "STUB: not implemented"; return "" }
 
 // String implements the stringer interface
-func (any *Any) String() string {
-	if any == nil {
-		return "nil"
-	}
-	return fmt.Sprintf("&Any{TypeUrl:%v,Value:%v,XXX_unrecognized:%v}",
-		any.TypeUrl, any.Value, any.XXX_unrecognized)
-}
+func (any *Any) String() string { _ = "STUB: not implemented"; return "" }

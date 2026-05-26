@@ -11,7 +11,6 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/simulation"
 	"github.com/sei-protocol/sei-chain/testutil/sample"
 	epochsimulation "github.com/sei-protocol/sei-chain/x/epoch/simulation"
-	"github.com/sei-protocol/sei-chain/x/epoch/types"
 )
 
 // avoid unused import issue
@@ -29,34 +28,36 @@ const (
 
 // GenerateGenesisState creates a randomized GenState of the module
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
-	accs := make([]string, len(simState.Accounts))
-	for i, acc := range simState.Accounts {
-		accs[i] = acc.Address.String()
-	}
-	epochGenesis := types.GenesisState{
-		// this line is used by starport scaffolding # simapp/module/genesisState
-	}
-	simState.GenState[types.ModuleName] = simState.Cdc.MustMarshalJSON(&epochGenesis)
+	_ = "STUB: not implemented"
+	return
 }
+
+// this line is used by starport scaffolding # simapp/module/genesisState
 
 // ProposalContents doesn't return any content functions for governance proposals
 func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {
+	_ = "STUB: not implemented"
+
+	// RandomizedParams creates randomized  param changes for the simulator
 	return nil
 }
 
-// RandomizedParams creates randomized  param changes for the simulator
 func (am AppModule) RandomizedParams(_ *rand.Rand) []simtypes.ParamChange {
-	return []simtypes.ParamChange{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // RegisterStoreDecoder registers a decoder
-func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {}
+func (am AppModule) RegisterStoreDecoder(_ sdk.StoreDecoderRegistry) {
+	_ = "STUB: not implemented"
 
-// WeightedOperations returns the all the gov module operations with their respective weights.
-func (am AppModule) WeightedOperations(_ module.SimulationState) []simtypes.WeightedOperation {
-	operations := make([]simtypes.WeightedOperation, 0)
-
-	// this line is used by starport scaffolding # simapp/module/operation
-
-	return operations
+	// WeightedOperations returns the all the gov module operations with their respective weights.
+	return
 }
+
+func (am AppModule) WeightedOperations(_ module.SimulationState) []simtypes.WeightedOperation {
+	_ = "STUB: not implemented"
+	return nil
+}
+
+// this line is used by starport scaffolding # simapp/module/operation

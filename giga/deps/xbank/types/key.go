@@ -2,8 +2,6 @@ package types
 
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/address"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/types/kv"
 )
 
 const (
@@ -36,16 +34,10 @@ var (
 )
 
 // DenomMetadataKey returns the denomination metadata key.
-func DenomMetadataKey(denom string) []byte {
-	d := []byte(denom)
-	return append(DenomMetadataPrefix, d...)
-}
+func DenomMetadataKey(denom string) []byte { _ = "STUB: not implemented"; return nil }
 
 // DenomAllowListKey returns the denomination allow list key.
-func DenomAllowListKey(denom string) []byte {
-	d := []byte(denom)
-	return append(DenomAllowListPrefix, d...)
-}
+func DenomAllowListKey(denom string) []byte { _ = "STUB: not implemented"; return nil }
 
 // AddressFromBalancesStore returns an account address from a balances prefix
 // store. The key must not contain the prefix BalancesPrefix as the prefix store
@@ -53,43 +45,35 @@ func DenomAllowListKey(denom string) []byte {
 //
 // If invalid key is passed, AddressFromBalancesStore returns ErrInvalidKey.
 func AddressFromBalancesStore(key []byte) (sdk.AccAddress, error) {
-	if len(key) == 0 {
-		return nil, ErrInvalidKey
-	}
-	kv.AssertKeyAtLeastLength(key, 1)
-	addrLen := key[0]
-	bound := int(addrLen)
-	if len(key)-1 < bound {
-		return nil, ErrInvalidKey
-	}
-	return key[1 : bound+1], nil
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), nil
 }
 
 // CreateAccountBalancesPrefix creates the prefix for an account's balances.
-func CreateAccountBalancesPrefix(addr []byte) []byte {
-	return append(BalancesPrefix, address.MustLengthPrefix(addr)...)
-}
+func CreateAccountBalancesPrefix(addr []byte) []byte { _ = "STUB: not implemented"; return nil }
 
 func CreateAccountBalancesPrefixFromBech32(addr string) []byte {
-	accAdrr, _ := sdk.AccAddressFromBech32(addr)
-	accAdrrPrefix := CreateAccountBalancesPrefix(accAdrr)
-	return accAdrrPrefix
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // CreatePrefixedAccountStoreKey returns the key for the given account and denomination.
 // This method can be used when performing an ABCI query for the balance of an account.
 func CreatePrefixedAccountStoreKey(addr []byte, denom []byte) []byte {
-	return append(CreateAccountBalancesPrefix(addr), denom...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // This creates the prefix for use for the mem KV store used to track deferred balances by module name
 func CreateDeferredCacheModulePrefix(moduleAddr []byte) []byte {
-	return append(DeferredCachePrefix, address.MustLengthPrefix(moduleAddr)...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // This creates the prefix for use for the mem KV store used to track deferred balances by module and txIndex to appropriately partition reads and writes to and from module balances
 func CreateDeferredCacheModuleTxIndexedPrefix(moduleAddr []byte, index uint64) []byte {
-	return append(CreateDeferredCacheModulePrefix(moduleAddr), sdk.Uint64ToBigEndian(index)...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // AddressFromDeferredCacheStore returns an account address from a deferred Cache prefix
@@ -98,14 +82,6 @@ func CreateDeferredCacheModuleTxIndexedPrefix(moduleAddr []byte, index uint64) [
 //
 // If invalid key is passed, AddressFromBalancesStore returns ErrInvalidKey.
 func AddressFromDeferredCacheStore(key []byte) (sdk.AccAddress, error) {
-	if len(key) == 0 {
-		return nil, ErrInvalidKey
-	}
-	kv.AssertKeyAtLeastLength(key, 1)
-	addrLen := key[0]
-	bound := int(addrLen)
-	if len(key)-1 < bound {
-		return nil, ErrInvalidKey
-	}
-	return key[1 : bound+1], nil
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), nil
 }

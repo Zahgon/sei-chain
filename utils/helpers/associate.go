@@ -5,7 +5,6 @@ import (
 	"github.com/sei-protocol/sei-chain/precompiles/utils"
 	cryptotypes "github.com/sei-protocol/sei-chain/sei-cosmos/crypto/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
 )
 
 type AssociationHelper struct {
@@ -28,56 +27,16 @@ type bankKeeper interface {
 }
 
 func NewAssociationHelper(evmKeeper evmKeeper, bankKeeper bankKeeper, accountKeeper utils.AccountKeeper) *AssociationHelper {
-	return &AssociationHelper{evmKeeper: evmKeeper, bankKeeper: bankKeeper, accountKeeper: accountKeeper}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (p AssociationHelper) AssociateAddresses(ctx sdk.Context, seiAddr sdk.AccAddress, evmAddr common.Address, pubkey cryptotypes.PubKey, migrateUseiOnly bool) error {
-	castAddr := sdk.AccAddress(evmAddr[:])
-	if !castAddr.Equals(seiAddr) && p.accountKeeper.GetAccount(ctx, seiAddr) == nil {
-		castAcc := p.accountKeeper.GetAccount(ctx, castAddr)
-		castBaseAcc, ok := castAcc.(*authtypes.BaseAccount)
-		if ok && castBaseAcc.GetPubKey() == nil && p.bankKeeper.LockedCoins(ctx, castAddr).IsZero() {
-			p.accountKeeper.SetAccount(ctx, authtypes.NewBaseAccount(seiAddr, pubkey, castBaseAcc.GetAccountNumber(), castBaseAcc.GetSequence()))
-		}
-	}
-	p.evmKeeper.SetAddressMapping(ctx, seiAddr, evmAddr)
-	acc := p.accountKeeper.GetAccount(ctx, seiAddr)
-	if acc == nil {
-		acc = p.accountKeeper.NewAccountWithAddress(ctx, seiAddr)
-	}
-	if acc.GetPubKey() == nil {
-		if err := acc.SetPubKey(pubkey); err != nil {
-			return err
-		}
-		p.accountKeeper.SetAccount(ctx, acc)
-	}
-	return p.MigrateBalance(ctx, evmAddr, seiAddr, migrateUseiOnly)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (p AssociationHelper) MigrateBalance(ctx sdk.Context, evmAddr common.Address, seiAddr sdk.AccAddress, migrateUseiOnly bool) error {
-	castAddr := sdk.AccAddress(evmAddr[:])
-	if castAddr.Equals(seiAddr) {
-		return nil
-	}
-	var castAddrBalances sdk.Coins
-	if migrateUseiOnly {
-		castAddrBalances = sdk.Coins{p.bankKeeper.GetBalance(ctx, castAddr, "usei")}
-	} else {
-		castAddrBalances = p.bankKeeper.SpendableCoins(ctx, castAddr)
-	}
-	if !castAddrBalances.IsZero() {
-		if err := p.bankKeeper.SendCoins(ctx, castAddr, seiAddr, castAddrBalances); err != nil {
-			return err
-		}
-	}
-	castAddrWei := p.bankKeeper.GetWeiBalance(ctx, castAddr)
-	if !castAddrWei.IsZero() {
-		if err := p.bankKeeper.SendCoinsAndWei(ctx, castAddr, seiAddr, sdk.ZeroInt(), castAddrWei); err != nil {
-			return err
-		}
-	}
-	if p.bankKeeper.LockedCoins(ctx, castAddr).IsZero() {
-		p.accountKeeper.RemoveAccount(ctx, authtypes.NewBaseAccountWithAddress(castAddr))
-	}
+	_ = "STUB: not implemented"
 	return nil
 }

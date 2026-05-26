@@ -99,47 +99,32 @@ type EchoTransactorRaw struct {
 
 // NewEcho creates a new instance of Echo, bound to a specific deployed contract.
 func NewEcho(address common.Address, backend bind.ContractBackend) (*Echo, error) {
-	contract, err := bindEcho(address, backend, backend, backend)
-	if err != nil {
-		return nil, err
-	}
-	return &Echo{EchoCaller: EchoCaller{contract: contract}, EchoTransactor: EchoTransactor{contract: contract}, EchoFilterer: EchoFilterer{contract: contract}}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewEchoCaller creates a new read-only instance of Echo, bound to a specific deployed contract.
 func NewEchoCaller(address common.Address, caller bind.ContractCaller) (*EchoCaller, error) {
-	contract, err := bindEcho(address, caller, nil, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &EchoCaller{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewEchoTransactor creates a new write-only instance of Echo, bound to a specific deployed contract.
 func NewEchoTransactor(address common.Address, transactor bind.ContractTransactor) (*EchoTransactor, error) {
-	contract, err := bindEcho(address, nil, transactor, nil)
-	if err != nil {
-		return nil, err
-	}
-	return &EchoTransactor{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // NewEchoFilterer creates a new log filterer instance of Echo, bound to a specific deployed contract.
 func NewEchoFilterer(address common.Address, filterer bind.ContractFilterer) (*EchoFilterer, error) {
-	contract, err := bindEcho(address, nil, nil, filterer)
-	if err != nil {
-		return nil, err
-	}
-	return &EchoFilterer{contract: contract}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // bindEcho binds a generic wrapper to an already deployed contract.
 func bindEcho(address common.Address, caller bind.ContractCaller, transactor bind.ContractTransactor, filterer bind.ContractFilterer) (*bind.BoundContract, error) {
-	parsed, err := EchoMetaData.GetAbi()
-	if err != nil {
-		return nil, err
-	}
-	return bind.NewBoundContract(address, *parsed, caller, transactor, filterer), nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -147,18 +132,21 @@ func bindEcho(address common.Address, caller bind.ContractCaller, transactor bin
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Echo *EchoRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Echo.Contract.EchoCaller.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Echo *EchoRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Echo.Contract.EchoTransactor.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Echo *EchoRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Echo.Contract.EchoTransactor.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Call invokes the (constant) contract method with params as input values and
@@ -166,99 +154,91 @@ func (_Echo *EchoRaw) Transact(opts *bind.TransactOpts, method string, params ..
 // returns, a slice of interfaces for anonymous returns and a struct for named
 // returns.
 func (_Echo *EchoCallerRaw) Call(opts *bind.CallOpts, result *[]interface{}, method string, params ...interface{}) error {
-	return _Echo.Contract.contract.Call(opts, result, method, params...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Transfer initiates a plain transaction to move funds to the contract, calling
 // its default method if one is available.
 func (_Echo *EchoTransactorRaw) Transfer(opts *bind.TransactOpts) (*types.Transaction, error) {
-	return _Echo.Contract.contract.Transfer(opts)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Transact invokes the (paid) contract method with params as input values.
 func (_Echo *EchoTransactorRaw) Transact(opts *bind.TransactOpts, method string, params ...interface{}) (*types.Transaction, error) {
-	return _Echo.Contract.contract.Transact(opts, method, params...)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Echo is a free data retrieval call binding the contract method 0x6279e43c.
 //
 // Solidity: function echo(uint256 value) pure returns(uint256)
 func (_Echo *EchoCaller) Echo(opts *bind.CallOpts, value *big.Int) (*big.Int, error) {
-	var out []interface{}
-	err := _Echo.contract.Call(opts, &out, "echo", value)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Echo is a free data retrieval call binding the contract method 0x6279e43c.
 //
 // Solidity: function echo(uint256 value) pure returns(uint256)
 func (_Echo *EchoSession) Echo(value *big.Int) (*big.Int, error) {
-	return _Echo.Contract.Echo(&_Echo.CallOpts, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Echo is a free data retrieval call binding the contract method 0x6279e43c.
 //
 // Solidity: function echo(uint256 value) pure returns(uint256)
 func (_Echo *EchoCallerSession) Echo(value *big.Int) (*big.Int, error) {
-	return _Echo.Contract.Echo(&_Echo.CallOpts, value)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Timestamps is a free data retrieval call binding the contract method 0x8bc33af3.
 //
 // Solidity: function timestamps(uint256 ) view returns(uint256)
 func (_Echo *EchoCaller) Timestamps(opts *bind.CallOpts, arg0 *big.Int) (*big.Int, error) {
-	var out []interface{}
-	err := _Echo.contract.Call(opts, &out, "timestamps", arg0)
-
-	if err != nil {
-		return *new(*big.Int), err
-	}
-
-	out0 := *abi.ConvertType(out[0], new(*big.Int)).(**big.Int)
-
-	return out0, err
-
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Timestamps is a free data retrieval call binding the contract method 0x8bc33af3.
 //
 // Solidity: function timestamps(uint256 ) view returns(uint256)
 func (_Echo *EchoSession) Timestamps(arg0 *big.Int) (*big.Int, error) {
-	return _Echo.Contract.Timestamps(&_Echo.CallOpts, arg0)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // Timestamps is a free data retrieval call binding the contract method 0x8bc33af3.
 //
 // Solidity: function timestamps(uint256 ) view returns(uint256)
 func (_Echo *EchoCallerSession) Timestamps(arg0 *big.Int) (*big.Int, error) {
-	return _Echo.Contract.Timestamps(&_Echo.CallOpts, arg0)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetTime is a paid mutator transaction binding the contract method 0x3beb26c4.
 //
 // Solidity: function setTime(uint256 epoch) returns()
 func (_Echo *EchoTransactor) SetTime(opts *bind.TransactOpts, epoch *big.Int) (*types.Transaction, error) {
-	return _Echo.contract.Transact(opts, "setTime", epoch)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetTime is a paid mutator transaction binding the contract method 0x3beb26c4.
 //
 // Solidity: function setTime(uint256 epoch) returns()
 func (_Echo *EchoSession) SetTime(epoch *big.Int) (*types.Transaction, error) {
-	return _Echo.Contract.SetTime(&_Echo.TransactOpts, epoch)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 // SetTime is a paid mutator transaction binding the contract method 0x3beb26c4.
 //
 // Solidity: function setTime(uint256 epoch) returns()
 func (_Echo *EchoTransactorSession) SetTime(epoch *big.Int) (*types.Transaction, error) {
-	return _Echo.Contract.SetTime(&_Echo.TransactOpts, epoch)
+	_ = "STUB: not implemented"
+	return nil, nil
 }

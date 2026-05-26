@@ -1,8 +1,6 @@
 package ktype
 
 import (
-	"bytes"
-
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/flatkv/lthash"
 )
 
@@ -26,9 +24,7 @@ var (
 // 0x5F6D657461 ("_meta") — probability ~2^-48 for random addresses and
 // negligible even under CREATE2 brute-force. Legacy DB keys must not use
 // the _meta/ prefix.
-func IsMetaKey(key []byte) bool {
-	return bytes.HasPrefix(key, MetaKeyPrefixBytes)
-}
+func IsMetaKey(key []byte) bool { _ = "STUB: not implemented"; return false }
 
 // LocalMeta stores per-DB version tracking metadata.
 // Version is stored at _meta/version, LtHash at _meta/hash.

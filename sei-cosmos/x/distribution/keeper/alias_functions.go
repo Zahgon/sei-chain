@@ -3,25 +3,28 @@ package keeper
 import (
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	authtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/distribution/types"
 	stakingtypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/staking/types"
 )
 
 // get outstanding rewards
 func (k Keeper) GetValidatorOutstandingRewardsCoins(ctx sdk.Context, val sdk.ValAddress) sdk.DecCoins {
-	return k.GetValidatorOutstandingRewards(ctx, val).Rewards
+	_ = "STUB: not implemented"
+	return *new(sdk.DecCoins)
 }
 
 // get the community coins
 func (k Keeper) GetFeePoolCommunityCoins(ctx sdk.Context) sdk.DecCoins {
-	return k.GetFeePool(ctx).CommunityPool
+	_ = "STUB: not implemented"
+	return *new(sdk.DecCoins)
 }
 
 // GetDistributionAccount returns the distribution ModuleAccount
 func (k Keeper) GetDistributionAccount(ctx sdk.Context) authtypes.ModuleAccountI {
-	return k.authKeeper.GetModuleAccount(ctx, types.ModuleName)
+	_ = "STUB: not implemented"
+	return *new(authtypes.ModuleAccountI)
 }
 
 func (k Keeper) GetAllValidators(ctx sdk.Context) []stakingtypes.Validator {
-	return k.stakingKeeper.GetAllValidators(ctx)
+	_ = "STUB: not implemented"
+	return nil
 }

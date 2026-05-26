@@ -3,8 +3,6 @@ package keeper
 import (
 	"github.com/gogo/protobuf/grpc"
 
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
 
@@ -16,22 +14,11 @@ type Migrator struct {
 
 // NewMigrator returns a new Migrator.
 func NewMigrator(keeper AccountKeeper, queryServer grpc.Server) Migrator {
-	return Migrator{keeper: keeper, queryServer: queryServer}
+	_ = "STUB: not implemented"
+	return *new(Migrator)
 }
 
 // Migrate1to2 migrates from version 1 to 2.
-func (m Migrator) Migrate1to2(ctx sdk.Context) error {
-	var iterErr error
+func (m Migrator) Migrate1to2(ctx sdk.Context) error { _ = "STUB: not implemented"; return nil }
 
-	m.keeper.IterateAccounts(ctx, func(account types.AccountI) (stop bool) {
-		return false
-	})
-
-	return iterErr
-}
-
-func (m Migrator) Migrate2to3(ctx sdk.Context) error {
-	defaultParams := types.DefaultParams()
-	m.keeper.SetParams(ctx, defaultParams)
-	return nil
-}
+func (m Migrator) Migrate2to3(ctx sdk.Context) error { _ = "STUB: not implemented"; return nil }

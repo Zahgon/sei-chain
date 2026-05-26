@@ -6,7 +6,6 @@ package main
 import (
 	"bytes"
 	"context"
-	"errors"
 	"flag"
 	"fmt"
 	"log"
@@ -16,9 +15,6 @@ import (
 	"github.com/creachadair/atomicfile"
 	"github.com/creachadair/tomledit"
 	"github.com/creachadair/tomledit/transform"
-	"github.com/spf13/viper"
-
-	"github.com/sei-protocol/sei-chain/sei-tendermint/config"
 )
 
 func init() {
@@ -79,28 +75,20 @@ func main() {
 
 // ApplyFixes transforms doc and reports whether it succeeded.
 func ApplyFixes(ctx context.Context, doc *tomledit.Document) error {
+	_ = "STUB: not implemented"
 	// Check what version of Tendermint might have created this config file, as
 	// a safety check for the updates we are about to make.
-	tmVersion := GuessConfigVersion(doc)
-	if tmVersion == vUnknown {
-		return errors.New("cannot tell what Tendermint version created this config")
-	} else if tmVersion < v34 || tmVersion > v36 {
-		// TODO(creachadair): Add in rewrites for older versions.  This will
-		// require some digging to discover what the changes were.  The upgrade
-		// instructions do not give specifics.
-		return fmt.Errorf("unable to update version %s config", tmVersion)
-	}
-	return plan.Apply(ctx, doc)
+	return nil
 }
+
+// TODO(creachadair): Add in rewrites for older versions.  This will
+// require some digging to discover what the changes were.  The upgrade
+// instructions do not give specifics.
 
 // LoadConfig loads and parses the TOML document from path.
 func LoadConfig(path string) (*tomledit.Document, error) {
-	f, err := os.Open(filepath.Clean(path))
-	if err != nil {
-		return nil, err
-	}
-	defer func() { _ = f.Close() }()
-	return tomledit.Parse(f)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 const (
@@ -115,50 +103,20 @@ const (
 // GuessConfigVersion attempts to figure out which version of Tendermint
 // created the specified config document. It returns "" if the creating version
 // cannot be determined, otherwise a string of the form "vX.YY".
-func GuessConfigVersion(doc *tomledit.Document) string {
-	hasDisableWS := doc.First("rpc", "experimental-disable-websocket") != nil
-	hasUseLegacy := doc.First("p2p", "use-legacy") != nil // v0.35 only
-	if hasDisableWS && !hasUseLegacy {
-		return v36
-	}
+func GuessConfigVersion(doc *tomledit.Document) string { _ = "STUB: not implemented"; return "" }
 
-	hasBlockSync := transform.FindTable(doc, "blocksync") != nil // add: v0.35
-	hasStateSync := transform.FindTable(doc, "statesync") != nil // add: v0.34
-	if hasBlockSync && hasStateSync {
-		return v35
-	} else if hasStateSync {
-		return v34
-	}
+// v0.35 only
 
-	hasIndexKeys := doc.First("tx_index", "index_keys") != nil // add: v0.33
-	hasIndexTags := doc.First("tx_index", "index_tags") != nil // rem: v0.33
-	if hasIndexKeys && !hasIndexTags {
-		return v33
-	}
+// add: v0.35
+// add: v0.34
 
-	hasFastSync := transform.FindTable(doc, "fastsync") != nil // add: v0.32
-	if hasIndexTags && hasFastSync {
-		return v32
-	}
+// add: v0.33
+// rem: v0.33
 
-	// Something older, probably.
-	return vUnknown
-}
+// add: v0.32
+
+// Something older, probably.
 
 // CheckValid checks whether the specified config appears to be a valid
 // Tendermint config file. This emulates how the node loads the config.
-func CheckValid(data []byte) error {
-	v := viper.New()
-	v.SetConfigType("toml")
-
-	if err := v.ReadConfig(bytes.NewReader(data)); err != nil {
-		return fmt.Errorf("reading config: %w", err)
-	}
-
-	var cfg config.Config
-	if err := v.Unmarshal(&cfg); err != nil {
-		return fmt.Errorf("decoding config: %w", err)
-	}
-
-	return cfg.ValidateBasic()
-}
+func CheckValid(data []byte) error { _ = "STUB: not implemented"; return nil }

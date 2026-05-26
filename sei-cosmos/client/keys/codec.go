@@ -17,11 +17,7 @@ func init() {
 }
 
 // marshal keys
-func MarshalJSON(o interface{}) ([]byte, error) {
-	return KeysCdc.MarshalAsJSON(o)
-}
+func MarshalJSON(o interface{}) ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // unmarshal json
-func UnmarshalJSON(bz []byte, ptr interface{}) error {
-	return KeysCdc.UnmarshalAsJSON(bz, ptr)
-}
+func UnmarshalJSON(bz []byte, ptr interface{}) error { _ = "STUB: not implemented"; return nil }

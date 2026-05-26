@@ -1,37 +1,14 @@
 package tests
 
 import (
-	"bytes"
-	"fmt"
 	"math/big"
-	"os"
-	"strings"
 
-	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
-	"github.com/sei-protocol/sei-chain/precompiles"
-	"github.com/sei-protocol/sei-chain/precompiles/json"
-	"github.com/sei-protocol/sei-chain/precompiles/pointer"
-	"github.com/sei-protocol/sei-chain/precompiles/wasmd"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	banktypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/bank/types"
-	wasmtypes "github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
-	testkeeper "github.com/sei-protocol/sei-chain/testutil/keeper"
 )
 
-func send(nonce uint64) ethtypes.TxData {
-	_, recipient := testkeeper.MockAddressPair()
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: big.NewInt(1000000000),
-		Gas:       21000,
-		To:        &recipient,
-		Value:     big.NewInt(2000),
-		Data:      []byte{},
-		ChainID:   chainId,
-	}
-}
+func send(nonce uint64) ethtypes.TxData { _ = "STUB: not implemented"; return *new(ethtypes.TxData) }
 
 // sendInsufficientFunds builds a correct-nonce tx whose intrinsic fee
 // (GasFeeCap * Gas) exceeds mnemonicInitializer's funded balance, triggering
@@ -40,151 +17,56 @@ func send(nonce uint64) ethtypes.TxData {
 // deferred-info stub receipt — the case the trace-side filter needs to
 // catch.
 func sendInsufficientFunds(nonce uint64) ethtypes.TxData {
-	_, recipient := testkeeper.MockAddressPair()
-	// mnemonicInitializer funds 10_000_000_000 usei = 1e22 wei. A fee of
-	// 2.1e34 wei is comfortably over budget.
-	hugeFee := new(big.Int).Exp(big.NewInt(10), big.NewInt(30), nil)
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: hugeFee,
-		Gas:       21000,
-		To:        &recipient,
-		Value:     big.NewInt(0),
-		Data:      []byte{},
-		ChainID:   chainId,
-	}
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
 }
 
+// mnemonicInitializer funds 10_000_000_000 usei = 1e22 wei. A fee of
+// 2.1e34 wei is comfortably over budget.
+
 func sendAmount(nonce uint64, amount *big.Int) ethtypes.TxData {
-	_, recipient := testkeeper.MockAddressPair()
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: big.NewInt(1000000000),
-		Gas:       21000,
-		To:        &recipient,
-		Value:     amount,
-		Data:      []byte{},
-		ChainID:   chainId,
-	}
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
 }
 
 func sendErc20(nonce uint64) ethtypes.TxData {
-	_, recipient := testkeeper.MockAddressPair()
-	parsedABI, _ := abi.JSON(strings.NewReader(string(GetABI("ERC20"))))
-	bz, _ := parsedABI.Pack("transfer", recipient, big.NewInt(1))
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: big.NewInt(1000000000),
-		Gas:       500000,
-		To:        &erc20Addr,
-		Data:      bz,
-		ChainID:   chainId,
-	}
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
 }
 
 func depositErc20(nonce uint64) ethtypes.TxData {
-	parsedABI, _ := abi.JSON(strings.NewReader(string(GetABI("ERC20"))))
-	bz, _ := parsedABI.Pack("deposit")
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: big.NewInt(1000000000),
-		Gas:       500000,
-		To:        &erc20Addr,
-		Value:     big.NewInt(1),
-		Data:      bz,
-		ChainID:   chainId,
-	}
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
 }
 
 func mixedLogTesterTransfer(nonce uint64, recipient common.Address) ethtypes.TxData {
-	parsedABI, _ := abi.JSON(strings.NewReader(string(GetABI("MixedLogTester"))))
-	bz, _ := parsedABI.Pack("transfer", recipient, big.NewInt(1))
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: big.NewInt(1000000000),
-		Gas:       500000,
-		To:        &mixedLogTesterAddr,
-		Data:      bz,
-		ChainID:   chainId,
-	}
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
 }
 
 func registerCW20Pointer(nonce uint64, cw20Addr string) ethtypes.TxData {
-	pInfo := precompiles.GetPrecompileInfo(pointer.PrecompileName)
-	input, _ := pInfo.ABI.Pack("addCW20Pointer", cw20Addr)
-	pointer := common.HexToAddress(pointer.PointerAddress)
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: big.NewInt(1000000000),
-		Gas:       4000000,
-		To:        &pointer,
-		Value:     big.NewInt(0),
-		Data:      input,
-		ChainID:   chainId,
-	}
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
 }
 
 func transferCW20Msg(mnemonic string, cw20Addr string) sdk.Msg {
-	recipient, _ := testkeeper.MockAddressPair()
-	return &wasmtypes.MsgExecuteContract{
-		Sender:   getSeiAddrWithMnemonic(mnemonic).String(),
-		Contract: cw20Addr,
-		Msg:      []byte(fmt.Sprintf("{\"transfer\":{\"recipient\":\"%s\",\"amount\":\"100\"}}", recipient.String())),
-	}
+	_ = "STUB: not implemented"
+	return *new(sdk.Msg)
 }
 
 func transferCW20MsgTo(mnemonic string, cw20Addr string, recipient sdk.AccAddress) sdk.Msg {
-	return &wasmtypes.MsgExecuteContract{
-		Sender:   getSeiAddrWithMnemonic(mnemonic).String(),
-		Contract: cw20Addr,
-		Msg:      []byte(fmt.Sprintf("{\"transfer\":{\"recipient\":\"%s\",\"amount\":\"100\"}}", recipient.String())),
-	}
+	_ = "STUB: not implemented"
+	return *new(sdk.Msg)
 }
 
 func jsonExtractAsBytesFromArray(nonce uint64) ethtypes.TxData {
-	abiBz, err := os.ReadFile("../../precompiles/json/abi.json")
-	if err != nil {
-		panic(err)
-	}
-	newAbi, err := abi.JSON(bytes.NewReader(abiBz))
-	if err != nil {
-		panic(err)
-	}
-	input, err := newAbi.Pack("extractAsBytesFromArray", []byte("[\"1\"]"), uint16(0))
-	if err != nil {
-		panic(err)
-	}
-	to := common.HexToAddress(json.JSONAddress)
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: big.NewInt(1000000000),
-		Gas:       50000,
-		To:        &to,
-		Data:      input,
-		ChainID:   chainId,
-	}
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
 }
 
-func bankSendMsg(mnemonic string) sdk.Msg {
-	recipient, _ := testkeeper.MockAddressPair()
-	return &banktypes.MsgSend{
-		FromAddress: getSeiAddrWithMnemonic(mnemonic).String(),
-		ToAddress:   recipient.String(),
-		Amount:      sdk.NewCoins(sdk.NewCoin("usei", sdk.OneInt())),
-	}
-}
+func bankSendMsg(mnemonic string) sdk.Msg { _ = "STUB: not implemented"; return *new(sdk.Msg) }
 
 func callWasmIter(nonce uint64, contractAddr string) ethtypes.TxData {
-	pInfo := precompiles.GetPrecompileInfo(wasmd.PrecompileName)
-	input, _ := pInfo.ABI.Pack("execute", contractAddr, []byte("{\"do_something\":{}}"), []byte("[]"))
-	wasmd := common.HexToAddress(wasmd.WasmdAddress)
-	return &ethtypes.DynamicFeeTx{
-		Nonce:     nonce,
-		GasFeeCap: big.NewInt(1000000000),
-		Gas:       4000000,
-		To:        &wasmd,
-		Value:     big.NewInt(0),
-		Data:      input,
-		ChainID:   chainId,
-	}
+	_ = "STUB: not implemented"
+	return *new(ethtypes.TxData)
 }

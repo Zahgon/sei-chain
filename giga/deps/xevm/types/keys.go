@@ -1,10 +1,6 @@
 package types
 
 import (
-	"bytes"
-	"encoding/binary"
-	"fmt"
-
 	"github.com/ethereum/go-ethereum/common"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 )
@@ -75,95 +71,54 @@ var (
 )
 
 func EVMAddressToSeiAddressKey(evmAddress common.Address) []byte {
-	return append(EVMAddressToSeiAddressKeyPrefix, evmAddress[:]...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func SeiAddressToEVMAddressKey(seiAddress sdk.AccAddress) []byte {
-	return append(SeiAddressToEVMAddressKeyPrefix, seiAddress...)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func StateKey(evmAddress common.Address) []byte {
-	return append(StateKeyPrefix, evmAddress[:]...)
-}
+func StateKey(evmAddress common.Address) []byte { _ = "STUB: not implemented"; return nil }
 
-func ReceiptKey(txHash common.Hash) []byte {
-	return append(ReceiptKeyPrefix, txHash[:]...)
-}
+func ReceiptKey(txHash common.Hash) []byte { _ = "STUB: not implemented"; return nil }
 
 type TransientReceiptKey []byte
 
 func NewTransientReceiptKey(txIndex uint64, txHash common.Hash) TransientReceiptKey {
-	return append(ReceiptKeyPrefix, fmt.Sprintf("%020d:%s", txIndex, txHash.String())[:]...)
+	_ = "STUB: not implemented"
+	return *new(TransientReceiptKey)
 }
 
 func (trk TransientReceiptKey) TransactionHash() common.Hash {
-	if i := bytes.LastIndexByte(trk, ':'); i != -1 {
-		return common.HexToHash(string(trk[i+1:]))
-	}
-	return common.Hash{}
+	_ = "STUB: not implemented"
+	return *new(common.Hash)
 }
 
-func BlockBloomKey(height int64) []byte {
-	bz := make([]byte, 8)
-	binary.BigEndian.PutUint64(bz, uint64(height)) //nolint:gosec
-	return append(BlockBloomPrefix, bz...)
-}
+func BlockBloomKey(height int64) []byte { _ = "STUB: not implemented"; return nil }
 
-func TxHashesKey(height int64) []byte {
-	bz := make([]byte, 8)
-	binary.BigEndian.PutUint64(bz, uint64(height)) //nolint:gosec
-	return append(TxHashesPrefix, bz...)
-}
+//nolint:gosec
 
-func PointerERC20NativeKey(token string) []byte {
-	return append(
-		append(PointerRegistryPrefix, PointerERC20NativePrefix...),
-		[]byte(token)...,
-	)
-}
+func TxHashesKey(height int64) []byte { _ = "STUB: not implemented"; return nil }
 
-func PointerERC20CW20Key(cw20Address string) []byte {
-	return append(
-		append(PointerRegistryPrefix, PointerERC20CW20Prefix...),
-		[]byte(cw20Address)...,
-	)
-}
+//nolint:gosec
 
-func PointerERC721CW721Key(cw721Address string) []byte {
-	return append(
-		append(PointerRegistryPrefix, PointerERC721CW721Prefix...),
-		[]byte(cw721Address)...,
-	)
-}
+func PointerERC20NativeKey(token string) []byte { _ = "STUB: not implemented"; return nil }
 
-func PointerERC1155CW1155Key(cw1155Address string) []byte {
-	return append(
-		append(PointerRegistryPrefix, PointerERC1155CW1155Prefix...),
-		[]byte(cw1155Address)...,
-	)
-}
+func PointerERC20CW20Key(cw20Address string) []byte { _ = "STUB: not implemented"; return nil }
 
-func PointerCW20ERC20Key(erc20Addr common.Address) []byte {
-	return append(
-		append(PointerRegistryPrefix, PointerCW20ERC20Prefix...),
-		erc20Addr[:]...,
-	)
-}
+func PointerERC721CW721Key(cw721Address string) []byte { _ = "STUB: not implemented"; return nil }
 
-func PointerCW721ERC721Key(erc721Addr common.Address) []byte {
-	return append(
-		append(PointerRegistryPrefix, PointerCW721ERC721Prefix...),
-		erc721Addr[:]...,
-	)
-}
+func PointerERC1155CW1155Key(cw1155Address string) []byte { _ = "STUB: not implemented"; return nil }
+
+func PointerCW20ERC20Key(erc20Addr common.Address) []byte { _ = "STUB: not implemented"; return nil }
+
+func PointerCW721ERC721Key(erc721Addr common.Address) []byte { _ = "STUB: not implemented"; return nil }
 
 func PointerCW1155ERC1155Key(erc1155Addr common.Address) []byte {
-	return append(
-		append(PointerRegistryPrefix, PointerCW1155ERC1155Prefix...),
-		erc1155Addr[:]...,
-	)
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func PointerReverseRegistryKey(addr common.Address) []byte {
-	return append(PointerReverseRegistryPrefix, addr[:]...)
-}
+func PointerReverseRegistryKey(addr common.Address) []byte { _ = "STUB: not implemented"; return nil }

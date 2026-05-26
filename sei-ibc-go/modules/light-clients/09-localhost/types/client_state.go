@@ -1,19 +1,10 @@
 package types
 
 import (
-	"bytes"
-	"encoding/binary"
-	"reflect"
-	"strings"
-
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
 	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	connectiontypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/03-connection/types"
-	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
@@ -21,76 +12,69 @@ var _ exported.ClientState = (*ClientState)(nil)
 
 // NewClientState creates a new ClientState instance
 func NewClientState(chainID string, height clienttypes.Height) *ClientState {
-	return &ClientState{
-		ChainId: chainID,
-		Height:  height,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // GetChainID returns an empty string
 func (cs ClientState) GetChainID() string {
-	return cs.ChainId
+	_ = "STUB: not implemented"
+
+	// ClientType is localhost.
+	return ""
 }
 
-// ClientType is localhost.
-func (cs ClientState) ClientType() string {
-	return exported.Localhost
-}
+func (cs ClientState) ClientType() string { _ = "STUB: not implemented"; return "" }
 
 // GetLatestHeight returns the latest height stored.
 func (cs ClientState) GetLatestHeight() exported.Height {
-	return cs.Height
+	_ = "STUB: not implemented"
+
+	// Status always returns Active. The localhost status cannot be changed.
+	return *new(exported.Height)
 }
 
-// Status always returns Active. The localhost status cannot be changed.
 func (cs ClientState) Status(_ sdk.Context, _ sdk.KVStore, _ codec.BinaryCodec,
 ) exported.Status {
-	return exported.Active
+	_ = "STUB: not implemented"
+	return *
+
+	// Validate performs a basic validation of the client state fields.
+	new(exported.Status)
 }
 
-// Validate performs a basic validation of the client state fields.
-func (cs ClientState) Validate() error {
-	if strings.TrimSpace(cs.ChainId) == "" {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidChainID, "chain id cannot be blank")
-	}
-	if cs.Height.RevisionHeight == 0 {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidHeight, "local revision height cannot be zero")
-	}
-	return nil
-}
+func (cs ClientState) Validate() error { _ = "STUB: not implemented"; return nil }
 
 // ZeroCustomFields returns the same client state since there are no custom fields in localhost
 func (cs ClientState) ZeroCustomFields() exported.ClientState {
-	return &cs
+	_ = "STUB: not implemented"
+
+	// Initialize ensures that initial consensus state for localhost is nil
+	return *new(exported.ClientState)
 }
 
-// Initialize ensures that initial consensus state for localhost is nil
 func (cs ClientState) Initialize(_ sdk.Context, _ codec.BinaryCodec, _ sdk.KVStore, consState exported.ConsensusState) error {
-	if consState != nil {
-		return sdkerrors.Wrap(clienttypes.ErrInvalidConsensus, "initial consensus state for localhost must be nil.")
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // ExportMetadata is a no-op for localhost client
 func (cs ClientState) ExportMetadata(_ sdk.KVStore) []exported.GenesisMetadata {
+	_ = "STUB: not implemented"
+
+	// CheckHeaderAndUpdateState updates the localhost client. It only needs access to the context
 	return nil
 }
 
-// CheckHeaderAndUpdateState updates the localhost client. It only needs access to the context
 func (cs *ClientState) CheckHeaderAndUpdateState(
 	ctx sdk.Context, _ codec.BinaryCodec, _ sdk.KVStore, _ exported.Header,
 ) (exported.ClientState, exported.ConsensusState, error) {
+	_ = "STUB: not implemented"
 	// use the chain ID from context since the localhost client is from the running chain (i.e self).
-	cs.ChainId = ctx.ChainID()
-	revision := clienttypes.ParseChainID(cs.ChainId)
-	blockHeight := ctx.BlockHeight()
-	if blockHeight < 0 {
-		return nil, nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidHeight, "block height %d is negative", blockHeight)
-	}
-	cs.Height = clienttypes.NewHeight(revision, uint64(blockHeight)) // #nosec G115 --- overflow checked above
-	return cs, nil, nil
+	return *new(exported.ClientState), *new(exported.ConsensusState), nil
 }
+
+// #nosec G115 --- overflow checked above
 
 // CheckMisbehaviourAndUpdateState implements ClientState
 // Since localhost is the client of the running chain, misbehaviour cannot be submitted to it
@@ -98,7 +82,8 @@ func (cs *ClientState) CheckHeaderAndUpdateState(
 func (cs ClientState) CheckMisbehaviourAndUpdateState(
 	_ sdk.Context, _ codec.BinaryCodec, _ sdk.KVStore, _ exported.Misbehaviour,
 ) (exported.ClientState, error) {
-	return nil, sdkerrors.Wrap(clienttypes.ErrInvalidMisbehaviour, "cannot submit misbehaviour to localhost client")
+	_ = "STUB: not implemented"
+	return *new(exported.ClientState), nil
 }
 
 // CheckSubstituteAndUpdateState returns an error. The localhost cannot be modified by
@@ -107,7 +92,8 @@ func (cs ClientState) CheckSubstituteAndUpdateState(
 	ctx sdk.Context, _ codec.BinaryCodec, _, _ sdk.KVStore,
 	_ exported.ClientState,
 ) (exported.ClientState, error) {
-	return nil, sdkerrors.Wrap(clienttypes.ErrUpdateClientFailed, "cannot update localhost client with a proposal")
+	_ = "STUB: not implemented"
+	return *new(exported.ClientState), nil
 }
 
 // VerifyUpgradeAndUpdateState returns an error since localhost cannot be upgraded
@@ -115,7 +101,8 @@ func (cs ClientState) VerifyUpgradeAndUpdateState(
 	_ sdk.Context, _ codec.BinaryCodec, _ sdk.KVStore,
 	_ exported.ClientState, _ exported.ConsensusState, _, _ []byte,
 ) (exported.ClientState, exported.ConsensusState, error) {
-	return nil, nil, sdkerrors.Wrap(clienttypes.ErrInvalidUpgradeClient, "cannot upgrade localhost client")
+	_ = "STUB: not implemented"
+	return *new(exported.ClientState), *new(exported.ConsensusState), nil
 }
 
 // VerifyClientState verifies that the localhost client state is stored locally
@@ -123,21 +110,7 @@ func (cs ClientState) VerifyClientState(
 	store sdk.KVStore, cdc codec.BinaryCodec,
 	_ exported.Height, _ exported.Prefix, _ string, _ []byte, clientState exported.ClientState,
 ) error {
-	path := host.KeyClientState
-	bz := store.Get([]byte(path))
-	if bz == nil {
-		return sdkerrors.Wrapf(clienttypes.ErrFailedClientStateVerification,
-			"not found for path: %s", path)
-	}
-
-	selfClient := clienttypes.MustUnmarshalClientState(cdc, bz)
-
-	if !reflect.DeepEqual(selfClient, clientState) {
-		return sdkerrors.Wrapf(clienttypes.ErrFailedClientStateVerification,
-			"stored clientState != provided clientState: \n%v\n≠\n%v",
-			selfClient, clientState,
-		)
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -148,11 +121,13 @@ func (cs ClientState) VerifyClientConsensusState(
 	exported.Height, string, exported.Height, exported.Prefix,
 	[]byte, exported.ConsensusState,
 ) error {
+	_ = "STUB: not implemented"
+
+	// VerifyConnectionState verifies a proof of the connection state of the
+	// specified connection end stored locally.
 	return nil
 }
 
-// VerifyConnectionState verifies a proof of the connection state of the
-// specified connection end stored locally.
 func (cs ClientState) VerifyConnectionState(
 	store sdk.KVStore,
 	cdc codec.BinaryCodec,
@@ -162,25 +137,7 @@ func (cs ClientState) VerifyConnectionState(
 	connectionID string,
 	connectionEnd exported.ConnectionI,
 ) error {
-	path := host.ConnectionKey(connectionID)
-	bz := store.Get(path)
-	if bz == nil {
-		return sdkerrors.Wrapf(clienttypes.ErrFailedConnectionStateVerification, "not found for path %s", path)
-	}
-
-	var prevConnection connectiontypes.ConnectionEnd
-	err := cdc.Unmarshal(bz, &prevConnection)
-	if err != nil {
-		return err
-	}
-
-	if !reflect.DeepEqual(&prevConnection, connectionEnd) {
-		return sdkerrors.Wrapf(
-			clienttypes.ErrFailedConnectionStateVerification,
-			"connection end ≠ previous stored connection: \n%v\n≠\n%v", connectionEnd, prevConnection,
-		)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -196,25 +153,7 @@ func (cs ClientState) VerifyChannelState(
 	channelID string,
 	channel exported.ChannelI,
 ) error {
-	path := host.ChannelKey(portID, channelID)
-	bz := store.Get(path)
-	if bz == nil {
-		return sdkerrors.Wrapf(clienttypes.ErrFailedChannelStateVerification, "not found for path %s", path)
-	}
-
-	var prevChannel channeltypes.Channel
-	err := cdc.Unmarshal(bz, &prevChannel)
-	if err != nil {
-		return err
-	}
-
-	if !reflect.DeepEqual(&prevChannel, channel) {
-		return sdkerrors.Wrapf(
-			clienttypes.ErrFailedChannelStateVerification,
-			"channel end ≠ previous stored channel: \n%v\n≠\n%v", channel, prevChannel,
-		)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -234,20 +173,7 @@ func (cs ClientState) VerifyPacketCommitment(
 	sequence uint64,
 	commitmentBytes []byte,
 ) error {
-	path := host.PacketCommitmentKey(portID, channelID, sequence)
-
-	data := store.Get(path)
-	if len(data) == 0 {
-		return sdkerrors.Wrapf(clienttypes.ErrFailedPacketCommitmentVerification, "not found for path %s", path)
-	}
-
-	if !bytes.Equal(data, commitmentBytes) {
-		return sdkerrors.Wrapf(
-			clienttypes.ErrFailedPacketCommitmentVerification,
-			"commitment ≠ previous commitment: \n%X\n≠\n%X", commitmentBytes, data,
-		)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -267,20 +193,7 @@ func (cs ClientState) VerifyPacketAcknowledgement(
 	sequence uint64,
 	acknowledgement []byte,
 ) error {
-	path := host.PacketAcknowledgementKey(portID, channelID, sequence)
-
-	data := store.Get(path)
-	if len(data) == 0 {
-		return sdkerrors.Wrapf(clienttypes.ErrFailedPacketAckVerification, "not found for path %s", path)
-	}
-
-	if !bytes.Equal(data, acknowledgement) {
-		return sdkerrors.Wrapf(
-			clienttypes.ErrFailedPacketAckVerification,
-			"ak bytes ≠ previous ack: \n%X\n≠\n%X", acknowledgement, data,
-		)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -300,13 +213,7 @@ func (cs ClientState) VerifyPacketReceiptAbsence(
 	channelID string,
 	sequence uint64,
 ) error {
-	path := host.PacketReceiptKey(portID, channelID, sequence)
-
-	data := store.Get(path)
-	if data != nil {
-		return sdkerrors.Wrap(clienttypes.ErrFailedPacketReceiptVerification, "expected no packet receipt")
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -325,20 +232,6 @@ func (cs ClientState) VerifyNextSequenceRecv(
 	channelID string,
 	nextSequenceRecv uint64,
 ) error {
-	path := host.NextSequenceRecvKey(portID, channelID)
-
-	data := store.Get(path)
-	if len(data) == 0 {
-		return sdkerrors.Wrapf(clienttypes.ErrFailedNextSeqRecvVerification, "not found for path %s", path)
-	}
-
-	prevSequenceRecv := binary.BigEndian.Uint64(data)
-	if prevSequenceRecv != nextSequenceRecv {
-		return sdkerrors.Wrapf(
-			clienttypes.ErrFailedNextSeqRecvVerification,
-			"next sequence receive ≠ previous stored sequence (%d ≠ %d)", nextSequenceRecv, prevSequenceRecv,
-		)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }

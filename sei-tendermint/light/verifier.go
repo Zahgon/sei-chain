@@ -1,9 +1,6 @@
 package light
 
 import (
-	"bytes"
-	"errors"
-	"fmt"
 	"time"
 
 	tmmath "github.com/sei-protocol/sei-chain/sei-tendermint/libs/math"
@@ -40,55 +37,20 @@ func VerifyNonAdjacent(
 	maxClockDrift time.Duration,
 	trustLevel tmmath.Fraction,
 ) error {
-
-	if err := checkRequiredHeaderFields(trustedHeader); err != nil {
-		return err
-	}
-
-	if untrustedHeader.Height == trustedHeader.Height+1 {
-		return errors.New("headers must be non adjacent in height")
-	}
-
-	if err := ValidateTrustLevel(trustLevel); err != nil {
-		return err
-	}
-
-	// check if the trusted header has expired past the trusting period
-	if HeaderExpired(trustedHeader, trustingPeriod, now) {
-		return ErrOldHeaderExpired{trustedHeader.Time.Add(trustingPeriod), now}
-	}
-
-	if err := verifyNewHeaderAndVals(
-		untrustedHeader, untrustedVals,
-		trustedHeader,
-		now, maxClockDrift); err != nil {
-		return ErrInvalidHeader{err}
-	}
-
-	// Ensure that +`trustLevel` (default 1/3) or more in voting power of the last trusted validator
-	// set signed correctly.
-	err := trustedVals.VerifyCommitLightTrusting(trustedHeader.ChainID, untrustedHeader.Commit, trustLevel)
-	if err != nil {
-		switch e := err.(type) {
-		case types.ErrNotEnoughVotingPowerSigned:
-			return ErrNewValSetCantBeTrusted{e}
-		default:
-			return ErrInvalidHeader{e}
-		}
-	}
-
-	// Ensure that +2/3 of new validators signed correctly.
-	//
-	// NOTE: this should always be the last check because untrustedVals can be
-	// intentionally made very large to DOS the light client. not the case for
-	// VerifyAdjacent, where validator set is known in advance.
-	if err := untrustedVals.VerifyCommitLight(trustedHeader.ChainID, untrustedHeader.Commit.BlockID,
-		untrustedHeader.Height, untrustedHeader.Commit); err != nil {
-		return ErrInvalidHeader{err}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// check if the trusted header has expired past the trusting period
+
+// Ensure that +`trustLevel` (default 1/3) or more in voting power of the last trusted validator
+// set signed correctly.
+
+// Ensure that +2/3 of new validators signed correctly.
+//
+// NOTE: this should always be the last check because untrustedVals can be
+// intentionally made very large to DOS the light client. not the case for
+// VerifyAdjacent, where validator set is known in advance.
 
 // VerifyAdjacent verifies directly adjacent untrustedHeader against
 // trustedHeader. It ensures that:
@@ -111,48 +73,15 @@ func VerifyAdjacent(
 	now time.Time,
 	maxClockDrift time.Duration,
 ) error {
-
-	if err := checkRequiredHeaderFields(trustedHeader); err != nil {
-		return err
-	}
-
-	if len(trustedHeader.NextValidatorsHash) == 0 {
-		return errors.New("next validators hash in trusted header is empty")
-	}
-
-	if untrustedHeader.Height != trustedHeader.Height+1 {
-		return errors.New("headers must be adjacent in height")
-	}
-
-	// check if the trusted header has expired past the trusting period
-	if HeaderExpired(trustedHeader, trustingPeriod, now) {
-		return ErrOldHeaderExpired{trustedHeader.Time.Add(trustingPeriod), now}
-	}
-
-	if err := verifyNewHeaderAndVals(
-		untrustedHeader, untrustedVals,
-		trustedHeader,
-		now, maxClockDrift); err != nil {
-		return ErrInvalidHeader{err}
-	}
-
-	// Check the validator hashes are the same
-	if !bytes.Equal(untrustedHeader.ValidatorsHash, trustedHeader.NextValidatorsHash) {
-		err := fmt.Errorf("expected old header's next validators (%X) to match those from new header (%X)",
-			trustedHeader.NextValidatorsHash,
-			untrustedHeader.ValidatorsHash,
-		)
-		return ErrInvalidHeader{err}
-	}
-
-	// Ensure that +2/3 of new validators signed correctly.
-	if err := untrustedVals.VerifyCommitLight(trustedHeader.ChainID, untrustedHeader.Commit.BlockID,
-		untrustedHeader.Height, untrustedHeader.Commit); err != nil {
-		return ErrInvalidHeader{err}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
+
+// check if the trusted header has expired past the trusting period
+
+// Check the validator hashes are the same
+
+// Ensure that +2/3 of new validators signed correctly.
 
 // Verify combines both VerifyAdjacent and VerifyNonAdjacent functions.
 func Verify(
@@ -164,31 +93,22 @@ func Verify(
 	now time.Time,
 	maxClockDrift time.Duration,
 	trustLevel tmmath.Fraction) error {
-
-	if untrustedHeader.Height != trustedHeader.Height+1 {
-		return VerifyNonAdjacent(trustedHeader, trustedVals, untrustedHeader, untrustedVals,
-			trustingPeriod, now, maxClockDrift, trustLevel)
-	}
-
-	return VerifyAdjacent(trustedHeader, untrustedHeader, untrustedVals, trustingPeriod, now, maxClockDrift)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ValidateTrustLevel checks that trustLevel is within the allowed range [1/3,
 // 1]. If not, it returns an error. 1/3 is the minimum amount of trust needed
 // which does not break the security model. Must be strictly less than 1.
-func ValidateTrustLevel(lvl tmmath.Fraction) error {
-	if lvl.Numerator*3 < lvl.Denominator || // < 1/3
-		lvl.Numerator >= lvl.Denominator || // >= 1
-		lvl.Denominator == 0 {
-		return fmt.Errorf("trustLevel must be within [1/3, 1], given %v", lvl)
-	}
-	return nil
-}
+func ValidateTrustLevel(lvl tmmath.Fraction) error { _ = "STUB: not implemented"; return nil }
+
+// < 1/3
+// >= 1
 
 // HeaderExpired return true if the given header expired.
 func HeaderExpired(h *types.SignedHeader, trustingPeriod time.Duration, now time.Time) bool {
-	expirationTime := h.Time.Add(trustingPeriod)
-	return !expirationTime.After(now)
+	_ = "STUB: not implemented"
+	return false
 }
 
 // VerifyBackwards verifies an untrusted header with a height one less than
@@ -205,29 +125,7 @@ func HeaderExpired(h *types.SignedHeader, trustingPeriod time.Duration, now time
 // backwards verification and thus evidence that needs to be within a certain
 // time bound is never sent.
 func VerifyBackwards(untrustedHeader, trustedHeader *types.Header) error {
-	if err := untrustedHeader.ValidateBasic(); err != nil {
-		return ErrInvalidHeader{err}
-	}
-
-	if untrustedHeader.ChainID != trustedHeader.ChainID {
-		return ErrInvalidHeader{fmt.Errorf("new header belongs to a different chain (%s != %s)",
-			untrustedHeader.ChainID, trustedHeader.ChainID)}
-	}
-
-	if !untrustedHeader.Time.Before(trustedHeader.Time) {
-		return ErrInvalidHeader{
-			fmt.Errorf("expected older header time %v to be before new header time %v",
-				untrustedHeader.Time,
-				trustedHeader.Time)}
-	}
-
-	if !bytes.Equal(untrustedHeader.Hash(), trustedHeader.LastBlockID.Hash) {
-		return ErrInvalidHeader{
-			fmt.Errorf("older header hash %X does not match trusted header's last block %X",
-				untrustedHeader.Hash(),
-				trustedHeader.LastBlockID.Hash)}
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
@@ -239,52 +137,8 @@ func verifyNewHeaderAndVals(
 	trustedHeader *types.SignedHeader,
 	now time.Time,
 	maxClockDrift time.Duration) error {
-
-	if err := untrustedHeader.ValidateBasic(trustedHeader.ChainID); err != nil {
-		return fmt.Errorf("untrustedHeader.ValidateBasic failed: %w", err)
-	}
-
-	if untrustedHeader.Height <= trustedHeader.Height {
-		return fmt.Errorf("expected new header height %d to be greater than one of old header %d",
-			untrustedHeader.Height,
-			trustedHeader.Height)
-	}
-
-	if !untrustedHeader.Time.After(trustedHeader.Time) {
-		return fmt.Errorf("expected new header time %v to be after old header time %v",
-			untrustedHeader.Time,
-			trustedHeader.Time)
-	}
-
-	if !untrustedHeader.Time.Before(now.Add(maxClockDrift)) {
-		return fmt.Errorf("new header has a time from the future %v (now: %v; max clock drift: %v)",
-			untrustedHeader.Time,
-			now,
-			maxClockDrift)
-	}
-
-	if !bytes.Equal(untrustedHeader.ValidatorsHash, untrustedVals.Hash()) {
-		return fmt.Errorf("expected new header validators (%X) to match those that were supplied (%X) at height %d",
-			untrustedHeader.ValidatorsHash,
-			untrustedVals.Hash(),
-			untrustedHeader.Height,
-		)
-	}
-
+	_ = "STUB: not implemented"
 	return nil
 }
 
-func checkRequiredHeaderFields(h *types.SignedHeader) error {
-	if h.Height == 0 {
-		return errors.New("height in trusted header must be set (non zero")
-	}
-
-	if h.Time.IsZero() {
-		return errors.New("time in trusted header must be set")
-	}
-
-	if h.ChainID == "" {
-		return errors.New("chain ID in trusted header must be set")
-	}
-	return nil
-}
+func checkRequiredHeaderFields(h *types.SignedHeader) error { _ = "STUB: not implemented"; return nil }

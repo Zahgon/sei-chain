@@ -18,22 +18,21 @@ type TimeoutVote struct {
 
 // NewTimeoutVote creates a new TimeoutVote.
 func NewTimeoutVote(view View, latestPrepareQC utils.Option[ViewNumber]) *TimeoutVote {
-	return &TimeoutVote{
-		view:            view,
-		latestPrepareQC: latestPrepareQC,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // View .
 func (m *TimeoutVote) View() View {
-	return m.view
+	_ = "STUB: not implemented"
+
+	// latestPrepareQCView is the highest view number for which a PrepareQC was observed by the node.
+	return *new(View)
 }
 
-// latestPrepareQCView is the highest view number for which a PrepareQC was observed by the node.
 func (m *TimeoutVote) latestPrepareQCView() utils.Option[View] {
-	return utils.MapOpt(m.latestPrepareQC, func(n ViewNumber) View {
-		return View{Index: m.view.Index, Number: n}
-	})
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // FullTimeoutVote .
@@ -45,51 +44,25 @@ type FullTimeoutVote struct {
 
 // NewFullTimeoutVote creates a new FullTimeoutVote.
 func NewFullTimeoutVote(key SecretKey, view View, latestPrepareQC utils.Option[*PrepareQC]) *FullTimeoutVote {
-	vote := &TimeoutVote{
-		view:            view,
-		latestPrepareQC: utils.MapOpt(latestPrepareQC, func(qc *PrepareQC) ViewNumber { return qc.Proposal().View().Number }),
-	}
-	return &FullTimeoutVote{
-		vote:            Sign(key, vote),
-		latestPrepareQC: latestPrepareQC,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Vote .
 func (m *FullTimeoutVote) Vote() *Signed[*TimeoutVote] {
-	return m.vote
-}
+	_ = "STUB: not implemented"
 
-// View .
-func (m *FullTimeoutVote) View() View {
-	return m.vote.Msg().View()
-}
-
-// Verify verifies the FullTimeoutVote against the committee.
-func (m *FullTimeoutVote) Verify(c *Committee) error {
-	if err := m.vote.VerifySig(c); err != nil {
-		return err
-	}
-	if want, ok := m.vote.Msg().latestPrepareQCView().Get(); ok {
-		pQC, ok := m.latestPrepareQC.Get()
-		if !ok {
-			return errors.New("missing latestPrepareQC")
-		}
-		// TODO: verifying PrepareQC in all Timeout votes might be too inefficient.
-		// If it is, we can skip duplicated verification.
-		if err := pQC.Verify(c); err != nil {
-			return fmt.Errorf("latestPrepareQC: %w", err)
-		}
-		if got := pQC.Proposal().View(); got != want {
-			return fmt.Errorf("latestPrepareQC view mismatch, got %v, want %v", got, want)
-		}
-	} else {
-		if _, ok := m.latestPrepareQC.Get(); ok {
-			return errors.New("unnecessary latestPrepareQC")
-		}
-	}
+	// View .
 	return nil
 }
+
+func (m *FullTimeoutVote) View() View { _ = "STUB: not implemented"; return *new(View) }
+
+// Verify verifies the FullTimeoutVote against the committee.
+func (m *FullTimeoutVote) Verify(c *Committee) error { _ = "STUB: not implemented"; return nil }
+
+// TODO: verifying PrepareQC in all Timeout votes might be too inefficient.
+// If it is, we can skip duplicated verification.
 
 // TimeoutQC .
 type TimeoutQC struct {
@@ -99,111 +72,45 @@ type TimeoutQC struct {
 }
 
 // NewTimeoutQC creates a new TimeoutQC.
-func NewTimeoutQC(fullVotes []*FullTimeoutVote) *TimeoutQC {
-	if len(fullVotes) == 0 {
-		panic("qc cannot be empty")
-	}
-	latestPrepareQC := utils.None[*PrepareQC]()
-	votes := make([]*Signed[*TimeoutVote], 0, len(fullVotes))
-	for _, v := range fullVotes {
-		votes = append(votes, v.Vote())
-		if qc := v.latestPrepareQC; NextViewOpt(latestPrepareQC).Less(NextViewOpt(qc)) {
-			latestPrepareQC = qc
-		}
-	}
-	return &TimeoutQC{
-		votes:           votes,
-		latestPrepareQC: latestPrepareQC,
-	}
-}
+func NewTimeoutQC(fullVotes []*FullTimeoutVote) *TimeoutQC { _ = "STUB: not implemented"; return nil }
 
 // View .
-func (m *TimeoutQC) View() View {
-	return m.votes[0].Msg().View()
-}
+func (m *TimeoutQC) View() View { _ = "STUB: not implemented"; return *new(View) }
 
 // Votes .
 func (m *TimeoutQC) Votes() []*Signed[*TimeoutVote] {
-	return m.votes
-}
+	_ = "STUB: not implemented"
 
-// LatestPrepareQC returns the highest PrepareQC observed by signers.
-func (m *TimeoutQC) LatestPrepareQC() utils.Option[*PrepareQC] {
-	return m.latestPrepareQC
-}
-
-// Verify verifies the TimeoutQC against the committee and the previous CommitQC.
-// Verifying TimeoutQC should NOT require previous TimeoutQC,
-// since observing prior TimeoutQCs is not required in the pb.
-func (m *TimeoutQC) Verify(c *Committee, prev utils.Option[*CommitQC]) error {
-	// Verify the signatures.
-	done := map[PublicKey]struct{}{}
-	for _, v := range m.votes {
-		if _, ok := done[v.sig.key]; ok {
-			return fmt.Errorf("duplicate vote from %q", v.sig.key)
-		}
-		done[v.sig.key] = struct{}{}
-		if err := v.VerifySig(c); err != nil {
-			return err
-		}
-	}
-	// Verify that we have enough votes.
-	if got, want := len(done), c.TimeoutQuorum(); got < want {
-		return fmt.Errorf("got %v votes, want >= %v", got, want)
-	}
-	// Check that the TimeoutQC is from the correct consensus instance.
-	h := utils.None[ViewNumber]()
-	view := m.View()
-	if got, want := view.Index, NextIndexOpt(prev); got != want {
-		return fmt.Errorf("timeoutQC.View().Index = %v, want %v", got, want)
-	}
-	// Check that the votes come from the same view.
-	for _, v := range m.Votes() {
-		if got := v.Msg().View(); got != view {
-			return fmt.Errorf("votes[%q].View() = %v, want %v", v.sig.key, got, view)
-		}
-		if x, ok := v.Msg().latestPrepareQC.Get(); ok && x >= NextOpt(h) {
-			h = utils.Some(x)
-		}
-	}
-	// Check that the prepareQC is present iff needed.
-	if vn, ok := h.Get(); ok {
-		pQC, ok := m.latestPrepareQC.Get()
-		if !ok {
-			return errors.New("missing latestPrepareQC")
-		}
-		if got, want := pQC.Proposal().View(), (View{Index: view.Index, Number: vn}); got != want {
-			return fmt.Errorf("latestPrepareQC view number mismatch, got %v, want %v", got, want)
-		}
-		if err := pQC.Verify(c); err != nil {
-			return fmt.Errorf("higPrepareQC: %w", err)
-		}
-	} else {
-		if _, ok := m.latestPrepareQC.Get(); ok {
-			return errors.New("unnecessary latestPrepareQC")
-		}
-	}
+	// LatestPrepareQC returns the highest PrepareQC observed by signers.
 	return nil
 }
 
-func (m *TimeoutQC) reproposal() (*Proposal, bool) {
-	pQC, ok := m.latestPrepareQC.Get()
-	if !ok {
-		return nil, false
-	}
-	p := pQC.Proposal()
-	// TODO(gprusak): this unnecessarily accesses internal state and does the copy. Fix it.
-	var laneRanges []*LaneRange
-	for _, l := range p.laneRanges {
-		laneRanges = append(laneRanges, l)
-	}
-	return newProposal(
-		m.View().Next(),
-		p.Timestamp(),
-		laneRanges,
-		p.App(),
-	), true
+func (m *TimeoutQC) LatestPrepareQC() utils.Option[*PrepareQC] {
+	_ = "STUB: not implemented"
+	return nil
+
+	// Verify verifies the TimeoutQC against the committee and the previous CommitQC.
+	// Verifying TimeoutQC should NOT require previous TimeoutQC,
+	// since observing prior TimeoutQCs is not required in the pb.
 }
+
+func (m *TimeoutQC) Verify(c *Committee, prev utils.Option[*CommitQC]) error {
+	_ = "STUB: not implemented"
+	// Verify the signatures.
+	return nil
+}
+
+// Verify that we have enough votes.
+
+// Check that the TimeoutQC is from the correct consensus instance.
+
+// Check that the votes come from the same view.
+
+// Check that the prepareQC is present iff needed.
+
+func (m *TimeoutQC) reproposal() (*Proposal, bool) { _ = "STUB: not implemented"; return nil, false }
+
+// TODO(gprusak): this unnecessarily accesses internal state and does the copy. Fix it.
 
 // TimeoutVoteConv is the protobuf converter for TimeoutVote.
 var TimeoutVoteConv = protoutils.Conv[*TimeoutVote, *pb.TimeoutVote]{

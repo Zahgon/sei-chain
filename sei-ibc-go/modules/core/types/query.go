@@ -3,11 +3,8 @@ package types
 import (
 	"github.com/gogo/protobuf/grpc"
 
-	client "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client"
 	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
-	connection "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/03-connection"
 	connectiontypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/03-connection/types"
-	channel "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel"
 	channeltypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/04-channel/types"
 )
 
@@ -20,7 +17,6 @@ type QueryServer interface {
 
 // RegisterQueryService registers each individual IBC submodule query service
 func RegisterQueryService(server grpc.Server, queryService QueryServer) {
-	client.RegisterQueryService(server, queryService)
-	connection.RegisterQueryService(server, queryService)
-	channel.RegisterQueryService(server, queryService)
+	_ = "STUB: not implemented"
+	return
 }

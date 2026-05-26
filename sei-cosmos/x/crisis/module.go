@@ -2,8 +2,6 @@ package crisis
 
 import (
 	"encoding/json"
-	"fmt"
-	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -13,12 +11,9 @@ import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	codectypes "github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/module"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/crisis/client/cli"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/x/crisis/keeper"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/x/crisis/types"
 )
 
 var (
@@ -35,59 +30,61 @@ const (
 type AppModuleBasic struct{}
 
 // Name returns the crisis module's name.
-func (AppModuleBasic) Name() string {
-	return types.ModuleName
-}
+func (AppModuleBasic) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterLegacyAminoCodec registers the crisis module's types on the given LegacyAmino codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	types.RegisterLegacyAminoCodec(cdc)
+	_ = "STUB: not implemented"
+	return
 }
 
 // DefaultGenesis returns default genesis state as raw bytes for the crisis
 // module.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	return cdc.MustMarshalJSON(types.DefaultGenesisState())
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 // ValidateGenesis performs genesis state validation for the crisis module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var data types.GenesisState
-	if err := cdc.UnmarshalAsJSON(bz, &data); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
-	}
-
-	return types.ValidateGenesis(&data)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (am AppModuleBasic) ValidateGenesisStream(cdc codec.JSONCodec, config client.TxEncodingConfig, genesisCh <-chan json.RawMessage) error {
-	for genesis := range genesisCh {
-		err := am.ValidateGenesis(cdc, config, genesis)
-		if err != nil {
-			return err
-		}
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
 
 // RegisterRESTRoutes registers no REST routes for the crisis module.
-func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {}
+func (AppModuleBasic) RegisterRESTRoutes(_ client.Context, _ *mux.Router) {
+	_ = "STUB: not implemented"
 
-// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the capability module.
-func (AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {}
-
-// GetTxCmd returns the root tx command for the crisis module.
-func (b AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.NewTxCmd()
+	// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the capability module.
+	return
 }
 
-// GetQueryCmd returns no root query command for the crisis module.
-func (AppModuleBasic) GetQueryCmd() *cobra.Command { return nil }
+func (AppModuleBasic) RegisterGRPCGatewayRoutes(_ client.Context, _ *runtime.ServeMux) {
+	_ = "STUB: not implemented"
 
-// RegisterInterfaces registers interfaces and implementations of the crisis
-// module.
+	// GetTxCmd returns the root tx command for the crisis module.
+	return
+}
+
+func (b AppModuleBasic) GetTxCmd() *cobra.Command { _ = "STUB: not implemented"; return nil }
+
+// GetQueryCmd returns no root query command for the crisis module.
+func (AppModuleBasic) GetQueryCmd() *cobra.Command {
+	_ = "STUB: not implemented"
+
+	// RegisterInterfaces registers interfaces and implementations of the crisis
+	// module.
+	return nil
+}
+
 func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
-	types.RegisterInterfaces(registry)
+	_ = "STUB: not implemented"
+	return
 }
 
 // AppModule implements an application module for the crisis module.
@@ -107,73 +104,61 @@ type AppModule struct {
 // - which doesn't impact the chain security unless 66+% of validators have a wrongly
 // modified genesis file.
 func NewAppModule(keeper *keeper.Keeper, skipGenesisInvariants bool) AppModule {
-	return AppModule{
-		AppModuleBasic: AppModuleBasic{},
-		keeper:         keeper,
-
-		skipGenesisInvariants: skipGenesisInvariants,
-	}
+	_ = "STUB: not implemented"
+	return *new(AppModule)
 }
 
 // AddModuleInitFlags implements servertypes.ModuleInitFlags interface.
-func AddModuleInitFlags(startCmd *cobra.Command) {
-	startCmd.Flags().Bool(FlagSkipGenesisInvariants, false, "Skip x/crisis invariants check on startup")
-}
+func AddModuleInitFlags(startCmd *cobra.Command) { _ = "STUB: not implemented"; return }
 
 // Name returns the crisis module's name.
-func (AppModule) Name() string {
-	return types.ModuleName
-}
+func (AppModule) Name() string { _ = "STUB: not implemented"; return "" }
 
 // RegisterInvariants performs a no-op.
-func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
+func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {
+	_ = "STUB: not implemented"
 
-// Route returns the message routing key for the crisis module.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(RouterKey, NewHandler(*am.keeper))
+	// Route returns the message routing key for the crisis module.
+	return
 }
+
+func (am AppModule) Route() sdk.Route { _ = "STUB: not implemented"; return *new(sdk.Route) }
 
 // QuerierRoute returns no querier route.
-func (AppModule) QuerierRoute() string { return "" }
+func (AppModule) QuerierRoute() string {
+	_ = "STUB: not implemented"
 
-// LegacyQuerierHandler returns no sdk.Querier.
-func (AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier { return nil }
-
-// RegisterServices registers module services.
-func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterMsgServer(cfg.MsgServer(), am.keeper)
+	// LegacyQuerierHandler returns no sdk.Querier.
+	return ""
 }
+
+func (AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier {
+	_ = "STUB: not implemented"
+
+	// RegisterServices registers module services.
+	return *new(sdk.Querier)
+}
+
+func (am AppModule) RegisterServices(cfg module.Configurator) { _ = "STUB: not implemented"; return }
 
 // InitGenesis performs genesis initialization for the crisis module. It returns
 // no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
-	start := time.Now()
-	var genesisState types.GenesisState
-	cdc.MustUnmarshalJSON(data, &genesisState)
-	telemetry.MeasureSince(start, "InitGenesis", "crisis", "unmarshal")
-
-	am.keeper.InitGenesis(ctx, &genesisState)
-	if !am.skipGenesisInvariants {
-		am.keeper.AssertInvariants(ctx)
-	}
-	return []abci.ValidatorUpdate{}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the crisis
 // module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	gs := am.keeper.ExportGenesis(ctx)
-	return cdc.MustMarshalJSON(gs)
+	_ = "STUB: not implemented"
+	return *new(json.RawMessage)
 }
 
 func (am AppModule) ExportGenesisStream(ctx sdk.Context, cdc codec.JSONCodec) <-chan json.RawMessage {
-	ch := make(chan json.RawMessage)
-	go func() {
-		ch <- am.ExportGenesis(ctx, cdc)
-		close(ch)
-	}()
-	return ch
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 { _ = "STUB: not implemented"; return 0 }

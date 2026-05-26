@@ -23,24 +23,9 @@ func NewKeeper(
 	memKey sdk.StoreKey,
 	ps paramtypes.Subspace,
 ) *Keeper {
+	_ = "STUB: not implemented"
 	// set KeyTable if it has not already been set
-	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(types.ParamKeyTable())
-	}
-
-	return &Keeper{
-		cdc:        cdc,
-		storeKey:   storeKey,
-		memKey:     memKey,
-		paramstore: ps,
-	}
+	return nil
 }
 
-func (k *Keeper) SetHooks(eh types.EpochHooks) *Keeper {
-	if k.hooks != nil {
-		panic("cannot set epochs hooks twice")
-	}
-
-	k.hooks = eh
-	return k
-}
+func (k *Keeper) SetHooks(eh types.EpochHooks) *Keeper { _ = "STUB: not implemented"; return nil }

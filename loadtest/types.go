@@ -1,18 +1,12 @@
 package main
 
 import (
-	"fmt"
-	"math/rand"
-	"strings"
-
 	"github.com/ethereum/go-ethereum/common"
 	ethtypes "github.com/ethereum/go-ethereum/core/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec/types"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-
-	"github.com/sei-protocol/sei-chain/utils"
 )
 
 const (
@@ -77,19 +71,10 @@ type Config struct {
 	EVMAddresses *EVMAddresses
 }
 
-func (c *Config) EVMRpcEndpoint() string {
-	endpoints := strings.Split(c.EvmRpcEndpoints, ",")
-	return endpoints[0]
-}
-func (c *Config) ContainsAnyMessageTypes(types ...string) bool {
+func (c *Config) EVMRpcEndpoint() string { _ = "STUB: not implemented"; return "" }
 
-	for _, t := range types {
-		for _, mt := range c.MessageTypes {
-			if mt == t {
-				return true
-			}
-		}
-	}
+func (c *Config) ContainsAnyMessageTypes(types ...string) bool {
+	_ = "STUB: not implemented"
 	return false
 }
 
@@ -116,18 +101,12 @@ type NumericDistribution struct {
 	NumDistinct int64   `json:"number_of_distinct_values"`
 }
 
-func (d *NumericDistribution) Sample() sdk.Dec {
-	steps := sdk.NewDec(rand.Int63n(d.NumDistinct))
-	return d.Min.Add(d.Max.Sub(d.Min).QuoInt64(d.NumDistinct).Mul(steps))
-}
+func (d *NumericDistribution) Sample() sdk.Dec { _ = "STUB: not implemented"; return *new(sdk.Dec) }
 
 // Invalid numeric distribution sample
 func (d *NumericDistribution) InvalidSample() sdk.Dec {
-	steps := sdk.NewDec(rand.Int63n(d.NumDistinct))
-	if rand.Float64() < 0.5 {
-		return d.Min.Add(d.Max.Sub(d.Min).QuoInt64(d.NumDistinct).Mul(steps))
-	}
-	return d.Max.Add(d.Max.Sub(d.Min).QuoInt64(d.NumDistinct).Mul(steps))
+	_ = "STUB: not implemented"
+	return *new(sdk.Dec)
 }
 
 type DexMsgTypeDistribution struct {
@@ -158,46 +137,13 @@ type WasmMintNftType struct {
 	ContractAddr string `json:"contract_address"`
 }
 
-func (d *MsgTypeDistribution) SampleDexMsgs() string {
-	if !d.Dex.LimitOrderPct.Add(d.Dex.MarketOrderPct).Equal(sdk.OneDec()) {
-		panic("Distribution percentages must add up to 1")
-	}
-	randNum := sdk.MustNewDecFromStr(fmt.Sprintf("%f", rand.Float64()))
-	if randNum.LT(d.Dex.LimitOrderPct) {
-		return Limit
-	}
-	return Market
-}
+func (d *MsgTypeDistribution) SampleDexMsgs() string { _ = "STUB: not implemented"; return "" }
 
-func (d *MsgTypeDistribution) SampleStakingMsgs() string {
-	if !d.Staking.DelegatePct.Add(d.Staking.UndelegatePct).Add(d.Staking.BeginRedelegatePct).Equal(sdk.OneDec()) {
-		panic("Distribution percentages must add up to 1")
-	}
-	randNum := sdk.MustNewDecFromStr(fmt.Sprintf("%f", rand.Float64()))
-	if randNum.LT(d.Staking.DelegatePct) {
-		return "delegate"
-	} else if randNum.LT(d.Staking.DelegatePct.Add(d.Staking.UndelegatePct)) {
-		return "undelegate"
-	}
-	return "begin_redelegate"
-}
+func (d *MsgTypeDistribution) SampleStakingMsgs() string { _ = "STUB: not implemented"; return "" }
 
 type ContractDistributions []ContractDistribution
 
-func (d *ContractDistributions) Sample() string {
-	if !utils.Reduce(*d, func(i ContractDistribution, o sdk.Dec) sdk.Dec { return o.Add(i.Percentage) }, sdk.ZeroDec()).Equal(sdk.OneDec()) {
-		panic("Distribution percentages must add up to 1")
-	}
-	randNum := sdk.MustNewDecFromStr(fmt.Sprintf("%f", rand.Float64()))
-	cumPct := sdk.ZeroDec()
-	for _, dist := range *d {
-		cumPct = cumPct.Add(dist.Percentage)
-		if randNum.LTE(cumPct) {
-			return dist.ContractAddr
-		}
-	}
-	panic("this should never be triggered")
-}
+func (d *ContractDistributions) Sample() string { _ = "STUB: not implemented"; return "" }
 
 type ContractDistribution struct {
 	ContractAddr string  `json:"contract_address"`

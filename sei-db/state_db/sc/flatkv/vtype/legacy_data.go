@@ -1,11 +1,5 @@
 package vtype
 
-import (
-	"encoding/binary"
-	"errors"
-	"fmt"
-)
-
 type LegacyDataVersion uint8
 
 // DO NOT CHANGE VERSION VALUES!!! Adding new versions is ok, but historical versions should never be removed/changed.
@@ -44,110 +38,50 @@ type LegacyData struct {
 }
 
 // Create a new LegacyData with the given value.
-func NewLegacyData() *LegacyData {
-	return &LegacyData{version: LegacyDataVersion0}
-}
+func NewLegacyData() *LegacyData { _ = "STUB: not implemented"; return nil }
 
 // Serialize the legacy data to a byte slice.
-func (l *LegacyData) Serialize() []byte {
-	if l == nil {
-		return make([]byte, legacyHeaderLength)
-	}
-	data := make([]byte, legacyHeaderLength+len(l.value))
-	data[legacyVersionStart] = byte(l.version)
-	binary.BigEndian.PutUint64(data[legacyBlockHeightStart:legacyValueStart], uint64(l.blockHeight)) //nolint:gosec
-	copy(data[legacyValueStart:], l.value)
-	return data
-}
+func (l *LegacyData) Serialize() []byte { _ = "STUB: not implemented"; return nil }
+
+//nolint:gosec
 
 // Deserialize the legacy data from the given byte slice.
 func DeserializeLegacyData(data []byte) (*LegacyData, error) {
-	if len(data) == 0 {
-		return nil, errors.New("data is empty")
-	}
-
-	version := LegacyDataVersion(data[legacyVersionStart])
-	if version != LegacyDataVersion0 {
-		return nil, fmt.Errorf("unsupported serialization version: %d", version)
-	}
-
-	if len(data) < legacyHeaderLength {
-		return nil, fmt.Errorf("data length at version %d should be at least %d, got %d",
-			version, legacyHeaderLength, len(data))
-	}
-
-	value := make([]byte, len(data)-legacyHeaderLength)
-	copy(value, data[legacyValueStart:])
-
-	return &LegacyData{
-		version:     version,
-		blockHeight: int64(binary.BigEndian.Uint64(data[legacyBlockHeightStart:legacyValueStart])), //nolint:gosec
-		value:       value,
-	}, nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+//nolint:gosec
 
 // Get the serialization version for this LegacyData instance.
 func (l *LegacyData) GetSerializationVersion() LegacyDataVersion {
-	if l == nil {
-		return LegacyDataVersion0
-	}
-	return l.version
+	_ = "STUB: not implemented"
+	return *new(LegacyDataVersion)
 }
 
 // Get the block height when this legacy entry was last modified.
-func (l *LegacyData) GetBlockHeight() int64 {
-	if l == nil {
-		return 0
-	}
-	return l.blockHeight
-}
+func (l *LegacyData) GetBlockHeight() int64 { _ = "STUB: not implemented"; return 0 }
 
 // Get the legacy value.
-func (l *LegacyData) GetValue() []byte {
-	if l == nil {
-		return []byte{}
-	}
-	return l.value
-}
+func (l *LegacyData) GetValue() []byte { _ = "STUB: not implemented"; return nil }
 
 // Set the block height when this legacy entry was last modified/touched. Returns self (or a new LegacyData if nil).
 func (l *LegacyData) SetBlockHeight(blockHeight int64) *LegacyData {
-	if l == nil {
-		l = NewLegacyData()
-	}
-	l.blockHeight = blockHeight
-	return l
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Set the legacy value. Returns self (or a new LegacyData if nil).
 // Clears the delete flag — an explicit SetValue is a write, not a deletion,
 // even when value is empty ([]byte{} is a valid Cosmos module value).
-func (l *LegacyData) SetValue(value []byte) *LegacyData {
-	if l == nil {
-		l = NewLegacyData()
-	}
-	l.value = append([]byte(nil), value...)
-	l.isDelete = false
-	return l
-}
+func (l *LegacyData) SetValue(value []byte) *LegacyData { _ = "STUB: not implemented"; return nil }
 
 // MarkDeleted flags this entry for physical key removal at commit time.
 // The stored value is irrelevant once marked; IsDelete() will return true.
-func (l *LegacyData) MarkDeleted() *LegacyData {
-	if l == nil {
-		l = NewLegacyData()
-	}
-	l.isDelete = true
-	return l
-}
+func (l *LegacyData) MarkDeleted() *LegacyData { _ = "STUB: not implemented"; return nil }
 
 // IsDelete reports whether this entry represents a deletion.
 // Uses an explicit flag rather than value-length inference so that empty
 // values ([]byte{}) written by Cosmos modules are not misinterpreted as
 // deletions.
-func (l *LegacyData) IsDelete() bool {
-	if l == nil {
-		return true
-	}
-	return l.isDelete
-}
+func (l *LegacyData) IsDelete() bool { _ = "STUB: not implemented"; return false }

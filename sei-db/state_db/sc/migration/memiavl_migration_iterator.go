@@ -1,9 +1,6 @@
 package migration
 
 import (
-	"fmt"
-	"sort"
-
 	"github.com/sei-protocol/sei-chain/sei-db/state_db/sc/memiavl"
 )
 
@@ -48,123 +45,32 @@ func NewMemiavlMigrationIterator(
 	// The stores to iterate+migrate. If empty, all stores will be migrated.
 	storesToMigrate []string,
 ) *MemiavlMigrationIterator {
-	var allowed map[string]struct{}
-	if len(storesToMigrate) > 0 {
-		allowed = make(map[string]struct{}, len(storesToMigrate))
-		for _, s := range storesToMigrate {
-			allowed[s] = struct{}{}
-		}
-	}
-
-	namedTrees := db.Trees()
-	treeNames := make([]string, 0, len(namedTrees))
-	for _, nt := range namedTrees {
-		if nt.Name == MigrationStore {
-			continue
-		}
-		if len(allowed) > 0 {
-			if _, ok := allowed[nt.Name]; !ok {
-				continue
-			}
-		}
-		treeNames = append(treeNames, nt.Name)
-	}
-	sort.Strings(treeNames)
-	return &MemiavlMigrationIterator{
-		db:        db,
-		treeNames: treeNames,
-		treeIdx:   0,
-		boundary:  MigrationBoundaryNotStarted,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (m *MemiavlMigrationIterator) SetBoundary(boundary MigrationBoundary) {
-	m.boundary = boundary
-	m.treeIdx = computeStartTreeIndex(m.treeNames, boundary)
+	_ = "STUB: not implemented"
+	return
 }
 
 func (m *MemiavlMigrationIterator) NextBatch(size int) ([]ValueToMigrate, MigrationBoundary, error) {
-	if size <= 0 {
-		return nil, m.boundary, fmt.Errorf("batch size must be positive, got %d", size)
-	}
-	if m.boundary.Equals(MigrationBoundaryComplete) {
-		return nil, MigrationBoundaryComplete, nil
-	}
-
-	batch := make([]ValueToMigrate, 0, size)
-	firstKey := true
-
-	for m.treeIdx < len(m.treeNames) && len(batch) < size {
-		name := m.treeNames[m.treeIdx]
-		tree := m.db.TreeByName(name)
-		if tree == nil {
-			return nil, m.boundary, fmt.Errorf("tree %q no longer exists in db", name)
-		}
-
-		var start []byte
-		if firstKey && m.boundary.Status() == MigrationInProgress && m.boundary.ModuleName() == name {
-			// tree.Iterator's start bound is inclusive, so append a 0x00
-			// byte to get a start key strictly greater than boundary.Key().
-			key := m.boundary.Key()
-			start = make([]byte, len(key)+1)
-			copy(start, key)
-		}
-		firstKey = false
-
-		iter := tree.Iterator(start, nil, true)
-		for ; iter.Valid() && len(batch) < size; iter.Next() {
-			batch = append(batch, ValueToMigrate{
-				ModuleName: name,
-				Key:        copyBytes(iter.Key()),
-				Value:      copyBytes(iter.Value()),
-			})
-		}
-		exhausted := !iter.Valid()
-		if err := iter.Close(); err != nil {
-			return nil, m.boundary, fmt.Errorf("failed to close tree iterator for %s: %w", name, err)
-		}
-
-		if exhausted {
-			m.treeIdx++
-		}
-	}
-
-	if len(batch) == 0 {
-		m.boundary = MigrationBoundaryComplete
-		return nil, MigrationBoundaryComplete, nil
-	}
-
-	if m.treeIdx >= len(m.treeNames) {
-		// All trees fully drained; this was the final batch. Report
-		// Complete eagerly so the caller can finalize in the same step.
-		m.boundary = MigrationBoundaryComplete
-	} else {
-		last := batch[len(batch)-1]
-		m.boundary = NewMigrationBoundary(last.ModuleName, last.Key)
-	}
-	return batch, m.boundary, nil
+	_ = "STUB: not implemented"
+	return nil, *new(MigrationBoundary), nil
 }
+
+// tree.Iterator's start bound is inclusive, so append a 0x00
+// byte to get a start key strictly greater than boundary.Key().
+
+// All trees fully drained; this was the final batch. Report
+// Complete eagerly so the caller can finalize in the same step.
 
 // computeStartTreeIndex returns the index of the first tree that may contain
 // unmigrated keys according to the given boundary.
 func computeStartTreeIndex(treeNames []string, boundary MigrationBoundary) int {
-	switch boundary.Status() {
-	case MigrationNotStarted:
-		return 0
-	case MigrationComplete:
-		return len(treeNames)
-	}
-	return sort.Search(len(treeNames), func(i int) bool {
-		return treeNames[i] >= boundary.ModuleName()
-	})
+	_ = "STUB: not implemented"
+	return 0
 }
 
 // copyBytes returns a newly allocated copy of b, or nil if b is nil.
-func copyBytes(b []byte) []byte {
-	if b == nil {
-		return nil
-	}
-	c := make([]byte, len(b))
-	copy(c, b)
-	return c
-}
+func copyBytes(b []byte) []byte { _ = "STUB: not implemented"; return nil }

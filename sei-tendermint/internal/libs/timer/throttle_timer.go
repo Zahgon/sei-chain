@@ -23,46 +23,16 @@ type ThrottleTimer struct {
 }
 
 func NewThrottleTimer(name string, dur time.Duration) *ThrottleTimer {
-	var ch = make(chan struct{})
-	var quit = make(chan struct{})
-	var t = &ThrottleTimer{Name: name, Ch: ch, dur: dur, quit: quit}
-	t.mtx.Lock()
-	t.timer = time.AfterFunc(dur, t.fireRoutine)
-	t.mtx.Unlock()
-	t.timer.Stop()
-	return t
+	_ = "STUB: not implemented"
+	return nil
 }
 
-func (t *ThrottleTimer) fireRoutine() {
-	t.mtx.Lock()
-	defer t.mtx.Unlock()
-	select {
-	case t.Ch <- struct{}{}:
-		t.isSet = false
-	case <-t.quit:
-		// do nothing
-	default:
-		t.timer.Reset(t.dur)
-	}
-}
+func (t *ThrottleTimer) fireRoutine() { _ = "STUB: not implemented"; return }
 
-func (t *ThrottleTimer) Set() {
-	t.mtx.Lock()
-	defer t.mtx.Unlock()
-	if !t.isSet {
-		t.isSet = true
-		t.timer.Reset(t.dur)
-	}
-}
+// do nothing
+
+func (t *ThrottleTimer) Set() { _ = "STUB: not implemented"; return }
 
 // For ease of .Stop()'ing services before .Start()'ing them,
 // we ignore .Stop()'s on nil ThrottleTimers
-func (t *ThrottleTimer) Stop() bool {
-	if t == nil {
-		return false
-	}
-	close(t.quit)
-	t.mtx.Lock()
-	defer t.mtx.Unlock()
-	return t.timer.Stop()
-}
+func (t *ThrottleTimer) Stop() bool { _ = "STUB: not implemented"; return false }

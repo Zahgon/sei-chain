@@ -238,6 +238,4 @@ type GenesisMetadata interface {
 }
 
 // String returns the string representation of a client status.
-func (s Status) String() string {
-	return string(s)
-}
+func (s Status) String() string { _ = "STUB: not implemented"; return "" }

@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/store/types"
-	"github.com/sei-protocol/sei-chain/sei-cosmos/telemetry"
 )
 
 type IStoreTracer interface {
@@ -22,12 +21,7 @@ type IStoreTracer interface {
 
 // traceStart returns time.Now() when tracer is non-nil, or the zero Time
 // otherwise. Keeps time.Now off the gaskv hot path when no tracer is attached.
-func traceStart(tracer IStoreTracer) time.Time {
-	if tracer != nil {
-		return time.Now()
-	}
-	return time.Time{}
-}
+func traceStart(tracer IStoreTracer) time.Time { _ = "STUB: not implemented"; return *new(time.Time) }
 
 var _ types.KVStore = &Store{}
 
@@ -43,85 +37,42 @@ type Store struct {
 
 // NewStore returns a reference to a new GasKVStore.
 func NewStore(parent types.KVStore, gasMeter types.GasMeter, gasConfig types.GasConfig, moduleName string, tracer IStoreTracer) *Store {
-	kvs := &Store{
-		gasMeter:   gasMeter,
-		gasConfig:  gasConfig,
-		parent:     parent,
-		moduleName: moduleName,
-		tracer:     tracer,
-	}
-	return kvs
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // Implements Store.
 func (gs *Store) GetStoreType() types.StoreType {
-	return gs.parent.GetStoreType()
+	_ = "STUB: not implemented"
+	return *new(types.StoreType)
 }
 
-func (gs *Store) GetWorkingHash() ([]byte, error) {
-	return gs.parent.GetWorkingHash()
-}
+func (gs *Store) GetWorkingHash() ([]byte, error) { _ = "STUB: not implemented"; return nil, nil }
 
 // Implements KVStore.
-func (gs *Store) Get(key []byte) (value []byte) {
-	gs.gasMeter.ConsumeGas(gs.gasConfig.ReadCostFlat, types.GasReadCostFlatDesc)
-	start := traceStart(gs.tracer)
-	value = gs.parent.Get(key)
+func (gs *Store) Get(key []byte) (value []byte) { _ = "STUB: not implemented"; return nil }
 
-	// TODO overflow-safe math?
-	gs.gasMeter.ConsumeGas(gs.gasConfig.ReadCostPerByte*types.Gas(len(key)), types.GasReadPerByteDesc)
-	gs.gasMeter.ConsumeGas(gs.gasConfig.ReadCostPerByte*types.Gas(len(value)), types.GasReadPerByteDesc)
-	if gs.tracer != nil {
-		gs.tracer.Get(key, value, gs.moduleName, time.Since(start))
-	}
-
-	return value
-}
+// TODO overflow-safe math?
 
 // Implements KVStore.
-func (gs *Store) Set(key []byte, value []byte) {
-	types.AssertValidKey(key)
-	types.AssertValidValue(value)
-	gs.gasMeter.ConsumeGas(gs.gasConfig.WriteCostFlat, types.GasWriteCostFlatDesc)
-	// TODO overflow-safe math?
-	gs.gasMeter.ConsumeGas(gs.gasConfig.WriteCostPerByte*types.Gas(len(key)), types.GasWritePerByteDesc)
-	gs.gasMeter.ConsumeGas(gs.gasConfig.WriteCostPerByte*types.Gas(len(value)), types.GasWritePerByteDesc)
-	start := traceStart(gs.tracer)
-	gs.parent.Set(key, value)
-	if gs.tracer != nil {
-		gs.tracer.Set(key, value, gs.moduleName, time.Since(start))
-	}
-}
+func (gs *Store) Set(key []byte, value []byte) { _ = "STUB: not implemented"; return }
+
+// TODO overflow-safe math?
 
 // Implements KVStore.
-func (gs *Store) Has(key []byte) bool {
-	defer telemetry.MeasureSince(time.Now(), "store", "gaskv", "has")
-	gs.gasMeter.ConsumeGas(gs.gasConfig.HasCost, types.GasHasDesc)
-	start := traceStart(gs.tracer)
-	res := gs.parent.Has(key)
-	if gs.tracer != nil {
-		gs.tracer.Has(key, gs.moduleName, time.Since(start))
-	}
-	return res
-}
+func (gs *Store) Has(key []byte) bool { _ = "STUB: not implemented"; return false }
 
 // Implements KVStore.
-func (gs *Store) Delete(key []byte) {
-	defer telemetry.MeasureSince(time.Now(), "store", "gaskv", "delete")
-	// charge gas to prevent certain attack vectors even though space is being freed
-	gs.gasMeter.ConsumeGas(gs.gasConfig.DeleteCost, types.GasDeleteDesc)
-	start := traceStart(gs.tracer)
-	gs.parent.Delete(key)
-	if gs.tracer != nil {
-		gs.tracer.Delete(key, gs.moduleName, time.Since(start))
-	}
-}
+func (gs *Store) Delete(key []byte) { _ = "STUB: not implemented"; return }
+
+// charge gas to prevent certain attack vectors even though space is being freed
 
 // Iterator implements the KVStore interface. It returns an iterator which
 // incurs a flat gas cost for seeking to the first key/value pair and a variable
 // gas cost based on the current value's length if the iterator is valid.
 func (gs *Store) Iterator(start, end []byte) types.Iterator {
-	return gs.iterator(start, end, true)
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // ReverseIterator implements the KVStore interface. It returns a reverse
@@ -129,54 +80,36 @@ func (gs *Store) Iterator(start, end []byte) types.Iterator {
 // and a variable gas cost based on the current value's length if the iterator
 // is valid.
 func (gs *Store) ReverseIterator(start, end []byte) types.Iterator {
-	return gs.iterator(start, end, false)
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // Implements KVStore.
 func (gs *Store) CacheWrap(_ types.StoreKey) types.CacheWrap {
-	panic("cannot CacheWrap a GasKVStore")
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 // CacheWrapWithTrace implements the KVStore interface.
 func (gs *Store) CacheWrapWithTrace(_ types.StoreKey, _ io.Writer, _ types.TraceContext) types.CacheWrap {
-	panic("cannot CacheWrapWithTrace a GasKVStore")
+	_ = "STUB: not implemented"
+	return *new(types.CacheWrap)
 }
 
 func (gs *Store) iterator(start, end []byte, ascending bool) types.Iterator {
-	var parent types.Iterator
-	iteratorStart := traceStart(gs.tracer)
-	if ascending {
-		parent = gs.parent.Iterator(start, end)
-	} else {
-		parent = gs.parent.ReverseIterator(start, end)
-	}
-
-	gi := newGasIterator(gs.gasMeter, gs.gasConfig, parent, gs.moduleName, gs.tracer)
-	if gs.tracer != nil {
-		gi.(*gasIterator).iteratorID = gs.tracer.StartIterator(start, end, ascending, gs.moduleName, time.Since(iteratorStart))
-	}
-	defer func() {
-		if err := recover(); err != nil {
-			// if there is a panic, we close the iterator then reraise
-			_ = gi.Close()
-			panic(err)
-		}
-	}()
-	gi.(*gasIterator).consumeSeekGas()
-
-	return gi
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
-func (gs *Store) VersionExists(version int64) bool {
-	return gs.parent.VersionExists(version)
-}
+// if there is a panic, we close the iterator then reraise
 
-func (gs *Store) DeleteAll(start, end []byte) error {
-	return gs.parent.DeleteAll(start, end)
-}
+func (gs *Store) VersionExists(version int64) bool { _ = "STUB: not implemented"; return false }
+
+func (gs *Store) DeleteAll(start, end []byte) error { _ = "STUB: not implemented"; return nil }
 
 func (gs *Store) GetAllKeyStrsInRange(start, end []byte) (res []string) {
-	return gs.parent.GetAllKeyStrsInRange(start, end)
+	_ = "STUB: not implemented"
+	return nil
 }
 
 type gasIterator struct {
@@ -189,74 +122,40 @@ type gasIterator struct {
 }
 
 func newGasIterator(gasMeter types.GasMeter, gasConfig types.GasConfig, parent types.Iterator, moduleName string, tracer IStoreTracer) types.Iterator {
-	return &gasIterator{
-		gasMeter:   gasMeter,
-		gasConfig:  gasConfig,
-		parent:     parent,
-		moduleName: moduleName,
-		tracer:     tracer,
-		iteratorID: -1,
-	}
+	_ = "STUB: not implemented"
+	return *new(types.Iterator)
 }
 
 // Implements Iterator.
 func (gi *gasIterator) Domain() (start []byte, end []byte) {
-	return gi.parent.Domain()
+	_ = "STUB: not implemented"
+	return nil,
+
+		// Implements Iterator.
+		nil
 }
 
-// Implements Iterator.
-func (gi *gasIterator) Valid() bool {
-	return gi.parent.Valid()
-}
+func (gi *gasIterator) Valid() bool { _ = "STUB: not implemented"; return false }
 
 // Next implements the Iterator interface. It seeks to the next key/value pair
 // in the iterator. It incurs a flat gas cost for seeking and a variable gas
 // cost based on the current value's length if the iterator is valid.
-func (gi *gasIterator) Next() {
-	gi.consumeSeekGas()
-	start := traceStart(gi.tracer)
-	gi.parent.Next()
-	if gi.tracer != nil {
-		gi.tracer.RecordIteratorNext(gi.iteratorID, gi.moduleName, time.Since(start))
-	}
-}
+func (gi *gasIterator) Next() { _ = "STUB: not implemented"; return }
 
 // Key implements the Iterator interface. It returns the current key and it does
 // not incur any gas cost.
-func (gi *gasIterator) Key() (key []byte) {
-	return gi.parent.Key()
-}
+func (gi *gasIterator) Key() (key []byte) { _ = "STUB: not implemented"; return nil }
 
 // Value implements the Iterator interface. It returns the current value and it
 // does not incur any gas cost.
-func (gi *gasIterator) Value() (value []byte) {
-	value = gi.parent.Value()
-	if gi.tracer != nil {
-		gi.tracer.RecordIteratorValue(gi.iteratorID, gi.parent.Key(), value, gi.moduleName)
-	}
-	return value
-}
+func (gi *gasIterator) Value() (value []byte) { _ = "STUB: not implemented"; return nil }
 
 // Implements Iterator.
-func (gi *gasIterator) Close() error {
-	return gi.parent.Close()
-}
+func (gi *gasIterator) Close() error { _ = "STUB: not implemented"; return nil }
 
 // Error delegates the Error call to the parent iterator.
-func (gi *gasIterator) Error() error {
-	return gi.parent.Error()
-}
+func (gi *gasIterator) Error() error { _ = "STUB: not implemented"; return nil }
 
 // consumeSeekGas consumes on each iteration step a flat gas cost and a variable gas cost
 // based on the current value's length.
-func (gi *gasIterator) consumeSeekGas() {
-	if gi.Valid() {
-		key := gi.parent.Key()
-		value := gi.parent.Value()
-
-		gi.gasMeter.ConsumeGas(gi.gasConfig.ReadCostPerByte*types.Gas(len(key)), types.GasValuePerByteDesc)
-		gi.gasMeter.ConsumeGas(gi.gasConfig.ReadCostPerByte*types.Gas(len(value)), types.GasValuePerByteDesc)
-	}
-
-	gi.gasMeter.ConsumeGas(gi.gasConfig.IterNextCostFlat, types.GasIterNextCostFlatDesc)
-}
+func (gi *gasIterator) consumeSeekGas() { _ = "STUB: not implemented"; return }

@@ -15,14 +15,16 @@ type AppVote struct {
 }
 
 // NewAppVote creates a new AppVote.
-func NewAppVote(proposal *AppProposal) *AppVote {
-	return &AppVote{proposal: proposal}
-}
+func NewAppVote(proposal *AppProposal) *AppVote { _ = "STUB: not implemented"; return nil }
 
 // Proposal returns the state proposal.
-func (m *AppVote) Proposal() *AppProposal { return m.proposal }
+func (m *AppVote) Proposal() *AppProposal {
+	_ = "STUB: not implemented"
 
-// AppVoteConv is the protobuf converter for AppVote.
+	// AppVoteConv is the protobuf converter for AppVote.
+	return nil
+}
+
 var AppVoteConv = protoutils.Conv[*AppVote, *pb.AppProposal]{
 	Encode: func(m *AppVote) *pb.AppProposal {
 		return AppProposalConv.Encode(m.proposal)

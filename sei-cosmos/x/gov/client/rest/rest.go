@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/sei-protocol/sei-chain/sei-cosmos/client"
-	clientrest "github.com/sei-protocol/sei-chain/sei-cosmos/client/rest"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	"github.com/sei-protocol/sei-chain/sei-cosmos/types/rest"
 )
@@ -29,9 +28,8 @@ type ProposalRESTHandler struct {
 }
 
 func RegisterHandlers(clientCtx client.Context, rtr *mux.Router, phs []ProposalRESTHandler) {
-	r := clientrest.WithHTTPDeprecationHeaders(rtr)
-	registerQueryRoutes(clientCtx, r)
-	registerTxHandlers(clientCtx, r, phs)
+	_ = "STUB: not implemented"
+	return
 }
 
 // PostProposalReq defines the properties of a proposal request's body.

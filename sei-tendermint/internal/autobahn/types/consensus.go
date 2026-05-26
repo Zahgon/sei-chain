@@ -21,18 +21,22 @@ type ConsensusReqPrepareVote struct{ *Signed[*PrepareVote] }
 type ConsensusReqCommitVote struct{ *Signed[*CommitVote] }
 
 // View implements ConsensusReq.
-func (m *ConsensusReqPrepareVote) View() View { return m.Msg().Proposal().View() }
+func (m *ConsensusReqPrepareVote) View() View { _ = "STUB: not implemented"; return *new(View) }
 
 // View implements ConsensusReq.
-func (m *ConsensusReqCommitVote) View() View { return m.Msg().Proposal().View() }
+func (m *ConsensusReqCommitVote) View() View { _ = "STUB: not implemented"; return *new(View) }
 
-func (m *FullProposal) isConsensusReq()            {}
-func (m *ConsensusReqPrepareVote) isConsensusReq() {}
-func (m *ConsensusReqCommitVote) isConsensusReq()  {}
-func (m *FullTimeoutVote) isConsensusReq()         {}
-func (m *TimeoutQC) isConsensusReq()               {}
+func (m *FullProposal) isConsensusReq()            { _ = "STUB: not implemented"; return }
+func (m *ConsensusReqPrepareVote) isConsensusReq() { _ = "STUB: not implemented"; return }
+func (m *ConsensusReqCommitVote) isConsensusReq()  { _ = "STUB: not implemented"; return }
+func (m *FullTimeoutVote) isConsensusReq()         { _ = "STUB: not implemented"; return }
+func (m *TimeoutQC) isConsensusReq() {
+	_ = "STUB: not implemented"
 
-// ConsensusReqConv is the protobuf converter for ConsensusReq.
+	// ConsensusReqConv is the protobuf converter for ConsensusReq.
+	return
+}
+
 var ConsensusReqConv = protoutils.Conv[ConsensusReq, *pb.ConsensusReq]{
 	Encode: func(m ConsensusReq) *pb.ConsensusReq {
 		switch m := m.(type) {

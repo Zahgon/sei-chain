@@ -3,8 +3,6 @@ package main
 import (
 	"fmt"
 	"os"
-
-	"github.com/sei-protocol/sei-chain/sei-cosmos/cosmovisor"
 )
 
 func main() {
@@ -15,16 +13,6 @@ func main() {
 }
 
 // Run is the main loop, but returns an error
-func Run(args []string) error {
-	cfg, err := cosmovisor.GetConfigFromEnv()
-	if err != nil {
-		return err
-	}
+func Run(args []string) error { _ = "STUB: not implemented"; return nil }
 
-	doUpgrade, err := cosmovisor.LaunchProcess(cfg, args, os.Stdout, os.Stderr)
-	// if RestartAfterUpgrade, we launch after a successful upgrade (only condition LaunchProcess returns nil)
-	for cfg.RestartAfterUpgrade && err == nil && doUpgrade {
-		doUpgrade, err = cosmovisor.LaunchProcess(cfg, args, os.Stdout, os.Stderr)
-	}
-	return err
-}
+// if RestartAfterUpgrade, we launch after a successful upgrade (only condition LaunchProcess returns nil)

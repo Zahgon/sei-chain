@@ -1,22 +1,16 @@
 package keeper
 
 import (
-	"strings"
-
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 	capabilitytypes "github.com/sei-protocol/sei-chain/sei-cosmos/x/capability/types"
-	host "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/24-host"
-
-	"github.com/sei-protocol/sei-chain/sei-wasmd/x/wasm/types"
 )
 
 // bindIbcPort will reserve the port.
 // returns a string name of the port or error if we cannot bind it.
 // this will fail if call twice.
 func (k Keeper) bindIbcPort(ctx sdk.Context, portID string) error {
-	cap := k.portKeeper.BindPort(ctx, portID)
-	return k.ClaimCapability(ctx, cap, host.PortPath(portID))
+	_ = "STUB: not implemented"
+	return nil
 }
 
 // ensureIbcPort is like registerIbcPort, but it checks if we already hold the port
@@ -24,33 +18,28 @@ func (k Keeper) bindIbcPort(ctx sdk.Context, portID string) error {
 // Returns success if we already registered or just registered and error if we cannot
 // (lack of permissions or someone else has it)
 func (k Keeper) ensureIbcPort(ctx sdk.Context, contractAddr sdk.AccAddress) (string, error) {
-	portID := PortIDForContract(contractAddr)
-	if _, ok := k.capabilityKeeper.GetCapability(ctx, host.PortPath(portID)); ok {
-		return portID, nil
-	}
-	return portID, k.bindIbcPort(ctx, portID)
+	_ = "STUB: not implemented"
+	return "", nil
 }
 
 const portIDPrefix = "wasm."
 
-func PortIDForContract(addr sdk.AccAddress) string {
-	return portIDPrefix + addr.String()
-}
+func PortIDForContract(addr sdk.AccAddress) string { _ = "STUB: not implemented"; return "" }
 
 func ContractFromPortID(portID string) (sdk.AccAddress, error) {
-	if !strings.HasPrefix(portID, portIDPrefix) {
-		return nil, sdkerrors.Wrapf(types.ErrInvalid, "without prefix")
-	}
-	return sdk.AccAddressFromBech32(portID[len(portIDPrefix):])
+	_ = "STUB: not implemented"
+	return *new(sdk.AccAddress), nil
 }
 
 // AuthenticateCapability wraps the scopedKeeper's AuthenticateCapability function
 func (k Keeper) AuthenticateCapability(ctx sdk.Context, cap *capabilitytypes.Capability, name string) bool {
-	return k.capabilityKeeper.AuthenticateCapability(ctx, cap, name)
+	_ = "STUB: not implemented"
+	return false
 }
 
 // ClaimCapability allows the transfer module to claim a capability
 // that IBC module passes to it
 func (k Keeper) ClaimCapability(ctx sdk.Context, cap *capabilitytypes.Capability, name string) error {
-	return k.capabilityKeeper.ClaimCapability(ctx, cap, name)
+	_ = "STUB: not implemented"
+	return nil
 }

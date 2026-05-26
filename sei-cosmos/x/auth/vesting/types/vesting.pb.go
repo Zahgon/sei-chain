@@ -5,14 +5,12 @@ package types
 
 import (
 	fmt "fmt"
+	math "math"
+
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_sei_protocol_sei_chain_sei_cosmos_types "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	types1 "github.com/sei-protocol/sei-chain/sei-cosmos/types"
 	types "github.com/sei-protocol/sei-chain/sei-cosmos/x/auth/types"
-	io "io"
-	math "math"
-	math_bits "math/bits"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -40,35 +38,22 @@ type BaseVestingAccount struct {
 	CancelledTime int64 `protobuf:"varint,7,opt,name=cancelled_time,json=cancelledTime,proto3" json:"cancelled_time,omitempty" yaml:"cancelled_time"`
 }
 
-func (m *BaseVestingAccount) Reset()      { *m = BaseVestingAccount{} }
-func (*BaseVestingAccount) ProtoMessage() {}
-func (*BaseVestingAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_89e80273ca606d6e, []int{0}
-}
-func (m *BaseVestingAccount) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *BaseVestingAccount) Reset()                    { _ = "STUB: not implemented"; return }
+func (*BaseVestingAccount) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*BaseVestingAccount) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *BaseVestingAccount) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *BaseVestingAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_BaseVestingAccount.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *BaseVestingAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_BaseVestingAccount.Merge(m, src)
-}
-func (m *BaseVestingAccount) XXX_Size() int {
-	return m.Size()
-}
-func (m *BaseVestingAccount) XXX_DiscardUnknown() {
-	xxx_messageInfo_BaseVestingAccount.DiscardUnknown(m)
-}
+
+func (m *BaseVestingAccount) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *BaseVestingAccount) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *BaseVestingAccount) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_BaseVestingAccount proto.InternalMessageInfo
 
@@ -79,35 +64,28 @@ type ContinuousVestingAccount struct {
 	StartTime           int64 `protobuf:"varint,2,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty" yaml:"start_time"`
 }
 
-func (m *ContinuousVestingAccount) Reset()      { *m = ContinuousVestingAccount{} }
-func (*ContinuousVestingAccount) ProtoMessage() {}
+func (m *ContinuousVestingAccount) Reset()      { _ = "STUB: not implemented"; return }
+func (*ContinuousVestingAccount) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*ContinuousVestingAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_89e80273ca606d6e, []int{1}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *ContinuousVestingAccount) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *ContinuousVestingAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_ContinuousVestingAccount.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *ContinuousVestingAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ContinuousVestingAccount.Merge(m, src)
-}
-func (m *ContinuousVestingAccount) XXX_Size() int {
-	return m.Size()
-}
-func (m *ContinuousVestingAccount) XXX_DiscardUnknown() {
-	xxx_messageInfo_ContinuousVestingAccount.DiscardUnknown(m)
-}
+
+func (m *ContinuousVestingAccount) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *ContinuousVestingAccount) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *ContinuousVestingAccount) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_ContinuousVestingAccount proto.InternalMessageInfo
 
@@ -118,35 +96,28 @@ type DelayedVestingAccount struct {
 	*BaseVestingAccount `protobuf:"bytes,1,opt,name=base_vesting_account,json=baseVestingAccount,proto3,embedded=base_vesting_account" json:"base_vesting_account,omitempty"`
 }
 
-func (m *DelayedVestingAccount) Reset()      { *m = DelayedVestingAccount{} }
-func (*DelayedVestingAccount) ProtoMessage() {}
+func (m *DelayedVestingAccount) Reset()      { _ = "STUB: not implemented"; return }
+func (*DelayedVestingAccount) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*DelayedVestingAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_89e80273ca606d6e, []int{2}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *DelayedVestingAccount) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *DelayedVestingAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_DelayedVestingAccount.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *DelayedVestingAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DelayedVestingAccount.Merge(m, src)
-}
-func (m *DelayedVestingAccount) XXX_Size() int {
-	return m.Size()
-}
-func (m *DelayedVestingAccount) XXX_DiscardUnknown() {
-	xxx_messageInfo_DelayedVestingAccount.DiscardUnknown(m)
-}
+
+func (m *DelayedVestingAccount) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *DelayedVestingAccount) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *DelayedVestingAccount) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_DelayedVestingAccount proto.InternalMessageInfo
 
@@ -156,50 +127,30 @@ type Period struct {
 	Amount github_com_sei_protocol_sei_chain_sei_cosmos_types.Coins `protobuf:"bytes,2,rep,name=amount,proto3,castrepeated=github.com/sei-protocol/sei-chain/sei-cosmos/types.Coins" json:"amount"`
 }
 
-func (m *Period) Reset()      { *m = Period{} }
-func (*Period) ProtoMessage() {}
-func (*Period) Descriptor() ([]byte, []int) {
-	return fileDescriptor_89e80273ca606d6e, []int{3}
-}
-func (m *Period) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
+func (m *Period) Reset()                    { _ = "STUB: not implemented"; return }
+func (*Period) ProtoMessage()               { _ = "STUB: not implemented"; return }
+func (*Period) Descriptor() ([]byte, []int) { _ = "STUB: not implemented"; return nil, nil }
+
+func (m *Period) XXX_Unmarshal(b []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *Period) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_Period.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *Period) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Period.Merge(m, src)
-}
-func (m *Period) XXX_Size() int {
-	return m.Size()
-}
-func (m *Period) XXX_DiscardUnknown() {
-	xxx_messageInfo_Period.DiscardUnknown(m)
-}
+
+func (m *Period) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *Period) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *Period) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_Period proto.InternalMessageInfo
 
-func (m *Period) GetLength() int64 {
-	if m != nil {
-		return m.Length
-	}
-	return 0
-}
+func (m *Period) GetLength() int64 { _ = "STUB: not implemented"; return 0 }
 
 func (m *Period) GetAmount() github_com_sei_protocol_sei_chain_sei_cosmos_types.Coins {
-	if m != nil {
-		return m.Amount
-	}
-	return nil
+	_ = "STUB: not implemented"
+	return *new(github_com_sei_protocol_sei_chain_sei_cosmos_types.Coins)
 }
 
 // PeriodicVestingAccount implements the VestingAccount interface. It
@@ -210,35 +161,28 @@ type PeriodicVestingAccount struct {
 	VestingPeriods      []Period `protobuf:"bytes,3,rep,name=vesting_periods,json=vestingPeriods,proto3" json:"vesting_periods" yaml:"vesting_periods"`
 }
 
-func (m *PeriodicVestingAccount) Reset()      { *m = PeriodicVestingAccount{} }
-func (*PeriodicVestingAccount) ProtoMessage() {}
+func (m *PeriodicVestingAccount) Reset()      { _ = "STUB: not implemented"; return }
+func (*PeriodicVestingAccount) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*PeriodicVestingAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_89e80273ca606d6e, []int{4}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *PeriodicVestingAccount) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *PeriodicVestingAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PeriodicVestingAccount.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *PeriodicVestingAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PeriodicVestingAccount.Merge(m, src)
-}
-func (m *PeriodicVestingAccount) XXX_Size() int {
-	return m.Size()
-}
-func (m *PeriodicVestingAccount) XXX_DiscardUnknown() {
-	xxx_messageInfo_PeriodicVestingAccount.DiscardUnknown(m)
-}
+
+func (m *PeriodicVestingAccount) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *PeriodicVestingAccount) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *PeriodicVestingAccount) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_PeriodicVestingAccount proto.InternalMessageInfo
 
@@ -251,35 +195,28 @@ type PermanentLockedAccount struct {
 	*BaseVestingAccount `protobuf:"bytes,1,opt,name=base_vesting_account,json=baseVestingAccount,proto3,embedded=base_vesting_account" json:"base_vesting_account,omitempty"`
 }
 
-func (m *PermanentLockedAccount) Reset()      { *m = PermanentLockedAccount{} }
-func (*PermanentLockedAccount) ProtoMessage() {}
+func (m *PermanentLockedAccount) Reset()      { _ = "STUB: not implemented"; return }
+func (*PermanentLockedAccount) ProtoMessage() { _ = "STUB: not implemented"; return }
 func (*PermanentLockedAccount) Descriptor() ([]byte, []int) {
-	return fileDescriptor_89e80273ca606d6e, []int{5}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
 func (m *PermanentLockedAccount) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
+	_ = "STUB: not implemented"
+	return nil
 }
+
 func (m *PermanentLockedAccount) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_PermanentLockedAccount.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalToSizedBuffer(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
+	_ = "STUB: not implemented"
+	return nil, nil
 }
-func (m *PermanentLockedAccount) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_PermanentLockedAccount.Merge(m, src)
-}
-func (m *PermanentLockedAccount) XXX_Size() int {
-	return m.Size()
-}
-func (m *PermanentLockedAccount) XXX_DiscardUnknown() {
-	xxx_messageInfo_PermanentLockedAccount.DiscardUnknown(m)
-}
+
+func (m *PermanentLockedAccount) XXX_Merge(src proto.Message) { _ = "STUB: not implemented"; return }
+
+func (m *PermanentLockedAccount) XXX_Size() int { _ = "STUB: not implemented"; return 0 }
+
+func (m *PermanentLockedAccount) XXX_DiscardUnknown() { _ = "STUB: not implemented"; return }
 
 var xxx_messageInfo_PermanentLockedAccount proto.InternalMessageInfo
 
@@ -343,1300 +280,132 @@ var fileDescriptor_89e80273ca606d6e = []byte{
 }
 
 func (m *BaseVestingAccount) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *BaseVestingAccount) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *BaseVestingAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.CancelledTime != 0 {
-		i = encodeVarintVesting(dAtA, i, uint64(m.CancelledTime))
-		i--
-		dAtA[i] = 0x38
-	}
-	if len(m.Admin) > 0 {
-		i -= len(m.Admin)
-		copy(dAtA[i:], m.Admin)
-		i = encodeVarintVesting(dAtA, i, uint64(len(m.Admin)))
-		i--
-		dAtA[i] = 0x32
-	}
-	if m.EndTime != 0 {
-		i = encodeVarintVesting(dAtA, i, uint64(m.EndTime))
-		i--
-		dAtA[i] = 0x28
-	}
-	if len(m.DelegatedVesting) > 0 {
-		for iNdEx := len(m.DelegatedVesting) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.DelegatedVesting[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintVesting(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x22
-		}
-	}
-	if len(m.DelegatedFree) > 0 {
-		for iNdEx := len(m.DelegatedFree) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.DelegatedFree[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintVesting(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if len(m.OriginalVesting) > 0 {
-		for iNdEx := len(m.OriginalVesting) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.OriginalVesting[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintVesting(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.BaseAccount != nil {
-		{
-			size, err := m.BaseAccount.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintVesting(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ContinuousVestingAccount) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *ContinuousVestingAccount) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *ContinuousVestingAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.StartTime != 0 {
-		i = encodeVarintVesting(dAtA, i, uint64(m.StartTime))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.BaseVestingAccount != nil {
-		{
-			size, err := m.BaseVestingAccount.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintVesting(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DelayedVestingAccount) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *DelayedVestingAccount) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *DelayedVestingAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.BaseVestingAccount != nil {
-		{
-			size, err := m.BaseVestingAccount.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintVesting(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
-func (m *Period) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
+func (m *Period) Marshal() (dAtA []byte, err error) { _ = "STUB: not implemented"; return nil, nil }
 
-func (m *Period) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
-}
+func (m *Period) MarshalTo(dAtA []byte) (int, error) { _ = "STUB: not implemented"; return 0, nil }
 
 func (m *Period) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.Amount) > 0 {
-		for iNdEx := len(m.Amount) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.Amount[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintVesting(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x12
-		}
-	}
-	if m.Length != 0 {
-		i = encodeVarintVesting(dAtA, i, uint64(m.Length))
-		i--
-		dAtA[i] = 0x8
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PeriodicVestingAccount) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *PeriodicVestingAccount) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PeriodicVestingAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if len(m.VestingPeriods) > 0 {
-		for iNdEx := len(m.VestingPeriods) - 1; iNdEx >= 0; iNdEx-- {
-			{
-				size, err := m.VestingPeriods[iNdEx].MarshalToSizedBuffer(dAtA[:i])
-				if err != nil {
-					return 0, err
-				}
-				i -= size
-				i = encodeVarintVesting(dAtA, i, uint64(size))
-			}
-			i--
-			dAtA[i] = 0x1a
-		}
-	}
-	if m.StartTime != 0 {
-		i = encodeVarintVesting(dAtA, i, uint64(m.StartTime))
-		i--
-		dAtA[i] = 0x10
-	}
-	if m.BaseVestingAccount != nil {
-		{
-			size, err := m.BaseVestingAccount.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintVesting(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PermanentLockedAccount) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalToSizedBuffer(dAtA[:size])
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
+	_ = "STUB: not implemented"
+	return nil, nil
 }
 
 func (m *PermanentLockedAccount) MarshalTo(dAtA []byte) (int, error) {
-	size := m.Size()
-	return m.MarshalToSizedBuffer(dAtA[:size])
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func (m *PermanentLockedAccount) MarshalToSizedBuffer(dAtA []byte) (int, error) {
-	i := len(dAtA)
-	_ = i
-	var l int
-	_ = l
-	if m.BaseVestingAccount != nil {
-		{
-			size, err := m.BaseVestingAccount.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintVesting(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0xa
-	}
-	return len(dAtA) - i, nil
+	_ = "STUB: not implemented"
+	return 0, nil
 }
 
 func encodeVarintVesting(dAtA []byte, offset int, v uint64) int {
-	offset -= sovVesting(v)
-	base := offset
-	for v >= 1<<7 {
-		dAtA[offset] = uint8(v&0x7f | 0x80)
-		v >>= 7
-		offset++
-	}
-	dAtA[offset] = uint8(v)
-	return base
-}
-func (m *BaseVestingAccount) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BaseAccount != nil {
-		l = m.BaseAccount.Size()
-		n += 1 + l + sovVesting(uint64(l))
-	}
-	if len(m.OriginalVesting) > 0 {
-		for _, e := range m.OriginalVesting {
-			l = e.Size()
-			n += 1 + l + sovVesting(uint64(l))
-		}
-	}
-	if len(m.DelegatedFree) > 0 {
-		for _, e := range m.DelegatedFree {
-			l = e.Size()
-			n += 1 + l + sovVesting(uint64(l))
-		}
-	}
-	if len(m.DelegatedVesting) > 0 {
-		for _, e := range m.DelegatedVesting {
-			l = e.Size()
-			n += 1 + l + sovVesting(uint64(l))
-		}
-	}
-	if m.EndTime != 0 {
-		n += 1 + sovVesting(uint64(m.EndTime))
-	}
-	l = len(m.Admin)
-	if l > 0 {
-		n += 1 + l + sovVesting(uint64(l))
-	}
-	if m.CancelledTime != 0 {
-		n += 1 + sovVesting(uint64(m.CancelledTime))
-	}
-	return n
+	_ = "STUB: not implemented"
+	return 0
 }
 
-func (m *ContinuousVestingAccount) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BaseVestingAccount != nil {
-		l = m.BaseVestingAccount.Size()
-		n += 1 + l + sovVesting(uint64(l))
-	}
-	if m.StartTime != 0 {
-		n += 1 + sovVesting(uint64(m.StartTime))
-	}
-	return n
-}
+func (m *BaseVestingAccount) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *DelayedVestingAccount) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BaseVestingAccount != nil {
-		l = m.BaseVestingAccount.Size()
-		n += 1 + l + sovVesting(uint64(l))
-	}
-	return n
-}
+func (m *ContinuousVestingAccount) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *Period) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.Length != 0 {
-		n += 1 + sovVesting(uint64(m.Length))
-	}
-	if len(m.Amount) > 0 {
-		for _, e := range m.Amount {
-			l = e.Size()
-			n += 1 + l + sovVesting(uint64(l))
-		}
-	}
-	return n
-}
+func (m *DelayedVestingAccount) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *PeriodicVestingAccount) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BaseVestingAccount != nil {
-		l = m.BaseVestingAccount.Size()
-		n += 1 + l + sovVesting(uint64(l))
-	}
-	if m.StartTime != 0 {
-		n += 1 + sovVesting(uint64(m.StartTime))
-	}
-	if len(m.VestingPeriods) > 0 {
-		for _, e := range m.VestingPeriods {
-			l = e.Size()
-			n += 1 + l + sovVesting(uint64(l))
-		}
-	}
-	return n
-}
+func (m *Period) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func (m *PermanentLockedAccount) Size() (n int) {
-	if m == nil {
-		return 0
-	}
-	var l int
-	_ = l
-	if m.BaseVestingAccount != nil {
-		l = m.BaseVestingAccount.Size()
-		n += 1 + l + sovVesting(uint64(l))
-	}
-	return n
-}
+func (m *PeriodicVestingAccount) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-func sovVesting(x uint64) (n int) {
-	return (math_bits.Len64(x|1) + 6) / 7
-}
-func sozVesting(x uint64) (n int) {
-	return sovVesting(uint64((x << 1) ^ uint64((int64(x) >> 63))))
-}
-func (m *BaseVestingAccount) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowVesting
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: BaseVestingAccount: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: BaseVestingAccount: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BaseAccount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BaseAccount == nil {
-				m.BaseAccount = &types.BaseAccount{}
-			}
-			if err := m.BaseAccount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field OriginalVesting", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.OriginalVesting = append(m.OriginalVesting, types1.Coin{})
-			if err := m.OriginalVesting[len(m.OriginalVesting)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DelegatedFree", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DelegatedFree = append(m.DelegatedFree, types1.Coin{})
-			if err := m.DelegatedFree[len(m.DelegatedFree)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 4:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field DelegatedVesting", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.DelegatedVesting = append(m.DelegatedVesting, types1.Coin{})
-			if err := m.DelegatedVesting[len(m.DelegatedVesting)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 5:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field EndTime", wireType)
-			}
-			m.EndTime = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.EndTime |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 6:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Admin", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Admin = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 7:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field CancelledTime", wireType)
-			}
-			m.CancelledTime = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.CancelledTime |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipVesting(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *PermanentLockedAccount) Size() (n int) { _ = "STUB: not implemented"; return 0 }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func sovVesting(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func sozVesting(x uint64) (n int) { _ = "STUB: not implemented"; return 0 }
+
+func (m *BaseVestingAccount) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *ContinuousVestingAccount) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowVesting
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: ContinuousVestingAccount: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ContinuousVestingAccount: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BaseVestingAccount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BaseVestingAccount == nil {
-				m.BaseVestingAccount = &BaseVestingAccount{}
-			}
-			if err := m.BaseVestingAccount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
-			}
-			m.StartTime = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.StartTime |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		default:
-			iNdEx = preIndex
-			skippy, err := skipVesting(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func (m *DelayedVestingAccount) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowVesting
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: DelayedVestingAccount: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: DelayedVestingAccount: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BaseVestingAccount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BaseVestingAccount == nil {
-				m.BaseVestingAccount = &BaseVestingAccount{}
-			}
-			if err := m.BaseVestingAccount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipVesting(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
-func (m *Period) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowVesting
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: Period: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Period: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Length", wireType)
-			}
-			m.Length = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.Length |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Amount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.Amount = append(m.Amount, types1.Coin{})
-			if err := m.Amount[len(m.Amount)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipVesting(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
+func (m *DelayedVestingAccount) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
 
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
-	return nil
-}
+func (m *Period) Unmarshal(dAtA []byte) error { _ = "STUB: not implemented"; return nil }
+
 func (m *PeriodicVestingAccount) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowVesting
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PeriodicVestingAccount: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PeriodicVestingAccount: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BaseVestingAccount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BaseVestingAccount == nil {
-				m.BaseVestingAccount = &BaseVestingAccount{}
-			}
-			if err := m.BaseVestingAccount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 0 {
-				return fmt.Errorf("proto: wrong wireType = %d for field StartTime", wireType)
-			}
-			m.StartTime = 0
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				m.StartTime |= int64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field VestingPeriods", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.VestingPeriods = append(m.VestingPeriods, Period{})
-			if err := m.VestingPeriods[len(m.VestingPeriods)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipVesting(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
+
 func (m *PermanentLockedAccount) Unmarshal(dAtA []byte) error {
-	l := len(dAtA)
-	iNdEx := 0
-	for iNdEx < l {
-		preIndex := iNdEx
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return ErrIntOverflowVesting
-			}
-			if iNdEx >= l {
-				return io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= uint64(b&0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		fieldNum := int32(wire >> 3)
-		wireType := int(wire & 0x7)
-		if wireType == 4 {
-			return fmt.Errorf("proto: PermanentLockedAccount: wiretype end group for non-group")
-		}
-		if fieldNum <= 0 {
-			return fmt.Errorf("proto: PermanentLockedAccount: illegal tag %d (wire type %d)", fieldNum, wire)
-		}
-		switch fieldNum {
-		case 1:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field BaseVestingAccount", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthVesting
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.BaseVestingAccount == nil {
-				m.BaseVestingAccount = &BaseVestingAccount{}
-			}
-			if err := m.BaseVestingAccount.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		default:
-			iNdEx = preIndex
-			skippy, err := skipVesting(dAtA[iNdEx:])
-			if err != nil {
-				return err
-			}
-			if (skippy < 0) || (iNdEx+skippy) < 0 {
-				return ErrInvalidLengthVesting
-			}
-			if (iNdEx + skippy) > l {
-				return io.ErrUnexpectedEOF
-			}
-			iNdEx += skippy
-		}
-	}
-
-	if iNdEx > l {
-		return io.ErrUnexpectedEOF
-	}
+	_ = "STUB: not implemented"
 	return nil
 }
-func skipVesting(dAtA []byte) (n int, err error) {
-	l := len(dAtA)
-	iNdEx := 0
-	depth := 0
-	for iNdEx < l {
-		var wire uint64
-		for shift := uint(0); ; shift += 7 {
-			if shift >= 64 {
-				return 0, ErrIntOverflowVesting
-			}
-			if iNdEx >= l {
-				return 0, io.ErrUnexpectedEOF
-			}
-			b := dAtA[iNdEx]
-			iNdEx++
-			wire |= (uint64(b) & 0x7F) << shift
-			if b < 0x80 {
-				break
-			}
-		}
-		wireType := int(wire & 0x7)
-		switch wireType {
-		case 0:
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				iNdEx++
-				if dAtA[iNdEx-1] < 0x80 {
-					break
-				}
-			}
-		case 1:
-			iNdEx += 8
-		case 2:
-			var length int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return 0, ErrIntOverflowVesting
-				}
-				if iNdEx >= l {
-					return 0, io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				length |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if length < 0 {
-				return 0, ErrInvalidLengthVesting
-			}
-			iNdEx += length
-		case 3:
-			depth++
-		case 4:
-			if depth == 0 {
-				return 0, ErrUnexpectedEndOfGroupVesting
-			}
-			depth--
-		case 5:
-			iNdEx += 4
-		default:
-			return 0, fmt.Errorf("proto: illegal wireType %d", wireType)
-		}
-		if iNdEx < 0 {
-			return 0, ErrInvalidLengthVesting
-		}
-		if depth == 0 {
-			return iNdEx, nil
-		}
-	}
-	return 0, io.ErrUnexpectedEOF
-}
+
+func skipVesting(dAtA []byte) (n int, err error) { _ = "STUB: not implemented"; return 0, nil }
 
 var (
 	ErrInvalidLengthVesting        = fmt.Errorf("proto: negative length found during unmarshaling")

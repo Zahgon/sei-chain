@@ -3,9 +3,7 @@ package types
 import (
 	"github.com/sei-protocol/sei-chain/sei-cosmos/codec"
 	sdk "github.com/sei-protocol/sei-chain/sei-cosmos/types"
-	sdkerrors "github.com/sei-protocol/sei-chain/sei-cosmos/types/errors"
 
-	clienttypes "github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/02-client/types"
 	"github.com/sei-protocol/sei-chain/sei-ibc-go/modules/core/exported"
 )
 
@@ -19,72 +17,25 @@ func (cs ClientState) CheckHeaderAndUpdateState(
 	ctx sdk.Context, cdc codec.BinaryCodec, clientStore sdk.KVStore,
 	header exported.Header,
 ) (exported.ClientState, exported.ConsensusState, error) {
-	smHeader, ok := header.(*Header)
-	if !ok {
-		return nil, nil, sdkerrors.Wrapf(
-			clienttypes.ErrInvalidHeader, "header type %T, expected  %T", header, &Header{},
-		)
-	}
-
-	if err := checkHeader(cdc, &cs, smHeader); err != nil {
-		return nil, nil, err
-	}
-
-	clientState, consensusState := update(&cs, smHeader)
-	return clientState, consensusState, nil
+	_ = "STUB: not implemented"
+	return *new(exported.ClientState), *new(exported.ConsensusState), nil
 }
 
 // checkHeader checks if the Solo Machine update signature is valid.
 func checkHeader(cdc codec.BinaryCodec, clientState *ClientState, header *Header) error {
+	_ = "STUB: not implemented"
 	// assert update sequence is current sequence
-	if header.Sequence != clientState.Sequence {
-		return sdkerrors.Wrapf(
-			clienttypes.ErrInvalidHeader,
-			"header sequence does not match the client state sequence (%d != %d)", header.Sequence, clientState.Sequence,
-		)
-	}
-
-	// assert update timestamp is not less than current consensus state timestamp
-	if header.Timestamp < clientState.ConsensusState.Timestamp {
-		return sdkerrors.Wrapf(
-			clienttypes.ErrInvalidHeader,
-			"header timestamp is less than to the consensus state timestamp (%d < %d)", header.Timestamp, clientState.ConsensusState.Timestamp,
-		)
-	}
-
-	// assert currently registered public key signed over the new public key with correct sequence
-	data, err := HeaderSignBytes(cdc, header)
-	if err != nil {
-		return err
-	}
-
-	sigData, err := UnmarshalSignatureData(cdc, header.Signature)
-	if err != nil {
-		return err
-	}
-
-	publicKey, err := clientState.ConsensusState.GetPubKey()
-	if err != nil {
-		return err
-	}
-
-	if err := VerifySignature(publicKey, data, sigData); err != nil {
-		return sdkerrors.Wrap(ErrInvalidHeader, err.Error())
-	}
-
 	return nil
 }
 
+// assert update timestamp is not less than current consensus state timestamp
+
+// assert currently registered public key signed over the new public key with correct sequence
+
 // update the consensus state to the new public key and an incremented sequence
 func update(clientState *ClientState, header *Header) (*ClientState, *ConsensusState) {
-	consensusState := &ConsensusState{
-		PublicKey:   header.NewPublicKey,
-		Diversifier: header.NewDiversifier,
-		Timestamp:   header.Timestamp,
-	}
-
-	// increment sequence number
-	clientState.Sequence++
-	clientState.ConsensusState = consensusState
-	return clientState, consensusState
+	_ = "STUB: not implemented"
+	return nil, nil
 }
+
+// increment sequence number

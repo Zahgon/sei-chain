@@ -11,12 +11,11 @@ type EpochWasmQueryHandler struct {
 }
 
 func NewEpochWasmQueryHandler(keeper *keeper.Keeper) *EpochWasmQueryHandler {
-	return &EpochWasmQueryHandler{
-		epochKeeper: *keeper,
-	}
+	_ = "STUB: not implemented"
+	return nil
 }
 
 func (handler EpochWasmQueryHandler) GetEpoch(ctx sdk.Context, req *types.QueryEpochRequest) (*types.QueryEpochResponse, error) {
-	c := sdk.WrapSDKContext(ctx)
-	return handler.epochKeeper.Epoch(c, req)
+	_ = "STUB: not implemented"
+	return nil, nil
 }
